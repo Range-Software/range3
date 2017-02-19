@@ -1,0 +1,82 @@
+Range Software Package License:
+Software for engineering simulations
+Version 3.0
+
+--------------------------------------------------
+Copyright 2017
+Tomas Soltys
+Ke Zlatkovu 597, 25070 Odolena Voda, Czech Republic
+tomas.soltys@range-software.com
+--------------------------------------------------
+
+LICENSE SECTIONS:
+
+  1. FULL LICENSE for registered software and files
+  2. FULL LICENSE for unregistered software and files
+  3. ACKNOWLEDGEMENT
+
+
+--------------------------------------------------
+1. FULL LICENSE for registered software and files
+--------------------------------------------------
+
+This is a legal agreement between you (either an individual or an entity) and Tomas Soltys.  By opening the sealed software packages (if appropriate) and/or by using the SOFTWARE, you agree to be bound by the terms of this Agreement.  If you do not agree to the terms of this Agreement, promptly return the disk package and accompanying items for a full refund.
+
+SOFTWARE LICENSE
+
+1.1.  GRANT OF LICENSE.  This License Agreement (License) permits you to use a single copy, or multiples copies if you are the only user of the software product identified above, which may include user documentation provided in on-line or electronic form (SOFTWARE).  The SOFTWARE is licensed as a single product, to an individual user, or group of users for Multiple User Licenses and Site Licenses.  This Agreement requires that each user of the SOFTWARE be Licensed, either individually, or as part of a group.  Each user of this SOFTWARE must be covered either individually, or as part of a group Multi-User License.  The SOFTWARE is in use on a computer when it is loaded into the temporary memory (i.e. RAM) or installed into the permanent memory (e.g. hard disk) of that computer.  This software may be installed on a network provided that appropriate restrictions are in place limiting the use to registered users only.
+
+1.2.  COPYRIGHT.  All physical copies of the software are the property of the registered user(s) but use of the software is restricted according to the terms as specified above (GRANT OF LICENSE).  By Czech Republic laws the SOFTWARE is expressly protected under Law No. 121/2000 Coll. of April 7, 2000 on Copyright, Rights Related to Copyright and on the Amendment of Certain Laws (Copyright Act).  All Intellectual Property Rights (IPR) remain the property of Tomas Soltys.  You may not copy the printed materials accompanying the SOFTWARE (if any), nor print copies of any user documentation provided in on-line or electronic form unless for the specific use of a legally registered user as specified above (GRANT OF LICENSE).  You must not redistribute the registration codes provided, either on paper, electronically, or as stored in the file range.tkey or any other form.
+
+1.3.  OTHER RESTRICTIONS.  The registration notification provided, showing your authorization code and this License is your proof of license to exercise the rights granted herein and must be retained by you.  You may not rent or lease the SOFTWARE, but you may transfer your rights under this License on a permanent basis, provided you transfer this License, the SOFTWARE and all accompanying printed materials, retain no copies, and the recipient agrees to the terms of this License.  You may not reverse engineer, decompile, or disassemble the SOFTWARE, except to the extent the foregoing restriction is expressly prohibited by applicable law.
+
+LIMITED WARRANTY
+
+LIMITED WARRANTY.  Tomas Soltys warrants that the SOFTWARE will perform substantially in accordance with the accompanying printed material (if any) and on-line documentation for a period of 365 days from the date of receipt.
+
+CUSTOMER REMEDIES.  Tomas Soltys entire liability and your exclusive remedy shall be, at Tomas Soltys option, either (a) return of the price paid or (b) repair or replacement of the SOFTWARE that does not meet this Limited Warranty and that is returned to Tomas Soltys with a copy of your receipt.  This Limited Warranty is void if failure of the SOFTWARE has resulted from accident, abuse, or misapplication.  Any replacement SOFTWARE will be warranted for the remainder ofthe original warranty period or thirty (30) days, whichever is longer.
+
+NO OTHER WARRANTIES.  To the maximum extent permitted by applicable law, Tomas Soltys disclaims all other warranties, either express or implied, including but not limited to implied warranties of merchantability and fitness for a particular purpose, with respect to the SOFTWARE and any accompanying written materials.
+
+NO LIABILITY FOR CONSEQUENTIAL DAMAGES. To the maximum extent permitted by applicable law, in no event shall Tomas Soltys be liable for any damages whatsoever (including, without limitation, damages for loss of business profits, business interruption, loss of business information, or other pecuniary loss) arising out of the use or inability to use the SOFTWARE, even if Tomas Soltys has been advised of the possibility of such damages.
+
+GENERAL
+
+This Agreement will be governed by the laws of Czech Republic, without reference to conflict of laws principles. You agree that any litigation relating to this Agreement may only be brought in, and shall be subject to the jurisdiction of, any Court of Czech Republic.
+
+REGARDLESS OF WHETHER ANY REMEDY SET FORTH IN THIS AGREEMENT FAILS OF ITS ESSENTIAL PURPOSE, IN NO EVENT WILL TOMAS SOLTYS BE LIABLE FOR ANY LOST PROFITS, LOST SAVINGS OR OTHER INCIDENTAL, INDIRECT, SPECIAL OR CONSEQUENTIAL DAMAGES, ARISING OUT OF ANY USE OR INABILITY TO USE THIS PRODUCT OR THE BREACH OF THIS AGREEMENT, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
+
+
+--------------------------------------------------
+2. FULL LICENSE for unregistered software and files
+--------------------------------------------------
+
+LIMITED WARRANTY
+
+THE PROGRAM IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING, BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.  IN NO EVENT WILL THE AUTHOR or AUTHORS BE LIABLE TO YOU FOR ANY DAMAGES, INCLUDING INCIDENTAL OR CONSEQUENTIAL DAMAGES, ARISING OUT OF THE USE OF THE PROGRAM, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
+YOU ACKNOWLEDGE THAT YOU HAVE READ THIS LICENSE, UNDERSTAND IT AND AGREE TO BE BOUND BY ITS TERMS AS THE COMPLETE AND EXCLUSIVE STATEMENT OF THE AGREEMENT BETWEEN US, SUPERSEDING ANY PROPOSAL OR PRIOR AGREEMENT, ORAL OR WRITTEN, AND ANY OTHER COMMUNICATIONS BETWEEN US RELATING TO THE SUBJECT MATTER OF THIS LICENSE.
+
+Range Software Package is a shareware software and is provided at no charge to the user for evaluation.  The purpose of shareware software is to provide personal computer users with quality software on a "try before you buy" basis.
+
+If you find this program useful and continue to use more functions, you must make a registration payment (see the registration instructions for details).
+
+Anyone distributing this product for any kind of remuneration must first contact Tomas Soltys for authorization.
+
+You may distribute this software to friends and colleagues but you must include all files in the original distribution.  Please encourage them to register their copy if they find that they make use of it.
+
+
+--------------------------------------------------
+3. ACKNOWLEDGEMENT
+--------------------------------------------------
+
+YOU ACKNOWLEDGE THAT YOU HAVE READ THIS AGREEMENT, UNDERSTAND IT AND AGREE TO BE BOUND BY ITS TERMS AND CONDITIONS.
+
+--------------------------------------------------
+
+  Contact Tomas Soltys as follows with any questions:
+
+  Tomas Soltys
+  Ke Zlatkovu 597
+  Odolena Voda, 25070 CZECH REPUBLIC
+  Email: tomas.soltys@range-software.com
+  Tel:  (+420) 776-843-663

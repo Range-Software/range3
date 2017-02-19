@@ -1,0 +1,19 @@
+------------------------------------------------------------------
+Version 3.0.alpha_3
+
+- Added "limit value" scale to highlight values outside min/max range
+- When importing STL model name is created from file name
+- Reorganized File menu
+
+------------------------------------------------------------------
+Version 3.0.alpha_2
+
+- Fixed crash when window was closed, new model loaded and and original model display checkbox selected.
+- Display more appropriate message in "Mark entity" dialog when "mark element" is disabled.
+- Enhanced value edit.
+
+------------------------------------------------------------------
+Version 3.0.alpha_1
+
+Initial release.
+

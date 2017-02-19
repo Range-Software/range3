@@ -1,0 +1,71 @@
+/*********************************************************************
+ *  AUTHOR: Tomas Soltys                                             *
+ *  FILE:   draw_engine_object.h                                     *
+ *  GROUP:  Range                                                    *
+ *  TYPE:   header file (*.h)                                        *
+ *  DATE:   1-st October 2014                                        *
+ *                                                                   *
+ *  DESCRIPTION: Draw engine object class declaration                *
+ *********************************************************************/
+
+#ifndef __DRAW_ENGINE_OBJECT_H__
+#define __DRAW_ENGINE_OBJECT_H__
+
+#include <QObject>
+
+#include <rmlib.h>
+
+#include "draw_engine_input.h"
+#include "gl_widget.h"
+#include "model.h"
+
+class DrawEngineObject : public QObject
+{
+
+    Q_OBJECT
+
+    protected:
+
+        //! Object name.
+        QString name;
+        //! List of input parameters.
+        QList<DrawEngineInput> inputParameters;
+        //! OpenGL color.
+        QColor color;
+        //! Generated model.
+        Model model;
+
+    public:
+
+        //! Constructor.
+        explicit DrawEngineObject(QObject *parent = 0);
+
+        //! Return const reference object name.
+        const QString &getName(void) const;
+
+        //! Return number of input parameters.
+        uint getNInputParameters(void) const;
+
+        //! Return const reference to input parameter at given position.
+        const DrawEngineInput &getInputParamater(uint position) const;
+
+        //! Return reference to input parameter at given position.
+        DrawEngineInput &getInputParamater(uint position);
+
+        //! Update model.
+        void updateModel(void);
+
+        //! Return const reference to generated model.
+        const Model &getModel(void) const;
+
+        //! Draw object to OpenGL.
+        void glDraw(GLWidget *glWidget) const;
+
+    protected:
+
+        //! Generate RAW model from input parameters.
+        virtual RModelRaw generate(void) const = 0;
+
+};
+
+#endif // __DRAW_ENGINE_OBJECT_H__

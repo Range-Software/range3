@@ -1,0 +1,87 @@
+<RCC>
+    <qresource prefix="/icons/logos">
+        <file>pixmaps/range-logo-128.png</file>
+    </qresource>
+    <qresource prefix="/icons/file">
+        <file>pixmaps/range-project_new.png</file>
+        <file>pixmaps/range-cancel.svg</file>
+        <file>pixmaps/range-quit.svg</file>
+        <file>pixmaps/range-ok.svg</file>
+        <file>pixmaps/range-new.svg</file>
+        <file>pixmaps/range-open.svg</file>
+        <file>pixmaps/range-save-as.svg</file>
+        <file>pixmaps/range-save.svg</file>
+        <file>pixmaps/range-import-msh.svg</file>
+        <file>pixmaps/range-import-raw.svg</file>
+        <file>pixmaps/range-import-stl.svg</file>
+        <file>pixmaps/range-export-msh.svg</file>
+        <file>pixmaps/range-export-raw.svg</file>
+        <file>pixmaps/range-export-stl.svg</file>
+        <file>pixmaps/range-close.svg</file>
+        <file>pixmaps/range-preferences.svg</file>
+        <file>pixmaps/range-resetO.svg</file>
+        <file>pixmaps/range-resetX.svg</file>
+        <file>pixmaps/range-resetY.svg</file>
+        <file>pixmaps/range-resetZ.svg</file>
+        <file>pixmaps/range-screenshot.svg</file>
+        <file>pixmaps/range-undo.svg</file>
+        <file>pixmaps/range-clear.svg</file>
+        <file>pixmaps/range-report.svg</file>
+        <file>pixmaps/range-add.svg</file>
+        <file>pixmaps/range-remove.svg</file>
+        <file>pixmaps/range-refresh.svg</file>
+        <file>pixmaps/range-download.svg</file>
+        <file>pixmaps/range-list.svg</file>
+        <file>pixmaps/range-qt.svg</file>
+        <file>pixmaps/range-keys.svg</file>
+    </qresource>
+    <qresource prefix="/icons/solver">
+        <file>pixmaps/range-solver-start.svg</file>
+        <file>pixmaps/range-solver-stop.svg</file>
+        <file>pixmaps/range-solver-view.svg</file>
+        <file>pixmaps/range-solver-kill.svg</file>
+        <file>pixmaps/range-solver-queue.svg</file>
+    </qresource>
+    <qresource prefix="/pixmaps/colorscale">
+        <file alias="pixmaps/range-scale-01-RGB">pixmaps/range-scale-rgb_n.png</file>
+        <file alias="pixmaps/range-scale-02-RGB S">pixmaps/range-scale-rgb_ns.png</file>
+        <file alias="pixmaps/range-scale-03-RGB SO">pixmaps/range-scale-rgb_nso.png</file>
+        <file alias="pixmaps/range-scale-04-RGB R">pixmaps/range-scale-rgb_r.png</file>
+        <file alias="pixmaps/range-scale-05-RGB RS">pixmaps/range-scale-rgb_rs.png</file>
+        <file alias="pixmaps/range-scale-06-RGB RSO">pixmaps/range-scale-rgb_rso.png</file>
+        <file alias="pixmaps/range-scale-07-Grayscale">pixmaps/range-scale-grayscale_n.png</file>
+        <file alias="pixmaps/range-scale-08-Grayscale S">pixmaps/range-scale-grayscale_ns.png</file>
+        <file alias="pixmaps/range-scale-09-Grayscale SO">pixmaps/range-scale-grayscale_nso.png</file>
+        <file alias="pixmaps/range-scale-10-Grayscale R">pixmaps/range-scale-grayscale_r.png</file>
+        <file alias="pixmaps/range-scale-11-Grayscale RS">pixmaps/range-scale-grayscale_rs.png</file>
+        <file alias="pixmaps/range-scale-12-Grayscale RSO">pixmaps/range-scale-grayscale_rso.png</file>
+        <file alias="pixmaps/range-scale-13-Fire">pixmaps/range-scale-fire_n.png</file>
+        <file alias="pixmaps/range-scale-14-Fire R">pixmaps/range-scale-fire_r.png</file>
+        <file alias="pixmaps/range-scale-15-WhiteBlue">pixmaps/range-scale-wb_n.png</file>
+        <file alias="pixmaps/range-scale-16-WhiteBlue R">pixmaps/range-scale-wb_r.png</file>
+        <file alias="pixmaps/range-scale-17-WhiteGreen">pixmaps/range-scale-wg_n.png</file>
+        <file alias="pixmaps/range-scale-18-WhiteGreen R">pixmaps/range-scale-wg_r.png</file>
+        <file alias="pixmaps/range-scale-19-WhiteRed">pixmaps/range-scale-wr_n.png</file>
+        <file alias="pixmaps/range-scale-20-WhiteRed R">pixmaps/range-scale-wr_r.png</file>
+        <file alias="pixmaps/range-scale-21-Value limits">pixmaps/range-scale-limit_n.png</file>
+        <file alias="pixmaps/range-scale-22-Value limits R">pixmaps/range-scale-limit_r.png</file>
+    </qresource>
+    <qresource prefix="/icons/media">
+        <file>pixmaps/range-play_play.svg</file>
+        <file>pixmaps/range-play_pause.svg</file>
+        <file>pixmaps/range-play_last.svg</file>
+        <file>pixmaps/range-play_forward.svg</file>
+        <file>pixmaps/range-play_first.svg</file>
+        <file>pixmaps/range-play_backward.svg</file>
+        <file>pixmaps/range-play_record.svg</file>
+    </qresource>
+    <qresource prefix="/icons/mime">
+        <file>pixmaps/range-file-document.svg</file>
+        <file>pixmaps/range-file-image.svg</file>
+    </qresource>
+    <qresource prefix="/icons/geometry">
+        <file>pixmaps/range-undo.svg</file>
+        <file>pixmaps/range-redo.svg</file>
+        <file>pixmaps/range-generate_volume_mesh.svg</file>
+    </qresource>
+</RCC>
