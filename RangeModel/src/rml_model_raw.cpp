@@ -310,22 +310,18 @@ unsigned int RModelRaw::mergeNearNodes (double tolerance)
     RLogger::info("Finding near nodes\n");
     RProgressInitialize("Finfing near nodes");
     unsigned int nn = this->getNNodes();
-    unsigned int npMax = 0, np = 0;
     for (unsigned int i=0;i<nn;i++)
     {
         nodeBook[i] = i;
-        np += nn - i - 1;
     }
-    npMax = np;
-    np = 0;
     for (unsigned int i=0;i<nn;i++)
     {
-        RProgressPrint(np+1,npMax);
-        np += nn - i - 1;
+        RProgressPrint(i,nn);
         if (nodeBook[i] != i)
         {
             continue;
         }
+#pragma omp parallel for default(shared)
         for (unsigned int j=i+1;j<nn;j++)
         {
             if (nodeBook[j] != j)
@@ -355,7 +351,7 @@ unsigned int RModelRaw::mergeNearNodes (double tolerance)
     RProgressInitialize("Merging near nodes");
     for (unsigned int i=0;i<nn;i++)
     {
-        RProgressPrint(i+1,nn);
+        RProgressPrint(i,nn);
         unsigned int nID = nn-i-1;
         if (nodeBook[nID] != nID)
         {
@@ -380,7 +376,7 @@ unsigned int RModelRaw::mergeNearNodes (double tolerance)
         }
         else
         {
-            nodeBook[i] = nn;
+            nodeBook[i] = nodeBook[nodeBook[i]];
         }
     }
 
@@ -389,7 +385,7 @@ unsigned int RModelRaw::mergeNearNodes (double tolerance)
     unsigned int ne = this->getNElements();
     for (unsigned int i=0;i<ne;i++)
     {
-        RProgressPrint(i+1,ne);
+        RProgressPrint(i,ne);
         for (unsigned int j=0;j<this->getElement(i).size();j++)
         {
             this->getElement(i).setNodeId(j,nodeBook[this->getElement(i).getNodeId(j)]);

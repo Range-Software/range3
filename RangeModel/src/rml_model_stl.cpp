@@ -205,7 +205,7 @@ void RModelStl::readBinary(const QString &fileName, double tolerance)
         node1.set(x1,y1,z1);
         node2.set(x2,y2,z2);
         node3.set(x3,y3,z3);
-        this->addTriangle(node1,node2,node3,true,tolerance);
+        this->addTriangle(node1,node2,node3,false,tolerance);
 
         stlFile.read(dummy,2);
         if (stlFile.error() != QFile::NoError)
@@ -217,6 +217,8 @@ void RModelStl::readBinary(const QString &fileName, double tolerance)
     stlFile.close ();
 
     RProgressFinalize("Done");
+
+    this->mergeNearNodes(tolerance);
 } /* RModelStl::readBinary */
 
 
@@ -417,12 +419,14 @@ void RModelStl::readAscii (const QString &fileName,
         node1.set(x1,y1,z1);
         node2.set(x2,y2,z2);
         node3.set(x3,y3,z3);
-        this->addTriangle(node1,node2,node3,true,tolerance);
+        this->addTriangle(node1,node2,node3,false,tolerance);
     }
 
     file.close ();
 
     RProgressFinalize("Done");
+
+    this->mergeNearNodes(tolerance);
 } /* RModelStl::readAscii */
 
 

@@ -2641,7 +2641,7 @@ void Model::consolidate(bool force)
             this->edgeNodes = this->findEdgeNodes();
             updateMeshInput = true;
         }
-        this->edgeElements = this->findEdgeElements(90.0);
+        this->edgeElements = this->findEdgeElements(30.0);
         this->holeElements = this->findHoleElements();
         if (force)
         {
