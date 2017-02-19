@@ -11,7 +11,7 @@ LIBS += -fopenmp
 TARGET = RangeModel
 TEMPLATE = lib
 
-BUILDPATH = $${PWD}/../../../build-range3
+BUILDPATH = $${PWD}/../../build-range3
 
 DEFINES += RANGEMODEL_LIBRARY
 

@@ -12,7 +12,7 @@ LIBS += -fopenmp
 TARGET = Range
 TEMPLATE = app
 
-BUILDPATH = $${PWD}/../../../build-range3
+BUILDPATH = $${PWD}/../../build-range3
 
 SOURCES += \
     src/action.cpp \

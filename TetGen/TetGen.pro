@@ -9,7 +9,7 @@ QT       -= core gui
 TARGET = TetGen
 TEMPLATE = lib
 
-BUILDPATH = $${PWD}/../../../build-range3
+BUILDPATH = $${PWD}/../../build-range3
 
 SOURCES += \
     predicates.cxx \

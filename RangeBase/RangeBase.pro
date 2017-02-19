@@ -9,7 +9,7 @@ QT += core
 TARGET = RangeBase
 TEMPLATE = lib
 
-BUILDPATH = $${PWD}/../../../build-range3
+BUILDPATH = $${PWD}/../../build-range3
 
 DEFINES += RANGEBASE_LIBRARY
 

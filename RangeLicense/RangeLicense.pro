@@ -6,7 +6,7 @@ LIBS += -fopenmp
 TARGET = RangeLicense
 TEMPLATE = app
 
-BUILDPATH = $${PWD}/../../../build-range3
+BUILDPATH = $${PWD}/../../build-range3
 
 SOURCES += \
     src/main.cpp \

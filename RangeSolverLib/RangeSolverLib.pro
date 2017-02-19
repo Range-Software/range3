@@ -11,7 +11,7 @@ LIBS += -fopenmp
 TARGET = RangeSolverLib
 TEMPLATE = lib
 
-BUILDPATH = $${PWD}/../../../build-range3
+BUILDPATH = $${PWD}/../../build-range3
 
 DEFINES += RANGESOLVERLIB_LIBRARY
 
