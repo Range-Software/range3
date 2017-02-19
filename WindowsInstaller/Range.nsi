@@ -18,10 +18,10 @@
 
 ;Name and file
 Name "Range Software Package"
-OutFile "C:\Work\range3\trunk\WindowsInstaller\range-3.0.alpha_3-installer.exe"
+OutFile "C:\Work\range3\WindowsInstaller\range-3.0.alpha_3-installer.exe"
 
-;Icon "C:\Work\range\trunk\WindowsInstaller\range.ico"
-;UninstallIcon "C:\Work\Range-Software\range\trunk\WindowsInstaller\range.ico"
+;Icon "C:\Work\range\WindowsInstaller\range.ico"
+;UninstallIcon "C:\Work\Range-Software\range\WindowsInstaller\range.ico"
 
 ;Default installation folder
 InstallDir "$PROGRAMFILES\Range Software 3"
@@ -42,10 +42,10 @@ Var StartMenuFolder
 
 !define MUI_ABORTWARNING
 
-!define MUI_ICON "C:\Work\range3\trunk\WindowsInstaller\range.ico"
-!define MUI_UNICON "C:\Work\range3\trunk\WindowsInstaller\range.ico"
-!define MUI_WELCOMEFINISHPAGE_BITMAP "C:\Work\range3\trunk\WindowsInstaller\range-install.bmp"
-!define MUI_UNWELCOMEFINISHPAGE_BITMAP "C:\Work\range3\trunk\WindowsInstaller\range-uninstall.bmp"
+!define MUI_ICON "C:\Work\range3\WindowsInstaller\range.ico"
+!define MUI_UNICON "C:\Work\range3\WindowsInstaller\range.ico"
+!define MUI_WELCOMEFINISHPAGE_BITMAP "C:\Work\range3\WindowsInstaller\range-install.bmp"
+!define MUI_UNWELCOMEFINISHPAGE_BITMAP "C:\Work\range3\WindowsInstaller\range-uninstall.bmp"
 !define MUI_FINISHPAGE_LINK_LOCATION "http://www.range-software.com"
 !define MUI_FINISHPAGE_LINK "http://www.range-software.com"
 !define MUI_FINISHPAGE_RUN "$INSTDIR\bin\Range.exe"
@@ -103,11 +103,11 @@ SectionGroup "Range Software" SecRange
         SetOutPath "$INSTDIR\bin"
         File C:\Work\build-range3\bin\Range.exe
         File C:\Work\build-range3\bin\RangeSolver.exe
-        File C:\Work\range3\trunk\WindowsInstaller\bin\*.dll
+        File C:\Work\range3\WindowsInstaller\bin\*.dll
         SetOutPath "$INSTDIR\bin\imageformats"
-        File C:\Work\range3\trunk\WindowsInstaller\bin\imageformats\*
+        File C:\Work\range3\WindowsInstaller\bin\imageformats\*
         SetOutPath "$INSTDIR\bin\platforms"
-        File C:\Work\range3\trunk\WindowsInstaller\bin\platforms\*
+        File C:\Work\range3\WindowsInstaller\bin\platforms\*
         SetOutPath "$INSTDIR\doc"
         File C:\Work\build-range3\doc\LICENSE.txt
         File C:\Work\build-range3\doc\RELEASE_NOTES.txt
