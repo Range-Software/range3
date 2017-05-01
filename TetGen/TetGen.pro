@@ -41,13 +41,13 @@ CONFIG(debug,debug|release) {
 
 unix {
     target.path = $${BUILDPATH}/lib
-    headers.path = $${BUILDPATH}/include
+#    headers.path = $${BUILDPATH}/include
 }
 win32 {
     target.path = $${BUILDPATH}\\lib
-    headers.path = $${BUILDPATH}\\include
+#    headers.path = $${BUILDPATH}\\include
 }
 
-headers.files += $$HEADERS
-INSTALLS += headers
+#headers.files += $$HEADERS
+#INSTALLS += headers
 INSTALLS += target
