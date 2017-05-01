@@ -1,7 +1,6 @@
 #!/bin/bash
 
 moduleList="range"
-buildDir="${HOME}/Work/build-range3/build"
 qmakeCmd=$(which qmake-qt5)
 selfDebug=false
 
@@ -16,7 +15,9 @@ timeStamp=$(date +%H%M%S)
 
 . ${myPath}/lib.sh
 
-moduleDir=$(dirname $myPath)
+topDir="$(dirname $myPath)"
+moduleDir="${topDir}/range"
+buildDir="${topDir}/build"
 
 MAKE="make"
 if [ -f /proc/cpuinfo ]
@@ -141,13 +142,13 @@ do
         cd $currentDir
         exit 1
     fi
-    $MAKE install
-    if [ $? -ne 0 ]
-    then
-        echo_e "Failed to install module '$module'"
-        cd $currentDir
-        exit 1
-    fi
+#    $MAKE install
+#    if [ $? -ne 0 ]
+#    then
+#        echo_e "Failed to install module '$module'"
+#        cd $currentDir
+#        exit 1
+#    fi
     set_unindent
 done
 

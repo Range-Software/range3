@@ -7,6 +7,7 @@ TARGET = Range
 TEMPLATE = app
 
 BUILDPATH = $${PWD}/../../build-range3
+BUILDPATH = %{buildDir}
 
 SOURCES += \
     src/action.cpp \
