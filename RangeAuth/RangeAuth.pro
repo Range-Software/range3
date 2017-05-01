@@ -34,8 +34,7 @@ else {
     LIBS += -L$${BUILDPATH}/lib/ -lRangeBase
 }
 
-INCLUDEPATH += $${BUILDPATH}/include
-DEPENDPATH += $${BUILDPATH}/include
+INCLUDEPATH += $${_PRO_FILE_PWD_}/../RangeBase/include
 
 DEFINES += TETLIBRARY
 

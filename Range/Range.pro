@@ -1,9 +1,3 @@
-#-------------------------------------------------
-#
-# Project created by QtCreator 2011-12-30T09:43:04
-#
-#-------------------------------------------------
-
 QT += core gui opengl printsupport network
 QMAKE_CXXFLAGS += -Wno-unused-parameter
 QMAKE_CXXFLAGS += -fopenmp
@@ -398,10 +392,23 @@ CONFIG(debug, debug|release) {
     DEBUG_EXT = "_debug"
 }
 
-LIBS += -L$${BUILDPATH}/lib/ -lRangeSolverLib$${DEBUG_EXT} -lRangeModel$${DEBUG_EXT} -lRangeBase$${DEBUG_EXT} -lRangeAuth$${DEBUG_EXT} -lTetGen$${DEBUG_EXT}
+LIBS += \
+    -L../TetGen/ \
+    -L../RangeBase/ \
+    -L../RangeAuth/ \
+    -L../RangeModel/ \
+    -L../RangeSolverLib/ \
+    -lRangeSolverLib$${DEBUG_EXT} \
+    -lRangeModel$${DEBUG_EXT} \
+    -lRangeBase$${DEBUG_EXT} \
+    -lRangeAuth$${DEBUG_EXT} \
+    -lTetGen$${DEBUG_EXT}
 
-INCLUDEPATH += $${BUILDPATH}/include
-DEPENDPATH += $${BUILDPATH}/include
+INCLUDEPATH += $${_PRO_FILE_PWD_}/../TetGen
+INCLUDEPATH += $${_PRO_FILE_PWD_}/../RangeBase/include
+INCLUDEPATH += $${_PRO_FILE_PWD_}/../RangeAuth/include
+INCLUDEPATH += $${_PRO_FILE_PWD_}/../RangeModel/include
+INCLUDEPATH += $${_PRO_FILE_PWD_}/../RangeSolverLib/include
 
 LIB_EXT = "a"
 
@@ -412,12 +419,6 @@ win32 {
     LIBS += -lopengl32
     target.path = $${BUILDPATH}\\bin
 }
-
-POST_TARGETDEPS += $${BUILDPATH}/lib/libRangeSolverLib$${DEBUG_EXT}.$${LIB_EXT}
-POST_TARGETDEPS += $${BUILDPATH}/lib/libRangeModel$${DEBUG_EXT}.$${LIB_EXT}
-POST_TARGETDEPS += $${BUILDPATH}/lib/libRangeBase$${DEBUG_EXT}.$${LIB_EXT}
-POST_TARGETDEPS += $${BUILDPATH}/lib/libRangeAuth$${DEBUG_EXT}.$${LIB_EXT}
-POST_TARGETDEPS += $${BUILDPATH}/lib/libTetGen$${DEBUG_EXT}.$${LIB_EXT}
 
 INSTALLS += target
 

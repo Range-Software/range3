@@ -17,13 +17,6 @@ HEADERS += \
     src/application.h \
     src/main_task.h
 
-OTHER_FILES +=
-
-RESOURCES +=
-
-FORMS +=
-
-
 CONFIG -= debug_and_release
 CONFIG += rtti
 CONFIG += exceptions
@@ -38,10 +31,14 @@ CONFIG(debug, debug|release) {
     DEBUG_EXT = "_debug"
 }
 
-LIBS += -L$${BUILDPATH}/lib/ -lRangeAuth$${DEBUG_EXT} -lRangeBase$${DEBUG_EXT}
+LIBS += \
+    -L../RangeBase/ \
+    -L../RangeAuth/ \
+    -lRangeAuth$${DEBUG_EXT} \
+    -lRangeBase$${DEBUG_EXT}
 
-INCLUDEPATH += $${BUILDPATH}/include
-DEPENDPATH += $${BUILDPATH}/include
+INCLUDEPATH += $${_PRO_FILE_PWD_}/../RangeBase/include
+INCLUDEPATH += $${_PRO_FILE_PWD_}/../RangeAuth/include
 
 LIB_EXT = "a"
 
@@ -51,8 +48,5 @@ unix {
 win32 {
     target.path = $${BUILDPATH}\\bin
 }
-
-POST_TARGETDEPS += $${BUILDPATH}/lib/libRangeAuth$${DEBUG_EXT}.$${LIB_EXT}
-POST_TARGETDEPS += $${BUILDPATH}/lib/libRangeBase$${DEBUG_EXT}.$${LIB_EXT}
 
 INSTALLS += target

@@ -1,9 +1,3 @@
-#-------------------------------------------------
-#
-# Project created by QtCreator 2012-01-21T12:26:44
-#
-#-------------------------------------------------
-
 QT += core
 QMAKE_CXXFLAGS += -fopenmp
 LIBS += -fopenmp
@@ -174,8 +168,8 @@ else {
     LIBS += -L$${BUILDPATH}/lib/ -lRangeBase -lTetGen
 }
 
-INCLUDEPATH += $${BUILDPATH}/include
-DEPENDPATH += $${BUILDPATH}/include
+INCLUDEPATH += $${_PRO_FILE_PWD_}/../TetGen
+INCLUDEPATH += $${_PRO_FILE_PWD_}/../RangeBase/include
 
 DEFINES += TETLIBRARY
 

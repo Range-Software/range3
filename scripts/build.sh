@@ -1,6 +1,6 @@
 #!/bin/bash
 
-moduleList="TetGen RangeBase RangeAuth RangeModel RangeSolverLib RangeLicense RangeSolver Range"
+moduleList="range"
 buildDir="${HOME}/Work/build-range3/build"
 qmakeCmd=$(which qmake-qt5)
 selfDebug=false
@@ -66,6 +66,13 @@ do
     shift
 done
 
+if [ $debug = true ]
+then
+    buildDir+="-Debug"
+else
+    buildDir+="-Release"
+fi
+
 logDir="${buildDir}/log"
 
 if [ ! -x $qmakeCmd ]
@@ -111,43 +118,38 @@ then
     qmakeArgs+=" CONFIG+=debug"
 fi
 
+currentDir=$(pwd)
+
+cd $buildDir
+
 for module in $moduleList
 do
-    moduleProjectDir="$moduleDir/$module"
-    moduleProjectFile="$moduleProjectDir/$module.pro"
-    moduleBuildDir="$buildDir/$module"
-    if [ $debug = true ]
-    then
-        moduleBuildDir+="-Debug"
-    else
-        moduleBuildDir+="-Release"
-    fi
-    moduleMakefile="$moduleBuildDir/Makefile"
+    projectFile="$moduleDir/$module.pro"
+    makefile="Makefile"
 
     echo_i "Building $module"
     set_indent
     # QMAKE
     echo_i "Running qmake"
-    curDir=$(pwd)
-    cd $moduleProjectDir
-    $qmakeCmd $moduleProjectFile $qmakeArgs -o $moduleMakefile
-    cd $curDir
+    $qmakeCmd $projectFile $qmakeArgs -o $makefile
     # QMAKE
     echo_i "Running make"
-    curDir=$(pwd)
-    cd $moduleBuildDir
     $MAKE
     if [ $? -ne 0 ]
     then
         echo_e "Failed to build module '$module'"
+        cd $currentDir
         exit 1
     fi
     $MAKE install
     if [ $? -ne 0 ]
     then
         echo_e "Failed to install module '$module'"
+        cd $currentDir
         exit 1
     fi
-    cd $curDir
     set_unindent
 done
+
+cd $currentDir
+
