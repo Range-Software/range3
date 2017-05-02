@@ -56,7 +56,7 @@ Var StartMenuFolder
 ;Pages
 
 !insertmacro MUI_PAGE_WELCOME
-!insertmacro MUI_PAGE_LICENSE "..\doc\LICENSE.txt"
+!insertmacro MUI_PAGE_LICENSE "..\range\Range\doc\LICENSE.txt"
 !insertmacro MUI_PAGE_COMPONENTS
 !insertmacro MUI_PAGE_DIRECTORY
 !define MUI_PAGE_CUSTOMFUNCTION_PRE ClosePrograms
@@ -109,21 +109,21 @@ SectionGroup "Range Software" SecRange
         SetOutPath "$INSTDIR\bin\platforms"
         File bin\platforms\*
         SetOutPath "$INSTDIR\doc"
-        File ..\doc\LICENSE.txt
-        File ..\doc\RELEASE_NOTES.txt
+        File ..\range\Range\doc\LICENSE.txt
+        File ..\range\Range\doc\RELEASE_NOTES.txt
     SectionEnd
     Section "Documentation" SecDocFiles
         SetOutPath "$INSTDIR\doc"
-        File ..\doc\*pdf
+        File ..\range\Range\doc\*pdf
     SectionEnd
     Section "Model Files" SecModelFiles
         SetOutPath "$INSTDIR\data"
-;        File ..\data\*.stl
-        File ..\data\*.rbm
+;        File ..\range\Range\data\*.stl
+        File ..\range\Range\data\*.rbm
     SectionEnd
     Section "Material Files" SecMaterialFiles
         SetOutPath "$INSTDIR\materials"
-        File ..\materials\*.rbmt
+        File ..\range\Range\materials\*.rbmt
     SectionEnd
     SectionGroup "Shortcuts" SecShortcuts
         Section "Start Menu" SecShortcutsStart
