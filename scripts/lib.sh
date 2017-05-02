@@ -147,6 +147,7 @@ function echo_e
 function touch_dir
 {
     local dir=$1
+    local clean=$2
     if [ -z "$dir" ]
     then
         echo_e "Missing directory"
@@ -155,6 +156,10 @@ function touch_dir
     if [ -d "$dir" ]
     then
         echo_i "Directory '${dir}' already exists"
+        if [ "$clean" = true ]
+        then
+            rm -rfv $dir/*
+        fi
         return 0
     fi
     echo_i "Creating directory '${dir}'"

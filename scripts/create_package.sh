@@ -6,7 +6,6 @@
 
 # Configuration section - Begin -------------------------------------------
 
-buildDir="${HOME}/Work/build-range3"
 selfDebug=false
 
 myName=$(basename $0 .sh)
@@ -18,17 +17,27 @@ timeStamp=$(date +%H%M%S)
 . ${myPath}/lib.sh
 
 moduleDir=$(dirname $myPath)
+sourceDir="${moduleDir}/range"
 
-# path where pacgage will be installed after un-packing
-installDir='/opt/range3';
+# build source
+buildDir="${moduleDir}/build-Release"
+buildBin="${buildDir}/Range/Range ${buildDir}/RangeSolver/RangeSolver"
+buildMan="${sourceDir}/Range/man/*"
+buildDoc="${sourceDir}/Range/doc/*"
+buildDat="${sourceDir}/Range/data/*"
+buildMat="${sourceDir}/Range/materials/*"
+buildLnk="${sourceDir}/Range/desktop/*"
 
 # paths for a binaries, documents, pixmaps and other data
-path_bin='bin';
-path_man='man';
-path_doc='doc';
-path_dat='data';
-path_mat='materials';
-path_lnk='desktop';
+path_bin='bin'
+path_man='man'
+path_doc='doc'
+path_dat='data'
+path_mat='materials'
+path_lnk='desktop'
+
+# path where pacgage will be installed after un-packing
+installDir='/opt/range3'
 
 # RPM package information
 summary='Range Software Package'
@@ -68,9 +77,6 @@ function print_help
 while [ $# -gt 0 ]
 do
     case $1 in
-        --build-dir=*)
-            buildDir=$( echo $1 | awk 'BEGIN{ FS="=" } { print $2 }' )
-            ;;
         --install-dir=*)
             installDir=$( echo $1 | awk 'BEGIN{ FS="=" } { print $2 }' )
             ;;
@@ -168,6 +174,53 @@ inst_path_mat=$installDir'/'$path_mat
 inst_path_lnk='/usr/share/applications'
 
 # Set-up section - End ----------------------------------------------------
+
+# File preparation - Begin ------------------------------------------------
+
+touch_dir $source_path_bin true && \
+touch_dir $source_path_man true && \
+touch_dir $source_path_doc true && \
+touch_dir $source_path_dat true && \
+touch_dir $source_path_mat true && \
+touch_dir $source_path_lnk true
+if [ $? -ne 0 ]
+then
+    echo_e "Failed to touch build package directories"
+    exit 1
+fi
+
+# Copy binaries
+for file in $(ls -1 $buildBin)
+do
+    cp -v $file $source_path_bin
+done
+# Copy man pages
+for file in $(ls -1 $buildMan)
+do
+    cp -v $file $source_path_man
+done
+# Copy documents
+for file in $(ls -1 $buildDoc)
+do
+    cp -v $file $source_path_doc
+done
+# Copy data
+for file in $(ls -1 $buildDat)
+do
+    cp -v $file $source_path_dat
+done
+# Copy materials
+for file in $(ls -1 $buildMat)
+do
+    cp -v $file $source_path_mat
+done
+# Copy desktop files
+for file in $(ls -1 $buildLnk)
+do
+    cp -v $file $source_path_lnk
+done
+
+# File preparation - End --------------------------------------------------
 
 # Generation section - Begin ----------------------------------------------
 
