@@ -5,8 +5,6 @@ LIBS += -fopenmp
 TARGET = RangeSolverLib
 TEMPLATE = lib
 
-BUILDPATH = $${PWD}/../../build-range3
-
 DEFINES += RANGESOLVERLIB_LIBRARY
 
 INCLUDEPATH += include
@@ -71,13 +69,6 @@ CONFIG += exceptions
 #CONFIG += dll
 CONFIG += staticlib
 
-CONFIG(debug, debug|release) {
-    LIBS += -L$${BUILDPATH}/lib/ -lRangeModel_debug -lRangeBase_debug
-}
-else {
-    LIBS += -L$${BUILDPATH}/lib/ -lRangeModel -lRangeBase
-}
-
 INCLUDEPATH += $${_PRO_FILE_PWD_}/../TetGen
 INCLUDEPATH += $${_PRO_FILE_PWD_}/../RangeBase/include
 INCLUDEPATH += $${_PRO_FILE_PWD_}/../RangeModel/include
@@ -89,15 +80,3 @@ CONFIG(debug,debug|release) {
     DEFINES += DEBUG
 }
 
-unix {
-    target.path = $${BUILDPATH}/lib
-#    headers.path = $${BUILDPATH}/include
-}
-win32 {
-    target.path = $${BUILDPATH}\\lib
-#    headers.path = $${BUILDPATH}\\include
-}
-
-#headers.files += $$HEADERS
-#INSTALLS += headers
-INSTALLS += target

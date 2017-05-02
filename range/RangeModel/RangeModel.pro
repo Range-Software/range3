@@ -5,8 +5,6 @@ LIBS += -fopenmp
 TARGET = RangeModel
 TEMPLATE = lib
 
-BUILDPATH = $${PWD}/../../build-range3
-
 DEFINES += RANGEMODEL_LIBRARY
 
 DEFINES += "FILE_MAJOR_VERSION=0"
@@ -161,13 +159,6 @@ CONFIG += exceptions
 #CONFIG += dll
 CONFIG += staticlib
 
-CONFIG(debug, debug|release) {
-    LIBS += -L$${BUILDPATH}/lib/ -lRangeBase_debug -lTetGen_debug
-}
-else {
-    LIBS += -L$${BUILDPATH}/lib/ -lRangeBase -lTetGen
-}
-
 INCLUDEPATH += $${_PRO_FILE_PWD_}/../TetGen
 INCLUDEPATH += $${_PRO_FILE_PWD_}/../RangeBase/include
 
@@ -177,17 +168,4 @@ CONFIG(debug,debug|release) {
     TARGET = $$join(TARGET,,,_debug)
     DEFINES += DEBUG
 }
-
-unix {
-    target.path = $${BUILDPATH}/lib
-#    headers.path = $${BUILDPATH}/include
-}
-win32 {
-    target.path = $${BUILDPATH}\\lib
-#    headers.path = $${BUILDPATH}\\include
-}
-
-#headers.files += $$HEADERS
-#INSTALLS += headers
-INSTALLS += target
 

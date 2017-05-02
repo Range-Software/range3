@@ -3,8 +3,6 @@ QT       -= core gui
 TARGET = TetGen
 TEMPLATE = lib
 
-BUILDPATH = $${PWD}/../../build-range3
-
 SOURCES += \
     predicates.cxx \
     tetgen.cxx
@@ -39,15 +37,3 @@ CONFIG(debug,debug|release) {
     DEFINES += DEBUG
 }
 
-unix {
-    target.path = $${BUILDPATH}/lib
-#    headers.path = $${BUILDPATH}/include
-}
-win32 {
-    target.path = $${BUILDPATH}\\lib
-#    headers.path = $${BUILDPATH}\\include
-}
-
-#headers.files += $$HEADERS
-#INSTALLS += headers
-INSTALLS += target

@@ -6,8 +6,6 @@ LIBS += -fopenmp
 TARGET = RangeLicense
 TEMPLATE = app
 
-BUILDPATH = $${PWD}/../../build-range3
-
 SOURCES += \
     src/main.cpp \
     src/application.cpp \
@@ -40,13 +38,3 @@ LIBS += \
 INCLUDEPATH += $${_PRO_FILE_PWD_}/../RangeBase/include
 INCLUDEPATH += $${_PRO_FILE_PWD_}/../RangeAuth/include
 
-LIB_EXT = "a"
-
-unix {
-    target.path = $${BUILDPATH}/bin
-}
-win32 {
-    target.path = $${BUILDPATH}\\bin
-}
-
-INSTALLS += target

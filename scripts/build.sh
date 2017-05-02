@@ -41,16 +41,12 @@ function print_help
     echo ""
     echo "  --clean                  Clean old build"
     echo "  --debug                  Build debug version"
-    echo "  --build-dir=[DIRECTORY]  Custom build directory"
     echo "  --help, -h, -?           Print this help and exit"
 }
 
 while [ $# -gt 0 ]
 do
     case $1 in
-        --build-dir=*)
-            buildDir=$( echo $1 | awk 'BEGIN{ FS="=" } { print $2 }' )
-            ;;
         --clean)
             clean=true
             ;;

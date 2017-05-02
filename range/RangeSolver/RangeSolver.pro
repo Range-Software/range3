@@ -56,13 +56,3 @@ INCLUDEPATH += $${_PRO_FILE_PWD_}/../RangeAuth/include
 INCLUDEPATH += $${_PRO_FILE_PWD_}/../RangeModel/include
 INCLUDEPATH += $${_PRO_FILE_PWD_}/../RangeSolverLib/include
 
-LIB_EXT = "a"
-
-unix {
-    target.path = $${BUILDPATH}/bin
-}
-win32 {
-    target.path = $${BUILDPATH}\\bin
-}
-
-INSTALLS += target

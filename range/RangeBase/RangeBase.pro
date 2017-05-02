@@ -9,8 +9,6 @@ QT += core
 TARGET = RangeBase
 TEMPLATE = lib
 
-BUILDPATH = $${PWD}/../../build-range3
-
 DEFINES += RANGEBASE_LIBRARY
 
 INCLUDEPATH += include
@@ -84,17 +82,4 @@ CONFIG(debug,debug|release) {
     TARGET = $$join(TARGET,,,_debug)
     DEFINES += DEBUG
 }
-
-unix {
-    target.path = $${BUILDPATH}/lib
-#    headers.path = $${BUILDPATH}/include
-}
-win32 {
-    target.path = $${BUILDPATH}\\lib
-#    headers.path = $${BUILDPATH}\\include
-}
-
-#headers.files += $$HEADERS
-#INSTALLS += headers
-INSTALLS += target
 

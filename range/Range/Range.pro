@@ -6,8 +6,6 @@ LIBS += -fopenmp
 TARGET = Range
 TEMPLATE = app
 
-BUILDPATH = $${PWD}/../../build-range3
-
 SOURCES += \
     src/action.cpp \
     src/action_definition.cpp \
@@ -410,45 +408,12 @@ INCLUDEPATH += $${_PRO_FILE_PWD_}/../RangeAuth/include
 INCLUDEPATH += $${_PRO_FILE_PWD_}/../RangeModel/include
 INCLUDEPATH += $${_PRO_FILE_PWD_}/../RangeSolverLib/include
 
-LIB_EXT = "a"
-
-unix {
-#    target.path = $${BUILDPATH}/bin
-}
 win32 {
     LIBS += -lopengl32
-#    target.path = $${BUILDPATH}\\bin
 }
-
-#INSTALLS += target
 
 RESOURCES += \
     range.qrc
 
 win32:RC_ICONS += pixmaps/range.ico
 
-## Copy materials files
-#materials.path = $${BUILDPATH}/materials
-#materials.files += materials/*.rbmt
-#INSTALLS += materials
-#
-## Copy data files
-#data.path = $${BUILDPATH}/data
-#data.files += data/*.rbm
-#INSTALLS += data
-#
-## Copy doc files
-#doc.path = $${BUILDPATH}/doc
-#doc.files += doc/*.pdf
-#doc.files += doc/*.txt
-#INSTALLS += doc
-#
-## Copy man files
-#man.path = $${BUILDPATH}/man
-#man.files += man/*
-#INSTALLS += man
-#
-## Copy desktop files
-#desktop.path = $${BUILDPATH}/desktop
-#desktop.files += desktop/*
-#INSTALLS += desktop
