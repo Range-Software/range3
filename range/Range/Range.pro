@@ -402,6 +402,13 @@ LIBS += \
     -lRangeAuth$${DEBUG_EXT} \
     -lTetGen$${DEBUG_EXT}
 
+PRE_TARGETDEPS += \
+    ../TetGen/libTetGen$${DEBUG_EXT}.a \
+    ../RangeBase/libRangeBase$${DEBUG_EXT}.a \
+    ../RangeAuth/libRangeAuth$${DEBUG_EXT}.a \
+    ../RangeModel/libRangeModel$${DEBUG_EXT}.a \
+    ../RangeSolverLib/libRangeSolverLib$${DEBUG_EXT}.a
+
 INCLUDEPATH += $${_PRO_FILE_PWD_}/../TetGen
 INCLUDEPATH += $${_PRO_FILE_PWD_}/../RangeBase/include
 INCLUDEPATH += $${_PRO_FILE_PWD_}/../RangeAuth/include

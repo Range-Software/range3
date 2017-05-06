@@ -35,6 +35,10 @@ LIBS += \
     -lRangeAuth$${DEBUG_EXT} \
     -lRangeBase$${DEBUG_EXT}
 
+PRE_TARGETDEPS += \
+    ../RangeBase/libRangeBase$${DEBUG_EXT}.a \
+    ../RangeAuth/libRangeAuth$${DEBUG_EXT}.a
+
 INCLUDEPATH += $${_PRO_FILE_PWD_}/../RangeBase/include
 INCLUDEPATH += $${_PRO_FILE_PWD_}/../RangeAuth/include
 
