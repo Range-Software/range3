@@ -469,6 +469,7 @@ void ProblemTaskTree::onAddProblemButtonClicked(void)
     QTreeWidgetItem *item = this->treeWidget->topLevelItem(this->treeWidget->topLevelItemCount()-1);
 
     std::vector<RProblemType> problemTypes = RProblem::getTypes(problemTypeMask);
+    RProblem::sortTypesByDependency(problemTypes);
     for (uint i=0;i<problemTypes.size();i++)
     {
         RProblemTaskItem taskItem(problemTypes[i]);

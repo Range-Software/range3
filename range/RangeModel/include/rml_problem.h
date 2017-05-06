@@ -129,6 +129,9 @@ class RProblem
         //! Return list of possible result variable types for specific problem type mask.
         static std::vector<RVariableType> getVariableTypes ( RProblemTypeMask typeMask );
 
+        //! Sort list of problem types by dependency.
+        static void sortTypesByDependency(std::vector<RProblemType> &problemTypes);
+
 };
 
 #endif /* __RML_PROBLEM_H__ */

@@ -436,3 +436,36 @@ std::vector<RVariableType> RProblem::getVariableTypes(RProblemTypeMask typeMask)
 
     return variableTypes;
 } /* RProblemMask::getVariableTypes */
+
+void RProblem::sortTypesByDependency(std::vector<RProblemType> &problemTypes)
+{
+    if (problemTypes.size() == 0)
+    {
+        return;
+    }
+
+    bool orderChanged = false;
+
+    do
+    {
+        orderChanged = false;
+        for (uint i=0;i<problemTypes.size()-1;i++)
+        {
+            RProblemTypeMask requiredProblemTypes = RProblem::getRequiredProblemTypeMask(problemTypes[i]);
+            for (uint j=i+1;j<problemTypes.size();j++)
+            {
+                if (requiredProblemTypes & problemTypes[j])
+                {
+                    problemTypes.insert(problemTypes.begin()+i,problemTypes.at(j));
+                    problemTypes.erase(problemTypes.begin()+j+1);
+                    orderChanged = true;
+                    break;
+                }
+            }
+            if (orderChanged)
+            {
+                break;
+            }
+        }
+    } while (orderChanged);
+} /* RProblemMask::sortTypesByDependency */
