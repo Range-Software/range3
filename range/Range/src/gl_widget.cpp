@@ -14,6 +14,7 @@
 #include <rmlib.h>
 
 #include "gl_axis.h"
+#include "gl_dimension.h"
 #include "gl_cut_plane.h"
 #include "gl_line.h"
 #include "gl_point.h"
@@ -205,13 +206,8 @@ void GLWidget::drawModel(void)
 
     if (this->clippingPlaneEnabled)
     {
-//        GL_SAFE_CALL(glEnable(GL_CLIP_PLANE0));
         const GLdouble clippingPlane[4] = { 0.0, 0.0, -1.0, - this->scale  + 2.0 * this->clippingPlaneDistance * this->scale };
         GL_SAFE_CALL(glClipPlane(GL_CLIP_PLANE0,clippingPlane));
-    }
-    else
-    {
-//        GL_SAFE_CALL(glDisable(GL_CLIP_PLANE0));
     }
 
     GL_SAFE_CALL(glEnable(GL_LIGHTING));
@@ -270,6 +266,12 @@ void GLWidget::drawModel(void)
     {
         GL_SAFE_CALL(glDisable(GL_CLIP_PLANE0));
     }
+
+    // Draw model dimensions.
+    double xMin=0.0,xMax=0.0,yMin=0.0,yMax=0.0,zMin=0.0,zMax=0.0;
+    Session::getInstance().getModel(this->getModelID()).findNodeLimits(xMin,xMax,yMin,yMax,zMin,zMax);
+    GLDimension gDimension(this,xMin,xMax,yMin,yMax,zMin,zMax);
+    gDimension.paint();
 
     // Draw draw-engine objects.
     const DrawEngine *pDrawEngine = Session::getInstance().getDrawEngine();

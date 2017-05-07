@@ -10,6 +10,15 @@
 
 #include "gl_axis.h"
 
+void GLAxis::_init(const GLAxis *pGlAxis)
+{
+    if (pGlAxis)
+    {
+        this->setType(pGlAxis->getType());
+        this->setSize(pGlAxis->getSize());
+    }
+}
+
 GLAxis::GLAxis(GLWidget *glWidget, GLAxisType type) : GLObject(glWidget), size(1.0)
 {
     this->setType(type);
@@ -30,15 +39,6 @@ GLAxis & GLAxis::operator =(const GLAxis &glAxis)
     this->GLObject::operator =(glAxis);
     this->_init(&glAxis);
     return (*this);
-}
-
-void GLAxis::_init(const GLAxis *pGlAxis)
-{
-    if (pGlAxis)
-    {
-        this->setType(pGlAxis->getType());
-        this->setSize(pGlAxis->getSize());
-    }
 }
 
 GLAxisType GLAxis::getType(void) const

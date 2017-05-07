@@ -65,6 +65,7 @@ SOURCES += \
     src/gl_arrow.cpp \
     src/gl_axis.cpp \
     src/gl_cut_plane.cpp \
+    src/gl_dimension.cpp \
     src/gl_display_properties_dialog.cpp \
     src/gl_display_properties.cpp \
     src/gl_element.cpp \
@@ -251,6 +252,7 @@ HEADERS += \
     src/gl_arrow.h \
     src/gl_axis.h \
     src/gl_cut_plane.h \
+    src/gl_dimension.h \
     src/gl_display_properties_dialog.h \
     src/gl_display_properties.h \
     src/gl_element_base.h \
