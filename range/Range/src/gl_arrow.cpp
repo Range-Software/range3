@@ -19,15 +19,17 @@ void GLArrow::_init(const GLArrow *pGlArrow)
         this->direction = pGlArrow->direction;
         this->showHead = pGlArrow->showHead;
         this->drawFrom = pGlArrow->drawFrom;
+        this->scale = pGlArrow->scale;
     }
 }
 
-GLArrow::GLArrow(GLWidget *glWidget, const RR3Vector &position, const RR3Vector &direction, bool showHead, bool drawFrom)
+GLArrow::GLArrow(GLWidget *glWidget, const RR3Vector &position, const RR3Vector &direction, bool showHead, bool drawFrom, double scale)
     : GLObject(glWidget)
     , position(position)
     , direction(direction)
     , showHead(showHead)
     , drawFrom(drawFrom)
+    , scale(scale)
 {
     this->_init();
 }
@@ -113,7 +115,7 @@ void GLArrow::drawHead(void)
         v2 = this->position;
     }
 
-    RModelRaw raw = RShapeGenerator::generateArrow(v1,v2);
+    RModelRaw raw = RShapeGenerator::generateArrow(v1,v2,this->scale);
     for (uint i=0;i<raw.getNElements();i++)
     {
         const RElement &rElement = raw.getElement(i);

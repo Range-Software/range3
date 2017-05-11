@@ -66,9 +66,30 @@ void GLDimension::finalize(void)
 
 void GLDimension::draw(void)
 {
-    RR3Vector position(xMin,yMin,zMin);
-    RR3Vector direction(xMax-xMin,0.0,0.0);
+    double dx = this->xMax-this->xMin;
+    double dy = this->yMax-this->yMin;
+    double dz = this->zMax-this->zMin;
 
-    GLArrow a1(this->getGLWidget(),position,direction,true,true);
-    a1.paint();
+    double dmax = std::max(std::max(std::fabs(dx),std::fabs(dy)),std::fabs(dz));
+
+    double scale = 0.1;
+
+    double dxScale = scale*(dmax/std::fabs(dx));
+    double dyScale = scale*(dmax/std::fabs(dy));
+    double dzScale = scale*(dmax/std::fabs(dz));
+
+    GLArrow(this->getGLWidget(),RR3Vector(this->xMin,this->yMin,this->zMin),RR3Vector( dx,0.0,0.0),true,true,dxScale).paint();
+    GLArrow(this->getGLWidget(),RR3Vector(this->xMax,this->yMin,this->zMin),RR3Vector(-dx,0.0,0.0),true,true,dxScale).paint();
+
+    this->getGLWidget()->renderText((this->xMin+this->xMax)/2.0,this->yMin,this->zMin,QString::number(dx),QFont("Courier",20));
+
+    GLArrow(this->getGLWidget(),RR3Vector(this->xMin,this->yMin,this->zMin),RR3Vector(0.0, dy,0.0),true,true,dyScale).paint();
+    GLArrow(this->getGLWidget(),RR3Vector(this->xMin,this->yMax,this->zMin),RR3Vector(0.0,-dy,0.0),true,true,dyScale).paint();
+
+    this->getGLWidget()->renderText(this->xMin,(this->yMin+this->yMax)/2.0,this->zMin,QString::number(dy),QFont("Courier",20));
+
+    GLArrow(this->getGLWidget(),RR3Vector(this->xMin,this->yMin,this->zMin),RR3Vector(0.0,0.0, dz),true,true,dzScale).paint();
+    GLArrow(this->getGLWidget(),RR3Vector(this->xMin,this->yMin,this->zMax),RR3Vector(0.0,0.0,-dz),true,true,dzScale).paint();
+
+    this->getGLWidget()->renderText(this->xMin,this->yMin,(this->zMin+this->zMax)/2.0,QString::number(dz),QFont("Courier",20));
 }

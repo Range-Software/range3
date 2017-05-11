@@ -39,29 +39,39 @@ RShapeGenerator &RShapeGenerator::operator =(const RShapeGenerator &shapeGenerat
     return (*this);
 }
 
-RModelRaw RShapeGenerator::generateArrow(const RR3Vector &v1, const RR3Vector &v2)
+RModelRaw RShapeGenerator::generateArrow(const RR3Vector &v1, const RR3Vector &v2, double scale)
 {
     RModelRaw arrow;
 
-    RNode r1(  0.0,     0.0,         0.0         );
-    RNode r2(  1.0,     0.0,         0.0         );
-    RNode r3(  1.0/2.0, 1.0/6.0,     0.0         );
-    RNode r4(  1.0/2.0, 0.70711/6.0, 0.70711/6.0 );
-    RNode r5(  1.0/2.0, 0.0,         1.0/6.0     );
-    RNode r6(  1.0/2.0,-0.70711/6.0, 0.70711/6.0 );
-    RNode r7(  1.0/2.0,-1.0/6.0,     0.0         );
-    RNode r8(  1.0/2.0,-0.70711/6.0,-0.70711/6.0 );
-    RNode r9(  1.0/2.0, 0.0,        -1.0/6.0     );
-    RNode r10( 1.0/2.0, 0.70711/6.0,-0.70711/6.0 );
+    RNode r1(  0.0,                0.0,          0.0         );
+    RNode r2(  1.0/scale,          0.0,          0.0         );
+    RNode r3(  1.0/scale-1.0/2.0,  1.0/6.0,      0.0         );
+    RNode r4(  1.0/scale-1.0/2.0,  0.70711/6.0,  0.70711/6.0 );
+    RNode r5(  1.0/scale-1.0/2.0,  0.0,          1.0/6.0     );
+    RNode r6(  1.0/scale-1.0/2.0, -0.70711/6.0,  0.70711/6.0 );
+    RNode r7(  1.0/scale-1.0/2.0, -1.0/6.0,      0.0         );
+    RNode r8(  1.0/scale-1.0/2.0, -0.70711/6.0, -0.70711/6.0 );
+    RNode r9(  1.0/scale-1.0/2.0,  0.0,         -1.0/6.0     );
+    RNode r10( 1.0/scale-1.0/2.0,  0.70711/6.0, -0.70711/6.0 );
 //    RNode r11( 1.0/2.0, 0.0,         0.0         );
+
+    r1.scale(scale);
+    r2.scale(scale);
+    r3.scale(scale);
+    r4.scale(scale);
+    r5.scale(scale);
+    r6.scale(scale);
+    r7.scale(scale);
+    r8.scale(scale);
+    r9.scale(scale);
+    r10.scale(scale);
 
     RSegment segment(RNode(v1[0],v1[1],v1[2]),RNode(v2[0],v2[1],v2[2]));
 
-    double scale = segment.findLength();
     RRMatrix R;
     segment.findRotationMatrix(R);
 
-    R *= scale;
+    R *= segment.findLength();
 
     r1.transform(R,v1);
     r2.transform(R,v1);

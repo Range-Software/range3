@@ -10,6 +10,7 @@
 
 #include <QFileDialog>
 #include <QPainter>
+#include <QGuiApplication>
 
 #include <rmlib.h>
 
@@ -267,11 +268,15 @@ void GLWidget::drawModel(void)
         GL_SAFE_CALL(glDisable(GL_CLIP_PLANE0));
     }
 
-    // Draw model dimensions.
-    double xMin=0.0,xMax=0.0,yMin=0.0,yMax=0.0,zMin=0.0,zMax=0.0;
-    Session::getInstance().getModel(this->getModelID()).findNodeLimits(xMin,xMax,yMin,yMax,zMin,zMax);
-    GLDimension gDimension(this,xMin,xMax,yMin,yMax,zMin,zMax);
-    gDimension.paint();
+    if (this->displayProperties.getShowModelDimensions())
+    {
+        // Draw model dimensions.
+        double xMin=0.0,xMax=0.0,yMin=0.0,yMax=0.0,zMin=0.0,zMax=0.0;
+        Session::getInstance().getModel(this->getModelID()).findNodeLimits(xMin,xMax,yMin,yMax,zMin,zMax);
+        this->qglColor(Qt::black);
+        GLDimension gDimension(this,xMin,xMax,yMin,yMax,zMin,zMax);
+        gDimension.paint();
+    }
 
     // Draw draw-engine objects.
     const DrawEngine *pDrawEngine = Session::getInstance().getDrawEngine();
@@ -532,6 +537,8 @@ void GLWidget::drawValueRange(QPainter &painter,
 
 void GLWidget::drawMessageBox(QPainter &painter)
 {
+    painter.setFont(QGuiApplication::font());
+
     const Model &rModel = Session::getInstance().getModel(this->getModelID());
 
     QList<QString> messages;

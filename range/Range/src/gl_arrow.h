@@ -35,6 +35,8 @@ class GLArrow : public GLObject
         bool showHead;
         //! Draw from.
         bool drawFrom;
+        //! Scale.
+        double scale;
 
     private:
 
@@ -44,7 +46,7 @@ class GLArrow : public GLObject
     public:
 
         //! Constructor.
-        explicit GLArrow(GLWidget *glWidget, const RR3Vector &position, const RR3Vector &direction, bool showHead, bool drawFrom);
+        explicit GLArrow(GLWidget *glWidget, const RR3Vector &position, const RR3Vector &direction, bool showHead, bool drawFrom, double scale = 1.0);
 
         //! Copy constructor.
         GLArrow(const GLArrow &glArrow);

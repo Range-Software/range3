@@ -103,6 +103,12 @@ void GLDisplayPropertiesDialog::populate(void)
     itemsLayout->addWidget(showModelEdgesCheckBox);
     QObject::connect(showModelEdgesCheckBox,&QCheckBox::clicked,this,&GLDisplayPropertiesDialog::onShowModelEdgesClicked);
 
+    // Show model edges
+    QCheckBox *showModelDimensionsCheckBox = new QCheckBox(tr("Show model dimensions"));
+    showModelDimensionsCheckBox->setChecked(this->pGlWidget->getGLDisplayProperties().getShowModelDimensions());
+    itemsLayout->addWidget(showModelDimensionsCheckBox);
+    QObject::connect(showModelDimensionsCheckBox,&QCheckBox::clicked,this,&GLDisplayPropertiesDialog::onShowModelDimensionsClicked);
+
     // Show model errors
     QCheckBox *showModelErrorsCheckBox = new QCheckBox(tr("Show model errors"));
     showModelErrorsCheckBox->setChecked(this->pGlWidget->getGLDisplayProperties().getShowErrors());
@@ -170,6 +176,12 @@ void GLDisplayPropertiesDialog::populate(void)
 void GLDisplayPropertiesDialog::onShowModelEdgesClicked(bool checked)
 {
     this->pGlWidget->getGLDisplayProperties().setShowModelEdges(checked);
+    this->pGlWidget->update();
+}
+
+void GLDisplayPropertiesDialog::onShowModelDimensionsClicked(bool checked)
+{
+    this->pGlWidget->getGLDisplayProperties().setShowModelDimensions(checked);
     this->pGlWidget->update();
 }
 

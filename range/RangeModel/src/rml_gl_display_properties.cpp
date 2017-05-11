@@ -37,6 +37,7 @@ void RGLDisplayProperties::_init(const RGLDisplayProperties *pDisplayProperties)
         this->drawGlobalAxis = pDisplayProperties->drawGlobalAxis;
         this->drawLocalAxis = pDisplayProperties->drawLocalAxis;
         this->showModelEdges = pDisplayProperties->showModelEdges;
+        this->showModelDimensions = pDisplayProperties->showModelDimensions;
         this->showErrors = pDisplayProperties->showErrors;
         this->bgColor = pDisplayProperties->bgColor;
         this->bgGradient = pDisplayProperties->bgGradient;
@@ -48,6 +49,7 @@ RGLDisplayProperties::RGLDisplayProperties()
     : drawGlobalAxis(true)
     , drawLocalAxis(true)
     , showModelEdges(true)
+    , showModelDimensions(false)
     , showErrors(true)
     , bgGradient(true)
 {
@@ -115,6 +117,16 @@ bool RGLDisplayProperties::getShowModelEdges(void) const
 void RGLDisplayProperties::setShowModelEdges(bool showModelEdges)
 {
     this->showModelEdges = showModelEdges;
+}
+
+bool RGLDisplayProperties::getShowModelDimensions(void) const
+{
+    return this->showModelDimensions;
+}
+
+void RGLDisplayProperties::setShowModelDimensions(bool showModelDimensions)
+{
+    this->showModelDimensions = showModelDimensions;
 }
 
 bool RGLDisplayProperties::getShowErrors(void) const

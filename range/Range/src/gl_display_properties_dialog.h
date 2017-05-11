@@ -52,6 +52,9 @@ class GLDisplayPropertiesDialog : public QDialog
         //! Show model edges clicked.
         void onShowModelEdgesClicked(bool checked);
 
+        //! Show model edges clicked.
+        void onShowModelDimensionsClicked(bool checked);
+
         //! Show model errors clicked.
         void onShowModelErrorsClicked(bool checked);
 

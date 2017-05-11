@@ -36,7 +36,7 @@ class RShapeGenerator
         RShapeGenerator & operator = ( const RShapeGenerator &shapeGenerator );
 
         //! Generate arrow.
-        static RModelRaw generateArrow(const RR3Vector &v1,const RR3Vector &v2);
+        static RModelRaw generateArrow(const RR3Vector &v1, const RR3Vector &v2, double scale = 1.0);
 
 };
 
