@@ -298,7 +298,7 @@ void ModelAction::removeNodes(const ModelActionInput &modelActionInput)
     RLogger::indent();
 
     rModel.removeNodes(modelActionInput.getNodeIDs(),modelActionInput.getCloseHole());
-    rModel.consolidate();
+    rModel.consolidate(true);
 
     RLogger::unindent();
 
