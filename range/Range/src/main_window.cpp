@@ -460,6 +460,7 @@ void MainWindow::createToolBars(void)
         this->addToolBar(Qt::TopToolBarArea, toolBar);
         toolBar->addAction(this->actionList->getAction(ACTION_GEOMETRY_UNDO));
         toolBar->addAction(this->actionList->getAction(ACTION_GEOMETRY_REDO));
+        toolBar->addAction(this->actionList->getAction(ACTION_GEOMETRY_TRANSFORM));
         toolBar->addAction(this->actionList->getAction(ACTION_GEOMETRY_VOLUME_GENERATE_TETRAHEDRA));
         this->toolBars.push_back(toolBar);
 

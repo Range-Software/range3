@@ -83,5 +83,6 @@
         <file>pixmaps/range-undo.svg</file>
         <file>pixmaps/range-redo.svg</file>
         <file>pixmaps/range-generate_volume_mesh.svg</file>
+        <file>pixmaps/range-geometry_transform.svg</file>
     </qresource>
 </RCC>
