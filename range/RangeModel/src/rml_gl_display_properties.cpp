@@ -49,7 +49,7 @@ RGLDisplayProperties::RGLDisplayProperties()
     : drawGlobalAxis(true)
     , drawLocalAxis(true)
     , showModelEdges(true)
-    , showModelDimensions(false)
+    , showModelDimensions(true)
     , showErrors(true)
     , bgGradient(true)
 {

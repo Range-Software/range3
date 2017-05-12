@@ -268,13 +268,14 @@ void GLWidget::drawModel(void)
         GL_SAFE_CALL(glDisable(GL_CLIP_PLANE0));
     }
 
+    // Draw model dimensions.
     if (this->displayProperties.getShowModelDimensions())
     {
-        // Draw model dimensions.
         double xMin=0.0,xMax=0.0,yMin=0.0,yMax=0.0,zMin=0.0,zMax=0.0;
         Session::getInstance().getModel(this->getModelID()).findNodeLimits(xMin,xMax,yMin,yMax,zMin,zMax);
-        this->qglColor(Qt::black);
-        GLDimension gDimension(this,xMin,xMax,yMin,yMax,zMin,zMax);
+        int lineColorValue = qGray(this->getGLDisplayProperties().getBgColor().rgb()) < 96 ? 255 : 0;
+        this->qglColor(QColor(lineColorValue,lineColorValue,lineColorValue,255));
+        GLDimension gDimension(this,1.0/this->scale,xMin,xMax,yMin,yMax,zMin,zMax);
         gDimension.paint();
     }
 

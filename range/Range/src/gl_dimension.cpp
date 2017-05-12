@@ -11,15 +11,24 @@
 #include "gl_arrow.h"
 #include "gl_dimension.h"
 
+const double GLDimension::arrowScale = 0.1;
+
 void GLDimension::_init(const GLDimension *pGlDimension)
 {
     if (pGlDimension)
     {
-
+        this->scale = pGlDimension->scale;
+        this->xMin = pGlDimension->xMin;
+        this->xMax = pGlDimension->xMax;
+        this->yMin = pGlDimension->yMin;
+        this->yMax = pGlDimension->yMax;
+        this->zMin = pGlDimension->zMin;
+        this->zMax = pGlDimension->zMax;
     }
 }
 
 GLDimension::GLDimension(GLWidget *glWidget,
+                         double scale,
                          double xMin,
                          double xMax,
                          double yMin,
@@ -27,6 +36,7 @@ GLDimension::GLDimension(GLWidget *glWidget,
                          double zMin,
                          double zMax)
     : GLObject(glWidget)
+    , scale(scale)
     , xMin(xMin)
     , xMax(xMax)
     , yMin(yMin)
@@ -72,11 +82,9 @@ void GLDimension::draw(void)
 
     double dmax = std::max(std::max(std::fabs(dx),std::fabs(dy)),std::fabs(dz));
 
-    double scale = 0.1;
-
-    double dxScale = scale*(dmax/std::fabs(dx));
-    double dyScale = scale*(dmax/std::fabs(dy));
-    double dzScale = scale*(dmax/std::fabs(dz));
+    double dxScale = GLDimension::arrowScale * this->scale * dmax / std::fabs(dx);
+    double dyScale = GLDimension::arrowScale * this->scale * dmax / std::fabs(dy);
+    double dzScale = GLDimension::arrowScale * this->scale * dmax / std::fabs(dz);
 
     GLArrow(this->getGLWidget(),RR3Vector(this->xMin,this->yMin,this->zMin),RR3Vector( dx,0.0,0.0),true,true,dxScale).paint();
     GLArrow(this->getGLWidget(),RR3Vector(this->xMax,this->yMin,this->zMin),RR3Vector(-dx,0.0,0.0),true,true,dxScale).paint();

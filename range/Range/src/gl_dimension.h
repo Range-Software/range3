@@ -23,6 +23,9 @@ class GLDimension : public GLObject
 
     protected:
 
+        static const double arrowScale;
+
+        double scale;
         double xMin;
         double xMax;
         double yMin;
@@ -39,6 +42,7 @@ class GLDimension : public GLObject
 
         //! Constructor.
         explicit GLDimension(GLWidget *glWidget,
+                             double scale,
                              double xMin,
                              double xMax,
                              double yMin,

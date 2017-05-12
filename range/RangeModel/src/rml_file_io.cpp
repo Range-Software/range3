@@ -1419,7 +1419,7 @@ void RFileIO::readAscii(RFile &inFile, RGLDisplayProperties &displayProperties)
     RFileIO::readAscii(inFile,displayProperties.drawGlobalAxis);
     RFileIO::readAscii(inFile,displayProperties.drawLocalAxis);
     RFileIO::readAscii(inFile,displayProperties.showModelEdges);
-//    RFileIO::readAscii(inFile,displayProperties.showModelDimensions);
+    RFileIO::readAscii(inFile,displayProperties.showModelDimensions);
     RFileIO::readAscii(inFile,displayProperties.showErrors);
     RFileIO::readAscii(inFile,displayProperties.bgColor);
     RFileIO::readAscii(inFile,displayProperties.bgGradient);
@@ -1438,7 +1438,7 @@ void RFileIO::readBinary(RFile &inFile, RGLDisplayProperties &displayProperties)
     RFileIO::readBinary(inFile,displayProperties.drawGlobalAxis);
     RFileIO::readBinary(inFile,displayProperties.drawLocalAxis);
     RFileIO::readBinary(inFile,displayProperties.showModelEdges);
-//    RFileIO::readBinary(inFile,displayProperties.showModelDimensions);
+    RFileIO::readBinary(inFile,displayProperties.showModelDimensions);
     RFileIO::readBinary(inFile,displayProperties.showErrors);
     RFileIO::readBinary(inFile,displayProperties.bgColor);
     RFileIO::readBinary(inFile,displayProperties.bgGradient);
@@ -1468,11 +1468,11 @@ void RFileIO::writeAscii(RFile &outFile, const RGLDisplayProperties &displayProp
     {
         RFileIO::writeAscii(outFile,' ',false);
     }
-//    RFileIO::writeAscii(outFile,displayProperties.showModelDimensions,addNewLine);
-//    if (!addNewLine)
-//    {
-//        RFileIO::writeAscii(outFile,' ',false);
-//    }
+    RFileIO::writeAscii(outFile,displayProperties.showModelDimensions,addNewLine);
+    if (!addNewLine)
+    {
+        RFileIO::writeAscii(outFile,' ',false);
+    }
     RFileIO::writeAscii(outFile,displayProperties.showErrors,addNewLine);
     if (!addNewLine)
     {
@@ -1509,7 +1509,7 @@ void RFileIO::writeBinary(RFile &outFile, const RGLDisplayProperties &displayPro
     RFileIO::writeBinary(outFile,displayProperties.drawGlobalAxis);
     RFileIO::writeBinary(outFile,displayProperties.drawLocalAxis);
     RFileIO::writeBinary(outFile,displayProperties.showModelEdges);
-//    RFileIO::writeBinary(outFile,displayProperties.showModelDimensions);
+    RFileIO::writeBinary(outFile,displayProperties.showModelDimensions);
     RFileIO::writeBinary(outFile,displayProperties.showErrors);
     RFileIO::writeBinary(outFile,displayProperties.bgColor);
     RFileIO::writeBinary(outFile,displayProperties.bgGradient);
