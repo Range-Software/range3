@@ -162,7 +162,7 @@ void ActionDefinition::generateActionDescList(QList<ActionDefinitionItem> &actio
     actionDesc.push_back(ActionDefinitionItem(ACTION_GEOMETRY_ISO_EDIT, ACTION_GROUP_GEOMETRY, "Edit iso", "", "", &Action::onGeometryIsoEdit));
     actionDesc.push_back(ActionDefinitionItem(ACTION_GEOMETRY_ENTITY_MERGE, ACTION_GROUP_GEOMETRY, "Merge selected entities", "Ctrl+M", "", &Action::onGeometryEntityMerge));
     actionDesc.push_back(ActionDefinitionItem(ACTION_GEOMETRY_ENTITY_REMOVE, ACTION_GROUP_GEOMETRY, "Remove selected entities", "Ctrl+X", "", &Action::onGeometryEntityRemove));
-    actionDesc.push_back(ActionDefinitionItem(ACTION_GEOMETRY_TRANSFORM, ACTION_GROUP_GEOMETRY, "Scale, translate, rotate", "Ctrl+T", "", &Action::onGeometryTransform));
+    actionDesc.push_back(ActionDefinitionItem(ACTION_GEOMETRY_TRANSFORM, ACTION_GROUP_GEOMETRY, "Scale, translate, rotate", "Ctrl+T", ":/icons/geometry/pixmaps/range-geometry_transform.svg", &Action::onGeometryTransform));
     actionDesc.push_back(ActionDefinitionItem(ACTION_GEOMETRY_DEV_EXPORT_INTERSECTED_ELEMENTS, ACTION_GROUP_GEOMETRY, "Export intersected elements", "", "", &Action::onGeometryDevExportIntersectedElements));
     actionDesc.push_back(ActionDefinitionItem(ACTION_GEOMETRY_DEV_PURGE_UNUSED_NODES, ACTION_GROUP_GEOMETRY, "Purge unused nodes", "", "", &Action::onGeometryDevPurgeUnusedNodes));
     actionDesc.push_back(ActionDefinitionItem(ACTION_GEOMETRY_DEV_PURGE_UNUSED_ELEMENTS, ACTION_GROUP_GEOMETRY, "Purge unused elements", "", "", &Action::onGeometryDevPurgeUnusedElements));
