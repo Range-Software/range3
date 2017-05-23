@@ -4973,6 +4973,9 @@ QList<uint> RModel::findIntersectedElements(void) const
     RLogger::info("Finding intersected elements\n");
     RLogger::indent();
 
+//    double modelScale = this->findNodeScale() * 100.0;
+//    this->scaleGeometry(this->);
+
     QVector<bool> intElements;
     intElements.resize(this->getNElements());
     intElements.fill(false);
