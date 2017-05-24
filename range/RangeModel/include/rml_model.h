@@ -787,6 +787,9 @@ class RModel : public RProblem, public RResults
                            const RR3Vector &scaleVector,
                            const RR3Vector &scaleCenter);
 
+        //! Scale model.
+        void scaleGeometry(double scaleFactor);
+
         //! Translate model.
         void translateGeometry(const QSet<uint> &nodeIDs,
                                const RR3Vector &translateVector);
@@ -853,7 +856,7 @@ class RModel : public RProblem, public RResults
         uint fixSliverElements(double edgeRatio);
 
         //! Find list of intersected elements.
-        QList<uint> findIntersectedElements(void) const;
+        QList<uint> findIntersectedElements(void);
 
         //! Break intersected elements.
         uint breakIntersectedElements(uint nIterations);
