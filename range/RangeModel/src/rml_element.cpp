@@ -1683,12 +1683,16 @@ bool RElement::mergeNodes(uint nodeId1, uint nodeId2, bool allowDowngrade)
 {
     bool nodeMerged = false;
 
-    for (uint i=0;i<this->size();i++)
+    for (int i=this->size()-1;i>=0;i--)
     {
         if (this->getNodeId(i) == nodeId2)
         {
             this->setNodeId(i,nodeId1);
             nodeMerged = true;
+//            if (allowDowngrade)
+//            {
+//                this->nodeIDs.erase(this->nodeIDs.begin()+i);
+//            }
         }
     }
     if (!allowDowngrade || !nodeMerged)
@@ -1716,12 +1720,14 @@ bool RElement::mergeNodes(uint nodeId1, uint nodeId2, bool allowDowngrade)
         case R_ELEMENT_TRUSS1:
         {
             this->setType(R_ELEMENT_POINT);
+            this->nodeIDs.resize(1);
             this->setNodeId(0,nids[0]);
             return true;
         }
         case R_ELEMENT_TRI1:
         {
             this->setType(R_ELEMENT_TRUSS1);
+            this->nodeIDs.resize(2);
             this->setNodeId(0,nids[0]);
             this->setNodeId(1,nids[1]);
             return true;
@@ -1729,6 +1735,7 @@ bool RElement::mergeNodes(uint nodeId1, uint nodeId2, bool allowDowngrade)
         case R_ELEMENT_QUAD1:
         {
             this->setType(R_ELEMENT_TRI1);
+            this->nodeIDs.resize(3);
             this->setNodeId(0,nids[0]);
             this->setNodeId(1,nids[1]);
             this->setNodeId(2,nids[2]);
@@ -1737,6 +1744,7 @@ bool RElement::mergeNodes(uint nodeId1, uint nodeId2, bool allowDowngrade)
         case R_ELEMENT_TETRA1:
         {
             this->setType(R_ELEMENT_TRI1);
+            this->nodeIDs.resize(3);
             this->setNodeId(0,nids[0]);
             this->setNodeId(1,nids[1]);
             this->setNodeId(2,nids[2]);
