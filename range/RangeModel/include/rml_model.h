@@ -856,7 +856,7 @@ class RModel : public RProblem, public RResults
         uint fixSliverElements(double edgeRatio);
 
         //! Find list of intersected elements.
-        QList<uint> findIntersectedElements(void);
+        QList<uint> findIntersectedElements(void) const;
 
         //! Break intersected elements.
         uint breakIntersectedElements(uint nIterations);

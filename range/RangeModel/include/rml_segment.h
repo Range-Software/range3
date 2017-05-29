@@ -128,8 +128,20 @@ class RSegment
             return this->node1;
         }
 
+        //! Return segment first node.
+        inline RNode & getNode1 ( void )
+        {
+            return this->node1;
+        }
+
         //! Return segment second node.
         inline const RNode & getNode2 ( void ) const
+        {
+            return this->node2;
+        }
+
+        //! Return segment second node.
+        inline RNode & getNode2 ( void )
         {
             return this->node2;
         }

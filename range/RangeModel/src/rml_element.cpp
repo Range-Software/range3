@@ -2457,29 +2457,101 @@ bool RElement::findIntersectionPoints(const RElement &e1, const RElement &e2, co
     std::vector<RTriangle> t1;
     std::vector<RTriangle> t2;
 
+    double nodeScale = 1.0;
+
+    double xmin = 0.0, xmax = 0.0;
+    double ymin = 0.0, ymax = 0.0;
+    double zmin = 0.0, zmax = 0.0;
+
+    for (uint i=0;i<e1.size();i++)
+    {
+        if (i==0)
+        {
+            xmin = xmax = nodes[e1.getNodeId(i)].getX();
+            ymin = ymax = nodes[e1.getNodeId(i)].getY();
+            zmin = zmax = nodes[e1.getNodeId(i)].getZ();
+        }
+        else
+        {
+            xmin = std::min(nodes[e1.getNodeId(i)].getX(),xmin);
+            ymin = std::min(nodes[e1.getNodeId(i)].getY(),ymin);
+            zmin = std::min(nodes[e1.getNodeId(i)].getZ(),zmin);
+
+            xmax = std::max(nodes[e1.getNodeId(i)].getX(),xmax);
+            ymax = std::max(nodes[e1.getNodeId(i)].getY(),ymax);
+            zmax = std::max(nodes[e1.getNodeId(i)].getZ(),zmax);
+        }
+    }
+
+    for (uint i=0;i<e2.size();i++)
+    {
+        xmin = std::min(nodes[e2.getNodeId(i)].getX(),xmin);
+        ymin = std::min(nodes[e2.getNodeId(i)].getY(),ymin);
+        zmin = std::min(nodes[e2.getNodeId(i)].getZ(),zmin);
+
+        xmax = std::max(nodes[e2.getNodeId(i)].getX(),xmax);
+        ymax = std::max(nodes[e2.getNodeId(i)].getY(),ymax);
+        zmax = std::max(nodes[e2.getNodeId(i)].getZ(),zmax);
+    }
+
+
+    nodeScale = std::sqrt(std::pow(xmax - xmin,2) + std::pow(ymax - ymin,2) + std::pow(zmax - zmin,2));
+    if (nodeScale <= RConstants::eps)
+    {
+        nodeScale = 1.0;
+    }
+    else
+    {
+        nodeScale = 1.0/nodeScale;
+    }
+
     if (R_ELEMENT_TYPE_IS_POINT(e1.getType()))
     {
         p1.push_back(nodes[e1.getNodeId(0)]);
+        p1.at(0).scale(nodeScale);
     }
     if (R_ELEMENT_TYPE_IS_POINT(e2.getType()))
     {
         p2.push_back(nodes[e2.getNodeId(0)]);
+        p2.at(0).scale(nodeScale);
     }
     if (R_ELEMENT_TYPE_IS_LINE(e1.getType()))
     {
         s1 = e1.segmentize(nodes);
+        for (uint i=0;i<s1.size();i++)
+        {
+            s1.at(i).getNode1().scale(nodeScale);
+            s1.at(i).getNode2().scale(nodeScale);
+        }
     }
     if (R_ELEMENT_TYPE_IS_LINE(e2.getType()))
     {
         s2 = e2.segmentize(nodes);
+        for (uint i=0;i<s2.size();i++)
+        {
+            s2.at(i).getNode1().scale(nodeScale);
+            s2.at(i).getNode2().scale(nodeScale);
+        }
     }
     if (R_ELEMENT_TYPE_IS_SURFACE(e1.getType()))
     {
         t1 = e1.triangulate(nodes);
+        for (uint i=0;i<t1.size();i++)
+        {
+            t1.at(i).getNode1().scale(nodeScale);
+            t1.at(i).getNode2().scale(nodeScale);
+            t1.at(i).getNode3().scale(nodeScale);
+        }
     }
     if (R_ELEMENT_TYPE_IS_SURFACE(e2.getType()))
     {
         t2 = e2.triangulate(nodes);
+        for (uint i=0;i<t2.size();i++)
+        {
+            t2.at(i).getNode1().scale(nodeScale);
+            t2.at(i).getNode2().scale(nodeScale);
+            t2.at(i).getNode3().scale(nodeScale);
+        }
     }
 
     bool intersectionFound = false;
@@ -2572,6 +2644,11 @@ bool RElement::findIntersectionPoints(const RElement &e1, const RElement &e2, co
                 intersectionFound = true;
             }
         }
+    }
+
+    for (auto f : x)
+    {
+        f.scale(1.0/nodeScale);
     }
 
     return intersectionFound;

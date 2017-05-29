@@ -4977,13 +4977,10 @@ uint RModel::fixSliverElements(double edgeRatio)
 } /* RModel::fixSliverElements */
 
 
-QList<uint> RModel::findIntersectedElements(void)
+QList<uint> RModel::findIntersectedElements(void) const
 {
     RLogger::info("Finding intersected elements\n");
     RLogger::indent();
-
-    double modelScale = this->findNodeScale() * 100.0;
-    this->scaleGeometry(modelScale);
 
     QVector<bool> intElements;
     intElements.resize(this->getNElements());
@@ -5047,8 +5044,6 @@ QList<uint> RModel::findIntersectedElements(void)
         }
     }
 
-    this->scaleGeometry(1.0/modelScale);
-
     RLogger::unindent();
 
     return elementIDs;
@@ -5070,9 +5065,6 @@ uint RModel::breakIntersectedElements(uint nIterations)
 
 uint RModel::breakIntersectedElements(uint nIterations, const std::vector<uint> &elementIDs)
 {
-    double modelScale = this->findNodeScale() * 100.0;
-    this->scaleGeometry(modelScale);
-
     uint oldNNodes = this->getNNodes();
     uint nIntersected = 0;
     uint iteration = 0;
@@ -5322,8 +5314,6 @@ uint RModel::breakIntersectedElements(uint nIterations, const std::vector<uint> 
     }
     this->removeElements(dElementIDs,false);
     RLogger::unindent();
-
-    this->scaleGeometry(1.0/modelScale);
 
     return nIntersected;
 } /* RModel::breakIntersectedElements */

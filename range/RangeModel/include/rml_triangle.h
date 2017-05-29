@@ -140,14 +140,32 @@ class RTriangle
             return this->node1;
         }
 
+        //! Return triangles first node.
+        inline RNode & getNode1 ( void )
+        {
+            return this->node1;
+        }
+
         //! Return triangles second node.
         inline const RNode & getNode2 ( void ) const
         {
             return this->node2;
         }
 
+        //! Return triangles second node.
+        inline RNode & getNode2 ( void )
+        {
+            return this->node2;
+        }
+
         //! Return triangles third node.
         inline const RNode & getNode3 ( void ) const
+        {
+            return this->node3;
+        }
+
+        //! Return triangles third node.
+        inline RNode & getNode3 ( void )
         {
             return this->node3;
         }
