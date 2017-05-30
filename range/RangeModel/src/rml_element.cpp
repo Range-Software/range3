@@ -1689,10 +1689,6 @@ bool RElement::mergeNodes(uint nodeId1, uint nodeId2, bool allowDowngrade)
         {
             this->setNodeId(i,nodeId1);
             nodeMerged = true;
-//            if (allowDowngrade)
-//            {
-//                this->nodeIDs.erase(this->nodeIDs.begin()+i);
-//            }
         }
     }
     if (!allowDowngrade || !nodeMerged)
@@ -2564,12 +2560,14 @@ bool RElement::findIntersectionPoints(const RElement &e1, const RElement &e2, co
 
     bool intersectionFound = false;
 
+    std::set<RR3Vector> xTmp;
+
     // Segment-point intersection
     for (uint i=0;i<s1.size();i++)
     {
         for (uint j=0;j<p2.size();j++)
         {
-            if (s1[i].findPointIntersection(p2[j],x))
+            if (s1[i].findPointIntersection(p2[j],xTmp))
             {
                 intersectionFound = true;
             }
@@ -2579,7 +2577,7 @@ bool RElement::findIntersectionPoints(const RElement &e1, const RElement &e2, co
     {
         for (uint j=0;j<p1.size();j++)
         {
-            if (s2[i].findPointIntersection(p1[j],x))
+            if (s2[i].findPointIntersection(p1[j],xTmp))
             {
                 intersectionFound = true;
             }
@@ -2591,7 +2589,7 @@ bool RElement::findIntersectionPoints(const RElement &e1, const RElement &e2, co
     {
         for (uint j=0;j<s2.size();j++)
         {
-            if (s1[i].findSegmentIntersection(s2[j],x))
+            if (s1[i].findSegmentIntersection(s2[j],xTmp))
             {
                 intersectionFound = true;
             }
@@ -2603,7 +2601,7 @@ bool RElement::findIntersectionPoints(const RElement &e1, const RElement &e2, co
     {
         for (uint j=0;j<p2.size();j++)
         {
-            if (t1[i].findPointIntersection(p2[j],x))
+            if (t1[i].findPointIntersection(p2[j],xTmp))
             {
                 intersectionFound = true;
             }
@@ -2613,7 +2611,7 @@ bool RElement::findIntersectionPoints(const RElement &e1, const RElement &e2, co
     {
         for (uint j=0;j<p1.size();j++)
         {
-            if (t2[i].findPointIntersection(p1[j],x))
+            if (t2[i].findPointIntersection(p1[j],xTmp))
             {
                 intersectionFound = true;
             }
@@ -2625,7 +2623,7 @@ bool RElement::findIntersectionPoints(const RElement &e1, const RElement &e2, co
     {
         for (uint j=0;j<s2.size();j++)
         {
-            if (t1[i].findSegmentIntersection(s2[j],x))
+            if (t1[i].findSegmentIntersection(s2[j],xTmp))
             {
                 intersectionFound = true;
             }
@@ -2635,7 +2633,7 @@ bool RElement::findIntersectionPoints(const RElement &e1, const RElement &e2, co
     {
         for (uint j=0;j<s1.size();j++)
         {
-            if (t2[i].findSegmentIntersection(s1[j],x))
+            if (t2[i].findSegmentIntersection(s1[j],xTmp))
             {
                 intersectionFound = true;
             }
@@ -2647,16 +2645,17 @@ bool RElement::findIntersectionPoints(const RElement &e1, const RElement &e2, co
     {
         for (uint j=0;j<t2.size();j++)
         {
-            if (t1[i].findTriangleIntersection(t2[j],x))
+            if (t1[i].findTriangleIntersection(t2[j],xTmp))
             {
                 intersectionFound = true;
             }
         }
     }
 
-    for (auto f : x)
+    for (auto f : xTmp)
     {
         f.scale(1.0/nodeScale);
+        x.insert(f);
     }
 
     return intersectionFound;
