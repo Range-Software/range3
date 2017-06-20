@@ -530,6 +530,7 @@ void Action::onGeometryUndo(void)
         Model &rModel = Session::getInstance().getModel(selectedModelIDs[i]);
         if (rModel.getUndoStackSize() > 0)
         {
+            Session::getInstance().getPickList().removeItems(selectedModelIDs[i]);
             rModel.undo(0);
         }
         Session::getInstance().setModelChanged(selectedModelIDs[i]);
@@ -544,6 +545,7 @@ void Action::onGeometryRedo(void)
         Model &rModel = Session::getInstance().getModel(selectedModelIDs[i]);
         if (rModel.getRedoStackSize() > 0)
         {
+            Session::getInstance().getPickList().removeItems(selectedModelIDs[i]);
             rModel.redo(0);
         }
         Session::getInstance().setModelChanged(selectedModelIDs[i]);
