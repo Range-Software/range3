@@ -1696,6 +1696,21 @@ void Model::setColor(REntityGroupType elementGroupType, uint position, const QCo
     }
 }
 
+void Model::glDrawLock(void)
+{
+    this->drawLock.lock();
+}
+
+bool Model::glDrawTrylock(void)
+{
+    return this->drawLock.tryLock();
+}
+
+void Model::glDrawUnlock(void)
+{
+    this->drawLock.unlock();
+}
+
 void Model::glDraw(GLWidget *glWidget, bool useGlLists) const
 {
     try

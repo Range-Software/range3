@@ -1772,25 +1772,13 @@ void RElement::breakWithNodes(const std::vector<RNode> &nodes, const std::vector
 
         std::vector<RNode> tNodes;
         std::vector<uint> nodeBook;
-//        RR3Vector origin(0.0,0.0,0.0);
         for (uint i=0;i<this->size();i++)
         {
             double x = rotatedNodes[i][0];
             double y = rotatedNodes[i][1];
             tNodes.push_back(RNode(x,y,0.0));
             nodeBook.push_back(this->getNodeId(i));
-//            if (i == 0)
-//            {
-//                origin[0] = x;
-//                origin[1] = y;
-//            }
-//            else
-//            {
-//                origin[0] = std::min(origin[0],x);
-//                origin[1] = std::min(origin[1],y);
-//            }
         }
-//        origin *= -1.0;
 
         for (uint i=0;i<breakNodeIDs.size();i++)
         {

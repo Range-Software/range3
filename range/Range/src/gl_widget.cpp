@@ -40,6 +40,9 @@ GLWidget::GLWidget(uint modelID, QWidget *parent)
       dtz(0.0),
       dscale(0.0),
       mscale(1.0),
+      xPosition(0.0),
+      yPosition(0.0),
+      zPosition(0.0),
       scale(1.0),
       drawStreamLinePosition(false),
       drawCutPlane(false),
@@ -258,10 +261,15 @@ void GLWidget::drawModel(void)
         GL_SAFE_CALL(glEnable(GL_CLIP_PLANE0));
     }
 
-    // Draw model.
-    Session::getInstance().getModel(this->getModelID()).glDraw(this);
-    // Draw picked elements.
-    Session::getInstance().getModel(this->getModelID()).glDraw(this,Session::getInstance().getPickList().getItems(this->getModelID()));
+    if (Session::getInstance().getModel(this->getModelID()).glDrawTrylock())
+    {
+        // Draw model.
+        Session::getInstance().getModel(this->getModelID()).glDraw(this);
+        // Draw picked elements.
+        Session::getInstance().getModel(this->getModelID()).glDraw(this,Session::getInstance().getPickList().getItems(this->getModelID()));
+        // Unlock drawing lock.
+        Session::getInstance().getModel(this->getModelID()).glDrawUnlock();
+    }
 
     if (this->clippingPlaneEnabled)
     {
@@ -364,7 +372,7 @@ void GLWidget::drawModel(void)
     this->dtx = this->dty = this->dtz = 0.0;
     this->drx = this->dry = 0.0;
     this->dscale = 0.0;
-}
+} // drawModel()
 
 void GLWidget::drawValueRanges(QPainter &painter)
 {
@@ -584,13 +592,21 @@ void GLWidget::applyTransformations(void)
 {
     if (this->dtx != 0.0 || this->dty != 0.0 || this->dtz != 0.0) {
         glTranslatef(this->dtx, this->dty, this->dtz);
+        this->xPosition += this->dtx;
+        this->yPosition += this->dty;
+        this->zPosition += this->dtz;
     }
+
+//    RLogger::warning("%13g %13g %13g\n",this->xPosition,this->yPosition,this->zPosition);
+//    glTranslatef(0.0, 0.0, -this->scale*this->zPosition);
     if (this->drx != 0.0) {
         glRotatef(this->drx, 1.0f, 0.0f, 0.0f);
     }
     if (this->dry != 0.0) {
         glRotatef(this->dry, 0.0f, 1.0f, 0.0f);
     }
+//    glTranslatef(0.0, 0.0, this->scale*this->zPosition);
+
     if (this->dscale != 0.0 && this->dscale != 1.0) {
         this->scale *= 1.0+this->dscale;
         if (this->scale < 1e4) {
@@ -1033,19 +1049,16 @@ void GLWidget::transformPoint(GLdouble out[], const GLdouble m[], const GLdouble
 
 void GLWidget::resetView(float xRotation, float yRotation, float zRotation)
 {
-    GLdouble xPosition = 0.0;
-    GLdouble yPosition = 0.0;
-    GLdouble zPosition = 0.0;
-
+    this->xPosition = this->yPosition = this->zPosition = 0.0;
     this->scale = 1.0;
 
     this->calculateModelScale();
 
-    Session::getInstance().getModel(this->getModelID()).findNodeCenter(xPosition,yPosition,zPosition);
+    Session::getInstance().getModel(this->getModelID()).findNodeCenter(this->xPosition,this->yPosition,this->zPosition);
 
-    xPosition *= this->mscale;
-    yPosition *= this->mscale;
-    zPosition *= this->mscale;
+    this->xPosition *= this->mscale;
+    this->yPosition *= this->mscale;
+    this->zPosition *= this->mscale;
 
     glLoadIdentity ();
 
@@ -1055,7 +1068,7 @@ void GLWidget::resetView(float xRotation, float yRotation, float zRotation)
 
     glGetDoublev (GL_MODELVIEW_MATRIX, this->lMatrix);
 
-    glTranslated (-xPosition, -yPosition, -zPosition);
+    glTranslated (-this->xPosition, -this->yPosition, -this->zPosition);
 
     glGetDoublev (GL_MODELVIEW_MATRIX, this->gMatrix);
 

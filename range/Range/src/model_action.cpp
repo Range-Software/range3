@@ -39,6 +39,8 @@ void ModelAction::run(void)
 
 void ModelAction::executeAction(const ModelActionInput &modelActionInput)
 {
+    Session::getInstance().getModel(modelActionInput.getModelID()).glDrawLock();
+
     try
     {
         switch (modelActionInput.getType())
@@ -176,6 +178,7 @@ void ModelAction::executeAction(const ModelActionInput &modelActionInput)
     {
         RLogger::error("Failed to perform model action \'%d\'. %s\n",modelActionInput.getType(),error.getMessage().toUtf8().constData());
     }
+    Session::getInstance().getModel(modelActionInput.getModelID()).glDrawUnlock();
 }
 
 void ModelAction::autoMarkSurfaces(const ModelActionInput &modelActionInput)
@@ -243,7 +246,7 @@ void ModelAction::removeEntities(const ModelActionInput &modelActionInput)
 
     rModel.RModel::purgeUnusedElements();
     rModel.RModel::purgeUnusedNodes();
-    rModel.consolidate();
+    rModel.consolidate(true);
 
     Session::getInstance().getPickList().clear();
 

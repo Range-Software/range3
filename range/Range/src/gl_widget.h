@@ -48,6 +48,12 @@ class GLWidget : public QOpenGLWidget
         float dscale;
         //! Model scale factor.
         float mscale;
+        //! X position.
+        double xPosition;
+        //! X position.
+        double yPosition;
+        //! X position.
+        double zPosition;
         //! Scale factor.
         float scale;
         //! Button press start point.

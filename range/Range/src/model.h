@@ -14,6 +14,7 @@
 #include <QtCore>
 #include <QColor>
 #include <QStack>
+#include <QMutex>
 
 #include <rmlib.h>
 
@@ -26,6 +27,9 @@ class Model : public RModel
 {
 
     protected:
+
+        //! Lock enabling model to be drawn.
+        QMutex drawLock;
 
         //! Book of edge nodes.
         QVector<bool> edgeNodes;
@@ -364,6 +368,15 @@ class Model : public RModel
         void setColor(REntityGroupType  elementGroupType,
                       uint               position,
                       const QColor      &color);
+
+        //! Lock model for drawing.
+        void glDrawLock(void);
+
+        //! Try-lock model for drawing.
+        bool glDrawTrylock(void);
+
+        //! Unlock model for drawing.
+        void glDrawUnlock(void);
 
         //! Draw model to OpenGL context.
         void glDraw(GLWidget *glWidget, bool useGlLists = true) const;
