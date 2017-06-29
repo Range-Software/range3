@@ -19,6 +19,7 @@
 #include "gl_cut_plane.h"
 #include "gl_line.h"
 #include "gl_point.h"
+#include "gl_rotation_sphere.h"
 #include "gl_widget.h"
 #include "gl_functions.h"
 #include "pick_list.h"
@@ -245,6 +246,31 @@ void GLWidget::drawModel(void)
         GLAxis gAxis(this,GL_AXIS_GLOBAL);
         gAxis.setSize(0.8);
         gAxis.paint();
+
+        // Draw rotation sphere
+        int lineColorValue = qGray(this->getGLDisplayProperties().getBgColor().rgb()) < 96 ? 255 : 0;
+        this->qglColor(QColor(lineColorValue,lineColorValue,lineColorValue,255));
+
+        RRMatrix R(4,4);
+        for (uint i=0;i<4;i++)
+        {
+            for (uint j=0;j<4;j++)
+            {
+                R[i][j] = this->gMatrix[i*4+j];
+            }
+        }
+
+        RRVector b(4);
+        b[0] = this->xPosition;
+        b[1] = this->yPosition;
+        b[2] = this->zPosition;
+        b[3] = 1.0;
+
+        RRVector p(4);
+        RRMatrix::mlt(R,b,p);
+
+        GLRotationSphere gRotationSphere(this,RR3Vector(p[0],p[1],p[2]),0.5/this->scale);
+        gRotationSphere.paint();
     }
 
     GL_SAFE_CALL(glEnable(GL_DEPTH_TEST));
@@ -592,20 +618,20 @@ void GLWidget::applyTransformations(void)
 {
     if (this->dtx != 0.0 || this->dty != 0.0 || this->dtz != 0.0) {
         glTranslatef(this->dtx, this->dty, this->dtz);
-        this->xPosition += this->dtx;
-        this->yPosition += this->dty;
-        this->zPosition += this->dtz;
+//        this->xPosition += this->dtx;
+//        this->yPosition += this->dty;
+//        this->zPosition += this->dtz;
     }
 
-//    RLogger::warning("%13g %13g %13g\n",this->xPosition,this->yPosition,this->zPosition);
-//    glTranslatef(0.0, 0.0, -this->scale*this->zPosition);
+//    RLogger::warning("%13g %13g %13g | %13g\n",this->xPosition,this->yPosition,this->zPosition,this->scale);
+//    glTranslatef(0.0, 0.0, -(this->scale-1.0));
     if (this->drx != 0.0) {
-        glRotatef(this->drx, 1.0f, 0.0f, 0.0f);
+        glRotatef(this->drx/this->scale, 1.0f, 0.0f, 0.0f);
     }
     if (this->dry != 0.0) {
-        glRotatef(this->dry, 0.0f, 1.0f, 0.0f);
+        glRotatef(this->dry/this->scale, 0.0f, 1.0f, 0.0f);
     }
-//    glTranslatef(0.0, 0.0, this->scale*this->zPosition);
+//    glTranslatef(0.0, 0.0, (this->scale-1.0));
 
     if (this->dscale != 0.0 && this->dscale != 1.0) {
         this->scale *= 1.0+this->dscale;

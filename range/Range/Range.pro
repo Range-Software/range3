@@ -82,6 +82,7 @@ SOURCES += \
     src/gl_node.cpp \
     src/gl_object.cpp \
     src/gl_point.cpp \
+    src/gl_rotation_sphere.cpp \
     src/gl_scalar_field.cpp \
     src/gl_simplex.cpp \
     src/gl_simplex_point.cpp \
@@ -269,6 +270,7 @@ HEADERS += \
     src/gl_node.h \
     src/gl_object.h \
     src/gl_point.h \
+    src/gl_rotation_sphere.h \
     src/gl_scalar_field.h \
     src/gl_simplex.h \
     src/gl_simplex_point.h \
