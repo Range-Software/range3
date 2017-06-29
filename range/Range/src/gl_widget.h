@@ -205,7 +205,7 @@ class GLWidget : public QOpenGLWidget
         void calculateModelScale(void);
 
         //! Calulate picking ray.
-        void calculatePickRay(const QPoint &screenPosition, RR3Vector &position, RR3Vector &direction) const;
+        void calculatePickRay(const QPoint &screenPosition, RR3Vector &position, RR3Vector &direction, bool applyModelScale = true) const;
 
         //! Calculate screen position from real coordinates.
         void convertModelToScreen(const RR3Vector &realPosition, QPoint &screenPosition) const;

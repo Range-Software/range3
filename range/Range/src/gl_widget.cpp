@@ -251,25 +251,10 @@ void GLWidget::drawModel(void)
         int lineColorValue = qGray(this->getGLDisplayProperties().getBgColor().rgb()) < 96 ? 255 : 0;
         this->qglColor(QColor(lineColorValue,lineColorValue,lineColorValue,255));
 
-        RRMatrix R(4,4);
-        for (uint i=0;i<4;i++)
-        {
-            for (uint j=0;j<4;j++)
-            {
-                R[i][j] = this->gMatrix[i*4+j];
-            }
-        }
+        RR3Vector p,d;
+        this->calculatePickRay(QPoint(int(ceil(double(this->width())/2.0)),int(ceil(double(this->height())/2.0))),p,d,false);
 
-        RRVector b(4);
-        b[0] = this->xPosition;
-        b[1] = this->yPosition;
-        b[2] = this->zPosition;
-        b[3] = 1.0;
-
-        RRVector p(4);
-        RRMatrix::mlt(R,b,p);
-
-        GLRotationSphere gRotationSphere(this,RR3Vector(p[0],p[1],p[2]),0.5/this->scale);
+        GLRotationSphere gRotationSphere(this,RR3Vector(p[0],p[1],p[2]),(0.5/this->scale));
         gRotationSphere.paint();
     }
 
@@ -672,6 +657,7 @@ void GLWidget::processActionEvent(void)
     RR3Vector pickRayPosition;
     RR3Vector pickRayDirection;
 
+    RLogger::warning("%d %d\n",this->bpStart.x(),this->bpStart.y());
     this->calculatePickRay(this->bpStart,pickRayPosition,pickRayDirection);
 
     PickItem pickItem;
@@ -827,7 +813,7 @@ void GLWidget::calculateModelScale(void)
     }
 }
 
-void GLWidget::calculatePickRay(const QPoint &screenPosition, RR3Vector &position, RR3Vector &direction) const
+void GLWidget::calculatePickRay(const QPoint &screenPosition, RR3Vector &position, RR3Vector &direction, bool applyModelScale) const
 {
     double wx = 1.0;
     double wy = double(this->height()) / double(this->width());
@@ -840,7 +826,7 @@ void GLWidget::calculatePickRay(const QPoint &screenPosition, RR3Vector &positio
     {
         for (uint j=0;j<4;j++)
         {
-            R[i][j] = this->gMatrix[4*j+i] * this->mscale;
+            R[i][j] = this->gMatrix[4*j+i] * (applyModelScale ?this->mscale : 1.0);
         }
     }
     R.invert();

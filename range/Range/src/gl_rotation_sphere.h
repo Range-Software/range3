@@ -25,6 +25,7 @@ class GLRotationSphere : public GLObject
         GLboolean normalizeEnabled;
         GLboolean lightingEnabled;
         GLfloat lineWidth;
+        GLboolean cullFaceEnabled;
 
     protected:
 
