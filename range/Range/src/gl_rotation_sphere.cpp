@@ -79,6 +79,12 @@ void GLRotationSphere::finalize(void)
 
 void GLRotationSphere::draw(void)
 {
+    GLboolean stipple;
+    GL_SAFE_CALL(glGetBooleanv(GL_LINE_STIPPLE,&stipple));
+    GL_SAFE_CALL(glPushAttrib(GL_ENABLE_BIT));
+    GL_SAFE_CALL(glLineStipple(6, 0xAAAA));
+    GL_SAFE_CALL(glEnable(GL_LINE_STIPPLE));
+
     GLFunctions::begin(GL_LINE_LOOP);
     for (uint i=0;i<360;i++)
     {
@@ -137,5 +143,9 @@ void GLRotationSphere::draw(void)
 
     GLFunctions::end();
 
-//    GL_SAFE_CALL(glPopAttrib());
+    GL_SAFE_CALL(glPopAttrib());
+    if (!stipple)
+    {
+        GL_SAFE_CALL(glDisable(GL_LINE_STIPPLE));
+    }
 }

@@ -18,6 +18,7 @@
 typedef enum _GLActionEventType {
     GL_ACTION_EVENT_NONE = 0,
     GL_ACTION_EVENT_TRANSLATE,
+    GL_ACTION_EVENT_TRANSLATE_Z,
     GL_ACTION_EVENT_ROTATE,
     GL_ACTION_EVENT_ZOOM,
     GL_ACTION_EVENT_PICK_ELEMENT,
@@ -39,6 +40,8 @@ class GLActionEvent : public QObject
         int key;
         //! Mause buttons flag.
         Qt::MouseButtons buttons;
+        //! Wheel is scrolling
+        Qt::ScrollPhase scrollPhase;
         //! Even changed.
         bool actionChanged;
 
@@ -76,6 +79,9 @@ class GLActionEvent : public QObject
 
         //! Set Qt mouse event.
         void setMouseEvent(QMouseEvent *mouseEvent);
+
+        //! Set Qt wheel event.
+        void setScrollPhase(Qt::ScrollPhase srcollPhase);
 
         //! Clear.
         void clear(void);

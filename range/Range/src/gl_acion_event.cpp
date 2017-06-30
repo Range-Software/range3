@@ -16,20 +16,27 @@ typedef struct _GLActionCombination
     Qt::KeyboardModifiers keyModifiers;
     //! Key.
     int key;
-    //! Mause buttons flag.
+    //! Mouse buttons flag.
     Qt::MouseButtons buttons;
+    //! Wheel scroll phase.
+    Qt::ScrollPhase scrollPhase;
+    //! OpenGL action event type.
+    GLActionEventType eventType;
 } GLActionCombination;
 
-static GLActionCombination glActionCombinations[GL_ACTION_N_EVENTS]
+static std::vector<GLActionCombination> glActionCombinations =
 {
-    {Qt::NoModifier,0,Qt::NoButton}, // GL_ACTION_EVENT_NONE
-    {Qt::NoModifier,0,Qt::LeftButton}, // GL_ACTION_EVENT_TRANSLATE
-    {Qt::NoModifier,0,Qt::MiddleButton}, // GL_ACTION_EVENT_ROTATE
-    {Qt::NoModifier,0,Qt::RightButton}, // GL_ACTION_EVENT_ZOOM
-    {Qt::ControlModifier,0,Qt::LeftButton}, // GL_ACTION_EVENT_PICK_ELEMENT
-    {Qt::ControlModifier | Qt::AltModifier,0,Qt::LeftButton}, // GL_ACTION_EVENT_PICK_NODE
-    {Qt::ControlModifier | Qt::ShiftModifier,0,Qt::LeftButton}, // GL_ACTION_EVENT_PICK_HOLE_ELEMENT
-    {Qt::ControlModifier,0,Qt::RightButton}  // GL_ACTION_EVENT_PICK_CLEAR
+    { Qt::NoModifier,                          0, Qt::NoButton,     Qt::NoScrollPhase, GL_ACTION_EVENT_NONE              },
+    { Qt::NoModifier,                          0, Qt::LeftButton,   Qt::NoScrollPhase, GL_ACTION_EVENT_TRANSLATE         },
+    { Qt::ControlModifier,                     0, Qt::MiddleButton, Qt::NoScrollPhase, GL_ACTION_EVENT_TRANSLATE_Z       },
+    { Qt::ControlModifier,                     0, Qt::NoButton,     Qt::ScrollUpdate,  GL_ACTION_EVENT_TRANSLATE_Z       },
+    { Qt::NoModifier,                          0, Qt::MiddleButton, Qt::NoScrollPhase, GL_ACTION_EVENT_ROTATE            },
+    { Qt::NoModifier,                          0, Qt::RightButton,  Qt::NoScrollPhase, GL_ACTION_EVENT_ZOOM              },
+    { Qt::NoModifier,                          0, Qt::NoButton,     Qt::ScrollUpdate,  GL_ACTION_EVENT_ZOOM              },
+    { Qt::ControlModifier,                     0, Qt::LeftButton,   Qt::NoScrollPhase, GL_ACTION_EVENT_PICK_ELEMENT      },
+    { Qt::ControlModifier | Qt::AltModifier,   0, Qt::LeftButton,   Qt::NoScrollPhase, GL_ACTION_EVENT_PICK_NODE         },
+    { Qt::ControlModifier | Qt::ShiftModifier, 0, Qt::LeftButton,   Qt::NoScrollPhase, GL_ACTION_EVENT_PICK_HOLE_ELEMENT },
+    { Qt::ControlModifier,                     0, Qt::RightButton,  Qt::NoScrollPhase, GL_ACTION_EVENT_PICK_CLEAR        }
 };
 
 GLActionEvent::GLActionEvent(QObject *parent)
@@ -43,45 +50,17 @@ GLActionEvent::GLActionEvent(QObject *parent)
 
 GLActionEventType GLActionEvent::getType(void) const
 {
-    GLActionEventType type = GL_ACTION_EVENT_NONE;
-
-    if (this->buttons & Qt::LeftButton)
+    for (auto &glActionCombination : glActionCombinations)
     {
-        type = GL_ACTION_EVENT_TRANSLATE;
-        if (this->keyModifiers & Qt::ControlModifier)
+        if (this->buttons      == glActionCombination.buttons &&
+            this->keyModifiers == glActionCombination.keyModifiers &&
+            this->scrollPhase  == glActionCombination.scrollPhase)
         {
-            type = GL_ACTION_EVENT_PICK_ELEMENT;
-            if (this->keyModifiers & Qt::AltModifier)
-            {
-                type = GL_ACTION_EVENT_PICK_NODE;
-            }
-            if (this->keyModifiers & Qt::ShiftModifier)
-            {
-                type = GL_ACTION_EVENT_PICK_HOLE_ELEMENT;
-            }
-        }
-        else
-        {
-            if (this->keyModifiers & Qt::AltModifier)
-            {
-                type = GL_ACTION_EVENT_ROTATE;
-            }
-        }
-    }
-    if (this->buttons & Qt::MiddleButton)
-    {
-        type = GL_ACTION_EVENT_ROTATE;
-    }
-    if (this->buttons & Qt::RightButton)
-    {
-        type = GL_ACTION_EVENT_ZOOM;
-        if (this->keyModifiers & Qt::ControlModifier)
-        {
-            type = GL_ACTION_EVENT_PICK_CLEAR;
+            return glActionCombination.eventType;
         }
     }
 
-    return type;
+    return GL_ACTION_EVENT_NONE;
 }
 
 bool GLActionEvent::getChanged(void) const
@@ -108,6 +87,15 @@ void GLActionEvent::setMouseEvent(QMouseEvent *mouseEvent)
     emit this->changed(currType);
 }
 
+void GLActionEvent::setScrollPhase(Qt::ScrollPhase srcollPhase)
+{
+    GLActionEventType prevType = this->getType();
+    this->scrollPhase = srcollPhase;
+    GLActionEventType currType = this->getType();
+    this->actionChanged = (prevType != currType);
+    emit this->changed(currType);
+}
+
 void GLActionEvent::clear(void)
 {
     GLActionEventType prevType = this->getType();
@@ -119,25 +107,31 @@ void GLActionEvent::clear(void)
     emit this->changed(currType);
 }
 
-#include <rblib.h>
 QString GLActionEvent::findKeyMouseCombination(GLActionEventType type)
 {
-    QString keyString(QKeySequence(glActionCombinations[type].keyModifiers + glActionCombinations[type].key).toString());
-
-    QString mouseButtonString;
-
-    if (glActionCombinations[type].buttons & Qt::LeftButton)
+    for (auto &glActionCombination : glActionCombinations)
     {
-        mouseButtonString = (mouseButtonString.length() > 0 ? " + " : "") + tr("Left mouse button");
-    }
-    if (glActionCombinations[type].buttons & Qt::MiddleButton)
-    {
-        mouseButtonString = (mouseButtonString.length() > 0 ? " + " : "") + tr("Middle mouse button");
-    }
-    if (glActionCombinations[type].buttons & Qt::RightButton)
-    {
-        mouseButtonString = (mouseButtonString.length() > 0 ? " + " : "") + tr("Right mouse button");
-    }
+        if (glActionCombination.eventType == type)
+        {
+            QString keyString(QKeySequence(glActionCombination.keyModifiers + glActionCombination.key).toString());
 
-    return keyString + mouseButtonString;
+            QString mouseButtonString;
+
+            if (glActionCombination.buttons & Qt::LeftButton)
+            {
+                mouseButtonString = (mouseButtonString.length() > 0 ? " + " : "") + tr("Left mouse button");
+            }
+            if (glActionCombination.buttons & Qt::MiddleButton)
+            {
+                mouseButtonString = (mouseButtonString.length() > 0 ? " + " : "") + tr("Middle mouse button");
+            }
+            if (glActionCombination.buttons & Qt::RightButton)
+            {
+                mouseButtonString = (mouseButtonString.length() > 0 ? " + " : "") + tr("Right mouse button");
+            }
+
+            return keyString + mouseButtonString;
+        }
+    }
+    return QString();
 }

@@ -34,26 +34,22 @@ class GLWidget : public QOpenGLWidget
         double lMatrix[16];
         //! model ID.
         uint modelID;
-        //! X rotation.
+        //! Center of rotation.
+        RR3Vector rotationCenter;
+        //! X rotation increment.
         float drx;
-        //! Y rotation.
+        //! Y rotation increment.
         float dry;
-        //! X translation.
+        //! X translation increment.
         float dtx;
-        //! Y translation.
+        //! Y translation increment.
         float dty;
-        //! Z translation.
+        //! Z translation increment.
         float dtz;
         //! Scale factor increment.
         float dscale;
         //! Model scale factor.
         float mscale;
-        //! X position.
-        double xPosition;
-        //! X position.
-        double yPosition;
-        //! X position.
-        double zPosition;
         //! Scale factor.
         float scale;
         //! Button press start point.
@@ -88,6 +84,8 @@ class GLWidget : public QOpenGLWidget
         bool clippingPlaneEnabled;
         //! Clipping plane distance.
         double clippingPlaneDistance;
+        //! Show rotation sphere.
+        bool showRotationSphere;
 
     public:
 
@@ -205,7 +203,7 @@ class GLWidget : public QOpenGLWidget
         void calculateModelScale(void);
 
         //! Calulate picking ray.
-        void calculatePickRay(const QPoint &screenPosition, RR3Vector &position, RR3Vector &direction, bool applyModelScale = true) const;
+        void calculatePickRay(const QPoint &screenPosition, double viewDepth, RR3Vector &position, RR3Vector &direction, bool applyModelScale) const;
 
         //! Calculate screen position from real coordinates.
         void convertModelToScreen(const RR3Vector &realPosition, QPoint &screenPosition) const;

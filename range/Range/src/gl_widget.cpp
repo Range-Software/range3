@@ -34,6 +34,7 @@
 GLWidget::GLWidget(uint modelID, QWidget *parent)
     : QOpenGLWidget(parent),
       modelID(modelID),
+      rotationCenter(0.0,0.0,0.0),
       drx(0.0),
       dry(0.0),
       dtx(0.0),
@@ -41,16 +42,14 @@ GLWidget::GLWidget(uint modelID, QWidget *parent)
       dtz(0.0),
       dscale(0.0),
       mscale(1.0),
-      xPosition(0.0),
-      yPosition(0.0),
-      zPosition(0.0),
       scale(1.0),
       drawStreamLinePosition(false),
       drawCutPlane(false),
       drawMoveNodes(false),
       useGlVoidModelList(false),
       clippingPlaneEnabled(false),
-      clippingPlaneDistance(0.5)
+      clippingPlaneDistance(0.5),
+      showRotationSphere(false)
 {
     this->setFocusPolicy(Qt::StrongFocus);
     this->setAutoFillBackground(false);
@@ -244,15 +243,18 @@ void GLWidget::drawModel(void)
     {
         // Draw main axis.
         GLAxis gAxis(this,GL_AXIS_GLOBAL);
-        gAxis.setSize(0.8);
+        gAxis.setSize(0.8/this->scale);
         gAxis.paint();
+    }
 
+    if (this->showRotationSphere)
+    {
         // Draw rotation sphere
         int lineColorValue = qGray(this->getGLDisplayProperties().getBgColor().rgb()) < 96 ? 255 : 0;
         this->qglColor(QColor(lineColorValue,lineColorValue,lineColorValue,255));
 
         RR3Vector p,d;
-        this->calculatePickRay(QPoint(int(ceil(double(this->width())/2.0)),int(ceil(double(this->height())/2.0))),p,d,false);
+        this->calculatePickRay(QPoint(int(ceil(double(this->width())/2.0)),int(ceil(double(this->height())/2.0))),0.0,p,d,false);
 
         GLRotationSphere gRotationSphere(this,RR3Vector(p[0],p[1],p[2]),(0.5/this->scale));
         gRotationSphere.paint();
@@ -601,29 +603,29 @@ void GLWidget::drawMessageBox(QPainter &painter)
 
 void GLWidget::applyTransformations(void)
 {
-    if (this->dtx != 0.0 || this->dty != 0.0 || this->dtz != 0.0) {
+    if (this->dtx != 0.0 || this->dty != 0.0 || this->dtz != 0.0)
+    {
         glTranslatef(this->dtx, this->dty, this->dtz);
-//        this->xPosition += this->dtx;
-//        this->yPosition += this->dty;
-//        this->zPosition += this->dtz;
     }
 
-//    RLogger::warning("%13g %13g %13g | %13g\n",this->xPosition,this->yPosition,this->zPosition,this->scale);
-//    glTranslatef(0.0, 0.0, -(this->scale-1.0));
-    if (this->drx != 0.0) {
-        glRotatef(this->drx/this->scale, 1.0f, 0.0f, 0.0f);
+    if (this->drx != 0.0)
+    {
+        glRotatef(this->drx, 1.0f, 0.0f, 0.0f);
     }
-    if (this->dry != 0.0) {
-        glRotatef(this->dry/this->scale, 0.0f, 1.0f, 0.0f);
+    if (this->dry != 0.0)
+    {
+        glRotatef(this->dry, 0.0f, 1.0f, 0.0f);
     }
-//    glTranslatef(0.0, 0.0, (this->scale-1.0));
 
-    if (this->dscale != 0.0 && this->dscale != 1.0) {
+    if (this->dscale != 0.0 && this->dscale != 1.0)
+    {
         this->scale *= 1.0+this->dscale;
-        if (this->scale < 1e4) {
+        if (this->scale < 1e4)
+        {
             glScalef(1.0+this->dscale,1.0+this->dscale,1.0+this->dscale);
         }
-        else {
+        else
+        {
             this->scale /= 1.0+this->dscale;
         }
     }
@@ -657,8 +659,7 @@ void GLWidget::processActionEvent(void)
     RR3Vector pickRayPosition;
     RR3Vector pickRayDirection;
 
-    RLogger::warning("%d %d\n",this->bpStart.x(),this->bpStart.y());
-    this->calculatePickRay(this->bpStart,pickRayPosition,pickRayDirection);
+    this->calculatePickRay(this->bpStart,this->calculateViewDepth(),pickRayPosition,pickRayDirection,true);
 
     PickItem pickItem;
     bool pickFound = false;
@@ -723,6 +724,7 @@ void GLWidget::mouseReleaseEvent(QMouseEvent *mouseEvent)
 {
     this->actionEvent.setMouseEvent(mouseEvent);
     this->bpEnd = mouseEvent->pos();
+    this->showRotationSphere = false;
 
     if (this->actionEvent.getType() == GL_ACTION_EVENT_TRANSLATE)
     {
@@ -734,7 +736,6 @@ void GLWidget::mouseReleaseEvent(QMouseEvent *mouseEvent)
     this->bpStart = this->bpEnd;
 
     this->processActionEvent();
-
     this->update();
 }
 
@@ -742,12 +743,19 @@ void GLWidget::mouseMoveEvent(QMouseEvent *mouseEvent)
 {
     this->actionEvent.setMouseEvent(mouseEvent);
     this->bpEnd = mouseEvent->pos();
+    this->showRotationSphere = true;
 
     if (this->actionEvent.getType() == GL_ACTION_EVENT_TRANSLATE)
     {
         this->dtx =   2 * (this->bpEnd.x() - this->bpStart.x()) / (float)this->width();
         this->dty = - 2 * (this->bpEnd.y() - this->bpStart.y()) / (float)this->width();
         this->dtz = 0.0;
+    }
+    else if (this->actionEvent.getType() == GL_ACTION_EVENT_TRANSLATE_Z)
+    {
+        this->dtx = 0.0;
+        this->dty = 0.0;
+        this->dtz = this->scale * 2 * (this->bpEnd.y() - this->bpStart.y()) / (float)this->width();
     }
     else if (this->actionEvent.getType() == GL_ACTION_EVENT_ROTATE)
     {
@@ -759,8 +767,6 @@ void GLWidget::mouseMoveEvent(QMouseEvent *mouseEvent)
         this->dscale = (this->bpEnd.y() - this->bpStart.y()) / (float)this->width();
     }
     this->bpStart = this->bpEnd;
-
-    this->processActionEvent();
 
     this->update();
 }
@@ -776,6 +782,8 @@ void GLWidget::leaveEvent(QEvent *event)
 
 void GLWidget::wheelEvent(QWheelEvent *mouseEvent)
 {
+    this->actionEvent.setScrollPhase(Qt::ScrollUpdate);
+
     int numDegrees = mouseEvent->delta() / 8;
     int numSteps = numDegrees / 15;
     float x = (float)mouseEvent->x();
@@ -783,13 +791,26 @@ void GLWidget::wheelEvent(QWheelEvent *mouseEvent)
     float w = (float)this->width();
     float h = (float)this->height();
 
-    this->dtx = 2.0*x/w - 1.0;
-    this->dty = 2.0*y/h - 1.0;
-    this->dty = (0.5 - y/h)*2.0*h/w;
-    this->dtx *= numSteps/10.0;
-    this->dty *= numSteps/10.0;
-    this->dscale = -(float)numSteps/10.0;
+    if (this->actionEvent.getType() == GL_ACTION_EVENT_TRANSLATE_Z)
+    {
+        this->showRotationSphere = true;
+        this->dtx = 0.0;
+        this->dty = 0.0;
+        this->dtz = this->scale*double(numSteps)/100.0;
+    }
+    else if (this->actionEvent.getType() == GL_ACTION_EVENT_ZOOM)
+    {
+        this->dtx = 2.0*x/w - 1.0;
+        this->dty = 2.0*y/h - 1.0;
+        this->dty = (0.5 - y/h)*2.0*h/w;
+        this->dtx *= numSteps/10.0;
+        this->dty *= numSteps/10.0;
+        this->dscale = -float(numSteps)/10.0;
+    }
 
+    this->actionEvent.setScrollPhase(Qt::NoScrollPhase);
+
+    this->processActionEvent();
     this->update();
 }
 
@@ -802,6 +823,8 @@ void GLWidget::keyPressEvent(QKeyEvent *keyEvent)
 void GLWidget::keyReleaseEvent(QKeyEvent *keyEvent)
 {
     this->actionEvent.clear();
+    this->showRotationSphere = false;
+    this->update();
 }
 
 void GLWidget::calculateModelScale(void)
@@ -813,13 +836,13 @@ void GLWidget::calculateModelScale(void)
     }
 }
 
-void GLWidget::calculatePickRay(const QPoint &screenPosition, RR3Vector &position, RR3Vector &direction, bool applyModelScale) const
+void GLWidget::calculatePickRay(const QPoint &screenPosition, double viewDepth, RR3Vector &position, RR3Vector &direction, bool applyModelScale) const
 {
     double wx = 1.0;
     double wy = double(this->height()) / double(this->width());
     double x = 2.0*wx*(double(screenPosition.x()) / double(this->width())) - wx;
     double y = 2.0*wy*(1.0 - double(screenPosition.y()) / double(this->height())) - wy;
-    double vd = this->calculateViewDepth();
+    double vd = viewDepth;
 
     RRMatrix R(4,4);
     for (uint i=0;i<4;i++)
@@ -1061,16 +1084,17 @@ void GLWidget::transformPoint(GLdouble out[], const GLdouble m[], const GLdouble
 
 void GLWidget::resetView(float xRotation, float yRotation, float zRotation)
 {
-    this->xPosition = this->yPosition = this->zPosition = 0.0;
     this->scale = 1.0;
 
     this->calculateModelScale();
 
-    Session::getInstance().getModel(this->getModelID()).findNodeCenter(this->xPosition,this->yPosition,this->zPosition);
+    double xPosition(0.0), yPosition(0.0), zPosition(0.0);
 
-    this->xPosition *= this->mscale;
-    this->yPosition *= this->mscale;
-    this->zPosition *= this->mscale;
+    Session::getInstance().getModel(this->getModelID()).findNodeCenter(xPosition,yPosition,zPosition);
+
+    xPosition *= this->mscale;
+    yPosition *= this->mscale;
+    zPosition *= this->mscale;
 
     glLoadIdentity ();
 
@@ -1080,7 +1104,7 @@ void GLWidget::resetView(float xRotation, float yRotation, float zRotation)
 
     glGetDoublev (GL_MODELVIEW_MATRIX, this->lMatrix);
 
-    glTranslated (-this->xPosition, -this->yPosition, -this->zPosition);
+    glTranslated (-xPosition,-yPosition,-zPosition);
 
     glGetDoublev (GL_MODELVIEW_MATRIX, this->gMatrix);
 
