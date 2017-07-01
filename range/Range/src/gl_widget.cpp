@@ -31,10 +31,12 @@
 #define GL_MULTISAMPLE  0x809D
 #endif
 
+const GLsizei GLWidget::lAxisWpWidth = 100;
+const GLsizei GLWidget::lAxisWpHeight = 100;
+
 GLWidget::GLWidget(uint modelID, QWidget *parent)
     : QOpenGLWidget(parent),
       modelID(modelID),
-      rotationCenter(0.0,0.0,0.0),
       drx(0.0),
       dry(0.0),
       dtx(0.0),
@@ -148,7 +150,8 @@ void GLWidget::paintGL(void)
     this->glTextRenderer.clear();
 
     this->drawValueRanges(painter);
-    this->drawMessageBox(painter);
+    this->drawMessageBox(painter,false);
+    this->drawInfoBox(painter,false);
 
     painter.end();
 
@@ -264,7 +267,7 @@ void GLWidget::drawModel(void)
     GL_SAFE_CALL(glEnable(GL_NORMALIZE));
     GL_SAFE_CALL(glEnable(GL_POINT_SMOOTH));
     GL_SAFE_CALL(glEnable(GL_LINE_SMOOTH));
-//    GL_SAFE_CALL(glEnable(GL_POLYGON_SMOOTH));
+    GL_SAFE_CALL(glEnable(GL_POLYGON_SMOOTH));
 
     // Apply model scale.
     GL_SAFE_CALL(glScaled(this->mscale,this->mscale,this->mscale));
@@ -354,7 +357,7 @@ void GLWidget::drawModel(void)
     if (this->displayProperties.getDrawLocalAxis())
     {
         // LOWER-LEFT CORNER VIEWPORT
-        GL_SAFE_CALL(glViewport (0,0,100,100));
+        GL_SAFE_CALL(glViewport (0,0,GLWidget::lAxisWpWidth,GLWidget::lAxisWpHeight));
 
         GL_SAFE_CALL(glMatrixMode(GL_PROJECTION));
         GL_SAFE_CALL(glLoadIdentity());
@@ -557,7 +560,7 @@ void GLWidget::drawValueRange(QPainter &painter,
     }
 }
 
-void GLWidget::drawMessageBox(QPainter &painter)
+void GLWidget::drawMessageBox(QPainter &painter, bool drawBox)
 {
     painter.setFont(QGuiApplication::font());
 
@@ -584,17 +587,65 @@ void GLWidget::drawMessageBox(QPainter &painter)
 
     int fontPixelHeight = painter.fontInfo().pixelSize();
 
+    int sizeX = this->width() - offset - offset;
+    int sizeY = offset + (fontPixelHeight+padding)*messages.size();
     int posX = offset;
     int posY = offset;
-    int sizeX = this->width()-posX - offset;
-    int sizeY = posY+(fontPixelHeight+padding)*messages.size();
+
+    int colorValue = qGray(this->getGLDisplayProperties().getBgColor().rgb()) < 96 ? 255 : 0;
 
     // Outer box
-    painter.setPen(QColor(255,255,255,255));
-    painter.drawRect(posX,posY,sizeX,sizeY);
-    painter.fillRect(posX,posY,sizeX,sizeY,QColor(255,255,255,200));
+    if (drawBox)
+    {
+        colorValue = 255 - colorValue;
+        int boxColorValue = 255 - colorValue;
+        painter.setPen(QColor(boxColorValue,boxColorValue,boxColorValue,255));
+        painter.drawRect(posX,posY,sizeX,sizeY);
+        painter.fillRect(posX,posY,sizeX,sizeY,QColor(boxColorValue,boxColorValue,boxColorValue,200));
+    }
 
-    painter.setPen(QColor(0,0,0,255));
+    painter.setPen(QColor(colorValue,colorValue,colorValue,255));
+    for (int i=0;i<messages.size();i++)
+    {
+        painter.drawText(posX+padding,posY+(fontPixelHeight+padding)*(i+1),messages[i]);
+    }
+}
+
+void GLWidget::drawInfoBox(QPainter &painter, bool drawBox)
+{
+    painter.setFont(QGuiApplication::font());
+
+    QList<QString> messages;
+
+    messages.append("Zoom: " + QString::number(this->scale));
+
+    if (messages.size() == 0)
+    {
+        return;
+    }
+
+    int offset = 10;
+    int padding = 2;
+
+    int fontPixelHeight = painter.fontInfo().pixelSize();
+
+    int sizeX = GLWidget::lAxisWpWidth;
+    int sizeY = offset + (fontPixelHeight+padding)*messages.size();
+    int posX = offset;
+    int posY = this->height() - offset - GLWidget::lAxisWpHeight - sizeY;
+
+    int colorValue = qGray(this->getGLDisplayProperties().getBgColor().rgb()) < 96 ? 255 : 0;
+
+    // Outer box
+    if (drawBox)
+    {
+        colorValue = 255 - colorValue;
+        int boxColorValue = 255 - colorValue;
+        painter.setPen(QColor(boxColorValue,boxColorValue,boxColorValue,255));
+        painter.drawRect(posX,posY,sizeX,sizeY);
+        painter.fillRect(posX,posY,sizeX,sizeY,QColor(boxColorValue,boxColorValue,boxColorValue,200));
+    }
+    painter.setPen(QColor(colorValue,colorValue,colorValue,255));
     for (int i=0;i<messages.size();i++)
     {
         painter.drawText(posX+padding,posY+(fontPixelHeight+padding)*(i+1),messages[i]);

@@ -26,6 +26,13 @@ class GLWidget : public QOpenGLWidget
 {
     Q_OBJECT
 
+    private:
+
+        //! Local axis viewport width.
+        static const GLsizei lAxisWpWidth;
+        //! Local axis viewport height.
+        static const GLsizei lAxisWpHeight;
+
     protected:
 
         //! Global transformation matrix.
@@ -34,8 +41,6 @@ class GLWidget : public QOpenGLWidget
         double lMatrix[16];
         //! model ID.
         uint modelID;
-        //! Center of rotation.
-        RR3Vector rotationCenter;
         //! X rotation increment.
         float drx;
         //! Y rotation increment.
@@ -167,7 +172,10 @@ class GLWidget : public QOpenGLWidget
                             const QString &valueRangeFile, const QString &valueRangeName, const QString &valueRangeUnits);
 
         //! Draw message box.
-        void drawMessageBox(QPainter &painter);
+        void drawMessageBox(QPainter &painter, bool drawBox);
+
+        //! Draw information box.
+        void drawInfoBox(QPainter &painter, bool drawBox);
 
         //! Apply transformations.
         void applyTransformations(void);
