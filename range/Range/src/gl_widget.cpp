@@ -787,6 +787,7 @@ void GLWidget::mouseReleaseEvent(QMouseEvent *mouseEvent)
     this->bpStart = this->bpEnd;
 
     this->processActionEvent();
+    this->actionEvent.clear();
     this->update();
 }
 

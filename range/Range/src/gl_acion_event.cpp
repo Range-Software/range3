@@ -102,6 +102,7 @@ void GLActionEvent::clear(void)
     this->buttons = Qt::NoButton;
     this->keyModifiers = Qt::NoModifier;
     this->key = 0;
+    this->scrollPhase = Qt::NoScrollPhase;
     GLActionEventType currType = this->getType();
     this->actionChanged = (prevType != currType);
     emit this->changed(currType);
