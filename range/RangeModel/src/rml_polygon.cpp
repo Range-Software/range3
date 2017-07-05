@@ -247,15 +247,37 @@ uint RPolygon::findEarNode(void) const
     {
         return RConstants::eod;
     }
+    if (this->getNNodes() == 3)
+    {
+        return 0;
+    }
 
     uint earNode = RConstants::eod;
-    double earAngle = 0.0;
+    double earAngle = RConstants::pi;
 
-    for (uint i=2;i<this->getNNodes();i++)
+    for (uint i=0;i<this->getNNodes();i++)
     {
-        uint n1 = i-2;
-        uint n2 = i-1;
-        uint n3 = i;
+        uint n1 = 0;
+        uint n2 = i;
+        uint n3 = 0;
+
+        if (i==0)
+        {
+            n1 = this->getNNodes()-1;
+        }
+        else
+        {
+            n1 = i-1;
+        }
+
+        if (i == this->getNNodes()-1)
+        {
+            n3 = 0;
+        }
+        else
+        {
+            n3 = i+1;
+        }
 
         RR3Vector v12(this->nodes[n2].getX()-this->nodes[n1].getX(),
                       this->nodes[n2].getY()-this->nodes[n1].getY(),
@@ -265,31 +287,30 @@ uint RPolygon::findEarNode(void) const
                       this->nodes[n3].getY()-this->nodes[n2].getY(),
                       this->nodes[n3].getZ()-this->nodes[n2].getZ());
 
-        RR3Vector v31(this->nodes[n1].getX()-this->nodes[n3].getX(),
-                      this->nodes[n1].getY()-this->nodes[n3].getY(),
-                      this->nodes[n1].getZ()-this->nodes[n3].getZ());
+        RR3Vector vn;
 
-        double angle = 0.0;
+        RR3Vector::cross(v12,v23,vn);
 
-        angle = RRVector::angle(v12,v23);
-        if (angle > earAngle)
+        if (RRVector::angle(vn,this->normal) < RConstants::pi / 2.0)
         {
-            angle = earAngle;
-            earNode = n2;
-        }
+            RTriangle t(this->nodes[n1],this->nodes[n2],this->nodes[n3]);
+            for (uint j=0;j<this->getNNodes();j++)
+            {
+                if (j == n1 || j == n2 || j == n3)
+                {
+                    continue;
+                }
 
-        angle = RRVector::angle(v23,v31);
-        if (angle > earAngle)
-        {
-            angle = earAngle;
-            earNode = n3;
-        }
-
-        angle = RRVector::angle(v31,v12);
-        if (angle > earAngle)
-        {
-            angle = earAngle;
-            earNode = n1;
+                if (!t.isPointInside(this->nodes[j].toVector(),false))
+                {
+                    double angle = RRVector::angle(v12,v23);
+                    if (angle < earAngle)
+                    {
+                        earAngle = angle;
+                        earNode = n2;
+                    }
+                }
+            }
         }
     }
 
