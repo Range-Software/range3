@@ -763,7 +763,7 @@ void GLWidget::processActionEvent(void)
 
 void GLWidget::mousePressEvent(QMouseEvent *mouseEvent)
 {
-    this->actionEvent.setMouseEvent(mouseEvent);
+    this->actionEvent.setMouseEvent(mouseEvent,false);
     this->bpStart = mouseEvent->pos();
 
     this->processActionEvent();
@@ -773,7 +773,7 @@ void GLWidget::mousePressEvent(QMouseEvent *mouseEvent)
 
 void GLWidget::mouseReleaseEvent(QMouseEvent *mouseEvent)
 {
-    this->actionEvent.setMouseEvent(mouseEvent);
+    this->actionEvent.setMouseEvent(mouseEvent,true);
     this->bpEnd = mouseEvent->pos();
     this->showRotationSphere = false;
 
@@ -787,39 +787,42 @@ void GLWidget::mouseReleaseEvent(QMouseEvent *mouseEvent)
     this->bpStart = this->bpEnd;
 
     this->processActionEvent();
-    this->actionEvent.clear();
     this->update();
 }
 
 void GLWidget::mouseMoveEvent(QMouseEvent *mouseEvent)
 {
-    this->actionEvent.setMouseEvent(mouseEvent);
+    this->actionEvent.setMouseEvent(mouseEvent,false);
     this->bpEnd = mouseEvent->pos();
-    this->showRotationSphere = true;
 
     if (this->actionEvent.getType() == GL_ACTION_EVENT_TRANSLATE)
     {
+        this->showRotationSphere = true;
         this->dtx =   2 * (this->bpEnd.x() - this->bpStart.x()) / (float)this->width();
         this->dty = - 2 * (this->bpEnd.y() - this->bpStart.y()) / (float)this->width();
         this->dtz = 0.0;
     }
     else if (this->actionEvent.getType() == GL_ACTION_EVENT_TRANSLATE_Z)
     {
+        this->showRotationSphere = true;
         this->dtx = 0.0;
         this->dty = 0.0;
         this->dtz = this->scale * 2 * (this->bpEnd.y() - this->bpStart.y()) / (float)this->width();
     }
     else if (this->actionEvent.getType() == GL_ACTION_EVENT_ROTATE)
     {
+        this->showRotationSphere = true;
         this->drx = 500 * (this->bpEnd.y() - this->bpStart.y()) / (float)this->width();
         this->dry = 500 * (this->bpEnd.x() - this->bpStart.x()) / (float)this->width();
     }
     else if (this->actionEvent.getType() == GL_ACTION_EVENT_ZOOM)
     {
+        this->showRotationSphere = true;
         this->dscale = (this->bpEnd.y() - this->bpStart.y()) / (float)this->width();
     }
     this->bpStart = this->bpEnd;
 
+    this->processActionEvent();
     this->update();
 }
 
@@ -868,13 +871,13 @@ void GLWidget::wheelEvent(QWheelEvent *mouseEvent)
 
 void GLWidget::keyPressEvent(QKeyEvent *keyEvent)
 {
-    this->actionEvent.setKeyEvent(keyEvent);
+    this->actionEvent.setKeyEvent(keyEvent,false);
     this->update();
 }
 
 void GLWidget::keyReleaseEvent(QKeyEvent *keyEvent)
 {
-    this->actionEvent.clear();
+    this->actionEvent.setKeyEvent(keyEvent,true);
     this->showRotationSphere = false;
     this->update();
 }

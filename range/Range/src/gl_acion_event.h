@@ -75,10 +75,10 @@ class GLActionEvent : public QObject
         }
 
         //! Set Qt key event.
-        void setKeyEvent(QKeyEvent *keyEvent);
+        void setKeyEvent(QKeyEvent *keyEvent, bool release);
 
         //! Set Qt mouse event.
-        void setMouseEvent(QMouseEvent *mouseEvent);
+        void setMouseEvent(QMouseEvent *mouseEvent, bool release);
 
         //! Set Qt wheel event.
         void setScrollPhase(Qt::ScrollPhase srcollPhase);

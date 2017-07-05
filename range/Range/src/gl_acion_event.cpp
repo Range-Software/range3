@@ -44,6 +44,7 @@ GLActionEvent::GLActionEvent(QObject *parent)
     , keyModifiers(Qt::NoModifier)
     , key(0)
     , buttons(Qt::NoButton)
+    , scrollPhase(Qt::NoScrollPhase)
     , actionChanged(false)
 {
 }
@@ -68,20 +69,20 @@ bool GLActionEvent::getChanged(void) const
     return actionChanged;
 }
 
-void GLActionEvent::setKeyEvent(QKeyEvent *keyEvent)
+void GLActionEvent::setKeyEvent(QKeyEvent *keyEvent, bool release)
 {
     GLActionEventType prevType = this->getType();
-    this->key = keyEvent->key();
-    this->keyModifiers = keyEvent->modifiers();
+    this->key = release ? 0 : keyEvent->key();
+    this->keyModifiers = release ? Qt::NoModifier : keyEvent->modifiers();
     GLActionEventType currType = this->getType();
     this->actionChanged = (prevType != currType);
     emit this->changed(currType);
 }
 
-void GLActionEvent::setMouseEvent(QMouseEvent *mouseEvent)
+void GLActionEvent::setMouseEvent(QMouseEvent *mouseEvent, bool release)
 {
     GLActionEventType prevType = this->getType();
-    this->buttons = mouseEvent->buttons();
+    this->buttons = release ? Qt::NoButton : mouseEvent->buttons();
     GLActionEventType currType = this->getType();
     this->actionChanged = (prevType != currType);
     emit this->changed(currType);
