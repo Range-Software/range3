@@ -393,20 +393,31 @@ void RTriangle::findCenter(RR3Vector &center) const
     center[2] = (this->getNode1().getZ() + this->getNode2().getZ() + this->getNode3().getZ()) / 3.0;
 }
 
+RR3Vector RTriangle::computeNormal(const RNode &node1, const RNode &node2, const RNode &node3, bool normalize)
+{
+    return RTriangle::computeNormal(node1.toVector(),node2.toVector(),node3.toVector(),normalize);
+}
+
+RR3Vector RTriangle::computeNormal(const RR3Vector &node1, const RR3Vector &node2, const RR3Vector &node3, bool normalize)
+{
+    RR3Vector v1;
+    RR3Vector v2;
+    RR3Vector::subtract(node2,node1,v1);
+    RR3Vector::subtract(node3,node1,v2);
+
+    RR3Vector n;
+    RR3Vector::cross(v1,v2,n);
+
+    if (normalize)
+    {
+        n.normalize();
+    }
+    return n;
+}
+
 void RTriangle::computeNormal(void)
 {
-    RRVector v1(3);
-    v1[0] = this->node2.getX() - this->node1.getX();
-    v1[1] = this->node2.getY() - this->node1.getY();
-    v1[2] = this->node2.getZ() - this->node1.getZ();
-
-    RRVector v2(3);
-    v2[0] = this->node3.getX() - this->node1.getX();
-    v2[1] = this->node3.getY() - this->node1.getY();
-    v2[2] = this->node3.getZ() - this->node1.getZ();
-
-    RRVector::cross(v1,v2,this->normal);
-    this->normal.normalize();
+    this->normal = RTriangle::computeNormal(this->node1,this->node2,this->node3);
 }
 
 bool RTriangle::findParallelSegmentIntersection(const RSegment &segment, std::set<RR3Vector> &x) const

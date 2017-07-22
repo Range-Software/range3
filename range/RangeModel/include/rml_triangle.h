@@ -176,6 +176,11 @@ class RTriangle
             return this->normal;
         }
 
+        //! Calculate normal of a triangle represented by three nodes.
+        static RR3Vector computeNormal(const RNode &node1, const RNode &node2, const RNode &node3, bool normalize = true);
+
+        //! Calculate normal of a triangle represented by three vectors.
+        static RR3Vector computeNormal(const RR3Vector &node1, const RR3Vector &node2, const RR3Vector &node3, bool normalize = true);
 
     protected:
 

@@ -133,12 +133,23 @@ void PickDetailsTree::populate(void)
             }
             case PICK_ITEM_NODE:
             {
+                QTreeWidgetItem *childItem = 0;
+
                 QString nodeNumber;
                 if (REntityGroup::typeIsElementGroup(rEntityID.getType()))
                 {
                     const RElement &rElement = rModel.getElement(elementID);
                     nodeNumber = QString::number(rElement.getNodeId(rPickItems[i].getNodeID()));
                     itemText = tr("Node") + " # " + nodeNumber;
+
+                    const RNode &rNode = rModel.getNode(rElement.getNodeId(rPickItems[i].getNodeID()));
+
+                    childItem = new QTreeWidgetItem(topItem);
+                    childItem->setText(PICK_DETAILS_TREE_COLUMN_1,tr("Coordinates") + ":");
+                    childItem->setText(PICK_DETAILS_TREE_COLUMN_2,QString::number(rNode.getX()));
+                    childItem->setText(PICK_DETAILS_TREE_COLUMN_3,QString::number(rNode.getY()));
+                    childItem->setText(PICK_DETAILS_TREE_COLUMN_4,QString::number(rNode.getZ()));
+                    childItem->setText(PICK_DETAILS_TREE_COLUMN_5,"[m]");
                 }
                 else if (REntityGroup::typeIsInterpolatedElementGroup(rEntityID.getType()))
                 {
@@ -146,12 +157,10 @@ void PickDetailsTree::populate(void)
                     itemText = tr("Interpolated node") + " # " + nodeNumber;
                 }
 
-                QTreeWidgetItem *childItem = 0;
-
                 // Type
                 childItem = new QTreeWidgetItem(topItem);
-                childItem->setText(PICK_DETAILS_TREE_COLUMN_1,tr("Family:"));
-                childItem->setText(PICK_DETAILS_TREE_COLUMN_2,REntityGroup::getTypeName(rEntityID.getType()));
+                childItem->setText(PICK_DETAILS_TREE_COLUMN_1,tr("Family") + ":");
+                childItem->setText(PICK_DETAILS_TREE_COLUMN_5,REntityGroup::getTypeName(rEntityID.getType()));
 
                 break;
             }

@@ -52,7 +52,7 @@ class RPolygon
         void setNodes ( const std::vector<RNode> &nodes );
 
         //! Remove node.
-        void removeNode(uint nodePosition);
+        void removeNode(uint nodePosition, bool updateNormal = true);
 
         //! Calculate polygon area.
         double findArea ( void ) const;

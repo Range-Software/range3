@@ -25,7 +25,6 @@ RPolygon::RPolygon(const std::vector<RNode> &nodes)
     : nodes(nodes)
 {
     this->_init();
-    RPolygon::sortNodes(this->nodes);
     this->computeNormal();
 }
 
@@ -40,7 +39,6 @@ RPolygon::RPolygon(const std::vector<RR3Vector> &nodes)
     }
 
     this->_init();
-    RPolygon::sortNodes(this->nodes);
     this->computeNormal();
 }
 
@@ -67,11 +65,14 @@ void RPolygon::setNodes(const std::vector<RNode> &nodes)
     this->computeNormal();
 }
 
-void RPolygon::removeNode(uint nodePosition)
+void RPolygon::removeNode(uint nodePosition, bool updateNormal)
 {
     R_ERROR_ASSERT (nodePosition < this->nodes.size());
     this->nodes.erase(this->nodes.begin()+nodePosition);
-    this->computeNormal();
+    if (updateNormal)
+    {
+        this->computeNormal();
+    }
 }
 
 double RPolygon::findArea(void) const
@@ -173,7 +174,7 @@ std::vector<RElement> RPolygon::triangulate(const std::vector<RNode> &nodes, boo
     std::vector<RNode> sortedNodes(nodes);
     std::vector<uint> nodeIDs;
 
-    nodeIDs.resize(nodes.size());
+    nodeIDs.resize(sortedNodes.size());
     for (uint i=0;i<nodeIDs.size();i++)
     {
         nodeIDs[i] = i;
@@ -211,7 +212,7 @@ std::vector<RElement> RPolygon::triangulate(const std::vector<RNode> &nodes, boo
 
         elements.push_back(element);
 
-        p.removeNode(n2);
+        p.removeNode(n2,false);
         book.erase(book.begin()+n2);
     }
 
@@ -226,19 +227,26 @@ void RPolygon::computeNormal(void)
     {
         return;
     }
-
-    for (uint i=2;i<this->nodes.size();i++)
+    if (this->nodes.size() == 3)
     {
-        RTriangle t(this->nodes[0],this->nodes[1],this->nodes[i]);
-        RR3Vector n(t.getNormal());
+        RTriangle t(this->nodes[0],this->nodes[1],this->nodes[2]);
+        this->normal = t.getNormal();
+        return;
+    }
+
+    for (uint i=0;i<this->nodes.size();i++)
+    {
+        uint n1 = (i==0) ? this->getNNodes()-1 : i-1;
+        uint n2 = i;
+        uint n3 = (i==this->getNNodes()-1) ? 0 : i+1;
+
+        RR3Vector n(RTriangle::computeNormal(this->nodes[n1],this->nodes[n2],this->nodes[n3],false));
         this->normal[0] += n[0];
         this->normal[1] += n[1];
         this->normal[2] += n[2];
     }
 
-    this->normal[0] /= double(this->nodes.size() - 2);
-    this->normal[1] /= double(this->nodes.size() - 2);
-    this->normal[2] /= double(this->nodes.size() - 2);
+    this->normal.normalize();
 }
 
 uint RPolygon::findEarNode(void) const
@@ -257,35 +265,17 @@ uint RPolygon::findEarNode(void) const
 
     for (uint i=0;i<this->getNNodes();i++)
     {
-        uint n1 = 0;
+        uint n1 = (i==0) ? this->getNNodes()-1 : i-1;
         uint n2 = i;
-        uint n3 = 0;
+        uint n3 = (i==this->getNNodes()-1) ? 0 : i+1;
 
-        if (i==0)
-        {
-            n1 = this->getNNodes()-1;
-        }
-        else
-        {
-            n1 = i-1;
-        }
+        RR3Vector v12(this->nodes[n1].getX()-this->nodes[n2].getX(),
+                      this->nodes[n1].getY()-this->nodes[n2].getY(),
+                      this->nodes[n1].getZ()-this->nodes[n2].getZ());
 
-        if (i == this->getNNodes()-1)
-        {
-            n3 = 0;
-        }
-        else
-        {
-            n3 = i+1;
-        }
-
-        RR3Vector v12(this->nodes[n2].getX()-this->nodes[n1].getX(),
-                      this->nodes[n2].getY()-this->nodes[n1].getY(),
-                      this->nodes[n2].getZ()-this->nodes[n1].getZ());
-
-        RR3Vector v23(this->nodes[n3].getX()-this->nodes[n2].getX(),
-                      this->nodes[n3].getY()-this->nodes[n2].getY(),
-                      this->nodes[n3].getZ()-this->nodes[n2].getZ());
+        RR3Vector v23(this->nodes[n2].getX()-this->nodes[n3].getX(),
+                      this->nodes[n2].getY()-this->nodes[n3].getY(),
+                      this->nodes[n2].getZ()-this->nodes[n3].getZ());
 
         RR3Vector vn;
 
@@ -293,6 +283,7 @@ uint RPolygon::findEarNode(void) const
 
         if (RRVector::angle(vn,this->normal) < RConstants::pi / 2.0)
         {
+
             RTriangle t(this->nodes[n1],this->nodes[n2],this->nodes[n3]);
             for (uint j=0;j<this->getNNodes();j++)
             {
