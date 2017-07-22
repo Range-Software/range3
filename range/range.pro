@@ -8,7 +8,8 @@ SUBDIRS = \
     RangeSolverLib \
     RangeLicense \
     RangeSolver \
-    Range
+    Range \
+    RangeTestApp
 
 RangeModel.depends = RangeBase TetGen
 RangeSolverLib.depends = RangeModel
