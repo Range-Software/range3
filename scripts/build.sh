@@ -138,13 +138,6 @@ do
         cd $currentDir
         exit 1
     fi
-#    $MAKE install
-#    if [ $? -ne 0 ]
-#    then
-#        echo_e "Failed to install module '$module'"
-#        cd $currentDir
-#        exit 1
-#    fi
     set_unindent
 done
 
