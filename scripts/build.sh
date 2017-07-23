@@ -70,6 +70,17 @@ else
     buildDir+="-Release"
 fi
 
+if [ $clean = true ]
+then
+    echo_i "Removing build directory '${buildDir}'"
+    rm -rf $buildDir
+    if [ $? -ne 0 ]
+    then
+        echo_e "Failed to remove build directory '${buildDir}'"
+        exit 1
+    fi
+fi
+
 logDir="${buildDir}/log"
 
 if [ ! -x $qmakeCmd ]
@@ -96,17 +107,6 @@ _BUILD_LOG_FNAME="${logDir}/${myName}-${timeStamp}.log"
 if [ $selfDebug = true ]
 then
     _DEBUG_LOG_FNAME="${logDir}/op-${myName}-${timeStamp}.log"
-fi
-
-if [ $clean = true ]
-then
-    echo_i "Removing build directory '${buildDir}'"
-    rm -rf $buildDir
-    if [ $? -ne 0 ]
-    then
-        echo_e "Failed to remove build directory '${buildDir}'"
-        exit 1
-    fi
 fi
 
 qmakeArgs="-recursive"
