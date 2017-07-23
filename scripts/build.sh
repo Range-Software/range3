@@ -112,7 +112,7 @@ fi
 qmakeArgs="-recursive"
 if [ $debug = true ]
 then
-    qmakeArgs+=" CONFIG+=debug"
+    qmakeArgs+=" CONFIG+=debug CONFIG+=qml_debug"
 fi
 
 currentDir=$(pwd)
