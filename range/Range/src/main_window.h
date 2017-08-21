@@ -70,6 +70,8 @@ class MainWindow : public QMainWindow
         ProgressBar* mainProgressBar;
         //! Download bar.
         ProgressBar* downloadProgressBar;
+        //! First run flag.
+        bool isFirstRun;
 
     private:
 

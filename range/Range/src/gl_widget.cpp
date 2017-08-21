@@ -1224,11 +1224,13 @@ void GLWidget::onDisplayPropertiesChanged(uint modelID, REntityGroupType element
             {
                 this->glModelList.getGlVectorFieldList(entityID).setListInvalid(GL_ENTITY_LIST_ITEM_NORMAL);
             }
+            break;
         case R_ENTITY_GROUP_SCALAR_FIELD:
             if (this->glModelList.getNGlScalarFieldLists() > entityID)
             {
                 this->glModelList.getGlScalarFieldList(entityID).setListInvalid(GL_ENTITY_LIST_ITEM_NORMAL);
             }
+            break;
         case R_ENTITY_GROUP_STREAM_LINE:
             if (this->glModelList.getNGlStreamLineLists() > entityID)
             {
@@ -1240,6 +1242,7 @@ void GLWidget::onDisplayPropertiesChanged(uint modelID, REntityGroupType element
             {
                 this->glModelList.getGlCutList(entityID).setListInvalid(GL_ENTITY_LIST_ITEM_NORMAL);
             }
+            break;
         case R_ENTITY_GROUP_ISO:
             if (this->glModelList.getNGlIsoLists() > entityID)
             {

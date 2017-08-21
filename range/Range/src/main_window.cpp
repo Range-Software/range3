@@ -16,7 +16,6 @@
 #include <QStatusBar>
 #include <QSplitter>
 #include <QScrollBar>
-#include <QMessageBox>
 
 #include "logger.h"
 #include "progress.h"
@@ -47,6 +46,7 @@
 
 MainWindow::MainWindow (QWidget *parent)
     : QMainWindow(parent)
+    , isFirstRun(true)
 {
     if (this->objectName().isEmpty())
     {
@@ -158,6 +158,11 @@ MainWindow::MainWindow (QWidget *parent)
 
     // Enable logger to sen messages to window.
     Logger::unhalt();
+
+    if (this->isFirstRun)
+    {
+//        QMessageBox::warning(this,tr("FIRST RUN"),"This is first run");
+    }
 }
 
 MainWindow *MainWindow::getInstance(void)
@@ -868,6 +873,8 @@ void MainWindow::readSettings(void)
         }
     }
 
+    this->isFirstRun = MainSettings::getInstance().value("application/firstRun",true).toBool();
+
     MainSettings::getInstance().sync();
 }
 
@@ -926,6 +933,8 @@ void MainWindow::writeSettings(void) const
         QString key = "application/shortcut_" + this->actionList->getAction(ActionType(i))->text();
         MainSettings::getInstance().setValue(key, this->actionList->getAction(ActionType(i))->shortcut().toString());
     }
+
+    MainSettings::getInstance().setValue("application/firstRun",false);
 
     MainSettings::getInstance().sync();
 
@@ -1071,7 +1080,6 @@ void MainWindow::onErrorPrinted(const QString &message)
     sb->setValue(sb->maximum());
     this->dockApplicationOutput->show();
     this->dockApplicationOutput->raise();
-//    QMessageBox::warning(this,tr("Error"),message);
 }
 
 void MainWindow::onProcessReadyStandardOutput(const QString &message)

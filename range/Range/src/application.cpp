@@ -13,7 +13,6 @@
 #include <QStyle>
 #include <QPalette>
 #include <QNetworkProxy>
-#include <QMessageBox>
 
 #include "application.h"
 #include "locker.h"
