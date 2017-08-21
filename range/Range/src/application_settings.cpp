@@ -21,7 +21,7 @@ ApplicationSettings::ApplicationSettings(QObject *parent)
     : QObject(parent)
     , nHistoryRecords(3)
     , style(ApplicationSettings::getDefaultStyle())
-    , rangeApiAllowed(true)
+    , rangeApiAllowed(false)
     , rangeApiServer("http://range-software.com")
 {
     this->nThreads = ApplicationSettings::getMaxThreads();
