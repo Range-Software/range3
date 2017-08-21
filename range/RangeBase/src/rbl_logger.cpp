@@ -19,6 +19,22 @@
 #include "rbl_error.h"
 
 
+void RLogger::_init (const RLogger *pLogger)
+{
+    if (pLogger)
+    {
+        this->setLevel (pLogger->getLevel());
+        this->setHalted (pLogger->getHalted());
+        this->setPrintTimeEnabled (pLogger->getPrintTimeEnabled());
+        this->setAddNewLine (pLogger->getAddNewLine());
+        this->setFile (pLogger->getFile());
+        this->setLogHandler (pLogger->getLogHandler());
+        this->setIndentLevel (pLogger->getIndentLevel());
+        // Copy unprocessed messages.
+    }
+} /* RLogger::_init */
+
+
 RLogger::RLogger (RLogLevel logLevel) : logHandler(0)
                                       , indentLevel(0)
 {
@@ -41,20 +57,18 @@ RLogger::~RLogger ()
 } /* RLogger::~RLogger */
 
 
-void RLogger::_init (const RLogger *pLogger)
+RLogger & RLogger::operator = (const RLogger &logger)
 {
-    if (pLogger)
-    {
-        this->setLevel (pLogger->getLevel());
-        this->setHalted (pLogger->getHalted());
-        this->setPrintTimeEnabled (pLogger->getPrintTimeEnabled());
-        this->setAddNewLine (pLogger->getAddNewLine());
-        this->setFile (pLogger->getFile());
-        this->setLogHandler (pLogger->getLogHandler());
-        this->setIndentLevel (pLogger->getIndentLevel());
-        // Copy unprocessed messages.
-    }
-} /* RLogger::_init */
+    this->_init (&logger);
+    return (*this);
+} /* RLogger::operator = */
+
+
+RLogger & RLogger::getInstance()
+{
+    static RLogger logger;
+    return logger;
+} /* rbl_logger_get_default_instance */
 
 
 RLogLevel RLogger::getLevel (void) const
@@ -410,18 +424,28 @@ void RLogger::purge (unsigned int nMessages)
 } /* RLogger::purge */
 
 
-RLogger & RLogger::operator = (const RLogger &logger)
+int RLogger::trace(const char *format, ...)
 {
-    this->_init (&logger);
-    return (*this);
-} /* RLogger::operator = */
+    char buffer[1024];
+    va_list ap;
+    va_start(ap, format);
+    int retVal = vsprintf (buffer, format, ap);
+    va_end(ap);
+    RLogger::getInstance().print(buffer, R_MESSAGE_TRACE);
+    return retVal;
+} /* RLogger::trace */
 
 
-RLogger & RLogger::getInstance()
+int RLogger::debug(const char *format, ...)
 {
-    static RLogger logger;
-    return logger;
-} /* rbl_logger_get_default_instance */
+    char buffer[1024];
+    va_list ap;
+    va_start(ap, format);
+    int retVal = vsprintf (buffer, format, ap);
+    va_end(ap);
+    RLogger::getInstance().print(buffer, R_MESSAGE_DEBUG);
+    return retVal;
+} /* RLogger::debug */
 
 
 int RLogger::info (const char *format, ...)

@@ -165,6 +165,12 @@ class RLogger
         //! If nMessages is set to 0 all messages will be purged.
         void purge ( unsigned int nMessages = 0 );
 
+        //! Convenience function to log trace message.
+        static int trace ( const char *format, ... );
+
+        //! Convenience function to log debug message.
+        static int debug ( const char *format, ... );
+
         //! Convenience function to log info message.
         static int info ( const char *format, ... );
 
