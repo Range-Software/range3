@@ -45,6 +45,10 @@ RError::RError(RErrorType type, const char *file, unsigned int line, const QStri
     QString devInfo;
 #ifdef DEBUG
     devInfo = QString(file) + "@" + QString::number(line) + ":";
+#else
+    // Suppress unused parameter warnings
+    (void)file;
+    (void)line;
 #endif
     this->setMessage(this->getMessage() + " " + devInfo + message);
 } /* RError::RError */
@@ -58,6 +62,9 @@ RError::RError(RErrorType type, const char *file, unsigned int line, const char 
     snprintf(buffer,1024,"%s@%u: ",file,line);
 #else
     memset(buffer,'\0',1024);
+    // Suppress unused parameter warnings
+    (void)file;
+    (void)line;
 #endif
 
     va_list ap;
