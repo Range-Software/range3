@@ -40,7 +40,7 @@ class DownloadManager: public QObject
         DownloadManager(QObject *parent = 0);
 
         uint append(const QUrl &url);
-        static QString saveFileName(const QUrl &url);
+        static QString saveFileNameFromUrl(const QUrl &url);
 
     signals:
 

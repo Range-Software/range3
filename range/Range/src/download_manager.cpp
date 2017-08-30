@@ -43,7 +43,7 @@ uint DownloadManager::append(const QUrl &url)
     return ++this->downloadID;
 }
 
-QString DownloadManager::saveFileName(const QUrl &url)
+QString DownloadManager::saveFileNameFromUrl(const QUrl &url)
 {
     QString basename = QFileInfo(url.path()).fileName();
 
@@ -85,7 +85,7 @@ void DownloadManager::startNextDownload(void)
 
     QUrl url = this->downloadQueue.dequeue();
 
-    QString filename = DownloadManager::saveFileName(url);
+    QString filename = DownloadManager::saveFileNameFromUrl(url);
     RLogger::info("Writing to file \'%s\'\n",filename.toUtf8().constData());
     this->output.setFileName(filename);
     if (!this->output.open(QIODevice::WriteOnly))
