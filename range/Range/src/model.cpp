@@ -26,6 +26,14 @@
 #include "main_settings.h"
 #include "session.h"
 
+const int Model::ConsolidateActionAll = Model::ConsolidateSurfaceNeighbors |
+                                        Model::ConsolidateVolumeNeighbors |
+                                        Model::ConsolidateEdgeNodes |
+                                        Model::ConsolidateEdgeElements |
+                                        Model::ConsolidateHoleElements |
+                                        Model::ConsolidateIntersectedElements |
+                                        Model::ConsolidateMeshInput;
+
 void Model::_init(const Model *pModel)
 {
     if (pModel)
@@ -57,13 +65,13 @@ Model::Model(const Model &model) : RModel(model)
 Model::Model (const RModelMsh &modelMsh) : RModel(modelMsh)
 {
     this->_init();
-    this->consolidate(false);
+    this->consolidate(Model::ConsolidateEdgeElements | Model::ConsolidateHoleElements);
 }
 
 Model::Model (const RModelStl &modelStl) : RModel(modelStl)
 {
     this->_init();
-    this->consolidate(false);
+    this->consolidate(Model::ConsolidateEdgeElements | Model::ConsolidateHoleElements);
 }
 
 Model::Model (const RModelRaw &modelRaw,
@@ -73,7 +81,7 @@ Model::Model (const RModelRaw &modelRaw,
     this->_init();
     if (consolidate)
     {
-        this->consolidate(false);
+        this->consolidate(Model::ConsolidateEdgeElements | Model::ConsolidateHoleElements);
     }
 }
 
@@ -258,7 +266,7 @@ void Model::insertModel(const Model &model, bool mergeNearNodes, double toleranc
             rIso.setName(this->generateNextEntityName(R_ENTITY_GROUP_ISO));
         }
     }
-    this->consolidate(false);
+    this->consolidate(Model::ConsolidateEdgeElements | Model::ConsolidateHoleElements);
 }
 
 const QString &Model::getFileName(void) const
@@ -602,14 +610,14 @@ void Model::closeSurfaceHole(QList<uint> edgeIDs)
         }
     }
 
-    this->consolidate();
+    this->consolidate(Model::ConsolidateEdgeElements | Model::ConsolidateHoleElements);
 
     RLogger::unindent();
 }
 
 void Model::transformGeometry(const GeometryTransformInput &geometryTransformInput)
 {
-    this->consolidate(true);
+    this->consolidate(Model::ConsolidateActionAll);
 
     QSet<uint> nodeIDs;
 
@@ -744,14 +752,14 @@ void Model::transformGeometry(const GeometryTransformInput &geometryTransformInp
     }
 
     this->mergeNearNodes();
-    this->consolidate(true);
+    this->consolidate(Model::ConsolidateActionAll);
 }
 
 uint Model::coarsenSurfaceElements(const std::vector<uint> surfaceIDs, double edgeLength, double elementArea)
 {
     uint nDeleted = this->RModel::coarsenSurfaceElements(surfaceIDs,edgeLength,elementArea);
 
-    this->consolidate(true);
+    this->consolidate(Model::ConsolidateActionAll);
 
     return nDeleted;
 }
@@ -760,7 +768,7 @@ uint Model::tetrahedralizeSurface(const std::vector<uint> surfaceIDs)
 {
     uint nGenerated = this->RModel::tetrahedralizeSurface(surfaceIDs);
 
-    this->consolidate(true);
+    this->consolidate(Model::ConsolidateActionAll);
 
     return nGenerated;
 }
@@ -769,7 +777,7 @@ uint Model::mergeNearNodes(double tolerance)
 {
     uint nMerged = this->RModel::mergeNearNodes(tolerance);
 
-    this->consolidate(true);
+    this->consolidate(Model::ConsolidateActionAll);
 
     return nMerged;
 }
@@ -778,7 +786,7 @@ uint Model::purgeUnusedNodes(void)
 {
     uint nPurged = this->RModel::purgeUnusedNodes();
 
-    this->consolidate();
+    this->consolidate(Model::ConsolidateEdgeElements | Model::ConsolidateHoleElements);
 
     return nPurged;
 }
@@ -787,7 +795,7 @@ uint Model::purgeUnusedElements(void)
 {
     uint nPurged = this->RModel::purgeUnusedElements();
 
-    this->consolidate();
+    this->consolidate(Model::ConsolidateEdgeElements | Model::ConsolidateHoleElements);
 
     return nPurged;
 }
@@ -804,7 +812,7 @@ uint Model::fixSliverElements(double edgeRatio)
         RLogger::info("Total number of sliver elements that were affected = %d.\n", nAffected);
 
         RMeshInput tmpInput = this->getMeshInput();
-        this->consolidate(true);
+        this->consolidate(Model::ConsolidateActionAll);
         this->setMeshInput(tmpInput);
     }
 
@@ -837,7 +845,7 @@ uint Model::breakIntersectedElements(uint nIterations)
         RLogger::info("Total number of elements that were intersected = %d.\n", ni);
 
         RMeshInput tmpInput = this->getMeshInput();
-        this->consolidate(true);
+        this->consolidate(Model::ConsolidateActionAll);
         this->setMeshInput(tmpInput);
     }
     return ni;
@@ -901,7 +909,7 @@ bool Model::boolDifference(uint nIterations, QList<uint> surfaceEntityIDs, uint 
 {
     bool success = this->RModel::boolDifference(nIterations,surfaceEntityIDs,cuttingSurfaceEntityId);
 
-    this->consolidate(true);
+    this->consolidate(Model::ConsolidateActionAll);
 
     return success;
 }
@@ -910,7 +918,7 @@ bool Model::boolIntersection(uint nIterations, QList<uint> surfaceEntityIDs)
 {
     bool success = this->RModel::boolIntersection(nIterations,surfaceEntityIDs);
 
-    this->consolidate(true);
+    this->consolidate(Model::ConsolidateActionAll);
 
     return success;
 }
@@ -919,7 +927,7 @@ bool Model::boolUnion(uint nIterations, QList<uint> surfaceEntityIDs)
 {
     bool success = this->RModel::boolUnion(nIterations,surfaceEntityIDs);
 
-    this->consolidate(true);
+    this->consolidate(Model::ConsolidateActionAll);
 
     return success;
 }
@@ -2570,7 +2578,7 @@ void Model::read(const QString &fileName)
     {
         this->unloadViewFactorMatrix();
     }
-    this->consolidate(false);
+    this->consolidate(Model::ConsolidateEdgeElements | Model::ConsolidateHoleElements);
     // Fix missing color scales in variable data.
     for (uint i=0;i<this->getNVariables();i++)
     {
@@ -2632,7 +2640,7 @@ void Model::unloadViewFactorMatrix(void)
     this->viewFactorMatrix.clear();
 }
 
-void Model::consolidate(bool force)
+void Model::consolidate(int consolidateActionMask)
 {
 
     RLogger::info("Consolidating model\n");
@@ -2641,28 +2649,34 @@ void Model::consolidate(bool force)
     {
         bool updateMeshInput = false;
 
-        if (force || this->getNElements() != this->surfaceNeigs.size())
+        if (consolidateActionMask & Model::ConsolidateSurfaceNeighbors || this->getNElements() != this->surfaceNeigs.size())
         {
             this->setSurfaceNeighbors(this->findSurfaceNeighbors());
             updateMeshInput = true;
         }
-        if (force || this->getNElements() != this->volumeNeigs.size())
+        if (consolidateActionMask & Model::ConsolidateVolumeNeighbors || this->getNElements() != this->volumeNeigs.size())
         {
             this->setVolumeNeighbors(this->findVolumeNeighbors());
             updateMeshInput = true;
         }
-        if (force || this->getNNodes() != uint(this->edgeNodes.size()))
+        if (consolidateActionMask & Model::ConsolidateEdgeNodes || this->getNNodes() != uint(this->edgeNodes.size()))
         {
             this->edgeNodes = this->findEdgeNodes();
             updateMeshInput = true;
         }
-        this->edgeElements = this->findEdgeElements(30.0);
-        this->holeElements = this->findHoleElements();
-        if (force)
+        if (consolidateActionMask & Model::ConsolidateEdgeElements)
+        {
+            this->edgeElements = this->findEdgeElements(30.0);
+        }
+        if (consolidateActionMask & Model::ConsolidateHoleElements)
+        {
+            this->holeElements = this->findHoleElements();
+        }
+        if (consolidateActionMask & Model::ConsolidateIntersectedElements)
         {
             this->updateIntersectedElements();
         }
-        if (force || updateMeshInput)
+        if (consolidateActionMask & Model::ConsolidateMeshInput || updateMeshInput)
         {
             this->initializeMeshInput();
         }

@@ -26,6 +26,22 @@
 class Model : public RModel
 {
 
+    public:
+
+        enum ConsolidateAction
+        {
+            ConsolidateNone                = 0,
+            ConsolidateSurfaceNeighbors    = 1 << 1,
+            ConsolidateVolumeNeighbors     = 1 << 2,
+            ConsolidateEdgeNodes           = 1 << 3,
+            ConsolidateEdgeElements        = 1 << 4,
+            ConsolidateHoleElements        = 1 << 5,
+            ConsolidateIntersectedElements = 1 << 6,
+            ConsolidateMeshInput           = 1 << 7
+        };
+
+        static const int ConsolidateActionAll;
+
     protected:
 
         //! Lock enabling model to be drawn.
@@ -415,7 +431,7 @@ class Model : public RModel
         void unloadViewFactorMatrix(void);
 
         //! Update (recompute) internal structures.
-        void consolidate(bool force = false);
+        void consolidate(int consolidateActionMask);
 
         //! Build file name from data directory.
         QString buildDataFileName(const QString &format, bool withTimeStep = false) const;
@@ -488,6 +504,8 @@ class Model : public RModel
 
         //! Find hole elements.
         QVector<RElement> findHoleElements(void) const;
+
+        friend class ModelAction;
 
 };
 

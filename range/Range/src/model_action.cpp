@@ -234,6 +234,20 @@ void ModelAction::removeEntities(const ModelActionInput &modelActionInput)
     RLogger::info("Removing entities\n");
     RLogger::indent();
 
+    uint nSurfaceEntities = 0;
+    uint nVolumeEntities = 0;
+    foreach (SessionEntityID sessionEntityID, modelActionInput.getEntityIDs())
+    {
+        if (sessionEntityID.getType() == R_ENTITY_GROUP_SURFACE)
+        {
+            nSurfaceEntities++;
+        }
+        if (sessionEntityID.getType() == R_ENTITY_GROUP_VOLUME)
+        {
+            nVolumeEntities++;
+        }
+    }
+
     rModel.removeEntities(R_ENTITY_GROUP_POINT,SessionEntityID::getEntityIDs(modelActionInput.getEntityIDs(),R_ENTITY_GROUP_POINT));
     rModel.removeEntities(R_ENTITY_GROUP_LINE,SessionEntityID::getEntityIDs(modelActionInput.getEntityIDs(),R_ENTITY_GROUP_LINE));
     rModel.removeEntities(R_ENTITY_GROUP_SURFACE,SessionEntityID::getEntityIDs(modelActionInput.getEntityIDs(),R_ENTITY_GROUP_SURFACE));
@@ -246,7 +260,23 @@ void ModelAction::removeEntities(const ModelActionInput &modelActionInput)
 
     rModel.RModel::purgeUnusedElements();
     rModel.RModel::purgeUnusedNodes();
-    rModel.consolidate(true);
+
+    int consolidateActionMask = Model::ConsolidateEdgeNodes | Model::ConsolidateEdgeElements | Model::ConsolidateHoleElements | Model::ConsolidateMeshInput;
+
+    if (nSurfaceEntities > 0)
+    {
+        consolidateActionMask |= Model::ConsolidateSurfaceNeighbors;
+        if (rModel.getNIntersected() > 0)
+        {
+            consolidateActionMask |= Model::ConsolidateIntersectedElements;
+        }
+    }
+    if (nSurfaceEntities > 0)
+    {
+        consolidateActionMask |= Model::ConsolidateVolumeNeighbors;
+    }
+
+    rModel.consolidate(consolidateActionMask);
 
     Session::getInstance().getPickList().clear();
 
@@ -287,7 +317,7 @@ void ModelAction::createElement(const ModelActionInput &modelActionInput)
 
     rModel.addElement(e);
 
-    rModel.consolidate();
+    rModel.consolidate(Model::ConsolidateEdgeElements | Model::ConsolidateHoleElements);
     RLogger::unindent();
 
     Session::getInstance().setModelChanged(modelActionInput.getModelID());
@@ -301,7 +331,7 @@ void ModelAction::removeNodes(const ModelActionInput &modelActionInput)
     RLogger::indent();
 
     rModel.removeNodes(modelActionInput.getNodeIDs(),modelActionInput.getCloseHole());
-    rModel.consolidate(true);
+    rModel.consolidate(Model::ConsolidateActionAll);
 
     RLogger::unindent();
 
@@ -345,8 +375,37 @@ void ModelAction::removeElements(const ModelActionInput &modelActionInput)
     RLogger::info("Removing elements\n");
     RLogger::indent();
 
+    uint nSurfaceElements = 0;
+    uint nVolumeElements = 0;
+    foreach (uint elementID, modelActionInput.getElementIDs())
+    {
+        if (R_ELEMENT_TYPE_IS_SURFACE(rModel.getElement(elementID).getType()))
+        {
+            nSurfaceElements++;
+        }
+        if (R_ELEMENT_TYPE_IS_VOLUME(rModel.getElement(elementID).getType()))
+        {
+            nVolumeElements++;
+        }
+    }
+
+    int consolidateActionMask = Model::ConsolidateEdgeNodes | Model::ConsolidateEdgeElements | Model::ConsolidateHoleElements | Model::ConsolidateMeshInput;
+
+    if (nSurfaceElements > 0)
+    {
+        consolidateActionMask |= Model::ConsolidateSurfaceNeighbors;
+        if (rModel.getNIntersected() > 0)
+        {
+            consolidateActionMask |= Model::ConsolidateIntersectedElements;
+        }
+    }
+    if (nVolumeElements > 0)
+    {
+        consolidateActionMask |= Model::ConsolidateVolumeNeighbors;
+    }
+
     rModel.removeElements(modelActionInput.getElementIDs(),modelActionInput.getCloseHole());
-    rModel.consolidate(true);
+    rModel.consolidate(Model::ConsolidateActionAll);
 
     RLogger::unindent();
 
@@ -735,7 +794,7 @@ void ModelAction::consolidate(const ModelActionInput &modelActionInput)
     RLogger::info("Consolidating geometry\n");
     RLogger::indent();
 
-    rModel.consolidate(true);
+    rModel.consolidate(Model::ConsolidateActionAll);
 
     RLogger::unindent();
 
