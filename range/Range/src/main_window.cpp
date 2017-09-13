@@ -1026,6 +1026,20 @@ void MainWindow::progressBarFinalize(ProgressBar *progressBar, const QString &me
     this->statusBar()->showMessage(message,5000);
 }
 
+void MainWindow::setEnabled(bool enabled)
+{
+    this->dockModel->setEnabled(enabled);
+    this->dockProblem->setEnabled(enabled);
+    this->dockBc->setEnabled(enabled);
+    this->dockIc->setEnabled(enabled);
+    this->dockEc->setEnabled(enabled);
+    this->dockMaterial->setEnabled(enabled);
+    this->dockResults->setEnabled(enabled);
+    this->dockDocuments->setEnabled(enabled);
+    this->dockRecords->setEnabled(enabled);
+    this->actionList->setEnabled(enabled,true);
+}
+
 void MainWindow::enable(void)
 {
     this->setEnabled(true);

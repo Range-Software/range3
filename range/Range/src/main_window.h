@@ -195,6 +195,9 @@ class MainWindow : public QMainWindow
     protected slots:
 
         //! Enable whole window.
+        void setEnabled(bool enabled);
+
+        //! Enable whole window.
         void enable(void);
 
         //! Disable whole window.
