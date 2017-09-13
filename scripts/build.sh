@@ -108,6 +108,8 @@ if [ $selfDebug = true ]
 then
     _DEBUG_LOG_FNAME="${logDir}/op-${myName}-${timeStamp}.log"
 fi
+qmakeLogFile="${logDir}/${myName}-${timeStamp}-qmake.log"
+makeLogFile="${logDir}/${myName}-${timeStamp}-make.log"
 
 qmakeArgs="-recursive"
 if [ $debug = true ]
@@ -128,13 +130,19 @@ do
     set_indent
     # QMAKE
     echo_i "Running qmake"
-    $qmakeCmd $projectFile $qmakeArgs -o $makefile
-    # QMAKE
-    echo_i "Running make"
-    $MAKE
-    if [ $? -ne 0 ]
+    $qmakeCmd $projectFile $qmakeArgs -o $makefile | tee -a $qmakeLogFile
+    if [ ${PIPESTATUS[0]} -ne 0 ]
     then
-        echo_e "Failed to build module '$module'"
+        echo_e "Command '$qmakeCmd $projectFile $qmakeArgs -o $makefile' failed. Check log file '$qmakeLogFile' for errors"
+        cd $currentDir
+        exit 1
+    fi
+    # MAKE
+    echo_i "Running make"
+    $MAKE | tee -a $makeLogFile
+    if [ ${PIPESTATUS[0]} -ne 0 ]
+    then
+        echo_e "Command '$MAKE' failed. Check log file '$makeLogFile' for errors"
         cd $currentDir
         exit 1
     fi
