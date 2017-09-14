@@ -38,11 +38,19 @@ class ActionList : public QObject
         //! Return action for given action name.
         Action * getAction (const QString &name);
 
-        //! Enable disable actions.
-        void setEnabled(bool enabled, bool allActions);
-
         //! Process action availability based on selections.
         void processAvailability(void);
+
+        //! Enable actions.
+        void enable(void);
+
+        //! Disable actions.
+        void disable(void);
+
+    private:
+
+        //! Enable disable actions.
+        void setDisabled(bool allActions);
 
     signals:
 

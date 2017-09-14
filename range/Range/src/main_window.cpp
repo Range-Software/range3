@@ -1037,7 +1037,14 @@ void MainWindow::setEnabled(bool enabled)
     this->dockResults->setEnabled(enabled);
     this->dockDocuments->setEnabled(enabled);
     this->dockRecords->setEnabled(enabled);
-    this->actionList->setEnabled(enabled,true);
+    if (enabled)
+    {
+        this->actionList->enable();
+    }
+    else
+    {
+        this->actionList->disable();
+    }
 }
 
 void MainWindow::enable(void)

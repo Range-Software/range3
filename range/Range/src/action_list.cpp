@@ -66,101 +66,9 @@ Action * ActionList::getAction (const QString &name)
     return 0;
 }
 
-void ActionList::setEnabled(bool enabled, bool allActions)
-{
-    if (allActions)
-    {
-        this->getAction(ACTION_SESSION_NEW)->setEnabled(enabled);
-        this->getAction(ACTION_SESSION_OPEN)->setEnabled(enabled);
-        this->getAction(ACTION_SESSION_SAVE)->setEnabled(enabled);
-        this->getAction(ACTION_SESSION_SAVE_AS)->setEnabled(enabled);
-        this->getAction(ACTION_SESSION_CLOSE)->setEnabled(enabled);
-        this->getAction(ACTION_MODEL_NEW)->setEnabled(enabled);
-        this->getAction(ACTION_MODEL_OPEN)->setEnabled(enabled);
-        this->getAction(ACTION_MODEL_IMPORT_MSH)->setEnabled(enabled);
-        this->getAction(ACTION_MODEL_IMPORT_RAW)->setEnabled(enabled);
-        this->getAction(ACTION_MODEL_IMPORT_STL)->setEnabled(enabled);
-    }
-    this->getAction(ACTION_MODEL_SAVE)->setEnabled(enabled);
-    this->getAction(ACTION_MODEL_SAVE_AS)->setEnabled(enabled);
-    this->getAction(ACTION_MODEL_EXPORT_MSH)->setEnabled(enabled);
-    this->getAction(ACTION_MODEL_EXPORT_RAW)->setEnabled(enabled);
-    this->getAction(ACTION_MODEL_EXPORT_STL_ASCII)->setEnabled(enabled);
-    this->getAction(ACTION_MODEL_EXPORT_STL_BINARY)->setEnabled(enabled);
-    this->getAction(ACTION_MODEL_CLOSE)->setEnabled(enabled);
-    this->getAction(ACTION_MODEL_RELOAD_RESULTS)->setEnabled(enabled);
-    this->getAction(ACTION_MODEL_DROP_RESULTS)->setEnabled(enabled);
-    this->getAction(ACTION_GEOMETRY_UNDO)->setEnabled(enabled);
-    this->getAction(ACTION_GEOMETRY_REDO)->setEnabled(enabled);
-    this->getAction(ACTION_GEOMETRY_DRAW_POINT)->setEnabled(enabled);
-    this->getAction(ACTION_GEOMETRY_DRAW_LINE)->setEnabled(enabled);
-    this->getAction(ACTION_GEOMETRY_DRAW_TRIANGLE)->setEnabled(enabled);
-    this->getAction(ACTION_GEOMETRY_DRAW_QUADRILATERAL)->setEnabled(enabled);
-    this->getAction(ACTION_GEOMETRY_DRAW_CIRCLE)->setEnabled(enabled);
-    this->getAction(ACTION_GEOMETRY_DRAW_ELLIPSE)->setEnabled(enabled);
-    this->getAction(ACTION_GEOMETRY_DRAW_TETRAHEDRON)->setEnabled(enabled);
-    this->getAction(ACTION_GEOMETRY_DRAW_HEXAHEDRON)->setEnabled(enabled);
-    this->getAction(ACTION_GEOMETRY_DRAW_CYLINDER)->setEnabled(enabled);
-    this->getAction(ACTION_GEOMETRY_DRAW_SPHERE)->setEnabled(enabled);
-    this->getAction(ACTION_GEOMETRY_CREATE_ELEMENT)->setEnabled(enabled);
-    this->getAction(ACTION_GEOMETRY_FIX_SLIVER_ELEMENTS)->setEnabled(enabled);
-    this->getAction(ACTION_GEOMETRY_FIND_INTERSECTED_ELEMENTS)->setEnabled(enabled);
-    this->getAction(ACTION_GEOMETRY_BREAK_INTERSECTED_ELEMENTS)->setEnabled(enabled);
-    this->getAction(ACTION_GEOMETRY_BOOL_UNION)->setEnabled(enabled);
-    this->getAction(ACTION_GEOMETRY_BOOL_DIFFERENCE)->setEnabled(enabled);
-    this->getAction(ACTION_GEOMETRY_BOOL_INTERSECTION)->setEnabled(enabled);
-    this->getAction(ACTION_GEOMETRY_MERGE_NEAR_NODES)->setEnabled(enabled);
-    this->getAction(ACTION_GEOMETRY_MOVE_NODE)->setEnabled(enabled);
-    this->getAction(ACTION_GEOMETRY_REMOVE_NODE)->setEnabled(enabled);
-    this->getAction(ACTION_GEOMETRY_REMOVE_NODE_AND_CLOSE_HOLE)->setEnabled(enabled);
-    this->getAction(ACTION_GEOMETRY_REMOVE_ELEMENT)->setEnabled(enabled);
-    this->getAction(ACTION_GEOMETRY_LINE_GENERATE_FROM_EDGES)->setEnabled(enabled);
-    this->getAction(ACTION_GEOMETRY_SURFACE_MARK)->setEnabled(enabled);
-    this->getAction(ACTION_GEOMETRY_SURFACE_SWAP_ELEMENT_NORMAL)->setEnabled(enabled);
-    this->getAction(ACTION_GEOMETRY_SURFACE_SWAP_NORMALS)->setEnabled(enabled);
-    this->getAction(ACTION_GEOMETRY_SURFACE_SYNC_NORMALS)->setEnabled(enabled);
-    this->getAction(ACTION_GEOMETRY_SURFACE_CLOSE_HOLE)->setEnabled(enabled);
-    this->getAction(ACTION_GEOMETRY_SURFACE_COARSEN)->setEnabled(enabled);
-    this->getAction(ACTION_GEOMETRY_VECTOR_FIELD_CREATE)->setEnabled(enabled);
-    this->getAction(ACTION_GEOMETRY_VECTOR_FIELD_EDIT)->setEnabled(enabled);
-    this->getAction(ACTION_GEOMETRY_SCALAR_FIELD_CREATE)->setEnabled(enabled);
-    this->getAction(ACTION_GEOMETRY_SCALAR_FIELD_EDIT)->setEnabled(enabled);
-    this->getAction(ACTION_GEOMETRY_STREAM_LINE_CREATE)->setEnabled(enabled);
-    this->getAction(ACTION_GEOMETRY_STREAM_LINE_EDIT)->setEnabled(enabled);
-    this->getAction(ACTION_GEOMETRY_CUT_CREATE)->setEnabled(enabled);
-    this->getAction(ACTION_GEOMETRY_CUT_EDIT)->setEnabled(enabled);
-    this->getAction(ACTION_GEOMETRY_ISO_CREATE)->setEnabled(enabled);
-    this->getAction(ACTION_GEOMETRY_ISO_EDIT)->setEnabled(enabled);
-    this->getAction(ACTION_GEOMETRY_ENTITY_MERGE)->setEnabled(enabled);
-    this->getAction(ACTION_GEOMETRY_ENTITY_REMOVE)->setEnabled(enabled);
-    this->getAction(ACTION_GEOMETRY_TRANSFORM)->setEnabled(enabled);
-    this->getAction(ACTION_GEOMETRY_VOLUME_GENERATE_TETRAHEDRA)->setEnabled(enabled);
-    this->getAction(ACTION_GEOMETRY_DEV_EXPORT_INTERSECTED_ELEMENTS)->setEnabled(enabled);
-    this->getAction(ACTION_GEOMETRY_DEV_PURGE_UNUSED_NODES)->setEnabled(enabled);
-    this->getAction(ACTION_GEOMETRY_DEV_PURGE_UNUSED_ELEMENTS)->setEnabled(enabled);
-    this->getAction(ACTION_GEOMETRY_DEV_POINT_INSIDE_SURFACE)->setEnabled(enabled);
-    this->getAction(ACTION_GEOMETRY_DEV_TETRAHEDRALIZE_SURFACE)->setEnabled(enabled);
-    this->getAction(ACTION_GEOMETRY_DEV_CONSOLIDATE)->setEnabled(enabled);
-    this->getAction(ACTION_PROBLEM_TASK_FLOW)->setEnabled(enabled);
-    this->getAction(ACTION_PROBLEM_SOLVER_SETUP)->setEnabled(enabled);
-    this->getAction(ACTION_PROBLEM_DEFINE_MONITORING_POINTS)->setEnabled(enabled);
-    this->getAction(ACTION_PROBLEM_RESET)->setEnabled(enabled);
-    this->getAction(ACTION_SOLVER_START)->setEnabled(enabled);
-    this->getAction(ACTION_SOLVER_STOP)->setEnabled(enabled);
-    this->getAction(ACTION_SOLVER_KILL)->setEnabled(enabled);
-    this->getAction(ACTION_SOLVER_VIEW)->setEnabled(true);
-    this->getAction(ACTION_SOLVER_QUEUE)->setEnabled(true);
-    this->getAction(ACTION_REPORT_MODEL_STATISTICS)->setEnabled(enabled);
-    this->getAction(ACTION_REPORT_SOLVER_LOG)->setEnabled(enabled);
-    this->getAction(ACTION_REPORT_CONVERGENCE_GRAPH)->setEnabled(enabled);
-    this->getAction(ACTION_REPORT_MONITORING_POINT_GRAPH)->setEnabled(enabled);
-    this->getAction(ACTION_REPORT_CREATE_REPORT)->setEnabled(enabled);
-    this->getAction(ACTION_MATERIAL_DELETE)->setEnabled(enabled);
-}
-
 void ActionList::processAvailability(void)
 {
-    this->setEnabled(false,false);
+    this->setDisabled(false);
 
     this->getAction(ACTION_GEOMETRY_UNDO)->setDisabled(!Session::getInstance().isUndoAvailable());
     this->getAction(ACTION_GEOMETRY_UNDO)->setToolTip(Session::getInstance().getUndoTooltip());
@@ -253,6 +161,110 @@ void ActionList::processAvailability(void)
     {
         this->getAction(ACTION_SOLVER_START)->setEnabled(true);
     }
+}
+
+void ActionList::enable(void)
+{
+    this->processAvailability();
+}
+
+void ActionList::disable(void)
+{
+    this->setDisabled(true);
+}
+
+void ActionList::setDisabled(bool allActions)
+{
+    bool enabled = false;
+
+    if (allActions)
+    {
+        this->getAction(ACTION_SESSION_NEW)->setEnabled(enabled);
+        this->getAction(ACTION_SESSION_OPEN)->setEnabled(enabled);
+        this->getAction(ACTION_SESSION_SAVE)->setEnabled(enabled);
+        this->getAction(ACTION_SESSION_SAVE_AS)->setEnabled(enabled);
+        this->getAction(ACTION_SESSION_CLOSE)->setEnabled(enabled);
+        this->getAction(ACTION_MODEL_NEW)->setEnabled(enabled);
+        this->getAction(ACTION_MODEL_OPEN)->setEnabled(enabled);
+        this->getAction(ACTION_MODEL_IMPORT_MSH)->setEnabled(enabled);
+        this->getAction(ACTION_MODEL_IMPORT_RAW)->setEnabled(enabled);
+        this->getAction(ACTION_MODEL_IMPORT_STL)->setEnabled(enabled);
+    }
+    this->getAction(ACTION_MODEL_SAVE)->setEnabled(enabled);
+    this->getAction(ACTION_MODEL_SAVE_AS)->setEnabled(enabled);
+    this->getAction(ACTION_MODEL_EXPORT_MSH)->setEnabled(enabled);
+    this->getAction(ACTION_MODEL_EXPORT_RAW)->setEnabled(enabled);
+    this->getAction(ACTION_MODEL_EXPORT_STL_ASCII)->setEnabled(enabled);
+    this->getAction(ACTION_MODEL_EXPORT_STL_BINARY)->setEnabled(enabled);
+    this->getAction(ACTION_MODEL_CLOSE)->setEnabled(enabled);
+    this->getAction(ACTION_MODEL_RELOAD_RESULTS)->setEnabled(enabled);
+    this->getAction(ACTION_MODEL_DROP_RESULTS)->setEnabled(enabled);
+    this->getAction(ACTION_GEOMETRY_UNDO)->setEnabled(enabled);
+    this->getAction(ACTION_GEOMETRY_REDO)->setEnabled(enabled);
+    this->getAction(ACTION_GEOMETRY_DRAW_POINT)->setEnabled(enabled);
+    this->getAction(ACTION_GEOMETRY_DRAW_LINE)->setEnabled(enabled);
+    this->getAction(ACTION_GEOMETRY_DRAW_TRIANGLE)->setEnabled(enabled);
+    this->getAction(ACTION_GEOMETRY_DRAW_QUADRILATERAL)->setEnabled(enabled);
+    this->getAction(ACTION_GEOMETRY_DRAW_CIRCLE)->setEnabled(enabled);
+    this->getAction(ACTION_GEOMETRY_DRAW_ELLIPSE)->setEnabled(enabled);
+    this->getAction(ACTION_GEOMETRY_DRAW_TETRAHEDRON)->setEnabled(enabled);
+    this->getAction(ACTION_GEOMETRY_DRAW_HEXAHEDRON)->setEnabled(enabled);
+    this->getAction(ACTION_GEOMETRY_DRAW_CYLINDER)->setEnabled(enabled);
+    this->getAction(ACTION_GEOMETRY_DRAW_SPHERE)->setEnabled(enabled);
+    this->getAction(ACTION_GEOMETRY_CREATE_ELEMENT)->setEnabled(enabled);
+    this->getAction(ACTION_GEOMETRY_FIX_SLIVER_ELEMENTS)->setEnabled(enabled);
+    this->getAction(ACTION_GEOMETRY_FIND_INTERSECTED_ELEMENTS)->setEnabled(enabled);
+    this->getAction(ACTION_GEOMETRY_BREAK_INTERSECTED_ELEMENTS)->setEnabled(enabled);
+    this->getAction(ACTION_GEOMETRY_BOOL_UNION)->setEnabled(enabled);
+    this->getAction(ACTION_GEOMETRY_BOOL_DIFFERENCE)->setEnabled(enabled);
+    this->getAction(ACTION_GEOMETRY_BOOL_INTERSECTION)->setEnabled(enabled);
+    this->getAction(ACTION_GEOMETRY_MERGE_NEAR_NODES)->setEnabled(enabled);
+    this->getAction(ACTION_GEOMETRY_MOVE_NODE)->setEnabled(enabled);
+    this->getAction(ACTION_GEOMETRY_REMOVE_NODE)->setEnabled(enabled);
+    this->getAction(ACTION_GEOMETRY_REMOVE_NODE_AND_CLOSE_HOLE)->setEnabled(enabled);
+    this->getAction(ACTION_GEOMETRY_REMOVE_ELEMENT)->setEnabled(enabled);
+    this->getAction(ACTION_GEOMETRY_LINE_GENERATE_FROM_EDGES)->setEnabled(enabled);
+    this->getAction(ACTION_GEOMETRY_SURFACE_MARK)->setEnabled(enabled);
+    this->getAction(ACTION_GEOMETRY_SURFACE_SWAP_ELEMENT_NORMAL)->setEnabled(enabled);
+    this->getAction(ACTION_GEOMETRY_SURFACE_SWAP_NORMALS)->setEnabled(enabled);
+    this->getAction(ACTION_GEOMETRY_SURFACE_SYNC_NORMALS)->setEnabled(enabled);
+    this->getAction(ACTION_GEOMETRY_SURFACE_CLOSE_HOLE)->setEnabled(enabled);
+    this->getAction(ACTION_GEOMETRY_SURFACE_COARSEN)->setEnabled(enabled);
+    this->getAction(ACTION_GEOMETRY_VECTOR_FIELD_CREATE)->setEnabled(enabled);
+    this->getAction(ACTION_GEOMETRY_VECTOR_FIELD_EDIT)->setEnabled(enabled);
+    this->getAction(ACTION_GEOMETRY_SCALAR_FIELD_CREATE)->setEnabled(enabled);
+    this->getAction(ACTION_GEOMETRY_SCALAR_FIELD_EDIT)->setEnabled(enabled);
+    this->getAction(ACTION_GEOMETRY_STREAM_LINE_CREATE)->setEnabled(enabled);
+    this->getAction(ACTION_GEOMETRY_STREAM_LINE_EDIT)->setEnabled(enabled);
+    this->getAction(ACTION_GEOMETRY_CUT_CREATE)->setEnabled(enabled);
+    this->getAction(ACTION_GEOMETRY_CUT_EDIT)->setEnabled(enabled);
+    this->getAction(ACTION_GEOMETRY_ISO_CREATE)->setEnabled(enabled);
+    this->getAction(ACTION_GEOMETRY_ISO_EDIT)->setEnabled(enabled);
+    this->getAction(ACTION_GEOMETRY_ENTITY_MERGE)->setEnabled(enabled);
+    this->getAction(ACTION_GEOMETRY_ENTITY_REMOVE)->setEnabled(enabled);
+    this->getAction(ACTION_GEOMETRY_TRANSFORM)->setEnabled(enabled);
+    this->getAction(ACTION_GEOMETRY_VOLUME_GENERATE_TETRAHEDRA)->setEnabled(enabled);
+    this->getAction(ACTION_GEOMETRY_DEV_EXPORT_INTERSECTED_ELEMENTS)->setEnabled(enabled);
+    this->getAction(ACTION_GEOMETRY_DEV_PURGE_UNUSED_NODES)->setEnabled(enabled);
+    this->getAction(ACTION_GEOMETRY_DEV_PURGE_UNUSED_ELEMENTS)->setEnabled(enabled);
+    this->getAction(ACTION_GEOMETRY_DEV_POINT_INSIDE_SURFACE)->setEnabled(enabled);
+    this->getAction(ACTION_GEOMETRY_DEV_TETRAHEDRALIZE_SURFACE)->setEnabled(enabled);
+    this->getAction(ACTION_GEOMETRY_DEV_CONSOLIDATE)->setEnabled(enabled);
+    this->getAction(ACTION_PROBLEM_TASK_FLOW)->setEnabled(enabled);
+    this->getAction(ACTION_PROBLEM_SOLVER_SETUP)->setEnabled(enabled);
+    this->getAction(ACTION_PROBLEM_DEFINE_MONITORING_POINTS)->setEnabled(enabled);
+    this->getAction(ACTION_PROBLEM_RESET)->setEnabled(enabled);
+    this->getAction(ACTION_SOLVER_START)->setEnabled(enabled);
+    this->getAction(ACTION_SOLVER_STOP)->setEnabled(enabled);
+    this->getAction(ACTION_SOLVER_KILL)->setEnabled(enabled);
+    this->getAction(ACTION_SOLVER_VIEW)->setEnabled(true);
+    this->getAction(ACTION_SOLVER_QUEUE)->setEnabled(true);
+    this->getAction(ACTION_REPORT_MODEL_STATISTICS)->setEnabled(enabled);
+    this->getAction(ACTION_REPORT_SOLVER_LOG)->setEnabled(enabled);
+    this->getAction(ACTION_REPORT_CONVERGENCE_GRAPH)->setEnabled(enabled);
+    this->getAction(ACTION_REPORT_MONITORING_POINT_GRAPH)->setEnabled(enabled);
+    this->getAction(ACTION_REPORT_CREATE_REPORT)->setEnabled(enabled);
+    this->getAction(ACTION_MATERIAL_DELETE)->setEnabled(enabled);
 }
 
 void ActionList::changeShortcut(ActionType actionType, const QString &shortcut)
