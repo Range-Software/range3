@@ -3225,9 +3225,10 @@ void RModel::syncSurfaceNormals(void)
         this->setSurfaceNeighbors(this->findSurfaceNeighbors());
     }
 
+    uint nSwapped = 0;
     for (uint i=0;i<this->getNSurfaces();i++)
     {
-        RUVector elementSurface(this->getNElements(),false);
+        RBVector elementSurface(this->getNElements(),false);
         RBVector elementChecked(this->getNElements(),false);
 
         const RSurface &rSurface = this->getSurface(i);
@@ -3259,6 +3260,7 @@ void RModel::syncSurfaceNormals(void)
                             if (!this->getElement(elementID).isNeighborNormalSync(this->getElement(neighbourID)))
                             {
                                 this->getElement(neighbourID).swapNormal();
+                                nSwapped++;
                             }
                             elementChecked[neighbourID] = true;
                             elementStack.push(neighbourID);
@@ -3274,6 +3276,7 @@ void RModel::syncSurfaceNormals(void)
             }
         }
     }
+    RLogger::info("Number of swapped elements = %u\n",nSwapped);
 } /* RModel::syncSurfaceNormals */
 
 
@@ -7325,7 +7328,6 @@ std::vector<RUVector> RModel::findSurfaceNeighbors(void) const
 
     RProgressFinalize();
     RLogger::unindent();
-
     return neigs;
 } /* RModel::findSurfaceNeighbors */
 

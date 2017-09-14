@@ -721,6 +721,8 @@ void ModelAction::syncSurfaceNormals(const ModelActionInput &modelActionInput)
     RLogger::indent();
 
     rModel.syncSurfaceNormals();
+    rModel.consolidate(Model::ConsolidateHoleElements);
+    rModel.consolidate(Model::ConsolidateEdgeElements);
 
     RLogger::unindent();
 

@@ -1558,20 +1558,16 @@ bool RElement::isNeighbor(const RElement &rElement) const
     }
 
     uint nFound = 0;
-    for (uint i=0;i<this->size();i++)
+    for (uint i=0;i<rElement.size();i++)
     {
-        for (uint j=0;j<rElement.size();j++)
+        if (this->hasNodeId(rElement.getNodeId(i)))
         {
-            if (this->hasNodeId(rElement.getNodeId(j)))
-            {
-                nFound++;
-                break;
-            }
+            nFound++;
         }
-        if (nFound == nNodesPerSide)
-        {
-            return true;
-        }
+    }
+    if (nFound == nNodesPerSide)
+    {
+        return true;
     }
     return false;
 } /* RElement::isNeighbor */

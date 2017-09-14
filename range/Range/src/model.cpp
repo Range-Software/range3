@@ -2647,22 +2647,23 @@ void Model::consolidate(int consolidateActionMask)
     RLogger::indent();
     try
     {
-        bool updateMeshInput = false;
-
         if (consolidateActionMask & Model::ConsolidateSurfaceNeighbors || this->getNElements() != this->surfaceNeigs.size())
         {
             this->setSurfaceNeighbors(this->findSurfaceNeighbors());
-            updateMeshInput = true;
+            this->syncSurfaceNormals();
+            consolidateActionMask |= Model::ConsolidateMeshInput;
+            consolidateActionMask |= Model::ConsolidateEdgeElements;
+            consolidateActionMask |= Model::ConsolidateHoleElements;
         }
         if (consolidateActionMask & Model::ConsolidateVolumeNeighbors || this->getNElements() != this->volumeNeigs.size())
         {
             this->setVolumeNeighbors(this->findVolumeNeighbors());
-            updateMeshInput = true;
+            consolidateActionMask |= Model::ConsolidateMeshInput;
         }
         if (consolidateActionMask & Model::ConsolidateEdgeNodes || this->getNNodes() != uint(this->edgeNodes.size()))
         {
             this->edgeNodes = this->findEdgeNodes();
-            updateMeshInput = true;
+            consolidateActionMask |= Model::ConsolidateMeshInput;
         }
         if (consolidateActionMask & Model::ConsolidateEdgeElements)
         {
@@ -2676,7 +2677,7 @@ void Model::consolidate(int consolidateActionMask)
         {
             this->updateIntersectedElements();
         }
-        if (consolidateActionMask & Model::ConsolidateMeshInput || updateMeshInput)
+        if (consolidateActionMask & Model::ConsolidateMeshInput)
         {
             this->initializeMeshInput();
         }
