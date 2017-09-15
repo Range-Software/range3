@@ -108,7 +108,7 @@ void SolverSetupChecker::checkMaterials(QStringList &warnings, QStringList &erro
         if (!pElementGroup->getMaterial().hasProperties(materialProperties))
         {
             QString errorMessage = QObject::tr("Entity") + " <b>" + pElementGroup->getName() + "</b> " + QObject::tr("has material assigned which is missing required properties.");
-            errors.append(errorMessage);
+            warnings.append(errorMessage);
         }
     }
 }

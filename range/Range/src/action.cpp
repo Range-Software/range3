@@ -1712,7 +1712,7 @@ void Action::onSolverStart(void)
     {
         if (nWarnings > 0)
         {
-            dialogMessage += "<p>" + tr("Solver setup contains possible problems.") + "<p>" + tr("Do you want to continue?") + "</p>";
+            dialogMessage += "<p>" + tr("Do you want to continue?") + "</p>";
 
             int response = QMessageBox::question(this->mainWindow,tr("Solver setup warnings"),dialogMessage,QMessageBox::Yes,QMessageBox::No);
             startSolverTasks = (response == QMessageBox::Yes);
