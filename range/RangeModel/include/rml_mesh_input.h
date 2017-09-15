@@ -30,6 +30,8 @@ class RMeshInput
         double volumeConstraint;
         //! Tolerance.
         double tolerance;
+        //! Perform surface integrity check before mesh generation.
+        bool surfaceIntegrityCheck;
         //! Keep results after mesh generation is done.
         bool keepResults;
 
@@ -93,6 +95,12 @@ class RMeshInput
 
         //! Set tolerance.
         void setTolerance(double tolerance);
+
+        //! Return whether to perform surface integrity check before mesh generation.
+        bool getSurfaceIntegrityCheck(void) const;
+
+        //! Set whether to perform surface integrity check before mesh generation.
+        void setSurfaceIntegrityCheck(bool surfaceIntegrityCheck);
 
         //! Return whether results should be kept.
         bool getKeepResults(void) const;

@@ -27,6 +27,8 @@ class MeshGeneratorDialog : public QDialog
 
         //! Model ID.
         uint modelID;
+        //! Keep results check box.
+        QCheckBox *surfaceIntegrityCheck;
         //! Quality mesh group box.
         QGroupBox *qualityMeshGroupBox;
         //! Volume constraint.

@@ -31,6 +31,10 @@ MeshGeneratorDialog::MeshGeneratorDialog(uint modelID, QWidget *parent) :
     QVBoxLayout *mainLayout = new QVBoxLayout;
     this->setLayout (mainLayout);
 
+    this->surfaceIntegrityCheck = new QCheckBox(tr("Check surface integrity"));
+    mainLayout->addWidget(this->surfaceIntegrityCheck);
+    this->surfaceIntegrityCheck->setChecked(Session::getInstance().getModel(this->modelID).getNVolumes() == 0);
+
     this->qualityMeshGroupBox = new QGroupBox(tr("Quality mesh"));
     mainLayout->addWidget(this->qualityMeshGroupBox);
     this->qualityMeshGroupBox->setCheckable(true);
@@ -75,6 +79,7 @@ int MeshGeneratorDialog::exec(void)
     {
         RMeshInput &rMeshInput = Session::getInstance().getModel(this->modelID).getMeshInput();
 
+        rMeshInput.setSurfaceIntegrityCheck(this->surfaceIntegrityCheck->isChecked());
         rMeshInput.setQualityMesh(this->qualityMeshGroupBox->isChecked());
         rMeshInput.setVolumeConstraint(this->volumeConstraintEdit->getValue());
         rMeshInput.setKeepResults(this->keepResultsCheck->isChecked());

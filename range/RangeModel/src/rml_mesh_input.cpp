@@ -21,6 +21,7 @@ void RMeshInput::_init(const RMeshInput *pMeshInput)
         this->radiusEdgeRatio = pMeshInput->radiusEdgeRatio;
         this->volumeConstraint = pMeshInput->volumeConstraint;
         this->tolerance = pMeshInput->tolerance;
+        this->surfaceIntegrityCheck = pMeshInput->surfaceIntegrityCheck;
         this->keepResults = pMeshInput->keepResults;
     }
 }
@@ -33,6 +34,7 @@ RMeshInput::RMeshInput() :
     radiusEdgeRatio(1.6),
     volumeConstraint(0.1),
     tolerance(1.0e-10),
+    surfaceIntegrityCheck(false),
     keepResults(true)
 {
     this->_init();
@@ -121,6 +123,16 @@ double RMeshInput::getTolerance(void) const
 void RMeshInput::setTolerance(double tolerance)
 {
     this->tolerance = tolerance;
+}
+
+bool RMeshInput::getSurfaceIntegrityCheck(void) const
+{
+    return this->surfaceIntegrityCheck;
+}
+
+void RMeshInput::setSurfaceIntegrityCheck(bool surfaceIntegrityCheck)
+{
+    this->surfaceIntegrityCheck = surfaceIntegrityCheck;
 }
 
 bool RMeshInput::getKeepResults(void) const

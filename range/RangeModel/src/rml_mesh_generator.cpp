@@ -128,6 +128,7 @@ std::vector<RElement> RMeshGenerator::generate(const std::vector<RNode> &nodes, 
 
     RMeshInput input;
     input.setVerbose(false);
+    input.setSurfaceIntegrityCheck(true);
     input.setQualityMesh(false);
     input.setKeepResults(false);
     input.setOutputEdges(false);
@@ -170,6 +171,8 @@ std::vector<RTetrahedron> RMeshGenerator::generate(const std::vector<RTriangle> 
     RModel model(modelRaw);
 
     RMeshInput input;
+    input.setVerbose(false);
+    input.setSurfaceIntegrityCheck(true);
     input.setQualityMesh(false);
     input.setKeepResults(false);
     input.setOutputEdges(false);

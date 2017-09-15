@@ -30,10 +30,13 @@ void MeshGenerator::run(void)
 
     try
     {
-        uint nIntersected = model.breakIntersectedElements(10);
-        if (nIntersected > 0)
+        if (model.getMeshInput().getSurfaceIntegrityCheck())
         {
-            RLogger::warning("Number of intersected elements found = %u.\n",nIntersected);
+            uint nIntersected = model.breakIntersectedElements(10);
+            if (nIntersected > 0)
+            {
+                RLogger::warning("Number of intersected elements found = %u.\n",nIntersected);
+            }
         }
         RMeshGenerator::generate(model.getMeshInput(),model);
         model.clearEdgeNodes();
