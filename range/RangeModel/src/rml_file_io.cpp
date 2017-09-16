@@ -3757,60 +3757,6 @@ void RFileIO::writeBinary(RFile &outFile, const RTimeSolver &timeSolver)
 
 
 /*********************************************************************
- *  RMatrixSolverType                                                *
- *********************************************************************/
-
-
-void RFileIO::readAscii(RFile &inFile, RMatrixSolverType &matrixSolverType)
-{
-    int iValue;
-    inFile.getTextStream() >> iValue;
-    if (inFile.getTextStream().status() != QTextStream::Ok)
-    {
-        throw RError(R_ERROR_READ_FILE,R_ERROR_REF, "Failed to read RMatrixSolverType value.");
-    }
-    matrixSolverType = RMatrixSolverType(iValue);
-} /* RFileIO::readAscii */
-
-
-void RFileIO::readBinary(RFile &inFile, RMatrixSolverType &matrixSolverType)
-{
-    inFile.read((char*)&matrixSolverType,sizeof(RMatrixSolverType));
-    if (inFile.error() != RFile::NoError)
-    {
-        throw RError(R_ERROR_READ_FILE,R_ERROR_REF,"Failed to read RMatrixSolverType value.");
-    }
-} /* RFileIO::readBinary */
-
-
-void RFileIO::writeAscii(RFile &outFile, const RMatrixSolverType &matrixSolverType, bool addNewLine)
-{
-    if (!addNewLine)
-    {
-        outFile.getTextStream() << int(matrixSolverType);
-    }
-    else
-    {
-        outFile.getTextStream() << int(matrixSolverType) << RConstants::endl;
-    }
-    if (outFile.getTextStream().status() != QTextStream::Ok)
-    {
-        throw RError(R_ERROR_WRITE_FILE,R_ERROR_REF,"Failed to write RMatrixSolverType value.");
-    }
-} /* RFileIO::writeAscii */
-
-
-void RFileIO::writeBinary(RFile &outFile, const RMatrixSolverType &matrixSolverType)
-{
-    outFile.write((char*)&matrixSolverType,sizeof(RMatrixSolverType));
-    if (outFile.error() != RFile::NoError)
-    {
-        throw RError(R_ERROR_WRITE_FILE,R_ERROR_REF,"Failed to write RMatrixSolverType value.");
-    }
-} /* RFileIO::writeBinary */
-
-
-/*********************************************************************
  *  RMatrixSolverConf                                                *
  *********************************************************************/
 

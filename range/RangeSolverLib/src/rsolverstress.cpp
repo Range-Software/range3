@@ -797,7 +797,7 @@ void RSolverStress::solveStressStrain(void)
 {
     RLogger::info("Solving strass-strain problem.\n");
 
-    this->pModel->getMatrixSolverConf().setType(R_MATRIX_SOLVER_CG);
+    this->pModel->getMatrixSolverConf().setType(RMatrixSolverConf::CG);
 
     try
     {
@@ -819,7 +819,7 @@ void RSolverStress::solveEigenValue(void)
 {
     RLogger::info("Solving eigen-value problem.\n");
 
-    this->pModel->getMatrixSolverConf().setType(R_MATRIX_SOLVER_CG);
+    this->pModel->getMatrixSolverConf().setType(RMatrixSolverConf::CG);
 
     REigenValueSolverConf conf;
 

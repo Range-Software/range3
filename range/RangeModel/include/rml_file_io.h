@@ -705,17 +705,6 @@ class RFileIO
         //! Write RTimeSolver.
         static void writeBinary(RFile &outFile, const RTimeSolver &timeSolver);
 
-        // RMatrixSolverType
-
-        //! Read RMatrixSolverType.
-        static void readAscii(RFile &inFile, RMatrixSolverType &matrixSolverType);
-        //! Read RMatrixSolverType.
-        static void readBinary(RFile &inFile, RMatrixSolverType &matrixSolverType);
-        //! Write RMatrixSolverType.
-        static void writeAscii(RFile &outFile, const RMatrixSolverType &matrixSolverType, bool addNewLine = true);
-        //! Write RMatrixSolverType.
-        static void writeBinary(RFile &outFile, const RMatrixSolverType &matrixSolverType);
-
         // RMatrixSolverConf
 
         //! Read RMatrixSolverConf.

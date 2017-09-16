@@ -460,7 +460,7 @@ void RSolverFluid::solve(void)
     this->solverStopWatch.reset();
     this->solverStopWatch.resume();
 
-    this->pModel->getMatrixSolverConf().setType(R_MATRIX_SOLVER_GMRES);
+    this->pModel->getMatrixSolverConf().setType(RMatrixSolverConf::GMRES);
 
     try
     {

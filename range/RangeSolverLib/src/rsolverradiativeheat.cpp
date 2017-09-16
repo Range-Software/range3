@@ -265,7 +265,7 @@ void RSolverRadiativeHeat::prepare(void)
 
 void RSolverRadiativeHeat::solve(void)
 {
-    this->pModel->getMatrixSolverConf().setType(R_MATRIX_SOLVER_CG);
+    this->pModel->getMatrixSolverConf().setType(RMatrixSolverConf::CG);
 
     try
     {

@@ -14,27 +14,21 @@
 #include <QString>
 
 //! Matrix solver type.
-typedef enum _RMatrixSolverType
-{
-    R_MATRIX_SOLVER_NONE = 0,
-    R_MATRIX_SOLVER_JACOBI,
-    R_MATRIX_SOLVER_GAUSS_SEIDL,
-    R_MATRIX_SOLVER_SOR,
-    R_MATRIX_SOLVER_SSOR,
-    R_MATRIX_SOLVER_CG,
-    R_MATRIX_SOLVER_CGS,
-    R_MATRIX_SOLVER_BiCG,
-    R_MATRIX_SOLVER_BiCGSTAB,
-    R_MATRIX_SOLVER_GMRES,
-    R_MATRIX_SOLVER_QMR,
-    R_MATRIX_SOLVER_CHEBYSHEV,
-    R_MATRIX_SOLVER_N_TYPES
-} RMatrixSolverType;
-
+typedef int RMatrixSolverType;
 
 //! Matrix solver class.
 class RMatrixSolverConf
 {
+
+    public:
+
+        enum Type
+        {
+            None = 0,
+            CG,
+            GMRES,
+            NTypes
+        };
 
     protected:
 
@@ -60,7 +54,7 @@ class RMatrixSolverConf
     public:
 
         //! Constructor.
-        RMatrixSolverConf ( RMatrixSolverType type = R_MATRIX_SOLVER_NONE );
+        RMatrixSolverConf ( RMatrixSolverType type = RMatrixSolverConf::None );
 
         //! Copy constructor.
         RMatrixSolverConf ( const RMatrixSolverConf &matrixSolver );

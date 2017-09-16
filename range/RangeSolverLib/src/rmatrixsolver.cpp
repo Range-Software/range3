@@ -79,29 +79,11 @@ void RMatrixSolver::solve(const RSparseMatrix &A, const RRVector &b, RRVector &x
 
     switch (this->matrixSolverConf.getType())
     {
-        case R_MATRIX_SOLVER_JACOBI:
-            break;
-        case R_MATRIX_SOLVER_GAUSS_SEIDL:
-            break;
-        case R_MATRIX_SOLVER_SOR:
-            break;
-        case R_MATRIX_SOLVER_SSOR:
-            break;
-        case R_MATRIX_SOLVER_CG:
+        case RMatrixSolverConf::CG:
             this->solveCG(A,y,x,P);
             break;
-        case R_MATRIX_SOLVER_CGS:
-            break;
-        case R_MATRIX_SOLVER_BiCG:
-            break;
-        case R_MATRIX_SOLVER_BiCGSTAB:
-            break;
-        case R_MATRIX_SOLVER_GMRES:
+        case RMatrixSolverConf::GMRES:
             this->solveGMRES(A,y,x,P);
-            break;
-        case R_MATRIX_SOLVER_QMR:
-            break;
-        case R_MATRIX_SOLVER_CHEBYSHEV:
             break;
         default:
             throw RError(R_ERROR_APPLICATION,R_ERROR_REF,"Unknown matrix solver type \'%d\'",this->matrixSolverConf.getType());
