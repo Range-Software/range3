@@ -460,12 +460,10 @@ void RSolverFluid::solve(void)
     this->solverStopWatch.reset();
     this->solverStopWatch.resume();
 
-    this->pModel->getMatrixSolverConf().setType(RMatrixSolverConf::GMRES);
-
     try
     {
         RLogger::indent();
-        RMatrixSolver matrixSolver(this->pModel->getMatrixSolverConf());
+        RMatrixSolver matrixSolver(this->pModel->getMatrixSolverConf(RMatrixSolverConf::GMRES));
         matrixSolver.disableConvergenceLogFile();
         matrixSolver.solve(this->A,this->b,this->x,R_MATRIX_PRECONDITIONER_JACOBI,1);
         RLogger::unindent();
@@ -692,7 +690,7 @@ void RSolverFluid::statistics(void)
     cvgValues.push_back(RIterationInfoValue("Velocity convergence",this->cvgV));
     cvgValues.push_back(RIterationInfoValue("Pressure convergence",this->cvgP));
 
-    RIterationInfo::writeToFile(this->pModel->getMatrixSolverConf().getOutputFileName(),counter,cvgValues);
+    RIterationInfo::writeToFile(this->pModel->getMatrixSolverConf(RMatrixSolverConf::GMRES).getOutputFileName(),counter,cvgValues);
 
     this->printStats(R_VARIABLE_VELOCITY);
     this->printStats(R_VARIABLE_PRESSURE);

@@ -6784,7 +6784,11 @@ QString RModel::readAscii(const QString &fileName)
 
     RFileIO::readAscii(modelFile,this->taskTree);
     RFileIO::readAscii(modelFile,this->timeSolver);
-    RFileIO::readAscii(modelFile,this->matrixSolver);
+    RFileIO::readAscii(modelFile,this->getMatrixSolverConf(RMatrixSolverConf::CG));
+    if (modelFile.getVersion() > RVersion(0,3,2))
+    {
+        RFileIO::readAscii(modelFile,this->getMatrixSolverConf(RMatrixSolverConf::GMRES));
+    }
     RFileIO::readAscii(modelFile,this->monitoringPointManager);
     RFileIO::readAscii(modelFile,this->problemSetup);
 
@@ -6942,7 +6946,11 @@ QString RModel::readBinary(const QString &fileName)
 
     RFileIO::readBinary(modelFile,this->taskTree);
     RFileIO::readBinary(modelFile,this->timeSolver);
-    RFileIO::readBinary(modelFile,this->matrixSolver);
+    RFileIO::readBinary(modelFile,this->getMatrixSolverConf(RMatrixSolverConf::CG));
+    if (modelFile.getVersion() > RVersion(0,3,2))
+    {
+        RFileIO::readBinary(modelFile,this->getMatrixSolverConf(RMatrixSolverConf::GMRES));
+    }
     RFileIO::readBinary(modelFile,this->monitoringPointManager);
     RFileIO::readBinary(modelFile,this->problemSetup);
 
@@ -7100,7 +7108,8 @@ void RModel::writeAscii(const QString &fileName) const
 
     RFileIO::writeAscii(modelFile,this->taskTree);
     RFileIO::writeAscii(modelFile,this->timeSolver);
-    RFileIO::writeAscii(modelFile,this->matrixSolver);
+    RFileIO::writeAscii(modelFile,this->getMatrixSolverConf(RMatrixSolverConf::CG));
+    RFileIO::writeAscii(modelFile,this->getMatrixSolverConf(RMatrixSolverConf::GMRES));
     RFileIO::writeAscii(modelFile,this->monitoringPointManager);
     RFileIO::writeAscii(modelFile,this->problemSetup);
 
@@ -7241,7 +7250,8 @@ void RModel::writeBinary(const QString &fileName) const
 
     RFileIO::writeBinary(modelFile,this->taskTree);
     RFileIO::writeBinary(modelFile,this->timeSolver);
-    RFileIO::writeBinary(modelFile,this->matrixSolver);
+    RFileIO::writeBinary(modelFile,this->getMatrixSolverConf(RMatrixSolverConf::CG));
+    RFileIO::writeBinary(modelFile,this->getMatrixSolverConf(RMatrixSolverConf::GMRES));
     RFileIO::writeBinary(modelFile,this->monitoringPointManager);
     RFileIO::writeBinary(modelFile,this->problemSetup);
 

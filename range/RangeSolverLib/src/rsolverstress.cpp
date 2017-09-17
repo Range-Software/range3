@@ -797,12 +797,10 @@ void RSolverStress::solveStressStrain(void)
 {
     RLogger::info("Solving strass-strain problem.\n");
 
-    this->pModel->getMatrixSolverConf().setType(RMatrixSolverConf::CG);
-
     try
     {
         RLogger::indent();
-        RMatrixSolver matrixSolver(this->pModel->getMatrixSolverConf());
+        RMatrixSolver matrixSolver(this->pModel->getMatrixSolverConf(RMatrixSolverConf::CG));
         matrixSolver.solve(this->A,this->b,this->x,R_MATRIX_PRECONDITIONER_JACOBI,3);
         RLogger::unindent();
     }
@@ -819,8 +817,6 @@ void RSolverStress::solveEigenValue(void)
 {
     RLogger::info("Solving eigen-value problem.\n");
 
-    this->pModel->getMatrixSolverConf().setType(RMatrixSolverConf::CG);
-
     REigenValueSolverConf conf;
 
     if (this->pModel->getProblemSetup().getModalSetup().getMethod() == R_MODAL_MULTIPLE_MODES)
@@ -834,10 +830,10 @@ void RSolverStress::solveEigenValue(void)
     conf.setNEigenValues(this->pModel->getProblemSetup().getModalSetup().getNModesToExtract());
     conf.setNIterations(this->pModel->getProblemSetup().getModalSetup().getNIterations());
     conf.setSolverCvgValue(this->pModel->getProblemSetup().getModalSetup().getConvergenceValue());
-    conf.setOutputFrequency(this->pModel->getMatrixSolverConf().getOutputFrequency());
-    conf.setOutputFileName(this->pModel->getMatrixSolverConf().getOutputFileName());
+    conf.setOutputFrequency(this->pModel->getMatrixSolverConf(RMatrixSolverConf::CG).getOutputFrequency());
+    conf.setOutputFileName(this->pModel->getMatrixSolverConf(RMatrixSolverConf::CG).getOutputFileName());
 
-    REigenValueSolver solver(conf,this->pModel->getMatrixSolverConf());
+    REigenValueSolver solver(conf,this->pModel->getMatrixSolverConf(RMatrixSolverConf::CG));
 
     try
     {

@@ -494,12 +494,10 @@ void RSolverHeat::prepare(void)
 
 void RSolverHeat::solve(void)
 {
-    this->pModel->getMatrixSolverConf().setType(RMatrixSolverConf::CG);
-
     try
     {
         RLogger::indent();
-        RMatrixSolver matrixSolver(this->pModel->getMatrixSolverConf());
+        RMatrixSolver matrixSolver(this->pModel->getMatrixSolverConf(RMatrixSolverConf::CG));
         matrixSolver.solve(this->A,this->b,this->x,R_MATRIX_PRECONDITIONER_JACOBI,1);
         RLogger::unindent();
     }

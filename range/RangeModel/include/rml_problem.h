@@ -36,8 +36,8 @@ class RProblem
         RProblemTaskItem taskTree;
         //! Time-Solver.
         RTimeSolver timeSolver;
-        //! Materix solver.
-        RMatrixSolverConf matrixSolver;
+        //! Matrix solvers.
+        QMap<RMatrixSolverType,RMatrixSolverConf> matrixSolverConfs;
         //! Monitoring points.
         RMonitoringPointManager monitoringPointManager;
         //! Problem setup.
@@ -73,13 +73,10 @@ class RProblem
         void setTimeSolver ( const RTimeSolver &timeSolver );
 
         //! Return const reference to matrix solver.
-        const RMatrixSolverConf & getMatrixSolverConf ( void ) const;
+        RMatrixSolverConf getMatrixSolverConf(RMatrixSolverType matrixSolverType) const;
 
         //! Return reference to matrix solver.
-        RMatrixSolverConf & getMatrixSolverConf ( void );
-
-        //! Set new matrix solver.
-        void setMatrixSolver ( const RMatrixSolverConf &matrixSolver );
+        RMatrixSolverConf &getMatrixSolverConf(RMatrixSolverType matrixSolverType);
 
         //! Return const reference to monitoring point manager.
         const RMonitoringPointManager & getMonitoringPointManager(void) const;

@@ -93,7 +93,8 @@ void SolverTask::run(void)
         return;
     }
 
-    model.getMatrixSolverConf().setOutputFileName(this->convergenceFileName);
+    model.getMatrixSolverConf(RMatrixSolverConf::CG).setOutputFileName(this->convergenceFileName);
+    model.getMatrixSolverConf(RMatrixSolverConf::GMRES).setOutputFileName(this->convergenceFileName);
     model.getMonitoringPointManager().setOutputFileName(this->monitoringFileName);
 
     // Solve model

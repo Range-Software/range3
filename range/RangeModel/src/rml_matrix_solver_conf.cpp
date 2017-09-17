@@ -20,17 +20,8 @@ typedef struct _RMatrixSolverDesc
 static RMatrixSolverDesc matrixSolverDesc [] =
 {
     { "None" },
-    { "Jacobi" },
-    { "Gauss-Seidl" },
-    { "Successive Overrelaxation" },
-    { "Symmetric Successive Overrelaxation" },
     { "Conjugate Gradient" },
-    { "Conjugate Gradient Squared" },
-    { "BiConjugate Gradient" },
-    { "BiConjugate Gradient Stabilized" },
-    { "Generalized Minimal Residual" },
-    { "Quasi-Minimal Residual" },
-    { "Chebyshev" }
+    { "Generalized Minimal Residual" }
 };
 
 void RMatrixSolverConf::_init(const RMatrixSolverConf *pMatrixSolver)
@@ -53,6 +44,21 @@ RMatrixSolverConf::RMatrixSolverConf(RMatrixSolverType type)
     , solverCvgValue(RConstants::eps)
     , outputFrequency(100)
 {
+    switch (this->type)
+    {
+        case CG:
+        {
+            nInnerIterations = 10;
+            nOuterIterations = 1000;
+            break;
+        }
+        case GMRES:
+        {
+            nInnerIterations = 10;
+            nOuterIterations = 10;
+            break;
+        }
+    }
     this->_init();
 }
 

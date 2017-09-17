@@ -163,11 +163,13 @@ RProblem::~RProblem()
 
 void RProblem::_init(const RProblem *pProblem)
 {
+    this->matrixSolverConfs.insert(RMatrixSolverConf::CG,RMatrixSolverConf(RMatrixSolverConf::CG));
+    this->matrixSolverConfs.insert(RMatrixSolverConf::GMRES,RMatrixSolverConf(RMatrixSolverConf::GMRES));
     if (pProblem)
     {
         this->taskTree = pProblem->taskTree;
         this->timeSolver = pProblem->timeSolver;
-        this->matrixSolver = pProblem->matrixSolver;
+        this->matrixSolverConfs = pProblem->matrixSolverConfs;
         this->monitoringPointManager = pProblem->monitoringPointManager;
         this->problemSetup = pProblem->problemSetup;
     }
@@ -210,22 +212,24 @@ void RProblem::setTimeSolver(const RTimeSolver &timeSolver)
 } /* RProblem::setTimeSolver */
 
 
-const RMatrixSolverConf &RProblem::getMatrixSolverConf(void) const
+RMatrixSolverConf RProblem::getMatrixSolverConf(RMatrixSolverType matrixSolverType) const
 {
-    return this->matrixSolver;
+    if (!this->matrixSolverConfs.contains(matrixSolverType))
+    {
+        throw RError(R_ERROR_APPLICATION,R_ERROR_REF,"Invalid matrix solver type \'%d\'",matrixSolverType);
+    }
+    return this->matrixSolverConfs[matrixSolverType];
 } /* RProblem::getMatrixSolver */
 
 
-RMatrixSolverConf &RProblem::getMatrixSolverConf(void)
+RMatrixSolverConf &RProblem::getMatrixSolverConf(RMatrixSolverType matrixSolverType)
 {
-    return this->matrixSolver;
+    if (!this->matrixSolverConfs.contains(matrixSolverType))
+    {
+        throw RError(R_ERROR_APPLICATION,R_ERROR_REF,"Invalid matrix solver type \'%d\'",matrixSolverType);
+    }
+    return this->matrixSolverConfs[matrixSolverType];
 } /* RProblem::getMatrixSolver */
-
-
-void RProblem::setMatrixSolver(const RMatrixSolverConf &matrixSolver)
-{
-    this->matrixSolver = matrixSolver;
-} /* RProblem::setMatrixSolver */
 
 
 const RMonitoringPointManager &RProblem::getMonitoringPointManager(void) const

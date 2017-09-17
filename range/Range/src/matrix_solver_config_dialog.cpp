@@ -12,6 +12,8 @@
 #include <QLabel>
 #include <QPushButton>
 
+#include <rmlib.h>
+
 #include "session.h"
 #include "matrix_solver_config_dialog.h"
 
@@ -24,45 +26,104 @@ MatrixSolverConfigDialog::MatrixSolverConfigDialog(uint modelID, QWidget *parent
 
     this->setWindowTitle(tr("Matrix solver configuration"));
 
-    QGridLayout *mainLayout = new QGridLayout;
-    this->setLayout (mainLayout);
+    QVBoxLayout *mainLayout = new QVBoxLayout;
+    this->setLayout(mainLayout);
 
-    RMatrixSolverConf &solverConf = Session::getInstance().getModel(this->modelID).getMatrixSolverConf();
+    // CG SOLVER
+    RMatrixSolverConf &solverConfCG = Session::getInstance().getModel(this->modelID).getMatrixSolverConf(RMatrixSolverConf::CG);
 
-    uint rowCount = 0;
+    this->groupCG = new QGroupBox(RMatrixSolverConf::getName(RMatrixSolverConf::CG));
+    mainLayout->addWidget(this->groupCG);
 
-    QLabel *labelNIterations = new QLabel(tr("Number of iterations:"));
-    mainLayout->addWidget(labelNIterations, rowCount, 0, 1, 1);
+    QGridLayout *cgLayout = new QGridLayout;
+    this->groupCG->setLayout(cgLayout);
 
-    this->spinNIterations = new QSpinBox;
-    this->spinNIterations->setRange(1,INT_MAX);
-    this->spinNIterations->setValue(solverConf.getNOuterIterations());
-    mainLayout->addWidget(this->spinNIterations, rowCount, 1, 1, 1);
+    uint cgRowCount = 0;
 
-    rowCount ++;
+    QLabel *labelCGNIterations = new QLabel(tr("Number of iterations:"));
+    cgLayout->addWidget(labelCGNIterations, cgRowCount, 0, 1, 1);
 
-    QLabel *labelCvgValue = new QLabel(tr("Convergence value:"));
-    mainLayout->addWidget(labelCvgValue, rowCount, 0, 1, 1);
+    this->spinCGNIterations = new QSpinBox;
+    this->spinCGNIterations->setRange(1,INT_MAX);
+    this->spinCGNIterations->setValue(solverConfCG.getNOuterIterations());
+    cgLayout->addWidget(this->spinCGNIterations, cgRowCount, 1, 1, 1);
 
-    this->editCvgValue = new ValueLineEdit(0.0,1.0);
-    this->editCvgValue->setValue(solverConf.getSolverCvgValue());
-    mainLayout->addWidget(this->editCvgValue, rowCount, 1, 1, 1);
+    cgRowCount ++;
 
-    rowCount ++;
+    QLabel *labelCGCvgValue = new QLabel(tr("Convergence value:"));
+    cgLayout->addWidget(labelCGCvgValue, cgRowCount, 0, 1, 1);
 
-    QLabel *labelOutputFrequency = new QLabel(tr("Solver output frequency:"));
-    mainLayout->addWidget(labelOutputFrequency, rowCount, 0, 1, 1);
+    this->editCGCvgValue = new ValueLineEdit(0.0,1.0);
+    this->editCGCvgValue->setValue(solverConfCG.getSolverCvgValue());
+    cgLayout->addWidget(this->editCGCvgValue, cgRowCount, 1, 1, 1);
 
-    this->spinOutputFrequency = new QSpinBox;
-    this->spinOutputFrequency->setRange(0,INT_MAX);
-    this->spinOutputFrequency->setValue(solverConf.getOutputFrequency());
-    mainLayout->addWidget(this->spinOutputFrequency, rowCount, 1, 1, 1);
+    cgRowCount ++;
 
-    rowCount ++;
+    QLabel *labelCGOutputFrequency = new QLabel(tr("Solver output frequency:"));
+    cgLayout->addWidget(labelCGOutputFrequency, cgRowCount, 0, 1, 1);
+
+    this->spinCGOutputFrequency = new QSpinBox;
+    this->spinCGOutputFrequency->setRange(0,INT_MAX);
+    this->spinCGOutputFrequency->setValue(solverConfCG.getOutputFrequency());
+    cgLayout->addWidget(this->spinCGOutputFrequency, cgRowCount, 1, 1, 1);
+
+    cgRowCount ++;
+
+    // GMRES SOLVER
+    RMatrixSolverConf &solverConfGMRES = Session::getInstance().getModel(this->modelID).getMatrixSolverConf(RMatrixSolverConf::GMRES);
+
+    this->groupGMRES = new QGroupBox(RMatrixSolverConf::getName(RMatrixSolverConf::GMRES));
+    mainLayout->addWidget(this->groupGMRES);
+
+    QGridLayout *gmresLayout = new QGridLayout;
+    this->groupGMRES->setLayout(gmresLayout);
+
+    uint gmresRowCount = 0;
+
+    QLabel *labelGMRESNInnerIterations = new QLabel(tr("Number of inner iterations:"));
+    gmresLayout->addWidget(labelGMRESNInnerIterations, gmresRowCount, 0, 1, 1);
+
+    this->spinGMRESNInnerIterations = new QSpinBox;
+    this->spinGMRESNInnerIterations->setRange(1,INT_MAX);
+    this->spinGMRESNInnerIterations->setValue(solverConfGMRES.getNInnerIterations());
+    gmresLayout->addWidget(this->spinGMRESNInnerIterations, gmresRowCount, 1, 1, 1);
+
+    gmresRowCount ++;
+
+    QLabel *labelGMRESNOuterIterations = new QLabel(tr("Number of outer iterations:"));
+    gmresLayout->addWidget(labelGMRESNOuterIterations, gmresRowCount, 0, 1, 1);
+
+    this->spinGMRESNOuterIterations = new QSpinBox;
+    this->spinGMRESNOuterIterations->setRange(1,INT_MAX);
+    this->spinGMRESNOuterIterations->setValue(solverConfGMRES.getNOuterIterations());
+    gmresLayout->addWidget(this->spinGMRESNOuterIterations, gmresRowCount, 1, 1, 1);
+
+    gmresRowCount ++;
+
+    QLabel *labelGMRESCvgValue = new QLabel(tr("Convergence value:"));
+    gmresLayout->addWidget(labelGMRESCvgValue, gmresRowCount, 0, 1, 1);
+
+    this->editGMRESCvgValue = new ValueLineEdit(0.0,1.0);
+    this->editGMRESCvgValue->setValue(solverConfGMRES.getSolverCvgValue());
+    gmresLayout->addWidget(this->editGMRESCvgValue, gmresRowCount, 1, 1, 1);
+
+    gmresRowCount ++;
+
+    QLabel *labelGMRESOutputFrequency = new QLabel(tr("Solver output frequency:"));
+    gmresLayout->addWidget(labelGMRESOutputFrequency, gmresRowCount, 0, 1, 1);
+
+    this->spinGMRESOutputFrequency = new QSpinBox;
+    this->spinGMRESOutputFrequency->setRange(0,INT_MAX);
+    this->spinGMRESOutputFrequency->setValue(solverConfGMRES.getOutputFrequency());
+    gmresLayout->addWidget(this->spinGMRESOutputFrequency, gmresRowCount, 1, 1, 1);
+
+    gmresRowCount ++;
+
+    // Button layout
 
     QHBoxLayout *buttonsLayout = new QHBoxLayout;
     buttonsLayout->addStretch(1);
-    mainLayout->addLayout(buttonsLayout, rowCount++, 0, 1, 2);
+    mainLayout->addLayout(buttonsLayout);
 
     QPushButton *cancelButton = new QPushButton(cancelIcon, tr("Cancel"));
     buttonsLayout->addWidget(cancelButton);
@@ -80,11 +141,18 @@ int MatrixSolverConfigDialog::exec(void)
 
     if (retVal == QDialog::Accepted)
     {
-        RMatrixSolverConf &solverConf = Session::getInstance().getModel(this->modelID).getMatrixSolverConf();
+        RMatrixSolverConf &solverConfCG = Session::getInstance().getModel(this->modelID).getMatrixSolverConf(RMatrixSolverConf::CG);
 
-        solverConf.setNOuterIterations(this->spinNIterations->value());
-        solverConf.setSolverCvgValue(this->editCvgValue->getValue());
-        solverConf.setOutputFrequency(this->spinOutputFrequency->value());
+        solverConfCG.setNOuterIterations(this->spinCGNIterations->value());
+        solverConfCG.setSolverCvgValue(this->editCGCvgValue->getValue());
+        solverConfCG.setOutputFrequency(this->spinCGOutputFrequency->value());
+
+        RMatrixSolverConf &solverConfGMRES = Session::getInstance().getModel(this->modelID).getMatrixSolverConf(RMatrixSolverConf::GMRES);
+
+        solverConfGMRES.setNInnerIterations(this->spinGMRESNInnerIterations->value());
+        solverConfGMRES.setNOuterIterations(this->spinGMRESNOuterIterations->value());
+        solverConfGMRES.setSolverCvgValue(this->editGMRESCvgValue->getValue());
+        solverConfGMRES.setOutputFrequency(this->spinGMRESOutputFrequency->value());
     }
 
     return retVal;

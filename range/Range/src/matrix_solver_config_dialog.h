@@ -13,6 +13,7 @@
 
 #include <QDialog>
 #include <QSpinBox>
+#include <QGroupBox>
 
 #include "value_line_edit.h"
 
@@ -25,12 +26,24 @@ class MatrixSolverConfigDialog : public QDialog
 
         //! Model ID.
         uint modelID;
+        //! CG SOLVER CONFIGURATION
+        QGroupBox *groupCG;
         //! Number of iterations.
-        QSpinBox *spinNIterations;
+        QSpinBox *spinCGNIterations;
         //! Convergence value.
-        ValueLineEdit *editCvgValue;
+        ValueLineEdit *editCGCvgValue;
         //! Output frequency.
-        QSpinBox *spinOutputFrequency;
+        QSpinBox *spinCGOutputFrequency;
+        //! GMRES SOLVER CONFIGURATION
+        QGroupBox *groupGMRES;
+        //! Number of inner iterations.
+        QSpinBox *spinGMRESNInnerIterations;
+        //! Number of outer iterations.
+        QSpinBox *spinGMRESNOuterIterations;
+        //! Convergence value.
+        ValueLineEdit *editGMRESCvgValue;
+        //! Output frequency.
+        QSpinBox *spinGMRESOutputFrequency;
 
     public:
 
