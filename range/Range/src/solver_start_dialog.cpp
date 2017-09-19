@@ -94,7 +94,16 @@ SolverStartDialog::SolverStartDialog(uint modelID, QWidget *parent)
     }
 
     this->restartSolverCheck = new QCheckBox("Restart solver / continue");
-    this->restartSolverCheck->setEnabled(Session::getInstance().getModel(this->modelID).getNVariables() > 0);
+    if (Session::getInstance().getModel(this->modelID).getNVariables() == 0)
+    {
+        this->restartSolverCheck->setDisabled(true);
+        this->restartSolverCheck->setChecked(false);
+    }
+    else
+    {
+        this->restartSolverCheck->setEnabled(true);
+        this->restartSolverCheck->setChecked(rModel.getProblemSetup().getRestart());
+    }
     mainLayout->addWidget(this->restartSolverCheck);
 
     QHBoxLayout *buttonsLayout = new QHBoxLayout;
