@@ -178,6 +178,7 @@ SOURCES += \
     src/solver_manager.cpp \
     src/solver_process.cpp \
     src/solver_setup_checker.cpp \
+    src/solver_start_dialog.cpp \
     src/solver_task.cpp \
     src/solver_task_id.cpp \
     src/stream_line_dialog.cpp \
@@ -365,6 +366,7 @@ HEADERS += \
     src/solver_manager.h \
     src/solver_process.h \
     src/solver_setup_checker.h \
+    src/solver_start_dialog.h \
     src/solver_task.h \
     src/solver_task_id.h \
     src/stream_line_dialog.h \

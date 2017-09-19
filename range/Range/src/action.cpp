@@ -56,8 +56,7 @@
 #include "session_entity_id.h"
 #include "session.h"
 #include "stream_line_dialog.h"
-#include "solver_setup_checker.h"
-#include "solver_task.h"
+#include "solver_start_dialog.h"
 #include "solver_manager.h"
 #include "scalar_field_dialog.h"
 #include "update_dialog.h"
@@ -1652,88 +1651,11 @@ void Action::onSolverStart(void)
 {
     QList<uint> modelIDs = Session::getInstance().getSelectedModelIDs();
 
-    uint nWarnings = 0;
-    uint nErrors = 0;
-
-    QString dialogMessage;
-
     // First perform checks whether setup is correct.
     for (int i=0;i<modelIDs.size();i++)
     {
-        QStringList setupWarnings;
-        QStringList setupErrors;
-
-        SolverSetupChecker solverSetupChecker(Session::getInstance().getModel(modelIDs[i]));
-        solverSetupChecker.perform(setupWarnings,setupErrors);
-
-        QString message = "<h3>" + Session::getInstance().getModel(modelIDs[i]).getName() + "</h3>";
-
-        if (setupWarnings.count() > 0)
-        {
-            message += "<h4>" + tr("Warnings") + ":</h4>";
-            message += "<ul>";
-            foreach (QString warning, setupWarnings)
-            {
-                message += "<li>" + warning + "</li>";
-            }
-            message += "</ul>";
-
-            nWarnings++;
-        }
-        if (setupErrors.count() > 0)
-        {
-            message += "<h4>" + tr("Errors") + ":</h4>";
-            message += "<ul>";
-            foreach (QString error, setupErrors)
-            {
-                message += "<li>" + error + "</li>";
-            }
-            message += "</ul>";
-
-            nErrors++;
-        }
-
-        if (setupWarnings.count() > 0 || setupErrors.count() > 0)
-        {
-            dialogMessage += message;
-        }
-    }
-
-    bool startSolverTasks = true;
-
-    if (nErrors > 0)
-    {
-        dialogMessage += "<p>" + tr("Error(s) detected!") + "<p>"+ tr("Can not run solver.") +"</p>";
-
-        QMessageBox::warning(this->mainWindow,tr("Solver setup errors"),dialogMessage);
-        startSolverTasks = false;
-    }
-    else
-    {
-        if (nWarnings > 0)
-        {
-            dialogMessage += "<p>" + tr("Do you want to continue?") + "</p>";
-
-            int response = QMessageBox::question(this->mainWindow,tr("Solver setup warnings"),dialogMessage,QMessageBox::Yes,QMessageBox::No);
-            startSolverTasks = (response == QMessageBox::Yes);
-        }
-    }
-
-    if (startSolverTasks)
-    {
-        // Start solver tasks
-        for (int i=0;i<modelIDs.size();i++)
-        {
-            QString modelFileName = ModelIO::getModelSaveName(MainSettings::getInstance(),
-                                                              this->mainWindow,
-                                                              Session::getInstance().getModel(modelIDs[i]));
-            Session::getInstance().getModel(modelIDs[i]).setFileName(modelFileName);
-
-            SolverTask *solverTask = new SolverTask(MainSettings::getInstance().getApplicationSettings(),
-                                                    modelIDs[i]);
-            solverTask->setBlocking(false);
-            SolverManager::getInstance().submit(solverTask);
-        }
+        SolverStartDialog solverStartDialog(modelIDs[i],this->mainWindow);
+        solverStartDialog.exec();
     }
 }
 
