@@ -485,6 +485,13 @@ void MainWindow::createToolBars(void)
         toolBar->addAction(this->actionList->getAction(ACTION_SOLVER_KILL));
         toolBar->addAction(this->actionList->getAction(ACTION_SOLVER_VIEW));
         this->toolBars.push_back(toolBar);
+
+        toolBar = new QToolBar(this);
+        toolBar->setObjectName(QString::fromUtf8("toolBarResults"));
+        toolBar->setWindowTitle(QApplication::translate("MainWindow", "Results"));
+        this->addToolBar(Qt::TopToolBarArea, toolBar);
+        toolBar->addAction(this->actionList->getAction(ACTION_MODEL_RELOAD_RESULTS));
+        this->toolBars.push_back(toolBar);
     }
     else
     {

@@ -240,7 +240,7 @@ void GLWidget::drawModel(void)
 
     GL_SAFE_CALL(glHint(GL_POINT_SMOOTH_HINT,GL_DONT_CARE));
     GL_SAFE_CALL(glHint(GL_LINE_SMOOTH_HINT,GL_DONT_CARE));
-    GL_SAFE_CALL(glHint(GL_POLYGON_SMOOTH_HINT,GL_DONT_CARE));
+    GL_SAFE_CALL(glHint(GL_POLYGON_SMOOTH_HINT,GL_FASTEST));
 
     if (this->displayProperties.getDrawGlobalAxis())
     {
@@ -267,7 +267,7 @@ void GLWidget::drawModel(void)
     GL_SAFE_CALL(glEnable(GL_NORMALIZE));
     GL_SAFE_CALL(glEnable(GL_POINT_SMOOTH));
     GL_SAFE_CALL(glEnable(GL_LINE_SMOOTH));
-    GL_SAFE_CALL(glEnable(GL_POLYGON_SMOOTH));
+    GL_SAFE_CALL(glDisable(GL_POLYGON_SMOOTH));
 
     // Apply model scale.
     GL_SAFE_CALL(glScaled(this->mscale,this->mscale,this->mscale));
