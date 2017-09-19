@@ -48,6 +48,7 @@ DropResultsDialog::DropResultsDialog(QWidget *parent) :
 
     QList<uint> selectedModelIDs = Session::getInstance().getSelectedModelIDs();
 
+    uint nRecords = 0;
     for (int i=0;i<selectedModelIDs.size();i++)
     {
         QList<QString> recordFiles = Session::getInstance().getModel(selectedModelIDs[i]).getRecordFiles(true);
@@ -56,7 +57,13 @@ DropResultsDialog::DropResultsDialog(QWidget *parent) :
         {
             QListWidgetItem *item = new QListWidgetItem(resultsRecordsList);
             item->setText(recordFiles[j]);
+            nRecords++;
         }
+    }
+    if (nRecords == 0)
+    {
+        this->deleteResultsCheckBox->setDisabled(true);
+        resultsRecordsList->setDisabled(true);
     }
 
     QHBoxLayout *buttonsLayout = new QHBoxLayout;
