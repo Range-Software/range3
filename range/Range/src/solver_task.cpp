@@ -134,7 +134,11 @@ void SolverTask::run(void)
         }
 
         // Execute solver
-        QString cmdLine = this->solverExecutable + QString(" ") + this->solverArguments.join(' ');
+        QString cmdLine = this->solverExecutable;
+        for (int i=0;i<this->solverArguments.size();i++)
+        {
+            cmdLine += QString(" \"") + this->solverArguments.at(i) + QString("\"");
+        }
 
         RLogger::info("Executing \'%s\'\n",cmdLine.toUtf8().constData());
 

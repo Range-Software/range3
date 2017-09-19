@@ -228,6 +228,7 @@ RMatrixSolverConf &RProblem::getMatrixSolverConf(RMatrixSolverType matrixSolverT
     {
         throw RError(R_ERROR_APPLICATION,R_ERROR_REF,"Invalid matrix solver type \'%d\'",matrixSolverType);
     }
+    this->matrixSolverConfs[matrixSolverType].setType(matrixSolverType);
     return this->matrixSolverConfs[matrixSolverType];
 } /* RProblem::getMatrixSolver */
 
