@@ -148,6 +148,7 @@ void ModelEntityDisplayPropertiesTree::populate(void)
         {
             case R_ENTITY_GROUP_VOLUME:
             case R_ENTITY_GROUP_SURFACE:
+                canDrawNodes = canDrawElementNums = canDrawNodeNums = true;
                 canDrawWire = canDrawEdges = true;
                 break;
             case R_ENTITY_GROUP_LINE:
