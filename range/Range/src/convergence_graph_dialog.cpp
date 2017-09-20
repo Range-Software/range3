@@ -19,7 +19,7 @@
 #include "convergence_graph_object.h"
 #include "graph_widget.h"
 
-ConvergenceGraphDialog::ConvergenceGraphDialog(const QString &convergenceFileName, QWidget *parent) :
+ConvergenceGraphDialog::ConvergenceGraphDialog(const QStringList &convergenceFileNames, QWidget *parent) :
     QDialog(parent)
 {
     QIcon clearIcon(":/icons/file/pixmaps/range-clear.svg");
@@ -33,18 +33,18 @@ ConvergenceGraphDialog::ConvergenceGraphDialog(const QString &convergenceFileNam
 
     uint mainLayoutRowCount = 0;
 
-    QLabel *label = new QLabel("Source: <i>" + convergenceFileName + "</i>");
+    QLabel *label = new QLabel("Source: <i>" + convergenceFileNames.at(0) + "</i>");
     mainLayout->addWidget(label, mainLayoutRowCount++, 0, 1, 1);
 
     this->dataColumnCombo = new QComboBox;
-    this->dataColumnCombo->addItems(ConvergenceGraphObject::findDataColumns(convergenceFileName));
+    this->dataColumnCombo->addItems(ConvergenceGraphObject::findDataColumns(convergenceFileNames.at(0)));
     this->dataColumnCombo->setCurrentIndex(0);
     mainLayout->addWidget(this->dataColumnCombo, mainLayoutRowCount++, 0, 1, 1);
 
     this->connect(this->dataColumnCombo,SIGNAL(currentIndexChanged(int)),SLOT(onCurrentIndexChanged(int)));
 
     this->graphObject = new ConvergenceGraphObject;
-    this->graphObject->setSourceFileName(convergenceFileName);
+    this->graphObject->setSourceFileName(convergenceFileNames.at(0));
     this->graphObject->setSourceReadInterval(1000);
 
     GraphWidget *graphWidget = new GraphWidget(graphObject,false,this);

@@ -1747,14 +1747,14 @@ void Action::onReportConvergenceGraph(void)
 
     for (int i=0;i<modelIDs.size();i++)
     {
-        QString fileName(RFileManager::findLastFile(Session::getInstance().getModel(modelIDs[i]).buildTmpFileName("cvg",QString("*"))));
-        if (fileName.isEmpty())
+        QStringList fileNames(RFileManager::findFiles(Session::getInstance().getModel(modelIDs[i]).buildTmpFileName("cvg",QString("*"))));
+        if (fileNames.isEmpty())
         {
             QMessageBox::information(this->mainWindow,tr("No convergence file"),tr("There is no file containing convergence values."));
         }
         else
         {
-            ConvergenceGraphDialog convergenceGraphDialog(fileName,this->mainWindow);
+            ConvergenceGraphDialog convergenceGraphDialog(fileNames,this->mainWindow);
             convergenceGraphDialog.exec();
         }
     }

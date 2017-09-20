@@ -68,6 +68,9 @@ class RFileManager
         //! Find last file
         static QString findLastFile ( const QString &filePattern );
 
+        //! Find files
+        static QStringList findFiles ( const QString &filePattern );
+
         //! Write link file.
         static void writeLink(const QString &linkFileName, const QString &targetFileName, const RVersion &version, bool binary = true);
 

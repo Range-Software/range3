@@ -163,6 +163,25 @@ QString RFileManager::findLastFile(const QString &filePattern)
     return QString();
 }
 
+QStringList RFileManager::findFiles(const QString &filePattern)
+{
+    QFileInfo fileInfo(filePattern);
+
+    QStringList nameFilters;
+    nameFilters << fileInfo.fileName();
+
+    QDir dir(fileInfo.absolutePath());
+
+    QStringList fileList = dir.entryList(nameFilters,QDir::Files,QDir::Reversed);
+
+    QStringList fileNames;
+    for (int i=0; i<fileList.count();i++)
+    {
+        fileNames.append(dir.filePath(fileList.at(i)));
+    }
+    return fileNames;
+}
+
 void RFileManager::writeLink(const QString &linkFileName, const QString &targetFileName, const RVersion &version, bool binary)
 {
     if (linkFileName.isEmpty() || targetFileName.isEmpty())

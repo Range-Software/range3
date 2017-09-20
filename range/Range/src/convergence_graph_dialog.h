@@ -31,7 +31,7 @@ class ConvergenceGraphDialog : public QDialog
     public:
 
         //! Constructor.
-        explicit ConvergenceGraphDialog(const QString &convergenceFileName, QWidget *parent = 0);
+        explicit ConvergenceGraphDialog(const QStringList &convergenceFileNames, QWidget *parent = 0);
 
         //! Execute dialog.
         int exec(void);
