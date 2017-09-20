@@ -82,6 +82,8 @@ GLWidget::GLWidget(uint modelID, QWidget *parent)
     QObject::connect(Session::getInstance().getDrawEngine(),&DrawEngine::objectAdded,this,&GLWidget::onDrawObjectAdded);
     QObject::connect(Session::getInstance().getDrawEngine(),&DrawEngine::objectRemoved,this,&GLWidget::onDrawObjectRemoved);
     QObject::connect(Session::getInstance().getDrawEngine(),&DrawEngine::objectChanged,this,&GLWidget::onDrawObjectChanged);
+
+    this->font = QPainter(this).font();
 }
 
 uint GLWidget::getModelID(void) const
@@ -148,6 +150,8 @@ void GLWidget::paintGL(void)
 
     this->glTextRenderer.render(painter);
     this->glTextRenderer.clear();
+
+    painter.setFont(this->font);
 
     this->drawValueRanges(painter);
     this->drawMessageBox(painter,false);

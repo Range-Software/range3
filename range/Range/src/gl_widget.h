@@ -91,6 +91,8 @@ class GLWidget : public QOpenGLWidget
         double clippingPlaneDistance;
         //! Show rotation sphere.
         bool showRotationSphere;
+        //! Widget's font.
+        QFont font;
 
     public:
 
