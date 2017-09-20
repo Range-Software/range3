@@ -75,6 +75,17 @@ void ActionList::processAvailability(void)
     this->getAction(ACTION_GEOMETRY_REDO)->setDisabled(!Session::getInstance().isRedoAvailable());
     this->getAction(ACTION_GEOMETRY_REDO)->setToolTip(Session::getInstance().getRedoTooltip());
 
+    this->getAction(ACTION_SESSION_NEW)->setEnabled(true);
+    this->getAction(ACTION_SESSION_OPEN)->setEnabled(true);
+    this->getAction(ACTION_SESSION_SAVE)->setEnabled(true);
+    this->getAction(ACTION_SESSION_SAVE_AS)->setEnabled(true);
+    this->getAction(ACTION_SESSION_CLOSE)->setEnabled(true);
+    this->getAction(ACTION_MODEL_NEW)->setEnabled(true);
+    this->getAction(ACTION_MODEL_OPEN)->setEnabled(true);
+    this->getAction(ACTION_MODEL_IMPORT_MSH)->setEnabled(true);
+    this->getAction(ACTION_MODEL_IMPORT_RAW)->setEnabled(true);
+    this->getAction(ACTION_MODEL_IMPORT_STL)->setEnabled(true);
+
     QList<uint> selectedModelIDs = Session::getInstance().getSelectedModelIDs();
     if (!selectedModelIDs.empty())
     {
