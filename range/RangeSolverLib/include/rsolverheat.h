@@ -45,7 +45,7 @@ class RSolverHeat : public RSolverGeneric
     public:
 
         //! Constructor.
-        explicit RSolverHeat(RModel *pModel, const QString &modelFileName, RSolverSharedData &sharedData);
+        explicit RSolverHeat(RModel *pModel, const QString &modelFileName, const QString &convergenceFileName, RSolverSharedData &sharedData);
 
         //! Copy constructor.
         RSolverHeat(const RSolverHeat &heatSolver);

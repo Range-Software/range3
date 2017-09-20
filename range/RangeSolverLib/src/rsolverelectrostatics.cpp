@@ -26,8 +26,8 @@ void RSolverElectrostatics::_init(const RSolverElectrostatics *pSolver)
     }
 }
 
-RSolverElectrostatics::RSolverElectrostatics(RModel *pModel, const QString &modelFileName, RSolverSharedData &sharedData)
-    : RSolverGeneric(pModel,modelFileName,sharedData)
+RSolverElectrostatics::RSolverElectrostatics(RModel *pModel, const QString &modelFileName, const QString &convergenceFileName, RSolverSharedData &sharedData)
+    : RSolverGeneric(pModel,modelFileName,convergenceFileName,sharedData)
 {
     this->problemType = R_PROBLEM_ELECTROSTATICS;
     this->_init();

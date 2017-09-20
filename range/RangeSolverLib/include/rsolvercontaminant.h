@@ -29,7 +29,7 @@ class RSolverContaminant : public RSolverGeneric
     public:
 
         //! Constructor.
-        explicit RSolverContaminant(RModel *pModel, const QString &modelFileName, RSolverSharedData &sharedData);
+        explicit RSolverContaminant(RModel *pModel, const QString &modelFileName, const QString &convergenceFileName, RSolverSharedData &sharedData);
 
         //! Copy constructor.
         RSolverContaminant(const RSolverContaminant &solver);

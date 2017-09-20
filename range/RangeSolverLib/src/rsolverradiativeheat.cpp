@@ -25,8 +25,8 @@ void RSolverRadiativeHeat::_init(const RSolverRadiativeHeat *pRadiativeHeatSolve
     }
 }
 
-RSolverRadiativeHeat::RSolverRadiativeHeat(RModel *pModel, const QString &modelFileName, RSolverSharedData &sharedData)
-    : RSolverGeneric(pModel,modelFileName,sharedData)
+RSolverRadiativeHeat::RSolverRadiativeHeat(RModel *pModel, const QString &modelFileName, const QString &convergenceFileName, RSolverSharedData &sharedData)
+    : RSolverGeneric(pModel,modelFileName,convergenceFileName,sharedData)
     , patchHeatNorm(0.0)
     , oldPatchHeatNorm(0.0)
 {

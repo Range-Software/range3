@@ -29,8 +29,8 @@ void RSolverHeat::_init(const RSolverHeat *pHeatSolver)
     }
 }
 
-RSolverHeat::RSolverHeat(RModel *pModel, const QString &modelFileName, RSolverSharedData &sharedData)
-    : RSolverGeneric(pModel,modelFileName,sharedData)
+RSolverHeat::RSolverHeat(RModel *pModel, const QString &modelFileName, const QString &convergenceFileName, RSolverSharedData &sharedData)
+    : RSolverGeneric(pModel,modelFileName,convergenceFileName,sharedData)
 {
     this->problemType = R_PROBLEM_HEAT;
     this->_init();

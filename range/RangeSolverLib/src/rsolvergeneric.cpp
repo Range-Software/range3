@@ -37,10 +37,11 @@ void RSolverGeneric::_init(const RSolverGeneric *pGenericSolver)
     }
 }
 
-RSolverGeneric::RSolverGeneric(RModel *pModel, const QString &modelFileName, RSolverSharedData &sharedData)
+RSolverGeneric::RSolverGeneric(RModel *pModel, const QString &modelFileName, const QString &convergenceFileName, RSolverSharedData &sharedData)
     : problemType(R_PROBLEM_NONE)
     , pModel(pModel)
     , modelFileName(modelFileName)
+    , convergenceFileName(convergenceFileName)
     , pSharedData(&sharedData)
     , firstRun(false)
     , taskIteration(0)

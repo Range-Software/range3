@@ -211,8 +211,8 @@ void RSolverFluid::_init(const RSolverFluid *pSolver)
     }
 }
 
-RSolverFluid::RSolverFluid(RModel *pModel, const QString &modelFileName, RSolverSharedData &sharedData)
-    : RSolverGeneric(pModel,modelFileName,sharedData)
+RSolverFluid::RSolverFluid(RModel *pModel, const QString &modelFileName, const QString &convergenceFileName, RSolverSharedData &sharedData)
+    : RSolverGeneric(pModel,modelFileName,convergenceFileName,sharedData)
     , streamVelocity(1.0)
     , cvgV(0.0)
     , cvgP(0.0)
@@ -376,7 +376,7 @@ void RSolverFluid::prepare(void)
                 }
 
                 RR3Vector normal;
-                element.findNormal(this->pModel->getNodes(),normal[0],normal[1],normal[2]);
+                element.findNormal(this->pModel->getNodes(),normal[0],normal[1],normal[2]); // no need to recalculate if mesh does not change !!!
 
                 double ro = this->elementDensity[elementID];
 
@@ -390,7 +390,7 @@ void RSolverFluid::prepare(void)
                     const RElementShapeFunction &shapeFunc = RElement::getShapeFunction(element.getType(),intPoint);
                     const RRVector &N = shapeFunc.getN();
                     RRMatrix J, Rt;
-                    double detJ = element.findJacobian(this->pModel->getNodes(),intPoint,J,Rt);
+                    double detJ = element.findJacobian(this->pModel->getNodes(),intPoint,J,Rt); // no need to recalculate if mesh does not change !!!
                     double integValue = detJ * shapeFunc.getW();
 
                     for (uint m=0;m<element.size();m++)
@@ -406,7 +406,7 @@ void RSolverFluid::prepare(void)
                 }
                 if (this->pModel->getTimeSolver().getEnabled())
                 {
-                    be *= this->pModel->getTimeSolver().getCurrentTimeStepSize();;
+                    be *= this->pModel->getTimeSolver().getCurrentTimeStepSize();
                 }
             }
 
@@ -690,7 +690,7 @@ void RSolverFluid::statistics(void)
     cvgValues.push_back(RIterationInfoValue("Velocity convergence",this->cvgV));
     cvgValues.push_back(RIterationInfoValue("Pressure convergence",this->cvgP));
 
-    RIterationInfo::writeToFile(this->pModel->getMatrixSolverConf(RMatrixSolverConf::GMRES).getOutputFileName(),counter,cvgValues);
+    RIterationInfo::writeToFile(this->convergenceFileName,counter,cvgValues);
 
     this->printStats(R_VARIABLE_VELOCITY);
     this->printStats(R_VARIABLE_PRESSURE);
@@ -2374,23 +2374,31 @@ void RSolverFluid::applyLocalRotations(unsigned int elementID, RRMatrix &Ae)
 {
     const RElement &rElement = this->pModel->getElement(elementID);
     RRMatrix T;
-    T.setIdentity(Ae.getNRows());
+
+    bool first = true;
 
     for (uint i=0;i<rElement.size();i++)
     {
         uint nodeId = rElement.getNodeId(i);
         if (this->localRotations[nodeId].isActive())
         {
+            if (first)
+            {
+                T.setIdentity(Ae.getNRows());
+                first = false;
+            }
             T.setBlock(this->localRotations[nodeId].getR(),4*i,4*i);
         }
     }
+    if (!first)
+    {
+        RRMatrix Tt(T);
+        Tt.transpose();
 
-    RRMatrix Tt(T);
-    Tt.transpose();
+        RRMatrix Aetmp;
 
-    RRMatrix Aetmp;
-
-    RRMatrix::mlt(Tt,Ae,Aetmp);
-    RRMatrix::mlt(Aetmp,T,Ae);
+        RRMatrix::mlt(Tt,Ae,Aetmp);
+        RRMatrix::mlt(Aetmp,T,Ae);
+    }
 }
 

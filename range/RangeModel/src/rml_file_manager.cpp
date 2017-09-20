@@ -135,6 +135,11 @@ QString RFileManager::getFileNameWithOutTimeStep(const QString &fileName, unsign
     }
 }
 
+QString RFileManager::getFileNameWithSuffix(const QString &fileName, const QString &suffix)
+{
+    return RFileManager::removeExtension(fileName) + "-" + suffix + "." + RFileManager::getExtension(fileName);
+}
+
 bool RFileManager::fileExists(const QString &fileName)
 {
     return QFile::exists(fileName);

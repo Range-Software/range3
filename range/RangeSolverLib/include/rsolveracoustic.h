@@ -46,7 +46,7 @@ class RSolverAcoustic : public RSolverGeneric
     public:
 
         //! Constructor.
-        explicit RSolverAcoustic(RModel *pModel, const QString &modelFileName, RSolverSharedData &sharedData);
+        explicit RSolverAcoustic(RModel *pModel, const QString &modelFileName, const QString &convergenceFileName, RSolverSharedData &sharedData);
 
         //! Copy constructor.
         RSolverAcoustic(const RSolverAcoustic &acousticSolver);

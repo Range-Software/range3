@@ -40,6 +40,8 @@ class RSolverGeneric
         RModel *pModel;
         //! Model file name.
         QString modelFileName;
+        //! Convergence file.
+        QString convergenceFileName;
         //! Matrix M (modal analysis).
         RSparseMatrix M;
         //! Matrix A.
@@ -77,7 +79,7 @@ class RSolverGeneric
     public:
 
         //! Constructor.
-        RSolverGeneric(RModel *pModel, const QString &modelFileName, RSolverSharedData &sharedData);
+        RSolverGeneric(RModel *pModel, const QString &modelFileName, const QString &convergenceFileName, RSolverSharedData &sharedData);
 
         //! Copy constructor.
         RSolverGeneric(const RSolverGeneric &genericSolver);

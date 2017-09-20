@@ -31,8 +31,8 @@ void RSolverAcoustic::_init(const RSolverAcoustic *pAcousticSolver)
     }
 }
 
-RSolverAcoustic::RSolverAcoustic(RModel *pModel, const QString &modelFileName, RSolverSharedData &sharedData)
-    : RSolverGeneric(pModel,modelFileName,sharedData)
+RSolverAcoustic::RSolverAcoustic(RModel *pModel, const QString &modelFileName, const QString &convergenceFileName, RSolverSharedData &sharedData)
+    : RSolverGeneric(pModel,modelFileName,convergenceFileName,sharedData)
 {
     this->problemType = R_PROBLEM_ACOUSTICS;
     this->_init();

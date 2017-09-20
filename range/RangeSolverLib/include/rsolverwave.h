@@ -33,7 +33,7 @@ class RSolverWave : public RSolverGeneric
     public:
 
         //! Constructor.
-        explicit RSolverWave(RModel *pModel, const QString &modelFileName, RSolverSharedData &sharedData);
+        explicit RSolverWave(RModel *pModel, const QString &modelFileName, const QString &convergenceFileName, RSolverSharedData &sharedData);
 
         //! Copy constructor.
         RSolverWave(const RSolverWave &waveSolver);

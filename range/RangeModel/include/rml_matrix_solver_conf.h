@@ -106,6 +106,9 @@ class RMatrixSolverConf
 
         //! Return solver name.
         static const QString & getName ( RMatrixSolverType type );
+
+        //! Return solver id.
+        static const QString & getId ( RMatrixSolverType type );
 };
 
 #endif /* __RML_MATRIX_SOLVER_H__ */

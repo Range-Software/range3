@@ -60,7 +60,7 @@ class RSolverStress : public RSolverGeneric
     public:
 
         //! Constructor.
-        explicit RSolverStress(RModel *pModel, const QString &modelFileName, RSolverSharedData &sharedData, bool modalAnalysis);
+        explicit RSolverStress(RModel *pModel, const QString &modelFileName, const QString &convergenceFileName, RSolverSharedData &sharedData, bool modalAnalysis);
 
         //! Copy constructor.
         RSolverStress(const RSolverStress &stressSolver);

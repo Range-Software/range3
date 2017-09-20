@@ -24,7 +24,7 @@ class RSolverFluidHeat : public RSolverFluid
     public:
 
         //! Constructor.
-        explicit RSolverFluidHeat(RModel *pModel, const QString &modelFileName, RSolverSharedData &sharedData);
+        explicit RSolverFluidHeat(RModel *pModel, const QString &modelFileName, const QString &convergenceFileName, RSolverSharedData &sharedData);
 
         //! Copy constructor.
         RSolverFluidHeat(const RSolverFluidHeat &solver);

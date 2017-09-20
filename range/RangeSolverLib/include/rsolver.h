@@ -25,6 +25,8 @@ class RSolver
         RModel *pModel;
         //! Model file name.
         QString modelFileName;
+        //! Convergence file name.
+        QString convergenceFileName;
         //! Shared variables.
         RSolverSharedData sharedData;
         //! Map of solvers.
@@ -40,7 +42,7 @@ class RSolver
     public:
 
         //! Constructor.
-        RSolver(RModel &model, const QString &modelFileName = QString());
+        RSolver(RModel &model, const QString &modelFileName, const QString &convergenceFileName);
 
         //! Copy constructor.
         RSolver(const RSolver &solver);

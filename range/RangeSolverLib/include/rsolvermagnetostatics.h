@@ -31,7 +31,7 @@ class RSolverMagnetostatics : public RSolverGeneric
     public:
 
         //! Constructor.
-        explicit RSolverMagnetostatics(RModel *pModel, const QString &modelFileName, RSolverSharedData &sharedData);
+        explicit RSolverMagnetostatics(RModel *pModel, const QString &modelFileName, const QString &convergenceFileName, RSolverSharedData &sharedData);
 
         //! Copy constructor.
         RSolverMagnetostatics(const RSolverMagnetostatics &solver);

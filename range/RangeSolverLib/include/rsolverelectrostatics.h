@@ -43,7 +43,7 @@ class RSolverElectrostatics : public RSolverGeneric
     public:
 
         //! Constructor.
-        explicit RSolverElectrostatics(RModel *pModel, const QString &modelFileName, RSolverSharedData &sharedData);
+        explicit RSolverElectrostatics(RModel *pModel, const QString &modelFileName, const QString &convergenceFileName, RSolverSharedData &sharedData);
 
         //! Copy constructor.
         RSolverElectrostatics(const RSolverElectrostatics &solver);

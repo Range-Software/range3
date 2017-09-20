@@ -15,13 +15,14 @@
 typedef struct _RMatrixSolverDesc
 {
     QString name;
+    QString id;
 } RMatrixSolverDesc;
 
 static RMatrixSolverDesc matrixSolverDesc [] =
 {
-    { "None" },
-    { "Conjugate Gradient" },
-    { "Generalized Minimal Residual" }
+    { "None", "NONE" },
+    { "Conjugate Gradient", "mxs-CG" },
+    { "Generalized Minimal Residual", "mxs-GMRES" }
 };
 
 void RMatrixSolverConf::_init(const RMatrixSolverConf *pMatrixSolver)
@@ -140,4 +141,9 @@ void RMatrixSolverConf::setOutputFileName(const QString &outputFileName)
 const QString &RMatrixSolverConf::getName(RMatrixSolverType type)
 {
     return matrixSolverDesc[type].name;
+}
+
+const QString &RMatrixSolverConf::getId(RMatrixSolverType type)
+{
+    return matrixSolverDesc[type].id;
 }

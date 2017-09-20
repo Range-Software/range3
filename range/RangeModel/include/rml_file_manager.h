@@ -58,6 +58,10 @@ class RFileManager
         static QString getFileNameWithOutTimeStep ( const QString &fileName,
                                                     unsigned int   numberWidth = 5 );
 
+        //! Create file name containing suffix (basename-suffix.extension).
+        static QString getFileNameWithSuffix ( const QString &fileName,
+                                               const QString &suffix );
+
         //! Check if file exists.
         static bool fileExists ( const QString &fileName );
 

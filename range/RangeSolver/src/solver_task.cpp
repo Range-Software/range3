@@ -93,8 +93,8 @@ void SolverTask::run(void)
         return;
     }
 
-    model.getMatrixSolverConf(RMatrixSolverConf::CG).setOutputFileName(this->convergenceFileName);
-    model.getMatrixSolverConf(RMatrixSolverConf::GMRES).setOutputFileName(this->convergenceFileName);
+    model.getMatrixSolverConf(RMatrixSolverConf::CG).setOutputFileName(RFileManager::getFileNameWithSuffix(this->convergenceFileName,RMatrixSolverConf::getId(RMatrixSolverConf::CG)));
+    model.getMatrixSolverConf(RMatrixSolverConf::GMRES).setOutputFileName(RFileManager::getFileNameWithSuffix(this->convergenceFileName,RMatrixSolverConf::getId(RMatrixSolverConf::GMRES)));
     model.getMonitoringPointManager().setOutputFileName(this->monitoringFileName);
 
     // Solve model
@@ -104,7 +104,7 @@ void SolverTask::run(void)
         RLogger::info("********* SOLVER - BEGIN *********\n");
         RLogger::info("\n");
         RLogger::indent();
-        RSolver solver(model,this->modelFileName);
+        RSolver solver(model,this->modelFileName,this->convergenceFileName);
         solver.run();
         RLogger::unindent();
         RLogger::info("\n");

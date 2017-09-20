@@ -18,8 +18,8 @@ void RSolverContaminant::_init(const RSolverContaminant *pSolver)
     }
 }
 
-RSolverContaminant::RSolverContaminant(RModel *pModel, const QString &modelFileName, RSolverSharedData &sharedData)
-    : RSolverGeneric(pModel,modelFileName,sharedData)
+RSolverContaminant::RSolverContaminant(RModel *pModel, const QString &modelFileName, const QString &convergenceFileName, RSolverSharedData &sharedData)
+    : RSolverGeneric(pModel,modelFileName,convergenceFileName,sharedData)
 {
     this->problemType = R_PROBLEM_CONTAMINANT;
     this->_init();

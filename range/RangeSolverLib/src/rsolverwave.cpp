@@ -20,8 +20,8 @@ void RSolverWave::_init(const RSolverWave *pWaveSolver)
     }
 }
 
-RSolverWave::RSolverWave(RModel *pModel, const QString &modelFileName, RSolverSharedData &sharedData)
-    : RSolverGeneric(pModel,modelFileName,sharedData)
+RSolverWave::RSolverWave(RModel *pModel, const QString &modelFileName, const QString &convergenceFileName, RSolverSharedData &sharedData)
+    : RSolverGeneric(pModel,modelFileName,convergenceFileName,sharedData)
 {
     this->problemType = R_PROBLEM_WAVE;
     this->_init();

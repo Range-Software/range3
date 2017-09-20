@@ -77,7 +77,7 @@ class RSolverFluid : public RSolverGeneric
     public:
 
         //! Constructor.
-        explicit RSolverFluid(RModel *pModel, const QString &modelFileName, RSolverSharedData &sharedData);
+        explicit RSolverFluid(RModel *pModel, const QString &modelFileName, const QString &convergenceFileName, RSolverSharedData &sharedData);
 
         //! Copy constructor.
         RSolverFluid(const RSolverFluid &solver);

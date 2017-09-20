@@ -18,8 +18,8 @@ void RSolverFluidHeat::_init(const RSolverFluidHeat *pSolver)
     }
 }
 
-RSolverFluidHeat::RSolverFluidHeat(RModel *pModel, const QString &modelFileName, RSolverSharedData &sharedData)
-    : RSolverFluid(pModel,modelFileName,sharedData)
+RSolverFluidHeat::RSolverFluidHeat(RModel *pModel, const QString &modelFileName, const QString &convergenceFileName, RSolverSharedData &sharedData)
+    : RSolverFluid(pModel,modelFileName,convergenceFileName,sharedData)
 {
     this->problemType = R_PROBLEM_FLUID_HEAT;
     this->_init();

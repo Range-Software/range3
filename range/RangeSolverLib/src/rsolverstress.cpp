@@ -34,8 +34,8 @@ void RSolverStress::_init(const RSolverStress *pStressSolver)
     }
 }
 
-RSolverStress::RSolverStress(RModel *pModel, const QString &modelFileName, RSolverSharedData &sharedData, bool modalAnalysis)
-    : RSolverGeneric(pModel,modelFileName,sharedData)
+RSolverStress::RSolverStress(RModel *pModel, const QString &modelFileName, const QString &convergenceFileName, RSolverSharedData &sharedData, bool modalAnalysis)
+    : RSolverGeneric(pModel,modelFileName,convergenceFileName,sharedData)
 {
     this->problemType = modalAnalysis ? R_PROBLEM_STRESS_MODAL : R_PROBLEM_STRESS;
     this->_init();
