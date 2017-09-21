@@ -12,21 +12,11 @@
 #define __CONVERGENCE_GRAPH_DIALOG_H__
 
 #include <QDialog>
-#include <QComboBox>
-
-#include "convergence_graph_object.h"
 
 class ConvergenceGraphDialog : public QDialog
 {
 
     Q_OBJECT
-
-    protected:
-
-        //! Data column combo box.
-        QComboBox *dataColumnCombo;
-        //! Graph object.
-        ConvergenceGraphObject *graphObject;
 
     public:
 
@@ -36,12 +26,10 @@ class ConvergenceGraphDialog : public QDialog
         //! Execute dialog.
         int exec(void);
 
-    protected slots:
+    private:
 
-        //! Data column combo current index changed.
-        void onCurrentIndexChanged(int index);
-        //! Clear button was clicked.
-        void onClearButtonClicked(void);
+        //! Find problem ID or matrix solver ID in convergence log filename and convert it to name.
+        static QString getNameFromID(const QString &fileName, const QString &fallbackName);
 
 };
 

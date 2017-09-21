@@ -30,6 +30,7 @@ SOURCES += \
     src/component_edit_table.cpp \
     src/convergence_graph_dialog.cpp \
     src/convergence_graph_object.cpp \
+    src/convergence_graph_widget.cpp \
     src/cut_dialog.cpp \
     src/direction_widget.cpp \
     src/document_generator.cpp \
@@ -219,6 +220,7 @@ HEADERS += \
     src/component_edit_table.h \
     src/convergence_graph_dialog.h \
     src/convergence_graph_object.h \
+    src/convergence_graph_widget.h \
     src/cut_dialog.h \
     src/direction_widget.h \
     src/document_generator.h \

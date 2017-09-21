@@ -62,6 +62,9 @@ class RFileManager
         static QString getFileNameWithSuffix ( const QString &fileName,
                                                const QString &suffix );
 
+        //! Return file suffix.
+        static QString getSuffix ( const QString &fileName );
+
         //! Check if file exists.
         static bool fileExists ( const QString &fileName );
 

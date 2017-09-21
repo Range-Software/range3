@@ -140,6 +140,41 @@ QString RFileManager::getFileNameWithSuffix(const QString &fileName, const QStri
     return RFileManager::removeExtension(fileName) + "-" + suffix + "." + RFileManager::getExtension(fileName);
 }
 
+QString RFileManager::getSuffix(const QString &fileName)
+{
+    if (fileName.isEmpty())
+    {
+        return QString();
+    }
+
+    int dashPos = fileName.lastIndexOf("-");
+    int dotPos = fileName.lastIndexOf(".");
+
+    if (dotPos < 0)
+    {
+        dotPos = fileName.size();
+    }
+
+    if (dashPos < 0)
+    {
+        return QString();
+    }
+
+    if (dashPos != dotPos && dotPos > dashPos)
+    {
+        QString suffix(fileName);
+
+        suffix.remove(dotPos,suffix.length() - dotPos);
+        suffix.remove(0,dashPos);
+
+        return suffix;
+    }
+    else
+    {
+        return QString();
+    }
+}
+
 bool RFileManager::fileExists(const QString &fileName)
 {
     return QFile::exists(fileName);
