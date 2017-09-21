@@ -430,6 +430,8 @@ void MainWindow::createMenus(void)
     menuHelp->addAction(this->actionList->getAction(ACTION_APPLICATION_UPDATE));
     menuHelp->addAction(this->actionList->getAction(ACTION_APPLICATION_ABOUT));
     menuHelp->addAction(this->actionList->getAction(ACTION_APPLICATION_ABOUT_QT));
+    menuHelp->addAction(this->actionList->getAction(ACTION_APPLICATION_LICENSE));
+    menuHelp->addAction(this->actionList->getAction(ACTION_APPLICATION_RELEASE_NOTES));
     menubar->addAction(menuHelp->menuAction());
 }
 
@@ -571,7 +573,7 @@ void MainWindow::createApplicationOutputDock(void)
     layoutApplicationOutput = new QWidget();
     layoutApplicationOutput->setObjectName(QString::fromUtf8("layoutApplicationOutput"));
 
-    this->applicationOutputBrowser = new TextBrowser(layoutApplicationOutput);
+    this->applicationOutputBrowser = new TextBrowser(true,layoutApplicationOutput);
     this->applicationOutputBrowser->setObjectName(QString::fromUtf8("applicationOutputBrowser"));
 
     gridLayoutApplicationOutput = new QGridLayout(layoutApplicationOutput);
@@ -595,7 +597,7 @@ void MainWindow::createProcessOutputDock(void)
     layoutProcessOutput = new QWidget();
     layoutProcessOutput->setObjectName(QString::fromUtf8("layoutProcessOutput"));
 
-    this->processOutputBrowser = new TextBrowser(layoutProcessOutput);
+    this->processOutputBrowser = new TextBrowser(true,layoutProcessOutput);
     this->processOutputBrowser->setObjectName(QString::fromUtf8("processOutputBrowser"));
 
     gridLayoutProcessOutput = new QGridLayout(layoutProcessOutput);

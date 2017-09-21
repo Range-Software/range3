@@ -59,6 +59,7 @@
 #include "solver_start_dialog.h"
 #include "solver_manager.h"
 #include "scalar_field_dialog.h"
+#include "text_browser_dialog.h"
 #include "update_dialog.h"
 #include "vector_field_dialog.h"
 
@@ -1818,14 +1819,10 @@ void Action::onUpdate(void)
 
 void Action::onAbout(void)
 {
-    QString releaseNotesUrl = "file:" + MainSettings::getInstance().findReleaseNotesFileName();
-    QString licenseUrl = "file:" + MainSettings::getInstance().findLicenseFileName();
-
     QString title = tr("About");
     QString body = QString("<h1>") + RVendor::name + QString(" ") + QString::number(RVendor::version.getMajor()) + QString("</h1>")
                  + QString("<h2>") + RVendor::description + QString("</h2>")
-                 + RVendor::version.toString() + QString(" (<a href=\"") + releaseNotesUrl + QString("\">") + tr("release notes") + QString("</a>)<br/>")
-                 + QString("<a href=\"") + licenseUrl + QString("\">") + RVendor::name + " " + tr("license") + QString("</a><br/>")
+                 + RVendor::version.toString()
                  + QString("<br/>")
                  + RVendor::author + QString(" &copy; ") + QString::number(RVendor::year) + QString("<br/>")
                  + QString("<a href=\"mailto:") + RVendor::email + QString("\">") + RVendor::email + QString("</a><br/>")
@@ -1839,5 +1836,63 @@ void Action::onAboutQt(void)
     QString title = tr("About Qt");
 
     QMessageBox::aboutQt(this->mainWindow,title);
+}
+
+void Action::onLicense(void)
+{
+    QString licenseFileName(MainSettings::getInstance().findLicenseFileName());
+
+    try
+    {
+        QFile file(licenseFileName);
+        if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+        {
+            throw RError(R_ERROR_OPEN_FILE,R_ERROR_REF,"Failed to open the file \'%s\'.",licenseFileName.toUtf8().constData());
+        }
+        QString licenseText(file.readAll());
+        file.close();
+
+        TextBrowserDialog textBrowserDialog(tr("License"),
+                                            licenseFileName,
+                                            licenseText);
+        textBrowserDialog.exec();
+    }
+    catch (const RError &rError)
+    {
+        RLogger::error("Failed to display license from file \'%s\'. %s\n",licenseFileName.toUtf8().constData(),rError.getMessage().toUtf8().constData());
+    }
+    catch (...)
+    {
+        RLogger::error("Failed to display license from file \'%s\'.\n",licenseFileName.toUtf8().constData());
+    }
+}
+
+void Action::onReleaseNotes(void)
+{
+    QString releaseNotesFileName(MainSettings::getInstance().findReleaseNotesFileName());
+
+    try
+    {
+        QFile file(releaseNotesFileName);
+        if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+        {
+            throw RError(R_ERROR_OPEN_FILE,R_ERROR_REF,"Failed to open the file \'%s\'.",releaseNotesFileName.toUtf8().constData());
+        }
+        QString releaseNotesText(file.readAll());
+        file.close();
+
+        TextBrowserDialog textBrowserDialog(tr("Release notes"),
+                                            releaseNotesFileName,
+                                            releaseNotesText);
+        textBrowserDialog.exec();
+    }
+    catch (const RError &rError)
+    {
+        RLogger::error("Failed to display release notes from file \'%s\'. %s\n",releaseNotesFileName.toUtf8().constData(),rError.getMessage().toUtf8().constData());
+    }
+    catch (...)
+    {
+        RLogger::error("Failed to display release notes from file \'%s\'.\n",releaseNotesFileName.toUtf8().constData());
+    }
 }
 

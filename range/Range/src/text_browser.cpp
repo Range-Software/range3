@@ -10,31 +10,38 @@
 
 #include "text_browser.h"
 
-TextBrowser::TextBrowser(QWidget *parent) :
-    QTextBrowser(parent)
+TextBrowser::TextBrowser(bool hasClearButton, QWidget *parent)
+  : QTextBrowser(parent)
+  , hasClearButton(hasClearButton)
 {
     QFont font("Monospace");
     font.setStyleHint(QFont::TypeWriter);
     this->setFont(font);
 
-    QIcon clearIcon(":/icons/file/pixmaps/range-clear.svg");
+    if (this->hasClearButton)
+    {
+        QIcon clearIcon(":/icons/file/pixmaps/range-clear.svg");
 
-    this->clearButton = new QPushButton(clearIcon,"Clear",this);
+        this->clearButton = new QPushButton(clearIcon,"Clear",this);
 
-    QObject::connect(this->clearButton,
-                     &QPushButton::clicked,
-                     this,
-                     &TextBrowser::clear);
+        QObject::connect(this->clearButton,
+                         &QPushButton::clicked,
+                         this,
+                         &TextBrowser::clear);
+    }
 }
 
 void TextBrowser::resizeEvent(QResizeEvent *event)
 {
+    if (!this->hasClearButton)
+    {
+        return;
+    }
     QTextBrowser::resizeEvent(event);
 
     int bw = this->clearButton->width();
     int bh = this->clearButton->height();
     int tw = this->width();
-//    int th = this->height();
 
     int x = tw - bw - 25;
     int y = 5;

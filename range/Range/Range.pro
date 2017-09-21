@@ -185,6 +185,7 @@ SOURCES += \
     src/stream_line_dialog.cpp \
     src/sub_window.cpp \
     src/sub_window_manager.cpp \
+    src/text_browser_dialog.cpp \
     src/text_browser.cpp \
     src/time_solver_setup_widget.cpp \
     src/update_dialog.cpp \
@@ -374,6 +375,7 @@ HEADERS += \
     src/stream_line_dialog.h \
     src/sub_window.h \
     src/sub_window_manager.h \
+    src/text_browser_dialog.h \
     src/text_browser.h \
     src/time_solver_setup_widget.h \
     src/update_dialog.h \

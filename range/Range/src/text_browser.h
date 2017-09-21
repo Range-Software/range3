@@ -21,22 +21,20 @@ class TextBrowser : public QTextBrowser
 
     protected:
 
+        //! Clear button enabled.
+        bool hasClearButton;
         //! Clear button.
         QPushButton *clearButton;
 
     public:
 
         //! Constructor.
-        explicit TextBrowser(QWidget *parent = 0);
+        explicit TextBrowser(bool hasClearButton, QWidget *parent = 0);
 
     protected:
 
         //! Resize event.
         virtual void resizeEvent(QResizeEvent *event);
-        
-    signals:
-        
-    public slots:
         
 };
 

@@ -323,6 +323,12 @@ class Action : public QAction
         //! About Qt.
         void onAboutQt(void);
 
+        //! License.
+        void onLicense(void);
+
+        //! Release notes.
+        void onReleaseNotes(void);
+
 };
 
 #endif // __ACTION_H__

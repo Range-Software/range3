@@ -188,6 +188,8 @@ void ActionDefinition::generateActionDescList(QList<ActionDefinitionItem> &actio
     actionDesc.push_back(ActionDefinitionItem(ACTION_APPLICATION_UPDATE, ACTION_GROUP_APPLICATION, "Update", "", ":/icons/file/pixmaps/range-download.svg", &Action::onUpdate));
     actionDesc.push_back(ActionDefinitionItem(ACTION_APPLICATION_ABOUT, ACTION_GROUP_APPLICATION, "About", "F1", ":/icons/logos/pixmaps/range-logo-128.png", &Action::onAbout));
     actionDesc.push_back(ActionDefinitionItem(ACTION_APPLICATION_ABOUT_QT, ACTION_GROUP_APPLICATION, "About Qt", "", ":/icons/file/pixmaps/range-qt.svg", &Action::onAboutQt));
+    actionDesc.push_back(ActionDefinitionItem(ACTION_APPLICATION_LICENSE, ACTION_GROUP_APPLICATION, "License", "", ":/icons/logos/pixmaps/range-logo-128.png", &Action::onLicense));
+    actionDesc.push_back(ActionDefinitionItem(ACTION_APPLICATION_RELEASE_NOTES, ACTION_GROUP_APPLICATION, "Release notes", "", ":/icons/logos/pixmaps/range-logo-128.png", &Action::onReleaseNotes));
     actionDesc.push_back(ActionDefinitionItem(ACTION_APPLICATION_QUIT, ACTION_GROUP_APPLICATION, "Quit", "Q", ":/icons/file/pixmaps/range-quit.svg", &Action::onQuit));
     actionDesc.push_back(ActionDefinitionItem(ACTION_SEPARATOR, ACTION_GROUP_NONE, "", "", "", 0));
 }

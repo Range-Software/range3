@@ -81,7 +81,7 @@ void StreamLineDialog::createDialog(void)
     this->resize(400,300);
 
     QString windowTitleStr = tr("Stream line editor");
-    this->setWindowTitle(tr(windowTitleStr.toUtf8().constData()));
+    this->setWindowTitle(windowTitleStr);
 
     QGridLayout *mainLayout = new QGridLayout;
     this->setLayout (mainLayout);
