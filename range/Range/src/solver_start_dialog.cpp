@@ -33,7 +33,6 @@ SolverStartDialog::SolverStartDialog(uint modelID, QWidget *parent)
     solverSetupChecker.perform(this->warnings,this->errors);
 
     this->setWindowTitle(QString("Start solver"));
-    this->resize(600,300);
 
     QIcon cancelIcon(":/icons/file/pixmaps/range-cancel.svg");
     QIcon okIcon(":/icons/file/pixmaps/range-ok.svg");
@@ -49,12 +48,6 @@ SolverStartDialog::SolverStartDialog(uint modelID, QWidget *parent)
 
     if (this->warnings.size() || this->errors.size())
     {
-//        QGroupBox *messageBox = new QGroupBox(tr("Warnings and/or Errors"));
-//        mainLayout->addWidget(messageBox);
-
-//        QVBoxLayout *messagesLayout = new QVBoxLayout;
-//        messageBox->setLayout(messagesLayout);
-
         QTextBrowser *messagesBrowser = new QTextBrowser;
         mainLayout->addWidget(messagesBrowser);
 
@@ -91,6 +84,8 @@ SolverStartDialog::SolverStartDialog(uint modelID, QWidget *parent)
         QTextCursor textCursor = messagesBrowser->textCursor();
         textCursor.movePosition(QTextCursor::Start);
         messagesBrowser->setTextCursor(textCursor);
+
+        this->resize(600,300);
     }
 
     this->restartSolverCheck = new QCheckBox("Restart solver / continue");
