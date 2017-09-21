@@ -1,4 +1,10 @@
 ------------------------------------------------------------------
+Version 3.0.alpha_4
+
+- Faster matrix assembly in Fluid solver
+- Can display multiple convergence logs
+
+------------------------------------------------------------------
 Version 3.0.alpha_3
 
 - Added "limit value" scale to highlight values outside min/max range
