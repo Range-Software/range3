@@ -93,6 +93,8 @@ class GLWidget : public QOpenGLWidget
         bool showRotationSphere;
         //! Widget's font.
         QFont font;
+        //! Use GL_CULL_FACE
+        bool useGlCullFace;
 
     public:
 
@@ -126,11 +128,17 @@ class GLWidget : public QOpenGLWidget
         //! Return reference display properties.
         GLDisplayProperties &getGLDisplayProperties(void);
 
-        //! return whether to use void GL model list.
+        //! Return whether to use void GL model list.
         bool getUseGLVoidModelList(void) const;
 
         //! Set whether to use void GL model list.
         void setUseGLVoidModelList(bool useGlVoidModelList);
+
+        //! Return whether to use GL_CULL_FACE.
+        bool getUseGlCullFace(void) const;
+
+        //! Set whether to use GL_CULL_FACE.
+        void setUseGlCullFace(bool useGlCullFace);
 
         //! Take screenshot.
         void takeScreenShot(const QString &fileName);

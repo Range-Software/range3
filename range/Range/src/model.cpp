@@ -1756,6 +1756,7 @@ void Model::glDraw(GLWidget *glWidget, bool useGlLists) const
             glElementGroup.setParentModel(this);
             glElementGroup.setSurfaceThickness(this->getSurface(i).getThickness());
             glElementGroup.setUseGlList(useGlLists);
+            glElementGroup.setUseGlCullFace(glWidget->getUseGlCullFace());
             glElementGroup.paint();
         }
 

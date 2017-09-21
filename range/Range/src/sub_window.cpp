@@ -87,6 +87,11 @@ void SubWindow::createSubWindow(void)
     spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     toolBar->addWidget(spacer);
 
+    QCheckBox *backSideColorCheck = new QCheckBox(tr("Back side color"));
+    toolBar->addWidget(backSideColorCheck);
+
+    QObject::connect(backSideColorCheck,&QCheckBox::stateChanged,this,&SubWindow::onBackSideColorChanged);
+
     ClippingPlaneWidget *clippingPlaneWidget = new ClippingPlaneWidget;
     toolBar->addWidget(clippingPlaneWidget);
 
@@ -178,6 +183,11 @@ void SubWindow::onShowErrorsToggled(bool checked)
     this->glWidget->getGLDisplayProperties().setShowErrors(checked);
     this->glWidget->getGLDisplayProperties().store();
     this->glWidget->update();
+}
+
+void SubWindow::onBackSideColorChanged(int state)
+{
+    this->glWidget->setUseGlCullFace(state == Qt::Unchecked);
 }
 
 void SubWindow::onPreferences(void)

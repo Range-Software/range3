@@ -20,7 +20,7 @@ ClippingPlaneWidget::ClippingPlaneWidget(QWidget *parent) :
     QHBoxLayout *layout = new QHBoxLayout;
     this->setLayout(layout);
 
-    this->enabledCheck = new QCheckBox(tr("Enable clipping plane"));
+    this->enabledCheck = new QCheckBox(tr("Clipping plane"));
     this->enabledCheck->setChecked(isEnabled);
     layout->addWidget(this->enabledCheck);
 

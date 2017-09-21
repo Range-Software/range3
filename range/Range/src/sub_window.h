@@ -82,6 +82,9 @@ class SubWindow : public QMdiSubWindow
         //! Show errors.
         void onShowErrorsToggled(bool checked);
 
+        //! Back side color check toggled.
+        void onBackSideColorChanged(int state);
+
         //! Edit preferences.
         void onPreferences(void);
 

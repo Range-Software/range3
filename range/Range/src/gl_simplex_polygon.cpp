@@ -175,6 +175,10 @@ void GLSimplexPolygon::drawNormal(const std::vector<RNode> &nodes1, const std::v
         GL_SAFE_CALL(glEnable(GL_CULL_FACE));
         GL_SAFE_CALL(glCullFace(GL_BACK));
     }
+    else
+    {
+        GL_SAFE_CALL(glDisable(GL_CULL_FACE));
+    }
 
     GLFunctions::begin(GL_POLYGON);
     for (uint i=0;i<nn;i++)
@@ -233,16 +237,19 @@ void GLSimplexPolygon::drawNormal(const std::vector<RNode> &nodes1, const std::v
         GL_SAFE_CALL(glDisable(GL_TEXTURE_1D));
     }
 
-    this->getGLWidget()->qglColor(Qt::white);
-
-    GLObject::glNormalVector(normal);
-
-    GLFunctions::begin(GL_POLYGON);
-    for (uint i=0;i<nn;i++)
+    if (this->useGlCullFace)
     {
-        GLObject::glVertexNode(nodes2[i]);
+        this->getGLWidget()->qglColor(Qt::white);
+
+        GLObject::glNormalVector(normal);
+
+        GLFunctions::begin(GL_POLYGON);
+        for (uint i=0;i<nn;i++)
+        {
+            GLObject::glVertexNode(nodes2[i]);
+        }
+        GLFunctions::end();
     }
-    GLFunctions::end();
 
     GL_SAFE_CALL(glCullFace(cullMode));
     GL_SAFE_CALL(cullState ? glEnable(GL_CULL_FACE) : glDisable(GL_CULL_FACE));

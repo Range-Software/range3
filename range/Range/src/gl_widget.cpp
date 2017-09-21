@@ -51,7 +51,8 @@ GLWidget::GLWidget(uint modelID, QWidget *parent)
       useGlVoidModelList(false),
       clippingPlaneEnabled(false),
       clippingPlaneDistance(0.5),
-      showRotationSphere(false)
+      showRotationSphere(false),
+      useGlCullFace(true)
 {
     this->setFocusPolicy(Qt::StrongFocus);
     this->setAutoFillBackground(false);
@@ -1588,6 +1589,21 @@ bool GLWidget::getUseGLVoidModelList(void) const
 void GLWidget::setUseGLVoidModelList(bool useGlVoidModelList)
 {
     this->useGlVoidModelList = useGlVoidModelList;
+}
+
+bool GLWidget::getUseGlCullFace(void) const
+{
+    return this->useGlCullFace;
+}
+
+void GLWidget::setUseGlCullFace(bool useGlCullFace)
+{
+    bool isDifferent = this->useGlCullFace != useGlCullFace;
+    this->useGlCullFace = useGlCullFace;
+    if (isDifferent)
+    {
+        Session::getInstance().setModelChanged(this->modelID);
+    }
 }
 
 void GLWidget::takeScreenShot(const QString &fileName)

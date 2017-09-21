@@ -317,6 +317,7 @@ void GLElementGroup::draw(void)
             glElement.setPointVolume(this->pointVolume);
             glElement.setLineCrossArea(this->lineCrossArea);
             glElement.setSurfaceThickness(this->surfaceThickness);
+            glElement.setUseGlCullFace(this->getUseGlCullFace());
             glElement.paint(paintAction);
         }
         if (this->getUseGlList())
