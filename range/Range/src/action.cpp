@@ -1748,7 +1748,29 @@ void Action::onReportConvergenceGraph(void)
 
     for (int i=0;i<modelIDs.size();i++)
     {
-        QStringList fileNames(RFileManager::findFiles(Session::getInstance().getModel(modelIDs[i]).buildTmpFileName("cvg",QString("*"))));
+        QStringList fileNames;
+
+        QString filePattern(Session::getInstance().getModel(modelIDs[i]).buildTmpFileName("cvg",QString("*")));
+
+        std::vector<RProblemType> problemTypes = RProblem::getTypes(R_PROBLEM_ALL);
+        for (uint i=0;i<problemTypes.size();i++)
+        {
+            QString fileName(RFileManager::findLastFile(RFileManager::getFileNameWithSuffix(filePattern,RProblem::getId(problemTypes[i]))));
+            if (!fileName.isEmpty())
+            {
+                fileNames.append(fileName);
+            }
+        }
+
+        for (RMatrixSolverType type=RMatrixSolverConf::None;type<RMatrixSolverConf::NTypes;type++)
+        {
+            QString fileName(RFileManager::findLastFile(RFileManager::getFileNameWithSuffix(filePattern,RMatrixSolverConf::getId(type))));
+            if (!fileName.isEmpty())
+            {
+                fileNames.append(fileName);
+            }
+        }
+
         if (fileNames.isEmpty())
         {
             QMessageBox::information(this->mainWindow,tr("No convergence file"),tr("There is no file containing convergence values."));

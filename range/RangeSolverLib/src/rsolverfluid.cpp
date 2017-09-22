@@ -464,7 +464,6 @@ void RSolverFluid::solve(void)
     {
         RLogger::indent();
         RMatrixSolver matrixSolver(this->pModel->getMatrixSolverConf(RMatrixSolverConf::GMRES));
-        matrixSolver.disableConvergenceLogFile();
         matrixSolver.solve(this->A,this->b,this->x,R_MATRIX_PRECONDITIONER_JACOBI,1);
         RLogger::unindent();
     }

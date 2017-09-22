@@ -692,7 +692,17 @@ bool Session::selectedModelsHasEntities(REntityGroupTypeMask entityTypeMask)
             ||
             ((entityTypeMask & R_ENTITY_GROUP_SURFACE) && Session::getInstance().getModel(modelIDs[i]).getNSurfaces())
             ||
-            ((entityTypeMask & R_ENTITY_GROUP_VOLUME) && Session::getInstance().getModel(modelIDs[i]).getNVolumes()))
+            ((entityTypeMask & R_ENTITY_GROUP_VOLUME) && Session::getInstance().getModel(modelIDs[i]).getNVolumes())
+            ||
+            ((entityTypeMask & R_ENTITY_GROUP_CUT) && Session::getInstance().getModel(modelIDs[i]).getNCuts())
+            ||
+            ((entityTypeMask & R_ENTITY_GROUP_ISO) && Session::getInstance().getModel(modelIDs[i]).getNIsos())
+            ||
+            ((entityTypeMask & R_ENTITY_GROUP_STREAM_LINE) && Session::getInstance().getModel(modelIDs[i]).getNStreamLines())
+            ||
+            ((entityTypeMask & R_ENTITY_GROUP_SCALAR_FIELD) && Session::getInstance().getModel(modelIDs[i]).getNScalarFields())
+            ||
+            ((entityTypeMask & R_ENTITY_GROUP_VECTOR_FIELD) && Session::getInstance().getModel(modelIDs[i]).getNVectorFields()))
         {
             return true;
         }
