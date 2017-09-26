@@ -8,6 +8,8 @@
  *  DESCRIPTION: OpenGL acion event class definition                 *
  *********************************************************************/
 
+#include <QGuiApplication>
+
 #include "gl_acion_event.h"
 
 typedef struct _GLActionCombination
@@ -73,7 +75,7 @@ void GLActionEvent::setKeyEvent(QKeyEvent *keyEvent, bool release)
 {
     GLActionEventType prevType = this->getType();
     this->key = release ? 0 : keyEvent->key();
-    this->keyModifiers = release ? Qt::NoModifier : keyEvent->modifiers();
+    this->keyModifiers = QGuiApplication::queryKeyboardModifiers();
     GLActionEventType currType = this->getType();
     this->actionChanged = (prevType != currType);
     emit this->changed(currType);
