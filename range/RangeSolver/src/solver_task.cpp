@@ -36,6 +36,7 @@ SolverTask::SolverTask(const SolverInput &solverInput, QCoreApplication *app, QO
 
 void SolverTask::run(void)
 {
+    RLogger::info("Threads = %u (max=%d)\n", this->nThreads, omp_get_max_threads());
     omp_set_num_threads(this->nThreads);
 
     RModel model;

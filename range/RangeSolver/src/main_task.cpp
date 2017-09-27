@@ -87,7 +87,7 @@ void MainTask::run(void)
         {
             solverInput.setMonitoringFileName(argumentsParser.getValue("monitoring-file").toString());
         }
-        if (argumentsParser.isSet("nthreads="))
+        if (argumentsParser.isSet("nthreads"))
         {
             solverInput.setNThreads(argumentsParser.getValue("nthreads").toUInt());
         }
