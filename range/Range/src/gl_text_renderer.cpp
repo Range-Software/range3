@@ -49,8 +49,6 @@ void GLTextRenderer::clear(void)
     this->list.clear();
 }
 
-#include <QBrush>
-
 void GLTextRenderer::render(QPainter &painter) const
 {
     foreach (GLTextRendererItem item, this->list)
