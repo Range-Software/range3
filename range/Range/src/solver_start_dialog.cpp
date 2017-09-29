@@ -53,27 +53,27 @@ SolverStartDialog::SolverStartDialog(uint modelID, QWidget *parent)
 
         QString htmlMessage;
 
-        if (this->warnings.size() > 0)
-        {
-            htmlMessage = "<h3>" + tr("Warnings") + "</h3>";
-            htmlMessage += "<ul>";
-            for (int i=0;i<this->warnings.size();i++)
-            {
-                htmlMessage += "<li>";
-                htmlMessage +=this->warnings.at(i);
-                htmlMessage += "</li>";
-            }
-            htmlMessage += "</ul>";
-        }
-
         if (this->errors.size() > 0)
         {
-            htmlMessage = "<h3>" + tr("Errors") + "</h3>";
+            htmlMessage += "<h3>" + tr("Errors") + "</h3>";
             htmlMessage += "<ul>";
             for (int i=0;i<this->errors.size();i++)
             {
                 htmlMessage += "<li>";
                 htmlMessage +=this->errors.at(i);
+                htmlMessage += "</li>";
+            }
+            htmlMessage += "</ul>";
+        }
+
+        if (this->warnings.size() > 0)
+        {
+            htmlMessage += "<h3>" + tr("Warnings") + "</h3>";
+            htmlMessage += "<ul>";
+            for (int i=0;i<this->warnings.size();i++)
+            {
+                htmlMessage += "<li>";
+                htmlMessage +=this->warnings.at(i);
                 htmlMessage += "</li>";
             }
             htmlMessage += "</ul>";
