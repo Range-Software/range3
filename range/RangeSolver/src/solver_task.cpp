@@ -79,7 +79,7 @@ void SolverTask::run(void)
     {
         if (!license.validateRecord(RProblem::getId(problemTypes[i]),this->account,this->password))
         {
-            RLogger::warning("Missing license for \'%s\' (product-id: %s)\n",
+            RLogger::warning("Invalid license for \'%s\' (product-id: %s)\n",
                              RProblem::getName(problemTypes[i]).toUtf8().constData(),
                              RProblem::getId(problemTypes[i]).toUtf8().constData());
             licenseValid = false;

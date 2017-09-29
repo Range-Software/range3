@@ -40,10 +40,10 @@ SolverTask::SolverTask(const ApplicationSettings *applicationSettings, uint mode
         for (uint i=0;i<problemTypes.size();i++)
         {
             if (!license.validateRecord(RProblem::getId(problemTypes[i]),
-                                         MainSettings::getInstance().getApplicationSettings()->getRangeAccount(),
-                                         MainSettings::getInstance().getApplicationSettings()->getRangePassword()))
+                                        MainSettings::getInstance().getApplicationSettings()->getRangeAccount(),
+                                        MainSettings::getInstance().getApplicationSettings()->getRangePassword()))
             {
-                RLogger::warning("Missing license for \'%s\' (product-id: %s)\n",
+                RLogger::warning("Invalid license for \'%s\' (product-id: %s)\n",
                                  RProblem::getName(problemTypes[i]).toUtf8().constData(),
                                  RProblem::getId(problemTypes[i]).toUtf8().constData());
             }

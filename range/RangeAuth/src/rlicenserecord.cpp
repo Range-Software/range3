@@ -139,6 +139,10 @@ QString RLicenseRecord::generateAuthCode(const QString &account, const QString &
 
 bool RLicenseRecord::validate(const QString &account, const QString &password) const
 {
+    if (this->getExpirationDate() < QDate::currentDate())
+    {
+        return false;
+    }
     return (this->code == this->generateAuthCode(account,password));
 }
 
