@@ -89,7 +89,22 @@ QString RFileManager::getFileNameWithTimeStep(const QString &fileName, unsigned 
         dashPos = dotPos;
     }
 
+    bool replace = true;
     if (dashPos != dotPos && (dotPos-dashPos-1) == int(numberWidth))
+    {
+        for (uint i=0;i<numberWidth;i++)
+        {
+            if (!fileName[i+dashPos].isDigit())
+            {
+                replace = false;
+            }
+        }
+    }
+    else
+    {
+        replace = false;
+    }
+    if (replace)
     {
         fileNameWithTs.replace(dashPos+1,dotPos-dashPos-1,timeStepString);
     }
@@ -123,6 +138,13 @@ QString RFileManager::getFileNameWithOutTimeStep(const QString &fileName, unsign
 
     if (dashPos != dotPos && (dotPos-dashPos-1) == int(numberWidth))
     {
+        for (uint i=0;i<numberWidth;i++)
+        {
+            if (!fileName[i+dashPos].isDigit())
+            {
+                return fileName;
+            }
+        }
         QString fileNameWithoutTs(fileName);
 
         fileNameWithoutTs.remove(dashPos,dotPos-dashPos);
