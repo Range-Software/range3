@@ -45,33 +45,22 @@ class ModelRecordsTreeRecordID
         uint recordNumber;
 };
 
-typedef enum _ModelRecordsTreeColumn
-{
-    MODEL_RECORDS_TREE_COLUMN_MARKED = 0,
-    MODEL_RECORDS_TREE_COLUMN_MODEL_ID,
-    MODEL_RECORDS_TREE_COLUMN_IS_RECORD,
-    MODEL_RECORDS_TREE_COLUMN_RECORD_NUMBER,
-    MODEL_RECORDS_TREE_COLUMN_RECORD_FILENAME,
-    MODEL_RECORDS_TREE_COLUMN_PATH_FILENAME,
-    MODEL_RECORDS_TREE_N_COLUMNS
-} ModelRecordsTreeColumn;
-
 ModelRecordsTree::ModelRecordsTree(QWidget *parent) :
     QTreeWidget(parent)
 {
-    this->setColumnCount(MODEL_RECORDS_TREE_N_COLUMNS);
+    this->setColumnCount(ModelRecordsTree::NColumns);
     this->setSelectionMode(QAbstractItemView::SingleSelection);
     this->setRootIsDecorated(false);
     this->setAutoScroll(false);
     QTreeWidgetItem* headerItem = new QTreeWidgetItem();
-    headerItem->setText(MODEL_RECORDS_TREE_COLUMN_RECORD_NUMBER,QString(tr("Record")));
-    headerItem->setText(MODEL_RECORDS_TREE_COLUMN_RECORD_FILENAME,QString(tr("File name")));
-    headerItem->setIcon(MODEL_RECORDS_TREE_COLUMN_MARKED,QIcon(":/icons/media/pixmaps/range-play_play.svg"));
+    headerItem->setText(ModelRecordsTree::RecordNumber,QString(tr("Record")));
+    headerItem->setText(ModelRecordsTree::RecordFileName,QString(tr("File name")));
+    headerItem->setIcon(ModelRecordsTree::Marked,QIcon(":/icons/media/pixmaps/range-play_play.svg"));
     this->setHeaderItem(headerItem);
 
-    this->setColumnHidden(MODEL_RECORDS_TREE_COLUMN_MODEL_ID,true);
-    this->setColumnHidden(MODEL_RECORDS_TREE_COLUMN_IS_RECORD,true);
-    this->setColumnHidden(MODEL_RECORDS_TREE_COLUMN_PATH_FILENAME,true);
+    this->setColumnHidden(ModelRecordsTree::ModelID,true);
+    this->setColumnHidden(ModelRecordsTree::IsRecord,true);
+    this->setColumnHidden(ModelRecordsTree::PathFileName,true);
 
     this->populate();
 
@@ -119,10 +108,10 @@ bool ModelRecordsTree::isFirst(void)
         QTreeWidgetItemIterator it(this);
         while (*it)
         {
-            if ((*it)->data(MODEL_RECORDS_TREE_COLUMN_IS_RECORD,Qt::UserRole).toBool() &&
-                (*it)->data(MODEL_RECORDS_TREE_COLUMN_MODEL_ID,Qt::UserRole).toUInt() == modelID)
+            if ((*it)->data(ModelRecordsTree::IsRecord,Qt::UserRole).toBool() &&
+                (*it)->data(ModelRecordsTree::ModelID,Qt::UserRole).toUInt() == modelID)
             {
-                if ((*it)->data(MODEL_RECORDS_TREE_COLUMN_MARKED,Qt::UserRole).toBool())
+                if ((*it)->data(ModelRecordsTree::Marked,Qt::UserRole).toBool())
                 {
                     return true;
                 }
@@ -146,10 +135,10 @@ bool ModelRecordsTree::isLast(void)
         QTreeWidgetItemIterator it(this);
         while (*it)
         {
-            if ((*it)->data(MODEL_RECORDS_TREE_COLUMN_IS_RECORD,Qt::UserRole).toBool() &&
-                (*it)->data(MODEL_RECORDS_TREE_COLUMN_MODEL_ID,Qt::UserRole).toUInt() == modelID)
+            if ((*it)->data(ModelRecordsTree::IsRecord,Qt::UserRole).toBool() &&
+                (*it)->data(ModelRecordsTree::ModelID,Qt::UserRole).toUInt() == modelID)
             {
-                if ((*it)->data(MODEL_RECORDS_TREE_COLUMN_MARKED,Qt::UserRole).toBool())
+                if ((*it)->data(ModelRecordsTree::Marked,Qt::UserRole).toBool())
                 {
                     marked = true;
                 }
@@ -178,13 +167,13 @@ void ModelRecordsTree::markCurrent(void)
         QTreeWidgetItemIterator it(this);
         while (*it)
         {
-            if ((*it)->data(MODEL_RECORDS_TREE_COLUMN_IS_RECORD,Qt::UserRole).toBool() &&
-                (*it)->data(MODEL_RECORDS_TREE_COLUMN_MODEL_ID,Qt::UserRole).toUInt() == modelID)
+            if ((*it)->data(ModelRecordsTree::IsRecord,Qt::UserRole).toBool() &&
+                (*it)->data(ModelRecordsTree::ModelID,Qt::UserRole).toUInt() == modelID)
             {
-                if ((*it)->data(MODEL_RECORDS_TREE_COLUMN_MARKED,Qt::UserRole).toBool())
+                if ((*it)->data(ModelRecordsTree::Marked,Qt::UserRole).toBool())
                 {
-                    emit this->recordMarked((*it)->data(MODEL_RECORDS_TREE_COLUMN_MODEL_ID,Qt::UserRole).toUInt(),
-                                            (*it)->text(MODEL_RECORDS_TREE_COLUMN_PATH_FILENAME));
+                    emit this->recordMarked((*it)->data(ModelRecordsTree::ModelID,Qt::UserRole).toUInt(),
+                                            (*it)->text(ModelRecordsTree::PathFileName));
                 }
             }
             ++it;
@@ -205,18 +194,18 @@ void ModelRecordsTree::markPrevious(void)
         QTreeWidgetItemIterator it(this);
         while (*it)
         {
-            if ((*it)->data(MODEL_RECORDS_TREE_COLUMN_MARKED,Qt::UserRole).toBool() &&
-                (*it)->data(MODEL_RECORDS_TREE_COLUMN_MODEL_ID,Qt::UserRole).toUInt() == modelID)
+            if ((*it)->data(ModelRecordsTree::Marked,Qt::UserRole).toBool() &&
+                (*it)->data(ModelRecordsTree::ModelID,Qt::UserRole).toUInt() == modelID)
             {
                 if (prevItem)
                 {
-                    (*it)->setData(MODEL_RECORDS_TREE_COLUMN_MARKED,Qt::UserRole,QVariant(false));
-                    prevItem->setData(MODEL_RECORDS_TREE_COLUMN_MARKED,Qt::UserRole,QVariant(true));
+                    (*it)->setData(ModelRecordsTree::Marked,Qt::UserRole,QVariant(false));
+                    prevItem->setData(ModelRecordsTree::Marked,Qt::UserRole,QVariant(true));
                 }
                 break;
             }
-            if ((*it)->data(MODEL_RECORDS_TREE_COLUMN_IS_RECORD,Qt::UserRole).toBool() &&
-                (*it)->data(MODEL_RECORDS_TREE_COLUMN_MODEL_ID,Qt::UserRole).toUInt() == modelID)
+            if ((*it)->data(ModelRecordsTree::IsRecord,Qt::UserRole).toBool() &&
+                (*it)->data(ModelRecordsTree::ModelID,Qt::UserRole).toUInt() == modelID)
             {
                 prevItem = (*it);
             }
@@ -242,17 +231,17 @@ void ModelRecordsTree::markNext(void)
         {
             if (markItem)
             {
-                if ((*it)->data(MODEL_RECORDS_TREE_COLUMN_MODEL_ID,Qt::UserRole).toUInt() == modelID)
+                if ((*it)->data(ModelRecordsTree::ModelID,Qt::UserRole).toUInt() == modelID)
                 {
-                    prevItem->setData(MODEL_RECORDS_TREE_COLUMN_MARKED,Qt::UserRole,false);
-                    (*it)->setData(MODEL_RECORDS_TREE_COLUMN_MARKED,Qt::UserRole,true);
+                    prevItem->setData(ModelRecordsTree::Marked,Qt::UserRole,false);
+                    (*it)->setData(ModelRecordsTree::Marked,Qt::UserRole,true);
                 }
                 break;
             }
-            if ((*it)->data(MODEL_RECORDS_TREE_COLUMN_MARKED,Qt::UserRole).toBool() &&
-                (*it)->data(MODEL_RECORDS_TREE_COLUMN_MODEL_ID,Qt::UserRole).toUInt() == modelID)
+            if ((*it)->data(ModelRecordsTree::Marked,Qt::UserRole).toBool() &&
+                (*it)->data(ModelRecordsTree::ModelID,Qt::UserRole).toUInt() == modelID)
             {
-                modelID = (*it)->data(MODEL_RECORDS_TREE_COLUMN_MODEL_ID,Qt::UserRole).toUInt();
+                modelID = (*it)->data(ModelRecordsTree::ModelID,Qt::UserRole).toUInt();
                 prevItem = (*it);
                 markItem = true;
             }
@@ -273,10 +262,10 @@ void ModelRecordsTree::markFirst(void)
         QTreeWidgetItemIterator it(this);
         while (*it)
         {
-            if ((*it)->data(MODEL_RECORDS_TREE_COLUMN_MODEL_ID,Qt::UserRole).toUInt() == modelID &&
-                (*it)->data(MODEL_RECORDS_TREE_COLUMN_IS_RECORD,Qt::UserRole).toBool())
+            if ((*it)->data(ModelRecordsTree::ModelID,Qt::UserRole).toUInt() == modelID &&
+                (*it)->data(ModelRecordsTree::IsRecord,Qt::UserRole).toBool())
             {
-                (*it)->setData(MODEL_RECORDS_TREE_COLUMN_MARKED,Qt::UserRole,isFirst);
+                (*it)->setData(ModelRecordsTree::Marked,Qt::UserRole,isFirst);
                 isFirst = false;
             }
             ++it;
@@ -298,7 +287,7 @@ void ModelRecordsTree::markLast(void)
         QTreeWidgetItemIterator it(this);
         while (*it)
         {
-            if ((*it)->data(MODEL_RECORDS_TREE_COLUMN_MODEL_ID,Qt::UserRole).toUInt() == modelID)
+            if ((*it)->data(ModelRecordsTree::ModelID,Qt::UserRole).toUInt() == modelID)
             {
                 lastItem = (*it);
                 itemID1++;
@@ -306,19 +295,19 @@ void ModelRecordsTree::markLast(void)
             ++it;
         }
 
-        if (lastItem && !lastItem->data(MODEL_RECORDS_TREE_COLUMN_MARKED,Qt::UserRole).toBool())
+        if (lastItem && !lastItem->data(ModelRecordsTree::Marked,Qt::UserRole).toBool())
         {
-            lastItem->setData(MODEL_RECORDS_TREE_COLUMN_MARKED,Qt::UserRole,true);
+            lastItem->setData(ModelRecordsTree::Marked,Qt::UserRole,true);
 
             QTreeWidgetItemIterator it(this);
             while (*it)
             {
-                if ((*it)->data(MODEL_RECORDS_TREE_COLUMN_MODEL_ID,Qt::UserRole).toUInt() == modelID)
+                if ((*it)->data(ModelRecordsTree::ModelID,Qt::UserRole).toUInt() == modelID)
                 {
                     itemID2++;
                     if (itemID1 != itemID2)
                     {
-                        (*it)->setData(MODEL_RECORDS_TREE_COLUMN_MARKED,Qt::UserRole,false);
+                        (*it)->setData(ModelRecordsTree::Marked,Qt::UserRole,false);
                     }
                 }
                 ++it;
@@ -342,9 +331,9 @@ void ModelRecordsTree::populate(void)
 
     for (int i=0;i<selectedItemList.size();i++)
     {
-        ModelRecordsTreeRecordID recordID(selectedItemList.at(i)->data(MODEL_RECORDS_TREE_COLUMN_MODEL_ID,Qt::UserRole).toUInt(),
-                                          selectedItemList.at(i)->data(MODEL_RECORDS_TREE_COLUMN_IS_RECORD,Qt::UserRole).toBool(),
-                                          selectedItemList.at(i)->data(MODEL_RECORDS_TREE_COLUMN_RECORD_NUMBER,Qt::DisplayRole).toUInt());
+        ModelRecordsTreeRecordID recordID(selectedItemList.at(i)->data(ModelRecordsTree::ModelID,Qt::UserRole).toUInt(),
+                                          selectedItemList.at(i)->data(ModelRecordsTree::IsRecord,Qt::UserRole).toBool(),
+                                          selectedItemList.at(i)->data(ModelRecordsTree::RecordNumber,Qt::DisplayRole).toUInt());
         selectedIDs[recordID] = true;
     }
 
@@ -358,10 +347,10 @@ void ModelRecordsTree::populate(void)
 
         QTreeWidgetItem *item = new QTreeWidgetItem(this);
         item->setFirstColumnSpanned(true);
-        item->setData(MODEL_RECORDS_TREE_COLUMN_MODEL_ID,Qt::UserRole,QVariant(i));
-        item->setData(MODEL_RECORDS_TREE_COLUMN_IS_RECORD,Qt::UserRole,QVariant(false));
-        item->setData(MODEL_RECORDS_TREE_COLUMN_MARKED,Qt::UserRole,QVariant(false));
-        item->setText(MODEL_RECORDS_TREE_COLUMN_MARKED,rModel.getName());
+        item->setData(ModelRecordsTree::ModelID,Qt::UserRole,QVariant(i));
+        item->setData(ModelRecordsTree::IsRecord,Qt::UserRole,QVariant(false));
+        item->setData(ModelRecordsTree::Marked,Qt::UserRole,QVariant(false));
+        item->setText(ModelRecordsTree::Marked,rModel.getName());
 
         item->setSelected(selectedIDs.constFind(ModelRecordsTreeRecordID(i,false,0)) != selectedIDs.constEnd());
 
@@ -375,11 +364,11 @@ void ModelRecordsTree::populate(void)
                 QString elipsizeFileName = fi.baseName();
 
                 QTreeWidgetItem *childItem = new QTreeWidgetItem(item);
-                childItem->setData(MODEL_RECORDS_TREE_COLUMN_MODEL_ID,Qt::UserRole,QVariant(i));
-                childItem->setData(MODEL_RECORDS_TREE_COLUMN_IS_RECORD,Qt::UserRole,QVariant(true));
-                childItem->setData(MODEL_RECORDS_TREE_COLUMN_RECORD_NUMBER,Qt::DisplayRole,QVariant(j+1));
-                childItem->setText(MODEL_RECORDS_TREE_COLUMN_RECORD_FILENAME,elipsizeFileName);
-                childItem->setText(MODEL_RECORDS_TREE_COLUMN_PATH_FILENAME,recordFiles[j]);
+                childItem->setData(ModelRecordsTree::ModelID,Qt::UserRole,QVariant(i));
+                childItem->setData(ModelRecordsTree::IsRecord,Qt::UserRole,QVariant(true));
+                childItem->setData(ModelRecordsTree::RecordNumber,Qt::DisplayRole,QVariant(j+1));
+                childItem->setText(ModelRecordsTree::RecordFileName,elipsizeFileName);
+                childItem->setText(ModelRecordsTree::PathFileName,recordFiles[j]);
                 uint recordNumber = 0;
                 if (rModel.getTimeSolver().getEnabled())
                 {
@@ -394,12 +383,12 @@ void ModelRecordsTree::populate(void)
                 }
                 if (Session::getInstance().isModelSelected(i) && recordNumber == uint(j))
                 {
-                    childItem->setIcon(MODEL_RECORDS_TREE_COLUMN_MARKED,QIcon(":/icons/media/pixmaps/range-play_play.svg"));
-                    childItem->setData(MODEL_RECORDS_TREE_COLUMN_MARKED,Qt::UserRole,QVariant(true));
+                    childItem->setIcon(ModelRecordsTree::Marked,QIcon(":/icons/media/pixmaps/range-play_play.svg"));
+                    childItem->setData(ModelRecordsTree::Marked,Qt::UserRole,QVariant(true));
                 }
                 else
                 {
-                    childItem->setData(MODEL_RECORDS_TREE_COLUMN_MARKED,Qt::UserRole,QVariant(false));
+                    childItem->setData(ModelRecordsTree::Marked,Qt::UserRole,QVariant(false));
                 }
 
                 childItem->setSelected(selectedIDs.constFind(ModelRecordsTreeRecordID(i,true,j+1)) != selectedIDs.constEnd());
@@ -413,9 +402,9 @@ void ModelRecordsTree::populate(void)
         this->takeTopLevelItem(0);
     }
 
-    this->resizeColumnToContents(MODEL_RECORDS_TREE_COLUMN_RECORD_NUMBER);
-    this->resizeColumnToContents(MODEL_RECORDS_TREE_COLUMN_RECORD_FILENAME);
-    this->resizeColumnToContents(MODEL_RECORDS_TREE_COLUMN_MARKED);
+    this->resizeColumnToContents(ModelRecordsTree::RecordNumber);
+    this->resizeColumnToContents(ModelRecordsTree::RecordFileName);
+    this->resizeColumnToContents(ModelRecordsTree::Marked);
 
     this->blockSignals(false);
 
@@ -428,17 +417,17 @@ void ModelRecordsTree::onModelSelectionChanged(uint modelID)
     QTreeWidgetItemIterator it(this);
     while (*it)
     {
-        if ((*it)->data(MODEL_RECORDS_TREE_COLUMN_IS_RECORD,Qt::UserRole).toBool() &&
-            (*it)->data(MODEL_RECORDS_TREE_COLUMN_MARKED,Qt::UserRole).toBool() &&
-            (*it)->data(MODEL_RECORDS_TREE_COLUMN_MODEL_ID,Qt::UserRole).toUInt() == modelID)
+        if ((*it)->data(ModelRecordsTree::IsRecord,Qt::UserRole).toBool() &&
+            (*it)->data(ModelRecordsTree::Marked,Qt::UserRole).toBool() &&
+            (*it)->data(ModelRecordsTree::ModelID,Qt::UserRole).toUInt() == modelID)
         {
             if (Session::getInstance().isModelSelected(modelID))
             {
-                (*it)->setIcon(MODEL_RECORDS_TREE_COLUMN_MARKED,QIcon(":/icons/media/pixmaps/range-play_play.svg"));
+                (*it)->setIcon(ModelRecordsTree::Marked,QIcon(":/icons/media/pixmaps/range-play_play.svg"));
             }
             else
             {
-                (*it)->setData(MODEL_RECORDS_TREE_COLUMN_MARKED,Qt::DecorationRole,QVariant());
+                (*it)->setData(ModelRecordsTree::Marked,Qt::DecorationRole,QVariant());
             }
         }
         ++it;
@@ -453,7 +442,7 @@ void ModelRecordsTree::onModelChanged(uint modelID)
 
 void ModelRecordsTree::onItemChanged(QTreeWidgetItem *item, int column)
 {
-    if (column != MODEL_RECORDS_TREE_COLUMN_MARKED)
+    if (column != ModelRecordsTree::Marked)
     {
         return;
     }
@@ -462,43 +451,43 @@ void ModelRecordsTree::onItemChanged(QTreeWidgetItem *item, int column)
 
     this->blockSignals(true);
 
-    if (item->data(MODEL_RECORDS_TREE_COLUMN_MARKED,Qt::UserRole).toBool() &&
-        Session::getInstance().isModelSelected(item->data(MODEL_RECORDS_TREE_COLUMN_MODEL_ID,Qt::UserRole).toUInt()))
+    if (item->data(ModelRecordsTree::Marked,Qt::UserRole).toBool() &&
+        Session::getInstance().isModelSelected(item->data(ModelRecordsTree::ModelID,Qt::UserRole).toUInt()))
     {
-        item->setIcon(MODEL_RECORDS_TREE_COLUMN_MARKED,QIcon(":/icons/media/pixmaps/range-play_play.svg"));
+        item->setIcon(ModelRecordsTree::Marked,QIcon(":/icons/media/pixmaps/range-play_play.svg"));
         recordMarkedIndicator = true;
     }
     else
     {
-        item->setData(MODEL_RECORDS_TREE_COLUMN_MARKED,Qt::DecorationRole,QVariant());
+        item->setData(ModelRecordsTree::Marked,Qt::DecorationRole,QVariant());
     }
 
     this->blockSignals(false);
 
     if (recordMarkedIndicator)
     {
-        emit this->recordMarked(item->data(MODEL_RECORDS_TREE_COLUMN_MODEL_ID,Qt::UserRole).toUInt(),
-                                item->text(MODEL_RECORDS_TREE_COLUMN_PATH_FILENAME));
+        emit this->recordMarked(item->data(ModelRecordsTree::ModelID,Qt::UserRole).toUInt(),
+                                item->text(ModelRecordsTree::PathFileName));
     }
 }
 
 void ModelRecordsTree::onItemActivated(QTreeWidgetItem *item, int column)
 {
-    uint modelID = item->data(MODEL_RECORDS_TREE_COLUMN_MODEL_ID,Qt::UserRole).toUInt();
+    uint modelID = item->data(ModelRecordsTree::ModelID,Qt::UserRole).toUInt();
 
     QTreeWidgetItemIterator it(this);
     while (*it)
     {
-        if ((*it)->data(MODEL_RECORDS_TREE_COLUMN_IS_RECORD,Qt::UserRole).toBool() &&
-            (*it)->data(MODEL_RECORDS_TREE_COLUMN_MARKED,Qt::UserRole).toBool() &&
-            (*it)->data(MODEL_RECORDS_TREE_COLUMN_MODEL_ID,Qt::UserRole).toUInt() == modelID)
+        if ((*it)->data(ModelRecordsTree::IsRecord,Qt::UserRole).toBool() &&
+            (*it)->data(ModelRecordsTree::Marked,Qt::UserRole).toBool() &&
+            (*it)->data(ModelRecordsTree::ModelID,Qt::UserRole).toUInt() == modelID)
         {
-            (*it)->setData(MODEL_RECORDS_TREE_COLUMN_MARKED,Qt::UserRole,false);
+            (*it)->setData(ModelRecordsTree::Marked,Qt::UserRole,false);
         }
         ++it;
     }
-    if (!item->data(MODEL_RECORDS_TREE_COLUMN_MARKED,Qt::UserRole).toBool())
+    if (!item->data(ModelRecordsTree::Marked,Qt::UserRole).toBool())
     {
-        item->setData(MODEL_RECORDS_TREE_COLUMN_MARKED,Qt::UserRole,true);
+        item->setData(ModelRecordsTree::Marked,Qt::UserRole,true);
     }
 }

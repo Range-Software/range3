@@ -18,6 +18,19 @@ class ModelRecordsTree : public QTreeWidget
 
     Q_OBJECT
 
+    protected:
+
+        enum ModelRecordsTreeColumn
+        {
+            Marked = 0,
+            ModelID,
+            IsRecord,
+            RecordNumber,
+            RecordFileName,
+            PathFileName,
+            NColumns
+        };
+
     public:
 
         //! Constructor.
