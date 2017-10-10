@@ -11,9 +11,9 @@
 #ifndef __RSOLVERCONTAMINANT_H__
 #define __RSOLVERCONTAMINANT_H__
 
-#include "rsolvergeneric.h"
+#include "rsolverfluid.h"
 
-class RSolverContaminant : public RSolverGeneric
+class RSolverContaminant : public RSolverFluid
 {
 
     protected:
@@ -65,6 +65,18 @@ class RSolverContaminant : public RSolverGeneric
 
         //! Process statistics.
         void statistics(void);
+
+        //! Compute element matrix.
+        void computeElement(unsigned int elementID, RRMatrix &Ae, RRVector &be, MatrixManager &matrixManager);
+
+        //! Compute element matrix.
+        void computeElementGeneral(unsigned int elementID, RRMatrix &Ae, RRVector &be, MatrixManager &matrixManager);
+
+        //! Compute tetrahedra element matrix.
+        void computeElementConstantDerivative(unsigned int elementID, RRMatrix &Ae, RRVector &be, MatrixManager &matrixManager);
+
+        //! Assembly matrix.
+        void assemblyMatrix(unsigned int elementID, const RRMatrix &Ae, const RRVector &be);
 
 };
 

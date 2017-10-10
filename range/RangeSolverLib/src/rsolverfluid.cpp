@@ -324,10 +324,6 @@ void RSolverFluid::prepare(void)
         this->computeFreePressureNodeHeight();
         this->computeElementScales();
         this->computeShapeDerivatives();
-    }
-
-    if (this->taskIteration == 0)
-    {
         this->streamVelocity = this->computeStreamVelocity(false);
     }
 
@@ -443,6 +439,7 @@ void RSolverFluid::prepare(void)
             #pragma omp flush (abort)
         }
     }
+
     if (abort)
     {
         RLogger::unindent();
@@ -1149,19 +1146,19 @@ void RSolverFluid::clearShapeDerivatives(void)
     }
 }
 
-void RSolverFluid::computeElement(unsigned int elementID, RRMatrix &Ae, RRVector &be, MatrixManager &matrtixManager)
+void RSolverFluid::computeElement(unsigned int elementID, RRMatrix &Ae, RRVector &be, MatrixManager &matrixManager)
 {
     if (RElement::hasConstantDerivative(this->pModel->getElement(elementID).getType()))
     {
-        this->computeElementConstantDerivative(elementID,Ae,be,matrtixManager);
+        this->computeElementConstantDerivative(elementID,Ae,be,matrixManager);
     }
     else
     {
-        this->computeElementGeneral(elementID,Ae,be,matrtixManager);
+        this->computeElementGeneral(elementID,Ae,be,matrixManager);
     }
 }
 
-void RSolverFluid::computeElementGeneral(unsigned int elementID, RRMatrix &Ae, RRVector &be, MatrixManager &matrtixManager)
+void RSolverFluid::computeElementGeneral(unsigned int elementID, RRMatrix &Ae, RRVector &be, MatrixManager &matrixManager)
 {
     bool unsteady = (this->pModel->getTimeSolver().getEnabled());
 
@@ -1175,7 +1172,7 @@ void RSolverFluid::computeElementGeneral(unsigned int elementID, RRMatrix &Ae, R
     Ae.fill(0.0);
     be.fill(0.0);
 
-    MatrixContainer &matrixCotainer = matrtixManager.getMatricies(element.getType());
+    MatrixContainer &matrixCotainer = matrixManager.getMatricies(element.getType());
     matrixCotainer.clear();
 
     // Element level matricies
@@ -1658,7 +1655,7 @@ void RSolverFluid::computeElementGeneral(unsigned int elementID, RRMatrix &Ae, R
     }
 }
 
-void RSolverFluid::computeElementConstantDerivative(unsigned int elementID, RRMatrix &Ae, RRVector &be, MatrixManager &matrtixManager)
+void RSolverFluid::computeElementConstantDerivative(unsigned int elementID, RRMatrix &Ae, RRVector &be, MatrixManager &matrixManager)
 {
     bool unsteady = (this->pModel->getTimeSolver().getEnabled());
 
@@ -1671,7 +1668,7 @@ void RSolverFluid::computeElementConstantDerivative(unsigned int elementID, RRMa
     Ae.fill(0.0);
     be.fill(0.0);
 
-    MatrixContainer &matrixCotainer = matrtixManager.getMatricies(element.getType());
+    MatrixContainer &matrixCotainer = matrixManager.getMatricies(element.getType());
     matrixCotainer.clear();
 
     // Element level matricies

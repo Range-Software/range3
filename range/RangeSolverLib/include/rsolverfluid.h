@@ -130,13 +130,13 @@ class RSolverFluid : public RSolverGeneric
         void clearShapeDerivatives(void);
 
         //! Compute element matrix.
-        void computeElement(unsigned int elementID, RRMatrix &Ae, RRVector &be, MatrixManager &matrtixManager);
+        void computeElement(unsigned int elementID, RRMatrix &Ae, RRVector &be, MatrixManager &matrixManager);
 
         //! Compute element matrix.
-        void computeElementGeneral(unsigned int elementID, RRMatrix &Ae, RRVector &be, MatrixManager &matrtixManager);
+        void computeElementGeneral(unsigned int elementID, RRMatrix &Ae, RRVector &be, MatrixManager &matrixManager);
 
         //! Compute tetrahedra element matrix.
-        void computeElementConstantDerivative(unsigned int elementID, RRMatrix &Ae, RRVector &be, MatrixManager &matrtixManager);
+        void computeElementConstantDerivative(unsigned int elementID, RRMatrix &Ae, RRVector &be, MatrixManager &matrixManager);
 
         //! Find Re scale.
         double findReScale(void) const;
@@ -146,7 +146,6 @@ class RSolverFluid : public RSolverGeneric
 
         //! Compute element scales.
         void computeElementScales(void);
-
 
         //! Find stream velocity.
         double computeStreamVelocity(bool averageBased) const;
