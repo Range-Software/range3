@@ -21,6 +21,12 @@ class RSolverContaminant : public RSolverFluid
         //! Node particle concentration.
         RRVector nodeConcentration;
 
+        //! Element density.
+        RRVector elementDiffusion;
+
+        //! Concentration convergence.
+        double cvgC;
+
     private:
 
         //! Internal initialization function.

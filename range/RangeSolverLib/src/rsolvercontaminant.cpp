@@ -8,7 +8,10 @@
  *  DESCRIPTION: Contaminant solver class definition                 *
  *********************************************************************/
 
+#include <omp.h>
+
 #include "rsolvercontaminant.h"
+#include "rmatrixsolver.h"
 
 class MatrixContainer
 {
@@ -89,12 +92,14 @@ void RSolverContaminant::_init(const RSolverContaminant *pSolver)
 {
     if (pSolver)
     {
-
+        this->elementDiffusion = pSolver->elementDiffusion;
+        this->cvgC = pSolver->cvgC;
     }
 }
 
 RSolverContaminant::RSolverContaminant(RModel *pModel, const QString &modelFileName, const QString &convergenceFileName, RSolverSharedData &sharedData)
     : RSolverFluid(pModel,modelFileName,convergenceFileName,sharedData)
+    , cvgC(0.0)
 {
     this->problemType = R_PROBLEM_CONTAMINANT;
     this->_init();
@@ -156,7 +161,8 @@ void RSolverContaminant::prepare(void)
         RSolverGeneric::generateNodeBook(this->problemType);
 
         this->generateMaterialVecor(R_MATERIAL_PROPERTY_DENSITY,this->elementDensity);
-        this->generateMaterialVecor(R_MATERIAL_PROPERTY_DYNAMIC_VISCOSITY,this->elementViscosity);
+        this->elementDiffusion.resize(this->pModel->getNElements());
+        this->elementDiffusion.fill(0.0);
 
         this->computeElementScales();
         this->computeShapeDerivatives();
@@ -239,7 +245,50 @@ void RSolverContaminant::prepare(void)
 
 void RSolverContaminant::solve(void)
 {
+    RLogger::info("Solving matrix system\n");
+    RLogger::indent();
 
+    this->solverStopWatch.reset();
+    this->solverStopWatch.resume();
+
+    try
+    {
+        RLogger::indent();
+        RMatrixSolver matrixSolver(this->pModel->getMatrixSolverConf(RMatrixSolverConf::GMRES));
+        matrixSolver.solve(this->A,this->b,this->x,R_MATRIX_PRECONDITIONER_JACOBI,1);
+        RLogger::unindent();
+    }
+    catch (RError error)
+    {
+        RLogger::unindent();
+        throw error;
+    }
+
+    this->solverStopWatch.pause();
+
+    this->nodeConcentration.resize(this->pModel->getNNodes(),0.0);
+
+    this->updateStopWatch.reset();
+    this->updateStopWatch.resume();
+
+    double cOld = RRVector::norm(this->nodeConcentration);
+
+    for (uint i=0;i<this->pModel->getNNodes();i++)
+    {
+        uint position = 0;
+        if (this->nodeBook.getValue(i,position))
+        {
+            this->nodeConcentration[i] = std::max(this->x[position],0.0);
+        }
+    }
+
+    double c = RRVector::norm(this->nodeConcentration);
+
+    this->cvgC = (c - cOld) / this->scales.findScaleFactor(R_VARIABLE_PARTICLE_CONCENTRATION);
+
+    this->updateStopWatch.pause();
+
+    RLogger::unindent();
 }
 
 void RSolverContaminant::process(void)
@@ -249,12 +298,60 @@ void RSolverContaminant::process(void)
 
 void RSolverContaminant::store(void)
 {
+    RLogger::info("Storing results\n");
+    RLogger::indent();
 
+    // Concentration
+    uint concentrationPos = this->pModel->findVariable(R_VARIABLE_PARTICLE_CONCENTRATION);
+    if (concentrationPos == RConstants::eod)
+    {
+        concentrationPos = this->pModel->addVariable(R_VARIABLE_PARTICLE_CONCENTRATION);
+
+        this->pModel->getVariable(concentrationPos).getVariableData().setMinMaxDisplayValue(
+                    RStatistics::findMinimumValue(this->nodeConcentration),
+                    RStatistics::findMaximumValue(this->nodeConcentration));
+    }
+    RVariable &concentration =  this->pModel->getVariable(concentrationPos);
+
+    concentration.setApplyType(R_VARIABLE_APPLY_NODE);
+    concentration.resize(1,this->pModel->getNNodes());
+    for (uint i=0;i<this->pModel->getNNodes();i++)
+    {
+        concentration.setValue(0,i,this->nodeConcentration[i]);
+    }
+
+    RLogger::unindent();
 }
 
 void RSolverContaminant::statistics(void)
 {
+    static uint counter = 0;
+    static double oldResidual = 0.0;
 
+    double scale = std::pow(this->scales.getSecond(),2) / this->scales.getKilogram();
+    double residual = RRVector::norm(this->b)*scale;
+    double convergence = residual - oldResidual;
+    oldResidual = residual;
+
+    std::vector<RIterationInfoValue> cvgValues;
+    cvgValues.push_back(RIterationInfoValue("Solver residual",residual));
+    cvgValues.push_back(RIterationInfoValue("Solver convergence",convergence));
+    cvgValues.push_back(RIterationInfoValue("Concentration convergence",this->cvgC));
+
+    RIterationInfo::writeToFile(this->convergenceFileName,counter,cvgValues);
+
+    this->printStats(R_VARIABLE_VELOCITY);
+    this->printStats(R_VARIABLE_PRESSURE);
+    this->processMonitoringPoints();
+
+    RLogger::info("Convergence:   %-13g\n",residual);
+
+    RLogger::info("Build time:    %9u [ms]\n",this->buildStopWatch.getMiliSeconds());
+    RLogger::info("Assembly time: %9u [ms]\n",this->assemblyStopWatch.getMiliSeconds());
+    RLogger::info("Solver time:   %9u [ms]\n",this->solverStopWatch.getMiliSeconds());
+    RLogger::info("Update time:   %9u [ms]\n",this->updateStopWatch.getMiliSeconds());
+
+    counter++;
 }
 
 void RSolverContaminant::computeElement(unsigned int elementID, RRMatrix &Ae, RRVector &be, MatrixManager &matrixManager)
@@ -282,8 +379,7 @@ void RSolverContaminant::computeElementConstantDerivative(unsigned int elementID
     uint nen = element.size();
 
     double ro = this->elementDensity[elementID];
-    double k = 0.0;
-//    double k = this->elementDiffusion[elementID];
+    double k = this->elementDiffusion[elementID];
 
     Ae.fill(0.0);
     be.fill(0.0);
@@ -390,6 +486,11 @@ void RSolverContaminant::computeElementConstantDerivative(unsigned int elementID
         if (unsteady)
         {
             be[m] = dt * fv[m];
+            for (uint n=0;n<nen;n++)
+            {
+                be[m] += (me[m][n] + cte[m][n] - (1.0 - alpha) * dt * (ce[m][n] + ke[m][n] + kte[m][n] + yte[m][n]))
+                       * this->nodeConcentration[element.getNodeId(n)];
+            }
         }
         else
         {
