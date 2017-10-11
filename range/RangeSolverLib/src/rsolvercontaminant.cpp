@@ -113,7 +113,6 @@ RSolverContaminant::RSolverContaminant(const RSolverContaminant &solver)
 
 RSolverContaminant::~RSolverContaminant()
 {
-    this->clearShapeDerivatives();
 }
 
 RSolverContaminant &RSolverContaminant::operator =(const RSolverContaminant &solver)
