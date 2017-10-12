@@ -844,7 +844,6 @@ void RSolverElectrostatics::assemblyMatrix(unsigned int elementID, const RRMatri
         }
     }
 
-
     // Assembly final matrix system
     for (uint m=0;m<element.size();m++)
     {

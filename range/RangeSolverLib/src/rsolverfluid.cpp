@@ -13,7 +13,7 @@
 #include "rsolverfluid.h"
 #include "rmatrixsolver.h"
 
-class MatrixContainer
+class FluidMatrixContainer
 {
     public:
 
@@ -66,7 +66,7 @@ class MatrixContainer
 
     public:
 
-        MatrixContainer() : initialized(false)
+        FluidMatrixContainer() : initialized(false)
         {
 
         }
@@ -162,30 +162,6 @@ class MatrixContainer
             this->be1.fill(0.0);
             this->be2.fill(0.0);
         }
-};
-
-class MatrixManager
-{
-    public:
-
-        std::vector<MatrixContainer> c;
-
-    public:
-
-        MatrixManager()
-        {
-            this->c.resize(R_ELEMENT_N_TYPES);
-        }
-
-        MatrixContainer &getMatricies(RElementType type)
-        {
-            if (!this->c[type].initialized)
-            {
-                this->c[type].resize(RElement::getNNodes(type));
-            }
-            return this->c[type];
-        }
-
 };
 
 void RSolverFluid::_init(const RSolverFluid *pSolver)
@@ -341,7 +317,7 @@ void RSolverFluid::prepare(void)
 
     bool abort = false;
 
-    MatrixManager matrixManager;
+    RMatrixManager<FluidMatrixContainer> matrixManager;
 
     // Compute element matrices
     #pragma omp parallel for default(shared) private(matrixManager)
@@ -1146,7 +1122,7 @@ void RSolverFluid::clearShapeDerivatives(void)
     }
 }
 
-void RSolverFluid::computeElement(unsigned int elementID, RRMatrix &Ae, RRVector &be, MatrixManager &matrixManager)
+void RSolverFluid::computeElement(unsigned int elementID, RRMatrix &Ae, RRVector &be, RMatrixManager<FluidMatrixContainer> &matrixManager)
 {
     if (RElement::hasConstantDerivative(this->pModel->getElement(elementID).getType()))
     {
@@ -1158,7 +1134,7 @@ void RSolverFluid::computeElement(unsigned int elementID, RRMatrix &Ae, RRVector
     }
 }
 
-void RSolverFluid::computeElementGeneral(unsigned int elementID, RRMatrix &Ae, RRVector &be, MatrixManager &matrixManager)
+void RSolverFluid::computeElementGeneral(unsigned int elementID, RRMatrix &Ae, RRVector &be, RMatrixManager<FluidMatrixContainer> &matrixManager)
 {
     bool unsteady = (this->pModel->getTimeSolver().getEnabled());
 
@@ -1172,7 +1148,7 @@ void RSolverFluid::computeElementGeneral(unsigned int elementID, RRMatrix &Ae, R
     Ae.fill(0.0);
     be.fill(0.0);
 
-    MatrixContainer &matrixCotainer = matrixManager.getMatricies(element.getType());
+    FluidMatrixContainer &matrixCotainer = matrixManager.getMatricies(element.getType());
     matrixCotainer.clear();
 
     // Element level matricies
@@ -1655,7 +1631,7 @@ void RSolverFluid::computeElementGeneral(unsigned int elementID, RRMatrix &Ae, R
     }
 }
 
-void RSolverFluid::computeElementConstantDerivative(unsigned int elementID, RRMatrix &Ae, RRVector &be, MatrixManager &matrixManager)
+void RSolverFluid::computeElementConstantDerivative(unsigned int elementID, RRMatrix &Ae, RRVector &be, RMatrixManager<FluidMatrixContainer> &matrixManager)
 {
     bool unsteady = (this->pModel->getTimeSolver().getEnabled());
 
@@ -1668,7 +1644,7 @@ void RSolverFluid::computeElementConstantDerivative(unsigned int elementID, RRMa
     Ae.fill(0.0);
     be.fill(0.0);
 
-    MatrixContainer &matrixCotainer = matrixManager.getMatricies(element.getType());
+    FluidMatrixContainer &matrixCotainer = matrixManager.getMatricies(element.getType());
     matrixCotainer.clear();
 
     // Element level matricies

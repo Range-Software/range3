@@ -12,8 +12,9 @@
 
 #include "rsolvercontaminant.h"
 #include "rmatrixsolver.h"
+#include "rmatrixmanager.h"
 
-class MatrixContainer
+class ContaminantMatrixContainer
 {
     public:
 
@@ -32,7 +33,7 @@ class MatrixContainer
 
     public:
 
-        MatrixContainer() : initialized(false)
+        ContaminantMatrixContainer() : initialized(false)
         {
 
         }
@@ -64,34 +65,12 @@ class MatrixContainer
         }
 };
 
-class MatrixManager
-{
-    public:
-
-        std::vector<MatrixContainer> c;
-
-    public:
-
-        MatrixManager()
-        {
-            this->c.resize(R_ELEMENT_N_TYPES);
-        }
-
-        MatrixContainer &getMatricies(RElementType type)
-        {
-            if (!this->c[type].initialized)
-            {
-                this->c[type].resize(RElement::getNNodes(type));
-            }
-            return this->c[type];
-        }
-
-};
-
 void RSolverContaminant::_init(const RSolverContaminant *pSolver)
 {
     if (pSolver)
     {
+        this->elementConcentration = pSolver->elementConcentration;
+        this->nodeConcentration = pSolver->nodeConcentration;
         this->elementDiffusion = pSolver->elementDiffusion;
         this->cvgC = pSolver->cvgC;
     }
@@ -113,7 +92,6 @@ RSolverContaminant::RSolverContaminant(const RSolverContaminant &solver)
 
 RSolverContaminant::~RSolverContaminant()
 {
-    this->clearShapeDerivatives();
 }
 
 RSolverContaminant &RSolverContaminant::operator =(const RSolverContaminant &solver)
@@ -152,22 +130,24 @@ void RSolverContaminant::prepare(void)
     this->buildStopWatch.reset();
     this->assemblyStopWatch.reset();
 
+    RBVector concentrationSetValues;
+
+    this->RSolverGeneric::generateNodeBook(R_PROBLEM_CONTAMINANT);
+
+    this->generateVariableVector(R_VARIABLE_PARTICLE_CONCENTRATION,this->elementConcentration,concentrationSetValues,true,this->firstRun,this->firstRun);
+    this->generateMaterialVecor(R_MATERIAL_PROPERTY_DENSITY,this->elementDensity);
+    this->elementDiffusion.resize(this->pModel->getNElements());
+    this->elementDiffusion.fill(0.0);
+
+    this->pModel->convertElementToNodeVector(this->elementConcentration,concentrationSetValues,this->nodeConcentration,true);
+
     this->pModel->convertNodeToElementVector(this->nodeVelocity.x,this->elementVelocity.x);
     this->pModel->convertNodeToElementVector(this->nodeVelocity.y,this->elementVelocity.y);
     this->pModel->convertNodeToElementVector(this->nodeVelocity.z,this->elementVelocity.z);
 
-    if (this->taskIteration == 0)
-    {
-        RSolverGeneric::generateNodeBook(this->problemType);
-
-        this->generateMaterialVecor(R_MATERIAL_PROPERTY_DENSITY,this->elementDensity);
-        this->elementDiffusion.resize(this->pModel->getNElements());
-        this->elementDiffusion.fill(0.0);
-
-        this->computeElementScales();
-        this->computeShapeDerivatives();
-        this->streamVelocity = this->computeStreamVelocity(false);
-    }
+    this->computeElementScales();
+    this->computeShapeDerivatives();
+    this->streamVelocity = this->computeStreamVelocity(false);
 
     this->b.resize(this->nodeBook.getNEnabled());
     this->x.resize(this->nodeBook.getNEnabled());
@@ -179,7 +159,7 @@ void RSolverContaminant::prepare(void)
 
     bool abort = false;
 
-    MatrixManager matrixManager;
+    RMatrixManager<ContaminantMatrixContainer> matrixManager;
 
     // Compute element matrices
     #pragma omp parallel for default(shared) private(matrixManager)
@@ -354,7 +334,7 @@ void RSolverContaminant::statistics(void)
     counter++;
 }
 
-void RSolverContaminant::computeElement(unsigned int elementID, RRMatrix &Ae, RRVector &be, MatrixManager &matrixManager)
+void RSolverContaminant::computeElement(unsigned int elementID, RRMatrix &Ae, RRVector &be, RMatrixManager<ContaminantMatrixContainer> &matrixManager)
 {
     if (RElement::hasConstantDerivative(this->pModel->getElement(elementID).getType()))
     {
@@ -366,12 +346,12 @@ void RSolverContaminant::computeElement(unsigned int elementID, RRMatrix &Ae, RR
     }
 }
 
-void RSolverContaminant::computeElementGeneral(unsigned int elementID, RRMatrix &Ae, RRVector &be, MatrixManager &matrixManager)
+void RSolverContaminant::computeElementGeneral(unsigned int elementID, RRMatrix &Ae, RRVector &be, RMatrixManager<ContaminantMatrixContainer> &matrixManager)
 {
 
 }
 
-void RSolverContaminant::computeElementConstantDerivative(unsigned int elementID, RRMatrix &Ae, RRVector &be, MatrixManager &matrixManager)
+void RSolverContaminant::computeElementConstantDerivative(unsigned int elementID, RRMatrix &Ae, RRVector &be, RMatrixManager<ContaminantMatrixContainer> &matrixManager)
 {
     bool unsteady = (this->pModel->getTimeSolver().getEnabled());
 
@@ -384,7 +364,7 @@ void RSolverContaminant::computeElementConstantDerivative(unsigned int elementID
     Ae.fill(0.0);
     be.fill(0.0);
 
-    MatrixContainer &matrixCotainer = matrixManager.getMatricies(element.getType());
+    ContaminantMatrixContainer &matrixCotainer = matrixManager.getMatricies(element.getType());
     matrixCotainer.clear();
 
     // Element level matricies
@@ -506,6 +486,21 @@ void RSolverContaminant::computeElementConstantDerivative(unsigned int elementID
 void RSolverContaminant::assemblyMatrix(unsigned int elementID, const RRMatrix &Ae, const RRVector &be)
 {
     const RElement &rElement = this->pModel->getElement(elementID);
+    RRVector fe(be);
+
+    // Apply explicit boundary conditions.
+    for (uint m=0;m<rElement.size();m++)
+    {
+        uint position;
+        uint nodeID = rElement.getNodeId(m);
+        if (!this->nodeBook.getValue(nodeID,position))
+        {
+            for (uint n=0;n<rElement.size();n++)
+            {
+                fe[n] -= Ae[n][m] * this->nodeConcentration[nodeID];
+            }
+        }
+    }
 
     // Assembly final matrix system
     for (uint m=0;m<rElement.size();m++)
@@ -514,7 +509,7 @@ void RSolverContaminant::assemblyMatrix(unsigned int elementID, const RRMatrix &
 
         if (this->nodeBook.getValue(rElement.getNodeId(m),mp))
         {
-            this->b[mp] += be[m];
+            this->b[mp] += fe[m];
 
             for (uint n=0;n<rElement.size();n++)
             {

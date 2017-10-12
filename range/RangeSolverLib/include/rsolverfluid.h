@@ -11,9 +11,10 @@
 #ifndef __RSOLVERFLUID_H__
 #define __RSOLVERFLUID_H__
 
+#include "rmatrixmanager.h"
 #include "rsolvergeneric.h"
 
-class MatrixManager;
+class FluidMatrixContainer;
 
 class RSolverFluid : public RSolverGeneric
 {
@@ -130,13 +131,13 @@ class RSolverFluid : public RSolverGeneric
         void clearShapeDerivatives(void);
 
         //! Compute element matrix.
-        void computeElement(unsigned int elementID, RRMatrix &Ae, RRVector &be, MatrixManager &matrixManager);
+        void computeElement(unsigned int elementID, RRMatrix &Ae, RRVector &be, RMatrixManager<FluidMatrixContainer> &matrixManager);
 
         //! Compute element matrix.
-        void computeElementGeneral(unsigned int elementID, RRMatrix &Ae, RRVector &be, MatrixManager &matrixManager);
+        void computeElementGeneral(unsigned int elementID, RRMatrix &Ae, RRVector &be, RMatrixManager<FluidMatrixContainer> &matrixManager);
 
         //! Compute tetrahedra element matrix.
-        void computeElementConstantDerivative(unsigned int elementID, RRMatrix &Ae, RRVector &be, MatrixManager &matrixManager);
+        void computeElementConstantDerivative(unsigned int elementID, RRMatrix &Ae, RRVector &be, RMatrixManager<FluidMatrixContainer> &matrixManager);
 
         //! Find Re scale.
         double findReScale(void) const;

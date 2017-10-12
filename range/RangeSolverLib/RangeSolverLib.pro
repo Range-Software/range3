@@ -18,6 +18,7 @@ SOURCES += \
     src/riterationinfo.cpp \
     src/riterationinfovalue.cpp \
     src/rlocalrotation.cpp \
+    src/rmatrixmanager.cpp \
     src/rmatrixpreconditioner.cpp \
     src/rmatrixsolver.cpp \
     src/rscales.cpp \
@@ -44,6 +45,7 @@ HEADERS += \
     include/riterationinfo.h \
     include/riterationinfovalue.h \
     include/rlocalrotation.h \
+    include/rmatrixmanager.h \
     include/rmatrixpreconditioner.h \
     include/rmatrixsolver.h \
     include/rscales.h \

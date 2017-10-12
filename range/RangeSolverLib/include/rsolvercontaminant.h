@@ -13,10 +13,15 @@
 
 #include "rsolverfluid.h"
 
+class ContaminantMatrixContainer;
+
 class RSolverContaminant : public RSolverFluid
 {
 
     protected:
+
+        //! Element concentration.
+        RRVector elementConcentration;
 
         //! Node particle concentration.
         RRVector nodeConcentration;
@@ -73,13 +78,13 @@ class RSolverContaminant : public RSolverFluid
         void statistics(void);
 
         //! Compute element matrix.
-        void computeElement(unsigned int elementID, RRMatrix &Ae, RRVector &be, MatrixManager &matrixManager);
+        void computeElement(unsigned int elementID, RRMatrix &Ae, RRVector &be, RMatrixManager<ContaminantMatrixContainer> &matrixManager);
 
         //! Compute element matrix.
-        void computeElementGeneral(unsigned int elementID, RRMatrix &Ae, RRVector &be, MatrixManager &matrixManager);
+        void computeElementGeneral(unsigned int elementID, RRMatrix &Ae, RRVector &be, RMatrixManager<ContaminantMatrixContainer> &matrixManager);
 
         //! Compute tetrahedra element matrix.
-        void computeElementConstantDerivative(unsigned int elementID, RRMatrix &Ae, RRVector &be, MatrixManager &matrixManager);
+        void computeElementConstantDerivative(unsigned int elementID, RRMatrix &Ae, RRVector &be, RMatrixManager<ContaminantMatrixContainer> &matrixManager);
 
         //! Assembly matrix.
         void assemblyMatrix(unsigned int elementID, const RRMatrix &Ae, const RRVector &be);
