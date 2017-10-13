@@ -70,7 +70,9 @@ void RSolverContaminant::_init(const RSolverContaminant *pSolver)
     if (pSolver)
     {
         this->elementConcentration = pSolver->elementConcentration;
+        this->elementRate = pSolver->elementRate;
         this->nodeConcentration = pSolver->nodeConcentration;
+        this->nodeRate = pSolver->nodeRate;
         this->elementDiffusion = pSolver->elementDiffusion;
         this->cvgC = pSolver->cvgC;
     }
@@ -115,7 +117,18 @@ void RSolverContaminant::recover(void)
 {
     this->recoveryStopWatch.reset();
     this->recoveryStopWatch.resume();
-    this->recoverVariable(R_VARIABLE_PARTICLE_CONCENTRATION,R_VARIABLE_APPLY_NODE,this->pModel->getNNodes(),0,this->nodeConcentration,RVariable::getInitValue(R_VARIABLE_PARTICLE_CONCENTRATION));
+    this->recoverVariable(R_VARIABLE_PARTICLE_CONCENTRATION,
+                          R_VARIABLE_APPLY_NODE,
+                          this->pModel->getNNodes(),
+                          0,
+                          this->nodeConcentration,
+                          RVariable::getInitValue(R_VARIABLE_PARTICLE_CONCENTRATION));
+    this->recoverVariable(R_VARIABLE_PARTICLE_RATE,
+                          R_VARIABLE_APPLY_ELEMENT,
+                          this->pModel->getNNodes(),
+                          0,
+                          this->elementRate,
+                          RVariable::getInitValue(R_VARIABLE_PARTICLE_RATE));
     this->recoverVariable(R_VARIABLE_VELOCITY,R_VARIABLE_APPLY_NODE,this->pModel->getNNodes(),0,this->nodeVelocity.x,RVariable::getInitValue(R_VARIABLE_VELOCITY));
     this->recoverVariable(R_VARIABLE_VELOCITY,R_VARIABLE_APPLY_NODE,this->pModel->getNNodes(),1,this->nodeVelocity.y,RVariable::getInitValue(R_VARIABLE_VELOCITY));
     this->recoverVariable(R_VARIABLE_VELOCITY,R_VARIABLE_APPLY_NODE,this->pModel->getNNodes(),2,this->nodeVelocity.z,RVariable::getInitValue(R_VARIABLE_VELOCITY));
@@ -131,15 +144,19 @@ void RSolverContaminant::prepare(void)
     this->assemblyStopWatch.reset();
 
     RBVector concentrationSetValues;
+    RBVector rateSetValues;
 
     this->RSolverGeneric::generateNodeBook(R_PROBLEM_CONTAMINANT);
 
     this->generateVariableVector(R_VARIABLE_PARTICLE_CONCENTRATION,this->elementConcentration,concentrationSetValues,true,this->firstRun,this->firstRun);
+    this->generateVariableVector(R_VARIABLE_PARTICLE_RATE,this->elementRate,rateSetValues,true,this->firstRun,this->firstRun);
     this->generateMaterialVecor(R_MATERIAL_PROPERTY_DENSITY,this->elementDensity);
     this->elementDiffusion.resize(this->pModel->getNElements());
     this->elementDiffusion.fill(0.0);
 
     this->pModel->convertElementToNodeVector(this->elementConcentration,concentrationSetValues,this->nodeConcentration,true);
+    this->nodeRate.fill(0.0); // Particle rate on node is meant as an input - needs to be cleared
+    this->pModel->convertElementToNodeVector(this->elementRate,rateSetValues,this->nodeRate,true);
 
     this->pModel->convertNodeToElementVector(this->nodeVelocity.x,this->elementVelocity.x);
     this->pModel->convertNodeToElementVector(this->nodeVelocity.y,this->elementVelocity.y);
@@ -443,7 +460,7 @@ void RSolverContaminant::computeElementGeneral(unsigned int elementID, RRMatrix 
                 yte[m][n] = Tsupg * vdiv[m];
             }
             // f vector
-            fv[m] = 0.0;
+            fv[m] = this->elementRate[elementID] * N[m];
         }
 
         // Assembly element level matrixes
@@ -580,7 +597,7 @@ void RSolverContaminant::computeElementConstantDerivative(unsigned int elementID
             yte[m][n] = Tsupg * vdiv[m] * wt;
         }
         // f vector
-        fv[m] = 0.0;
+        fv[m] = this->nodeRate[element.getNodeId(m)] * iN[m];
     }
 
     // Assembly element level matrixes

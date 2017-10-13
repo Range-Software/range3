@@ -126,9 +126,9 @@ void ValueScale::setValue(double value)
     this->mantis = RUtil::frexp10(value,&this->exponent);
     this->mantis *= 10;
     this->exponent -= 1;
-    this->scaleEdit->setValue(value);
     this->mantisEdit->setValue(this->mantis);
     this->exponentSpinBox->setValue(this->exponent);
+    this->scaleEdit->setValue(value);
 }
 
 void ValueScale::onScaleEditChanged(double value)

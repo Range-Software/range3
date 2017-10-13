@@ -20,11 +20,15 @@ class RSolverContaminant : public RSolverFluid
 
     protected:
 
-        //! Element concentration.
+        //! Element particle concentration.
         RRVector elementConcentration;
+        //! Element particle rate.
+        RRVector elementRate;
 
         //! Node particle concentration.
         RRVector nodeConcentration;
+        //! Node particle rate.
+        RRVector nodeRate;
 
         //! Element density.
         RRVector elementDiffusion;

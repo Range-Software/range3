@@ -89,20 +89,18 @@ QString RFileManager::getFileNameWithTimeStep(const QString &fileName, unsigned 
         dashPos = dotPos;
     }
 
-    bool replace = true;
+    bool replace = false;
     if (dashPos != dotPos && (dotPos-dashPos-1) == int(numberWidth))
     {
+        replace = true;
         for (uint i=0;i<numberWidth;i++)
         {
-            if (!fileName[i+dashPos].isDigit())
+            if (!fileName[i+dashPos+1].isDigit())
             {
                 replace = false;
+                break;
             }
         }
-    }
-    else
-    {
-        replace = false;
     }
     if (replace)
     {

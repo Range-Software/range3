@@ -661,12 +661,12 @@ void ResultsVariableTree::onRangeAutofillClicked(void)
     {
         Model &model = Session::getInstance().getModel(selectedModelIDs[i]);
 
-        unsigned int temperaturePos = model.findVariable(this->variableType);
-        if (temperaturePos == RConstants::eod)
+        unsigned int variablePos = model.findVariable(this->variableType);
+        if (variablePos == RConstants::eod)
         {
             continue;
         }
-        RVariable &variable =  model.getVariable(temperaturePos);
+        RVariable &variable =  model.getVariable(variablePos);
 
         double minValue = variable.getMinValue();
         double maxValue = variable.getMaxValue();
