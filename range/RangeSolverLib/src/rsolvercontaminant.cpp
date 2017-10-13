@@ -460,7 +460,7 @@ void RSolverContaminant::computeElementGeneral(unsigned int elementID, RRMatrix 
                 yte[m][n] = Tsupg * vdiv[m];
             }
             // f vector
-            fv[m] = this->elementRate[elementID] * N[m];
+            fv[m] = this->nodeRate[element.getNodeId(m)] * N[m];
         }
 
         // Assembly element level matrixes
