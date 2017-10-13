@@ -71,15 +71,20 @@ void RSolverContaminant::_init(const RSolverContaminant *pSolver)
     {
         this->elementConcentration = pSolver->elementConcentration;
         this->elementRate = pSolver->elementRate;
+        this->elementVelocity = pSolver->elementVelocity;
+        this->streamVelocity = pSolver->streamVelocity;
         this->nodeConcentration = pSolver->nodeConcentration;
         this->nodeRate = pSolver->nodeRate;
+        this->nodeVelocity = pSolver->nodeVelocity;
+        this->elementDensity = pSolver->elementDensity;
         this->elementDiffusion = pSolver->elementDiffusion;
         this->cvgC = pSolver->cvgC;
     }
 }
 
 RSolverContaminant::RSolverContaminant(RModel *pModel, const QString &modelFileName, const QString &convergenceFileName, RSolverSharedData &sharedData)
-    : RSolverFluid(pModel,modelFileName,convergenceFileName,sharedData)
+    : RSolverGeneric(pModel,modelFileName,convergenceFileName,sharedData)
+    , streamVelocity(1.0)
     , cvgC(0.0)
 {
     this->problemType = R_PROBLEM_CONTAMINANT;
@@ -87,7 +92,7 @@ RSolverContaminant::RSolverContaminant(RModel *pModel, const QString &modelFileN
 }
 
 RSolverContaminant::RSolverContaminant(const RSolverContaminant &solver)
-    : RSolverFluid(solver)
+    : RSolverGeneric(solver)
 {
     this->_init(&solver);
 }
@@ -162,7 +167,6 @@ void RSolverContaminant::prepare(void)
     this->pModel->convertNodeToElementVector(this->nodeVelocity.y,this->elementVelocity.y);
     this->pModel->convertNodeToElementVector(this->nodeVelocity.z,this->elementVelocity.z);
 
-    this->computeElementScales();
     this->computeShapeDerivatives();
     this->streamVelocity = this->computeStreamVelocity(false);
 
@@ -349,6 +353,121 @@ void RSolverContaminant::statistics(void)
     RLogger::info("Update time:   %9u [ms]\n",this->updateStopWatch.getMiliSeconds());
 
     counter++;
+}
+
+double RSolverContaminant::computeStreamVelocity(bool averageBased) const
+{
+    double velocity = 1.0;
+
+    double totalArea = 0.0;
+    double totalVolurate = 0.0;
+
+    for (uint i=0;i<this->pModel->getNSurfaces();i++)
+    {
+        const RSurface &rSurface = this->pModel->getSurface(i);
+
+        bool hasVelocity = rSurface.hasBoundaryCondition(R_BOUNDARY_CONDITION_INFLOW_VELOCITY);
+        bool hasVolurate = rSurface.hasBoundaryCondition(R_BOUNDARY_CONDITION_INFLOW_VOLURATE);
+
+        double v = 0.0;
+        double q = 0.0;
+
+        if (!hasVelocity && !hasVolurate)
+        {
+            continue;
+        }
+
+        if (hasVelocity)
+        {
+            const RBoundaryCondition &rBoundaryCondition = rSurface.getBoundaryCondition(R_BOUNDARY_CONDITION_INFLOW_VELOCITY);
+            uint vp = rBoundaryCondition.findComponentPosition(R_VARIABLE_VELOCITY);
+            if (vp != RConstants::eod)
+            {
+                v = rBoundaryCondition.getComponent(vp).get(this->pModel->getTimeSolver().getCurrentTime());
+            }
+        }
+
+        if (hasVolurate)
+        {
+            const RBoundaryCondition &rBoundaryCondition = rSurface.getBoundaryCondition(R_BOUNDARY_CONDITION_INFLOW_VOLURATE);
+            uint vp = rBoundaryCondition.findComponentPosition(R_VARIABLE_VOLUME_FLOW_RATE);
+            if (vp != RConstants::eod)
+            {
+                q = rBoundaryCondition.getComponent(vp).get(this->pModel->getTimeSolver().getCurrentTime());
+            }
+        }
+
+        double area = rSurface.findArea(this->pModel->getNodes(),this->pModel->getElements());
+        if (area < RConstants::eps)
+        {
+            continue;
+        }
+        if (hasVelocity)
+        {
+            q = v * area;
+        }
+        totalArea += area;
+        totalVolurate += std::fabs(q);
+    }
+
+    if (totalArea < RConstants::eps)
+    {
+        velocity = 1.0;
+    }
+    else
+    {
+        velocity = totalVolurate / totalArea;
+    }
+
+    if (averageBased)
+    {
+        double vm = 0.0;
+
+        for (uint i=0;i<this->pModel->getNNodes();i++)
+        for (uint i=0;i<this->pModel->getNNodes();i++)
+        {
+            vm += std::sqrt(std::pow(this->nodeVelocity.x[i],2) + std::pow(this->nodeVelocity.y[i],2) + std::pow(this->nodeVelocity.z[i],2));
+        }
+        if (this->pModel->getNNodes())
+        {
+            vm /= double(this->pModel->getNNodes());
+        }
+        velocity = (vm + this->streamVelocity) / 2.0;
+    }
+    if (velocity < RConstants::eps)
+    {
+        velocity = 1.0;
+    }
+    return velocity;
+}
+
+void RSolverContaminant::computeShapeDerivatives()
+{
+    this->shapeDerivations.resize(this->pModel->getNElements(),0);
+
+    for (uint i=0;i<this->pModel->getNElements();i++)
+    {
+        uint elementID = i;
+
+        const RElement &rElement = this->pModel->getElement(elementID);
+        if (R_ELEMENT_TYPE_IS_VOLUME(rElement.getType()))
+        {
+            if (!this->computableElements[elementID])
+            {
+                continue;
+            }
+
+            this->shapeDerivations[elementID] = new RElementShapeDerivation(rElement,this->pModel->getNodes(),R_PROBLEM_FLUID);
+        }
+    }
+}
+
+void RSolverContaminant::clearShapeDerivatives()
+{
+    for (uint i=0;i<this->shapeDerivations.size();i++)
+    {
+        delete this->shapeDerivations[i];
+    }
 }
 
 void RSolverContaminant::computeElement(unsigned int elementID, RRMatrix &Ae, RRVector &be, RMatrixManager<ContaminantMatrixContainer> &matrixManager)

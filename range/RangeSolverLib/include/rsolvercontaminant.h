@@ -15,7 +15,7 @@
 
 class ContaminantMatrixContainer;
 
-class RSolverContaminant : public RSolverFluid
+class RSolverContaminant : public RSolverGeneric
 {
 
     protected:
@@ -24,17 +24,36 @@ class RSolverContaminant : public RSolverFluid
         RRVector elementConcentration;
         //! Element particle rate.
         RRVector elementRate;
+        //! Element velocity.
+        struct { RRVector x, y, z; } elementVelocity;
+
+        //! Stream velocity.
+        double streamVelocity;
 
         //! Node particle concentration.
         RRVector nodeConcentration;
         //! Node particle rate.
         RRVector nodeRate;
+        //! Node velocity.
+        struct { RRVector x, y, z; } nodeVelocity;
 
+        //! Element density.
+        RRVector elementDensity;
         //! Element density.
         RRVector elementDiffusion;
 
         //! Concentration convergence.
         double cvgC;
+
+        //! Vector of element level shape function derivatives.
+        std::vector<RElementShapeDerivation *> shapeDerivations;
+
+        //! Stop-watches
+        RStopWatch recoveryStopWatch;
+        RStopWatch buildStopWatch;
+        RStopWatch assemblyStopWatch;
+        RStopWatch solverStopWatch;
+        RStopWatch updateStopWatch;
 
     private:
 
@@ -80,6 +99,15 @@ class RSolverContaminant : public RSolverFluid
 
         //! Process statistics.
         void statistics(void);
+
+        //! Find stream velocity.
+        double computeStreamVelocity(bool averageBased) const;
+
+        //! Compute element shape derivatives.
+        void computeShapeDerivatives(void);
+
+        //! Clear element shape derivatives.
+        void clearShapeDerivatives(void);
 
         //! Compute element matrix.
         void computeElement(unsigned int elementID, RRMatrix &Ae, RRVector &be, RMatrixManager<ContaminantMatrixContainer> &matrixManager);
