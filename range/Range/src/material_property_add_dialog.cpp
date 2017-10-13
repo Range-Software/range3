@@ -33,7 +33,7 @@ MaterialPropertyAddDialog::MaterialPropertyAddDialog(RMaterial &material, QWidge
     mainLayout->addWidget(label, mainLayoutRow++, 0, 1, 1);
 
     this->propertyList = new QListWidget;
-    this->propertyList->setSelectionMode(QAbstractItemView::MultiSelection);
+    this->propertyList->setSelectionMode(QAbstractItemView::ExtendedSelection);
     mainLayout->addWidget(this->propertyList, mainLayoutRow++, 0, 1, 1);
 
     QList<RMaterialPropertyType> properties = this->findAvailableProperties(material);
