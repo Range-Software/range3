@@ -348,7 +348,144 @@ void RSolverContaminant::computeElement(unsigned int elementID, RRMatrix &Ae, RR
 
 void RSolverContaminant::computeElementGeneral(unsigned int elementID, RRMatrix &Ae, RRVector &be, RMatrixManager<ContaminantMatrixContainer> &matrixManager)
 {
+    bool unsteady = (this->pModel->getTimeSolver().getEnabled());
 
+    const RElement &element = this->pModel->getElement(elementID);
+    uint nen = element.size();
+    uint nInp = RElement::getNIntegrationPoints(element.getType());
+
+    double ro = this->elementDensity[elementID];
+    double k = this->elementDiffusion[elementID];
+
+    Ae.fill(0.0);
+    be.fill(0.0);
+
+    ContaminantMatrixContainer &matrixCotainer = matrixManager.getMatricies(element.getType());
+    matrixCotainer.clear();
+
+    // Element level matricies
+    RRMatrix &me = matrixCotainer.me;
+    RRMatrix &ce = matrixCotainer.ce;
+    RRMatrix &ke = matrixCotainer.ke;
+    RRMatrix &cte = matrixCotainer.cte;
+    RRMatrix &kte = matrixCotainer.kte;
+    RRMatrix &yte = matrixCotainer.yte;
+
+    // Element level vectors
+    RRVector &fv = matrixCotainer.fv;
+
+    double alpha = this->pModel->getTimeSolver().getTimeMarchApproximationCoefficient();
+    double dt = this->pModel->getTimeSolver().getCurrentTimeStepSize();
+
+    // Element level input -------------------------------------------
+    RR3Vector ve(this->elementVelocity.x[elementID],
+                 this->elementVelocity.y[elementID],
+                 this->elementVelocity.z[elementID]);
+    // element level velocity magnitude
+    double mvh = ve.length();
+    // element level velocity direction
+    RR3Vector s(ve);
+    s.normalize();
+
+    for (uint intPoint=0;intPoint<nInp;intPoint++)
+    {
+        const RElementShapeFunction &shapeFunc = RElement::getShapeFunction(element.getType(),intPoint);
+        const RRVector &N = shapeFunc.getN();
+        const RRMatrix &B = this->shapeDerivations[elementID]->getDerivative(intPoint);
+        double detJ = this->shapeDerivations[elementID]->getJacobian(intPoint);
+
+        double integValue = detJ * shapeFunc.getW();
+
+        // velocity divergence
+        RRVector vdiv(nen,0.0);
+        // element length scale
+        double h = 0.0;
+
+        for (uint m=0;m<nen;m++)
+        {
+            vdiv[m] += ve[0] * B[m][0] + ve[1] * B[m][1] + ve[2] * B[m][2];
+            h += std::fabs(s[0]*B[m][0] + s[1]*B[m][1] + s[2]*B[m][2]);
+        }
+        if (h != 0.0)
+        {
+            h = 2.0/h;
+        }
+        // Reynolds numbers
+        double Re(k == 0.0 ? 0.0 : mvh * h / (2.0 * k));
+
+        // SUPG stabilization parameter
+        double Tsupg = 0.0;
+        if (mvh > 0.0)
+        {
+            Tsupg = h / (2.0 * mvh);
+            if (Re > 0.0 && Re <= 3.0)
+            {
+                Tsupg *= Re / 3.0;
+            }
+        }
+
+        for (uint m=0;m<nen;m++)
+        {
+            for (uint n=0;n<nen;n++)
+            {
+                // m matrix
+                if (unsteady)
+                {
+                    me[m][n] = ro * N[m] * N[n];
+                }
+                // c matrix
+                ce[m][n] = ro * N[m] * vdiv[n];
+                // k matrix
+                ke[m][n] = -k * (B[m][0] * B[n][0] + B[m][1] * B[n][1] + B[m][2] * B[n][2]);
+                // k~ matrix
+                kte[m][n] = Tsupg * ro * vdiv[m] * vdiv[n];
+                // y~ matrix
+                yte[m][n] = Tsupg * vdiv[m];
+            }
+            // f vector
+            fv[m] = 0.0;
+        }
+
+        // Assembly element level matrixes
+        for (uint m=0;m<nen;m++)
+        {
+            for (uint n=0;n<nen;n++)
+            {
+                if (unsteady)
+                {
+                    Ae[m][n] += me[m][n] + cte[m][n]
+                              + alpha * dt * (  ce[m][n]  + ke[m][n]
+                                             + kte[m][n] + yte[m][n] );
+                }
+                else
+                {
+                    Ae[m][n] += ce[m][n] + ke[m][n]
+                              + kte[m][n] + yte[m][n];
+                }
+            }
+            if (unsteady)
+            {
+                be[m] += dt * fv[m];
+                for (uint n=0;n<nen;n++)
+                {
+                    be[m] += (me[m][n] + cte[m][n] - (1.0 - alpha) * dt * (ce[m][n] + ke[m][n] + kte[m][n] + yte[m][n]))
+                           * this->nodeConcentration[element.getNodeId(n)];
+                }
+            }
+            else
+            {
+                be[m] = fv[m];
+            }
+        }
+        for (uint m=0;m<nen;m++)
+        {
+            for (uint n=0;n<nen;n++)
+            {
+                Ae[m][n] *= integValue;
+            }
+            be[m] *= integValue;
+        }
+    }
 }
 
 void RSolverContaminant::computeElementConstantDerivative(unsigned int elementID, RRMatrix &Ae, RRVector &be, RMatrixManager<ContaminantMatrixContainer> &matrixManager)
@@ -491,13 +628,12 @@ void RSolverContaminant::assemblyMatrix(unsigned int elementID, const RRMatrix &
     // Apply explicit boundary conditions.
     for (uint m=0;m<rElement.size();m++)
     {
-        uint position;
-        uint nodeID = rElement.getNodeId(m);
-        if (!this->nodeBook.getValue(nodeID,position))
+        uint mp = 0;
+        if (!this->nodeBook.getValue(rElement.getNodeId(m),mp))
         {
             for (uint n=0;n<rElement.size();n++)
             {
-                fe[n] -= Ae[n][m] * this->nodeConcentration[nodeID];
+                fe[n] -= Ae[n][m] * this->nodeConcentration[rElement.getNodeId(m)];
             }
         }
     }
