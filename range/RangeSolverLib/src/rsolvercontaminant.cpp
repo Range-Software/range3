@@ -341,8 +341,7 @@ void RSolverContaminant::statistics(void)
 
     RIterationInfo::writeToFile(this->convergenceFileName,counter,cvgValues);
 
-    this->printStats(R_VARIABLE_VELOCITY);
-    this->printStats(R_VARIABLE_PRESSURE);
+    this->printStats(R_VARIABLE_PARTICLE_CONCENTRATION);
     this->processMonitoringPoints();
 
     RLogger::info("Convergence:   %-13g\n",residual);
