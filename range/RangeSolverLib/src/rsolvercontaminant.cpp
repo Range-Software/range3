@@ -151,7 +151,7 @@ void RSolverContaminant::prepare(void)
     RBVector concentrationSetValues;
     RBVector rateSetValues;
 
-    this->RSolverGeneric::generateNodeBook(R_PROBLEM_CONTAMINANT);
+    this->generateNodeBook(R_PROBLEM_CONTAMINANT);
 
     this->generateVariableVector(R_VARIABLE_PARTICLE_CONCENTRATION,this->elementConcentration,concentrationSetValues,true,this->firstRun,this->firstRun);
     this->generateVariableVector(R_VARIABLE_PARTICLE_RATE,this->elementRate,rateSetValues,true,this->firstRun,this->firstRun);
