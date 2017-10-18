@@ -187,6 +187,9 @@ class GLWidget : public QOpenGLWidget
         //! Draw information box.
         void drawInfoBox(QPainter &painter, bool drawBox);
 
+        //! Draw key pressed box.
+        void drawKeyPressBox(QPainter &painter, bool drawBox);
+
         //! Apply transformations.
         void applyTransformations(void);
 
