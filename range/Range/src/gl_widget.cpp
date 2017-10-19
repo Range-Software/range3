@@ -157,7 +157,6 @@ void GLWidget::paintGL(void)
     this->drawValueRanges(painter);
     this->drawMessageBox(painter,false);
     this->drawInfoBox(painter,false);
-    this->drawKeyPressBox(painter,false);
 
     painter.end();
 
@@ -583,6 +582,23 @@ void GLWidget::drawMessageBox(QPainter &painter, bool drawBox)
         messages.push_back(QString("Number of hole elements: ") + QString::number(rModel.getNHoleElements()));
     }
 
+    QStringList actionMessage;
+    QString keyMouseMessage(this->actionEvent.getKeyMouseCombination());
+    QString eventMessage(GLActionEvent::toString(this->actionEvent.getType()));
+
+    if (keyMouseMessage.length() != 0)
+    {
+        actionMessage.append(keyMouseMessage);
+    }
+    if (eventMessage.length() != 0)
+    {
+        actionMessage.append(eventMessage);
+    }
+    if (actionMessage.size() > 0)
+    {
+        messages.append(actionMessage.join(" - "));
+    }
+
     if (messages.size() == 0)
     {
         return;
@@ -656,14 +672,6 @@ void GLWidget::drawInfoBox(QPainter &painter, bool drawBox)
     {
         painter.drawText(posX+padding,posY+(fontPixelHeight+padding)*(i+1),messages[i]);
     }
-}
-
-void GLWidget::drawKeyPressBox(QPainter &painter, bool drawBox)
-{
-//    int key = this->actionEvent.getKey();
-//    Qt::KeyboardModifiers keyModifiers = this->actionEvent.getKeyModifiers();
-//    Qt::MouseButtons mouseButtons = this->actionEvent.getMouseButtons();
-//    RLogger::warning("%s\n",QKeyEvent(QEvent::KeyPress,key,keyModifiers).text().toUtf8().constData());
 }
 
 void GLWidget::applyTransformations(void)

@@ -86,8 +86,14 @@ class GLActionEvent : public QObject
         //! Clear.
         void clear(void);
 
+        //! Return current key mouse conbination
+        QString getKeyMouseCombination(void) const;
+
         //! Return string representation of keay mouse combination.
         static QString findKeyMouseCombination(GLActionEventType type);
+
+        //! Get string representation of action type.
+        static QString toString(GLActionEventType type);
 
     signals:
 

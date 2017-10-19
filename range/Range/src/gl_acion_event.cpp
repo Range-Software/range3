@@ -111,13 +111,43 @@ void GLActionEvent::clear(void)
     emit this->changed(currType);
 }
 
+QString GLActionEvent::getKeyMouseCombination(void) const
+{
+    int _key = this->key;
+    if (_key == Qt::Key_Alt     ||
+        _key == Qt::Key_AltGr   ||
+        _key == Qt::Key_Control ||
+        _key == Qt::Key_Shift   ||
+        _key == Qt::Key_Meta)
+    {
+        _key = 0;
+    }
+    QString keyString(QKeySequence(this->keyModifiers+_key).toString(QKeySequence::NativeText));
+    QString mouseButtonString;
+
+    if (this->buttons & Qt::LeftButton)
+    {
+        mouseButtonString = (mouseButtonString.length() > 0 ? " + " : "") + tr("Left mouse button");
+    }
+    if (this->buttons & Qt::MiddleButton)
+    {
+        mouseButtonString = (mouseButtonString.length() > 0 ? " + " : "") + tr("Middle mouse button");
+    }
+    if (this->buttons & Qt::RightButton)
+    {
+        mouseButtonString = (mouseButtonString.length() > 0 ? " + " : "") + tr("Right mouse button");
+    }
+
+    return keyString + mouseButtonString;
+}
+
 QString GLActionEvent::findKeyMouseCombination(GLActionEventType type)
 {
     for (auto &glActionCombination : glActionCombinations)
     {
         if (glActionCombination.eventType == type)
         {
-            QString keyString(QKeySequence(glActionCombination.keyModifiers + glActionCombination.key).toString());
+            QString keyString(QKeySequence(glActionCombination.keyModifiers + glActionCombination.key).toString(QKeySequence::NativeText));
 
             QString mouseButtonString;
 
@@ -138,4 +168,31 @@ QString GLActionEvent::findKeyMouseCombination(GLActionEventType type)
         }
     }
     return QString();
+}
+
+QString GLActionEvent::toString(GLActionEventType type)
+{
+    switch (type)
+    {
+        case GL_ACTION_EVENT_NONE:
+            return QString();
+        case GL_ACTION_EVENT_TRANSLATE:
+            return tr("Translate");
+        case GL_ACTION_EVENT_TRANSLATE_Z:
+            return tr("Translate in Z direction");
+        case GL_ACTION_EVENT_ROTATE:
+            return tr("Rotate");
+        case GL_ACTION_EVENT_ZOOM:
+            return tr("Zoom");
+        case GL_ACTION_EVENT_PICK_ELEMENT:
+            return tr("Pick element");
+        case GL_ACTION_EVENT_PICK_NODE:
+            return tr("Pick node");
+        case GL_ACTION_EVENT_PICK_HOLE_ELEMENT:
+            return tr("Pick hole element");
+        case GL_ACTION_EVENT_PICK_CLEAR:
+            return tr("Clear pick information");
+        default:
+            return QString();
+    }
 }
