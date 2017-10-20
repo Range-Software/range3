@@ -750,7 +750,7 @@ void ResultsVariableTree::onRangeGraphClicked(void)
 
     GraphDialog graphDialog(graphObject,MainWindow::getInstance());
     graphDialog.getGraphWidget()->setPaintGraphLimits(true);
-    graphDialog.getGraphWidget()->setShowPointer(true,true);
+    graphDialog.getGraphWidget()->setShowPointer(true,true,true);
     graphDialog.exec();
 
     this->blockSignals(true);

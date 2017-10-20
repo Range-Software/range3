@@ -198,7 +198,7 @@ void MonitoringPointGraphDialog::displayInGraph(void)
     }
 
     GraphDialog graphDialog(graphObject,this);
-    graphDialog.getGraphWidget()->setShowPointer(true);
+    graphDialog.getGraphWidget()->setShowPointer(true,true,true);
     graphDialog.exec();
 }
 

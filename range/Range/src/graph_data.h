@@ -107,6 +107,9 @@ class GraphData : public QMap<double,RRVector>
         //! Find max y value.
         double findYMax(void) const;
 
+        //! Round key to neares value.
+        double roundKey(double x) const;
+
         //! Return y value for a given x.
         //! If such key is not fund an interpolated value is returned.
         RRVector findValue(double x) const;

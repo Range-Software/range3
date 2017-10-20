@@ -30,7 +30,8 @@ GraphWidget::GraphWidget(GraphObject *graphObject, bool editLimits, QWidget *par
     xAxisSpace(this->labelFontSize*2.0),
     yAxisSpace(this->labelFontSize*2.),
     showPointer(true),
-    snapPointer(true),
+    snapPointerX(true),
+    snapPointerY(true),
     editLimits(editLimits),
     paintGraphLimits(false),
     paintX0(false),
@@ -56,10 +57,11 @@ GraphWidget::GraphWidget(GraphObject *graphObject, bool editLimits, QWidget *par
     this->yMax = this->graphObject->getData().findYMax();
 }
 
-void GraphWidget::setShowPointer(bool showPointer, bool snapPointer)
+void GraphWidget::setShowPointer(bool showPointer, bool snapPointerX, bool snapPointerY)
 {
     this->showPointer = showPointer;
-    this->snapPointer = snapPointer;
+    this->snapPointerX = snapPointerX;
+    this->snapPointerY = snapPointerY;
     this->update();
 }
 
@@ -316,7 +318,13 @@ void GraphWidget::paintPointer(QPainter &painter, uint dataFieldID)
     double xp = double(this->mousePosition.x());
     double yp = double(this->mousePosition.y());
 
-    if (this->snapPointer)
+    if (this->snapPointerX)
+    {
+        xp = this->getX(this->graphObject->getData().roundKey(this->getXValue(xp)),
+                        this->xMin,
+                        this->xMax);
+    }
+    if (this->snapPointerY)
     {
         yp = this->getY(this->graphObject->getData().findValue(this->getXValue(xp))[dataFieldID],
                         this->yMin,
@@ -512,7 +520,11 @@ void GraphWidget::paintPosition(QPainter &painter,uint dataFieldID)
     double xValue = this->getXValue(this->mousePosition.x());
     double yValue = this->getYValue(this->mousePosition.y());
 
-    if (this->snapPointer)
+    if (this->snapPointerX)
+    {
+        xValue = this->graphObject->getData().roundKey(this->getXValue(this->mousePosition.x()));
+    }
+    if (this->snapPointerY)
     {
         yValue = this->graphObject->getData().findValue(xValue)[dataFieldID];
     }

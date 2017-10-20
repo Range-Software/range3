@@ -344,7 +344,7 @@ void ValueTable::onViewGraph(void)
     rGraphData.setLimits(minKey,maxKey);
 
     GraphDialog graphDialog(graphObject, MainWindow::getInstance());
-    graphDialog.getGraphWidget()->setShowPointer(true);
+    graphDialog.getGraphWidget()->setShowPointer(true,true,true);
     graphDialog.exec();
 }
 

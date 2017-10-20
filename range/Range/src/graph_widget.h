@@ -40,7 +40,8 @@ class GraphWidget : public QWidget
         double xAxisSpace;
         double yAxisSpace;
         bool showPointer;
-        bool snapPointer;
+        bool snapPointerX;
+        bool snapPointerY;
         bool editLimits;
         QPoint mousePosition;
         //! Paint graph limits.
@@ -54,7 +55,7 @@ class GraphWidget : public QWidget
         explicit GraphWidget(GraphObject *graphObject, bool editLimits = false, QWidget *parent = 0);
 
         //! Set show pointer.
-        void setShowPointer(bool showPointer, bool snapPointer = true);
+        void setShowPointer(bool showPointer, bool snapPointerX, bool snapPointerY);
 
         //! Set paint graph limits.
         void setPaintGraphLimits(bool paintGraphLimits);

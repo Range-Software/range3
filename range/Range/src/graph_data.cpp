@@ -198,6 +198,48 @@ double GraphData::findYMax(void) const
     return value;
 }
 
+double GraphData::roundKey(double x) const
+{
+    double x1 = 0.0;
+    double x2 = 0.0;
+    bool firstValue = true;
+
+    double xmin = this->findXMin();
+    double xmax = this->findXMax();
+
+    x = (x < xmin) ? xmin : x;
+    x = (x > xmax) ? xmax : x;
+
+    GraphData::const_iterator iter = this->constBegin();
+    while (iter != this->constEnd())
+    {
+        if (firstValue)
+        {
+            x1 = iter.key();
+            x2 = x1;
+            firstValue = false;
+        }
+        else
+        {
+            x2 = iter.key();
+        }
+        if (x1 <= x && x <= x2)
+        {
+            if (x-x1 < x2-x)
+            {
+                return x1;
+            }
+            else
+            {
+                return x2;
+            }
+        }
+        x1 = x2;
+        ++iter;
+    }
+    return x;
+}
+
 RRVector GraphData::findValue(double x) const
 {
     double x1 = 0.0;
