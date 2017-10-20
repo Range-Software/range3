@@ -1,21 +1,24 @@
 /*********************************************************************
  *  AUTHOR: Tomas Soltys                                             *
- *  FILE:   rsolvercontaminant.h                                     *
+ *  FILE:   rsolverfluidparticle.h                                   *
  *  GROUP:  RSolverLib                                               *
  *  TYPE:   header file (*.h)                                        *
  *  DATE:   28-th January 2016                                       *
  *                                                                   *
- *  DESCRIPTION: Contaminant solver class declaration                *
+ *  DESCRIPTION: Fluid particle dispersion solver class declaration  *
  *********************************************************************/
 
-#ifndef __RSOLVERCONTAMINANT_H__
-#define __RSOLVERCONTAMINANT_H__
+#ifndef __RSOLVERFLUIDPARTICLE_H__
+#define __RSOLVERFLUIDPARTICLE_H__
 
-#include "rsolverfluid.h"
+#include <rblib.h>
 
-class ContaminantMatrixContainer;
+#include "rmatrixmanager.h"
+#include "rsolvergeneric.h"
 
-class RSolverContaminant : public RSolverGeneric
+class FluidParticleMatrixContainer;
+
+class RSolverFluidParticle : public RSolverGeneric
 {
 
     protected:
@@ -58,21 +61,21 @@ class RSolverContaminant : public RSolverGeneric
     private:
 
         //! Internal initialization function.
-        void _init(const RSolverContaminant *pSolver = 0);
+        void _init(const RSolverFluidParticle *pSolver = 0);
 
     public:
 
         //! Constructor.
-        explicit RSolverContaminant(RModel *pModel, const QString &modelFileName, const QString &convergenceFileName, RSolverSharedData &sharedData);
+        explicit RSolverFluidParticle(RModel *pModel, const QString &modelFileName, const QString &convergenceFileName, RSolverSharedData &sharedData);
 
         //! Copy constructor.
-        RSolverContaminant(const RSolverContaminant &solver);
+        RSolverFluidParticle(const RSolverFluidParticle &solver);
 
         //! Destructor.
-        ~RSolverContaminant();
+        ~RSolverFluidParticle();
 
         //! Assignment operator.
-        RSolverContaminant &operator =(const RSolverContaminant &solver);
+        RSolverFluidParticle &operator =(const RSolverFluidParticle &solver);
 
         //! Check if solver has converged.
         bool hasConverged(void) const;
@@ -110,17 +113,17 @@ class RSolverContaminant : public RSolverGeneric
         void clearShapeDerivatives(void);
 
         //! Compute element matrix.
-        void computeElement(unsigned int elementID, RRMatrix &Ae, RRVector &be, RMatrixManager<ContaminantMatrixContainer> &matrixManager);
+        void computeElement(unsigned int elementID, RRMatrix &Ae, RRVector &be, RMatrixManager<FluidParticleMatrixContainer> &matrixManager);
 
         //! Compute element matrix.
-        void computeElementGeneral(unsigned int elementID, RRMatrix &Ae, RRVector &be, RMatrixManager<ContaminantMatrixContainer> &matrixManager);
+        void computeElementGeneral(unsigned int elementID, RRMatrix &Ae, RRVector &be, RMatrixManager<FluidParticleMatrixContainer> &matrixManager);
 
         //! Compute tetrahedra element matrix.
-        void computeElementConstantDerivative(unsigned int elementID, RRMatrix &Ae, RRVector &be, RMatrixManager<ContaminantMatrixContainer> &matrixManager);
+        void computeElementConstantDerivative(unsigned int elementID, RRMatrix &Ae, RRVector &be, RMatrixManager<FluidParticleMatrixContainer> &matrixManager);
 
         //! Assembly matrix.
         void assemblyMatrix(unsigned int elementID, const RRMatrix &Ae, const RRVector &be);
 
 };
 
-#endif // __RSOLVERCONTAMINANT_H__
+#endif // __RSOLVERFLUIDPARTICLE_H__

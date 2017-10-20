@@ -23,7 +23,7 @@
 #include "rmatrixsolver.h"
 #include "rscales.h"
 #include "rsolver.h"
-#include "rsolvercontaminant.h"
+#include "rsolverfluidparticle.h"
 #include "rsolverelectrostatics.h"
 #include "rsolvergeneric.h"
 #include "rsolverfluid.h"

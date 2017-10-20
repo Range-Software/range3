@@ -24,10 +24,10 @@ SOURCES += \
     src/rscales.cpp \
     src/rsolver.cpp \
     src/rsolveracoustic.cpp \
-    src/rsolvercontaminant.cpp \
     src/rsolverelectrostatics.cpp \
     src/rsolverfluid.cpp \
     src/rsolverfluidheat.cpp \
+    src/rsolverfluidparticle.cpp \
     src/rsolvergeneric.cpp \
     src/rsolverheat.cpp \
     src/rsolvermagnetostatics.cpp \
@@ -51,10 +51,10 @@ HEADERS += \
     include/rscales.h \
     include/rsolver.h \
     include/rsolveracoustic.h \
-    include/rsolvercontaminant.h \
     include/rsolverelectrostatics.h \
     include/rsolverfluid.h \
     include/rsolverfluidheat.h \
+    include/rsolverfluidparticle.h \
     include/rsolvergeneric.h \
     include/rsolverheat.h \
     include/rsolverlib.h \

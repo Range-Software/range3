@@ -1,20 +1,20 @@
 /*********************************************************************
  *  AUTHOR: Tomas Soltys                                             *
- *  FILE:   rsolvercontaminant.cpp                                   *
+ *  FILE:   rsolverfluidparticle.cpp                                 *
  *  GROUP:  RSolverLib                                               *
  *  TYPE:   source file (*.cpp)                                      *
  *  DATE:   28-th January 2016                                       *
  *                                                                   *
- *  DESCRIPTION: Contaminant solver class definition                 *
+ *  DESCRIPTION: Fluid particle dispersion solver class definition   *
  *********************************************************************/
 
 #include <omp.h>
 
-#include "rsolvercontaminant.h"
+#include "rsolverfluidparticle.h"
 #include "rmatrixsolver.h"
 #include "rmatrixmanager.h"
 
-class ContaminantMatrixContainer
+class FluidParticleMatrixContainer
 {
     public:
 
@@ -33,7 +33,7 @@ class ContaminantMatrixContainer
 
     public:
 
-        ContaminantMatrixContainer() : initialized(false)
+        FluidParticleMatrixContainer() : initialized(false)
         {
 
         }
@@ -65,7 +65,7 @@ class ContaminantMatrixContainer
         }
 };
 
-void RSolverContaminant::_init(const RSolverContaminant *pSolver)
+void RSolverFluidParticle::_init(const RSolverFluidParticle *pSolver)
 {
     if (pSolver)
     {
@@ -82,7 +82,7 @@ void RSolverContaminant::_init(const RSolverContaminant *pSolver)
     }
 }
 
-RSolverContaminant::RSolverContaminant(RModel *pModel, const QString &modelFileName, const QString &convergenceFileName, RSolverSharedData &sharedData)
+RSolverFluidParticle::RSolverFluidParticle(RModel *pModel, const QString &modelFileName, const QString &convergenceFileName, RSolverSharedData &sharedData)
     : RSolverGeneric(pModel,modelFileName,convergenceFileName,sharedData)
     , streamVelocity(1.0)
     , cvgC(0.0)
@@ -91,34 +91,34 @@ RSolverContaminant::RSolverContaminant(RModel *pModel, const QString &modelFileN
     this->_init();
 }
 
-RSolverContaminant::RSolverContaminant(const RSolverContaminant &solver)
+RSolverFluidParticle::RSolverFluidParticle(const RSolverFluidParticle &solver)
     : RSolverGeneric(solver)
 {
     this->_init(&solver);
 }
 
-RSolverContaminant::~RSolverContaminant()
+RSolverFluidParticle::~RSolverFluidParticle()
 {
 }
 
-RSolverContaminant &RSolverContaminant::operator =(const RSolverContaminant &solver)
+RSolverFluidParticle &RSolverFluidParticle::operator =(const RSolverFluidParticle &solver)
 {
     RSolverGeneric::operator =(solver);
     this->_init(&solver);
     return (*this);
 }
 
-bool RSolverContaminant::hasConverged(void) const
+bool RSolverFluidParticle::hasConverged(void) const
 {
     return true;
 }
 
-void RSolverContaminant::updateScales(void)
+void RSolverFluidParticle::updateScales(void)
 {
 
 }
 
-void RSolverContaminant::recover(void)
+void RSolverFluidParticle::recover(void)
 {
     this->recoveryStopWatch.reset();
     this->recoveryStopWatch.resume();
@@ -140,7 +140,7 @@ void RSolverContaminant::recover(void)
     this->recoveryStopWatch.pause();
 }
 
-void RSolverContaminant::prepare(void)
+void RSolverFluidParticle::prepare(void)
 {
     RLogger::info("Building matrix system\n");
     RLogger::indent();
@@ -180,7 +180,7 @@ void RSolverContaminant::prepare(void)
 
     bool abort = false;
 
-    RMatrixManager<ContaminantMatrixContainer> matrixManager;
+    RMatrixManager<FluidParticleMatrixContainer> matrixManager;
 
     // Compute element matrices
     #pragma omp parallel for default(shared) private(matrixManager)
@@ -244,7 +244,7 @@ void RSolverContaminant::prepare(void)
     RLogger::unindent();
 }
 
-void RSolverContaminant::solve(void)
+void RSolverFluidParticle::solve(void)
 {
     RLogger::info("Solving matrix system\n");
     RLogger::indent();
@@ -292,12 +292,12 @@ void RSolverContaminant::solve(void)
     RLogger::unindent();
 }
 
-void RSolverContaminant::process(void)
+void RSolverFluidParticle::process(void)
 {
 
 }
 
-void RSolverContaminant::store(void)
+void RSolverFluidParticle::store(void)
 {
     RLogger::info("Storing results\n");
     RLogger::indent();
@@ -324,7 +324,7 @@ void RSolverContaminant::store(void)
     RLogger::unindent();
 }
 
-void RSolverContaminant::statistics(void)
+void RSolverFluidParticle::statistics(void)
 {
     static uint counter = 0;
     static double oldResidual = 0.0;
@@ -354,7 +354,7 @@ void RSolverContaminant::statistics(void)
     counter++;
 }
 
-double RSolverContaminant::computeStreamVelocity(bool averageBased) const
+double RSolverFluidParticle::computeStreamVelocity(bool averageBased) const
 {
     double velocity = 1.0;
 
@@ -440,7 +440,7 @@ double RSolverContaminant::computeStreamVelocity(bool averageBased) const
     return velocity;
 }
 
-void RSolverContaminant::computeShapeDerivatives()
+void RSolverFluidParticle::computeShapeDerivatives()
 {
     this->shapeDerivations.resize(this->pModel->getNElements(),0);
 
@@ -461,7 +461,7 @@ void RSolverContaminant::computeShapeDerivatives()
     }
 }
 
-void RSolverContaminant::clearShapeDerivatives()
+void RSolverFluidParticle::clearShapeDerivatives()
 {
     for (uint i=0;i<this->shapeDerivations.size();i++)
     {
@@ -469,7 +469,7 @@ void RSolverContaminant::clearShapeDerivatives()
     }
 }
 
-void RSolverContaminant::computeElement(unsigned int elementID, RRMatrix &Ae, RRVector &be, RMatrixManager<ContaminantMatrixContainer> &matrixManager)
+void RSolverFluidParticle::computeElement(unsigned int elementID, RRMatrix &Ae, RRVector &be, RMatrixManager<FluidParticleMatrixContainer> &matrixManager)
 {
     if (RElement::hasConstantDerivative(this->pModel->getElement(elementID).getType()))
     {
@@ -481,7 +481,7 @@ void RSolverContaminant::computeElement(unsigned int elementID, RRMatrix &Ae, RR
     }
 }
 
-void RSolverContaminant::computeElementGeneral(unsigned int elementID, RRMatrix &Ae, RRVector &be, RMatrixManager<ContaminantMatrixContainer> &matrixManager)
+void RSolverFluidParticle::computeElementGeneral(unsigned int elementID, RRMatrix &Ae, RRVector &be, RMatrixManager<FluidParticleMatrixContainer> &matrixManager)
 {
     bool unsteady = (this->pModel->getTimeSolver().getEnabled());
 
@@ -495,7 +495,7 @@ void RSolverContaminant::computeElementGeneral(unsigned int elementID, RRMatrix 
     Ae.fill(0.0);
     be.fill(0.0);
 
-    ContaminantMatrixContainer &matrixCotainer = matrixManager.getMatricies(element.getType());
+    FluidParticleMatrixContainer &matrixCotainer = matrixManager.getMatricies(element.getType());
     matrixCotainer.clear();
 
     // Element level matricies
@@ -623,7 +623,7 @@ void RSolverContaminant::computeElementGeneral(unsigned int elementID, RRMatrix 
     }
 }
 
-void RSolverContaminant::computeElementConstantDerivative(unsigned int elementID, RRMatrix &Ae, RRVector &be, RMatrixManager<ContaminantMatrixContainer> &matrixManager)
+void RSolverFluidParticle::computeElementConstantDerivative(unsigned int elementID, RRMatrix &Ae, RRVector &be, RMatrixManager<FluidParticleMatrixContainer> &matrixManager)
 {
     bool unsteady = (this->pModel->getTimeSolver().getEnabled());
 
@@ -636,7 +636,7 @@ void RSolverContaminant::computeElementConstantDerivative(unsigned int elementID
     Ae.fill(0.0);
     be.fill(0.0);
 
-    ContaminantMatrixContainer &matrixCotainer = matrixManager.getMatricies(element.getType());
+    FluidParticleMatrixContainer &matrixCotainer = matrixManager.getMatricies(element.getType());
     matrixCotainer.clear();
 
     // Element level matricies
@@ -755,7 +755,7 @@ void RSolverContaminant::computeElementConstantDerivative(unsigned int elementID
     be *= detJ;
 }
 
-void RSolverContaminant::assemblyMatrix(unsigned int elementID, const RRMatrix &Ae, const RRVector &be)
+void RSolverFluidParticle::assemblyMatrix(unsigned int elementID, const RRMatrix &Ae, const RRVector &be)
 {
     const RElement &rElement = this->pModel->getElement(elementID);
     RRVector fe(be);

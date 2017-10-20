@@ -10,7 +10,7 @@
 
 #include "rsolver.h"
 #include "rsolveracoustic.h"
-#include "rsolvercontaminant.h"
+#include "rsolverfluidparticle.h"
 #include "rsolverelectrostatics.h"
 #include "rsolvermagnetostatics.h"
 #include "rsolverfluid.h"
@@ -53,7 +53,7 @@ void RSolver::_init(const RSolver *pSolver)
         }
         if (problemTypeMask & R_PROBLEM_CONTAMINANT)
         {
-            this->solvers[R_PROBLEM_CONTAMINANT] = new RSolverContaminant(this->pModel,
+            this->solvers[R_PROBLEM_CONTAMINANT] = new RSolverFluidParticle(this->pModel,
                                                                           this->modelFileName,
                                                                           RFileManager::getFileNameWithSuffix(this->convergenceFileName,RProblem::getId(R_PROBLEM_CONTAMINANT)),
                                                                           this->sharedData);
