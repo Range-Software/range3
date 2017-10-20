@@ -62,7 +62,7 @@ QString ConvergenceGraphDialog::getNameFromID(const QString &fileName, const QSt
     std::vector<RProblemType> problemTypes = RProblem::getTypes(R_PROBLEM_ALL);
     for (uint i=0;i<problemTypes.size();i++)
     {
-        if (fileName.contains(RProblem::getId(problemTypes[i])))
+        if (fileName.contains("-" + RProblem::getId(problemTypes[i]) + "."))
         {
             return RProblem::getName(problemTypes[i]);
         }

@@ -29,18 +29,18 @@ class RSolverFluid : public RSolverGeneric
         //! Element pressure.
         RRVector elementPressure;
         //! Element velocity.
-        struct { RRVector x, y, z; } elementVelocity;
+        RSolverCartesianVector<RRVector> elementVelocity;
         //! Element acceleration.
-        struct { RRVector x, y, z; } elementGravity;
+        RSolverCartesianVector<RRVector> elementGravity;
 
         //! Node pressure.
         RRVector nodePressure;
         //! Node velocity.
-        struct { RRVector x, y, z; } nodeVelocity;
+        RSolverCartesianVector<RRVector> nodeVelocity;
         //! Node velocity.
-        struct { RRVector x, y, z; } nodeVelocityOld;
+        RSolverCartesianVector<RRVector> nodeVelocityOld;
         //! Node acceleration.
-        struct { RRVector x, y, z; } nodeAcceleration;
+        RSolverCartesianVector<RRVector> nodeAcceleration;
 
         //! Stream velocity.
         double streamVelocity;
@@ -148,9 +148,6 @@ class RSolverFluid : public RSolverGeneric
         //! Compute element scales.
         void computeElementScales(void);
 
-        //! Find stream velocity.
-        double computeStreamVelocity(bool averageBased) const;
-
         //! Find element free pressure.
         void computeElementFreePressure(RRVector &values, RBVector &setValues);
 
@@ -159,6 +156,14 @@ class RSolverFluid : public RSolverGeneric
 
         //! Apply local rotations.
         void applyLocalRotations(unsigned int elementID, RRMatrix &Ae);
+
+    public:
+
+        //! Find stream velocity.
+        static double computeStreamVelocity(const RModel &rModel,
+                                            const RSolverCartesianVector<RRVector> &nodeVelocity,
+                                            bool averageBased,
+                                            double streamVelocity = 0.0);
 
 };
 

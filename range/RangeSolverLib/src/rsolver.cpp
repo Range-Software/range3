@@ -51,11 +51,11 @@ void RSolver::_init(const RSolver *pSolver)
                                                                      RFileManager::getFileNameWithSuffix(this->convergenceFileName,RProblem::getId(R_PROBLEM_ACOUSTICS)),
                                                                      this->sharedData);
         }
-        if (problemTypeMask & R_PROBLEM_CONTAMINANT)
+        if (problemTypeMask & R_PROBLEM_FLUID_PARTICLE)
         {
-            this->solvers[R_PROBLEM_CONTAMINANT] = new RSolverFluidParticle(this->pModel,
+            this->solvers[R_PROBLEM_FLUID_PARTICLE] = new RSolverFluidParticle(this->pModel,
                                                                           this->modelFileName,
-                                                                          RFileManager::getFileNameWithSuffix(this->convergenceFileName,RProblem::getId(R_PROBLEM_CONTAMINANT)),
+                                                                          RFileManager::getFileNameWithSuffix(this->convergenceFileName,RProblem::getId(R_PROBLEM_FLUID_PARTICLE)),
                                                                           this->sharedData);
         }
         if (problemTypeMask & R_PROBLEM_ELECTROSTATICS)

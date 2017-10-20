@@ -169,9 +169,9 @@ RProblemTaskItem RProblemTaskItem::generateDefaultTree(RProblemTypeMask problemT
         root.addChild(RProblemTaskItem(R_PROBLEM_ACOUSTICS));
         nTypes ++;
     }
-    if (problemTypeMask & R_PROBLEM_CONTAMINANT)
+    if (problemTypeMask & R_PROBLEM_FLUID_PARTICLE)
     {
-        root.addChild(RProblemTaskItem(R_PROBLEM_CONTAMINANT));
+        root.addChild(RProblemTaskItem(R_PROBLEM_FLUID_PARTICLE));
         nTypes ++;
     }
     if (problemTypeMask & R_PROBLEM_FLUID)

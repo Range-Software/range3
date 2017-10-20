@@ -22,6 +22,15 @@
 #include "rscales.h"
 #include "rsolvershareddata.h"
 
+template <typename T>
+struct RSolverCartesianVector
+{
+    public:
+
+        T x, y, z;
+
+};
+
 class RSolverGeneric
 {
 

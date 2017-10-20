@@ -15,11 +15,11 @@
 ( \
   _type == R_PROBLEM_NONE             || \
   _type == R_PROBLEM_ACOUSTICS        || \
-  _type == R_PROBLEM_CONTAMINANT      || \
   _type == R_PROBLEM_ELECTROSTATICS   || \
   _type == R_PROBLEM_MAGNETOSTATICS   || \
   _type == R_PROBLEM_FLUID            || \
   _type == R_PROBLEM_FLUID_HEAT       || \
+  _type == R_PROBLEM_FLUID_PARTICLE   || \
   _type == R_PROBLEM_HEAT             || \
   _type == R_PROBLEM_RADIATIVE_HEAT   || \
   _type == R_PROBLEM_STRESS           || \
@@ -32,11 +32,11 @@
 ( \
   _type == R_PROBLEM_NONE             || \
   _type &  R_PROBLEM_ACOUSTICS        || \
-  _type &  R_PROBLEM_CONTAMINANT      || \
   _type &  R_PROBLEM_ELECTROSTATICS   || \
   _type &  R_PROBLEM_MAGNETOSTATICS   || \
   _type &  R_PROBLEM_FLUID            || \
   _type &  R_PROBLEM_FLUID_HEAT       || \
+  _type == R_PROBLEM_FLUID_PARTICLE   || \
   _type &  R_PROBLEM_HEAT             || \
   _type &  R_PROBLEM_RADIATIVE_HEAT   || \
   _type &  R_PROBLEM_STRESS           || \
@@ -50,7 +50,7 @@ typedef enum _RProblemType
 {
     R_PROBLEM_NONE             = 0,
     R_PROBLEM_ACOUSTICS        = 1 << 0,
-    R_PROBLEM_CONTAMINANT      = 1 << 1,
+    R_PROBLEM_FLUID_PARTICLE   = 1 << 1,
     R_PROBLEM_ELECTROSTATICS   = 1 << 2,
     R_PROBLEM_MAGNETOSTATICS   = 1 << 3,
     R_PROBLEM_FLUID            = 1 << 4,
@@ -68,11 +68,11 @@ typedef int RProblemTypeMask;
 #define R_PROBLEM_ALL \
     ( \
         R_PROBLEM_ACOUSTICS | \
-        R_PROBLEM_CONTAMINANT | \
         R_PROBLEM_ELECTROSTATICS | \
         R_PROBLEM_MAGNETOSTATICS | \
         R_PROBLEM_FLUID | \
         R_PROBLEM_FLUID_HEAT | \
+        R_PROBLEM_FLUID_PARTICLE | \
         R_PROBLEM_HEAT | \
         R_PROBLEM_RADIATIVE_HEAT | \
         R_PROBLEM_STRESS | \

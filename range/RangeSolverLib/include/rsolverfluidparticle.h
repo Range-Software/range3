@@ -11,8 +11,6 @@
 #ifndef __RSOLVERFLUIDPARTICLE_H__
 #define __RSOLVERFLUIDPARTICLE_H__
 
-#include <rblib.h>
-
 #include "rmatrixmanager.h"
 #include "rsolvergeneric.h"
 
@@ -28,7 +26,7 @@ class RSolverFluidParticle : public RSolverGeneric
         //! Element particle rate.
         RRVector elementRate;
         //! Element velocity.
-        struct { RRVector x, y, z; } elementVelocity;
+        RSolverCartesianVector<RRVector> elementVelocity;
 
         //! Stream velocity.
         double streamVelocity;
@@ -38,7 +36,7 @@ class RSolverFluidParticle : public RSolverGeneric
         //! Node particle rate.
         RRVector nodeRate;
         //! Node velocity.
-        struct { RRVector x, y, z; } nodeVelocity;
+        RSolverCartesianVector<RRVector> nodeVelocity;
 
         //! Element density.
         RRVector elementDensity;
@@ -82,6 +80,9 @@ class RSolverFluidParticle : public RSolverGeneric
 
     protected:
 
+        //! Generate node rate input vector.
+        void generateNodeRateVector(void);
+
         //! Update scales.
         void updateScales(void);
 
@@ -102,9 +103,6 @@ class RSolverFluidParticle : public RSolverGeneric
 
         //! Process statistics.
         void statistics(void);
-
-        //! Find stream velocity.
-        double computeStreamVelocity(bool averageBased) const;
 
         //! Compute element shape derivatives.
         void computeShapeDerivatives(void);

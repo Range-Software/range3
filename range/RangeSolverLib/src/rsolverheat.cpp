@@ -95,8 +95,6 @@ void RSolverHeat::recover(void)
                           0,
                           this->elementJouleHeat,
                           RVariable::getInitValue(R_VARIABLE_JOULE_HEAT));
-
-//    this->syncShared("node-temperature",this->nodeTemperature);
 }
 
 void RSolverHeat::prepare(void)

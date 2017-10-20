@@ -35,7 +35,7 @@ const RProblemDesc problemDesc [] =
         R_PROBLEM_WAVE | R_PROBLEM_STRESS_MODAL
     },
     {
-        R_PROBLEM_CONTAMINANT,
+        R_PROBLEM_FLUID_PARTICLE,
         "prb-contaminant",
         "Contaminant dispersion",
         "Calculate distribution of contaminant in the flow field.",
@@ -76,7 +76,7 @@ const RProblemDesc problemDesc [] =
         "Heat transfer in fluids",
         "Heat transfer in fluids.",
         true,
-        R_PROBLEM_FLUID | R_PROBLEM_HEAT,
+        R_PROBLEM_FLUID,
         R_PROBLEM_STRESS_MODAL
     },
     {
@@ -113,7 +113,7 @@ const RProblemDesc problemDesc [] =
         "Stress modal analysis.",
         false,
         R_PROBLEM_NONE,
-        R_PROBLEM_ACOUSTICS | R_PROBLEM_CONTAMINANT | R_PROBLEM_ELECTROSTATICS | R_PROBLEM_MAGNETOSTATICS | R_PROBLEM_FLUID | R_PROBLEM_FLUID_HEAT | R_PROBLEM_HEAT | R_PROBLEM_RADIATIVE_HEAT | R_PROBLEM_POTENTIAL | R_PROBLEM_WAVE
+        R_PROBLEM_ACOUSTICS | R_PROBLEM_FLUID_PARTICLE | R_PROBLEM_ELECTROSTATICS | R_PROBLEM_MAGNETOSTATICS | R_PROBLEM_FLUID | R_PROBLEM_FLUID_HEAT | R_PROBLEM_HEAT | R_PROBLEM_RADIATIVE_HEAT | R_PROBLEM_POTENTIAL | R_PROBLEM_WAVE
     },
     {
         R_PROBLEM_POTENTIAL,

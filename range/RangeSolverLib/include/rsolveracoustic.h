@@ -36,7 +36,7 @@ class RSolverAcoustic : public RSolverGeneric
         //! Node acoustic pressure.
         RRVector nodeAcousticPressure;
         //! Element acoustic pressure.
-        struct { RRVector x, y, z; } elementAcousticParticleVelocity;
+        RSolverCartesianVector<RRVector> elementAcousticParticleVelocity;
 
     private:
 

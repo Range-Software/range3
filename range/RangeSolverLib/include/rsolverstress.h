@@ -31,13 +31,13 @@ class RSolverStress : public RSolverGeneric
         //! Element environment temperature vector.
         RRVector elementEnvironmentTemperature;
         //! Node displacement vector.
-        struct { RRVector x, y, z; } nodeDisplacement;
+        RSolverCartesianVector<RRVector> nodeDisplacement;
         //! Node initial displacement vector.
-        struct { RRVector x, y, z; } nodeInitialDisplacement;
+        RSolverCartesianVector<RRVector> nodeInitialDisplacement;
         //! Node force vector.
-        struct { RRVector x, y, z; } nodeForce;
+        RSolverCartesianVector<RRVector> nodeForce;
         //! Node acceleration vector.
-        struct { RRVector x, y, z; } nodeAcceleration;
+        RSolverCartesianVector<RRVector> nodeAcceleration;
         //! Node pressure.
         RRVector nodePressure;
         //! Element normal stress.

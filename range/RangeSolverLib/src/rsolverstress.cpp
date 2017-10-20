@@ -98,24 +98,24 @@ void RSolverStress::prepare(void)
     struct { RBVector x, y, z, n; } displacementSetValues;
 
     //! Element force vector.
-    struct { RRVector x, y, z; } elementForce;
-    struct { RBVector x, y, z; } forceSetValues;
+    RSolverCartesianVector<RRVector> elementForce;
+    RSolverCartesianVector<RBVector> forceSetValues;
 
     //! Element acceleration vector.
-    struct { RRVector x, y, z; } elementAcceleration;
-    struct { RBVector x, y, z; } accelerationSetValues;
+    RSolverCartesianVector<RRVector> elementAcceleration;
+    RSolverCartesianVector<RBVector> accelerationSetValues;
 
     //! Element gravity vector.
-    struct { RRVector x, y, z; } elementGravity;
-    struct { RBVector x, y, z; } gGravitySetValues;
+    RSolverCartesianVector<RRVector> elementGravity;
+    RSolverCartesianVector<RBVector> gGravitySetValues;
 
     //! Element pressure.
     RRVector elementPressure;
     RBVector pressureSetValues;
 
     //! Element traction per unit area.
-    struct { RRVector x, y, z; } elementForceUnitArea;
-    struct { RBVector x, y, z; } forceUnitAreaSetValues;
+    RSolverCartesianVector<RRVector> elementForceUnitArea;
+    RSolverCartesianVector<RBVector> forceUnitAreaSetValues;
 
     //! Element weight.
     RRVector elementWeight;

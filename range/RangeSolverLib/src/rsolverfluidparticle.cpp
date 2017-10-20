@@ -10,9 +10,9 @@
 
 #include <omp.h>
 
+#include "rsolverfluid.h"
 #include "rsolverfluidparticle.h"
 #include "rmatrixsolver.h"
-#include "rmatrixmanager.h"
 
 class FluidParticleMatrixContainer
 {
@@ -87,7 +87,7 @@ RSolverFluidParticle::RSolverFluidParticle(RModel *pModel, const QString &modelF
     , streamVelocity(1.0)
     , cvgC(0.0)
 {
-    this->problemType = R_PROBLEM_CONTAMINANT;
+    this->problemType = R_PROBLEM_FLUID_PARTICLE;
     this->_init();
 }
 
@@ -111,6 +111,15 @@ RSolverFluidParticle &RSolverFluidParticle::operator =(const RSolverFluidParticl
 bool RSolverFluidParticle::hasConverged(void) const
 {
     return true;
+}
+
+void RSolverFluidParticle::generateNodeRateVector(void)
+{
+    RBVector rateSetValues;
+    this->generateVariableVector(R_VARIABLE_PARTICLE_RATE,this->elementRate,rateSetValues,true,this->firstRun,this->firstRun);
+
+    this->nodeRate.fill(0.0); // Particle rate on node is meant as an input - needs to be cleared
+    this->pModel->convertElementToNodeVector(this->elementRate,rateSetValues,this->nodeRate,true);
 }
 
 void RSolverFluidParticle::updateScales(void)
@@ -149,26 +158,24 @@ void RSolverFluidParticle::prepare(void)
     this->assemblyStopWatch.reset();
 
     RBVector concentrationSetValues;
-    RBVector rateSetValues;
 
-    this->generateNodeBook(R_PROBLEM_CONTAMINANT);
+    this->generateNodeBook(R_PROBLEM_FLUID_PARTICLE);
 
     this->generateVariableVector(R_VARIABLE_PARTICLE_CONCENTRATION,this->elementConcentration,concentrationSetValues,true,this->firstRun,this->firstRun);
-    this->generateVariableVector(R_VARIABLE_PARTICLE_RATE,this->elementRate,rateSetValues,true,this->firstRun,this->firstRun);
     this->generateMaterialVecor(R_MATERIAL_PROPERTY_DENSITY,this->elementDensity);
     this->elementDiffusion.resize(this->pModel->getNElements());
-    this->elementDiffusion.fill(0.0);
+    this->elementDiffusion.fill(0.0); // TODO: Diffusion not yet implemented
+
+    this->generateNodeRateVector();
 
     this->pModel->convertElementToNodeVector(this->elementConcentration,concentrationSetValues,this->nodeConcentration,true);
-    this->nodeRate.fill(0.0); // Particle rate on node is meant as an input - needs to be cleared
-    this->pModel->convertElementToNodeVector(this->elementRate,rateSetValues,this->nodeRate,true);
 
     this->pModel->convertNodeToElementVector(this->nodeVelocity.x,this->elementVelocity.x);
     this->pModel->convertNodeToElementVector(this->nodeVelocity.y,this->elementVelocity.y);
     this->pModel->convertNodeToElementVector(this->nodeVelocity.z,this->elementVelocity.z);
 
     this->computeShapeDerivatives();
-    this->streamVelocity = this->computeStreamVelocity(false);
+    this->streamVelocity = RSolverFluid::computeStreamVelocity(*this->pModel,this->nodeVelocity,false);
 
     this->b.resize(this->nodeBook.getNEnabled());
     this->x.resize(this->nodeBook.getNEnabled());
@@ -354,92 +361,6 @@ void RSolverFluidParticle::statistics(void)
     counter++;
 }
 
-double RSolverFluidParticle::computeStreamVelocity(bool averageBased) const
-{
-    double velocity = 1.0;
-
-    double totalArea = 0.0;
-    double totalVolurate = 0.0;
-
-    for (uint i=0;i<this->pModel->getNSurfaces();i++)
-    {
-        const RSurface &rSurface = this->pModel->getSurface(i);
-
-        bool hasVelocity = rSurface.hasBoundaryCondition(R_BOUNDARY_CONDITION_INFLOW_VELOCITY);
-        bool hasVolurate = rSurface.hasBoundaryCondition(R_BOUNDARY_CONDITION_INFLOW_VOLURATE);
-
-        double v = 0.0;
-        double q = 0.0;
-
-        if (!hasVelocity && !hasVolurate)
-        {
-            continue;
-        }
-
-        if (hasVelocity)
-        {
-            const RBoundaryCondition &rBoundaryCondition = rSurface.getBoundaryCondition(R_BOUNDARY_CONDITION_INFLOW_VELOCITY);
-            uint vp = rBoundaryCondition.findComponentPosition(R_VARIABLE_VELOCITY);
-            if (vp != RConstants::eod)
-            {
-                v = rBoundaryCondition.getComponent(vp).get(this->pModel->getTimeSolver().getCurrentTime());
-            }
-        }
-
-        if (hasVolurate)
-        {
-            const RBoundaryCondition &rBoundaryCondition = rSurface.getBoundaryCondition(R_BOUNDARY_CONDITION_INFLOW_VOLURATE);
-            uint vp = rBoundaryCondition.findComponentPosition(R_VARIABLE_VOLUME_FLOW_RATE);
-            if (vp != RConstants::eod)
-            {
-                q = rBoundaryCondition.getComponent(vp).get(this->pModel->getTimeSolver().getCurrentTime());
-            }
-        }
-
-        double area = rSurface.findArea(this->pModel->getNodes(),this->pModel->getElements());
-        if (area < RConstants::eps)
-        {
-            continue;
-        }
-        if (hasVelocity)
-        {
-            q = v * area;
-        }
-        totalArea += area;
-        totalVolurate += std::fabs(q);
-    }
-
-    if (totalArea < RConstants::eps)
-    {
-        velocity = 1.0;
-    }
-    else
-    {
-        velocity = totalVolurate / totalArea;
-    }
-
-    if (averageBased)
-    {
-        double vm = 0.0;
-
-        for (uint i=0;i<this->pModel->getNNodes();i++)
-        for (uint i=0;i<this->pModel->getNNodes();i++)
-        {
-            vm += std::sqrt(std::pow(this->nodeVelocity.x[i],2) + std::pow(this->nodeVelocity.y[i],2) + std::pow(this->nodeVelocity.z[i],2));
-        }
-        if (this->pModel->getNNodes())
-        {
-            vm /= double(this->pModel->getNNodes());
-        }
-        velocity = (vm + this->streamVelocity) / 2.0;
-    }
-    if (velocity < RConstants::eps)
-    {
-        velocity = 1.0;
-    }
-    return velocity;
-}
-
 void RSolverFluidParticle::computeShapeDerivatives()
 {
     this->shapeDerivations.resize(this->pModel->getNElements(),0);
@@ -491,6 +412,9 @@ void RSolverFluidParticle::computeElementGeneral(unsigned int elementID, RRMatri
 
     double ro = this->elementDensity[elementID];
     double k = this->elementDiffusion[elementID];
+
+    double ca = ro;
+    ca = 1.0; // Seems like density should not be part of calculation
 
     Ae.fill(0.0);
     be.fill(0.0);
@@ -566,14 +490,14 @@ void RSolverFluidParticle::computeElementGeneral(unsigned int elementID, RRMatri
                 // m matrix
                 if (unsteady)
                 {
-                    me[m][n] = ro * N[m] * N[n];
+                    me[m][n] = ca * N[m] * N[n];
                 }
                 // c matrix
-                ce[m][n] = ro * N[m] * vdiv[n];
+                ce[m][n] = ca * N[m] * vdiv[n];
                 // k matrix
                 ke[m][n] = -k * (B[m][0] * B[n][0] + B[m][1] * B[n][1] + B[m][2] * B[n][2]);
                 // k~ matrix
-                kte[m][n] = Tsupg * ro * vdiv[m] * vdiv[n];
+                kte[m][n] = Tsupg * ca * vdiv[m] * vdiv[n];
                 // y~ matrix
                 yte[m][n] = Tsupg * vdiv[m];
             }
@@ -632,6 +556,9 @@ void RSolverFluidParticle::computeElementConstantDerivative(unsigned int element
 
     double ro = this->elementDensity[elementID];
     double k = this->elementDiffusion[elementID];
+
+    double ca = ro;
+    ca = 1.0; // Seems like density should not be part of calculation
 
     Ae.fill(0.0);
     be.fill(0.0);
@@ -703,14 +630,14 @@ void RSolverFluidParticle::computeElementConstantDerivative(unsigned int element
             // m matrix
             if (unsteady)
             {
-                me[m][n] = ro * iNiN[m][n];
+                me[m][n] = ca * iNiN[m][n];
             }
             // c matrix
-            ce[m][n] = ro * iN[m] * vdiv[n];
+            ce[m][n] = ca * iN[m] * vdiv[n];
             // k matrix
             ke[m][n] = -k * wt * (B[m][0] * B[n][0] + B[m][1] * B[n][1] + B[m][2] * B[n][2]);
             // k~ matrix
-            kte[m][n] = Tsupg * ro * vdiv[m] * vdiv[n] * wt;
+            kte[m][n] = Tsupg * ca * vdiv[m] * vdiv[n] * wt;
             // y~ matrix
             yte[m][n] = Tsupg * vdiv[m] * wt;
         }

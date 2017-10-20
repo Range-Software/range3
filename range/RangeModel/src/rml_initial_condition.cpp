@@ -27,7 +27,7 @@ const RInitialConditionDesc initialConditionDesc [] =
     { "ic-electric_potential", "Electric potential",
       R_PROBLEM_ELECTROSTATICS },
     { "ic-particle_contamination", "Particle concentration",
-      R_PROBLEM_CONTAMINANT },
+      R_PROBLEM_FLUID_PARTICLE },
     { "ic-pressure", "Pressure",
       R_PROBLEM_FLUID | R_PROBLEM_POTENTIAL | R_PROBLEM_STRESS | R_PROBLEM_STRESS_MODAL },
     { "ic-temperature", "Temperature",

@@ -19,9 +19,9 @@ class RSolverMagnetostatics : public RSolverGeneric
     protected:
 
         //! Node current density.
-        struct { RRVector x, y, z; } nodeCurrentDensity;
+        RSolverCartesianVector<RRVector> nodeCurrentDensity;
         //! Node current density.
-        struct { RRVector x, y, z; } nodeMagneticField;
+        RSolverCartesianVector<RRVector> nodeMagneticField;
 
     private:
 

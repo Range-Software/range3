@@ -22,7 +22,7 @@ typedef struct _RMaterialPropertyDesc
 const RMaterialPropertyDesc materialPropertyDesc [] =
 {
     { "prop-none",                          R_VARIABLE_NONE,                          R_PROBLEM_NONE },
-    { "prop-density",                       R_VARIABLE_DENSITY,                       R_PROBLEM_ACOUSTICS | R_PROBLEM_CONTAMINANT | R_PROBLEM_ELECTROSTATICS | R_PROBLEM_FLUID | R_PROBLEM_FLUID_HEAT | R_PROBLEM_HEAT | R_PROBLEM_STRESS | R_PROBLEM_STRESS_MODAL | R_PROBLEM_POTENTIAL | R_PROBLEM_WAVE },
+    { "prop-density",                       R_VARIABLE_DENSITY,                       R_PROBLEM_ACOUSTICS | R_PROBLEM_FLUID_PARTICLE | R_PROBLEM_ELECTROSTATICS | R_PROBLEM_FLUID | R_PROBLEM_FLUID_HEAT | R_PROBLEM_HEAT | R_PROBLEM_STRESS | R_PROBLEM_STRESS_MODAL | R_PROBLEM_POTENTIAL | R_PROBLEM_WAVE },
     { "prop-dynamic_viscosity",             R_VARIABLE_DYNAMIC_VISCOSITY,             R_PROBLEM_FLUID | R_PROBLEM_FLUID_HEAT },
     { "prop-electrical_conductivity",       R_VARIABLE_ELECTRICAL_CONDUCTIVITY,       R_PROBLEM_ELECTROSTATICS },
     { "prop-emissivity",                    R_VARIABLE_EMISSIVITY,                    R_PROBLEM_HEAT },
