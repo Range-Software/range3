@@ -496,8 +496,10 @@ void RSolverFluidHeat::computeShapeDerivatives(void)
             {
                 continue;
             }
-
-            this->shapeDerivations[elementID] = new RElementShapeDerivation(rElement,this->pModel->getNodes(),R_PROBLEM_FLUID);
+            if (!this->shapeDerivations[elementID])
+            {
+                this->shapeDerivations[elementID] = new RElementShapeDerivation(rElement,this->pModel->getNodes(),R_PROBLEM_FLUID);
+            }
         }
     }
 }
