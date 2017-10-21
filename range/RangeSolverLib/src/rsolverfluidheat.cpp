@@ -99,7 +99,7 @@ RSolverFluidHeat::RSolverFluidHeat(const RSolverFluidHeat &solver)
 
 RSolverFluidHeat::~RSolverFluidHeat()
 {
-
+    this->clearShapeDerivatives();
 }
 
 RSolverFluidHeat &RSolverFluidHeat::operator =(const RSolverFluidHeat &solver)

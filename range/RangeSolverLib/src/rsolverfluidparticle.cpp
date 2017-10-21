@@ -99,6 +99,7 @@ RSolverFluidParticle::RSolverFluidParticle(const RSolverFluidParticle &solver)
 
 RSolverFluidParticle::~RSolverFluidParticle()
 {
+    this->clearShapeDerivatives();
 }
 
 RSolverFluidParticle &RSolverFluidParticle::operator =(const RSolverFluidParticle &solver)
