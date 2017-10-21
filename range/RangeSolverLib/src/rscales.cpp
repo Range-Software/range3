@@ -429,7 +429,7 @@ void RScales::convert(RModel &model, bool invert) const
             }
 
             rVariable.getVariableData().setMinMaxDisplayValue(rVariable.getVariableData().getMinDisplayValue()*valueScale,
-                                                            rVariable.getVariableData().getMaxDisplayValue()*valueScale);
+                                                              rVariable.getVariableData().getMaxDisplayValue()*valueScale);
         }
     }
 

@@ -2136,9 +2136,9 @@ double RSolverFluid::findReScale(void) const
     double v = RSolverFluid::computeStreamVelocity(*this->pModel,this->nodeVelocity,false);
     double l = 1.0 / this->scales.getMetre();
 
-    double Re = this->avgRo * v * l / this->avgU;
+    double Re = (this->avgU == 0.0) ? 1.0 : this->avgRo * v * l / this->avgU;
 
-    return 1.0e-2 / Re;
+    return (Re == 0.0) ? 1.0 : 1.0e-2 / Re;
 }
 
 double RSolverFluid::findWeightScale(void) const
@@ -2146,7 +2146,7 @@ double RSolverFluid::findWeightScale(void) const
     double v = RSolverFluid::computeStreamVelocity(*this->pModel,this->nodeVelocity,false);
     double l = 1.0 / this->scales.getMetre();
 
-    double ws = 1.0 *  v / (this->avgU * l * l);
+    double ws = (this->avgU == 0.0) ? 1.0 : 1.0 *  v / (this->avgU * l * l);
     if (this->pModel->getTimeSolver().getEnabled())
     {
         ws *= 1.0e-2 / this->pModel->getTimeSolver().getCurrentTimeStepSize();

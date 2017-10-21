@@ -43,90 +43,60 @@ void RSolver::_init(const RSolver *pSolver)
         this->sharedData.addData("element-temperature",RRVector(this->pModel->getNElements(),RVariable::getInitValue(R_VARIABLE_TEMPERATURE)));
         RProblemTypeMask problemTypeMask = this->pModel->getProblemTaskTree().getProblemTypeMask();
 
-        if (problemTypeMask & R_PROBLEM_ACOUSTICS)
+        std::vector<RProblemType> problemTypes = RProblem::getTypes(problemTypeMask);
+        for (uint i=0;i<problemTypes.size();i++)
         {
-            // NOT WORKING
-            this->solvers[R_PROBLEM_ACOUSTICS] = new RSolverAcoustic(this->pModel,
-                                                                     this->modelFileName,
-                                                                     RFileManager::getFileNameWithSuffix(this->convergenceFileName,RProblem::getId(R_PROBLEM_ACOUSTICS)),
-                                                                     this->sharedData);
-        }
-        if (problemTypeMask & R_PROBLEM_FLUID_PARTICLE)
-        {
-            this->solvers[R_PROBLEM_FLUID_PARTICLE] = new RSolverFluidParticle(this->pModel,
-                                                                          this->modelFileName,
-                                                                          RFileManager::getFileNameWithSuffix(this->convergenceFileName,RProblem::getId(R_PROBLEM_FLUID_PARTICLE)),
-                                                                          this->sharedData);
-        }
-        if (problemTypeMask & R_PROBLEM_ELECTROSTATICS)
-        {
-            this->solvers[R_PROBLEM_ELECTROSTATICS] = new RSolverElectrostatics(this->pModel,
-                                                                                this->modelFileName,
-                                                                                RFileManager::getFileNameWithSuffix(this->convergenceFileName,RProblem::getId(R_PROBLEM_ELECTROSTATICS)),
-                                                                                this->sharedData);
-        }
-        if (problemTypeMask & R_PROBLEM_MAGNETOSTATICS)
-        {
-            this->solvers[R_PROBLEM_MAGNETOSTATICS] = new RSolverMagnetostatics(this->pModel,
-                                                                                this->modelFileName,
-                                                                                RFileManager::getFileNameWithSuffix(this->convergenceFileName,RProblem::getId(R_PROBLEM_MAGNETOSTATICS)),
-                                                                                this->sharedData);
-        }
-        if (problemTypeMask & R_PROBLEM_FLUID)
-        {
-            this->solvers[R_PROBLEM_FLUID] = new RSolverFluid(this->pModel,
-                                                              this->modelFileName,
-                                                              RFileManager::getFileNameWithSuffix(this->convergenceFileName,RProblem::getId(R_PROBLEM_FLUID)),
-                                                              this->sharedData);
-        }
-        if (problemTypeMask & R_PROBLEM_FLUID_HEAT)
-        {
-            this->solvers[R_PROBLEM_FLUID_HEAT] = new RSolverFluidHeat(this->pModel,
-                                                                       this->modelFileName,
-                                                                       RFileManager::getFileNameWithSuffix(this->convergenceFileName,RProblem::getId(R_PROBLEM_FLUID_HEAT)),
-                                                                       this->sharedData);
-        }
-        if (problemTypeMask & R_PROBLEM_RADIATIVE_HEAT)
-        {
-            this->solvers[R_PROBLEM_RADIATIVE_HEAT] = new RSolverRadiativeHeat(this->pModel,
-                                                                               this->modelFileName,
-                                                                               RFileManager::getFileNameWithSuffix(this->convergenceFileName,RProblem::getId(R_PROBLEM_RADIATIVE_HEAT)),
-                                                                               this->sharedData);
-        }
-        if (problemTypeMask & R_PROBLEM_HEAT)
-        {
-            this->solvers[R_PROBLEM_HEAT] = new RSolverHeat(this->pModel,
-                                                            this->modelFileName,
-                                                            RFileManager::getFileNameWithSuffix(this->convergenceFileName,RProblem::getId(R_PROBLEM_HEAT)),
-                                                            this->sharedData);
-        }
-        if (problemTypeMask & R_PROBLEM_STRESS)
-        {
-            this->solvers[R_PROBLEM_STRESS] = new RSolverStress(this->pModel,
-                                                                this->modelFileName,
-                                                                RFileManager::getFileNameWithSuffix(this->convergenceFileName,RProblem::getId(R_PROBLEM_STRESS)),
-                                                                this->sharedData,
-                                                                false);
-        }
-        if (problemTypeMask & R_PROBLEM_STRESS_MODAL)
-        {
-            this->solvers[R_PROBLEM_STRESS_MODAL] = new RSolverStress(this->pModel,
-                                                                      this->modelFileName,
-                                                                      RFileManager::getFileNameWithSuffix(this->convergenceFileName,RProblem::getId(R_PROBLEM_STRESS_MODAL)),
-                                                                      this->sharedData,
-                                                                      true);
-        }
-        if (problemTypeMask & R_PROBLEM_POTENTIAL)
-        {
-            // NOT IMPLEMENTED
-        }
-        if (problemTypeMask & R_PROBLEM_WAVE)
-        {
-            // NOT WORKING
-            this->solvers[R_PROBLEM_WAVE] = new RSolverWave(this->pModel,
-                                                            this->modelFileName,
-                                                            RFileManager::getFileNameWithSuffix(this->convergenceFileName,RProblem::getId(R_PROBLEM_POTENTIAL)),
-                                                            this->sharedData);
+            QString problemConvergenceFileName(RFileManager::getFileNameWithSuffix(this->convergenceFileName,RProblem::getId(problemTypes[i])));
+            if (problemTypes[i] == R_PROBLEM_ACOUSTICS)
+            {
+                // NOT WORKING
+                this->solvers[problemTypes[i]] = new RSolverAcoustic(this->pModel,this->modelFileName,problemConvergenceFileName,this->sharedData);
+            }
+            else if (problemTypes[i] == R_PROBLEM_FLUID_PARTICLE)
+            {
+                this->solvers[problemTypes[i]] = new RSolverFluidParticle(this->pModel,this->modelFileName,problemConvergenceFileName,this->sharedData);
+            }
+            else if (problemTypes[i] == R_PROBLEM_ELECTROSTATICS)
+            {
+                this->solvers[problemTypes[i]] = new RSolverElectrostatics(this->pModel,this->modelFileName,problemConvergenceFileName,this->sharedData);
+            }
+            else if (problemTypes[i] == R_PROBLEM_MAGNETOSTATICS)
+            {
+                this->solvers[problemTypes[i]] = new RSolverMagnetostatics(this->pModel,this->modelFileName,problemConvergenceFileName,this->sharedData);
+            }
+            else if (problemTypes[i] == R_PROBLEM_FLUID)
+            {
+                this->solvers[problemTypes[i]] = new RSolverFluid(this->pModel,this->modelFileName,problemConvergenceFileName,this->sharedData);
+            }
+            else if (problemTypes[i] == R_PROBLEM_FLUID_HEAT)
+            {
+                this->solvers[problemTypes[i]] = new RSolverFluidHeat(this->pModel,this->modelFileName,problemConvergenceFileName,this->sharedData);
+            }
+            else if (problemTypes[i] == R_PROBLEM_RADIATIVE_HEAT)
+            {
+                this->solvers[problemTypes[i]] = new RSolverRadiativeHeat(this->pModel,this->modelFileName,problemConvergenceFileName,this->sharedData);
+            }
+            else if (problemTypes[i] == R_PROBLEM_HEAT)
+            {
+                this->solvers[problemTypes[i]] = new RSolverHeat(this->pModel,this->modelFileName,problemConvergenceFileName,this->sharedData);
+            }
+            else if (problemTypes[i] == R_PROBLEM_STRESS)
+            {
+                this->solvers[problemTypes[i]] = new RSolverStress(this->pModel,this->modelFileName,problemConvergenceFileName,this->sharedData,false);
+            }
+            else if (problemTypes[i] == R_PROBLEM_STRESS_MODAL)
+            {
+                this->solvers[problemTypes[i]] = new RSolverStress(this->pModel,this->modelFileName,problemConvergenceFileName,this->sharedData,true);
+            }
+            else if (problemTypes[i] == R_PROBLEM_POTENTIAL)
+            {
+                // NOT IMPLEMENTED
+            }
+            else if (problemTypes[i] == R_PROBLEM_WAVE)
+            {
+                // NOT WORKING
+                this->solvers[problemTypes[i]] = new RSolverWave(this->pModel,this->modelFileName,problemConvergenceFileName,this->sharedData);
+            }
         }
 
         // if not restarting clear results data.
@@ -189,7 +159,6 @@ void RSolver::run(void)
             this->runSingle();
             RLogger::unindent();
 
-
             if (RApplicationState::getInstance().getStateType() == R_APPLICATION_STATE_STOP)
             {
                 break;
@@ -203,7 +172,6 @@ void RSolver::run(void)
         timeSolver.setCurrentTimeStep(0);
         timeSolver.setComputedTime(0.0);
         timeSolver.setTimes(RTimeSolver::findTimesVector(1, 0.0, 0.0));
-
         this->runSingle();
     }
 }
