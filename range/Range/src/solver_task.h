@@ -67,6 +67,9 @@ class SolverTask : public Job
         //! Return log file name.
         const QString & getLogFileName(void) const;
 
+        //! Return command line.
+        QString getCommandLine(void) const;
+
     protected:
 
         //! Run job.

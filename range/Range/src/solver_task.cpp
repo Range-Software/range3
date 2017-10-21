@@ -105,6 +105,16 @@ const QString &SolverTask::getLogFileName(void) const
     return this->logFileName;
 }
 
+QString SolverTask::getCommandLine(void) const
+{
+    QString cmdLine = this->solverExecutable;
+    for (int i=0;i<this->solverArguments.size();i++)
+    {
+        cmdLine += QString(" \"") + this->solverArguments.at(i) + QString("\"");
+    }
+    return cmdLine;
+}
+
 void SolverTask::run(void)
 {
     try
@@ -134,11 +144,7 @@ void SolverTask::run(void)
         }
 
         // Execute solver
-        QString cmdLine = this->solverExecutable;
-        for (int i=0;i<this->solverArguments.size();i++)
-        {
-            cmdLine += QString(" \"") + this->solverArguments.at(i) + QString("\"");
-        }
+        QString cmdLine = this->getCommandLine();
 
         RLogger::info("Executing \'%s\'\n",cmdLine.toUtf8().constData());
 

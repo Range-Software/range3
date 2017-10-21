@@ -16,6 +16,8 @@
 #include <QPushButton>
 #include <QTextBrowser>
 #include <QScrollBar>
+#include <QLineEdit>
+#include <QScrollArea>
 
 #include "main_settings.h"
 #include "model_io.h"
@@ -32,6 +34,12 @@ SolverStartDialog::SolverStartDialog(uint modelID, QWidget *parent)
     SolverSetupChecker solverSetupChecker(Session::getInstance().getModel(this->modelID));
     solverSetupChecker.perform(this->warnings,this->errors);
 
+    const Model &rModel = Session::getInstance().getModel(this->modelID);
+    this->modelFileName = ModelIO::getModelSaveName(MainSettings::getInstance(),this,rModel);
+
+    this->pSolverTask = new SolverTask(MainSettings::getInstance().getApplicationSettings(),this->modelID);
+    this->pSolverTask->setBlocking(false);
+
     this->setWindowTitle(QString("Start solver"));
 
     QIcon cancelIcon(":/icons/file/pixmaps/range-cancel.svg");
@@ -39,8 +47,6 @@ SolverStartDialog::SolverStartDialog(uint modelID, QWidget *parent)
 
     QVBoxLayout *mainLayout = new QVBoxLayout;
     this->setLayout (mainLayout);
-
-    const Model &rModel = Session::getInstance().getModel(this->modelID);
 
     QLabel *messageLabel = new QLabel;
     messageLabel->setText(tr("Start solver for model:") + " <b>" + rModel.getName() + "</b>");
@@ -60,7 +66,7 @@ SolverStartDialog::SolverStartDialog(uint modelID, QWidget *parent)
             for (int i=0;i<this->errors.size();i++)
             {
                 htmlMessage += "<li>";
-                htmlMessage +=this->errors.at(i);
+                htmlMessage += this->errors.at(i);
                 htmlMessage += "</li>";
             }
             htmlMessage += "</ul>";
@@ -73,7 +79,7 @@ SolverStartDialog::SolverStartDialog(uint modelID, QWidget *parent)
             for (int i=0;i<this->warnings.size();i++)
             {
                 htmlMessage += "<li>";
-                htmlMessage +=this->warnings.at(i);
+                htmlMessage += this->warnings.at(i);
                 htmlMessage += "</li>";
             }
             htmlMessage += "</ul>";
@@ -85,8 +91,21 @@ SolverStartDialog::SolverStartDialog(uint modelID, QWidget *parent)
         textCursor.movePosition(QTextCursor::Start);
         messagesBrowser->setTextCursor(textCursor);
 
-        this->resize(600,300);
+        this->resize(600,400);
     }
+
+    QLabel *commandTitleLabel = new QLabel(tr("Command line"));
+    mainLayout->addWidget(commandTitleLabel);
+
+    QScrollArea *scrollArea = new QScrollArea;
+    scrollArea->setWidgetResizable(true);
+    scrollArea->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Maximum);
+    mainLayout->addWidget(scrollArea);
+
+    QLabel *commandLineLabel = new QLabel(this->pSolverTask->getCommandLine());
+    commandLineLabel->setTextInteractionFlags(Qt::TextSelectableByMouse);
+    commandLineLabel->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Maximum);
+    scrollArea->setWidget(commandLineLabel);
 
     this->restartSolverCheck = new QCheckBox("Restart solver / continue");
     if (Session::getInstance().getModel(this->modelID).getNVariables() == 0)
@@ -126,14 +145,12 @@ int SolverStartDialog::exec(void)
         Session::getInstance().getModel(this->modelID).getProblemSetup().setRestart(this->restartSolverCheck->isChecked());
 
         // Start solver task
-        QString modelFileName = ModelIO::getModelSaveName(MainSettings::getInstance(),
-                                                          this,
-                                                          Session::getInstance().getModel(this->modelID));
-        Session::getInstance().getModel(this->modelID).setFileName(modelFileName);
-
-        SolverTask *solverTask = new SolverTask(MainSettings::getInstance().getApplicationSettings(),this->modelID);
-        solverTask->setBlocking(false);
-        SolverManager::getInstance().submit(solverTask);
+        Session::getInstance().getModel(this->modelID).setFileName(this->modelFileName);
+        SolverManager::getInstance().submit(this->pSolverTask);
+    }
+    else
+    {
+        delete this->pSolverTask;
     }
 
     return retVal;
