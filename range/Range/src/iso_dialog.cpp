@@ -15,13 +15,6 @@
 #include "session.h"
 #include "iso_dialog.h"
 
-typedef enum _VariableTreeColumn
-{
-    VARIABLE_TREE_COLUMN_NAME = 0,
-    VARIABLE_TREE_COLUMN_TYPE,
-    VARIABLE_TREE_N_COLUMNS
-} VariableTreeColumn;
-
 IsoDialog::IsoDialog(uint modelID, QWidget *parent) :
     QDialog(parent),
     modelID(modelID),
@@ -156,13 +149,13 @@ void IsoDialog::createDialog(void)
 
     this->variableTree = new QTreeWidget(this);
     this->variableTree->setSelectionMode(QAbstractItemView::SingleSelection);
-    this->variableTree->setColumnCount(VARIABLE_TREE_N_COLUMNS);
+    this->variableTree->setColumnCount(IsoDialog::NColumns);
 
     QTreeWidgetItem* headerItem = new QTreeWidgetItem();
-    headerItem->setText(VARIABLE_TREE_COLUMN_NAME,QString("Variables"));
-    headerItem->setText(VARIABLE_TREE_COLUMN_TYPE,QString("type"));
+    headerItem->setText(IsoDialog::Name,QString("Variables"));
+    headerItem->setText(IsoDialog::Type,QString("type"));
     this->variableTree->setHeaderItem(headerItem);
-    this->variableTree->setColumnHidden(VARIABLE_TREE_COLUMN_TYPE,true);
+    this->variableTree->setColumnHidden(IsoDialog::Type,true);
 
     double variableValue = 0.0;
     double minVariableValue = 0.0;
@@ -179,8 +172,8 @@ void IsoDialog::createDialog(void)
         }
 
         QTreeWidgetItem *itemVariable = new QTreeWidgetItem(this->variableTree);
-        itemVariable->setText(VARIABLE_TREE_COLUMN_NAME, rVariable.getName());
-        itemVariable->setData(VARIABLE_TREE_COLUMN_TYPE,Qt::DisplayRole,QVariant(rVariable.getType()));
+        itemVariable->setText(IsoDialog::Name, rVariable.getName());
+        itemVariable->setData(IsoDialog::Type,Qt::DisplayRole,QVariant(rVariable.getType()));
         if (this->entityID != RConstants::eod)
         {
             RIso &rIso = Session::getInstance().getModel(this->modelID).getIso(entityID);
@@ -238,7 +231,7 @@ RVariableType IsoDialog::getVariableType(void) const
         return R_VARIABLE_NONE;
     }
 
-    return RVariableType(items[0]->data(VARIABLE_TREE_COLUMN_TYPE,Qt::DisplayRole).toInt());
+    return RVariableType(items[0]->data(IsoDialog::Type,Qt::DisplayRole).toInt());
 }
 
 void IsoDialog::onVariableTreeSelectionChanged(void)

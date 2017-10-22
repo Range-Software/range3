@@ -3153,6 +3153,10 @@ void RFileIO::readAscii(RFile &inFile, RVectorField &vectorField)
 {
     RFileIO::readAscii(inFile,static_cast<REntityGroup&>(vectorField));
     RFileIO::readAscii(inFile,vectorField.variableType);
+    if (inFile.getVersion() > RVersion(0,3,3))
+    {
+        RFileIO::readAscii(inFile,vectorField.type3d);
+    }
     unsigned int nElementGroupIDs;
     RFileIO::readAscii(inFile,nElementGroupIDs);
     vectorField.elementGroupIDs.resize(nElementGroupIDs);
@@ -3167,6 +3171,10 @@ void RFileIO::readBinary(RFile &inFile, RVectorField &vectorField)
 {
     RFileIO::readBinary(inFile,static_cast<REntityGroup&>(vectorField));
     RFileIO::readBinary(inFile,vectorField.variableType);
+    if (inFile.getVersion() > RVersion(0,3,3))
+    {
+        RFileIO::readBinary(inFile,vectorField.type3d);
+    }
     unsigned int nElementGroupIDs;
     RFileIO::readBinary(inFile,nElementGroupIDs);
     vectorField.elementGroupIDs.resize(nElementGroupIDs);
@@ -3185,6 +3193,11 @@ void RFileIO::writeAscii(RFile &outFile, const RVectorField &vectorField, bool a
         RFileIO::writeAscii(outFile,' ',false);
     }
     RFileIO::writeAscii(outFile,vectorField.variableType,addNewLine);
+    if (!addNewLine)
+    {
+        RFileIO::writeAscii(outFile,' ',false);
+    }
+    RFileIO::writeAscii(outFile,vectorField.type3d,addNewLine);
     if (!addNewLine)
     {
         RFileIO::writeAscii(outFile,' ',false);
@@ -3209,6 +3222,7 @@ void RFileIO::writeBinary(RFile &outFile, const RVectorField &vectorField)
 {
     RFileIO::writeBinary(outFile,static_cast<const REntityGroup&>(vectorField));
     RFileIO::writeBinary(outFile,vectorField.variableType);
+    RFileIO::writeBinary(outFile,vectorField.type3d);
     RFileIO::writeBinary(outFile,(unsigned int)vectorField.elementGroupIDs.size());
     for (unsigned int i=0;i<vectorField.elementGroupIDs.size();i++)
     {

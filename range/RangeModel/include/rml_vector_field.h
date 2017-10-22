@@ -28,6 +28,8 @@ class RVectorField : public REntityGroup
 
         //! Variable type.
         RVariableType variableType;
+        //! 3D type.
+        bool type3d;
         //! List of element group IDs from which field is constructed.
         std::vector<uint> elementGroupIDs;
 
@@ -55,6 +57,12 @@ class RVectorField : public REntityGroup
 
         //! Set variable type.
         void setVariableType ( RVariableType variableType );
+
+        //! Return 3D type.
+        bool getType3D(void) const;
+
+        //! Set 3D type.
+        void setType3D(bool type3d);
 
         //! Return const reference to element group IDs.
         const std::vector<uint> & getElementGroupIDs ( void ) const;

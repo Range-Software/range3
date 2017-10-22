@@ -15,13 +15,6 @@
 #include "session.h"
 #include "scalar_field_dialog.h"
 
-typedef enum _VariableTreeColumn
-{
-    VARIABLE_TREE_COLUMN_NAME = 0,
-    VARIABLE_TREE_COLUMN_TYPE,
-    VARIABLE_TREE_N_COLUMNS
-} VariableTreeColumn;
-
 ScalarFieldDialog::ScalarFieldDialog(uint modelID, QWidget *parent) :
     QDialog(parent),
     modelID(modelID),
@@ -164,13 +157,13 @@ void ScalarFieldDialog::createDialog(void)
 
     this->variableTree = new QTreeWidget(this);
     this->variableTree->setSelectionMode(QAbstractItemView::SingleSelection);
-    this->variableTree->setColumnCount(VARIABLE_TREE_N_COLUMNS);
+    this->variableTree->setColumnCount(ScalarFieldDialog::NColumns);
 
     QTreeWidgetItem* headerItem = new QTreeWidgetItem();
-    headerItem->setText(VARIABLE_TREE_COLUMN_NAME,QString("Variables"));
-    headerItem->setText(VARIABLE_TREE_COLUMN_TYPE,QString("type"));
+    headerItem->setText(ScalarFieldDialog::Name,QString("Variables"));
+    headerItem->setText(ScalarFieldDialog::Type,QString("type"));
     this->variableTree->setHeaderItem(headerItem);
-    this->variableTree->setColumnHidden(VARIABLE_TREE_COLUMN_TYPE,true);
+    this->variableTree->setColumnHidden(ScalarFieldDialog::Type,true);
 
     Model &rModel = Session::getInstance().getModel(this->modelID);
 
@@ -179,8 +172,8 @@ void ScalarFieldDialog::createDialog(void)
         RVariable &rVariable = rModel.getVariable(i);
 
         QTreeWidgetItem *itemVariable = new QTreeWidgetItem(this->variableTree);
-        itemVariable->setText(VARIABLE_TREE_COLUMN_NAME, rVariable.getName());
-        itemVariable->setData(VARIABLE_TREE_COLUMN_TYPE,Qt::DisplayRole,QVariant(rVariable.getType()));
+        itemVariable->setText(ScalarFieldDialog::Name, rVariable.getName());
+        itemVariable->setData(ScalarFieldDialog::Type,Qt::DisplayRole,QVariant(rVariable.getType()));
         if (this->entityID != RConstants::eod)
         {
             RScalarField &rScalarField = Session::getInstance().getModel(modelID).getScalarField(entityID);
@@ -245,7 +238,7 @@ RVariableType ScalarFieldDialog::getVariableType(void) const
         return R_VARIABLE_NONE;
     }
 
-    return RVariableType(items[0]->data(VARIABLE_TREE_COLUMN_TYPE,Qt::DisplayRole).toInt());
+    return RVariableType(items[0]->data(ScalarFieldDialog::Type,Qt::DisplayRole).toInt());
 }
 
 void ScalarFieldDialog::onVariableTreeSelectionChanged(void)

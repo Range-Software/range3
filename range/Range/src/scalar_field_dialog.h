@@ -25,6 +25,13 @@ class ScalarFieldDialog : public QDialog
 
     protected:
 
+        enum TreeColumn
+        {
+            Name = 0,
+            Type,
+            NColumns
+        };
+
         //! Model tree widget.
         ModelTreeSimple *modelTree;
         //! Scalar variables tree widget.

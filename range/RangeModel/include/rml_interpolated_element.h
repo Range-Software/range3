@@ -51,6 +51,11 @@ class RInterpolatedElement : public std::vector<RInterpolatedNode>
                           double &cy,
                           double &cz ) const;
 
+        //! Compute and return element's normal and return true if element is surface (more than 2 nodes).
+        bool findNormal(double &nx,
+                        double &ny,
+                        double &nz) const;
+
         //! Check if picking ray is intersecting given element and return intersection distance from the position.
         bool findPickDistance(const RR3Vector &position,
                               const RR3Vector &direction,

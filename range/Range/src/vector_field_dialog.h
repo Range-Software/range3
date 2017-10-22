@@ -12,6 +12,7 @@
 #define __VECTOR_FIELD_DIALOG_H__
 
 #include <QDialog>
+#include <QCheckBox>
 
 #include "model_tree_simple.h"
 
@@ -22,10 +23,19 @@ class VectorFieldDialog : public QDialog
 
     protected:
 
+        enum TreeColumn
+        {
+            Name = 0,
+            Type,
+            NColumns
+        };
+
         //! Model tree widget.
         ModelTreeSimple *modelTree;
         //! Vector variables tree widget.
         QTreeWidget *variableTree;
+        //! 3D type check box.
+        QCheckBox *type3DCheckbox;
         //! OK button.
         QPushButton *okButton;
         //! Model ID.

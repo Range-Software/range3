@@ -387,6 +387,15 @@ std::vector<VectorFieldItem> GLVectorField::calculateField(const RVariable *pSca
                         v2[2] = rVariable.getValue(2,elementID);
                     }
 
+                    if (this->getType3D())
+                    {
+                        RR3Vector normal;
+                        if (rIElement.findNormal(normal[0],normal[1],normal[2]))
+                        {
+
+                        }
+                    }
+
                     if (this->getData().getDrawEqualArrowLength())
                     {
                         v2.normalize();

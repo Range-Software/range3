@@ -17,12 +17,14 @@ void RVectorField::_init(const RVectorField *pVectorField)
     if (pVectorField)
     {
         this->variableType = pVectorField->variableType;
+        this->type3d = pVectorField->type3d;
         this->elementGroupIDs = pVectorField->elementGroupIDs;
     }
 }
 
 RVectorField::RVectorField()
     : variableType(R_VARIABLE_NONE)
+    , type3d(true)
 {
     this->name = RVectorField::defaultName;
     this->_init();
@@ -53,6 +55,16 @@ RVariableType RVectorField::getVariableType(void) const
 void RVectorField::setVariableType(RVariableType variableType)
 {
     this->variableType = variableType;
+}
+
+bool RVectorField::getType3D(void) const
+{
+    return this->type3d;
+}
+
+void RVectorField::setType3D(bool type3d)
+{
+    this->type3d = type3d;
 }
 
 const std::vector<uint> &RVectorField::getElementGroupIDs(void) const

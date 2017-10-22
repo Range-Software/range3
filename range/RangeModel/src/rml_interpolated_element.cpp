@@ -172,6 +172,25 @@ void RInterpolatedElement::findCenter(double &cx, double &cy, double &cz) const
     }
 }
 
+bool RInterpolatedElement::findNormal(double &nx, double &ny, double &nz) const
+{
+    if (this->size() < 3)
+    {
+        return false;
+    }
+    std::vector<RR3Vector> nodes;
+    for (unsigned int i=0;i<this->size();i++)
+    {
+        nodes.push_back(RR3Vector(this->at(i).getX(),this->at(i).getY(),this->at(i).getZ()));
+    }
+    RPolygon p(nodes);
+    nx = p.getNormal()[0];
+    ny = p.getNormal()[1];
+    nz = p.getNormal()[2];
+
+    return true;
+}
+
 bool RInterpolatedElement::findPickDistance(const RR3Vector &position, const RR3Vector &direction, double tolerance, double &distance) const
 {
     bool found = false;

@@ -23,6 +23,13 @@ class IsoDialog : public QDialog
 
     protected:
 
+        enum TreeColumn
+        {
+            Name = 0,
+            Type,
+            NColumns
+        };
+
         //! Model tree widget.
         ModelTreeSimple *modelTree;
         //! Vector variables tree widget.

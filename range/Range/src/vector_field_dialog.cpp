@@ -15,13 +15,6 @@
 #include "session.h"
 #include "vector_field_dialog.h"
 
-typedef enum _VariableTreeColumn
-{
-    VARIABLE_TREE_COLUMN_NAME = 0,
-    VARIABLE_TREE_COLUMN_TYPE,
-    VARIABLE_TREE_N_COLUMNS
-} VariableTreeColumn;
-
 VectorFieldDialog::VectorFieldDialog(uint modelID, QWidget *parent) :
     QDialog(parent),
     modelID(modelID),
@@ -58,6 +51,7 @@ int VectorFieldDialog::exec(void)
                 vectorField.clearElementGroupIDs();
 
                 vectorField.setVariableType(varType);
+                vectorField.setType3D(this->type3DCheckbox->checkState() != Qt::Unchecked);
 
                 for (int i=0;i<entities.size();i++)
                 {
@@ -78,6 +72,11 @@ int VectorFieldDialog::exec(void)
 
                 vectorField.setName(RVariable::getName(varType));
                 vectorField.setVariableType(varType);
+                Qt::CheckState type3DCheckState = this->type3DCheckbox->checkState();
+                if (type3DCheckState != Qt::PartiallyChecked)
+                {
+                    vectorField.setType3D(type3DCheckState == Qt::Checked);
+                }
 
                 for (int i=0;i<entities.size();i++)
                 {
@@ -155,28 +154,35 @@ void VectorFieldDialog::createDialog(void)
 
     this->variableTree = new QTreeWidget(this);
     this->variableTree->setSelectionMode(QAbstractItemView::SingleSelection);
-    this->variableTree->setColumnCount(VARIABLE_TREE_N_COLUMNS);
+    this->variableTree->setColumnCount(VectorFieldDialog::NColumns);
 
     QTreeWidgetItem* headerItem = new QTreeWidgetItem();
-    headerItem->setText(VARIABLE_TREE_COLUMN_NAME,QString("Variables"));
-    headerItem->setText(VARIABLE_TREE_COLUMN_TYPE,QString("type"));
+    headerItem->setText(VectorFieldDialog::Name,QString("Variables"));
+    headerItem->setText(VectorFieldDialog::Type,QString("type"));
     this->variableTree->setHeaderItem(headerItem);
-    this->variableTree->setColumnHidden(VARIABLE_TREE_COLUMN_TYPE,true);
+    this->variableTree->setColumnHidden(VectorFieldDialog::Type,true);
 
     Model &rModel = Session::getInstance().getModel(this->modelID);
 
+    uint nType3D = 0;
+    uint nVariables = 0;
     for (uint i=0;i<rModel.getNVariables();i++)
     {
         RVariable &rVariable = rModel.getVariable(i);
         if (rVariable.getNVectors() > 1)
         {
             QTreeWidgetItem *itemVariable = new QTreeWidgetItem(this->variableTree);
-            itemVariable->setText(VARIABLE_TREE_COLUMN_NAME, rVariable.getName());
-            itemVariable->setData(VARIABLE_TREE_COLUMN_TYPE,Qt::DisplayRole,QVariant(rVariable.getType()));
+            itemVariable->setText(VectorFieldDialog::Name, rVariable.getName());
+            itemVariable->setData(VectorFieldDialog::Type,Qt::DisplayRole,QVariant(rVariable.getType()));
             if (this->entityID != RConstants::eod)
             {
                 RVectorField &rVectorField = Session::getInstance().getModel(modelID).getVectorField(entityID);
                 itemVariable->setSelected(rVariable.getType() == rVectorField.getVariableType());
+                if (rVectorField.getType3D())
+                {
+                    nType3D++;
+                }
+                nVariables++;
             }
         }
     }
@@ -188,9 +194,18 @@ void VectorFieldDialog::createDialog(void)
                      this,
                      &VectorFieldDialog::onVariableTreeSelectionChanged);
 
+    Qt::CheckState type3DCheckState = Qt::Unchecked;
+    if (nType3D > 0)
+    {
+        type3DCheckState = (nType3D == nVariables) ? Qt::Checked : Qt::PartiallyChecked;
+    }
+    this->type3DCheckbox = new QCheckBox("3D vector field");
+    this->type3DCheckbox->setCheckState(type3DCheckState);
+    mainLayout->addWidget(this->type3DCheckbox, 2, 0, 1, 2);
+
     QHBoxLayout *buttonsLayout = new QHBoxLayout;
     buttonsLayout->addStretch(1);
-    mainLayout->addLayout(buttonsLayout, 2, 0, 1, 2);
+    mainLayout->addLayout(buttonsLayout, 3, 0, 1, 2);
 
     QPushButton *cancelButton = new QPushButton(cancelIcon, tr("Cancel"));
     buttonsLayout->addWidget(cancelButton);
@@ -213,7 +228,7 @@ RVariableType VectorFieldDialog::getVariableType(void) const
         return R_VARIABLE_NONE;
     }
 
-    return RVariableType(items[0]->data(VARIABLE_TREE_COLUMN_TYPE,Qt::DisplayRole).toInt());
+    return RVariableType(items[0]->data(VectorFieldDialog::Type,Qt::DisplayRole).toInt());
 }
 
 void VectorFieldDialog::onVariableTreeSelectionChanged(void)
