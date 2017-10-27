@@ -204,6 +204,16 @@ void MainWindow::hideDrawWidget(void)
     this->hideCustomDockWidget(QString::fromUtf8("dockDraw"));
 }
 
+void MainWindow::progressAutoHideEnable(void)
+{
+    this->mainProgressBar->setAutoHide(true);
+}
+
+void MainWindow::progressAutoHideDisable(void)
+{
+    this->mainProgressBar->setAutoHide(false);
+}
+
 QDockWidget *MainWindow::findCustomDockWidget(const QString &name)
 {
     return this->findChild<QDockWidget*>(name);
@@ -1045,7 +1055,7 @@ void MainWindow::setEnabled(bool enabled)
     this->dockMaterial->setEnabled(enabled);
     this->dockResults->setEnabled(enabled);
     this->dockDocuments->setEnabled(enabled);
-    this->dockRecords->setEnabled(enabled);
+//    this->dockRecords->setEnabled(enabled);
     if (enabled)
     {
         this->actionList->enable();

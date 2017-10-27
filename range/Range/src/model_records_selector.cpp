@@ -20,6 +20,7 @@
 #include "model_records_selector.h"
 #include "model_io.h"
 #include "session.h"
+#include "main_window.h"
 
 ModelRecordsSelector::ModelRecordsSelector(QWidget *parent) :
     QWidget(parent),
@@ -75,13 +76,6 @@ ModelRecordsSelector::ModelRecordsSelector(QWidget *parent) :
     toolBar->addActions(actions);
 }
 
-void ModelRecordsSelector::recordScreenShot(bool modelID)
-{
-    Model &rModel = Session::getInstance().getModel(modelID);
-
-    Session::getInstance().setTakeScreenShot(modelID,rModel.buildScreenShotFileName());
-}
-
 void ModelRecordsSelector::createAnimation(bool modelID)
 {
     Model &rModel = Session::getInstance().getModel(modelID);
@@ -102,6 +96,8 @@ void ModelRecordsSelector::createAnimation(bool modelID)
     QString fileName(rModel.buildAnimationFileName());
 
     RLogger::info("Creating animation file \'%s\'\n",fileName.toUtf8().constData());
+
+    // TODO: Implement
 }
 
 void ModelRecordsSelector::onRecordMarked(uint modelID, const QString &recordFileName)
@@ -123,7 +119,8 @@ void ModelRecordsSelector::onUpdateJobFinished(void)
 {
     if (this->recordIndicator)
     {
-        this->recordScreenShot(this->updateModelID);
+        // Take screen-shot
+        Session::getInstance().setTakeScreenShot(this->updateModelID,Session::getInstance().getModel(this->updateModelID).buildScreenShotFileName());
     }
     if (this->markNextIndicator)
     {
@@ -137,6 +134,7 @@ void ModelRecordsSelector::playToggle(bool jumpToFirst)
 
     if (this->markNextIndicator)
     {
+        MainWindow::getInstance()->progressAutoHideDisable();
         this->playAction->setIcon(QIcon(":/icons/media/pixmaps/range-play_pause.svg"));
         this->playAction->setText("Pause");
 
@@ -146,6 +144,8 @@ void ModelRecordsSelector::playToggle(bool jumpToFirst)
     {
         this->playAction->setIcon(QIcon(":/icons/media/pixmaps/range-play_play.svg"));
         this->playAction->setText("Play");
+        this->recordAction->setEnabled(true);
+        MainWindow::getInstance()->progressAutoHideEnable();
     }
 }
 

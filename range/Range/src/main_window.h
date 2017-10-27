@@ -95,6 +95,12 @@ class MainWindow : public QMainWindow
         //! Hide draw dock widget.
         void hideDrawWidget(void);
 
+        //! Enable progress-bar autohide.
+        void progressAutoHideEnable(void);
+
+        //! Disable progress-bar autohide.
+        void progressAutoHideDisable(void);
+
     protected:
 
         //! Find custom dock widget.

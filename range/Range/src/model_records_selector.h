@@ -43,9 +43,6 @@ class ModelRecordsSelector : public QWidget
 
     protected:
 
-        //! Record screen-shot.
-        void recordScreenShot(bool modelID);
-
         //! Create animation from screenshots.
         void createAnimation(bool modelID);
 

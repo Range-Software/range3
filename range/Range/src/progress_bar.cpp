@@ -12,6 +12,7 @@
 
 ProgressBar::ProgressBar(QWidget *parent)
     : QProgressBar(parent)
+    , autoHide(true)
 {
     this->setTextVisible(true);
     this->pulseTimer = new QTimer(this);
@@ -44,6 +45,19 @@ void ProgressBar::setMessage(const QString &message)
 {
     this->message = message;
     this->setFormat(this->message);
+}
+
+void ProgressBar::setAutoHide(bool autoHide)
+{
+    this->autoHide = autoHide;
+}
+
+void ProgressBar::hide(void)
+{
+    if (this->autoHide)
+    {
+        this->QProgressBar::hide();
+    }
 }
 
 void ProgressBar::pulse(void)

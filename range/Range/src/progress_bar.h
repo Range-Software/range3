@@ -25,6 +25,8 @@ class ProgressBar : public QProgressBar
         QTimer *pulseTimer;
         //! Custom message.
         QString message;
+        //! Autohide flag.
+        bool autoHide;
 
     public:
 
@@ -42,6 +44,14 @@ class ProgressBar : public QProgressBar
 
         //! Set message.
         void setMessage(const QString &message);
+
+        //! Set autohide.
+        void setAutoHide(bool autoHide);
+
+    public slots:
+
+        //! Hide widget.
+        void hide(void);
 
     private slots:
 
