@@ -153,7 +153,7 @@ void ModelRecordsSelector::loadNextRecord(bool jumpToFirst)
 {
     if (!jumpToFirst && (this->tree->isLast() || !this->markNextIndicator))
     {
-        if (recordIndicator)
+        if (this->recordIndicator)
         {
             QList<uint> selectedModelIDs = Session::getInstance().getSelectedModelIDs();
             for (int i=0;i<selectedModelIDs.size();i++)

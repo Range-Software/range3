@@ -316,6 +316,9 @@ class Session : public QObject
         //! Take screenshot of given model ID.
         void takeScreenShot(uint modelID, const QString &screenShotFileName);
 
+        //! Take screenshot of given model ID.
+        void takeScreenShotBlocking(uint modelID, const QString &screenShotFileName);
+
         //! Number of history records has changed.
         void nHistoryRecordsChanged(uint nHistoryRecords);
 

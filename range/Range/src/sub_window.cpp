@@ -105,6 +105,10 @@ void SubWindow::createSubWindow(void)
     QObject::connect(&Session::getInstance(),
                      &Session::takeScreenShot,
                      this,
+                     &SubWindow::onSessionScreenshot);
+    QObject::connect(&Session::getInstance(),
+                     &Session::takeScreenShotBlocking,
+                     this,
                      &SubWindow::onSessionScreenshot,
                      Qt::BlockingQueuedConnection);
 
