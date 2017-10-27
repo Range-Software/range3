@@ -51,6 +51,9 @@ class ModelRecordsSelector : public QWidget
         //! Record markeded.
         void onRecordMarked(uint modelID, const QString &recordFileName);
 
+        //! On record has finished.
+        void onRecordFinished(void);
+
         //! On update job has finished.
         void onUpdateJobFinished(void);
 
@@ -62,6 +65,11 @@ class ModelRecordsSelector : public QWidget
 
         //! On record video toggled.
         void onRecordVideo(void);
+
+    signals:
+
+        //! Signal to load next record.
+        void recordFinished(void);
     
 };
 

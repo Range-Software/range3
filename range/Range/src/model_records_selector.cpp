@@ -74,6 +74,8 @@ ModelRecordsSelector::ModelRecordsSelector(QWidget *parent) :
     this->recordAction = actions.last();
 
     toolBar->addActions(actions);
+
+    QObject::connect(this,&ModelRecordsSelector::recordFinished,this,&ModelRecordsSelector::onRecordFinished);
 }
 
 void ModelRecordsSelector::createAnimation(bool modelID)
@@ -115,6 +117,11 @@ void ModelRecordsSelector::onRecordMarked(uint modelID, const QString &recordFil
     JobManager::getInstance().submit(updateJob);
 }
 
+void ModelRecordsSelector::onRecordFinished(void)
+{
+    QTimer::singleShot(this->recordIndicator?0:1000, this, SLOT(loadNextRecord()));
+}
+
 void ModelRecordsSelector::onUpdateJobFinished(void)
 {
     if (this->recordIndicator)
@@ -124,7 +131,7 @@ void ModelRecordsSelector::onUpdateJobFinished(void)
     }
     if (this->markNextIndicator)
     {
-        QTimer::singleShot(this->recordIndicator?0:1000, this, SLOT(loadNextRecord()));
+        emit this->recordFinished();
     }
 }
 
@@ -166,6 +173,7 @@ void ModelRecordsSelector::loadNextRecord(bool jumpToFirst)
         this->playAction->setIcon(QIcon(":/icons/media/pixmaps/range-play_play.svg"));
         this->playAction->setText("Play");
         this->recordAction->setEnabled(true);
+        MainWindow::getInstance()->progressAutoHideEnable();
     }
     else
     {
