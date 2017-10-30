@@ -1201,6 +1201,7 @@ void RSolverFluid::computeElementGeneral(unsigned int elementID, RRMatrix &Ae, R
     double mVh = this->streamVelocity;
     double alpha = this->pModel->getTimeSolver().getTimeMarchApproximationCoefficient();
     double dt = this->pModel->getTimeSolver().getCurrentTimeStepSize();
+    double alphaDt = alpha * dt;
 
     // Element level input -------------------------------------------
     RR3Vector ve(this->elementVelocity.x[elementID],
@@ -1278,17 +1279,21 @@ void RSolverFluid::computeElementGeneral(unsigned int elementID, RRMatrix &Ae, R
             h = 2.0/h;
         }
         // Reynolds numbers
-        double Re = ro * mvh * h / (2.0 * u);
-        double Ren = ro * mVh * hn / (2.0 * u);
+        double roD2u = ro / (2.0*u);
+        double Re = roD2u * mvh * h;
+        double Ren = roD2u * mVh * hn;
 
         // SUPG stabilization parameter
         double Tsupg = 0.0;
         if (mvh > 0.0)
         {
-            Tsupg = h / (2.0 * mvh);
             if (Re > 0.0 && Re <= 3.0)
             {
-                Tsupg *= Re / 3.0;
+                Tsupg = h * Re / (6.0 * mvh);
+            }
+            else
+            {
+                Tsupg = h / (2.0 * mvh);
             }
         }
 
@@ -1296,10 +1301,13 @@ void RSolverFluid::computeElementGeneral(unsigned int elementID, RRMatrix &Ae, R
         double Tpspg = 0.0;
         if (mVh > 0.0)
         {
-            Tpspg = hn / (2.0 * mVh);
             if (Ren > 0.0 && Ren <= 3.0)
             {
-                Tpspg *= Ren / 3.0;
+                Tpspg = hn * Ren / (6.0 * mVh);
+            }
+            else
+            {
+                Tpspg = hn / (2.0 * mVh);
             }
         }
 
@@ -1530,11 +1538,11 @@ void RSolverFluid::computeElementGeneral(unsigned int elementID, RRMatrix &Ae, R
                 if (unsteady)
                 {
                     Ae11[m][n] = me[m][n] + cte[m][n]
-                               + alpha * dt * (
-                                                 ce[m][n]    + cpe[m][n]
-                                               + ctpe[m][n]  + ke[m][n]
-                                               + kte[m][n]   + ktpe[m][n]
-                                               + ktppe[m][n] + ytpe[m][n] )
+                               + alphaDt * (
+                                              ce[m][n]    + cpe[m][n]
+                                            + ctpe[m][n]  + ke[m][n]
+                                            + kte[m][n]   + ktpe[m][n]
+                                            + ktppe[m][n] + ytpe[m][n] )
                                + dt * epe[m][n];
                 }
                 else
@@ -1552,8 +1560,8 @@ void RSolverFluid::computeElementGeneral(unsigned int elementID, RRMatrix &Ae, R
                 {
                     Ae12[m][n] = -dt * (ge[m][n] + yte[m][n]);
                     Ae21[n][m] = bte[n][m]
-                               + dt*geT[n][m]
-                               + alpha * dt * (ye[n][m] + ype[n][m]);
+                               + dt * geT[n][m]
+                               + alphaDt * (ye[n][m] + ype[n][m]);
                 }
                 else
                 {
@@ -1697,6 +1705,7 @@ void RSolverFluid::computeElementConstantDerivative(unsigned int elementID, RRMa
     double mVh = this->streamVelocity;
     double alpha = this->pModel->getTimeSolver().getTimeMarchApproximationCoefficient();
     double dt = this->pModel->getTimeSolver().getCurrentTimeStepSize();
+    double alphaDt = alpha * dt;
 
     // Element level input -------------------------------------------
     RR3Vector ve(this->elementVelocity.x[elementID],
@@ -1771,17 +1780,21 @@ void RSolverFluid::computeElementConstantDerivative(unsigned int elementID, RRMa
         h = 2.0/h;
     }
     // Reynolds numbers
-    double Re = ro * mvh * h / (2.0 * u);
-    double Ren = ro * mVh * hn / (2.0 * u);
+    double roD2u = ro / (2.0*u);
+    double Re = roD2u * mvh * h;
+    double Ren = roD2u * mVh * hn;
 
     // SUPG stabilization parameter
     double Tsupg = 0.0;
     if (mvh > 0.0)
     {
-        Tsupg = h / (2.0 * mvh);
         if (Re > 0.0 && Re <= 3.0)
         {
-            Tsupg *= Re / 3.0;
+            Tsupg = h * Re / (6.0 * mvh);
+        }
+        else
+        {
+            Tsupg = h / (2.0 * mvh);
         }
     }
 
@@ -1789,10 +1802,13 @@ void RSolverFluid::computeElementConstantDerivative(unsigned int elementID, RRMa
     double Tpspg = 0.0;
     if (mVh > 0.0)
     {
-        Tpspg = hn / (2.0 * mVh);
         if (Ren > 0.0 && Ren <= 3.0)
         {
-            Tpspg *= Ren / 3.0;
+            Tpspg = hn * Ren / (6.0 * mVh);
+        }
+        else
+        {
+            Tpspg = hn / (2.0 * mVh);
         }
     }
 
@@ -2027,11 +2043,11 @@ void RSolverFluid::computeElementConstantDerivative(unsigned int elementID, RRMa
             if (unsteady)
             {
                 Ae11[m][n] = me[m][n] + cte[m][n]
-                           + alpha * dt * (
-                                             ce[m][n]    + cpe[m][n]
-                                           + ctpe[m][n]  + ke[m][n]
-                                           + kte[m][n]   + ktpe[m][n]
-                                           + ktppe[m][n] + ytpe[m][n] )
+                           + alphaDt * (
+                                          ce[m][n]    + cpe[m][n]
+                                        + ctpe[m][n]  + ke[m][n]
+                                        + kte[m][n]   + ktpe[m][n]
+                                        + ktppe[m][n] + ytpe[m][n] )
                            + dt * epe[m][n];
             }
             else
@@ -2049,8 +2065,8 @@ void RSolverFluid::computeElementConstantDerivative(unsigned int elementID, RRMa
             {
                 Ae12[m][n] = -dt * (ge[m][n] + yte[m][n]);
                 Ae21[n][m] = bte[n][m]
-                           + dt*geT[n][m]
-                           + alpha * dt * (ye[n][m] + ype[n][m]);
+                           + dt * geT[n][m]
+                           + alphaDt * (ye[n][m] + ype[n][m]);
             }
             else
             {
@@ -2162,6 +2178,9 @@ void RSolverFluid::computeElementScales(void)
     this->elementScales.resize(this->pModel->getNElements());
     this->elementScales.fill(0.0);
 
+    double third = 1.0/3.0;
+
+#pragma omp parallel for default(shared)
     for (uint i=0;i<this->pModel->getNElements();i++)
     {
         if (!this->computableElements[i])
@@ -2176,11 +2195,11 @@ void RSolverFluid::computeElementScales(void)
         }
         if (rElement.getType() == R_ELEMENT_TETRA1)
         {
-            this->elementScales[i] = std::pow(6.0 * volume / RConstants::pi, 1.0/3.0);
+            this->elementScales[i] = std::pow(6.0 * volume / RConstants::pi, third);
         }
         else if (rElement.getType() == R_ELEMENT_HEXA1)
         {
-            this->elementScales[i] = std::pow(volume, 1.0/3.0);
+            this->elementScales[i] = std::pow(volume, third);
         }
         else
         {
@@ -2198,6 +2217,7 @@ void RSolverFluid::computeElementFreePressure(RRVector &values, RBVector &setVal
     setValues.resize(this->pModel->getNElements());
     setValues.fill(false);
 
+#pragma omp parallel for default(shared)
     for (uint i=0;i<this->pModel->getNSurfaces();i++)
     {
         const RSurface &rSurface = this->pModel->getSurface(i);

@@ -261,6 +261,7 @@ std::vector<ScalarFieldItem> GLScalarField::calculateField(const RVariable *pSca
                         uint nodeID = rElement.getNodeId(k);
 
                         bool nodeSet = false;
+#pragma omp flush(nodeBook)
 #pragma omp critical
                         {
                             if (nodeBook[nodeID])
