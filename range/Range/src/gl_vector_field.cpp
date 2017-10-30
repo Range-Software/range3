@@ -8,6 +8,8 @@
  *  DESCRIPTION: OpenGL vector field class definition                *
  *********************************************************************/
 
+#include <omp.h>
+
 #include <rmlib.h>
 
 #include "gl_vector_field.h"
@@ -195,10 +197,10 @@ std::vector<VectorFieldItem> GLVectorField::calculateField(const RVariable *pSca
 
     const RVariable &rVariable = rModel.getVariable(variablePosition);
     double scale = rVariable.getVariableData().getScale()*0.01;
-    double maxValue = rVariable.getMaxValue();
 
     if (!this->getData().getDrawEqualArrowLength())
     {
+        double maxValue = rVariable.getMaxValue();
         if (maxValue != 0.0)
         {
             scale /= maxValue*0.5;
@@ -211,10 +213,12 @@ std::vector<VectorFieldItem> GLVectorField::calculateField(const RVariable *pSca
         nodeBook.resize(rModel.getNNodes(),false);
     }
 
-    REntityGroupType entityType;
-    uint entityID;
+#pragma omp parallel for default(shared)
     for (uint i=0;i<this->elementGroupIDs.size();i++)
     {
+        REntityGroupType entityType;
+        uint entityID;
+
         if (!rModel.getEntityID(this->elementGroupIDs[i],entityType,entityID))
         {
             continue;
@@ -272,7 +276,10 @@ std::vector<VectorFieldItem> GLVectorField::calculateField(const RVariable *pSca
                     bool validScalarValue = (scalarValues.size() == 1);
                     double scalarValue = validScalarValue ? scalarValues[0] : 0.0;
 
-                    field.push_back(VectorFieldItem(v1,v2,validScalarValue,scalarValue));
+#pragma omp critical
+                    {
+                        field.push_back(VectorFieldItem(v1,v2,validScalarValue,scalarValue));
+                    }
                 }
                 else if (rVariable.getApplyType() == R_VARIABLE_APPLY_NODE)
                 {
@@ -280,11 +287,22 @@ std::vector<VectorFieldItem> GLVectorField::calculateField(const RVariable *pSca
                     {
                         uint nodeID = rElement.getNodeId(k);
 
-                        if (nodeBook[nodeID])
+                        bool nodeSet = false;
+#pragma omp critical
+                        {
+                            if (nodeBook[nodeID])
+                            {
+                                nodeSet = true;
+                            }
+                            else
+                            {
+                                nodeBook[nodeID] = true;
+                            }
+                        }
+                        if (nodeSet)
                         {
                             continue;
                         }
-                        nodeBook[nodeID] = true;
 
                         // 1. vector
                         RR3Vector v1;
@@ -323,7 +341,10 @@ std::vector<VectorFieldItem> GLVectorField::calculateField(const RVariable *pSca
                         bool validScalarValue = (scalarValues.size() == rElement.size());
                         double scalarValue = validScalarValue ? scalarValues[k] : 0.0;
 
-                        field.push_back(VectorFieldItem(v1,v2,validScalarValue,scalarValue));
+#pragma omp critical
+                        {
+                            field.push_back(VectorFieldItem(v1,v2,validScalarValue,scalarValue));
+                        }
                     }
                 }
             }
@@ -407,7 +428,10 @@ std::vector<VectorFieldItem> GLVectorField::calculateField(const RVariable *pSca
                     bool validScalarValue = (scalarValues.size() == 1);
                     double scalarValue = validScalarValue ? scalarValues[0] : 0.0;
 
-                    field.push_back(VectorFieldItem(v1,v2,validScalarValue,scalarValue));
+#pragma omp critical
+                    {
+                        field.push_back(VectorFieldItem(v1,v2,validScalarValue,scalarValue));
+                    }
 
                 }
                 else if (rVariable.getApplyType() == R_VARIABLE_APPLY_NODE)
@@ -472,7 +496,10 @@ std::vector<VectorFieldItem> GLVectorField::calculateField(const RVariable *pSca
                         }
                         v2 *= scale;
 
-                        field.push_back(VectorFieldItem(v1,v2,validScalarValue,scalarValue));
+#pragma omp critical
+                        {
+                            field.push_back(VectorFieldItem(v1,v2,validScalarValue,scalarValue));
+                        }
                     }
                 }
             }

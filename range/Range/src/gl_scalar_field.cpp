@@ -9,6 +9,7 @@
  *********************************************************************/
 
 #include <cmath>
+#include <omp.h>
 
 #include <rmlib.h>
 
@@ -201,10 +202,12 @@ std::vector<ScalarFieldItem> GLScalarField::calculateField(const RVariable *pSca
     double minValue = rVariable.getMinValue();
     double maxValue = rVariable.getMaxValue();
 
-    REntityGroupType entityType;
-    uint entityID;
+#pragma omp parallel for default(shared)
     for (uint i=0;i<this->elementGroupIDs.size();i++)
     {
+        REntityGroupType entityType;
+        uint entityID;
+
         if (!rModel.getEntityID(this->elementGroupIDs[i],entityType,entityID))
         {
             continue;
@@ -246,7 +249,10 @@ std::vector<ScalarFieldItem> GLScalarField::calculateField(const RVariable *pSca
                     bool validScalarValue = (scalarValues.size() == 1);
                     double scalarValue = validScalarValue ? scalarValues[0] : 0.0;
 
-                    field.push_back(ScalarFieldItem(position,scalarRate,validScalarValue,scalarValue));
+#pragma omp critical
+                    {
+                        field.push_back(ScalarFieldItem(position,scalarRate,validScalarValue,scalarValue));
+                    }
                 }
                 else if (rVariable.getApplyType() == R_VARIABLE_APPLY_NODE)
                 {
@@ -254,11 +260,22 @@ std::vector<ScalarFieldItem> GLScalarField::calculateField(const RVariable *pSca
                     {
                         uint nodeID = rElement.getNodeId(k);
 
-                        if (nodeBook[nodeID])
+                        bool nodeSet = false;
+#pragma omp critical
+                        {
+                            if (nodeBook[nodeID])
+                            {
+                                nodeSet = true;
+                            }
+                            else
+                            {
+                                nodeBook[nodeID] = true;
+                            }
+                        }
+                        if (nodeSet)
                         {
                             continue;
                         }
-                        nodeBook[nodeID] = true;
 
                         RR3Vector position;
                         position[0] = rModel.getNode(nodeID).getX();
@@ -281,7 +298,10 @@ std::vector<ScalarFieldItem> GLScalarField::calculateField(const RVariable *pSca
                         bool validScalarValue = (scalarValues.size() == rElement.size());
                         double scalarValue = validScalarValue ? scalarValues[k] : 0.0;
 
-                        field.push_back(ScalarFieldItem(position,scalarRate,validScalarValue,scalarValue));
+#pragma omp critical
+                        {
+                            field.push_back(ScalarFieldItem(position,scalarRate,validScalarValue,scalarValue));
+                        }
                     }
                 }
             }
@@ -339,7 +359,10 @@ std::vector<ScalarFieldItem> GLScalarField::calculateField(const RVariable *pSca
                     bool validScalarValue = (scalarValues.size() == 1);
                     double scalarValue = validScalarValue ? scalarValues[0] : 0.0;
 
-                    field.push_back(ScalarFieldItem(position,scalarRate,validScalarValue,scalarValue));
+#pragma omp critical
+                    {
+                        field.push_back(ScalarFieldItem(position,scalarRate,validScalarValue,scalarValue));
+                    }
 
                 }
                 else if (rVariable.getApplyType() == R_VARIABLE_APPLY_NODE)
@@ -399,7 +422,10 @@ std::vector<ScalarFieldItem> GLScalarField::calculateField(const RVariable *pSca
                             position[2] += rElement.interpolate(rModel.getNodes(),rIElement[k],zDisplacementValues);
                         }
 
-                        field.push_back(ScalarFieldItem(position,scalarRate,validScalarValue,scalarValue));
+#pragma omp critical
+                        {
+                            field.push_back(ScalarFieldItem(position,scalarRate,validScalarValue,scalarValue));
+                        }
                     }
                 }
             }
