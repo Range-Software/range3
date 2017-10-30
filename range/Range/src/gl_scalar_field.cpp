@@ -204,8 +204,10 @@ std::vector<ScalarFieldItem> GLScalarField::calculateField(const RVariable *pSca
         nodeBook.resize(rModel.getNNodes(),false);
     }
 
-    double minValue = rVariable.getMinValue();
-    double maxValue = rVariable.getMaxValue();
+//    double minValue = rVariable.getMinValue();
+//    double maxValue = rVariable.getMaxValue();
+    double minValue = rVariable.getVariableData().getMinDisplayValue();
+    double maxValue = rVariable.getVariableData().getMaxDisplayValue();
 
 #pragma omp parallel for default(shared)
     for (uint i=0;i<this->elementGroupIDs.size();i++)
