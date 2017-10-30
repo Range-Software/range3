@@ -352,7 +352,10 @@ void ModelRecordsTree::populate(void)
         item->setData(ModelRecordsTree::Marked,Qt::UserRole,QVariant(false));
         item->setText(ModelRecordsTree::Marked,rModel.getName());
 
-        item->setSelected(selectedIDs.constFind(ModelRecordsTreeRecordID(i,false,0)) != selectedIDs.constEnd());
+        if (selectedIDs.constFind(ModelRecordsTreeRecordID(i,false,0)) != selectedIDs.constEnd())
+        {
+            this->setCurrentItem(item);
+        }
 
         QList<QString> recordFiles = rModel.getRecordFiles(false);
 
@@ -391,7 +394,10 @@ void ModelRecordsTree::populate(void)
                     childItem->setData(ModelRecordsTree::Marked,Qt::UserRole,QVariant(false));
                 }
 
-                childItem->setSelected(selectedIDs.constFind(ModelRecordsTreeRecordID(i,true,j+1)) != selectedIDs.constEnd());
+                if (selectedIDs.constFind(ModelRecordsTreeRecordID(i,true,j+1)) != selectedIDs.constEnd())
+                {
+                    this->setCurrentItem(childItem);
+                }
             }
         }
         item->setExpanded(true);
@@ -455,6 +461,8 @@ void ModelRecordsTree::onItemChanged(QTreeWidgetItem *item, int column)
         Session::getInstance().isModelSelected(item->data(ModelRecordsTree::ModelID,Qt::UserRole).toUInt()))
     {
         item->setIcon(ModelRecordsTree::Marked,QIcon(":/icons/media/pixmaps/range-play_play.svg"));
+        this->setCurrentItem(item);
+        this->scrollToItem(item);
         recordMarkedIndicator = true;
     }
     else

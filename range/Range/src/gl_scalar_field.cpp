@@ -143,6 +143,13 @@ void GLScalarField::draw(void)
 
         for (uint i=0;i<scalarField.size();i++)
         {
+            float pointSize = scalarField[i].scalarRate * (this->maxPointSize - this->minPointSize) + this->minPointSize;
+
+            if (pointSize <= 0.0)
+            {
+                continue;
+            }
+
             if (scalarField[i].validScaleValue)
             {
                 GL_SAFE_CALL(glEnable(GL_TEXTURE_1D));
@@ -155,8 +162,6 @@ void GLScalarField::draw(void)
                 this->getData().getColor(r,g,b,a);
                 this->getGLWidget()->qglColor(QColor(r,g,b,a));
             }
-
-            float pointSize = scalarField[i].scalarRate * (this->maxPointSize - this->minPointSize) + this->minPointSize;
 
             GLPoint point(this->glWidget,scalarField[i].position,pointSize);
             point.paint();

@@ -22,7 +22,7 @@ void RScalarField::_init(const RScalarField *pScalarField)
 }
 
 RScalarField::RScalarField()
-    : minPointSize(1.0)
+    : minPointSize(0.0)
     , maxPointSize(RScalarField::getDefaultMaxPointSize())
 {
     this->name = RScalarField::defaultName;

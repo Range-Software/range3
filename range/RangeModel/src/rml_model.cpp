@@ -292,6 +292,12 @@ void RModel::update(const RModel &rModel)
         updateVolumeGroupData.push_back(this->getVolume(i).getData());
     }
 
+    std::vector<RScalarField> scalarFields;
+    for (uint i=0;i<this->getNScalarFields();i++)
+    {
+        scalarFields.push_back(this->getScalarField(i));
+    }
+
     std::vector<RVectorField> vectorFields;
     for (uint i=0;i<this->getNVectorFields();i++)
     {
@@ -347,6 +353,12 @@ void RModel::update(const RModel &rModel)
     for (uint i=0;i<nUpdateVolumes;i++)
     {
         this->getVolume(i).setData(updateVolumeGroupData[i]);
+    }
+
+    this->setNScalarFields(scalarFields.size());
+    for (uint i=0;i<this->getNScalarFields();i++)
+    {
+        this->setScalarField(i,scalarFields[i]);
     }
 
     this->setNVectorFields(vectorFields.size());

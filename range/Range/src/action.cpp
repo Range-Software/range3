@@ -1288,7 +1288,7 @@ void Action::onGeometryVectorFieldCreate(void)
 
     for (int i=0;i<modelIDs.size();i++)
     {
-        VectorFieldDialog vectorFieldDialog(i,this->mainWindow);
+        VectorFieldDialog vectorFieldDialog(modelIDs[i],this->mainWindow);
         vectorFieldDialog.exec();
     }
 }
@@ -1314,7 +1314,7 @@ void Action::onGeometryScalarFieldCreate(void)
 
     for (int i=0;i<modelIDs.size();i++)
     {
-        ScalarFieldDialog scalarFieldDialog(i,this->mainWindow);
+        ScalarFieldDialog scalarFieldDialog(modelIDs[i],this->mainWindow);
         scalarFieldDialog.exec();
     }
 }
@@ -1340,7 +1340,7 @@ void Action::onGeometryStreamLineCreate(void)
 
     for (int i=0;i<modelIDs.size();i++)
     {
-        StreamLineDialog streamLineDialog(i,this->mainWindow);
+        StreamLineDialog streamLineDialog(modelIDs[i],this->mainWindow);
         streamLineDialog.exec();
     }
 }
@@ -1366,7 +1366,7 @@ void Action::onGeometryCutCreate(void)
 
     for (int i=0;i<modelIDs.size();i++)
     {
-        CutDialog cutDialog(i,this->mainWindow);
+        CutDialog cutDialog(modelIDs[i],this->mainWindow);
         cutDialog.exec();
     }
 }
@@ -1392,7 +1392,7 @@ void Action::onGeometryIsoCreate(void)
 
     for (int i=0;i<modelIDs.size();i++)
     {
-        IsoDialog isoDialog(i,this->mainWindow);
+        IsoDialog isoDialog(modelIDs[i],this->mainWindow);
         isoDialog.exec();
     }
 }
