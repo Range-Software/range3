@@ -227,13 +227,14 @@ QList<QTreeWidgetItem *> ModelTree::getAllItems(QTreeWidgetItem *parent) const
 void ModelTree::insertModel(uint modelID)
 {
     const Model &rModel = Session::getInstance().getModel(modelID);
-    bool visible = rModel.isVisible();
 
     QTreeWidgetItem *itemModel = this->findModelItem(modelID,true);
     itemModel->setText(MODEL_TREE_COLUMN_NAME, rModel.getName());
-    itemModel->setData(MODEL_TREE_COLUMN_NAME,Qt::CheckStateRole,QVariant(visible?Qt::Checked:Qt::Unchecked));
     itemModel->setData(MODEL_TREE_COLUMN_TYPE,Qt::DisplayRole,QVariant(MODEL_TREE_MODEL));
     itemModel->setData(MODEL_TREE_COLUMN_MID,Qt::DisplayRole,QVariant(modelID));
+
+    bool modelChecked = false;
+    bool modelUnChecked = false;
 
     for (int i=itemModel->childCount()-1;i>=0;i--)
     {
@@ -263,18 +264,20 @@ void ModelTree::insertModel(uint modelID)
 
     if (rModel.getNPoints() > 0)
     {
-        visible = rModel.isVisible(R_ENTITY_GROUP_POINT);
-
         QTreeWidgetItem *itemGroup = this->findEntityGroupItem(itemModel,MODEL_TREE_GROUP_POINT,true);
         itemGroup->setText(MODEL_TREE_COLUMN_NAME, "Points");
-        itemGroup->setData(MODEL_TREE_COLUMN_NAME,Qt::CheckStateRole,QVariant(visible?Qt::Checked:Qt::Unchecked));
         itemGroup->setData(MODEL_TREE_COLUMN_NUMBER,Qt::DisplayRole,QVariant(rModel.getNPoints()));
         itemGroup->setData(MODEL_TREE_COLUMN_TYPE,Qt::DisplayRole,QVariant(MODEL_TREE_GROUP_POINT));
         itemGroup->setData(MODEL_TREE_COLUMN_MID,Qt::DisplayRole,QVariant(modelID));
 
+        bool itemChecked = false;
+        bool itemUnChecked = false;
         for (uint i=0;i<rModel.getNPoints();i++)
         {
-            visible = rModel.getVisible(R_ENTITY_GROUP_POINT,i);
+            bool visible = rModel.getVisible(R_ENTITY_GROUP_POINT,i);
+
+            if (visible) itemChecked = true;
+            else itemUnChecked = true;
 
             QTreeWidgetItem *itemEntity = this->findEntityItem(itemGroup,i,true);
             itemEntity->setText(MODEL_TREE_COLUMN_NAME, rModel.getPoint(i).getName());
@@ -288,22 +291,38 @@ void ModelTree::insertModel(uint modelID)
         {
             itemGroup->takeChild(i);
         }
+
+        Qt::CheckState itemGroupState = Qt::Unchecked;
+        if (itemChecked)
+        {
+            itemGroupState = Qt::Checked;
+            if (itemUnChecked)
+            {
+                itemGroupState = Qt::PartiallyChecked;
+            }
+        }
+        itemGroup->setData(MODEL_TREE_COLUMN_NAME,Qt::CheckStateRole,QVariant(itemGroupState));
+
+        if (itemChecked) modelChecked = true;
+        if (itemUnChecked) modelUnChecked = true;
     }
 
     if (rModel.getNLines() > 0)
     {
-        visible = rModel.isVisible(R_ENTITY_GROUP_LINE);
-
         QTreeWidgetItem *itemGroup = this->findEntityGroupItem(itemModel,MODEL_TREE_GROUP_LINE,true);
         itemGroup->setText(MODEL_TREE_COLUMN_NAME, "Lines");
-        itemGroup->setData(MODEL_TREE_COLUMN_NAME,Qt::CheckStateRole,QVariant(visible?Qt::Checked:Qt::Unchecked));
         itemGroup->setData(MODEL_TREE_COLUMN_NUMBER,Qt::DisplayRole,QVariant(rModel.getNLines()));
         itemGroup->setData(MODEL_TREE_COLUMN_TYPE,Qt::DisplayRole,QVariant(MODEL_TREE_GROUP_LINE));
         itemGroup->setData(MODEL_TREE_COLUMN_MID,Qt::DisplayRole,QVariant(modelID));
 
+        bool itemChecked = false;
+        bool itemUnChecked = false;
         for (uint i=0;i<rModel.getNLines();i++)
         {
-            visible = rModel.getVisible(R_ENTITY_GROUP_LINE,i);
+            bool visible = rModel.getVisible(R_ENTITY_GROUP_LINE,i);
+
+            if (visible) itemChecked = true;
+            else         itemUnChecked = true;
 
             QTreeWidgetItem *itemEntity = this->findEntityItem(itemGroup,i,true);
             itemEntity->setText(MODEL_TREE_COLUMN_NAME, rModel.getLine(i).getName());
@@ -317,22 +336,38 @@ void ModelTree::insertModel(uint modelID)
         {
             itemGroup->takeChild(i);
         }
+
+        Qt::CheckState itemGroupState = Qt::Unchecked;
+        if (itemChecked)
+        {
+            itemGroupState = Qt::Checked;
+            if (itemUnChecked)
+            {
+                itemGroupState = Qt::PartiallyChecked;
+            }
+        }
+        itemGroup->setData(MODEL_TREE_COLUMN_NAME,Qt::CheckStateRole,QVariant(itemGroupState));
+
+        if (itemChecked) modelChecked = true;
+        if (itemUnChecked) modelUnChecked = true;
     }
 
     if (rModel.getNSurfaces() > 0)
     {
-        visible = rModel.isVisible(R_ENTITY_GROUP_SURFACE);
-
         QTreeWidgetItem *itemGroup = this->findEntityGroupItem(itemModel,MODEL_TREE_GROUP_SURFACE,true);
         itemGroup->setText(MODEL_TREE_COLUMN_NAME, "Surfaces");
-        itemGroup->setData(MODEL_TREE_COLUMN_NAME,Qt::CheckStateRole,QVariant(visible?Qt::Checked:Qt::Unchecked));
         itemGroup->setData(MODEL_TREE_COLUMN_NUMBER,Qt::DisplayRole,QVariant(rModel.getNSurfaces()));
         itemGroup->setData(MODEL_TREE_COLUMN_TYPE,Qt::DisplayRole,QVariant(MODEL_TREE_GROUP_SURFACE));
         itemGroup->setData(MODEL_TREE_COLUMN_MID,Qt::DisplayRole,QVariant(modelID));
 
+        bool itemChecked = false;
+        bool itemUnChecked = false;
         for (uint i=0;i<rModel.getNSurfaces();i++)
         {
-            visible = rModel.getVisible(R_ENTITY_GROUP_SURFACE,i);
+            bool visible = rModel.getVisible(R_ENTITY_GROUP_SURFACE,i);
+
+            if (visible) itemChecked = true;
+            else         itemUnChecked = true;
 
             QTreeWidgetItem *itemEntity = this->findEntityItem(itemGroup,i,true);
             itemEntity->setText(MODEL_TREE_COLUMN_NAME, rModel.getSurface(i).getName());
@@ -346,22 +381,38 @@ void ModelTree::insertModel(uint modelID)
         {
             itemGroup->takeChild(i);
         }
+
+        Qt::CheckState itemGroupState = Qt::Unchecked;
+        if (itemChecked)
+        {
+            itemGroupState = Qt::Checked;
+            if (itemUnChecked)
+            {
+                itemGroupState = Qt::PartiallyChecked;
+            }
+        }
+        itemGroup->setData(MODEL_TREE_COLUMN_NAME,Qt::CheckStateRole,QVariant(itemGroupState));
+
+        if (itemChecked) modelChecked = true;
+        if (itemUnChecked) modelUnChecked = true;
     }
 
     if (rModel.getNVolumes() > 0)
     {
-        visible = rModel.isVisible(R_ENTITY_GROUP_VOLUME);
-
         QTreeWidgetItem *itemGroup = this->findEntityGroupItem(itemModel,MODEL_TREE_GROUP_VOLUME,true);
         itemGroup->setText(MODEL_TREE_COLUMN_NAME, "Volumes");
-        itemGroup->setData(MODEL_TREE_COLUMN_NAME,Qt::CheckStateRole,QVariant(visible?Qt::Checked:Qt::Unchecked));
         itemGroup->setData(MODEL_TREE_COLUMN_NUMBER,Qt::DisplayRole,QVariant(rModel.getNVolumes()));
         itemGroup->setData(MODEL_TREE_COLUMN_TYPE,Qt::DisplayRole,QVariant(MODEL_TREE_GROUP_VOLUME));
         itemGroup->setData(MODEL_TREE_COLUMN_MID,Qt::DisplayRole,QVariant(modelID));
 
+        bool itemChecked = false;
+        bool itemUnChecked = false;
         for (uint i=0;i<rModel.getNVolumes();i++)
         {
-            visible = rModel.getVisible(R_ENTITY_GROUP_VOLUME,i);
+            bool visible = rModel.getVisible(R_ENTITY_GROUP_VOLUME,i);
+
+            if (visible) itemChecked = true;
+            else         itemUnChecked = true;
 
             QTreeWidgetItem *itemEntity = this->findEntityItem(itemGroup,i,true);
             itemEntity->setText(MODEL_TREE_COLUMN_NAME, rModel.getVolume(i).getName());
@@ -375,22 +426,38 @@ void ModelTree::insertModel(uint modelID)
         {
             itemGroup->takeChild(i);
         }
+
+        Qt::CheckState itemGroupState = Qt::Unchecked;
+        if (itemChecked)
+        {
+            itemGroupState = Qt::Checked;
+            if (itemUnChecked)
+            {
+                itemGroupState = Qt::PartiallyChecked;
+            }
+        }
+        itemGroup->setData(MODEL_TREE_COLUMN_NAME,Qt::CheckStateRole,QVariant(itemGroupState));
+
+        if (itemChecked) modelChecked = true;
+        if (itemUnChecked) modelUnChecked = true;
     }
 
     if (rModel.getNCuts() > 0)
     {
-        visible = rModel.isVisible(R_ENTITY_GROUP_CUT);
-
         QTreeWidgetItem *itemGroup = this->findEntityGroupItem(itemModel,MODEL_TREE_GROUP_CUT,true);
         itemGroup->setText(MODEL_TREE_COLUMN_NAME, "Cuts");
-        itemGroup->setData(MODEL_TREE_COLUMN_NAME,Qt::CheckStateRole,QVariant(visible?Qt::Checked:Qt::Unchecked));
         itemGroup->setData(MODEL_TREE_COLUMN_NUMBER,Qt::DisplayRole,QVariant(rModel.getNCuts()));
         itemGroup->setData(MODEL_TREE_COLUMN_TYPE,Qt::DisplayRole,QVariant(MODEL_TREE_GROUP_CUT));
         itemGroup->setData(MODEL_TREE_COLUMN_MID,Qt::DisplayRole,QVariant(modelID));
 
+        bool itemChecked = false;
+        bool itemUnChecked = false;
         for (uint i=0;i<rModel.getNCuts();i++)
         {
-            visible = rModel.getVisible(R_ENTITY_GROUP_CUT,i);
+            bool visible = rModel.getVisible(R_ENTITY_GROUP_CUT,i);
+
+            if (visible) itemChecked = true;
+            else         itemUnChecked = true;
 
             QTreeWidgetItem *itemEntity = this->findEntityItem(itemGroup,i,true);
             itemEntity->setText(MODEL_TREE_COLUMN_NAME, rModel.getCut(i).getName());
@@ -403,22 +470,38 @@ void ModelTree::insertModel(uint modelID)
         {
             itemGroup->takeChild(i);
         }
+
+        Qt::CheckState itemGroupState = Qt::Unchecked;
+        if (itemChecked)
+        {
+            itemGroupState = Qt::Checked;
+            if (itemUnChecked)
+            {
+                itemGroupState = Qt::PartiallyChecked;
+            }
+        }
+        itemGroup->setData(MODEL_TREE_COLUMN_NAME,Qt::CheckStateRole,QVariant(itemGroupState));
+
+        if (itemChecked) modelChecked = true;
+        if (itemUnChecked) modelUnChecked = true;
     }
 
     if (rModel.getNIsos() > 0)
     {
-        visible = rModel.isVisible(R_ENTITY_GROUP_ISO);
-
         QTreeWidgetItem *itemGroup = this->findEntityGroupItem(itemModel,MODEL_TREE_GROUP_ISO,true);
         itemGroup->setText(MODEL_TREE_COLUMN_NAME, "Isos");
-        itemGroup->setData(MODEL_TREE_COLUMN_NAME,Qt::CheckStateRole,QVariant(visible?Qt::Checked:Qt::Unchecked));
         itemGroup->setData(MODEL_TREE_COLUMN_NUMBER,Qt::DisplayRole,QVariant(rModel.getNIsos()));
         itemGroup->setData(MODEL_TREE_COLUMN_TYPE,Qt::DisplayRole,QVariant(MODEL_TREE_GROUP_ISO));
         itemGroup->setData(MODEL_TREE_COLUMN_MID,Qt::DisplayRole,QVariant(modelID));
 
+        bool itemChecked = false;
+        bool itemUnChecked = false;
         for (uint i=0;i<rModel.getNIsos();i++)
         {
-            visible = rModel.getVisible(R_ENTITY_GROUP_ISO,i);
+            bool visible = rModel.getVisible(R_ENTITY_GROUP_ISO,i);
+
+            if (visible) itemChecked = true;
+            else         itemUnChecked = true;
 
             QTreeWidgetItem *itemEntity = this->findEntityItem(itemGroup,i,true);
             itemEntity->setText(MODEL_TREE_COLUMN_NAME, rModel.getIso(i).getName());
@@ -431,22 +514,38 @@ void ModelTree::insertModel(uint modelID)
         {
             itemGroup->takeChild(i);
         }
+
+        Qt::CheckState itemGroupState = Qt::Unchecked;
+        if (itemChecked)
+        {
+            itemGroupState = Qt::Checked;
+            if (itemUnChecked)
+            {
+                itemGroupState = Qt::PartiallyChecked;
+            }
+        }
+        itemGroup->setData(MODEL_TREE_COLUMN_NAME,Qt::CheckStateRole,QVariant(itemGroupState));
+
+        if (itemChecked) modelChecked = true;
+        if (itemUnChecked) modelUnChecked = true;
     }
 
     if (rModel.getNStreamLines() > 0)
     {
-        visible = rModel.isVisible(R_ENTITY_GROUP_STREAM_LINE);
-
+        bool itemChecked = false;
+        bool itemUnChecked = false;
         QTreeWidgetItem *itemGroup = this->findEntityGroupItem(itemModel,MODEL_TREE_GROUP_STREAM_LINE,true);
         itemGroup->setText(MODEL_TREE_COLUMN_NAME, "Stream lines");
-        itemGroup->setData(MODEL_TREE_COLUMN_NAME,Qt::CheckStateRole,QVariant(visible?Qt::Checked:Qt::Unchecked));
         itemGroup->setData(MODEL_TREE_COLUMN_NUMBER,Qt::DisplayRole,QVariant(rModel.getNStreamLines()));
         itemGroup->setData(MODEL_TREE_COLUMN_TYPE,Qt::DisplayRole,QVariant(MODEL_TREE_GROUP_STREAM_LINE));
         itemGroup->setData(MODEL_TREE_COLUMN_MID,Qt::DisplayRole,QVariant(modelID));
 
         for (uint i=0;i<rModel.getNStreamLines();i++)
         {
-            visible = rModel.getVisible(R_ENTITY_GROUP_STREAM_LINE,i);
+            bool visible = rModel.getVisible(R_ENTITY_GROUP_STREAM_LINE,i);
+
+            if (visible) itemChecked = true;
+            else         itemUnChecked = true;
 
             QTreeWidgetItem *itemEntity = this->findEntityItem(itemGroup,i,true);
             itemEntity->setText(MODEL_TREE_COLUMN_NAME, rModel.getStreamLine(i).getName());
@@ -459,22 +558,38 @@ void ModelTree::insertModel(uint modelID)
         {
             itemGroup->takeChild(i);
         }
+
+        Qt::CheckState itemGroupState = Qt::Unchecked;
+        if (itemChecked)
+        {
+            itemGroupState = Qt::Checked;
+            if (itemUnChecked)
+            {
+                itemGroupState = Qt::PartiallyChecked;
+            }
+        }
+        itemGroup->setData(MODEL_TREE_COLUMN_NAME,Qt::CheckStateRole,QVariant(itemGroupState));
+
+        if (itemChecked) modelChecked = true;
+        if (itemUnChecked) modelUnChecked = true;
     }
 
     if (rModel.getNScalarFields() > 0)
     {
-        visible = rModel.isVisible(R_ENTITY_GROUP_SCALAR_FIELD);
-
         QTreeWidgetItem *itemGroup = this->findEntityGroupItem(itemModel,MODEL_TREE_GROUP_SCALAR_FIELD,true);
         itemGroup->setText(MODEL_TREE_COLUMN_NAME, "Scalar fields");
-        itemGroup->setData(MODEL_TREE_COLUMN_NAME,Qt::CheckStateRole,QVariant(visible?Qt::Checked:Qt::Unchecked));
         itemGroup->setData(MODEL_TREE_COLUMN_NUMBER,Qt::DisplayRole,QVariant(rModel.getNScalarFields()));
         itemGroup->setData(MODEL_TREE_COLUMN_TYPE,Qt::DisplayRole,QVariant(MODEL_TREE_GROUP_SCALAR_FIELD));
         itemGroup->setData(MODEL_TREE_COLUMN_MID,Qt::DisplayRole,QVariant(modelID));
 
+        bool itemChecked = false;
+        bool itemUnChecked = false;
         for (uint i=0;i<rModel.getNScalarFields();i++)
         {
-            visible = rModel.getVisible(R_ENTITY_GROUP_SCALAR_FIELD,i);
+            bool visible = rModel.getVisible(R_ENTITY_GROUP_SCALAR_FIELD,i);
+
+            if (visible) itemChecked = true;
+            else         itemUnChecked = true;
 
             QTreeWidgetItem *itemEntity = this->findEntityItem(itemGroup,i,true);
             itemEntity->setText(MODEL_TREE_COLUMN_NAME, rModel.getScalarField(i).getName());
@@ -487,22 +602,38 @@ void ModelTree::insertModel(uint modelID)
         {
             itemGroup->takeChild(i);
         }
+
+        Qt::CheckState itemGroupState = Qt::Unchecked;
+        if (itemChecked)
+        {
+            itemGroupState = Qt::Checked;
+            if (itemUnChecked)
+            {
+                itemGroupState = Qt::PartiallyChecked;
+            }
+        }
+        itemGroup->setData(MODEL_TREE_COLUMN_NAME,Qt::CheckStateRole,QVariant(itemGroupState));
+
+        if (itemChecked) modelChecked = true;
+        if (itemUnChecked) modelUnChecked = true;
     }
 
     if (rModel.getNVectorFields() > 0)
     {
-        visible = rModel.isVisible(R_ENTITY_GROUP_VECTOR_FIELD);
-
         QTreeWidgetItem *itemGroup = this->findEntityGroupItem(itemModel,MODEL_TREE_GROUP_VECTOR_FIELD,true);
         itemGroup->setText(MODEL_TREE_COLUMN_NAME, "Vector fields");
-        itemGroup->setData(MODEL_TREE_COLUMN_NAME,Qt::CheckStateRole,QVariant(visible?Qt::Checked:Qt::Unchecked));
         itemGroup->setData(MODEL_TREE_COLUMN_NUMBER,Qt::DisplayRole,QVariant(rModel.getNVectorFields()));
         itemGroup->setData(MODEL_TREE_COLUMN_TYPE,Qt::DisplayRole,QVariant(MODEL_TREE_GROUP_VECTOR_FIELD));
         itemGroup->setData(MODEL_TREE_COLUMN_MID,Qt::DisplayRole,QVariant(modelID));
 
+        bool itemChecked = false;
+        bool itemUnChecked = false;
         for (uint i=0;i<rModel.getNVectorFields();i++)
         {
-            visible = rModel.getVisible(R_ENTITY_GROUP_VECTOR_FIELD,i);
+            bool visible = rModel.getVisible(R_ENTITY_GROUP_VECTOR_FIELD,i);
+
+            if (visible) itemChecked = true;
+            else         itemUnChecked = true;
 
             QTreeWidgetItem *itemEntity = this->findEntityItem(itemGroup,i,true);
             itemEntity->setText(MODEL_TREE_COLUMN_NAME, rModel.getVectorField(i).getName());
@@ -515,7 +646,32 @@ void ModelTree::insertModel(uint modelID)
         {
             itemGroup->takeChild(i);
         }
+
+        Qt::CheckState itemGroupState = Qt::Unchecked;
+        if (itemChecked)
+        {
+            itemGroupState = Qt::Checked;
+            if (itemUnChecked)
+            {
+                itemGroupState = Qt::PartiallyChecked;
+            }
+        }
+        itemGroup->setData(MODEL_TREE_COLUMN_NAME,Qt::CheckStateRole,QVariant(itemGroupState));
+
+        if (itemChecked) modelChecked = true;
+        if (itemUnChecked) modelUnChecked = true;
     }
+
+    Qt::CheckState modelState = Qt::Unchecked;
+    if (modelChecked)
+    {
+        modelState = Qt::Checked;
+        if (modelUnChecked)
+        {
+            modelState = Qt::PartiallyChecked;
+        }
+    }
+    itemModel->setData(MODEL_TREE_COLUMN_NAME,Qt::CheckStateRole,QVariant(modelState));
 }
 
 void ModelTree::removeModel(uint modelID)
