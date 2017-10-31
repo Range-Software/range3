@@ -1777,8 +1777,9 @@ void Action::onReportConvergenceGraph(void)
         }
         else
         {
-            ConvergenceGraphDialog convergenceGraphDialog(fileNames,this->mainWindow);
-            convergenceGraphDialog.exec();
+            ConvergenceGraphDialog *convergenceGraphDialog = new ConvergenceGraphDialog(fileNames,this->mainWindow);
+            convergenceGraphDialog->setModal(false);
+            convergenceGraphDialog->show();
         }
     }
 }

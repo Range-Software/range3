@@ -23,9 +23,6 @@ class ConvergenceGraphDialog : public QDialog
         //! Constructor.
         explicit ConvergenceGraphDialog(const QStringList &convergenceFileNames, QWidget *parent = 0);
 
-        //! Execute dialog.
-        int exec(void);
-
     private:
 
         //! Find problem ID or matrix solver ID in convergence log filename and convert it to name.

@@ -47,14 +47,7 @@ ConvergenceGraphDialog::ConvergenceGraphDialog(const QStringList &convergenceFil
     closeButton->setDefault(true);
     buttonsLayout->addWidget(closeButton);
 
-    QObject::connect(closeButton,&QPushButton::clicked,this,&ConvergenceGraphDialog::reject);
-}
-
-int ConvergenceGraphDialog::exec(void)
-{
-    int retVal = QDialog::exec();
-
-    return retVal;
+    QObject::connect(closeButton,&QPushButton::clicked,this,&ConvergenceGraphDialog::close);
 }
 
 QString ConvergenceGraphDialog::getNameFromID(const QString &fileName, const QString &fallbackName)
