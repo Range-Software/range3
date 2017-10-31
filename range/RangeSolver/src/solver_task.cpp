@@ -28,6 +28,7 @@ SolverTask::SolverTask(const SolverInput &solverInput, QCoreApplication *app, QO
     , convergenceFileName(solverInput.convergenceFileName)
     , monitoringFileName(solverInput.monitoringFileName)
     , nThreads(solverInput.nThreads)
+    , restart(solverInput.restart)
     , app(app)
 {
     this->nThreads = std::max(this->nThreads,uint(1));
@@ -97,6 +98,10 @@ void SolverTask::run(void)
     model.getMatrixSolverConf(RMatrixSolverConf::CG).setOutputFileName(RFileManager::getFileNameWithSuffix(this->convergenceFileName,RMatrixSolverConf::getId(RMatrixSolverConf::CG)));
     model.getMatrixSolverConf(RMatrixSolverConf::GMRES).setOutputFileName(RFileManager::getFileNameWithSuffix(this->convergenceFileName,RMatrixSolverConf::getId(RMatrixSolverConf::GMRES)));
     model.getMonitoringPointManager().setOutputFileName(this->monitoringFileName);
+    if (this->restart)
+    {
+        model.getProblemSetup().setRestart(true);
+    }
 
     // Solve model
     try

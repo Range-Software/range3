@@ -48,6 +48,7 @@ void MainTask::run(void)
         validOptions.append(RArgumentOption("convergence-file",RArgumentOption::Path,QVariant(),"Convergence file name",false,false));
         validOptions.append(RArgumentOption("monitoring-file",RArgumentOption::Path,QVariant(),"Monitoring file name",false,false));
         validOptions.append(RArgumentOption("nthreads",RArgumentOption::Integer,QVariant(1),"Number of threads to use",false,false));
+        validOptions.append(RArgumentOption("restart",RArgumentOption::Switch,QVariant(),"Restart solver",false,false));
         validOptions.append(RArgumentOption("read-stdin",RArgumentOption::Switch,QVariant(),"Read commands from standard input",false,false));
 
         RArgumentsParser argumentsParser(argumentList,validOptions);
@@ -91,7 +92,10 @@ void MainTask::run(void)
         {
             solverInput.setNThreads(argumentsParser.getValue("nthreads").toUInt());
         }
-
+        if (argumentsParser.isSet("restart"))
+        {
+            solverInput.setRestart(true);
+        }
 
         // Start solver.
         QThread* thread = new QThread;

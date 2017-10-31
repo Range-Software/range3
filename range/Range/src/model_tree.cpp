@@ -106,15 +106,10 @@ ModelTree::ModelTree(ActionList *actionList,
     this->addAction(this->actionList->getAction(ACTION_GEOMETRY_ENTITY_MERGE));
     this->addAction(this->actionList->getAction(ACTION_GEOMETRY_ENTITY_REMOVE));
     this->addAction(this->actionList->getAction(ACTION_SEPARATOR));
-    this->addAction(this->actionList->getAction(ACTION_GEOMETRY_CUT_CREATE));
     this->addAction(this->actionList->getAction(ACTION_GEOMETRY_CUT_EDIT));
-    this->addAction(this->actionList->getAction(ACTION_GEOMETRY_ISO_CREATE));
     this->addAction(this->actionList->getAction(ACTION_GEOMETRY_ISO_EDIT));
-    this->addAction(this->actionList->getAction(ACTION_GEOMETRY_STREAM_LINE_CREATE));
     this->addAction(this->actionList->getAction(ACTION_GEOMETRY_STREAM_LINE_EDIT));
-    this->addAction(this->actionList->getAction(ACTION_GEOMETRY_SCALAR_FIELD_CREATE));
     this->addAction(this->actionList->getAction(ACTION_GEOMETRY_SCALAR_FIELD_EDIT));
-    this->addAction(this->actionList->getAction(ACTION_GEOMETRY_VECTOR_FIELD_CREATE));
     this->addAction(this->actionList->getAction(ACTION_GEOMETRY_VECTOR_FIELD_EDIT));
 
     QObject::connect(&Session::getInstance(),

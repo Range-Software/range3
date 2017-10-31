@@ -26,7 +26,6 @@
         <file>pixmaps/range-screenshot.svg</file>
         <file>pixmaps/range-undo.svg</file>
         <file>pixmaps/range-clear.svg</file>
-        <file>pixmaps/range-report.svg</file>
         <file>pixmaps/range-add.svg</file>
         <file>pixmaps/range-remove.svg</file>
         <file>pixmaps/range-refresh.svg</file>
@@ -84,5 +83,9 @@
         <file>pixmaps/range-redo.svg</file>
         <file>pixmaps/range-generate_volume_mesh.svg</file>
         <file>pixmaps/range-geometry_transform.svg</file>
+    </qresource>
+    <qresource prefix="/icons/report">
+        <file>pixmaps/range-report.svg</file>
+        <file>pixmaps/range-report-convergence.svg</file>
     </qresource>
 </RCC>

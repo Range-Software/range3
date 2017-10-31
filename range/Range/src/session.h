@@ -236,6 +236,9 @@ class Session : public QObject
         //! Check if entity exist in selected model.
         static bool selectedModelsHasEntities(REntityGroupTypeMask entityTypeMask = R_ENTITY_GROUP_ELEMENT);
 
+        //! Check if entity exist and is selected in selected model.
+        static bool selectedModelsHasEntitySelected(REntityGroupType entityGroupType);
+
     signals:
 
         //! Emitted when new model has been added to the session.

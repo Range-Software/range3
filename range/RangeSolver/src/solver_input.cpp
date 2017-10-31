@@ -16,6 +16,10 @@ void SolverInput::_init(const SolverInput *pSolverInput)
     {
         this->modelFileName = pSolverInput->modelFileName;
         this->convergenceFileName = pSolverInput->convergenceFileName;
+        this->moduleLicenseFileName = pSolverInput->moduleLicenseFileName;
+        this->account = pSolverInput->account;
+        this->password = pSolverInput->password;
+        this->restart = pSolverInput->restart;
     }
 }
 
@@ -27,6 +31,7 @@ SolverInput::SolverInput(const QString &modelFileName,
     , moduleLicenseFileName(moduleLicenseFileName)
     , account(account)
     , password(password)
+    , restart(false)
 {
     this->_init();
 }
@@ -60,4 +65,9 @@ void SolverInput::setMonitoringFileName(const QString &monitoringFileName)
 void SolverInput::setNThreads(uint nThreads)
 {
     this->nThreads = nThreads;
+}
+
+void SolverInput::setRestart(bool restart)
+{
+    this->restart = restart;
 }

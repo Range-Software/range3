@@ -943,39 +943,39 @@ bool Model::isSelected(bool selected) const
     {
         return (this->getSelected() == selected);
     }
-    if (!this->isSelected(R_ENTITY_GROUP_POINT,selected))
+    if (!this->isSelected(R_ENTITY_GROUP_POINT,selected) && this->getNPoints() > 0)
     {
         return false;
     }
-    if (!this->isSelected(R_ENTITY_GROUP_LINE,selected))
+    if (!this->isSelected(R_ENTITY_GROUP_LINE,selected) && this->getNLines() > 0)
     {
         return false;
     }
-    if (!this->isSelected(R_ENTITY_GROUP_SURFACE,selected))
+    if (!this->isSelected(R_ENTITY_GROUP_SURFACE,selected) && this->getNSurfaces() > 0)
     {
         return false;
     }
-    if (!this->isSelected(R_ENTITY_GROUP_VOLUME,selected))
+    if (!this->isSelected(R_ENTITY_GROUP_VOLUME,selected) && this->getNVolumes() > 0)
     {
         return false;
     }
-    if (!this->isSelected(R_ENTITY_GROUP_VECTOR_FIELD,selected))
+    if (!this->isSelected(R_ENTITY_GROUP_VECTOR_FIELD,selected) && this->getNVectorFields() > 0)
     {
         return false;
     }
-    if (!this->isSelected(R_ENTITY_GROUP_SCALAR_FIELD,selected))
+    if (!this->isSelected(R_ENTITY_GROUP_SCALAR_FIELD,selected) && this->getNScalarFields() > 0)
     {
         return false;
     }
-    if (!this->isSelected(R_ENTITY_GROUP_STREAM_LINE,selected))
+    if (!this->isSelected(R_ENTITY_GROUP_STREAM_LINE,selected) && this->getNStreamLines() > 0)
     {
         return false;
     }
-    if (!this->isSelected(R_ENTITY_GROUP_CUT,selected))
+    if (!this->isSelected(R_ENTITY_GROUP_CUT,selected) && this->getNCuts() > 0)
     {
         return false;
     }
-    if (!this->isSelected(R_ENTITY_GROUP_ISO,selected))
+    if (!this->isSelected(R_ENTITY_GROUP_ISO,selected) && this->getNIsos() > 0)
     {
         return false;
     }
@@ -1017,6 +1017,10 @@ bool Model::isSelected(REntityGroupType elementGroupType,
             break;
         default:
             return false;
+    }
+    if (nEntities == 0)
+    {
+        return false;
     }
     for (uint i=0;i<nEntities;i++)
     {

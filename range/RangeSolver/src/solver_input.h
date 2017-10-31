@@ -34,6 +34,8 @@ class SolverInput
         QString monitoringFileName;
         //! Number of threads to use.
         uint nThreads;
+        //! Force to restart solver
+        bool restart;
 
     private:
 
@@ -65,6 +67,9 @@ class SolverInput
 
         //! Set number of threads to use.
         void setNThreads(uint nThreads);
+
+        //! Set force restart solver.
+        void setRestart(bool restart);
 
         friend class SolverTask;
 

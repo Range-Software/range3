@@ -180,9 +180,9 @@ void ActionDefinition::generateActionDescList(QList<ActionDefinitionItem> &actio
     actionDesc.push_back(ActionDefinitionItem(ACTION_SOLVER_QUEUE, ACTION_GROUP_SOLVER, "Show queued solvers", "", ":/icons/solver/pixmaps/range-solver-queue.svg", &Action::onSolverQueue));
     actionDesc.push_back(ActionDefinitionItem(ACTION_REPORT_MODEL_STATISTICS, ACTION_GROUP_REPORT, "Model statistics", "", "", &Action::onReportModelStatistics));
     actionDesc.push_back(ActionDefinitionItem(ACTION_REPORT_SOLVER_LOG, ACTION_GROUP_REPORT, "Solver log file", "", "", &Action::onReportSolverLog));
-    actionDesc.push_back(ActionDefinitionItem(ACTION_REPORT_CONVERGENCE_GRAPH, ACTION_GROUP_REPORT, "Solver convergence", "", "", &Action::onReportConvergenceGraph));
+    actionDesc.push_back(ActionDefinitionItem(ACTION_REPORT_CONVERGENCE_GRAPH, ACTION_GROUP_REPORT, "Solver convergence", "Ctrl+Alt+C", ":/icons/report/pixmaps/range-report-convergence.svg", &Action::onReportConvergenceGraph));
     actionDesc.push_back(ActionDefinitionItem(ACTION_REPORT_MONITORING_POINT_GRAPH, ACTION_GROUP_REPORT, "Monitoring points", "", "", &Action::onReportMonitoringPointGraph));
-    actionDesc.push_back(ActionDefinitionItem(ACTION_REPORT_CREATE_REPORT, ACTION_GROUP_REPORT, "Create report", "Ctrl+Shift+R", ":/icons/file/pixmaps/range-report.svg", &Action::onReportCreateReport));
+    actionDesc.push_back(ActionDefinitionItem(ACTION_REPORT_CREATE_REPORT, ACTION_GROUP_REPORT, "Create report", "Ctrl+Shift+R", ":/icons/report/pixmaps/range-report.svg", &Action::onReportCreateReport));
     actionDesc.push_back(ActionDefinitionItem(ACTION_APPLICATION_SETTINGS, ACTION_GROUP_APPLICATION, "Application settings", "Ctrl+A", ":/icons/file/pixmaps/range-preferences.svg", &Action::onApplicationSettings));
     actionDesc.push_back(ActionDefinitionItem(ACTION_APPLICATION_MODULE_LICENSES, ACTION_GROUP_APPLICATION, "Module licenses", "Ctrl+L", ":/icons/file/pixmaps/range-keys.svg", &Action::onApplicationModuleLicenses));
     actionDesc.push_back(ActionDefinitionItem(ACTION_APPLICATION_UPDATE, ACTION_GROUP_APPLICATION, "Update", "", ":/icons/file/pixmaps/range-download.svg", &Action::onUpdate));

@@ -499,6 +499,14 @@ void MainWindow::createToolBars(void)
         this->toolBars.push_back(toolBar);
 
         toolBar = new QToolBar(this);
+        toolBar->setObjectName(QString::fromUtf8("toolBarReport"));
+        toolBar->setWindowTitle(QApplication::translate("MainWindow", "Report"));
+        this->addToolBar(Qt::TopToolBarArea, toolBar);
+        toolBar->addAction(this->actionList->getAction(ACTION_REPORT_CONVERGENCE_GRAPH));
+        toolBar->addAction(this->actionList->getAction(ACTION_REPORT_CREATE_REPORT));
+        this->toolBars.push_back(toolBar);
+
+        toolBar = new QToolBar(this);
         toolBar->setObjectName(QString::fromUtf8("toolBarResults"));
         toolBar->setWindowTitle(QApplication::translate("MainWindow", "Results"));
         this->addToolBar(Qt::TopToolBarArea, toolBar);

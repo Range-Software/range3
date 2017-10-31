@@ -37,6 +37,8 @@ class SolverTask : public QObject
         QString monitoringFileName;
         //! Number of threads to use.
         uint nThreads;
+        //! Force to restart solver
+        bool restart;
         //! Pointer to application object.
         QCoreApplication *app;
 

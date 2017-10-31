@@ -710,6 +710,23 @@ bool Session::selectedModelsHasEntities(REntityGroupTypeMask entityTypeMask)
     return false;
 }
 
+bool Session::selectedModelsHasEntitySelected(REntityGroupType entityGroupType)
+{
+    QList<uint> modelIDs = Session::getInstance().getSelectedModelIDs();
+
+    for (int i=0;i<modelIDs.size();i++)
+    {
+        foreach (SessionEntityID sessionID, Session::getInstance().getModel(modelIDs[i]).getSelectedEntityIDs(modelIDs[i]))
+        {
+            if (sessionID.getType() == entityGroupType)
+            {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
 void Session::onPickListChanged(void)
 {
     emit this->pickListChanged();
