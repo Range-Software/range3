@@ -37,20 +37,15 @@ class CutDialog : public QDialog
     public:
 
         //! Constructor.
-        explicit CutDialog(uint modelID, QWidget *parent = 0);
-
-        //! Constructor.
         explicit CutDialog(uint modelID, uint entityID, QWidget *parent = 0);
-
-        //! Execute dialog.
-        int exec(void);
-
-    private:
-
-        //! Create dialog.
-        void createDialog(void);
         
     private slots:
+
+        //! Accept clicked.
+        void onAccept(void);
+
+        //! Reject clicked.
+        void onReject(void);
 
         //! Position changed.
         void onPositionChanged(const RR3Vector &position);

@@ -1366,8 +1366,8 @@ void Action::onGeometryCutCreate(void)
 
     for (int i=0;i<modelIDs.size();i++)
     {
-        CutDialog cutDialog(modelIDs[i],this->mainWindow);
-        cutDialog.exec();
+        CutDialog *cutDialog = new CutDialog(modelIDs[i],RConstants::eod,this->mainWindow);
+        cutDialog->show();
     }
 }
 
@@ -1381,8 +1381,8 @@ void Action::onGeometryCutEdit(void)
         {
             continue;
         }
-        CutDialog cutDialog(entityIDs[i].getMid(),entityIDs[i].getEid(),this->mainWindow);
-        cutDialog.exec();
+        CutDialog *cutDialog = new CutDialog(entityIDs[i].getMid(),entityIDs[i].getEid(),this->mainWindow);
+        cutDialog->show();
     }
 }
 

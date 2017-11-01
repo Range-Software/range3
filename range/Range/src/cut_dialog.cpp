@@ -21,87 +21,10 @@
 #include "direction_widget.h"
 #include "position_widget.h"
 
-typedef enum _VariableTreeColumn
-{
-    VARIABLE_TREE_COLUMN_NAME = 0,
-    VARIABLE_TREE_COLUMN_TYPE,
-    VARIABLE_TREE_N_COLUMNS
-} VariableTreeColumn;
-
-CutDialog::CutDialog(uint modelID, QWidget *parent) :
-    QDialog(parent),
-    modelID(modelID),
-    entityID(RConstants::eod)
-{
-    this->createDialog();
-}
-
-CutDialog::CutDialog(uint modelID, uint entityID, QWidget *parent) :
-    QDialog(parent),
-    modelID(modelID),
-    entityID(entityID)
-{
-    this->createDialog();
-}
-
-int CutDialog::exec(void)
-{
-    int retVal = QDialog::exec();
-
-    if (retVal == QDialog::Accepted)
-    {
-        Session::getInstance().storeCurentModelVersion(this->modelID,tr("Create a cut"));
-
-        QList<SessionEntityID> entities = this->modelTree->getSelected();
-
-        if (this->entityID != RConstants::eod)
-        {
-            RCut &rCut = Session::getInstance().getModel(this->modelID).getCut(this->entityID);
-
-            rCut.setPlane(this->cutPlane);
-
-            rCut.clearElementGroupIDs();
-
-            for (int i=0;i<entities.size();i++)
-            {
-                uint elementGroupId = Session::getInstance().getModel(this->modelID).getElementGroupID(entities[i].getType(),
-                                                                                                       entities[i].getEid());
-                if (elementGroupId == RConstants::eod)
-                {
-                    continue;
-                }
-                rCut.addElementGroupID(elementGroupId);
-            }
-
-            RLogger::info("Modified vector field \'%s\'\n",rCut.getName().toUtf8().constData());
-        }
-        else
-        {
-            RCut cut;
-
-            cut.setName("Cut");
-            cut.setPlane(this->cutPlane);
-
-            for (int i=0;i<entities.size();i++)
-            {
-                uint elementGroupId = Session::getInstance().getModel(this->modelID).getElementGroupID(entities[i].getType(),
-                                                                                                       entities[i].getEid());
-                cut.addElementGroupID(elementGroupId);
-            }
-
-            Session::getInstance().getModel(this->modelID).addCut(cut);
-            RLogger::info("Created new vector field \'%s\'\n",cut.getName().toUtf8().constData());
-        }
-
-        Session::getInstance().setModelChanged(this->modelID);
-    }
-
-    Session::getInstance().setEndDrawCutPlane();
-
-    return retVal;
-}
-
-void CutDialog::createDialog(void)
+CutDialog::CutDialog(uint modelID, uint entityID, QWidget *parent)
+    : QDialog(parent)
+    , modelID(modelID)
+    , entityID(entityID)
 {
     QIcon cancelIcon(":/icons/file/pixmaps/range-cancel.svg");
     QIcon okIcon(":/icons/file/pixmaps/range-ok.svg");
@@ -214,6 +137,66 @@ void CutDialog::createDialog(void)
     QObject::connect(okButton,&QPushButton::clicked,this,&CutDialog::accept);
 
     Session::getInstance().setBeginDrawCutPlane(this->cutPlane);
+
+    QObject::connect(this,&QDialog::rejected,this,&CutDialog::onReject);
+    QObject::connect(this,&QDialog::accepted,this,&CutDialog::onAccept);
+}
+
+void CutDialog::onAccept(void)
+{
+    Session::getInstance().storeCurentModelVersion(this->modelID,tr("Create a cut"));
+
+    QList<SessionEntityID> entities = this->modelTree->getSelected();
+
+    if (this->entityID != RConstants::eod)
+    {
+        RCut &rCut = Session::getInstance().getModel(this->modelID).getCut(this->entityID);
+
+        rCut.setPlane(this->cutPlane);
+
+        rCut.clearElementGroupIDs();
+
+        for (int i=0;i<entities.size();i++)
+        {
+            uint elementGroupId = Session::getInstance().getModel(this->modelID).getElementGroupID(entities[i].getType(),
+                                                                                                   entities[i].getEid());
+            if (elementGroupId == RConstants::eod)
+            {
+                continue;
+            }
+            rCut.addElementGroupID(elementGroupId);
+        }
+
+        RLogger::info("Modified vector field \'%s\'\n",rCut.getName().toUtf8().constData());
+    }
+    else
+    {
+        RCut cut;
+
+        cut.setName("Cut");
+        cut.setPlane(this->cutPlane);
+
+        for (int i=0;i<entities.size();i++)
+        {
+            uint elementGroupId = Session::getInstance().getModel(this->modelID).getElementGroupID(entities[i].getType(),
+                                                                                                   entities[i].getEid());
+            cut.addElementGroupID(elementGroupId);
+        }
+
+        Session::getInstance().getModel(this->modelID).addCut(cut);
+        RLogger::info("Created new vector field \'%s\'\n",cut.getName().toUtf8().constData());
+    }
+
+    Session::getInstance().setModelChanged(this->modelID);
+
+    this->close();
+    Session::getInstance().setEndDrawCutPlane();
+}
+
+void CutDialog::onReject(void)
+{
+    this->close();
+    Session::getInstance().setEndDrawCutPlane();
 }
 
 void CutDialog::onPositionChanged(const RR3Vector &position)
