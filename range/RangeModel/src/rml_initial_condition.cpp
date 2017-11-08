@@ -183,7 +183,7 @@ std::vector<RVariableType> RInitialCondition::getDefaultComponents
             componentTypes.push_back (R_VARIABLE_VELOCITY_Z);
             break;
         case R_INITIAL_CONDITION_VELOCITY_POTENTIAL:
-            componentTypes.push_back (R_VARIABLE_VELOCITY_POTENTIAL);
+            componentTypes.push_back (R_VARIABLE_POTENTIAL);
             break;
         case R_INITIAL_CONDITION_WAVE_DISPLACEMENT:
             componentTypes.push_back (R_VARIABLE_WAVE_DISPLACEMENT);

@@ -434,7 +434,7 @@ std::vector<RVariableType> RBoundaryCondition::getDefaultComponents
             componentTypes.push_back (R_VARIABLE_VELOCITY);
             break;
         case R_BOUNDARY_CONDITION_VELOCITY_POTENTIAL:
-            componentTypes.push_back (R_VARIABLE_VELOCITY_POTENTIAL);
+            componentTypes.push_back (R_VARIABLE_POTENTIAL);
             break;
         case R_BOUNDARY_CONDITION_WALL:
             break;

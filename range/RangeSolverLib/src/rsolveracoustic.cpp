@@ -18,7 +18,7 @@ void RSolverAcoustic::_init(const RSolverAcoustic *pAcousticSolver)
         this->elementElasticityModulus = pAcousticSolver->elementElasticityModulus;
         this->elementDensity = pAcousticSolver->elementDensity;
         this->elementDampingFactor = pAcousticSolver->elementDampingFactor;
-        this->nodeVelocityPotentialDisplacement = pAcousticSolver->nodeVelocityPotentialDisplacement;
+        this->nodeVelocityPotential = pAcousticSolver->nodeVelocityPotential;
         this->nodeVelocityPotentialVelocity = pAcousticSolver->nodeVelocityPotentialVelocity;
         this->nodeVelocityPotentialAcceleration = pAcousticSolver->nodeVelocityPotentialAcceleration;
         this->nodeAcousticPressure = pAcousticSolver->nodeAcousticPressure;
@@ -108,33 +108,46 @@ void RSolverAcoustic::updateScales(void)
 
 void RSolverAcoustic::recover(void)
 {
-    this->recoverVariable(R_VARIABLE_VELOCITY_POTENTIAL,R_VARIABLE_APPLY_NODE,this->pModel->getNElements(),0,this->nodeVelocityPotentialDisplacement,RVariable::getInitValue(R_VARIABLE_VELOCITY_POTENTIAL));
-
-    this->syncShared("node-velocity_potential_displacement",this->nodeVelocityPotentialDisplacement);
-    this->syncShared("node-velocity_potential_velocity",this->nodeVelocityPotentialVelocity);
-    this->syncShared("node-velocity_potential_acceleration",this->nodeVelocityPotentialAcceleration);
+    this->recoverVariable(R_VARIABLE_POTENTIAL,
+                          R_VARIABLE_APPLY_NODE,
+                          this->pModel->getNNodes(),
+                          0,
+                          this->nodeVelocityPotential,
+                          RVariable::getInitValue(R_VARIABLE_POTENTIAL));
+    this->recoverVariable(R_VARIABLE_POTENTIAL_VELOCITY,
+                          R_VARIABLE_APPLY_NODE,
+                          this->pModel->getNNodes(),
+                          0,
+                          this->nodeVelocityPotentialVelocity,
+                          RVariable::getInitValue(R_VARIABLE_POTENTIAL_VELOCITY));
+    this->recoverVariable(R_VARIABLE_POTENTIAL_ACCELERATION,
+                          R_VARIABLE_APPLY_NODE,
+                          this->pModel->getNNodes(),
+                          0,
+                          this->nodeVelocityPotentialAcceleration,
+                          RVariable::getInitValue(R_VARIABLE_POTENTIAL_ACCELERATION));
 }
 
 void RSolverAcoustic::prepare(void)
 {
     //! Element velocity potential - displacement.
-    RRVector elementVelocityPotentialDisplacement;
-    RBVector velocityPotentialDisplacementSetValues;
+    RRVector elementVelocityPotential;
+    RBVector velocityPotentialSetValues;
     //! Element velocity normal.
     RRVector elementVelocityNormal;
-    RBVector velocityPotentialSetValues;
+    RBVector velocityNormalSetValues;
 
     this->generateNodeBook(R_PROBLEM_ACOUSTICS);
 
-    this->generateVariableVector(R_VARIABLE_VELOCITY_POTENTIAL,elementVelocityPotentialDisplacement,velocityPotentialDisplacementSetValues,true,this->firstRun,this->firstRun);
-    this->generateVariableVector(R_VARIABLE_VELOCITY,elementVelocityNormal,velocityPotentialSetValues,true,this->firstRun,this->firstRun);
+    this->generateVariableVector(R_VARIABLE_POTENTIAL,elementVelocityPotential,velocityPotentialSetValues,true,this->firstRun,this->firstRun);
+    this->generateVariableVector(R_VARIABLE_VELOCITY,elementVelocityNormal,velocityNormalSetValues,true,this->firstRun,this->firstRun);
 
     this->generateMaterialVecor(R_MATERIAL_PROPERTY_MODULUS_OF_ELASTICITY,this->elementElasticityModulus);
     this->generateMaterialVecor(R_MATERIAL_PROPERTY_DENSITY,this->elementDensity);
 
     this->elementDampingFactor.resize(this->pModel->getNElements(),0.0);
-    this->pModel->convertElementToNodeVector(elementVelocityPotentialDisplacement,velocityPotentialDisplacementSetValues,this->nodeVelocityPotentialDisplacement,true);
-    this->nodeVelocityPotentialDisplacementOld = this->nodeVelocityPotentialDisplacement;
+    this->pModel->convertElementToNodeVector(elementVelocityPotential,velocityPotentialSetValues,this->nodeVelocityPotential,true);
+    this->nodeVelocityPotentialOld = this->nodeVelocityPotential;
 
     this->b.resize(this->nodeBook.getNEnabled());
     this->x.resize(this->nodeBook.getNEnabled());
@@ -501,7 +514,7 @@ void RSolverAcoustic::solve(void)
         uint position;
         if (this->nodeBook.getValue(i,position))
         {
-            this->nodeVelocityPotentialDisplacement[i] = this->x[position];
+            this->nodeVelocityPotential[i] = this->x[position];
         }
     }
 
@@ -517,11 +530,11 @@ void RSolverAcoustic::solve(void)
 
     for (uint i=0;i<this->pModel->getNNodes();i++)
     {
-        double puo = this->nodeVelocityPotentialDisplacementOld[i];
+        double puo = this->nodeVelocityPotentialOld[i];
         double pvo = this->nodeVelocityPotentialVelocity[i];
         double pao = this->nodeVelocityPotentialAcceleration[i];
 
-        double pu = this->nodeVelocityPotentialDisplacement[i];
+        double pu = this->nodeVelocityPotential[i];
         double pa = a0 * (pu - puo) - a2 * pvo - a3 * pao;
         double pv = pvo + a6 * pao + a7 * pa;
 
@@ -599,9 +612,9 @@ void RSolverAcoustic::processAbsorbingBoundary(void)
                 double qt = (b*(B+V)-B)/((B+V)*(1.0-b));
                 double qtx = b/(b-1.0);
 
-                t[rElement.getNodeId(j)] += -qx * this->nodeVelocityPotentialDisplacement[rElement.getNodeId(k)]
-                                          -  qt * this->nodeVelocityPotentialDisplacementOld[rElement.getNodeId(j)]
-                                          -  qtx * this->nodeVelocityPotentialDisplacementOld[rElement.getNodeId(k)];
+                t[rElement.getNodeId(j)] += -qx * this->nodeVelocityPotential[rElement.getNodeId(k)]
+                                          -  qt * this->nodeVelocityPotentialOld[rElement.getNodeId(j)]
+                                          -  qtx * this->nodeVelocityPotentialOld[rElement.getNodeId(k)];
                 ncount[rElement.getNodeId(j)] ++;
             }
         }
@@ -610,7 +623,7 @@ void RSolverAcoustic::processAbsorbingBoundary(void)
     {
         if (ncount[i] > 0)
         {
-            this->nodeVelocityPotentialDisplacement[i] = t[i] / ncount[i];
+            this->nodeVelocityPotential[i] = t[i] / ncount[i];
         }
     }
 }
@@ -630,7 +643,7 @@ void RSolverAcoustic::processAcousticPressure(void)
     {
         //this->nodeAcousticPressure[i] = (-1.0) * nodeDensity[i] * (this->nodeVelocityPotentialDisplacement[i] - this->nodeVelocityPotentialDisplacementOld[i]) / dt;
         // Per second
-        this->nodeAcousticPressure[i] = nodeDensity[i] * this->nodeVelocityPotentialDisplacement[i];
+        this->nodeAcousticPressure[i] = nodeDensity[i] * this->nodeVelocityPotential[i];
     }
 }
 
@@ -694,7 +707,7 @@ void RSolverAcoustic::processAcousticParticleVelocity(void)
                     {
                         uint nodeID = element.getNodeId(k);
 
-                        vi -= B[k] * this->nodeVelocityPotentialDisplacement[nodeID];
+                        vi -= B[k] * this->nodeVelocityPotential[nodeID];
                     }
 
                     RRMatrix R;
@@ -780,8 +793,8 @@ void RSolverAcoustic::processAcousticParticleVelocity(void)
                     {
                         uint nodeID = element.getNodeId(k);
 
-                        vi -= B[k][0] * this->nodeVelocityPotentialDisplacement[nodeID];
-                        vj -= B[k][1] * this->nodeVelocityPotentialDisplacement[nodeID];
+                        vi -= B[k][0] * this->nodeVelocityPotential[nodeID];
+                        vj -= B[k][1] * this->nodeVelocityPotential[nodeID];
                     }
 
                     RRMatrix R;
@@ -859,9 +872,9 @@ void RSolverAcoustic::processAcousticParticleVelocity(void)
                 for (uint m=0;m<element.size();m++)
                 {
                     uint nodeId = element.getNodeId(m);
-                    ve[0] -= B[m][0] * this->nodeVelocityPotentialDisplacement[nodeId];
-                    ve[1] -= B[m][1] * this->nodeVelocityPotentialDisplacement[nodeId];
-                    ve[2] -= B[m][2] * this->nodeVelocityPotentialDisplacement[nodeId];
+                    ve[0] -= B[m][0] * this->nodeVelocityPotential[nodeId];
+                    ve[1] -= B[m][1] * this->nodeVelocityPotential[nodeId];
+                    ve[2] -= B[m][2] * this->nodeVelocityPotential[nodeId];
                 }
 
                 this->elementAcousticParticleVelocity.x[elementID] = ve[0];
@@ -890,13 +903,13 @@ void RSolverAcoustic::store(void)
     RLogger::indent();
 
     // Velocity potential
-    uint velocityPotentialPos = this->pModel->findVariable(R_VARIABLE_VELOCITY_POTENTIAL);
+    uint velocityPotentialPos = this->pModel->findVariable(R_VARIABLE_POTENTIAL);
     if (velocityPotentialPos == RConstants::eod)
     {
-        velocityPotentialPos = this->pModel->addVariable(R_VARIABLE_VELOCITY_POTENTIAL);
+        velocityPotentialPos = this->pModel->addVariable(R_VARIABLE_POTENTIAL);
         this->pModel->getVariable(velocityPotentialPos).getVariableData().setMinMaxDisplayValue(
-                    RStatistics::findMinimumValue(this->nodeVelocityPotentialDisplacement),
-                    RStatistics::findMaximumValue(this->nodeVelocityPotentialDisplacement));
+                    RStatistics::findMinimumValue(this->nodeVelocityPotential),
+                    RStatistics::findMaximumValue(this->nodeVelocityPotential));
     }
     RVariable &velocityPotential =  this->pModel->getVariable(velocityPotentialPos);
 
@@ -904,7 +917,7 @@ void RSolverAcoustic::store(void)
     velocityPotential.resize(1,this->pModel->getNNodes());
     for (uint i=0;i<this->pModel->getNNodes();i++)
     {
-        velocityPotential.setValue(0,i,this->nodeVelocityPotentialDisplacement[i]);
+        velocityPotential.setValue(0,i,this->nodeVelocityPotential[i]);
     }
 
     // Acoustic pressure
@@ -967,7 +980,7 @@ void RSolverAcoustic::store(void)
 
 void RSolverAcoustic::statistics(void)
 {
-    this->printStats(R_VARIABLE_VELOCITY_POTENTIAL);
+    this->printStats(R_VARIABLE_POTENTIAL);
     this->printStats(R_VARIABLE_ACOUSTIC_PARTICLE_VELOCITY);
     this->printStats(R_VARIABLE_ACOUSTIC_PRESSURE);
     this->processMonitoringPoints();
@@ -1238,7 +1251,7 @@ void RSolverAcoustic::assemblyMatrix(uint elementID, const RRMatrix &Me, const R
             be[m] = fe[m];
             for (uint n=0;n<element.size();n++)
             {
-                double pu = this->nodeVelocityPotentialDisplacement[element.getNodeId(n)];
+                double pu = this->nodeVelocityPotential[element.getNodeId(n)];
                 double pv = this->nodeVelocityPotentialVelocity[element.getNodeId(n)];
                 double pa = this->nodeVelocityPotentialAcceleration[element.getNodeId(n)];
 
@@ -1262,7 +1275,7 @@ void RSolverAcoustic::assemblyMatrix(uint elementID, const RRMatrix &Me, const R
         {
             for (uint n=0;n<element.size();n++)
             {
-                be[n] -= Ae[n][m] * this->nodeVelocityPotentialDisplacement[nodeID];
+                be[n] -= Ae[n][m] * this->nodeVelocityPotential[nodeID];
             }
         }
     }

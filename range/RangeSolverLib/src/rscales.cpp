@@ -161,6 +161,12 @@ double RScales::findScaleFactor(RVariableType variableType) const
             return std::pow(this->second*this->ampere,2);
         case R_VARIABLE_POISSON_RATIO:
             return 1.0;
+        case R_VARIABLE_POTENTIAL:
+            return 1.0;
+        case R_VARIABLE_POTENTIAL_VELOCITY:
+            return 1.0/this->second;
+        case R_VARIABLE_POTENTIAL_ACCELERATION:
+            return 1.0/std::pow(this->second,2);
         case R_VARIABLE_PRESSURE:
         case R_VARIABLE_MODULUS_OF_ELASTICITY:
         case R_VARIABLE_STRESS:
@@ -188,8 +194,6 @@ double RScales::findScaleFactor(RVariableType variableType) const
         case R_VARIABLE_VELOCITY_Y:
         case R_VARIABLE_VELOCITY_Z:
             return this->metre/this->second;
-        case R_VARIABLE_VELOCITY_POTENTIAL:
-            return std::pow(this->metre,2)/this->second;
         case R_VARIABLE_VOF:
             return 1.0;
         case R_VARIABLE_VOLUME_FLOW_RATE:

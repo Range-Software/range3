@@ -1095,13 +1095,14 @@ void MainWindow::onWarningPrinted(const QString &message)
 {
     QTextCharFormat charFormat = this->applicationOutputBrowser->currentCharFormat();
     QColor tColor = this->applicationOutputBrowser->textColor();
+    if (!tColor.isValid())
+    {
+        tColor = QApplication::palette().text().color();
+    }
 
     this->applicationOutputBrowser->setTextColor(QColor(170,0,0));
     this->applicationOutputBrowser->insertPlainText(message);
-    if (tColor.isValid())
-    {
-        this->applicationOutputBrowser->setTextColor(tColor);
-    }
+    this->applicationOutputBrowser->setTextColor(tColor);
     this->applicationOutputBrowser->setCurrentCharFormat(charFormat);
     QScrollBar *sb = this->applicationOutputBrowser->verticalScrollBar();
     sb->setValue(sb->maximum());
@@ -1113,16 +1114,17 @@ void MainWindow::onErrorPrinted(const QString &message)
 {
     QTextCharFormat charFormat = this->applicationOutputBrowser->currentCharFormat();
     QColor tColor = this->applicationOutputBrowser->textColor();
+    if (!tColor.isValid())
+    {
+        tColor = QApplication::palette().text().color();
+    }
     QColor bColor = this->applicationOutputBrowser->textBackgroundColor();
 
     this->applicationOutputBrowser->setTextBackgroundColor(QColor(170,0,0));
     this->applicationOutputBrowser->setTextColor(QColor(255,255,255));
     this->applicationOutputBrowser->insertPlainText(message);
     this->applicationOutputBrowser->setTextBackgroundColor(bColor);
-    if (tColor.isValid())
-    {
-        this->applicationOutputBrowser->setTextColor(tColor);
-    }
+    this->applicationOutputBrowser->setTextColor(tColor);
     this->applicationOutputBrowser->setCurrentCharFormat(charFormat);
     QScrollBar *sb = this->applicationOutputBrowser->verticalScrollBar();
     sb->setValue(sb->maximum());

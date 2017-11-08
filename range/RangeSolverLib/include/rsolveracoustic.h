@@ -25,10 +25,10 @@ class RSolverAcoustic : public RSolverGeneric
         //! Element damping factor.
         RRVector elementDampingFactor;
 
-        //! Node velocity potential - displacement.
-        RRVector nodeVelocityPotentialDisplacement;
-        //! Node velocity potential - displacement - old.
-        RRVector nodeVelocityPotentialDisplacementOld;
+        //! Node velocity potential.
+        RRVector nodeVelocityPotential;
+        //! Node velocity potential - old.
+        RRVector nodeVelocityPotentialOld;
         //! Node velocity potential - velocity.
         RRVector nodeVelocityPotentialVelocity;
         //! Node velocity potential - acceleration.
