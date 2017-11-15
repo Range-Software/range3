@@ -19,10 +19,10 @@
 
 #include "rbl_message.h"
 
-#define R_LOG_LEVEL_NORMAL (RLogLevel)(R_MESSAGE_INFO | R_MESSAGE_ERROR)
-#define R_LOG_LEVEL_DETAIL (RLogLevel)(R_MESSAGE_INFO | R_MESSAGE_ERROR | R_MESSAGE_WARNING)
-#define R_LOG_LEVEL_DEBUG  (RLogLevel)(R_MESSAGE_INFO | R_MESSAGE_ERROR | R_MESSAGE_WARNING | R_MESSAGE_DEBUG)
-#define R_LOG_LEVEL_TRACE  (RLogLevel)(R_MESSAGE_INFO | R_MESSAGE_ERROR | R_MESSAGE_WARNING | R_MESSAGE_DEBUG | R_MESSAGE_TRACE)
+#define R_LOG_LEVEL_NORMAL (RLogLevel)(R_MESSAGE_INFO | R_MESSAGE_NOTICE | R_MESSAGE_ERROR)
+#define R_LOG_LEVEL_DETAIL (RLogLevel)(R_MESSAGE_INFO | R_MESSAGE_NOTICE | R_MESSAGE_ERROR | R_MESSAGE_WARNING)
+#define R_LOG_LEVEL_DEBUG  (RLogLevel)(R_MESSAGE_INFO | R_MESSAGE_NOTICE | R_MESSAGE_ERROR | R_MESSAGE_WARNING | R_MESSAGE_DEBUG)
+#define R_LOG_LEVEL_TRACE  (RLogLevel)(R_MESSAGE_INFO | R_MESSAGE_NOTICE | R_MESSAGE_ERROR | R_MESSAGE_WARNING | R_MESSAGE_DEBUG | R_MESSAGE_TRACE)
 
 #define R_LOG_LEVEL_IS_VALID(_level) \
 (                                    \
@@ -173,6 +173,9 @@ class RLogger
 
         //! Convenience function to log info message.
         static int info ( const char *format, ... );
+
+        //! Convenience function to log notice message.
+        static int notice ( const char *format, ... );
 
         //! Convenience function to log warning message.
         static int warning ( const char *format, ... );

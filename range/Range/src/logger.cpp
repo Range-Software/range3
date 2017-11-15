@@ -42,6 +42,11 @@ void Logger::printInfo(const QString &message)
     emit this->infoPrinted(message);
 }
 
+void Logger::printNotice(const QString &message)
+{
+    emit this->noticePrinted(message);
+}
+
 void Logger::printWarning(const QString &message)
 {
     emit this->warningPrinted(message);
@@ -58,6 +63,9 @@ static void logHandler (const RMessage &message)
     {
         case R_MESSAGE_INFO:
             emit Logger::getInstance().printInfo(message);
+            break;
+        case R_MESSAGE_NOTICE:
+            emit Logger::getInstance().printNotice(message);
             break;
         case R_MESSAGE_WARNING:
             emit Logger::getInstance().printWarning(message);

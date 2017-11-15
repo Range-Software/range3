@@ -16,6 +16,7 @@
 #include <QStatusBar>
 #include <QSplitter>
 #include <QScrollBar>
+#include <QMessageBox>
 
 #include "logger.h"
 #include "progress.h"
@@ -99,6 +100,7 @@ MainWindow::MainWindow (QWidget *parent)
 
     // Logger signals
     QObject::connect(&Logger::getInstance(),&Logger::infoPrinted,this,&MainWindow::onInfoPrinted);
+    QObject::connect(&Logger::getInstance(),&Logger::noticePrinted,this,&MainWindow::onNoticePrinted);
     QObject::connect(&Logger::getInstance(),&Logger::warningPrinted,this,&MainWindow::onWarningPrinted);
     QObject::connect(&Logger::getInstance(),&Logger::errorPrinted,this,&MainWindow::onErrorPrinted);
 
@@ -1074,6 +1076,11 @@ void MainWindow::onInfoPrinted(const QString &message)
     QScrollBar *sb = this->applicationOutputBrowser->verticalScrollBar();
     sb->setValue(sb->maximum());
     this->setCentralWidgetTabText(this->applicationOutputTabPosition,true);
+}
+
+void MainWindow::onNoticePrinted(const QString &message)
+{
+    QMessageBox::information(this,tr("Notice"),QString(message).replace("NOTICE: ",""));
 }
 
 void MainWindow::onWarningPrinted(const QString &message)

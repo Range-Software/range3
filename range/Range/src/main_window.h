@@ -211,6 +211,9 @@ class MainWindow : public QMainWindow
         //! Print application info message.
         void onInfoPrinted(const QString &message);
 
+        //! Print application notice message.
+        void onNoticePrinted(const QString &message);
+
         //! Print application warning message.
         void onWarningPrinted(const QString &message);
 

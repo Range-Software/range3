@@ -311,6 +311,10 @@ void RLogger::print (const RMessage &message)
             RLogger::insertLabel("TRACE",fullMessage);
             printToStderr = false;
             break;
+        case R_MESSAGE_NOTICE:
+            RLogger::insertLabel("NOTICE",fullMessage);
+            printToStderr = false;
+            break;
         case R_MESSAGE_INFO:
         default:
             printToStderr = false;
@@ -458,6 +462,18 @@ int RLogger::info (const char *format, ...)
     RLogger::getInstance().print(buffer, R_MESSAGE_INFO);
     return retVal;
 } /* RLogger::info */
+
+
+int RLogger::notice(const char *format, ...)
+{
+    char buffer[1024];
+    va_list ap;
+    va_start(ap, format);
+    int retVal = vsprintf (buffer, format, ap);
+    va_end(ap);
+    RLogger::getInstance().print(buffer, R_MESSAGE_NOTICE);
+    return retVal;
+} /* RLogger::notice */
 
 
 int RLogger::warning (const char *format, ...)

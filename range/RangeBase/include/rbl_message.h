@@ -19,6 +19,7 @@
 #define R_MESSAGE_TYPE_IS_VALID(_type) \
 ( \
   _type == R_MESSAGE_INFO    || \
+  _type == R_MESSAGE_NOTICE  || \
   _type == R_MESSAGE_ERROR   || \
   _type == R_MESSAGE_WARNING || \
   _type == R_MESSAGE_DEBUG   || \
@@ -29,10 +30,11 @@
 typedef enum _RMessageType
 {
     R_MESSAGE_INFO    = 1 << 0,
-    R_MESSAGE_ERROR   = 1 << 1,
-    R_MESSAGE_WARNING = 1 << 2,
-    R_MESSAGE_DEBUG   = 1 << 3,
-    R_MESSAGE_TRACE   = 1 << 4
+    R_MESSAGE_NOTICE  = 1 << 2,
+    R_MESSAGE_ERROR   = 1 << 3,
+    R_MESSAGE_WARNING = 1 << 4,
+    R_MESSAGE_DEBUG   = 1 << 5,
+    R_MESSAGE_TRACE   = 1 << 6
 } RMessageType;
 
 //! Message class.

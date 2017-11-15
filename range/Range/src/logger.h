@@ -43,6 +43,9 @@ class Logger : public QObject
         //! Emit print info signal.
         void printInfo(const QString &message);
 
+        //! Emit print notice signal.
+        void printNotice(const QString &message);
+
         //! Emit print warning signal.
         void printWarning(const QString &message);
 
@@ -53,6 +56,9 @@ class Logger : public QObject
 
         //! Signal containing info message.
         void infoPrinted(const QString &message);
+
+        //! Signal containing notice message.
+        void noticePrinted(const QString &message);
 
         //! Signal containing warning message.
         void warningPrinted(const QString &message);

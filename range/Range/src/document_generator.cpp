@@ -90,6 +90,7 @@ void DocumentGenerator::run(void)
                 }
             }
         }
+        RLogger::notice("Documents have been generated.");
     }
     catch (const RError &error)
     {

@@ -378,18 +378,70 @@ void ReportGenerator::generateResultsChapter(void)
         QTextBlockFormat blockFormat;
         blockFormat.setIndent(2);
 
-        cursor.insertBlock(blockFormat);
+        QTextBlockFormat rightAlignment;
+        rightAlignment.setAlignment(Qt::AlignRight);
+
+        QTextTableFormat tableFormat;
+        tableFormat.setCellPadding(1);
+        tableFormat.setCellSpacing(0);
+        tableFormat.setBorder(0.0);
+        tableFormat.setHeaderRowCount(0);
+        tableFormat.setBorderStyle(QTextFrameFormat::BorderStyle_None);
+        tableFormat.setAlignment(Qt::AlignCenter);
+
+        RStatistics stat(rVariable.getValues(),100,true);
+
+        cursor.insertTable(8,2,tableFormat);
+
         this->insertBold(cursor,QObject::tr("Variable type:"),true);
-        this->insertText(cursor," " + QObject::tr(rVariable.getNVectors() == 1 ? "Scalar" : "Vector"),true);
-        cursor.insertBlock(blockFormat);
+        cursor.movePosition(QTextCursor::NextCell);
+        cursor.setBlockFormat(rightAlignment);
+        this->insertText(cursor,QObject::tr(rVariable.getNVectors() == 1 ? "Scalar" : "Vector"),true);
+        cursor.movePosition(QTextCursor::NextCell);
+
         this->insertBold(cursor,QObject::tr("Units:"),true);
-        this->insertText(cursor," " + rVariable.getUnits(),true);
-        cursor.insertBlock(blockFormat);
+        cursor.movePosition(QTextCursor::NextCell);
+        cursor.setBlockFormat(rightAlignment);
+        this->insertText(cursor,rVariable.getUnits(),true);
+        cursor.movePosition(QTextCursor::NextCell);
+
         this->insertBold(cursor,QObject::tr("Minimum:"),true);
-        this->insertText(cursor," " + QString::number(rVariable.getMinValue()),true);
-        cursor.insertBlock(blockFormat);
+        cursor.movePosition(QTextCursor::NextCell);
+        cursor.setBlockFormat(rightAlignment);
+        this->insertText(cursor,QString::number(stat.getMin()),true);
+        cursor.movePosition(QTextCursor::NextCell);
+
         this->insertBold(cursor,QObject::tr("Maximum:"),true);
-        this->insertText(cursor," " + QString::number(rVariable.getMaxValue()),true);
+        cursor.movePosition(QTextCursor::NextCell);
+        cursor.setBlockFormat(rightAlignment);
+        this->insertText(cursor,QString::number(stat.getMax()),true);
+        cursor.movePosition(QTextCursor::NextCell);
+
+        this->insertBold(cursor,QObject::tr("Average:"),true);
+        cursor.movePosition(QTextCursor::NextCell);
+        cursor.setBlockFormat(rightAlignment);
+        this->insertText(cursor,QString::number(stat.getAvg()),true);
+        cursor.movePosition(QTextCursor::NextCell);
+
+        this->insertBold(cursor,QObject::tr("Median:"),true);
+        cursor.movePosition(QTextCursor::NextCell);
+        cursor.setBlockFormat(rightAlignment);
+        this->insertText(cursor,QString::number(stat.getMed()),true);
+        cursor.movePosition(QTextCursor::NextCell);
+
+        this->insertBold(cursor,QObject::tr("Percentile 5:"),true);
+        cursor.movePosition(QTextCursor::NextCell);
+        cursor.setBlockFormat(rightAlignment);
+        this->insertText(cursor,QString::number(stat.getP05()),true);
+        cursor.movePosition(QTextCursor::NextCell);
+
+        this->insertBold(cursor,QObject::tr("Percentile 95:"),true);
+        cursor.movePosition(QTextCursor::NextCell);
+        cursor.setBlockFormat(rightAlignment);
+        this->insertText(cursor,QString::number(stat.getP95()),true);
+        cursor.movePosition(QTextCursor::NextCell);
+
+        cursor.movePosition(QTextCursor::NextBlock);
     }
 
     this->insertH2(cursor,QObject::tr("Screenshot"));
