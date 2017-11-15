@@ -33,6 +33,7 @@
         <file>pixmaps/range-list.svg</file>
         <file>pixmaps/range-qt.svg</file>
         <file>pixmaps/range-keys.svg</file>
+        <file>pixmaps/range-important.svg</file>
     </qresource>
     <qresource prefix="/icons/solver">
         <file>pixmaps/range-solver-start.svg</file>
@@ -88,4 +89,5 @@
         <file>pixmaps/range-report.svg</file>
         <file>pixmaps/range-report-convergence.svg</file>
     </qresource>
+    <qresource prefix="/"/>
 </RCC>

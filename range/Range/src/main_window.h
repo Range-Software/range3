@@ -36,12 +36,6 @@ class MainWindow : public QMainWindow
         SubWindowManager *modelSubWindows;
         //! List of toolbars containing action types.
         QList<QToolBar*> toolBars;
-        //! Output dock.
-        QDockWidget *dockApplicationOutput;
-        //! Output dock.
-        QDockWidget *dockProcessOutput;
-        //! Pick details dock.
-        QDockWidget *dockPickDetails;
         //! Model manager dock.
         QDockWidget *dockModel;
         //! Problem setup manager dock.
@@ -60,6 +54,8 @@ class MainWindow : public QMainWindow
         QDockWidget *dockDocuments;
         //! Record manager dock.
         QDockWidget *dockRecords;
+        //! Central tab widget.
+        QTabWidget *centralTabWidget;
         //! Output text area.
         TextBrowser *applicationOutputBrowser;
         //! Process output text area.
@@ -72,6 +68,15 @@ class MainWindow : public QMainWindow
         ProgressBar* downloadProgressBar;
         //! First run flag.
         bool isFirstRun;
+
+        //! Model tab position;
+        int modelTabPosition;
+        //! Application output tab position;
+        int applicationOutputTabPosition;
+        //! Process output tab position;
+        int processOutputTabPosition;
+        //! Pick details tab position;
+        int pickDetailsTabPosition;
 
     private:
 
@@ -135,17 +140,11 @@ class MainWindow : public QMainWindow
         //! Create download bar.
         void createDownloadBar(void);
 
-        //! Create MIDI area.
-        void createMidiArea(void);
+        //! Create central widget.
+        void createCentralWidget(void);
 
-        //! Create application output dock.
-        void createApplicationOutputDock(void);
-
-        //! Create process output dock.
-        void createProcessOutputDock(void);
-
-        //! Create pick details dock.
-        void createPickDetailsDock(void);
+        //! Set central widget tab text.
+        void setCentralWidgetTabText(int tabPosition, bool important, const QString &additionalText = QString());
 
         //! Create model dock.
         void createModelDock(void);
@@ -283,6 +282,9 @@ class MainWindow : public QMainWindow
 
         //! Pick list has changed.
         void onPickLostChanged(void);
+
+        //! Central tab widget current changed.
+        void onCurrentChanged(int tabPosition);
 
 };
 
