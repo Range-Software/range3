@@ -310,7 +310,7 @@ Some introduction ...
 
     For linear case $c$ is a fixed constant equal to the propagation speed of wave. For acoustic $c=343 \left[m{\cdot}s^-1\right]$ (speed of sound in dry air at $20 \left[C\right]$)
 
-\subsubsection{Newmark-beta method}
+\subsubsection{Newmark-$\beta$ method}
 
     \begin{equation}
     \ddot{u}_{\beta} = \left(1-2\beta\right)\ddot{u}_{n} + 2 \beta\ddot{u}_{n+1} \qquad 0 \leq 2\beta \leq 1
@@ -397,8 +397,7 @@ Some introduction ...
     Solve the wave equation for an abstract scalar field velocity potential $\Phi$.
 
     \begin{equation}
-    \frac{\partial^2\Phi}{\partial{t}^2}+d\frac{\partial{\Phi}}{\partial{t}}=
-    {c(\Phi)}^2\left(\nabla^2\Phi\right)
+    \nabla ^2 \Phi - {1 \over c^2} { \partial^2 \Phi  \over  \partial t ^2 } = 0
     \end{equation}
 
     Derive particle velocity $\mathbf{u}$ and acoustic pressure $p$:
