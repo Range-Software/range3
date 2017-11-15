@@ -67,7 +67,6 @@ typedef int RProblemTypeMask;
 
 #define R_PROBLEM_ALL \
     ( \
-        R_PROBLEM_ACOUSTICS | \
         R_PROBLEM_ELECTROSTATICS | \
         R_PROBLEM_MAGNETOSTATICS | \
         R_PROBLEM_FLUID | \
