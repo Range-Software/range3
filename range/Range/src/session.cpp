@@ -17,6 +17,7 @@
 
 Session::Session()
 {
+    RLogger::trace("Session::Session()\n");
     this->downloadManager = new DownloadManager(this);
     this->drawEngine = new DrawEngine(this);
 
@@ -31,67 +32,80 @@ Session::Session()
 
 Session & Session::getInstance(void)
 {
+//    RLogger::trace("Session & Session::getInstance(void)\n");
     static Session session;
     return session;
 }
 
 void Session::lock(void)
 {
+    RLogger::trace("void Session::lock(void)\n");
     this->mutex.lock();
 }
 
 bool Session::trylock(int timeout)
 {
+    RLogger::trace("bool Session::trylock(int timeout)\n");
     return this->mutex.tryLock(timeout);
 }
 
 void Session::unlock(void)
 {
+    RLogger::trace("void Session::unlock(void)\n");
     this->mutex.unlock();
 }
 
 DownloadManager *Session::getDownloadManager(void)
 {
+    RLogger::trace("DownloadManager *Session::getDownloadManager(void)\n");
     return this->downloadManager;
 }
 
 DrawEngine *Session::getDrawEngine(void)
 {
+    RLogger::trace("DrawEngine *Session::getDrawEngine(void)\n");
     return this->drawEngine;
 }
 
 const QString &Session::getFileName(void) const
 {
+    RLogger::trace("const QString &Session::getFileName(void) const\n");
     return this->fileName;
 }
 
 uint Session::getNModels(void) const
 {
+    RLogger::trace("uint Session::getNModels(void) const\n");
     return (uint)this->models.size();
 }
 
 const Model & Session::getModel(uint position) const
 {
+//    RLogger::trace("const Model & Session::getModel(uint position) const\n");
     return this->models[position];
 }
 
 Model & Session::getModel(uint position)
 {
+//    RLogger::trace("Model & Session::getModel(uint position)\n");
     return this->models[position];
 }
 
 const Model * Session::getModelPtr(uint position) const
 {
+    RLogger::trace("const Model * Session::getModelPtr(uint position) const\n");
     return &this->models[position];
 }
 
 Model * Session::getModelPtr(uint position)
 {
+    RLogger::trace("Model * Session::getModelPtr(uint position)\n");
     return &this->models[position];
 }
 
 void Session::addModel(const Model &model)
 {
+    RLogger::trace("void Session::addModel(const Model &model)\n");
     this->models.push_back(model);
     this->models.last().initializeMeshInput();
     emit this->modelAdded(this->models.size()-1);
@@ -99,12 +113,14 @@ void Session::addModel(const Model &model)
 
 void Session::setModel(uint position, const Model &model)
 {
+    RLogger::trace("void Session::setModel(uint position, const Model &model)\n");
     this->models[position] = model;
     this->setModelChanged(position);
 }
 
 void Session::removeModel(uint position)
 {
+    RLogger::trace("void Session::removeModel(uint position)\n");
     this->models.removeAt(int(position));
     this->pickList.removeItems(position);
     emit this->modelRemoved(position);
@@ -112,6 +128,7 @@ void Session::removeModel(uint position)
 
 void Session::setModelSelected(uint modelID, bool selected)
 {
+    RLogger::trace("void Session::setModelSelected(uint modelID, bool selected)\n");
     for (uint i=0;i<this->getModel(modelID).getNPoints();i++)
     {
         this->setEntitySelected(modelID,R_ENTITY_GROUP_POINT,i,selected,false);
@@ -154,6 +171,7 @@ void Session::setModelSelected(uint modelID, bool selected)
 
 void Session::setEntitySelected(uint modelID, REntityGroupType elementGrpType, uint entityID, bool selected, bool notifyModel)
 {
+    RLogger::trace("void Session::setEntitySelected(uint modelID, REntityGroupType elementGrpType, uint entityID, bool selected, bool notifyModel)\n");
     if (this->getModel(modelID).getSelected(elementGrpType,entityID) != selected)
     {
         this->getModel(modelID).setSelected(elementGrpType,entityID,selected);
@@ -167,6 +185,7 @@ void Session::setEntitySelected(uint modelID, REntityGroupType elementGrpType, u
 
 void Session::setEntityVisible(uint modelID, REntityGroupType elementGrpType, uint entityID, bool visible)
 {
+    RLogger::trace("void Session::setEntityVisible(uint modelID, REntityGroupType elementGrpType, uint entityID, bool visible)\n");
     if (this->getModel(modelID).getVisible(elementGrpType,entityID) != visible)
     {
         this->getModel(modelID).setVisible(elementGrpType,entityID,visible);
@@ -177,6 +196,7 @@ void Session::setEntityVisible(uint modelID, REntityGroupType elementGrpType, ui
 
 void Session::setModelVisible(uint modelID, bool visible)
 {
+    RLogger::trace("void Session::setModelVisible(uint modelID, bool visible)\n");
     for (uint i=0;i<this->getModel(modelID).getNPoints();i++)
     {
         this->setEntityVisible(modelID,R_ENTITY_GROUP_POINT,i,visible);
@@ -217,6 +237,7 @@ void Session::setModelVisible(uint modelID, bool visible)
 
 QList<uint> Session::getSelectedModelIDs(void) const
 {
+    RLogger::trace("QList<uint> Session::getSelectedModelIDs(void) const\n");
     QList<uint> selectedModelIDs;
 
     for (uint i=0;i<this->getNModels();i++)
@@ -233,11 +254,13 @@ QList<uint> Session::getSelectedModelIDs(void) const
 
 bool Session::isModelSelected(uint modelID)
 {
+//    RLogger::trace("bool Session::isModelSelected(uint modelID)\n");
     return (!this->getModel(modelID).isSelected(false));
 }
 
 QList<SessionEntityID> Session::getAllEntityIDs(void) const
 {
+    RLogger::trace("QList<SessionEntityID> Session::getAllEntityIDs(void) const\n");
     QList<SessionEntityID> allEntityIDs;
 
     for (uint i=0;i<this->getNModels();i++)
@@ -249,6 +272,7 @@ QList<SessionEntityID> Session::getAllEntityIDs(void) const
 
 QList<SessionEntityID> Session::getAllEntityIDs(uint modelID) const
 {
+    RLogger::trace("QList<SessionEntityID> Session::getAllEntityIDs(uint modelID) const\n");
     QList<SessionEntityID> allEntityIDs;
     SessionEntityID entityID;
 
@@ -322,6 +346,7 @@ QList<SessionEntityID> Session::getAllEntityIDs(uint modelID) const
 
 QList<SessionEntityID> Session::getSelectedEntityIDs(void) const
 {
+    RLogger::trace("QList<SessionEntityID> Session::getSelectedEntityIDs(void) const\n");
     QList<SessionEntityID> selectedEntityIDs;
 
     for (uint i=0;i<this->getNModels();i++)
@@ -333,6 +358,7 @@ QList<SessionEntityID> Session::getSelectedEntityIDs(void) const
 
 QList<SessionEntityID> Session::getVisibleEntityIDs(void) const
 {
+    RLogger::trace("QList<SessionEntityID> Session::getVisibleEntityIDs(void) const\n");
     QList<SessionEntityID> visibleEntityIDs;
 
     for (uint i=0;i<this->getNModels();i++)
@@ -344,6 +370,7 @@ QList<SessionEntityID> Session::getVisibleEntityIDs(void) const
 
 QList<SessionEntityID> Session::filterSelectedEntityIDs(const QList<SessionEntityID> selectedEntityIDs, uint modelID, REntityGroupTypeMask entityTypeMask)
 {
+    RLogger::trace("QList<SessionEntityID> Session::filterSelectedEntityIDs(const QList<SessionEntityID> selectedEntityIDs, uint modelID, REntityGroupTypeMask entityTypeMask)\n");
     QList<SessionEntityID> selectedEntities(selectedEntityIDs);
 
     for (int i=selectedEntities.size()-1;i>=0;i--)
@@ -364,6 +391,7 @@ QList<SessionEntityID> Session::filterSelectedEntityIDs(const QList<SessionEntit
 
 uint Session::findModelByName(const QString &modelName)
 {
+    RLogger::trace("uint Session::findModelByName(const QString &modelName)\n");
     for (uint i=0;i<this->getNModels();i++)
     {
         if (this->getModel(i).getName() == modelName)
@@ -376,6 +404,7 @@ uint Session::findModelByName(const QString &modelName)
 
 uint Session::findModelByPtr(const Model *pModel)
 {
+    RLogger::trace("uint Session::findModelByPtr(const Model *pModel)\n");
     for (uint i=0;i<this->getNModels();i++)
     {
         if (this->getModelPtr(i) == pModel)
@@ -388,113 +417,141 @@ uint Session::findModelByPtr(const Model *pModel)
 
 void Session::setModelSelectionChanged(uint modelID)
 {
+    RLogger::trace("void Session::setModelSelectionChanged(uint modelID)\n");
     emit this->modelSelectionChanged(modelID);
 }
 
 void Session::setDisplayPropertiesChanged(uint modelID, REntityGroupType elementGrpType, uint entityID)
 {
+    RLogger::trace("void Session::setDisplayPropertiesChanged(uint modelID, REntityGroupType elementGrpType, uint entityID)\n");
     emit this->displayPropertiesChanged(modelID,elementGrpType,entityID);
 }
 
 void Session::setModelChanged(uint modelID)
 {
+    RLogger::trace("void Session::setModelChanged(uint modelID)\n");
     emit this->modelChanged(modelID);
 }
 
 void Session::setModelRenamed(uint modelID)
 {
+    RLogger::trace("void Session::setModelRenamed(uint modelID)\n");
     emit this->modelRenamed(modelID);
 }
 
 void Session::setProblemChanged(uint modelID)
 {
+    RLogger::trace("void Session::setProblemChanged(uint modelID)\n");
     emit this->problemChanged(modelID);
 }
 
 void Session::setProblemSelectionChanged(uint modelID)
 {
+    RLogger::trace("void Session::setProblemSelectionChanged(uint modelID)\n");
     emit this->problemSelectionChanged(modelID);
 }
 
 void Session::setResultsChanged(uint modelID)
 {
+    RLogger::trace("void Session::setResultsChanged(uint modelID)\n");
     emit this->resultsChanged(modelID);
 }
 
 void Session::setBoundaryConditionChanged(uint modelID, REntityGroupType elementGrpType, uint entityID)
 {
+    RLogger::trace("void Session::setBoundaryConditionChanged(uint modelID, REntityGroupType elementGrpType, uint entityID)\n");
     emit this->boundaryConditionChanged(modelID,elementGrpType,entityID);
 }
 
 void Session::setInitialConditionChanged(uint modelID, REntityGroupType elementGrpType, uint entityID)
 {
+    RLogger::trace("void Session::setInitialConditionChanged(uint modelID, REntityGroupType elementGrpType, uint entityID)\n");
     emit this->initialConditionChanged(modelID,elementGrpType,entityID);
 }
 
 void Session::setEnvironmentConditionChanged(uint modelID, REntityGroupType elementGrpType, uint entityID)
 {
+    RLogger::trace("void Session::setEnvironmentConditionChanged(uint modelID, REntityGroupType elementGrpType, uint entityID)\n");
     emit this->environmentConditionChanged(modelID,elementGrpType,entityID);
 }
 
 void Session::setMaterialChanged(uint modelID, REntityGroupType elementGrpType, uint entityID)
 {
+    RLogger::trace("void Session::setMaterialChanged(uint modelID, REntityGroupType elementGrpType, uint entityID)\n");
     emit this->materialChanged(modelID,elementGrpType,entityID);
 }
 
 void Session::setVariableDataChanged(uint modelID, RVariableType variableType)
 {
+    RLogger::trace("void Session::setVariableDataChanged(uint modelID, RVariableType variableType)\n");
     emit this->variableDataChanged(modelID,variableType);
 }
 
 void Session::setVariableDataChanged(const SessionEntityID &entityID, RVariableType variableType)
 {
+    RLogger::trace("void Session::setVariableDataChanged(const SessionEntityID &entityID, RVariableType variableType)\n");
     emit this->variableDataChanged(entityID,variableType);
 }
 
 const PickList &Session::getPickList(void) const
 {
+    RLogger::trace("const PickList &Session::getPickList(void) const\n");
     return this->pickList;
 }
 
 PickList &Session::getPickList(void)
 {
+    RLogger::trace("PickList &Session::getPickList(void)\n");
     return this->pickList;
 }
 
 void Session::setBeginDrawStreamLinePosition(const RR3Vector &position)
 {
+    RLogger::trace("void Session::setBeginDrawStreamLinePosition(const RR3Vector &position)\n");
     emit this->beginDrawStreamLinePosition(position);
 }
 
 void Session::setEndDrawStreamLinePosition(void)
 {
+    RLogger::trace("void Session::setEndDrawStreamLinePosition(void)\n");
     emit this->endDrawStreamLinePosition();
 }
 
 void Session::setBeginDrawCutPlane(const RPlane &plane)
 {
+    RLogger::trace("void Session::setBeginDrawCutPlane(const RPlane &plane)\n");
     emit this->beginDrawCutPlane(plane);
 }
 
 void Session::setEndDrawCutPlane(void)
 {
+    RLogger::trace("void Session::setEndDrawCutPlane(void)\n");
     emit this->endDrawCutPlane();
 }
 
 void Session::setBeginDrawMoveNodes(const QMap<SessionNodeID, RR3Vector> &nodesToMove)
 {
+    RLogger::trace("void Session::setBeginDrawMoveNodes(const QMap<SessionNodeID, RR3Vector> &nodesToMove)\n");
     emit this->beginDrawMoveNodes(nodesToMove);
 }
 
 void Session::setEndDrawMoveNodes(void)
 {
+    RLogger::trace("void Session::setEndDrawMoveNodes(void)\n");
     emit this->endDrawMoveNodes();
 }
 
-void Session::setTakeScreenShot(uint modelID, const QString &screenShotFileName)
+void Session::setTakeScreenShot(uint modelID, const QString &screenShotFileName, bool blocking)
 {
-    RLogger::trace("void Session::setTakeScreenShot(uint modelID, const QString &screenShotFileName)\n");
-    emit this->takeScreenShot(modelID, screenShotFileName);
+    RLogger::trace("void Session::setTakeScreenShot(uint modelID, const QString &screenShotFileName, bool blocking)\n");
+    if (blocking)
+    {
+        emit this->takeScreenShotBlocking(modelID, screenShotFileName);
+    }
+    else
+    {
+        emit this->takeScreenShot(modelID, screenShotFileName);
+    }
 }
 
 void Session::read(const QString &fileName)
@@ -662,6 +719,7 @@ QString Session::getUndoTooltip(void) const
 
 QString Session::getRedoTooltip(void) const
 {
+    RLogger::trace("QString Session::getRedoTooltip(void)\n");
     QString redoMessage;
 
     QList<uint> selectedModelIDs = this->getSelectedModelIDs();
@@ -679,17 +737,20 @@ QString Session::getRedoTooltip(void) const
 
 QString Session::getDefaultFileExtension(void)
 {
+    RLogger::trace("QString Session::getDefaultFileExtension(void)\n");
     return "ras";
 }
 
 QString Session::getDefaultFileName(void)
 {
+    RLogger::trace("QString Session::getDefaultFileName(void)\n");
     QDir sesionDir = MainSettings::getInstancePtr()->getSessionDir();
     return sesionDir.filePath(QString("default.") + Session::getDefaultFileExtension());
 }
 
 bool Session::selectedModelsHasEntities(REntityGroupTypeMask entityTypeMask)
 {
+    RLogger::trace("bool Session::selectedModelsHasEntities(REntityGroupTypeMask entityTypeMask)\n");
     QList<uint> modelIDs = Session::getInstance().getSelectedModelIDs();
 
     for (int i=0;i<modelIDs.size();i++)
@@ -720,6 +781,7 @@ bool Session::selectedModelsHasEntities(REntityGroupTypeMask entityTypeMask)
 
 bool Session::selectedModelsHasEntitySelected(REntityGroupType entityGroupType)
 {
+    RLogger::trace("bool Session::selectedModelsHasEntitySelected(REntityGroupType entityGroupType)\n");
     QList<uint> modelIDs = Session::getInstance().getSelectedModelIDs();
 
     for (int i=0;i<modelIDs.size();i++)
@@ -737,21 +799,25 @@ bool Session::selectedModelsHasEntitySelected(REntityGroupType entityGroupType)
 
 void Session::onPickListChanged(void)
 {
+    RLogger::trace("void Session::onPickListChanged(void)\n");
     emit this->pickListChanged();
 }
 
 void Session::onModelAdded(uint modelID)
 {
+    RLogger::trace("void Session::onModelAdded(uint modelID)\n");
     this->getModel(modelID).createDependentEntities();
 }
 
 void Session::onModelChanged(uint modelID)
 {
+    RLogger::trace("void Session::onModelChanged(uint modelID)\n");
     this->getModel(modelID).createDependentEntities();
 }
 
 void Session::onNHistoryRecordsChanged(uint nHistoryRecords)
 {
+    RLogger::trace("void Session::onNHistoryRecordsChanged(uint nHistoryRecords)\n");
     for (uint i=0;i<this->getNModels();i++)
     {
         this->getModel(i).updateHistoryStackSize(nHistoryRecords);
@@ -761,6 +827,7 @@ void Session::onNHistoryRecordsChanged(uint nHistoryRecords)
 
 void Session::onSoftwareUpdateFileSaved(uint downloadID, const QString &fileName)
 {
+    RLogger::trace("void Session::onSoftwareUpdateFileSaved(uint downloadID, const QString &fileName)\n");
     RLogger::info("Opening downloaded file \'%s\'\n",fileName.toUtf8().constData());
 
     if (!QDesktopServices::openUrl(QUrl("file:///" + fileName)))

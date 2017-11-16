@@ -201,7 +201,7 @@ class Session : public QObject
         void setEndDrawMoveNodes(void);
 
         //! Take screenshot of given model ID.
-        void setTakeScreenShot(uint modelID, const QString &screenShotFileName = QString());
+        void setTakeScreenShot(uint modelID, const QString &screenShotFileName, bool blocking);
 
         //! Read session from the file.
         void read(const QString &fileName);

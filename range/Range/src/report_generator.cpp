@@ -19,11 +19,13 @@ ReportGenerator::ReportGenerator(uint modelID, QObject *parent)
     : DocumentGenerator(parent)
     , modelID(modelID)
 {
+    RLogger::trace("ReportGenerator::ReportGenerator(uint modelID, QObject *parent)\n");
     this->setEnableHeaderCounters(false);
 }
 
 void ReportGenerator::generateTitle(void)
 {
+    RLogger::trace("void ReportGenerator::generateTitle(void)\n");
     const Model &rModel = Session::getInstance().getModel(this->modelID);
 
     QTextCursor cursor(this->docTitle);
@@ -54,6 +56,7 @@ void ReportGenerator::generateTitle(void)
 
 void ReportGenerator::generateBody(void)
 {
+    RLogger::trace("void ReportGenerator::generateBody(void)\n");
     this->generateModelChapter();
     this->generateProblemChapter();
     this->generateResultsChapter();
@@ -61,6 +64,8 @@ void ReportGenerator::generateBody(void)
 
 void ReportGenerator::generateModelChapter(void)
 {
+    RLogger::trace("void ReportGenerator::generateModelChapter(void)\n");
+
     const Model &rModel = Session::getInstance().getModel(this->modelID);
 
     QTextCursor cursor(this->docBody);
@@ -110,6 +115,8 @@ void ReportGenerator::generateModelChapter(void)
 
 void ReportGenerator::generateProblemChapter(void)
 {
+    RLogger::trace("void ReportGenerator::generateProblemChapter(void)\n");
+
     const Model &rModel = Session::getInstance().getModel(this->modelID);
 
     QTextCursor cursor(this->docBody);
@@ -327,6 +334,8 @@ void ReportGenerator::generateProblemChapter(void)
 
 void ReportGenerator::generateResultsChapter(void)
 {
+    RLogger::trace("void ReportGenerator::generateResultsChapter(void)\n");
+
     const Model &rModel = Session::getInstance().getModel(this->modelID);
 
     QTextCursor cursor(this->docBody);
@@ -455,10 +464,12 @@ void ReportGenerator::generateResultsChapter(void)
 
 QImage ReportGenerator::takeModelScreenshot(void) const
 {
+    RLogger::trace("QImage ReportGenerator::takeModelScreenshot(void)\n");
+
     const Model &rModel = Session::getInstance().getModel(this->modelID);
     QString screenShotFile(rModel.buildScreenShotFileName());
 
-    Session::getInstance().setTakeScreenShot(this->modelID,screenShotFile);
+    Session::getInstance().setTakeScreenShot(this->modelID,screenShotFile,true);
 
     return QImage(screenShotFile);
 }

@@ -87,33 +87,42 @@ void Application::applyStyle(const QString &styleName)
 void Application::onStarted(void)
 {
     // Process command line arguments.
-    QList<RArgumentOption> validOptions;
-    validOptions.append(RArgumentOption("log-debug",RArgumentOption::Switch,QVariant(),"Switch on debug log level",false,false));
-    validOptions.append(RArgumentOption("log-trace",RArgumentOption::Switch,QVariant(),"Switch on trace log level",false,false));
-
-    RArgumentsParser argumentsParser(Application::arguments(),validOptions);
-
-    if (argumentsParser.isSet("help"))
+    try
     {
-        argumentsParser.printHelp("GUI");
-        this->exit(0);
+        QList<RArgumentOption> validOptions;
+        validOptions.append(RArgumentOption("log-debug",RArgumentOption::Switch,QVariant(),"Switch on debug log level",false,false));
+        validOptions.append(RArgumentOption("log-trace",RArgumentOption::Switch,QVariant(),"Switch on trace log level",false,false));
+
+        RArgumentsParser argumentsParser(Application::arguments(),validOptions);
+
+        if (argumentsParser.isSet("help"))
+        {
+            argumentsParser.printHelp("GUI");
+            this->exit(0);
+            return;
+        }
+
+        if (argumentsParser.isSet("version"))
+        {
+            argumentsParser.printVersion();
+            this->exit(0);
+            return;
+        }
+
+        if (argumentsParser.isSet("log-debug"))
+        {
+            RLogger::getInstance().setLevel(R_LOG_LEVEL_DEBUG);
+        }
+        if (argumentsParser.isSet("log-trace"))
+        {
+            RLogger::getInstance().setLevel(R_LOG_LEVEL_TRACE);
+        }
+    }
+    catch (const RError &rError)
+    {
+        RLogger::error("Failed to parse command line options. %s\n",rError.getMessage().toUtf8().constData());
+        this->exit(1);
         return;
-    }
-
-    if (argumentsParser.isSet("version"))
-    {
-        argumentsParser.printVersion();
-        this->exit(0);
-        return;
-    }
-
-    if (argumentsParser.isSet("log-debug"))
-    {
-        RLogger::getInstance().setLevel(R_LOG_LEVEL_DEBUG);
-    }
-    if (argumentsParser.isSet("log-trace"))
-    {
-        RLogger::getInstance().setLevel(R_LOG_LEVEL_TRACE);
     }
 
     // Connect to aoutToQuit signal

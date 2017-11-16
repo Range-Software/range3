@@ -127,7 +127,7 @@ void ModelRecordsSelector::onUpdateJobFinished(void)
     if (this->recordIndicator)
     {
         // Take screen-shot
-        Session::getInstance().setTakeScreenShot(this->updateModelID,Session::getInstance().getModel(this->updateModelID).buildScreenShotFileName());
+        Session::getInstance().setTakeScreenShot(this->updateModelID,Session::getInstance().getModel(this->updateModelID).buildScreenShotFileName(),false);
     }
     if (this->markNextIndicator)
     {
