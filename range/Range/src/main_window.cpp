@@ -24,6 +24,7 @@
 #include "bc_tree.h"
 #include "document_tree.h"
 #include "draw_input_widget.h"
+#include "first_run_dialog.h"
 #include "ic_manager_tree.h"
 #include "ic_tree.h"
 #include "ec_manager_tree.h"
@@ -148,7 +149,7 @@ MainWindow::MainWindow (QWidget *parent)
 
     if (this->isFirstRun)
     {
-//        QMessageBox::warning(this,tr("FIRST RUN"),"This is first run");
+        FirstRunDialog(this).exec();
     }
 }
 
@@ -646,7 +647,7 @@ void MainWindow::createModelDock(void)
     gridLayoutModels->addWidget(splitter);
 
     //! Model tree.
-    this->treeModelManager = new ModelTree(this->getActions(),splitter);
+    this->treeModelManager = new ModelTree(this->actionList,splitter);
 
     //! Model display properties tree.
     ModelEntityDisplayPropertiesTree *treeModelDisplayProperties = new ModelEntityDisplayPropertiesTree;
@@ -796,7 +797,7 @@ void MainWindow::createMaterialDock(void)
     splitter->setChildrenCollapsible(false);
     this->dockMaterial->setWidget(splitter);
 
-    MaterialManagerTree *treeMaterialList = new MaterialManagerTree(this->getActions(),splitter);
+    MaterialManagerTree *treeMaterialList = new MaterialManagerTree(this->actionList,splitter);
 
     MaterialTree *treeMaterial = new MaterialTree(splitter);
 
@@ -848,40 +849,45 @@ void MainWindow::readSettings(void)
         throw RError(R_ERROR_APPLICATION,R_ERROR_REF,"Nonexisting application object.");
     }
 
-    pApplicationSettings->setSolverPath(MainSettings::getInstance().value("application/SolverPath").toString());
+    RVersion version(MainSettings::getInstance().value("application/version").toString());
 
-    if (pApplicationSettings->getSolverPath().isEmpty())
+    this->isFirstRun = (version != RVendor::version);
+
+    if (version <= RVendor::version)
     {
-        QDir solverExecDir(QApplication::applicationDirPath());
-        QString solverPath = solverExecDir.filePath(ApplicationSettings::getDefaultRangeSolverExecutable());
-        pApplicationSettings->setSolverPath(solverPath);
-    }
+        pApplicationSettings->setSolverPath(MainSettings::getInstance().value("application/SolverPath").toString());
 
-    pApplicationSettings->setNThreads(MainSettings::getInstance().value("application/nThreads",pApplicationSettings->getNThreads()).toUInt());
-    pApplicationSettings->setNHistoryRecords(MainSettings::getInstance().value("application/nHistoryRecords",pApplicationSettings->getNHistoryRecords()).toUInt());
-    pApplicationSettings->setStyle(MainSettings::getInstance().value("application/style",pApplicationSettings->getStyle()).toString());
-    pApplicationSettings->setRangeApiAllowed(MainSettings::getInstance().value("application/rangeApiAllowed",pApplicationSettings->getRangeApiAllowed()).toBool());
-    pApplicationSettings->setRangeApiServer(MainSettings::getInstance().value("application/rangeApiServer",pApplicationSettings->getRangeApiServer()).toString());
-    pApplicationSettings->setRangeAccount(MainSettings::getInstance().value("application/rangeAccount",pApplicationSettings->getRangeAccount()).toString());
-    pApplicationSettings->setRangePassword(MainSettings::getInstance().value("application/rangePassword",pApplicationSettings->getRangePassword()).toString());
-
-    for (int i=ACTION_NONE;i<ACTION_N_TYPES;i++)
-    {
-        if (!ACTION_TYPE_IS_ACTION(ActionType(i)))
+        if (pApplicationSettings->getSolverPath().isEmpty())
         {
-            continue;
+            QDir solverExecDir(QApplication::applicationDirPath());
+            QString solverPath = solverExecDir.filePath(ApplicationSettings::getDefaultRangeSolverExecutable());
+            pApplicationSettings->setSolverPath(solverPath);
         }
-        QString key = "application/shortcut_" + this->actionList->getAction(ActionType(i))->text();
-        if (MainSettings::getInstance().contains(key))
-        {
-            const QString &shortcut = MainSettings::getInstance().value(key).toString();
 
-            pApplicationSettings->getActionDefinition()->setShortcut(ActionType(i),shortcut);
-            this->actionList->getAction(ActionType(i))->setShortcut(shortcut);
+        pApplicationSettings->setNThreads(MainSettings::getInstance().value("application/nThreads",pApplicationSettings->getNThreads()).toUInt());
+        pApplicationSettings->setNHistoryRecords(MainSettings::getInstance().value("application/nHistoryRecords",pApplicationSettings->getNHistoryRecords()).toUInt());
+        pApplicationSettings->setStyle(MainSettings::getInstance().value("application/style",pApplicationSettings->getStyle()).toString());
+        pApplicationSettings->setRangeApiAllowed(MainSettings::getInstance().value("application/rangeApiAllowed",pApplicationSettings->getRangeApiAllowed()).toBool());
+        pApplicationSettings->setRangeApiServer(MainSettings::getInstance().value("application/rangeApiServer",pApplicationSettings->getRangeApiServer()).toString());
+        pApplicationSettings->setRangeAccount(MainSettings::getInstance().value("application/rangeAccount",pApplicationSettings->getRangeAccount()).toString());
+        pApplicationSettings->setRangePassword(MainSettings::getInstance().value("application/rangePassword",pApplicationSettings->getRangePassword()).toString());
+
+        for (int i=ACTION_NONE;i<ACTION_N_TYPES;i++)
+        {
+            if (!ACTION_TYPE_IS_ACTION(ActionType(i)))
+            {
+                continue;
+            }
+            QString key = "application/shortcut_" + this->actionList->getAction(ActionType(i))->text();
+            if (MainSettings::getInstance().contains(key))
+            {
+                const QString &shortcut = MainSettings::getInstance().value(key).toString();
+
+                pApplicationSettings->getActionDefinition()->setShortcut(ActionType(i),shortcut);
+                this->actionList->getAction(ActionType(i))->setShortcut(shortcut);
+            }
         }
     }
-
-    this->isFirstRun = MainSettings::getInstance().value("application/firstRun",true).toBool();
 
     MainSettings::getInstance().sync();
 }
@@ -942,7 +948,7 @@ void MainWindow::writeSettings(void) const
         MainSettings::getInstance().setValue(key, this->actionList->getAction(ActionType(i))->shortcut().toString());
     }
 
-    MainSettings::getInstance().setValue("application/firstRun",false);
+    MainSettings::getInstance().setValue("application/version",RVendor::version.toString());
 
     MainSettings::getInstance().sync();
 
@@ -964,11 +970,6 @@ uint MainWindow::getNToolBars(void) const
 QList<uint> MainWindow::getSelectedModelIDs(void) const
 {
     return this->treeModelManager->getSelectedModelIDs();
-}
-
-ActionList * MainWindow::getActions(void) const
-{
-    return this->actionList;
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)

@@ -56,6 +56,7 @@ SOURCES += \
     src/ec_tree.cpp \
     src/file_chooser_button.cpp \
     src/file_updater.cpp \
+    src/first_run_dialog.cpp \
     src/fix_sliver_elements_dialog.cpp \
     src/geometry_rotate_widget.cpp \
     src/geometry_scale_widget.cpp \
@@ -247,6 +248,7 @@ HEADERS += \
     src/ec_tree.h \
     src/file_chooser_button.h \
     src/file_updater.h \
+    src/first_run_dialog.h \
     src/fix_sliver_elements_dialog.h \
     src/geometry_rotate_widget.h \
     src/geometry_scale_widget.h \

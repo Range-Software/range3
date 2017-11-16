@@ -125,9 +125,6 @@ class MainWindow : public QMainWindow
         //! Return list of selected model IDs.
         QList<uint> getSelectedModelIDs(void) const;
 
-        //! Return action list.
-        ActionList * getActions(void) const;
-
         //! Create all menu items.
         void createMenus(void);
 
