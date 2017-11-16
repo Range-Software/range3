@@ -10,7 +10,11 @@
 
 #include <QTextStream>
 
+#ifdef _WIN32
+#include <windows.h>
+#else
 #include <unistd.h>
+#endif
 
 #include <rblib.h>
 
@@ -20,12 +24,18 @@ CommandProcessor::CommandProcessor(QCoreApplication *application) :
     QObject(application),
     enabled(false)
 {
+#ifdef _WIN32
+    this->stdinNotifier = new QWinEventNotifier(GetStdHandle(STD_INPUT_HANDLE),this);
+    this->connect(this->stdinNotifier,SIGNAL(activated(HANDLE)),this,SLOT(readStdin(int)));
+    this->stdinNotifier->setEnabled(true);
+#else
     this->stdinNotifier = new QSocketNotifier(STDIN_FILENO, QSocketNotifier::Read,this);
 
     QObject::connect(this->stdinNotifier,
                      &QSocketNotifier::activated,
                      this,
                      &CommandProcessor::readStdin);
+#endif
 }
 
 void CommandProcessor::setEnabled(bool enabled)

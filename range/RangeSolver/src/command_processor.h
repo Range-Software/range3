@@ -12,8 +12,13 @@
 #define __COMMAND_PROCESSOR_H__
 
 #include <QObject>
-#include <QSocketNotifier>
 #include <QCoreApplication>
+#ifdef _WIN32
+#include <QWinEventNotifier>
+#include <windows.h>
+#else
+#include <QSocketNotifier>
+#endif
 
 class CommandProcessor : public QObject
 {
@@ -24,8 +29,13 @@ class CommandProcessor : public QObject
 
         //! Processing is enabled.
         bool enabled;
+#ifdef _WIN32
+        //! Windows event notifier.
+        QWinEventNotifier *stdinNotifier;
+#else
         //! Standard input notifier.
         QSocketNotifier *stdinNotifier;
+#endif
 
     public:
 
