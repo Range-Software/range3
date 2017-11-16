@@ -225,23 +225,22 @@ void RLogger::decreaseIndent (void)
 void RLogger::printToFile (time_t         pTime,
                            const QString &cppString) const
 {
-    QString logFileNameTmp = this->getFile();
-    if (logFileNameTmp.isEmpty())
+    if (this->logFileName.isEmpty())
     {
         return;
     }
 
-    QFile logFile(logFileNameTmp);
+    QFile logFile(this->logFileName);
 
     if (!logFile.open(QIODevice::Append | QIODevice::Text))
     {
-        QTextStream(stderr) << "Failed to open the log file '" << logFileNameTmp << "'\n";
+        QTextStream(stderr) << "Failed to open the log file '" << this->logFileName << "'\n";
         return;
     }
 
     QTextStream out(&logFile);
 
-    if (this->getPrintTimeEnabled())
+    if (this->printTime)
     {
         char buffer [80];
         strftime (buffer,80,"%Y/%m/%d - %H:%M:%S > ",localtime (&pTime));
@@ -250,7 +249,7 @@ void RLogger::printToFile (time_t         pTime,
     out << cppString;
     if (out.status() != QTextStream::Ok)
     {
-        QTextStream(stderr) << "Failed to write the log message to file '" << logFileNameTmp << "'\n";
+        QTextStream(stderr) << "Failed to write the log message to file '" << this->logFileName << "'\n";
     }
 
     logFile.close ();
@@ -342,8 +341,8 @@ void RLogger::print (const RMessage &message)
     }
     else
     {
-        this->printToFile (message.getAtime(), fullMessage);
         RLocker::lock();
+        this->printToFile (message.getAtime(), fullMessage);
         if (this->logHandler)
         {
             this->logHandler(RMessage(fullMessage, messageType));
@@ -394,7 +393,7 @@ void RLogger::flush (void)
         this->printToFile (iter->getAtime(), *iter);
         if (this->logHandler)
         {
-            this->logHandler (*iter);
+            this->logHandler(*iter);
         }
     }
     RLocker::unlock();

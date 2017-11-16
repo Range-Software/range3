@@ -40,18 +40,6 @@ class Logger : public QObject
         //! Return reference to static object.
         static Logger & getInstance(void);
 
-        //! Emit print info signal.
-        void printInfo(const QString &message);
-
-        //! Emit print notice signal.
-        void printNotice(const QString &message);
-
-        //! Emit print warning signal.
-        void printWarning(const QString &message);
-
-        //! Emit print error signal.
-        void printError(const QString &message);
-
     signals:
 
         //! Signal containing info message.

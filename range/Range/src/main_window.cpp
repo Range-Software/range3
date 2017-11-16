@@ -146,9 +146,6 @@ MainWindow::MainWindow (QWidget *parent)
     // Number of history records has changed.
     QObject::connect(&Session::getInstance(),&Session::nHistoryRecordsChanged,this,&MainWindow::onNHistoryRecordsChanged);
 
-    // Enable logger to sen messages to window.
-    Logger::unhalt();
-
     if (this->isFirstRun)
     {
 //        QMessageBox::warning(this,tr("FIRST RUN"),"This is first run");

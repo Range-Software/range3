@@ -17,7 +17,7 @@ static void logHandler (const RMessage &message);
 void Logger::initialize (void)
 {
     RLogger::getInstance().setLevel(R_LOG_LEVEL_DETAIL);
-    RLogger::getInstance().setHalted(true);
+    RLogger::getInstance().setHalted(false);
     RLogger::getInstance().setLogHandler(logHandler);
 }
 
@@ -37,50 +37,30 @@ Logger & Logger::getInstance()
     return logger;
 }
 
-void Logger::printInfo(const QString &message)
-{
-    emit this->infoPrinted(message);
-}
-
-void Logger::printNotice(const QString &message)
-{
-    emit this->noticePrinted(message);
-}
-
-void Logger::printWarning(const QString &message)
-{
-    emit this->warningPrinted(message);
-}
-
-void Logger::printError(const QString &message)
-{
-    emit this->errorPrinted(message);
-}
-
 static void logHandler (const RMessage &message)
 {
     switch (message.getType())
     {
         case R_MESSAGE_INFO:
-            emit Logger::getInstance().printInfo(message);
+            emit Logger::getInstance().infoPrinted(message);
             break;
         case R_MESSAGE_NOTICE:
-            emit Logger::getInstance().printNotice(message);
+            emit Logger::getInstance().noticePrinted(message);
             break;
         case R_MESSAGE_WARNING:
-            emit Logger::getInstance().printWarning(message);
+            emit Logger::getInstance().warningPrinted(message);
             break;
         case R_MESSAGE_ERROR:
-            emit Logger::getInstance().printError(message);
+            emit Logger::getInstance().errorPrinted(message);
             break;
         case R_MESSAGE_DEBUG:
-            emit Logger::getInstance().printInfo(message);
+            emit Logger::getInstance().infoPrinted(message);
             break;
         case R_MESSAGE_TRACE:
-            emit Logger::getInstance().printInfo(message);
+            emit Logger::getInstance().infoPrinted(message);
             break;
         default:
-            emit Logger::getInstance().printError("UNKNOWN MESSAGE TYPE: " + message);
+            emit Logger::getInstance().errorPrinted("UNKNOWN MESSAGE TYPE: " + message);
             break;
     }
 }
