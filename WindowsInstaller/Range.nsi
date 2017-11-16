@@ -18,7 +18,7 @@
 
 ;Name and file
 Name "Range Software Package"
-OutFile "range-3.0.alpha_4-installer.exe"
+OutFile "range-3.0.rc_1-installer.exe"
 
 ;Icon "range.ico"
 ;UninstallIcon "range.ico"
