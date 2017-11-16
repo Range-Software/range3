@@ -26,7 +26,7 @@ void RArgumentsParser::_init(const RArgumentsParser *pArgumentsParser)
     }
 }
 
-RArgumentsParser::RArgumentsParser(const QList<QString> &argumentList, const QList<RArgumentOption> &validOptions)
+RArgumentsParser::RArgumentsParser(const QStringList &argumentList, const QList<RArgumentOption> &validOptions)
 {
     this->_init();
     foreach (const RArgumentOption &option, validOptions)
@@ -112,7 +112,7 @@ void RArgumentsParser::printVersion(void) const
     RLogger::info("%s\n",RVendor::version.toString().toUtf8().constData());
 }
 
-void RArgumentsParser::processArgumentList(const QList<QString> &argumentList)
+void RArgumentsParser::processArgumentList(const QStringList &argumentList)
 {
     RArgumentOption option;
 

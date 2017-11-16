@@ -21,7 +21,5 @@ int main (int argc, char *argv[])
         RLogger::info ("Application has terminated with error code (%d).\n", exitValue);
         return exitValue;
     }
-
-    RLogger::info ("Application has terminated successfully.\n");
     return 0;
 } /* main */

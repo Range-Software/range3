@@ -37,7 +37,7 @@ class RArgumentsParser
     public:
 
         //! Constructor.
-        RArgumentsParser(const QList<QString> &argumentList,
+        RArgumentsParser(const QStringList &argumentList,
                          const QList<RArgumentOption> &validOptions);
 
         //! Copy constructor.
@@ -68,7 +68,7 @@ class RArgumentsParser
     protected:
 
         //! Process argument list.
-        void processArgumentList(const QList<QString> &argumentList);
+        void processArgumentList(const QStringList &argumentList);
 
         //! Process argument.
         bool processArgument(const QString &argument, RArgumentOption &option);

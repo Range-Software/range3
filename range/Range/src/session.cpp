@@ -493,11 +493,13 @@ void Session::setEndDrawMoveNodes(void)
 
 void Session::setTakeScreenShot(uint modelID, const QString &screenShotFileName)
 {
+    RLogger::trace("void Session::setTakeScreenShot(uint modelID, const QString &screenShotFileName)\n");
     emit this->takeScreenShot(modelID, screenShotFileName);
 }
 
 void Session::read(const QString &fileName)
 {
+    RLogger::trace("void Session::read(const QString &fileName)\n");
     if (fileName.isEmpty())
     {
         throw RError(R_ERROR_INVALID_FILE_NAME,R_ERROR_REF,"No file name was provided.");
@@ -541,6 +543,7 @@ void Session::read(const QString &fileName)
 
 void Session::write(const QString &fileName, bool writeModels)
 {
+    RLogger::trace("void Session::write(const QString &fileName, bool writeModels)\n");
     RLogger::info("Writing session file \'%s\'.\n",fileName.toUtf8().constData());
 
     if (fileName.isEmpty())
@@ -590,6 +593,7 @@ void Session::write(const QString &fileName, bool writeModels)
 
 void Session::clear(void)
 {
+    RLogger::trace("void Session::clear(void)\n");
     RLogger::info("Closing session\n");
     this->fileName.clear();
 
@@ -606,11 +610,13 @@ void Session::clear(void)
 
 void Session::storeCurentModelVersion(uint modelID, const QString &message)
 {
+    RLogger::trace("void Session::storeCurentModelVersion(uint modelID, const QString &message)\n");
     this->getModel(modelID).storeCurentVersion(MainSettings::getInstance().getApplicationSettings()->getNHistoryRecords(),message);
 }
 
 bool Session::isUndoAvailable(void) const
 {
+    RLogger::trace("bool Session::isUndoAvailable(void)\n");
     QList<uint> selectedModelIDs = this->getSelectedModelIDs();
     for (int i=0;i<selectedModelIDs.size();i++)
     {
@@ -624,6 +630,7 @@ bool Session::isUndoAvailable(void) const
 
 bool Session::isRedoAvailable(void) const
 {
+    RLogger::trace("bool Session::isRedoAvailable(void)\n");
     QList<uint> selectedModelIDs = this->getSelectedModelIDs();
     for (int i=0;i<selectedModelIDs.size();i++)
     {
@@ -637,6 +644,7 @@ bool Session::isRedoAvailable(void) const
 
 QString Session::getUndoTooltip(void) const
 {
+    RLogger::trace("QString Session::getUndoTooltip(void)\n");
     QString undoMessage;
 
     QList<uint> selectedModelIDs = this->getSelectedModelIDs();
@@ -749,22 +757,6 @@ void Session::onNHistoryRecordsChanged(uint nHistoryRecords)
         this->getModel(i).updateHistoryStackSize(nHistoryRecords);
     }
     emit this->nHistoryRecordsChanged(nHistoryRecords);
-}
-
-void Session::onApplicationStarted(void)
-{
-    QString sessionFileName = MainSettings::getInstancePtr()->getSessionFileName();
-    if (!sessionFileName.isEmpty())
-    {
-        try
-        {
-            this->read(sessionFileName);
-        }
-        catch (const RError &rError)
-        {
-            RLogger::warning("Failed to read the session file \'%s\'. ERROR: %s\n",sessionFileName.toUtf8().constData(),rError.getMessage().toUtf8().constData());
-        }
-    }
 }
 
 void Session::onSoftwareUpdateFileSaved(uint downloadID, const QString &fileName)

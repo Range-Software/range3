@@ -44,11 +44,6 @@ Application::Application(int &argc, char **argv) :
                                       "}"));
 
     QObject::connect(this,&Application::started,this,&Application::onStarted);
-    QObject::connect(this,&Application::started,&Session::getInstance(),&Session::onApplicationStarted);
-    QObject::connect(this,&Application::aboutToQuit,this,&Application::onAboutToQuit);
-    QObject::connect(MainSettings::getInstance().getApplicationSettings(),&ApplicationSettings::styleChanged,this,&Application::onStyleChanged);
-
-    MainWindow::getInstance()->show();
 
     QTimer::singleShot(0, this, SIGNAL(started()));
 }
@@ -91,6 +86,44 @@ void Application::applyStyle(const QString &styleName)
 
 void Application::onStarted(void)
 {
+    // Process command line arguments.
+    QList<RArgumentOption> validOptions;
+    validOptions.append(RArgumentOption("log-debug",RArgumentOption::Switch,QVariant(),"Switch on debug log level",false,false));
+    validOptions.append(RArgumentOption("log-trace",RArgumentOption::Switch,QVariant(),"Switch on trace log level",false,false));
+
+    RArgumentsParser argumentsParser(Application::arguments(),validOptions);
+
+    if (argumentsParser.isSet("help"))
+    {
+        argumentsParser.printHelp("GUI");
+        this->exit(0);
+        return;
+    }
+
+    if (argumentsParser.isSet("version"))
+    {
+        argumentsParser.printVersion();
+        this->exit(0);
+        return;
+    }
+
+    if (argumentsParser.isSet("log-debug"))
+    {
+        RLogger::getInstance().setLevel(R_LOG_LEVEL_DEBUG);
+    }
+    if (argumentsParser.isSet("log-trace"))
+    {
+        RLogger::getInstance().setLevel(R_LOG_LEVEL_TRACE);
+    }
+
+    // Connect to aoutToQuit signal
+    QObject::connect(this,&Application::aboutToQuit,this,&Application::onAboutToQuit);
+    // Connect to style change signal
+    QObject::connect(MainSettings::getInstance().getApplicationSettings(),&ApplicationSettings::styleChanged,this,&Application::onStyleChanged);
+
+    // Prepare main window
+    MainWindow::getInstance()->show();
+
     // Set log file
     RLogger::getInstance().setFile(MainSettings::getInstance().getLogDir() + QDir::separator() + "range.log");
 
@@ -158,6 +191,19 @@ void Application::onStarted(void)
     QObject::connect(&RRASession::getInstance(),&RRASession::signedIn,this,&Application::onSignedIn);
     QObject::connect(&RRASession::getInstance(),&RRASession::signedOut,this,&Application::onSignedOut);
     QObject::connect(&RRASession::getInstance(),&RRASession::licenseReceived,this,&Application::onLicenseReceived);
+
+    QString sessionFileName = MainSettings::getInstance().getSessionFileName();
+    if (!sessionFileName.isEmpty())
+    {
+        try
+        {
+            Session::getInstance().read(sessionFileName);
+        }
+        catch (const RError &rError)
+        {
+            RLogger::warning("Failed to read the session file \'%s\'. ERROR: %s\n",sessionFileName.toUtf8().constData(),rError.getMessage().toUtf8().constData());
+        }
+    }
 }
 
 void Application::onAboutToQuit(void)

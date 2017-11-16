@@ -327,9 +327,6 @@ class Session : public QObject
 
     public slots:
 
-        //! Catch application has started signal.
-        void onApplicationStarted(void);
-
         //! Catch file saved signal for software update file.
         void onSoftwareUpdateFileSaved(uint downloadID, const QString &fileName);
 

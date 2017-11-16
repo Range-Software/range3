@@ -34,13 +34,6 @@ void MainTask::run(void)
         QString rangePassword = settings.value("application/rangePassword").toString();
 
         // Process command line arguments.
-        QStringList arguments = app->arguments();
-        QList<QString> argumentList;
-        foreach (const QString &str, arguments)
-        {
-            argumentList.append(str);
-        }
-
         QList<RArgumentOption> validOptions;
         validOptions.append(RArgumentOption("file",RArgumentOption::Path,QVariant(),"File name",true,false));
         validOptions.append(RArgumentOption("module-license-file",RArgumentOption::Path,QVariant(),"Module license file name",true,false));
@@ -51,7 +44,7 @@ void MainTask::run(void)
         validOptions.append(RArgumentOption("restart",RArgumentOption::Switch,QVariant(),"Restart solver",false,false));
         validOptions.append(RArgumentOption("read-stdin",RArgumentOption::Switch,QVariant(),"Read commands from standard input",false,false));
 
-        RArgumentsParser argumentsParser(argumentList,validOptions);
+        RArgumentsParser argumentsParser(QCoreApplication::arguments(),validOptions);
 
         if (argumentsParser.isSet("help"))
         {
