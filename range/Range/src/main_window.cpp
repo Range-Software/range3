@@ -1090,8 +1090,8 @@ void MainWindow::onWarningPrinted(const QString &message)
         tColor = QApplication::palette().text().color();
     }
 
-    this->applicationOutputBrowser->setTextColor(QColor(170,0,0));
     this->applicationOutputBrowser->moveCursor(QTextCursor::End);
+    this->applicationOutputBrowser->setTextColor(QColor(170,0,0));
     this->applicationOutputBrowser->insertPlainText(message);
     this->applicationOutputBrowser->moveCursor(QTextCursor::End);
     this->applicationOutputBrowser->setTextColor(tColor);
@@ -1112,9 +1112,9 @@ void MainWindow::onErrorPrinted(const QString &message)
     }
     QColor bColor = this->applicationOutputBrowser->textBackgroundColor();
 
+    this->applicationOutputBrowser->moveCursor(QTextCursor::End);
     this->applicationOutputBrowser->setTextBackgroundColor(QColor(170,0,0));
     this->applicationOutputBrowser->setTextColor(QColor(255,255,255));
-    this->applicationOutputBrowser->moveCursor(QTextCursor::End);
     this->applicationOutputBrowser->insertPlainText(message);
     this->applicationOutputBrowser->moveCursor(QTextCursor::End);
     this->applicationOutputBrowser->setTextBackgroundColor(bColor);
@@ -1154,9 +1154,9 @@ void MainWindow::onProcessReadyStandardError(const QString &message)
     QColor tColor = this->processOutputBrowser->textColor();
     QColor bColor = this->processOutputBrowser->textBackgroundColor();
 
+    this->processOutputBrowser->moveCursor(QTextCursor::End);
     this->processOutputBrowser->setTextBackgroundColor(QColor(170,0,0));
     this->processOutputBrowser->setTextColor(QColor(255,255,255));
-    this->processOutputBrowser->moveCursor(QTextCursor::End);
     this->processOutputBrowser->insertPlainText(message);
     this->processOutputBrowser->moveCursor(QTextCursor::End);
     this->processOutputBrowser->setTextBackgroundColor(bColor);

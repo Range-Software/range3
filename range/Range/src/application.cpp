@@ -145,13 +145,13 @@ void Application::onStarted(void)
     RLogger::info("Running on: %s\n",QSysInfo::productType().toUtf8().constData());
     RLogger::info("Machine precision (float):  %14g\n", RConstants::findMachineFloatEpsilon());
     RLogger::info("Machine precision (double): %14g\n", RConstants::findMachineDoubleEpsilon());
-    RLogger::info("Data directory: %s\n",MainSettings::getInstancePtr()->getDataDir().toUtf8().constData());
-    RLogger::info("Document directory: %s\n",MainSettings::getInstancePtr()->getDocDir().toUtf8().constData());
-    RLogger::info("Log directory: %s\n",MainSettings::getInstancePtr()->getLogDir().toUtf8().constData());
-    RLogger::info("Temporary directory: %s\n",MainSettings::getInstancePtr()->getTmpDir().toUtf8().constData());
-    RLogger::info("Material directory: %s\n",MainSettings::getInstancePtr()->getMaterialsDir().toUtf8().constData());
-    RLogger::info("Session directory: %s\n",MainSettings::getInstancePtr()->getSessionDir().toUtf8().constData());
-    RLogger::info("Solver path: %s\n",MainSettings::getInstancePtr()->getApplicationSettings()->getSolverPath().toUtf8().constData());
+    RLogger::info("Data directory: \'%s\'\n",MainSettings::getInstancePtr()->getDataDir().toUtf8().constData());
+    RLogger::info("Document directory: \'%s\'\n",MainSettings::getInstancePtr()->getDocDir().toUtf8().constData());
+    RLogger::info("Log directory: \'%s\'\n",MainSettings::getInstancePtr()->getLogDir().toUtf8().constData());
+    RLogger::info("Temporary directory: \'%s\'\n",MainSettings::getInstancePtr()->getTmpDir().toUtf8().constData());
+    RLogger::info("Material directory: \'%s\'\n",MainSettings::getInstancePtr()->getMaterialsDir().toUtf8().constData());
+    RLogger::info("Session directory: \'%s\'\n",MainSettings::getInstancePtr()->getSessionDir().toUtf8().constData());
+    RLogger::info("Solver path: \'%s\'\n",MainSettings::getInstancePtr()->getApplicationSettings()->getSolverPath().toUtf8().constData());
 
     // Read material database
     MaterialList::getInstance().setStorePath(MainSettings::getInstance().getMaterialsDir() + QDir::separator());
