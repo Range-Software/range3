@@ -136,6 +136,8 @@ void Application::onStarted(void)
     // Set log file
     RLogger::getInstance().setFile(MainSettings::getInstance().getLogDir() + QDir::separator() + "range.log");
 
+    Logger::getInstance().unhalt();
+
     // Set use system proxy settings
     QNetworkProxyFactory::setUseSystemConfiguration(true);
 
@@ -220,6 +222,10 @@ void Application::onAboutToQuit(void)
     // Stop RRA Session
     RRASession::getInstance().stop();
 
+    // Stop logger
+    Logger::getInstance().halt();
+
+    // Delete main window
     delete MainWindow::getInstance();
 }
 

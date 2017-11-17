@@ -17,7 +17,7 @@ static void logHandler (const RMessage &message);
 void Logger::initialize (void)
 {
     RLogger::getInstance().setLevel(R_LOG_LEVEL_DETAIL);
-    RLogger::getInstance().setHalted(false);
+    RLogger::getInstance().setHalted(true);
     RLogger::getInstance().setLogHandler(logHandler);
 }
 
