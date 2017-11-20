@@ -34,6 +34,8 @@
         <file>pixmaps/range-qt.svg</file>
         <file>pixmaps/range-keys.svg</file>
         <file>pixmaps/range-important.svg</file>
+        <file>pixmaps/range-shutdown.svg</file>
+        <file>pixmaps/range-startup.svg</file>
     </qresource>
     <qresource prefix="/icons/solver">
         <file>pixmaps/range-solver-start.svg</file>

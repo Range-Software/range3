@@ -20,25 +20,41 @@
 FirstRunDialog::FirstRunDialog(QWidget *parent)
     : QDialog(parent)
 {
-    QIcon closeIcon(":/icons/file/pixmaps/range-close.svg");
+    QIcon preferencesIcon(":/icons/file/pixmaps/range-preferences.svg");
+    QIcon startIcon(":/icons/file/pixmaps/range-startup.svg");
+    QIcon rangeIcon(":/icons/logos/pixmaps/range-logo-128.png");
 
     this->setWindowTitle(tr("First run"));
 
     QVBoxLayout *mainLayout = new QVBoxLayout;
     this->setLayout(mainLayout);
 
-    QPushButton *applicationSettingsButton = new QPushButton(tr("application settings"));
-    mainLayout->addWidget(applicationSettingsButton);
+    QHBoxLayout *logoLayout = new QHBoxLayout;
+    mainLayout->addLayout(logoLayout);
 
-    QObject::connect(applicationSettingsButton,&QPushButton::clicked,this,&FirstRunDialog::onApplicationSettingsButtonClicked);
+    QLabel *logoLabel = new QLabel;
+    logoLabel->setPixmap(rangeIcon.pixmap(QSize(128,128)));
+    logoLayout->addWidget(logoLabel);
+
+    QString labelMsg = "<h2>" + RVendor::name + "</h2>"
+                     + "<h3>" + RVendor::description + "</h3>"
+                     + "<p>" + tr("version") + ": " + RVendor::version.toString() + "</p>"
+                     + "<p><strong>" + tr("Welcome") + "!</strong></p>";
+
+    QLabel *label = new QLabel(labelMsg);
+    logoLayout->addWidget(label);
 
     QHBoxLayout *buttonsLayout = new QHBoxLayout;
-    buttonsLayout->addStretch(1);
     mainLayout->addLayout(buttonsLayout);
 
-    QPushButton *closeButton = new QPushButton(closeIcon, tr("Close"));
-    buttonsLayout->addWidget(closeButton);
+    QPushButton *applicationSettingsButton = new QPushButton(preferencesIcon, tr("Application settings"));
+    buttonsLayout->addWidget(applicationSettingsButton);
+    QObject::connect(applicationSettingsButton,&QPushButton::clicked,this,&FirstRunDialog::onApplicationSettingsButtonClicked);
 
+    buttonsLayout->addStretch(1);
+
+    QPushButton *closeButton = new QPushButton(startIcon, tr("Start"));
+    buttonsLayout->addWidget(closeButton);
     QObject::connect(closeButton,&QPushButton::clicked,this,&FirstRunDialog::accept);
 }
 
