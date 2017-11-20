@@ -27,6 +27,7 @@ buildDoc="${sourceDir}/Range/doc/*"
 buildDat="${sourceDir}/Range/data/*"
 buildMat="${sourceDir}/Range/materials/*"
 buildLnk="${sourceDir}/Range/desktop/*"
+buildPix="${sourceDir}/Range/pixmaps/range-logo-128.png"
 
 # paths for a binaries, documents, pixmaps and other data
 path_bin='bin'
@@ -35,6 +36,7 @@ path_doc='doc'
 path_dat='data'
 path_mat='materials'
 path_lnk='desktop'
+path_pix='pixmaps'
 
 # path where pacgage will be installed after un-packing
 installDir='/opt/range3'
@@ -165,6 +167,7 @@ source_path_doc=$buildDir'/'$path_doc
 source_path_dat=$buildDir'/'$path_dat
 source_path_mat=$buildDir'/'$path_mat
 source_path_lnk=$buildDir'/'$path_lnk
+source_path_pix=$buildDir'/'$path_pix
 
 inst_path_bin=$installDir'/'$path_bin
 inst_path_man='/usr/share/man/man1'
@@ -172,6 +175,7 @@ inst_path_doc=$installDir'/'$path_doc
 inst_path_dat=$installDir'/'$path_dat
 inst_path_mat=$installDir'/'$path_mat
 inst_path_lnk='/usr/share/applications'
+inst_path_pix=$installDir'/'$path_pix
 
 # Set-up section - End ----------------------------------------------------
 
@@ -182,7 +186,8 @@ touch_dir $source_path_man true && \
 touch_dir $source_path_doc true && \
 touch_dir $source_path_dat true && \
 touch_dir $source_path_mat true && \
-touch_dir $source_path_lnk true
+touch_dir $source_path_lnk true && \
+touch_dir $source_path_pix true
 if [ $? -ne 0 ]
 then
     echo_e "Failed to touch build package directories"
@@ -218,6 +223,11 @@ done
 for file in $(ls -1 $buildLnk)
 do
     cp -v $file $source_path_lnk
+done
+# Copy pixmap files
+for file in $(ls -1 $buildPix)
+do
+    cp -v $file $source_path_pix
 done
 
 # File preparation - End --------------------------------------------------
@@ -371,6 +381,21 @@ do
     baseName=$(basename $file)
     src_file="${path_lnk}/$baseName"
     dst_file="${inst_path_lnk}/$baseName"
+    packageFiles+=" ${src_file}"
+    files[$n]=$dst_file
+    n=$[n+1]
+    echo 'install -m 644 "'$src_file'" $RPM_BUILD_ROOT"'$dst_file'"' >> $packageSpec
+done
+
+# install section - create pixmap files
+echo 'install -d -m 755 "'$path_pix'" "$RPM_BUILD_ROOT'$inst_path_pix'"' >> $packageSpec
+directories[$m]=$inst_path_pix
+m=$[m+1]
+for file in $(ls -1 $source_path_pix)
+do
+    baseName=$(basename $file)
+    src_file="${path_pix}/$baseName"
+    dst_file="${inst_path_pix}/$baseName"
     packageFiles+=" ${src_file}"
     files[$n]=$dst_file
     n=$[n+1]
