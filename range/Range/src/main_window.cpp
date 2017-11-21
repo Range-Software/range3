@@ -1069,6 +1069,8 @@ void MainWindow::disable(void)
 void MainWindow::onInfoPrinted(const QString &message)
 {
     this->applicationOutputBrowser->moveCursor(QTextCursor::End);
+    this->applicationOutputBrowser->setTextBackgroundColor(QApplication::palette().base().color());
+    this->applicationOutputBrowser->setTextColor(QApplication::palette().text().color());
     this->applicationOutputBrowser->insertPlainText(message);
     this->applicationOutputBrowser->moveCursor(QTextCursor::End);
     QScrollBar *sb = this->applicationOutputBrowser->verticalScrollBar();
@@ -1084,17 +1086,13 @@ void MainWindow::onNoticePrinted(const QString &message)
 void MainWindow::onWarningPrinted(const QString &message)
 {
     QTextCharFormat charFormat = this->applicationOutputBrowser->currentCharFormat();
-    QColor tColor = this->applicationOutputBrowser->textColor();
-    if (!tColor.isValid())
-    {
-        tColor = QApplication::palette().text().color();
-    }
 
     this->applicationOutputBrowser->moveCursor(QTextCursor::End);
+    this->applicationOutputBrowser->setTextBackgroundColor(QApplication::palette().base().color());
     this->applicationOutputBrowser->setTextColor(QColor(170,0,0));
     this->applicationOutputBrowser->insertPlainText(message);
     this->applicationOutputBrowser->moveCursor(QTextCursor::End);
-    this->applicationOutputBrowser->setTextColor(tColor);
+    this->applicationOutputBrowser->setTextColor(QApplication::palette().text().color());
     this->applicationOutputBrowser->setCurrentCharFormat(charFormat);
     QScrollBar *sb = this->applicationOutputBrowser->verticalScrollBar();
     sb->setValue(sb->maximum());
@@ -1105,20 +1103,14 @@ void MainWindow::onWarningPrinted(const QString &message)
 void MainWindow::onErrorPrinted(const QString &message)
 {
     QTextCharFormat charFormat = this->applicationOutputBrowser->currentCharFormat();
-    QColor tColor = this->applicationOutputBrowser->textColor();
-    if (!tColor.isValid())
-    {
-        tColor = QApplication::palette().text().color();
-    }
-    QColor bColor = this->applicationOutputBrowser->textBackgroundColor();
 
     this->applicationOutputBrowser->moveCursor(QTextCursor::End);
     this->applicationOutputBrowser->setTextBackgroundColor(QColor(170,0,0));
     this->applicationOutputBrowser->setTextColor(QColor(255,255,255));
     this->applicationOutputBrowser->insertPlainText(message);
     this->applicationOutputBrowser->moveCursor(QTextCursor::End);
-    this->applicationOutputBrowser->setTextBackgroundColor(bColor);
-    this->applicationOutputBrowser->setTextColor(tColor);
+    this->applicationOutputBrowser->setTextBackgroundColor(QApplication::palette().base().color());
+    this->applicationOutputBrowser->setTextColor(QApplication::palette().text().color());
     this->applicationOutputBrowser->setCurrentCharFormat(charFormat);
     QScrollBar *sb = this->applicationOutputBrowser->verticalScrollBar();
     sb->setValue(sb->maximum());
@@ -1151,19 +1143,14 @@ void MainWindow::onProcessReadyStandardOutput(const QString &message)
 void MainWindow::onProcessReadyStandardError(const QString &message)
 {
     QTextCharFormat charFormat = this->processOutputBrowser->currentCharFormat();
-    QColor tColor = this->processOutputBrowser->textColor();
-    QColor bColor = this->processOutputBrowser->textBackgroundColor();
 
     this->processOutputBrowser->moveCursor(QTextCursor::End);
     this->processOutputBrowser->setTextBackgroundColor(QColor(170,0,0));
     this->processOutputBrowser->setTextColor(QColor(255,255,255));
     this->processOutputBrowser->insertPlainText(message);
     this->processOutputBrowser->moveCursor(QTextCursor::End);
-    this->processOutputBrowser->setTextBackgroundColor(bColor);
-    if (tColor.isValid())
-    {
-        this->processOutputBrowser->setTextColor(tColor);
-    }
+    this->processOutputBrowser->setTextBackgroundColor(QApplication::palette().base().color());
+    this->processOutputBrowser->setTextColor(QApplication::palette().text().color());
     this->processOutputBrowser->setCurrentCharFormat(charFormat);
     QScrollBar *sb = this->processOutputBrowser->verticalScrollBar();
     sb->setValue(sb->maximum());
