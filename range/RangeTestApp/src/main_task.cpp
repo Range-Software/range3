@@ -55,7 +55,7 @@ void MainTask::run(void)
         QList<RArgumentOption> validOptions;
 //        validOptions.append(RArgumentOption("file",RArgumentOption::Path,QVariant(),"File name",false,false));
 
-        RArgumentsParser argumentsParser(argumentList,validOptions);
+        RArgumentsParser argumentsParser(argumentList,validOptions,false);
 
         if (argumentsParser.isSet("help"))
         {

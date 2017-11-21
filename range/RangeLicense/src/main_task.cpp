@@ -48,7 +48,7 @@ void MainTask::run(void)
         validOptions.append(RArgumentOption("expiry-date",RArgumentOption::Date,QVariant(),"Date of expiry",true,false));
         validOptions.append(RArgumentOption("show-key",RArgumentOption::Switch,QVariant(),"Show software key",false,false));
 
-        RArgumentsParser argumentsParser(argumentList,validOptions);
+        RArgumentsParser argumentsParser(argumentList,validOptions,false);
 
         if (argumentsParser.isSet("help"))
         {

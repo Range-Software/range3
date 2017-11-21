@@ -117,6 +117,9 @@ class RArgumentOption
         //! Generate version option.
         static RArgumentOption generateVersionOption(void);
 
+        //! Check if argument is option.
+        static bool isOption(const QString &argument);
+
 };
 
 #endif // __RBL_ARGUMENT_OPTION_H__

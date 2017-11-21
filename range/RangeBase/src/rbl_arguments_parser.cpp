@@ -22,11 +22,14 @@ void RArgumentsParser::_init(const RArgumentsParser *pArgumentsParser)
     {
         this->executable = pArgumentsParser->executable;
         this->arguments = pArgumentsParser->arguments;
+        this->filesEnabled = pArgumentsParser->filesEnabled;
+        this->files = pArgumentsParser->files;
         this->validOptions = pArgumentsParser->validOptions;
     }
 }
 
-RArgumentsParser::RArgumentsParser(const QStringList &argumentList, const QList<RArgumentOption> &validOptions)
+RArgumentsParser::RArgumentsParser(const QStringList &argumentList, const QList<RArgumentOption> &validOptions, bool filesEnabled)
+    : filesEnabled(filesEnabled)
 {
     this->_init();
     foreach (const RArgumentOption &option, validOptions)
@@ -79,10 +82,17 @@ QVariant RArgumentsParser::getValue(const QString &option) const
     }
 }
 
+const QStringList &RArgumentsParser::getFiles() const
+{
+    return this->files;
+}
+
 void RArgumentsParser::printHelp(const QString &name) const
 {
     RLogger::info("%s :: %s - %s\n",RVendor::name.toUtf8().constData(),name.toUtf8().constData(),RVendor::version.toString().toUtf8().constData());
-    RLogger::info("Usage: %s <mandatory arguments> [optional arguments]\n", this->executable.toUtf8().constData());
+    RLogger::info("Usage: %s%s <mandatory arguments> [optional arguments]\n",
+                  this->executable.toUtf8().constData(),
+                  this->filesEnabled ? " [file(s)]" : "");
     RLogger::info("\n");
     RLogger::info("  Mandatory:\n");
     foreach (const RArgumentOption &option, this->validOptions)
@@ -114,27 +124,36 @@ void RArgumentsParser::printVersion(void) const
 
 void RArgumentsParser::processArgumentList(const QStringList &argumentList)
 {
-    RArgumentOption option;
-
-    bool exclusiveSet = false;
-
     // Process executable.
     if (argumentList.size() > 0)
     {
         this->executable = argumentList.at(0);
     }
 
+    bool exclusiveSet = false;
+
     // Process arguments
     for (int i=1;i<argumentList.size();i++)
     {
-        if (!this->processArgument(argumentList[i],option))
+        RArgumentOption option;
+        if (this->processArgument(argumentList[i],option))
         {
-            throw RError(R_ERROR_INVALID_INPUT,R_ERROR_REF,"Invalid command line argument \'%s\'",argumentList[i].toUtf8().constData());
+            this->arguments.insert(option.getFlag(),option);
+            if (option.getExclusive())
+            {
+                exclusiveSet = true;
+            }
         }
-        this->arguments.insert(option.getFlag(),option);
-        if (option.getExclusive())
+        else
         {
-            exclusiveSet = true;
+            if (this->filesEnabled && !RArgumentOption::isOption(argumentList[i]))
+            {
+                this->files.append(argumentList[i]);
+            }
+            else
+            {
+                throw RError(R_ERROR_INVALID_INPUT,R_ERROR_REF,"Invalid command line argument \'%s\'",argumentList[i].toUtf8().constData());
+            }
         }
     }
 

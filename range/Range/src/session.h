@@ -203,6 +203,9 @@ class Session : public QObject
         //! Take screenshot of given model ID.
         void setTakeScreenShot(uint modelID, const QString &screenShotFileName, bool blocking);
 
+        //! Read models.
+        void readModels(const QStringList &fileNames);
+
         //! Read session from the file.
         void read(const QString &fileName);
 

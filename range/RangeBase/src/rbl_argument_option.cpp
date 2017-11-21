@@ -186,3 +186,22 @@ RArgumentOption RArgumentOption::generateVersionOption(void)
 {
     return RArgumentOption("version",Switch,QVariant(RVendor::version.toString()),"Print version",false,true);
 }
+
+bool RArgumentOption::isOption(const QString &argument)
+{
+    if (argument.size() == 2)
+    {
+        if (argument[0] == '-' && argument[1] != '-')
+        {
+            return true;
+        }
+    }
+    else if (argument.size() >= 4)
+    {
+        if (argument[0] == '-' && argument[1] == '-')
+        {
+            return true;
+        }
+    }
+    return false;
+}

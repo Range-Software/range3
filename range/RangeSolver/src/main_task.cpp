@@ -44,7 +44,7 @@ void MainTask::run(void)
         validOptions.append(RArgumentOption("restart",RArgumentOption::Switch,QVariant(),"Restart solver",false,false));
         validOptions.append(RArgumentOption("read-stdin",RArgumentOption::Switch,QVariant(),"Read commands from standard input",false,false));
 
-        RArgumentsParser argumentsParser(QCoreApplication::arguments(),validOptions);
+        RArgumentsParser argumentsParser(QCoreApplication::arguments(),validOptions,false);
 
         if (argumentsParser.isSet("help"))
         {

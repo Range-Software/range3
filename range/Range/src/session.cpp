@@ -554,6 +554,27 @@ void Session::setTakeScreenShot(uint modelID, const QString &screenShotFileName,
     }
 }
 
+void Session::readModels(const QStringList &fileNames)
+{
+    RLogger::info("Loading %u files\n",fileNames.size());
+    RLogger::indent();
+    for (int i=0;i<fileNames.size();i++)
+    {
+        QString modelFileName;
+        RLogger::info("Loading %u: \'%s\'\n",i+1,fileNames.at(i).toUtf8().constData());
+
+        if (!fileNames.at(i).isEmpty())
+        {
+            // Read model.
+            ModelIO *modelIO = new ModelIO(MODEL_IO_OPEN, fileNames.at(i));
+            modelIO->setAutoDelete(true);
+
+            JobManager::getInstance().submit(modelIO);
+        }
+    }
+    RLogger::unindent();
+}
+
 void Session::read(const QString &fileName)
 {
     RLogger::trace("void Session::read(const QString &fileName)\n");
@@ -578,6 +599,7 @@ void Session::read(const QString &fileName)
     uint nModels = 0;
     RFileIO::readAscii(sessionFile,nModels);
     RLogger::info("Found %u files\n",nModels);
+    QStringList modelFileNames;
     for (uint i=0;i<nModels;i++)
     {
         QString modelFileName;
@@ -586,15 +608,19 @@ void Session::read(const QString &fileName)
 
         if (!modelFileName.isEmpty())
         {
-            // Read model.
-            ModelIO *modelIO = new ModelIO(MODEL_IO_OPEN, modelFileName);
-            modelIO->setAutoDelete(true);
+            modelFileNames.append(modelFileName);
+//            // Read model.
+//            ModelIO *modelIO = new ModelIO(MODEL_IO_OPEN, modelFileName);
+//            modelIO->setAutoDelete(true);
 
-            JobManager::getInstance().submit(modelIO);
+//            JobManager::getInstance().submit(modelIO);
         }
     }
 
     sessionFile.close();
+
+    this->readModels(modelFileNames);
+
     RLogger::unindent();
 }
 

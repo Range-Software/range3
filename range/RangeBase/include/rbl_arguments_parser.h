@@ -26,6 +26,10 @@ class RArgumentsParser
         QString executable;
         //! Commandline arguments.
         QMap<QString,RArgumentOption> arguments;
+        //! Default files are enabled.
+        bool filesEnabled;
+        //! List of default files to open.
+        QStringList files;
         //! List of valid options.
         QMap<QString,RArgumentOption> validOptions;
 
@@ -38,7 +42,8 @@ class RArgumentsParser
 
         //! Constructor.
         RArgumentsParser(const QStringList &argumentList,
-                         const QList<RArgumentOption> &validOptions);
+                         const QList<RArgumentOption> &validOptions,
+                         bool filesEnabled);
 
         //! Copy constructor.
         RArgumentsParser(const RArgumentsParser &argumentsParser);
@@ -58,6 +63,9 @@ class RArgumentsParser
         //! Return value of given option.
         //! If option is not set empty string is returned.
         QVariant getValue(const QString &option) const;
+
+        //! Return list of files.
+        const QStringList &getFiles(void) const;
 
         //! Print help message.
         void printHelp(const QString &name) const;

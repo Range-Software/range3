@@ -86,6 +86,8 @@ void Application::applyStyle(const QString &styleName)
 
 void Application::onStarted(void)
 {
+    QStringList filesToLoad;
+
     // Process command line arguments.
     try
     {
@@ -93,7 +95,7 @@ void Application::onStarted(void)
         validOptions.append(RArgumentOption("log-debug",RArgumentOption::Switch,QVariant(),"Switch on debug log level",false,false));
         validOptions.append(RArgumentOption("log-trace",RArgumentOption::Switch,QVariant(),"Switch on trace log level",false,false));
 
-        RArgumentsParser argumentsParser(Application::arguments(),validOptions);
+        RArgumentsParser argumentsParser(Application::arguments(),validOptions,true);
 
         if (argumentsParser.isSet("help"))
         {
@@ -117,6 +119,8 @@ void Application::onStarted(void)
         {
             RLogger::getInstance().setLevel(R_LOG_LEVEL_TRACE);
         }
+
+        filesToLoad = argumentsParser.getFiles();
     }
     catch (const RError &rError)
     {
@@ -203,16 +207,30 @@ void Application::onStarted(void)
     QObject::connect(&RRASession::getInstance(),&RRASession::signedOut,this,&Application::onSignedOut);
     QObject::connect(&RRASession::getInstance(),&RRASession::licenseReceived,this,&Application::onLicenseReceived);
 
-    QString sessionFileName = MainSettings::getInstance().getSessionFileName();
-    if (!sessionFileName.isEmpty())
+    if (!filesToLoad.isEmpty())
     {
         try
         {
-            Session::getInstance().read(sessionFileName);
+            Session::getInstance().readModels(filesToLoad);
         }
         catch (const RError &rError)
         {
-            RLogger::warning("Failed to read the session file \'%s\'. ERROR: %s\n",sessionFileName.toUtf8().constData(),rError.getMessage().toUtf8().constData());
+            RLogger::warning("Failed to read model file(s). ERROR: %s\n",rError.getMessage().toUtf8().constData());
+        }
+    }
+    else
+    {
+        QString sessionFileName = MainSettings::getInstance().getSessionFileName();
+        if (!sessionFileName.isEmpty())
+        {
+            try
+            {
+                Session::getInstance().read(sessionFileName);
+            }
+            catch (const RError &rError)
+            {
+                RLogger::warning("Failed to read the session file \'%s\'. ERROR: %s\n",sessionFileName.toUtf8().constData(),rError.getMessage().toUtf8().constData());
+            }
         }
     }
 }
