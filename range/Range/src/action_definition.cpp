@@ -190,6 +190,7 @@ void ActionDefinition::generateActionDescList(QList<ActionDefinitionItem> &actio
     actionDesc.push_back(ActionDefinitionItem(ACTION_APPLICATION_ABOUT_QT, ACTION_GROUP_APPLICATION, "About Qt", "", ":/icons/file/pixmaps/range-qt.svg", &Action::onAboutQt));
     actionDesc.push_back(ActionDefinitionItem(ACTION_APPLICATION_LICENSE, ACTION_GROUP_APPLICATION, "License", "", ":/icons/logos/pixmaps/range-logo-128.png", &Action::onLicense));
     actionDesc.push_back(ActionDefinitionItem(ACTION_APPLICATION_RELEASE_NOTES, ACTION_GROUP_APPLICATION, "Release notes", "", ":/icons/logos/pixmaps/range-logo-128.png", &Action::onReleaseNotes));
+    actionDesc.push_back(ActionDefinitionItem(ACTION_APPLICATION_HELP, ACTION_GROUP_APPLICATION, "Help", "Ctrl+H", ":/icons/file/pixmaps/range-help.svg", &Action::onHelp));
     actionDesc.push_back(ActionDefinitionItem(ACTION_APPLICATION_QUIT, ACTION_GROUP_APPLICATION, "Quit", "Q", ":/icons/file/pixmaps/range-shutdown.svg", &Action::onQuit));
     actionDesc.push_back(ActionDefinitionItem(ACTION_SEPARATOR, ACTION_GROUP_NONE, "", "", "", 0));
 }

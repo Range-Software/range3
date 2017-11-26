@@ -305,6 +305,9 @@ class Action : public QAction
         //! Create report.
         void onReportCreateReport(void);
 
+        //! Help center.
+        void onHelp(void);
+
         //! Quit program.
         void onQuit(void);
 

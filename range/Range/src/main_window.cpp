@@ -425,6 +425,7 @@ void MainWindow::createMenus(void)
 
     QMenu *menuHelp = new QMenu(menubar);
     menuHelp->setTitle(QApplication::translate("MainWindow", "Help"));
+    menuHelp->addAction(this->actionList->getAction(ACTION_APPLICATION_HELP));
     menuHelp->addAction(this->actionList->getAction(ACTION_APPLICATION_UPDATE));
     menuHelp->addAction(this->actionList->getAction(ACTION_APPLICATION_ABOUT));
     menuHelp->addAction(this->actionList->getAction(ACTION_APPLICATION_ABOUT_QT));

@@ -28,6 +28,7 @@
 #include "new_model_dialog.h"
 #include "coarsen_surface_dialog.h"
 #include "cut_dialog.h"
+#include "help_center_dialog.h"
 #include "iso_dialog.h"
 #include "job_manager.h"
 #include "log_browser_dialog.h"
@@ -1812,6 +1813,13 @@ void Action::onReportCreateReport(void)
         ReportDialog reportDialog(modelIDs[i],this->mainWindow);
         reportDialog.exec();
     }
+}
+
+void Action::onHelp(void)
+{
+    HelpCenterDialog *pHelpCenterDialog = new HelpCenterDialog(this->mainWindow);
+    pHelpCenterDialog->setModal(false);
+    pHelpCenterDialog->show();
 }
 
 void Action::onQuit(void)

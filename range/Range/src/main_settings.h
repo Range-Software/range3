@@ -90,6 +90,9 @@ class MainSettings : public QSettings
         //! Return release notes file name.
         QString findReleaseNotesFileName(void) const;
 
+        //! Return help directory path.
+        QString findHelpDir(void) const;
+
         //! Return const pointer to application settings.
         const ApplicationSettings * getApplicationSettings(void) const;
 

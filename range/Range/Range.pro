@@ -100,6 +100,9 @@ SOURCES += \
     src/graph_dialog.cpp \
     src/graph_object.cpp \
     src/graph_widget.cpp \
+    src/help_actions_widget.cpp \
+    src/help_center_dialog.cpp \
+    src/help_tips_widget.cpp \
     src/http_request_input.cpp \
     src/http_request_worker.cpp \
     src/ic_manager_tree.cpp \
@@ -196,7 +199,8 @@ SOURCES += \
     src/value_table.cpp \
     src/variable_selector.cpp \
     src/variable_value_edit.cpp \
-    src/vector_field_dialog.cpp
+    src/vector_field_dialog.cpp \
+    src/document_widget.cpp
 
 HEADERS += \
     src/action.h \
@@ -292,6 +296,9 @@ HEADERS += \
     src/graph_dialog.h \
     src/graph_object.h \
     src/graph_widget.h \
+    src/help_actions_widget.h \
+    src/help_center_dialog.h \
+    src/help_tips_widget.h \
     src/http_request_input.h \
     src/http_request_worker.h \
     src/ic_manager_tree.h \
@@ -388,7 +395,8 @@ HEADERS += \
     src/variable_data.h \
     src/variable_selector.h \
     src/variable_value_edit.h \
-    src/vector_field_dialog.h
+    src/vector_field_dialog.h \
+    src/document_widget.h
 
 CONFIG -= debug_and_release
 #CONFIG += rtti

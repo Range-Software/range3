@@ -114,6 +114,14 @@ QString MainSettings::findReleaseNotesFileName(void) const
     return dir.filePath(MainSettings::releaseNotesFileName);
 }
 
+QString MainSettings::findHelpDir(void) const
+{
+    QDir dir(this->applicationDirPath);
+    dir.cdUp();
+    dir.cd("doc");
+    return dir.filePath("help");
+}
+
 const ApplicationSettings *MainSettings::getApplicationSettings(void) const
 {
     return this->applicationSettings;
