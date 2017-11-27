@@ -108,13 +108,14 @@ SectionGroup "Range Software" SecRange
         File bin\imageformats\*
         SetOutPath "$INSTDIR\bin\platforms"
         File bin\platforms\*
+    SectionEnd
+    Section "Documentation" SecDocFiles
+        SectionIn RO
         SetOutPath "$INSTDIR\doc"
         File ..\range\Range\doc\LICENSE.txt
         File ..\range\Range\doc\RELEASE_NOTES.txt
-    SectionEnd
-    Section "Documentation" SecDocFiles
-        SetOutPath "$INSTDIR\doc"
-        File ..\range\Range\doc\*pdf
+;        File ..\range\Range\doc\*.pdf
+		File ..\range\Range\doc\*.html
     SectionEnd
     Section "Model Files" SecModelFiles
         SetOutPath "$INSTDIR\data"
