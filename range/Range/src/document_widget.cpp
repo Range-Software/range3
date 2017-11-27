@@ -67,7 +67,8 @@ void DocumentWidget::onListSelectionChanged(void)
     QFile file(helpFile);
     if (!file.open(QFile::ReadOnly | QFile::Text))
     {
-        RLogger::error("Failed to load help file \'%s\'\n",helpFile.toUtf8().constData());
+        RLogger::warning("Failed to load help file \'%s\'\n",helpFile.toUtf8().constData());
+        this->textBrowser->setHtml(tr("No help available."));
     }
     else
     {

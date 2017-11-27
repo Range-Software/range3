@@ -118,8 +118,7 @@ QString MainSettings::findHelpDir(void) const
 {
     QDir dir(this->applicationDirPath);
     dir.cdUp();
-    dir.cd("doc");
-    return dir.filePath("help");
+    return dir.filePath("doc");
 }
 
 const ApplicationSettings *MainSettings::getApplicationSettings(void) const
