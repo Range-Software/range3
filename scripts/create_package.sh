@@ -195,39 +195,39 @@ then
 fi
 
 # Copy binaries
-for file in $(ls -1 $buildBin)
+for file in $buildBin
 do
-    cp -v $file $source_path_bin
+    cp -v "$file" $source_path_bin
 done
 # Copy man pages
-for file in $(ls -1 $buildMan)
+for file in $buildMan
 do
-    cp -v $file $source_path_man
+    cp -v "$file" $source_path_man
 done
 # Copy documents
-for file in $(ls -1 $buildDoc)
+for file in $buildDoc
 do
-    cp -v $file $source_path_doc
+    cp -v "$file" $source_path_doc
 done
 # Copy data
-for file in $(ls -1 $buildDat)
+for file in $buildDat
 do
-    cp -v $file $source_path_dat
+    cp -v "$file" $source_path_dat
 done
 # Copy materials
-for file in $(ls -1 $buildMat)
+for file in $buildMat
 do
-    cp -v $file $source_path_mat
+    cp -v "$file" $source_path_mat
 done
 # Copy desktop files
-for file in $(ls -1 $buildLnk)
+for file in $buildLnk
 do
-    cp -v $file $source_path_lnk
+    cp -v "$file" $source_path_lnk
 done
 # Copy pixmap files
-for file in $(ls -1 $buildPix)
+for file in $buildPix
 do
-    cp -v $file $source_path_pix
+    cp -v "$file" $source_path_pix
 done
 
 # File preparation - End --------------------------------------------------
@@ -254,7 +254,7 @@ echo "BuildRoot: /var/tmp/%{name}-buildroot"  >> $packageSpec
 echo                                          >> $packageSpec
 
 # global section
-echo "%global debug_package %{nil}"           >> $packageSpec 
+echo "%global debug_package %{nil}"           >> $packageSpec
 
 # description
 echo '%description'                           >> $packageSpec
@@ -279,7 +279,7 @@ echo 'mkdir -p $RPM_BUILD_ROOT'$inst_path_bin >> $packageSpec
 echo 'mkdir -p $RPM_BUILD_ROOT'$inst_path_doc >> $packageSpec
 for file in $source_path_doc/*
 do
-    if [ -d $file ]; then
+    if [ -d "$file" ]; then
         echo 'mkdir -p $RPM_BUILD_ROOT'$inst_path_doc'/'`basename "$file"` >> $packageSpec
     fi
 done
@@ -306,7 +306,7 @@ do
     baseName=$(basename $file)
     src_file="${path_bin}/$baseName"
     dst_file="${inst_path_bin}/$baseName"
-    packageFiles+=" ${src_file}"
+    packageFiles+=" ${src_file// /\\\ }"
     files[$n]=$dst_file
     n=$[n+1]
     echo "install -m 755 ${src_file} \$RPM_BUILD_ROOT${dst_file}" >> $packageSpec
@@ -316,12 +316,12 @@ done
 echo 'install -d -m 755 "'$path_doc'" "$RPM_BUILD_ROOT'$inst_path_doc'"' >> $packageSpec
 directories[$m]=$inst_path_doc
 m=$[m+1]
-for file in $(ls -1 $source_path_doc)
+for file in $source_path_doc/*
 do
-    baseName=$(basename $file)
+    baseName=$(basename "$file")
     src_file="${path_doc}/$baseName"
     dst_file="${inst_path_doc}/$baseName"
-    packageFiles+=" ${src_file}"
+    packageFiles+=" ${src_file// /\\\ }"
     files[$n]=$dst_file
     n=$[n+1]
     echo 'install -m 644 "'$src_file'" $RPM_BUILD_ROOT"'$dst_file'"' >> $packageSpec
@@ -336,7 +336,7 @@ do
     baseName=$(basename $file)
     src_file="${path_dat}/$baseName"
     dst_file="${inst_path_dat}/$baseName"
-    packageFiles+=" ${src_file}"
+    packageFiles+=" ${src_file// /\\\ }"
     files[$n]=$dst_file
     n=$[n+1]
     echo 'install -m 644 "'$src_file'" $RPM_BUILD_ROOT"'$dst_file'"' >> $packageSpec
@@ -351,7 +351,7 @@ do
     baseName=$(basename $file)
     src_file="${path_mat}/$baseName"
     dst_file="${inst_path_mat}/$baseName"
-    packageFiles+=" ${src_file}"
+    packageFiles+=" ${src_file// /\\\ }"
     files[$n]=$dst_file
     n=$[n+1]
     echo 'install -m 644 "'$src_file'" $RPM_BUILD_ROOT"'$dst_file'"' >> $packageSpec
@@ -366,7 +366,7 @@ do
     baseName=$(basename $file)
     src_file="${path_man}/$baseName"
     dst_file="${inst_path_man}/$baseName"
-    packageFiles+=" ${src_file}"
+    packageFiles+=" ${src_file// /\\\ }"
     files[$n]=$dst_file
     n=$[n+1]
     echo 'install -m 644 "'$src_file'" $RPM_BUILD_ROOT"'$dst_file'"' >> $packageSpec
@@ -381,7 +381,7 @@ do
     baseName=$(basename $file)
     src_file="${path_lnk}/$baseName"
     dst_file="${inst_path_lnk}/$baseName"
-    packageFiles+=" ${src_file}"
+    packageFiles+=" ${src_file// /\\\ }"
     files[$n]=$dst_file
     n=$[n+1]
     echo 'install -m 644 "'$src_file'" $RPM_BUILD_ROOT"'$dst_file'"' >> $packageSpec
@@ -396,7 +396,7 @@ do
     baseName=$(basename $file)
     src_file="${path_pix}/$baseName"
     dst_file="${inst_path_pix}/$baseName"
-    packageFiles+=" ${src_file}"
+    packageFiles+=" ${src_file// /\\\ }"
     files[$n]=$dst_file
     n=$[n+1]
     echo 'install -m 644 "'$src_file'" $RPM_BUILD_ROOT"'$dst_file'"' >> $packageSpec
@@ -435,7 +435,7 @@ echo                                          >> $packageSpec
 # Package creation section - Begin ----------------------------------------
 
 echo_i "Creating package file"
-tar -czvf $packageFile --directory=$buildDir $packageFiles
+eval tar -czvf $packageFile --directory=$buildDir $packageFiles
 if [ $? -ne 0 ]
 then
     echo_e "Failed to create package file '$packageFile'"
