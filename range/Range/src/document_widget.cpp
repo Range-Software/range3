@@ -35,19 +35,19 @@ DocumentWidget::DocumentWidget(QWidget *parent)
     splitter->addWidget(this->textBrowser);
 }
 
-void DocumentWidget::addListItem(QIcon icon, const QString &text, const QString &key)
+void DocumentWidget::addListItem(QIcon icon, const QString &text, const QString &fileName)
 {
     QListWidgetItem *item = new QListWidgetItem(this->listWidget);
     item->setIcon(icon);
     item->setText(text);
-    item->setData(Qt::UserRole,key);
+    item->setData(Qt::UserRole,fileName);
 }
 
-void DocumentWidget::addListItem(const QString &text, const QString &key)
+void DocumentWidget::addListItem(const QString &text, const QString &fileName)
 {
     QListWidgetItem *item = new QListWidgetItem(this->listWidget);
     item->setText(text);
-    item->setData(Qt::UserRole,key);
+    item->setData(Qt::UserRole,fileName);
 }
 
 void DocumentWidget::onListSelectionChanged(void)
@@ -60,9 +60,7 @@ void DocumentWidget::onListSelectionChanged(void)
         return;
     }
 
-    const QString &key(selectedItems.at(0)->data(Qt::UserRole).toString());
-
-    QString helpFile(RFileManager::buildPath(MainSettings::getInstance().findHelpDir(),"action_" + key + ".html"));
+    const QString &helpFile(selectedItems.at(0)->data(Qt::UserRole).toString());
 
     QFile file(helpFile);
     if (!file.open(QFile::ReadOnly | QFile::Text))

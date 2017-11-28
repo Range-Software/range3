@@ -35,10 +35,10 @@ class DocumentWidget : public QWidget
     protected:
 
         //! Add list item.
-        void addListItem(QIcon icon, const QString &text, const QString &key);
+        void addListItem(QIcon icon, const QString &text, const QString &fileName);
 
         //! Add list item.
-        void addListItem(const QString &text, const QString &key);
+        void addListItem(const QString &text, const QString &fileName);
 
     private slots:
 

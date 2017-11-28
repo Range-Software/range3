@@ -13,7 +13,10 @@
 #include <QListWidget>
 #include <QTextBrowser>
 
+#include <rmlib.h>
+
 #include "help_actions_widget.h"
+#include "main_settings.h"
 
 HelpActionsWidget::HelpActionsWidget(const ActionDefinition *actionDefinition, QWidget *parent)
     : DocumentWidget(parent)
@@ -34,9 +37,10 @@ HelpActionsWidget::HelpActionsWidget(const ActionDefinition *actionDefinition, Q
             {
                 iconName = ":/icons/general/pixmaps/range-generic_action.svg";
             }
+            const QString &actionText(actionDefinition->getText(actionTypes[j]));
             this->addListItem(QIcon(iconName),
-                              ActionDefinitionItem::getGroupName(actionGroupTypes[i]) + " >> " + actionDefinition->getText(actionTypes[j]),
-                              actionDefinition->getText(actionTypes[j]));
+                              ActionDefinitionItem::getGroupName(actionGroupTypes[i]) + " >> " + actionText,
+                              RFileManager::buildPath(MainSettings::getInstance().findHelpDir(),"action_" + actionText + ".html"));
         }
     }
 }
