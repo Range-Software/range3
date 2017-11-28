@@ -163,9 +163,7 @@ void RSolver::run(void)
             {
                 break;
             }
-        } while (timeSolver.setNextTimeStep() != RConstants::eod
-                 &&
-                 RApplicationState::getInstance().getStateType() != R_APPLICATION_STATE_STOP);
+        } while (timeSolver.setNextTimeStep() != RConstants::eod);
     }
     else
     {

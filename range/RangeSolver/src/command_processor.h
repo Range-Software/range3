@@ -13,11 +13,13 @@
 
 #include <QObject>
 #include <QCoreApplication>
+
 #ifdef _WIN32
 #include <QWinEventNotifier>
 #include <windows.h>
 #else
 #include <QSocketNotifier>
+typedef int HANDLE;
 #endif
 
 class CommandProcessor : public QObject
@@ -48,7 +50,7 @@ class CommandProcessor : public QObject
     public slots:
 
         //! Run processor.
-        void readStdin(int socket);
+        void readStdin(HANDLE socket);
         
 };
 

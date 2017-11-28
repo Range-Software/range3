@@ -62,7 +62,6 @@ SolverTask::SolverTask(const ApplicationSettings *applicationSettings, uint mode
     this->logFileName = rModel.buildTmpFileName("log",this->taskID.toString());
     this->convergenceFileName = rModel.buildTmpFileName("cvg",this->taskID.toString());
     this->monitoringFileName = rModel.buildTmpFileName("mon",this->taskID.toString());
-    this->stdinFileName = rModel.buildTmpFileName("inp",this->taskID.toString());
 
     this->solverArguments.append("--file=" + this->modelFileName);
     this->solverArguments.append("--log-file=" + this->logFileName);
@@ -159,17 +158,6 @@ void SolverTask::run(void)
                          this,
                          &SolverTask::onProcessReadyReadStandardError);
 
-
-        // Touch stdin file
-//        QFile file(this->stdinFileName);
-//        if (!file.open(QIODevice::WriteOnly))
-//        {
-//            RLogger::error("Failed to create stdin file \'%s\'.\n",
-//                           this->stdinFileName.toUtf8().constData());
-//            throw RError(R_ERROR_APPLICATION,R_ERROR_REF,"Solver execution failed.");
-//        }
-//        this->solverProcess->setStandardInputFile(this->stdinFileName);
-
         this->solverProcess->start(this->solverExecutable,this->solverArguments);
 
         if (!this->solverProcess->waitForFinished(-1) || this->solverProcess->exitCode() != 0)
@@ -180,7 +168,6 @@ void SolverTask::run(void)
 
             throw RError(R_ERROR_APPLICATION,R_ERROR_REF,"Solver execution failed.");
         }
-//        file.close();
 
         RLogger::info("Command \'%s\' succesfully finished.\n",cmdLine.toUtf8().constData());
 

@@ -26,7 +26,7 @@ CommandProcessor::CommandProcessor(QCoreApplication *application) :
 {
 #ifdef _WIN32
     this->stdinNotifier = new QWinEventNotifier(GetStdHandle(STD_INPUT_HANDLE),this);
-    this->connect(this->stdinNotifier,SIGNAL(activated(HANDLE)),this,SLOT(readStdin(int)));
+    this->connect(this->stdinNotifier,SIGNAL(activated(HANDLE)),this,SLOT(readStdin(HANDLE)));
     this->stdinNotifier->setEnabled(true);
 #else
     this->stdinNotifier = new QSocketNotifier(STDIN_FILENO, QSocketNotifier::Read,this);
@@ -43,21 +43,18 @@ void CommandProcessor::setEnabled(bool enabled)
     this->enabled = enabled;
 }
 
-void CommandProcessor::readStdin(int socket)
+void CommandProcessor::readStdin(HANDLE socket)
 {
     if (!this->enabled)
     {
         return;
     }
 
-    RLogger::info("Processing input.\n");
-
     QTextStream textStream(stdin,QIODevice::ReadOnly);
-
-    QString line;
-
-    line = textStream.readLine();
+    QString line = textStream.readLine();
     RLogger::info("Received command: \'%s\'\n",line.toUtf8().constData());
-
-    RApplicationState::getInstance().setStateType(R_APPLICATION_STATE_STOP);
+    if (line == "STOP")
+    {
+        RApplicationState::getInstance().setStateType(R_APPLICATION_STATE_STOP);
+    }
 }
