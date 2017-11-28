@@ -401,6 +401,9 @@ do
     n=$[n+1]
     echo 'install -m 644 "'$src_file'" $RPM_BUILD_ROOT"'$dst_file'"' >> $packageSpec
 done
+packageFiles=${packageFiles//(/\\\(}
+packageFiles=${packageFiles//)/\\\)}
+packageFiles=${packageFiles//,/\\\,}
 
 echo                                          >> $packageSpec
 

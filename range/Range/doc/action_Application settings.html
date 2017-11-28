@@ -1,0 +1,1 @@
+<h1>Application settings</h1>

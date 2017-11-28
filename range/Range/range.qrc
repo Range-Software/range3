@@ -92,5 +92,7 @@
         <file>pixmaps/range-report.svg</file>
         <file>pixmaps/range-report-convergence.svg</file>
     </qresource>
-    <qresource prefix="/"/>
+    <qresource prefix="/icons/general">
+        <file>pixmaps/range-generic_action.svg</file>
+    </qresource>
 </RCC>

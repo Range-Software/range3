@@ -29,8 +29,13 @@ HelpActionsWidget::HelpActionsWidget(const ActionDefinition *actionDefinition, Q
             {
                 continue;
             }
-            this->addListItem(QIcon(actionDefinition->getIcon(actionTypes[j])),
-                              actionDefinition->getText(actionTypes[j]),
+            QString iconName(actionDefinition->getIcon(actionTypes[j]));
+            if (iconName.isEmpty())
+            {
+                iconName = ":/icons/general/pixmaps/range-generic_action.svg";
+            }
+            this->addListItem(QIcon(iconName),
+                              ActionDefinitionItem::getGroupName(actionGroupTypes[i]) + " >> " + actionDefinition->getText(actionTypes[j]),
                               actionDefinition->getText(actionTypes[j]));
         }
     }
