@@ -43,6 +43,8 @@ class SolverTask : public Job
         QString convergenceFileName;
         //! Monitoring file name.
         QString monitoringFileName;
+        //! Process stdin file name.
+        QString stdinFileName;
 
     public:
 
