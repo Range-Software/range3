@@ -1710,10 +1710,6 @@ void Action::onSolverView(void)
     logBrowserDialog.exec();
 }
 
-void Action::onSolverQueue(void)
-{
-}
-
 void Action::onReportModelStatistics(void)
 {
     QList<uint> modelIDs = Session::getInstance().getSelectedModelIDs();

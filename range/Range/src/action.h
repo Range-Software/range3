@@ -287,9 +287,6 @@ class Action : public QAction
         //! View solver.
         void onSolverView(void);
 
-        //! Show solver queue.
-        void onSolverQueue(void);
-
         //! Produce model statistics.
         void onReportModelStatistics(void);
 

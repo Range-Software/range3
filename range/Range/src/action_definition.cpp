@@ -186,7 +186,6 @@ void ActionDefinition::generateActionDescList(QList<ActionDefinitionItem> &actio
     actionDesc.push_back(ActionDefinitionItem(ACTION_SOLVER_STOP, ACTION_GROUP_SOLVER, "Stop solver", "", "Ctrl+E", ":/icons/solver/pixmaps/range-solver-stop.svg", &Action::onSolverStop));
     actionDesc.push_back(ActionDefinitionItem(ACTION_SOLVER_KILL, ACTION_GROUP_SOLVER, "Kill solver", "", "Ctrl+K", ":/icons/solver/pixmaps/range-solver-kill.svg", &Action::onSolverKill));
     actionDesc.push_back(ActionDefinitionItem(ACTION_SOLVER_VIEW, ACTION_GROUP_SOLVER, "View solver progress", "", "", ":/icons/solver/pixmaps/range-solver-view.svg", &Action::onSolverView));
-    actionDesc.push_back(ActionDefinitionItem(ACTION_SOLVER_QUEUE, ACTION_GROUP_SOLVER, "Show queued solvers", "", "", ":/icons/solver/pixmaps/range-solver-queue.svg", &Action::onSolverQueue));
     actionDesc.push_back(ActionDefinitionItem(ACTION_REPORT_MODEL_STATISTICS, ACTION_GROUP_REPORT, "Model statistics", "", "", "", &Action::onReportModelStatistics));
     actionDesc.push_back(ActionDefinitionItem(ACTION_REPORT_SOLVER_LOG, ACTION_GROUP_REPORT, "Solver log file", "", "", "", &Action::onReportSolverLog));
     actionDesc.push_back(ActionDefinitionItem(ACTION_REPORT_CONVERGENCE_GRAPH, ACTION_GROUP_REPORT, "Solver convergence", "", "Ctrl+Alt+C", ":/icons/report/pixmaps/range-report-convergence.svg", &Action::onReportConvergenceGraph));
