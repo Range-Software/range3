@@ -284,9 +284,6 @@ class Action : public QAction
         //! Kill solver.
         void onSolverKill(void);
 
-        //! View solver.
-        void onSolverView(void);
-
         //! Produce model statistics.
         void onReportModelStatistics(void);
 

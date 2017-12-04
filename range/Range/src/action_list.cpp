@@ -268,7 +268,6 @@ void ActionList::setDisabled(bool allActions)
     this->getAction(ACTION_SOLVER_START)->setEnabled(enabled);
     this->getAction(ACTION_SOLVER_STOP)->setEnabled(enabled);
     this->getAction(ACTION_SOLVER_KILL)->setEnabled(enabled);
-    this->getAction(ACTION_SOLVER_VIEW)->setEnabled(true);
     this->getAction(ACTION_REPORT_MODEL_STATISTICS)->setEnabled(enabled);
     this->getAction(ACTION_REPORT_SOLVER_LOG)->setEnabled(enabled);
     this->getAction(ACTION_REPORT_CONVERGENCE_GRAPH)->setEnabled(enabled);

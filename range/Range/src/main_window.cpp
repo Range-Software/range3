@@ -402,7 +402,6 @@ void MainWindow::createMenus(void)
     menuSolver->addAction(this->actionList->getAction(ACTION_SOLVER_START));
     menuSolver->addAction(this->actionList->getAction(ACTION_SOLVER_STOP));
     menuSolver->addAction(this->actionList->getAction(ACTION_SOLVER_KILL));
-    menuSolver->addAction(this->actionList->getAction(ACTION_SOLVER_VIEW));
     menuSolver->addAction(this->actionList->getAction(ACTION_SEPARATOR));
     menubar->addAction(menuSolver->menuAction());
 
@@ -469,7 +468,6 @@ void MainWindow::createToolBars(void)
         toolBar->addAction(this->actionList->getAction(ACTION_SOLVER_START));
         toolBar->addAction(this->actionList->getAction(ACTION_SOLVER_STOP));
         toolBar->addAction(this->actionList->getAction(ACTION_SOLVER_KILL));
-        toolBar->addAction(this->actionList->getAction(ACTION_SOLVER_VIEW));
         toolBar->addAction(this->actionList->getAction(ACTION_SEPARATOR));
         toolBar->addAction(this->actionList->getAction(ACTION_REPORT_CONVERGENCE_GRAPH));
         toolBar->addAction(this->actionList->getAction(ACTION_REPORT_CREATE_REPORT));

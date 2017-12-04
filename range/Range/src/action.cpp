@@ -1704,12 +1704,6 @@ void Action::onSolverKill(void)
     }
 }
 
-void Action::onSolverView(void)
-{
-    LogBrowserDialog logBrowserDialog(SolverManager::getInstance().getLastLogFileName(),this->mainWindow);
-    logBrowserDialog.exec();
-}
-
 void Action::onReportModelStatistics(void)
 {
     QList<uint> modelIDs = Session::getInstance().getSelectedModelIDs();
