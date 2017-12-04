@@ -160,6 +160,7 @@ class ActionDefinitionItem
         ActionType type;
         ActionGroupType groupType;
         QString text;
+        QString desc;
         QString shortCut;
         QString icon;
         PointerToMemberFunction slot;
@@ -175,6 +176,7 @@ class ActionDefinitionItem
         ActionDefinitionItem(ActionType type = ACTION_NONE,
                              ActionGroupType groupType = ACTION_GROUP_NONE,
                              const QString &text = QString(),
+                             const QString &desc = QString(),
                              const QString &shortCut = QString(),
                              const QString &icon = QString(),
                              PointerToMemberFunction slot = 0);

@@ -20,16 +20,18 @@ void ActionDefinitionItem::_init(const ActionDefinitionItem *pActionDefinitionIt
         this->type = pActionDefinitionItem->type;
         this->groupType = pActionDefinitionItem->groupType;
         this->text = pActionDefinitionItem->text;
+        this->desc = pActionDefinitionItem->desc;
         this->shortCut = pActionDefinitionItem->shortCut;
         this->icon = pActionDefinitionItem->icon;
         this->slot = pActionDefinitionItem->slot;
     }
 }
 
-ActionDefinitionItem::ActionDefinitionItem(ActionType type, ActionGroupType groupType, const QString &text, const QString &shortCut, const QString &icon, PointerToMemberFunction slot)
+ActionDefinitionItem::ActionDefinitionItem(ActionType type, ActionGroupType groupType, const QString &text, const QString &desc, const QString &shortCut, const QString &icon, PointerToMemberFunction slot)
     : type(type)
     , groupType(groupType)
     , text(text)
+    , desc(desc)
     , shortCut(shortCut)
     , icon(icon)
     , slot(slot)

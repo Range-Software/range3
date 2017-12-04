@@ -447,59 +447,44 @@ void MainWindow::createToolBars(void)
     //! Disable toolbar restoring untill its modification is not implemented.
     nToolBars = 0;
 
-    if (nToolBars == 0 || nToolBars != 4)
+    if (nToolBars == 0 || nToolBars != 1)
     {
         toolBar = new QToolBar(this);
-        toolBar->setObjectName(QString::fromUtf8("toolBarFile"));
-        toolBar->setWindowTitle(QApplication::translate("MainWindow", "File"));
+        toolBar->setObjectName(QString::fromUtf8("toolBarMain"));
+        toolBar->setWindowTitle(tr("Main toolbar"));
         this->addToolBar(Qt::TopToolBarArea, toolBar);
         toolBar->addAction(this->actionList->getAction(ACTION_MODEL_NEW));
         toolBar->addAction(this->actionList->getAction(ACTION_MODEL_OPEN));
         toolBar->addAction(this->actionList->getAction(ACTION_MODEL_SAVE));
         toolBar->addAction(this->actionList->getAction(ACTION_MODEL_CLOSE));
         toolBar->addAction(this->actionList->getAction(ACTION_APPLICATION_QUIT));
-        this->toolBars.push_back(toolBar);
-
-        toolBar = new QToolBar(this);
-        toolBar->setObjectName(QString::fromUtf8("toolBarGeometry"));
-        toolBar->setWindowTitle(QApplication::translate("MainWindow", "Geometry"));
-        this->addToolBar(Qt::TopToolBarArea, toolBar);
+        toolBar->addAction(this->actionList->getAction(ACTION_SEPARATOR));
         toolBar->addAction(this->actionList->getAction(ACTION_GEOMETRY_UNDO));
         toolBar->addAction(this->actionList->getAction(ACTION_GEOMETRY_REDO));
         toolBar->addAction(this->actionList->getAction(ACTION_GEOMETRY_TRANSFORM));
         toolBar->addAction(this->actionList->getAction(ACTION_GEOMETRY_VOLUME_GENERATE_TETRAHEDRA));
-        this->toolBars.push_back(toolBar);
-
-        toolBar = new QToolBar(this);
-        toolBar->setObjectName(QString::fromUtf8("toolBarProblemSetup"));
-        toolBar->setWindowTitle(QApplication::translate("MainWindow", "Problem setup"));
-        this->addToolBar(Qt::TopToolBarArea, toolBar);
+        toolBar->addAction(this->actionList->getAction(ACTION_SEPARATOR));
         toolBar->addAction(this->actionList->getAction(ACTION_PROBLEM_TASK_FLOW));
-        this->toolBars.push_back(toolBar);
-
-        toolBar = new QToolBar(this);
-        toolBar->setObjectName(QString::fromUtf8("toolBarSolver"));
-        toolBar->setWindowTitle(QApplication::translate("MainWindow", "Solver"));
-        this->addToolBar(Qt::TopToolBarArea, toolBar);
+        toolBar->addAction(this->actionList->getAction(ACTION_SEPARATOR));
         toolBar->addAction(this->actionList->getAction(ACTION_SOLVER_START));
         toolBar->addAction(this->actionList->getAction(ACTION_SOLVER_STOP));
         toolBar->addAction(this->actionList->getAction(ACTION_SOLVER_KILL));
         toolBar->addAction(this->actionList->getAction(ACTION_SOLVER_VIEW));
-        this->toolBars.push_back(toolBar);
-
-        toolBar = new QToolBar(this);
-        toolBar->setObjectName(QString::fromUtf8("toolBarReport"));
-        toolBar->setWindowTitle(QApplication::translate("MainWindow", "Report"));
-        this->addToolBar(Qt::TopToolBarArea, toolBar);
+        toolBar->addAction(this->actionList->getAction(ACTION_SEPARATOR));
         toolBar->addAction(this->actionList->getAction(ACTION_REPORT_CONVERGENCE_GRAPH));
         toolBar->addAction(this->actionList->getAction(ACTION_REPORT_CREATE_REPORT));
-        this->toolBars.push_back(toolBar);
-
-        toolBar = new QToolBar(this);
-        toolBar->setObjectName(QString::fromUtf8("toolBarResults"));
-        toolBar->setWindowTitle(QApplication::translate("MainWindow", "Results"));
-        this->addToolBar(Qt::TopToolBarArea, toolBar);
+        toolBar->addAction(this->actionList->getAction(ACTION_SEPARATOR));
         toolBar->addAction(this->actionList->getAction(ACTION_MODEL_RELOAD_RESULTS));
+
+        QWidget* spacer = new QWidget();
+        spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        toolBar->addWidget(spacer);
+
+        toolBar->addAction(this->actionList->getAction(ACTION_APPLICATION_SETTINGS));
+        toolBar->addAction(this->actionList->getAction(ACTION_SEPARATOR));
+        toolBar->addAction(this->actionList->getAction(ACTION_APPLICATION_HELP));
+        toolBar->addAction(this->actionList->getAction(ACTION_APPLICATION_ABOUT));
+
         this->toolBars.push_back(toolBar);
     }
     else

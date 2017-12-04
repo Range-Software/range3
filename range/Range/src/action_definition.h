@@ -40,6 +40,9 @@ class ActionDefinition : public QObject
         //! Return action text.
         const QString &getText(ActionType type) const;
 
+        //! Return action description.
+        const QString &getDescription(ActionType type) const;
+
         //! Return action text.
         const QString &getShortCut(ActionType type) const;
 

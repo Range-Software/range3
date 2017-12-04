@@ -84,8 +84,9 @@ Action::Action(ActionType type, MainWindow *mainWindow, QObject *parent) :
         }
         default:
         {
-            this->setText(QApplication::translate("MainWindow", actionDefinition->getText(this->type).toUtf8().constData()));
-            this->setShortcut(QApplication::translate("MainWindow", actionDefinition->getShortCut(this->type).toUtf8().constData()));
+            this->setText(tr(actionDefinition->getText(this->type).toUtf8().constData()));
+            this->setToolTip(tr(actionDefinition->getDescription(this->type).toUtf8().constData()));
+            this->setShortcut(tr(actionDefinition->getShortCut(this->type).toUtf8().constData()));
             if (!actionDefinition->getIcon(this->type).isEmpty())
             {
                 this->setIcon(QIcon(actionDefinition->getIcon(this->type).toUtf8().constData()));
