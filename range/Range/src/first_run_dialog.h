@@ -26,9 +26,6 @@ class FirstRunDialog : public QDialog
         //! On Send usage info toggled.
         void onSendUsageInfoToggled(bool checked);
 
-        //! On Application settings button clicked.
-        void onApplicationSettingsButtonClicked(bool checked);
-
 };
 
 #endif // __FIRST_RUN_DIALOG_H__

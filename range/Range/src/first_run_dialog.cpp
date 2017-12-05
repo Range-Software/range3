@@ -12,10 +12,10 @@
 #include <QVBoxLayout>
 #include <QPushButton>
 #include <QCheckBox>
+#include <QLabel>
 #include <QIcon>
 
 #include "first_run_dialog.h"
-#include "application_settings_dialog.h"
 #include "main_settings.h"
 
 FirstRunDialog::FirstRunDialog(QWidget *parent)
@@ -58,10 +58,6 @@ FirstRunDialog::FirstRunDialog(QWidget *parent)
     QHBoxLayout *buttonsLayout = new QHBoxLayout;
     mainLayout->addLayout(buttonsLayout);
 
-    QPushButton *applicationSettingsButton = new QPushButton(preferencesIcon, tr("Application settings"));
-    buttonsLayout->addWidget(applicationSettingsButton);
-    QObject::connect(applicationSettingsButton,&QPushButton::clicked,this,&FirstRunDialog::onApplicationSettingsButtonClicked);
-
     buttonsLayout->addStretch(1);
 
     QPushButton *closeButton = new QPushButton(startIcon, tr("Start"));
@@ -74,7 +70,7 @@ void FirstRunDialog::onSendUsageInfoToggled(bool checked)
     MainSettings::getInstance().getApplicationSettings()->setSendUsageInfo(checked);
 }
 
-void FirstRunDialog::onApplicationSettingsButtonClicked(bool checked)
-{
-    ApplicationSettingsDialog(MainSettings::getInstance().getApplicationSettings(),this).exec();
-}
+//void FirstRunDialog::onApplicationSettingsButtonClicked(bool checked)
+//{
+//    ApplicationSettingsDialog(MainSettings::getInstance().getApplicationSettings(),this).exec();
+//}

@@ -90,7 +90,7 @@ SolverTaskID &SolverTask::getTaskID(void)
 void SolverTask::stop(void)
 {
     RLogger::info("Stopping solver task (#%s).\n",this->taskID.toString().toUtf8().constData());
-    this->solverProcess->write("STOP\n");
+    this->solverProcess->write("STOP\r\n");
 }
 
 void SolverTask::kill(void)

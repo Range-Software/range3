@@ -50,11 +50,17 @@ void CommandProcessor::readStdin(HANDLE socket)
         return;
     }
 
+    this->disconnect(this->stdinNotifier,SIGNAL(activated(HANDLE)),this,SLOT(readStdin(HANDLE)));
+
     QTextStream textStream(stdin,QIODevice::ReadOnly);
     QString line = textStream.readLine();
     RLogger::info("Received command: \'%s\'\n",line.toUtf8().constData());
-    if (line == "STOP")
+    if (line.contains("STOP"))
     {
         RApplicationState::getInstance().setStateType(R_APPLICATION_STATE_STOP);
+    }
+    else
+    {
+        this->connect(this->stdinNotifier,SIGNAL(activated(HANDLE)),this,SLOT(readStdin(HANDLE)));
     }
 }

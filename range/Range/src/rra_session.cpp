@@ -59,6 +59,8 @@ RRARequestInput::Type RRASession::getNextType(RRARequestInput::Type type)
 //        case RRARequestInput::LOGOUT:
             return RRARequestInput::CLIENT_LICENSE;
         case RRARequestInput::CLIENT_LICENSE:
+            return RRARequestInput::SEND_USAGE_INFO;
+        case RRARequestInput::SEND_USAGE_INFO:
         default:
             return RRARequestInput::AVAILABLE_SOFTWARE;
     }
@@ -133,6 +135,14 @@ void RRASession::submitNextRequest(void)
         case RRARequestInput::CLIENT_LICENSE:
         {
             this->rraRequestWorker->requestClientLicense();
+            break;
+        }
+        case RRARequestInput::SEND_USAGE_INFO:
+        {
+            if (MainSettings::getInstancePtr()->getApplicationSettings()->getSendUsageInfo())
+            {
+                this->rraRequestWorker->sendUsageInfo();
+            }
             break;
         }
     }
@@ -217,6 +227,11 @@ void RRASession::onRraFailed(RRARequestInput::Type type, const QString &errorMes
         case RRARequestInput::CLIENT_LICENSE:
         {
             requestStr = "client license";
+            break;
+        }
+        case RRARequestInput::SEND_USAGE_INFO:
+        {
+            requestStr = "usage info";
             break;
         }
         default:

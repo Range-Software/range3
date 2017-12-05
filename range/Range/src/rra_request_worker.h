@@ -46,6 +46,9 @@ class RRARequestWorker : public HttpRequestWorker
         //! Request client license.
         void requestClientLicense(void);
 
+        //! Send usage info.
+        void sendUsageInfo(void);
+
     private slots:
 
         //! Handle HTTP Request finished signal.
@@ -72,8 +75,11 @@ class RRARequestWorker : public HttpRequestWorker
         //! Login status.
         void loginStatus(const QString &status, bool loggedIn, const QString &responseMessage);
 
-        //!Client license request is complete.
+        //! Client license request is complete.
         void clientLicense(const RLicense &license, const QString &responseMessage);
+
+        //! Usage request is complete.
+        void usage(const QString &data, const QString &responseMessage);
 
 };
 

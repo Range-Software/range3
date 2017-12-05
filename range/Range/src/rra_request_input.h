@@ -23,7 +23,8 @@ class RRARequestInput : public HttpRequestInput
             AVAILABLE_SOFTWARE = 0,
             LOGIN,
             LOGOUT,
-            CLIENT_LICENSE
+            CLIENT_LICENSE,
+            SEND_USAGE_INFO
         };
 
     protected:
@@ -52,6 +53,9 @@ class RRARequestInput : public HttpRequestInput
 
         //! Request latest software version.
         static RRARequestInput *requestClientLicense(void);
+
+        //! Send usage info.
+        static RRARequestInput *sendUsageInfo(void);
 
         //! Return request type.
         Type getType(void) const;

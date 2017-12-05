@@ -135,13 +135,9 @@ QWidget *ApplicationSettingsDialog::createGeneralTab(void)
     }
     layout->addWidget(this->styleCombo,3,1,1,1);
 
-    this->sendUsageInfoAllowed = new QCheckBox(tr("Send usage info"));
-    this->sendUsageInfoAllowed->setCheckState(this->applicationSettings->getSendUsageInfo()?Qt::Checked:Qt::Unchecked);
-    layout->addWidget(this->sendUsageInfoAllowed,4,0,1,2);
-
     QWidget *spacer = new QWidget();
     spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    layout->addWidget(spacer,5,0,1,2);
+    layout->addWidget(spacer,4,0,1,2);
 
     return widget;
 }
@@ -175,9 +171,13 @@ QWidget *ApplicationSettingsDialog::createRangeAccountTab(void)
 
     uint rowCount = 0;
 
+    this->sendUsageInfoAllowed = new QCheckBox(tr("Send usage info"));
+    this->sendUsageInfoAllowed->setCheckState(this->applicationSettings->getSendUsageInfo()?Qt::Checked:Qt::Unchecked);
+    rraLayout->addWidget(this->sendUsageInfoAllowed,rowCount,0,1,2);
+
     QLabel *rangeApiServerLabel = new QLabel(tr("Range API server:"));
     rangeApiServerLabel->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Minimum);
-    rraLayout->addWidget(rangeApiServerLabel,rowCount,0,1,1);
+    rraLayout->addWidget(rangeApiServerLabel,++rowCount,0,1,1);
 
     this->rangeApiServer = new QLineEdit(this->applicationSettings->getRangeApiServer());
     this->rangeApiServer->setPlaceholderText(tr("http://"));

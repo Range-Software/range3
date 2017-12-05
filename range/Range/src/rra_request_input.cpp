@@ -70,6 +70,17 @@ RRARequestInput *RRARequestInput::requestClientLicense(void)
     return pInput;
 }
 
+RRARequestInput *RRARequestInput::sendUsageInfo(void)
+{
+    RRARequestInput *pInput = new RRARequestInput;
+
+    pInput->type = SEND_USAGE_INFO;
+    pInput->addVariable("pageMode","false");
+    pInput->addVariable("action","usage_info");
+
+    return pInput;
+}
+
 RRARequestInput::Type RRARequestInput::getType(void) const
 {
     return this->type;

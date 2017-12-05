@@ -52,6 +52,14 @@ void RRARequestWorker::requestClientLicense(void)
     delete pInput;
 }
 
+void RRARequestWorker::sendUsageInfo(void)
+{
+    RRARequestInput *pInput = RRARequestInput::sendUsageInfo();
+    this->requestType = pInput->getType();
+    this->execute(pInput);
+    delete pInput;
+}
+
 void RRARequestWorker::onHttpRequestFinished(void)
 {
     if (this->getErrorType() != QNetworkReply::NoError)
@@ -142,6 +150,11 @@ void RRARequestWorker::onHttpRequestFinished(void)
         case RRARequestInput::CLIENT_LICENSE:
         {
             emit this->clientLicense(RLicense(html),responseMessages);
+            return;
+        }
+        case RRARequestInput::SEND_USAGE_INFO:
+        {
+            emit this->usage(QString(html),responseMessages);
             return;
         }
         default:
