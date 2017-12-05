@@ -8,7 +8,10 @@
  *  DESCRIPTION: Help tips and tricks widget class definition        *
  *********************************************************************/
 
+#include <rmlib.h>
+
 #include "help_tips_widget.h"
+#include "main_settings.h"
 
 HelpTipsWidget::HelpTipsWidget(QWidget *parent)
     : DocumentWidget(parent)
