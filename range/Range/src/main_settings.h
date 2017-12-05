@@ -93,6 +93,9 @@ class MainSettings : public QSettings
         //! Return help directory path.
         QString findHelpDir(void) const;
 
+        //! Return pixmaps directory path.
+        QString findPixmapsDir(void) const;
+
         //! Return const pointer to application settings.
         const ApplicationSettings * getApplicationSettings(void) const;
 

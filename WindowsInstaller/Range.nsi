@@ -115,7 +115,9 @@ SectionGroup "Range Software" SecRange
         File ..\range\Range\doc\LICENSE.txt
         File ..\range\Range\doc\RELEASE_NOTES.txt
 ;        File ..\range\Range\doc\*.pdf
-		File ..\range\Range\doc\*.html
+        SetOutPath "$INSTDIR\help"
+		File ..\range\Range\help\*.html
+		File ..\range\Range\help\*.png
     SectionEnd
     Section "Model Files" SecModelFiles
         SetOutPath "$INSTDIR\data"

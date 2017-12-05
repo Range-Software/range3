@@ -103,6 +103,7 @@ SOURCES += \
     src/help_actions_widget.cpp \
     src/help_center_dialog.cpp \
     src/help_tips_widget.cpp \
+    src/help_tutorial_widget.cpp \
     src/http_request_input.cpp \
     src/http_request_worker.cpp \
     src/ic_manager_tree.cpp \
@@ -299,6 +300,7 @@ HEADERS += \
     src/help_actions_widget.h \
     src/help_center_dialog.h \
     src/help_tips_widget.h \
+    src/help_tutorial_widget.h \
     src/http_request_input.h \
     src/http_request_worker.h \
     src/ic_manager_tree.h \

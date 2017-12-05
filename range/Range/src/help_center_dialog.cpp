@@ -15,6 +15,7 @@
 
 #include "help_center_dialog.h"
 #include "help_actions_widget.h"
+#include "help_tutorial_widget.h"
 #include "help_tips_widget.h"
 #include "main_settings.h"
 
@@ -34,6 +35,9 @@ HelpCenterDialog::HelpCenterDialog(QWidget *parent)
 
     HelpActionsWidget *helpActionsWidget = new HelpActionsWidget(MainSettings::getInstance().getApplicationSettings()->getActionDefinition());
     tabWidget->addTab(helpActionsWidget,tr("Actions"));
+
+    HelpTutorialWidget *helpTutorialWidget = new HelpTutorialWidget;
+    tabWidget->addTab(helpTutorialWidget,tr("Tutorials"));
 
     HelpTipsWidget *helpTipsWidget = new HelpTipsWidget;
     tabWidget->addTab(helpTipsWidget,tr("Tips and tricks"));

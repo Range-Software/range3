@@ -32,6 +32,7 @@ DocumentWidget::DocumentWidget(QWidget *parent)
     QObject::connect(this->listWidget,&QListWidget::itemSelectionChanged,this,&DocumentWidget::onListSelectionChanged);
 
     this->textBrowser = new QTextBrowser;
+    this->textBrowser->setSearchPaths(QStringList() << MainSettings::getInstance().findHelpDir());
     splitter->addWidget(this->textBrowser);
 }
 

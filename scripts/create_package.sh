@@ -24,6 +24,7 @@ buildDir="${moduleDir}/build-Release"
 buildBin="${buildDir}/Range/Range ${buildDir}/RangeSolver/RangeSolver"
 buildMan="${sourceDir}/Range/man/*"
 buildDoc="${sourceDir}/Range/doc/*"
+buildHlp="${sourceDir}/Range/help/*"
 buildDat="${sourceDir}/Range/data/*"
 buildMat="${sourceDir}/Range/materials/*"
 buildLnk="${sourceDir}/Range/desktop/*"
@@ -33,6 +34,7 @@ buildPix="${sourceDir}/Range/pixmaps/range-logo-128.png"
 path_bin='bin'
 path_man='man'
 path_doc='doc'
+path_hlp='help'
 path_dat='data'
 path_mat='materials'
 path_lnk='desktop'
@@ -164,6 +166,7 @@ src=$package'.tar.gz'
 source_path_bin=$buildDir'/'$path_bin
 source_path_man=$buildDir'/'$path_man
 source_path_doc=$buildDir'/'$path_doc
+source_path_hlp=$buildDir'/'$path_hlp
 source_path_dat=$buildDir'/'$path_dat
 source_path_mat=$buildDir'/'$path_mat
 source_path_lnk=$buildDir'/'$path_lnk
@@ -172,6 +175,7 @@ source_path_pix=$buildDir'/'$path_pix
 inst_path_bin=$installDir'/'$path_bin
 inst_path_man='/usr/share/man/man1'
 inst_path_doc=$installDir'/'$path_doc
+inst_path_hlp=$installDir'/'$path_hlp
 inst_path_dat=$installDir'/'$path_dat
 inst_path_mat=$installDir'/'$path_mat
 inst_path_lnk='/usr/share/applications'
@@ -184,6 +188,7 @@ inst_path_pix=$installDir'/'$path_pix
 touch_dir $source_path_bin true && \
 touch_dir $source_path_man true && \
 touch_dir $source_path_doc true && \
+touch_dir $source_path_hlp true && \
 touch_dir $source_path_dat true && \
 touch_dir $source_path_mat true && \
 touch_dir $source_path_lnk true && \
@@ -208,6 +213,11 @@ done
 for file in $buildDoc
 do
     cp -v "$file" $source_path_doc
+done
+# Copy help files
+for file in $buildHlp
+do
+    cp -v "$file" $source_path_hlp
 done
 # Copy data
 for file in $buildDat
@@ -277,12 +287,7 @@ echo '%install'                               >> $packageSpec
 echo 'rm -rf $RPM_BUILD_ROOT'                 >> $packageSpec
 echo 'mkdir -p $RPM_BUILD_ROOT'$inst_path_bin >> $packageSpec
 echo 'mkdir -p $RPM_BUILD_ROOT'$inst_path_doc >> $packageSpec
-for file in $source_path_doc/*
-do
-    if [ -d "$file" ]; then
-        echo 'mkdir -p $RPM_BUILD_ROOT'$inst_path_doc'/'`basename "$file"` >> $packageSpec
-    fi
-done
+echo 'mkdir -p $RPM_BUILD_ROOT'$inst_path_hlp >> $packageSpec
 echo 'mkdir -p $RPM_BUILD_ROOT'$inst_path_dat >> $packageSpec
 echo 'mkdir -p $RPM_BUILD_ROOT'$inst_path_mat >> $packageSpec
 echo 'mkdir -p $RPM_BUILD_ROOT'$inst_path_lnk >> $packageSpec
@@ -321,6 +326,21 @@ do
     baseName=$(basename "$file")
     src_file="${path_doc}/$baseName"
     dst_file="${inst_path_doc}/$baseName"
+    packageFiles+=" ${src_file// /\\\ }"
+    files[$n]=$dst_file
+    n=$[n+1]
+    echo 'install -m 644 "'$src_file'" $RPM_BUILD_ROOT"'$dst_file'"' >> $packageSpec
+done
+
+# install section - create help files
+echo 'install -d -m 755 "'$path_hlp'" "$RPM_BUILD_ROOT'$inst_path_hlp'"' >> $packageSpec
+directories[$m]=$inst_path_hlp
+m=$[m+1]
+for file in $source_path_hlp/*
+do
+    baseName=$(basename "$file")
+    src_file="${path_hlp}/$baseName"
+    dst_file="${inst_path_hlp}/$baseName"
     packageFiles+=" ${src_file// /\\\ }"
     files[$n]=$dst_file
     n=$[n+1]

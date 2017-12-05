@@ -118,7 +118,14 @@ QString MainSettings::findHelpDir(void) const
 {
     QDir dir(this->applicationDirPath);
     dir.cdUp();
-    return dir.filePath("doc");
+    return dir.filePath("help");
+}
+
+QString MainSettings::findPixmapsDir(void) const
+{
+    QDir dir(this->applicationDirPath);
+    dir.cdUp();
+    return dir.filePath("pixmaps");
 }
 
 const ApplicationSettings *MainSettings::getApplicationSettings(void) const
