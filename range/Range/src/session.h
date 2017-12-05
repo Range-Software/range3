@@ -28,6 +28,8 @@ class Session : public QObject
 
     protected:
 
+        //! Session ID.
+        QString sessionID;
         //! Session filename.
         QString fileName;
         //! List of models.
@@ -50,6 +52,9 @@ class Session : public QObject
 
         //! Return reference to static instance.
         static Session & getInstance(void);
+
+        //! Return session ID.
+        const QString &getID(void) const;
 
         //! Lock session.
         void lock(void);

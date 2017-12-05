@@ -18,6 +18,7 @@
 Session::Session()
 {
     RLogger::trace("Session::Session()\n");
+    this->sessionID = QDateTime::currentDateTimeUtc().toString("yyyyMMddHHmmsszzz");
     this->downloadManager = new DownloadManager(this);
     this->drawEngine = new DrawEngine(this);
 
@@ -32,9 +33,14 @@ Session::Session()
 
 Session & Session::getInstance(void)
 {
-//    RLogger::trace("Session & Session::getInstance(void)\n");
+    // No trace - too many messages.
     static Session session;
     return session;
+}
+
+const QString &Session::getID(void) const
+{
+    return this->sessionID;
 }
 
 void Session::lock(void)

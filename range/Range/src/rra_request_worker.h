@@ -47,7 +47,7 @@ class RRARequestWorker : public HttpRequestWorker
         void requestClientLicense(void);
 
         //! Send usage info.
-        void sendUsageInfo(void);
+        void sendUsageInfo(const QString &usageInfo);
 
     private slots:
 

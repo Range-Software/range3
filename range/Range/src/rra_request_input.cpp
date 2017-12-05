@@ -70,13 +70,14 @@ RRARequestInput *RRARequestInput::requestClientLicense(void)
     return pInput;
 }
 
-RRARequestInput *RRARequestInput::sendUsageInfo(void)
+RRARequestInput *RRARequestInput::sendUsageInfo(const QString &usageInfo)
 {
     RRARequestInput *pInput = new RRARequestInput;
 
     pInput->type = SEND_USAGE_INFO;
     pInput->addVariable("pageMode","false");
     pInput->addVariable("action","usage_info");
+    pInput->addVariable("usage_info",usageInfo.toHtmlEscaped());
 
     return pInput;
 }

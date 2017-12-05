@@ -52,9 +52,9 @@ void RRARequestWorker::requestClientLicense(void)
     delete pInput;
 }
 
-void RRARequestWorker::sendUsageInfo(void)
+void RRARequestWorker::sendUsageInfo(const QString &usageInfo)
 {
-    RRARequestInput *pInput = RRARequestInput::sendUsageInfo();
+    RRARequestInput *pInput = RRARequestInput::sendUsageInfo(usageInfo);
     this->requestType = pInput->getType();
     this->execute(pInput);
     delete pInput;

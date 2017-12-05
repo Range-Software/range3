@@ -13,8 +13,8 @@
 #include <rblib.h>
 
 #include "rra_session.h"
-
 #include "main_settings.h"
+#include "usage_info.h"
 
 const int RRASession::relaxInterval = 1000;
 const int RRASession::timeoutInterval = 10000;
@@ -141,7 +141,7 @@ void RRASession::submitNextRequest(void)
         {
             if (MainSettings::getInstancePtr()->getApplicationSettings()->getSendUsageInfo())
             {
-                this->rraRequestWorker->sendUsageInfo();
+                this->rraRequestWorker->sendUsageInfo(UsageInfo::getInstance().getReport());
             }
             break;
         }

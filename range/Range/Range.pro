@@ -35,6 +35,7 @@ SOURCES += \
     src/direction_widget.cpp \
     src/document_generator.cpp \
     src/document_tree.cpp \
+    src/document_widget.cpp \
     src/download_manager.cpp \
     src/draw_engine.cpp \
     src/draw_engine_circle.cpp \
@@ -194,14 +195,14 @@ SOURCES += \
     src/text_browser.cpp \
     src/time_solver_setup_widget.cpp \
     src/update_dialog.cpp \
+    src/usage_info.cpp \
     src/value_line_edit.cpp \
     src/value_scale.cpp \
     src/value_set_generator_dialog.cpp \
     src/value_table.cpp \
     src/variable_selector.cpp \
     src/variable_value_edit.cpp \
-    src/vector_field_dialog.cpp \
-    src/document_widget.cpp
+    src/vector_field_dialog.cpp
 
 HEADERS += \
     src/action.h \
@@ -232,6 +233,7 @@ HEADERS += \
     src/direction_widget.h \
     src/document_generator.h \
     src/document_tree.h \
+    src/document_widget.h \
     src/download_manager.h \
     src/draw_engine.h \
     src/draw_engine_circle.h \
@@ -390,6 +392,7 @@ HEADERS += \
     src/text_browser.h \
     src/time_solver_setup_widget.h \
     src/update_dialog.h \
+    src/usage_info.h \
     src/value_line_edit.h \
     src/value_scale.h \
     src/value_set_generator_dialog.h \
@@ -397,8 +400,7 @@ HEADERS += \
     src/variable_data.h \
     src/variable_selector.h \
     src/variable_value_edit.h \
-    src/vector_field_dialog.h \
-    src/document_widget.h
+    src/vector_field_dialog.h
 
 CONFIG -= debug_and_release
 #CONFIG += rtti

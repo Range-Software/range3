@@ -55,7 +55,7 @@ class RRARequestInput : public HttpRequestInput
         static RRARequestInput *requestClientLicense(void);
 
         //! Send usage info.
-        static RRARequestInput *sendUsageInfo(void);
+        static RRARequestInput *sendUsageInfo(const QString &usageInfo);
 
         //! Return request type.
         Type getType(void) const;
