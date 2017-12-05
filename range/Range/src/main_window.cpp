@@ -147,7 +147,7 @@ MainWindow::MainWindow (QWidget *parent)
     // Number of history records has changed.
     QObject::connect(&Session::getInstance(),&Session::nHistoryRecordsChanged,this,&MainWindow::onNHistoryRecordsChanged);
 
-    if (this->isFirstRun)
+//    if (this->isFirstRun)
     {
         FirstRunDialog(this).exec();
     }
@@ -851,6 +851,7 @@ void MainWindow::readSettings(void)
         pApplicationSettings->setNThreads(MainSettings::getInstance().value("application/nThreads",pApplicationSettings->getNThreads()).toUInt());
         pApplicationSettings->setNHistoryRecords(MainSettings::getInstance().value("application/nHistoryRecords",pApplicationSettings->getNHistoryRecords()).toUInt());
         pApplicationSettings->setStyle(MainSettings::getInstance().value("application/style",pApplicationSettings->getStyle()).toString());
+        pApplicationSettings->setSendUsageInfo(MainSettings::getInstance().value("application/sendUsageInfo",pApplicationSettings->getSendUsageInfo()).toBool());
         pApplicationSettings->setRangeApiAllowed(MainSettings::getInstance().value("application/rangeApiAllowed",pApplicationSettings->getRangeApiAllowed()).toBool());
         pApplicationSettings->setRangeApiServer(MainSettings::getInstance().value("application/rangeApiServer",pApplicationSettings->getRangeApiServer()).toString());
         pApplicationSettings->setRangeAccount(MainSettings::getInstance().value("application/rangeAccount",pApplicationSettings->getRangeAccount()).toString());
@@ -917,6 +918,7 @@ void MainWindow::writeSettings(void) const
     MainSettings::getInstance().setValue("application/nThreads", MainSettings::getInstance().getApplicationSettings()->getNThreads());
     MainSettings::getInstance().setValue("application/nHistoryRecords", MainSettings::getInstance().getApplicationSettings()->getNHistoryRecords());
     MainSettings::getInstance().setValue("application/style", MainSettings::getInstance().getApplicationSettings()->getStyle());
+    MainSettings::getInstance().setValue("application/sendUsageInfo", MainSettings::getInstance().getApplicationSettings()->getSendUsageInfo());
     MainSettings::getInstance().setValue("application/rangeApiAllowed", MainSettings::getInstance().getApplicationSettings()->getRangeApiAllowed());
     MainSettings::getInstance().setValue("application/rangeApiServer", MainSettings::getInstance().getApplicationSettings()->getRangeApiServer());
     MainSettings::getInstance().setValue("application/rangeAccount", MainSettings::getInstance().getApplicationSettings()->getRangeAccount());

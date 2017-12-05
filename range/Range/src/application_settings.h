@@ -35,6 +35,8 @@ class ApplicationSettings : public QObject
         uint nHistoryRecords;
         //! Style.
         QString style;
+        //! Send usage info.
+        bool sendUsageInfo;
         //! Allow range API.
         bool rangeApiAllowed;
         //! Range server.
@@ -86,6 +88,12 @@ class ApplicationSettings : public QObject
 
         //! Set style.
         void setStyle(const QString &style);
+
+        //! Return send usage info.
+        bool getSendUsageInfo(void) const;
+
+        //! Set send usage info.
+        void setSendUsageInfo(bool sendUsageInfo);
 
         //! Return Range API allowed.
         bool getRangeApiAllowed(void) const;

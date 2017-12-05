@@ -11,6 +11,7 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QPushButton>
+#include <QCheckBox>
 #include <QIcon>
 
 #include "first_run_dialog.h"
@@ -43,6 +44,14 @@ FirstRunDialog::FirstRunDialog(QWidget *parent)
 
     QLabel *label = new QLabel(labelMsg);
     logoLayout->addWidget(label);
+
+    QLabel *sendStatistixText = new QLabel(tr("You can allow the sending of usage info from your computer so that Range Software can receive bug reports and statistics that help improve our software. None of the information gathered includes personal data."));
+    sendStatistixText->setWordWrap(true);
+    mainLayout->addWidget(sendStatistixText);
+
+    QCheckBox *sendStatistixCheck = new QCheckBox(tr("Send usage info"));
+    sendStatistixCheck->setCheckState(Qt::Checked);
+    mainLayout->addWidget(sendStatistixCheck);
 
     QHBoxLayout *buttonsLayout = new QHBoxLayout;
     mainLayout->addLayout(buttonsLayout);

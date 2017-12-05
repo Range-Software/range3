@@ -21,6 +21,7 @@ ApplicationSettings::ApplicationSettings(QObject *parent)
     : QObject(parent)
     , nHistoryRecords(3)
     , style(ApplicationSettings::getDefaultStyle())
+    , sendUsageInfo(true)
     , rangeApiAllowed(false)
     , rangeApiServer("http://range-software.com")
 {
@@ -101,6 +102,16 @@ void ApplicationSettings::setStyle(const QString &style)
         this->style = ApplicationSettings::getDefaultStyle();
     }
     emit this->styleChanged(this->style);
+}
+
+bool ApplicationSettings::getSendUsageInfo(void) const
+{
+    return this->sendUsageInfo;
+}
+
+void ApplicationSettings::setSendUsageInfo(bool sendUsageInfo)
+{
+    this->sendUsageInfo = sendUsageInfo;
 }
 
 bool ApplicationSettings::getRangeApiAllowed(void) const

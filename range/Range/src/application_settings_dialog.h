@@ -13,6 +13,7 @@
 
 #include <QDialog>
 #include <QSpinBox>
+#include <QCheckBox>
 #include <QComboBox>
 #include <QGroupBox>
 
@@ -38,6 +39,8 @@ class ApplicationSettingsDialog : public QDialog
         QMap<ActionType,QString> changedShortcut;
         //! Style combo box.
         QComboBox *styleCombo;
+        //! Send usage info allowed.
+        QCheckBox *sendUsageInfoAllowed;
         //! Range API allowed checkbox.
         QGroupBox *rangeApiAllowed;
         //! Range API server edit.

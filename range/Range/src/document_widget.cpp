@@ -33,6 +33,7 @@ DocumentWidget::DocumentWidget(QWidget *parent)
 
     this->textBrowser = new QTextBrowser;
     this->textBrowser->setSearchPaths(QStringList() << MainSettings::getInstance().findHelpDir());
+    this->textBrowser->setReadOnly(true);
     splitter->addWidget(this->textBrowser);
 }
 

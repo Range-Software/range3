@@ -73,6 +73,7 @@ int ApplicationSettingsDialog::exec(void)
         this->applicationSettings->setNThreads(this->nThreadsSpin->value());
         this->applicationSettings->setNHistoryRecords(this->nHistoryRecordsSpin->value());
         this->applicationSettings->setStyle(this->styleCombo->currentText());
+        this->applicationSettings->setSendUsageInfo(this->sendUsageInfoAllowed->isChecked());
         this->applicationSettings->setRangeApiAllowed(this->rangeApiAllowed->isChecked());
         this->applicationSettings->setRangeApiServer(this->rangeApiServer->text());
         this->applicationSettings->setRangeAccount(this->rangeAccountEdit->text());
@@ -132,11 +133,15 @@ QWidget *ApplicationSettingsDialog::createGeneralTab(void)
             this->styleCombo->setCurrentIndex(i);
         }
     }
-    layout->addWidget(styleCombo,3,1,1,1);
+    layout->addWidget(this->styleCombo,3,1,1,1);
+
+    this->sendUsageInfoAllowed = new QCheckBox(tr("Send usage info"));
+    this->sendUsageInfoAllowed->setCheckState(this->applicationSettings->getSendUsageInfo()?Qt::Checked:Qt::Unchecked);
+    layout->addWidget(this->sendUsageInfoAllowed,4,0,1,2);
 
     QWidget *spacer = new QWidget();
     spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    layout->addWidget(spacer,4,0,1,2);
+    layout->addWidget(spacer,5,0,1,2);
 
     return widget;
 }
