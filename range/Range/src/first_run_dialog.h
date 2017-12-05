@@ -23,6 +23,9 @@ class FirstRunDialog : public QDialog
 
     private slots:
 
+        //! On Send usage info toggled.
+        void onSendUsageInfoToggled(bool checked);
+
         //! On Application settings button clicked.
         void onApplicationSettingsButtonClicked(bool checked);
 

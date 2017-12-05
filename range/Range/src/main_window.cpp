@@ -147,7 +147,7 @@ MainWindow::MainWindow (QWidget *parent)
     // Number of history records has changed.
     QObject::connect(&Session::getInstance(),&Session::nHistoryRecordsChanged,this,&MainWindow::onNHistoryRecordsChanged);
 
-//    if (this->isFirstRun)
+    if (this->isFirstRun)
     {
         FirstRunDialog(this).exec();
     }

@@ -45,13 +45,15 @@ FirstRunDialog::FirstRunDialog(QWidget *parent)
     QLabel *label = new QLabel(labelMsg);
     logoLayout->addWidget(label);
 
-    QLabel *sendStatistixText = new QLabel(tr("You can allow the sending of usage info from your computer so that Range Software can receive bug reports and statistics that help improve our software. None of the information gathered includes personal data."));
-    sendStatistixText->setWordWrap(true);
-    mainLayout->addWidget(sendStatistixText);
+    QLabel *sendUsageInfoLabel = new QLabel(tr("You can allow the sending of usage info from your computer so that Range Software can receive bug reports and statistics that help improve our software. None of the information gathered includes personal data."));
+    sendUsageInfoLabel->setWordWrap(true);
+    mainLayout->addWidget(sendUsageInfoLabel);
 
-    QCheckBox *sendStatistixCheck = new QCheckBox(tr("Send usage info"));
-    sendStatistixCheck->setCheckState(Qt::Checked);
-    mainLayout->addWidget(sendStatistixCheck);
+    QCheckBox *sendUsageInfoCheck = new QCheckBox(tr("Send usage info"));
+    sendUsageInfoCheck->setCheckState(MainSettings::getInstance().getApplicationSettings()->getSendUsageInfo()?Qt::Checked:Qt::Unchecked);
+    mainLayout->addWidget(sendUsageInfoCheck);
+
+    QObject::connect(sendUsageInfoCheck,&QCheckBox::toggled,this,&FirstRunDialog::onSendUsageInfoToggled);
 
     QHBoxLayout *buttonsLayout = new QHBoxLayout;
     mainLayout->addLayout(buttonsLayout);
@@ -65,6 +67,11 @@ FirstRunDialog::FirstRunDialog(QWidget *parent)
     QPushButton *closeButton = new QPushButton(startIcon, tr("Start"));
     buttonsLayout->addWidget(closeButton);
     QObject::connect(closeButton,&QPushButton::clicked,this,&FirstRunDialog::accept);
+}
+
+void FirstRunDialog::onSendUsageInfoToggled(bool checked)
+{
+    MainSettings::getInstance().getApplicationSettings()->setSendUsageInfo(checked);
 }
 
 void FirstRunDialog::onApplicationSettingsButtonClicked(bool checked)
