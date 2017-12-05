@@ -13,5 +13,12 @@
 HelpTipsWidget::HelpTipsWidget(QWidget *parent)
     : DocumentWidget(parent)
 {
+    QStringList tips;
 
+
+    foreach (const QString &tipName, tips)
+    {
+        this->addListItem(tipName,
+                          RFileManager::buildPath(MainSettings::getInstance().findHelpDir(),"tip_" + tipName + ".html"));
+    }
 }
