@@ -28,8 +28,8 @@ QString UsageInfo::getReport(void) const
     QString report;
 
     report += "{";
-    report += "\"account:\" \"" + MainSettings::getInstance().getApplicationSettings()->getRangeAccount() + "\",";
-    report += "\"session:\" \"" + Session::getInstance().getID() + "\"";
+    report += "  \"account:\" \"" + MainSettings::getInstance().getApplicationSettings()->getRangeAccount() + "\",";
+    report += "  \"session:\" \"" + Session::getInstance().getID() + "\"";
     report += "}";
 
     return report;
