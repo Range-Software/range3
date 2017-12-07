@@ -1107,6 +1107,8 @@ void MainWindow::onErrorPrinted(const QString &message)
 void MainWindow::onProcessReadyStandardOutput(const QString &message)
 {
     this->processOutputBrowser->moveCursor(QTextCursor::End);
+    this->processOutputBrowser->setTextBackgroundColor(QApplication::palette().base().color());
+    this->processOutputBrowser->setTextColor(QApplication::palette().text().color());
     this->processOutputBrowser->insertPlainText(message);
     this->processOutputBrowser->moveCursor(QTextCursor::End);
     QScrollBar *sb = this->processOutputBrowser->verticalScrollBar();

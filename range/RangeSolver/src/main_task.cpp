@@ -43,6 +43,7 @@ void MainTask::run(void)
         validOptions.append(RArgumentOption("nthreads",RArgumentOption::Integer,QVariant(1),"Number of threads to use",false,false));
         validOptions.append(RArgumentOption("restart",RArgumentOption::Switch,QVariant(),"Restart solver",false,false));
         validOptions.append(RArgumentOption("read-stdin",RArgumentOption::Switch,QVariant(),"Read commands from standard input",false,false));
+        validOptions.append(RArgumentOption("task-id",RArgumentOption::Path,QVariant(),"Task ID for inter process communication",false,false));
 
         RArgumentsParser argumentsParser(QCoreApplication::arguments(),validOptions,false);
 
@@ -66,7 +67,7 @@ void MainTask::run(void)
         }
 
         // Command processor.
-        CommandProcessor *commandProcessor = new CommandProcessor(app);
+        CommandProcessor *commandProcessor = new CommandProcessor(argumentsParser.getValue("task-id").toString(),app);
         commandProcessor->setEnabled(argumentsParser.isSet("read-stdin"));
 
         SolverInput solverInput(argumentsParser.getValue("file").toString(),

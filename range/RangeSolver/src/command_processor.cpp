@@ -8,34 +8,44 @@
  *  DESCRIPTION: Command processor class definition                  *
  *********************************************************************/
 
-#include <QTextStream>
+//#include <QTextStream>
+#include <QDataStream>
 
-#ifdef _WIN32
-#include <windows.h>
-#else
-#include <unistd.h>
-#endif
+//#ifdef _WIN32
+//#include <windows.h>
+//#else
+//#include <unistd.h>
+//#endif
 
 #include <rblib.h>
 
 #include "command_processor.h"
 
-CommandProcessor::CommandProcessor(QCoreApplication *application) :
+CommandProcessor::CommandProcessor(const QString &taskID, QCoreApplication *application) :
     QObject(application),
-    enabled(false)
+    enabled(false),
+    localSocket(new QLocalSocket(this))
 {
-#ifdef _WIN32
-    this->stdinNotifier = new QWinEventNotifier(GetStdHandle(STD_INPUT_HANDLE),this);
-    this->connect(this->stdinNotifier,SIGNAL(activated(HANDLE)),this,SLOT(readStdin(HANDLE)));
-    this->stdinNotifier->setEnabled(true);
-#else
-    this->stdinNotifier = new QSocketNotifier(STDIN_FILENO, QSocketNotifier::Read,this);
+    RLogger::info("Connecting to: %s\n",taskID.toUtf8().constData());
+    this->localSocket->connectToServer(taskID);
+    if (!this->localSocket->waitForConnected())
+    {
+        RLogger::error("Failed to connect to: %s\n",taskID.toUtf8().constData());
+    }
+    RLogger::info("Connected to: %s\n",taskID.toUtf8().constData());
+    QObject::connect(this->localSocket, &QLocalSocket::readyRead, this, &CommandProcessor::readSocket);
+//#ifdef _WIN32
+//    this->stdinNotifier = new QWinEventNotifier(GetStdHandle(STD_INPUT_HANDLE),this);
+//    QObject::connect(this->stdinNotifier,&QWinEventNotifier::activated,this,&CommandProcessor::readStdin);
+//    this->stdinNotifier->setEnabled(false);
+//#else
+//    this->stdinNotifier = new QSocketNotifier(STDIN_FILENO, QSocketNotifier::Read,this);
 
-    QObject::connect(this->stdinNotifier,
-                     &QSocketNotifier::activated,
-                     this,
-                     &CommandProcessor::readStdin);
-#endif
+//    QObject::connect(this->stdinNotifier,
+//                     &QSocketNotifier::activated,
+//                     this,
+//                     &CommandProcessor::readStdin);
+//#endif
 }
 
 void CommandProcessor::setEnabled(bool enabled)
@@ -43,24 +53,45 @@ void CommandProcessor::setEnabled(bool enabled)
     this->enabled = enabled;
 }
 
-void CommandProcessor::readStdin(HANDLE socket)
+//void CommandProcessor::readStdin(HANDLE socket)
+//{
+//    if (!this->enabled)
+//    {
+//        return;
+//    }
+//    RLogger::warning("Notified\n");
+//    return;
+
+//    QTextStream textStream(stdin,QIODevice::ReadOnly);
+//    textStream.skipWhiteSpace();
+//    QString line = textStream.readLine();
+//    RLogger::info("Received command: \'%s\'\n",line.toUtf8().constData());
+//    if (line.contains("STOP"))
+//    {
+//        RApplicationState::getInstance().setStateType(R_APPLICATION_STATE_STOP);
+//    }
+//}
+
+void CommandProcessor::readSocket(void)
 {
-    if (!this->enabled)
+    if (this->localSocket->bytesAvailable() < (int)sizeof(quint32))
     {
         return;
     }
-
-    this->disconnect(this->stdinNotifier,SIGNAL(activated(HANDLE)),this,SLOT(readStdin(HANDLE)));
-
-    QTextStream textStream(stdin,QIODevice::ReadOnly);
-    QString line = textStream.readLine();
-    RLogger::info("Received command: \'%s\'\n",line.toUtf8().constData());
-    if (line.contains("STOP"))
+    QDataStream in;
+    in.setDevice(this->localSocket);
+    in.setVersion(QDataStream::Qt_5_7);
+    quint32 blockSize;
+    in >> blockSize;
+    if (this->localSocket->bytesAvailable() < blockSize || in.atEnd())
+    {
+        return;
+    }
+    QString message;
+    in >> message;
+    RLogger::info("Received command: \'%s\'\n",message.toUtf8().constData());
+    if (message.contains("STOP"))
     {
         RApplicationState::getInstance().setStateType(R_APPLICATION_STATE_STOP);
-    }
-    else
-    {
-        this->connect(this->stdinNotifier,SIGNAL(activated(HANDLE)),this,SLOT(readStdin(HANDLE)));
     }
 }

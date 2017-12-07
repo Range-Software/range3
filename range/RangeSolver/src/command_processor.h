@@ -14,13 +14,15 @@
 #include <QObject>
 #include <QCoreApplication>
 
-#ifdef _WIN32
-#include <QWinEventNotifier>
-#include <windows.h>
-#else
-#include <QSocketNotifier>
-typedef int HANDLE;
-#endif
+#include <QLocalSocket>
+
+//#ifdef _WIN32
+//#include <QWinEventNotifier>
+//#include <windows.h>
+//#else
+//#include <QSocketNotifier>
+//typedef int HANDLE;
+//#endif
 
 class CommandProcessor : public QObject
 {
@@ -31,26 +33,30 @@ class CommandProcessor : public QObject
 
         //! Processing is enabled.
         bool enabled;
-#ifdef _WIN32
-        //! Windows event notifier.
-        QWinEventNotifier *stdinNotifier;
-#else
-        //! Standard input notifier.
-        QSocketNotifier *stdinNotifier;
-#endif
+        QLocalSocket *localSocket;
+//#ifdef _WIN32
+//        //! Windows event notifier.
+//        QWinEventNotifier *stdinNotifier;
+//#else
+//        //! Standard input notifier.
+//        QSocketNotifier *stdinNotifier;
+//#endif
 
     public:
 
         //! Constructor.
-        explicit CommandProcessor(QCoreApplication *application = 0);
+        explicit CommandProcessor(const QString &taskID, QCoreApplication *application = 0);
 
         //! Start listening and processing.
         void setEnabled(bool enabled);
         
     public slots:
 
-        //! Run processor.
-        void readStdin(HANDLE socket);
+//        //! Run processor.
+//        void readStdin(HANDLE socket);
+
+        //! Read local socket.
+        void readSocket(void);
         
 };
 

@@ -11,6 +11,9 @@
 #ifndef __SOLVER_TASK_H__
 #define __SOLVER_TASK_H__
 
+#include <QLocalServer>
+#include <QLocalSocket>
+
 #include "application_settings.h"
 #include "job.h"
 #include "solver_process.h"
@@ -43,6 +46,9 @@ class SolverTask : public Job
         QString convergenceFileName;
         //! Monitoring file name.
         QString monitoringFileName;
+
+        QLocalServer *localServer;
+        QList<QLocalSocket*> localClients;
 
     public:
 
@@ -82,6 +88,8 @@ class SolverTask : public Job
 
         //! Catch ready read standard error signal.
         void onProcessReadyReadStandardError(void);
+
+        void onNewConnection(void);
 
     signals:
 

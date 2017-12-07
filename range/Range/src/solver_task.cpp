@@ -21,7 +21,8 @@ SolverTask::SolverTask(const ApplicationSettings *applicationSettings, uint mode
     Job(parent),
     applicationSettings(applicationSettings),
     modelID(modelID),
-    solverProcess(0)
+    solverProcess(0),
+    localServer(0)
 {
     this->taskID.generate();
 
@@ -69,7 +70,16 @@ SolverTask::SolverTask(const ApplicationSettings *applicationSettings, uint mode
     this->solverArguments.append("--convergence-file=" + this->convergenceFileName);
     this->solverArguments.append("--monitoring-file=" + this->monitoringFileName);
     this->solverArguments.append("--nthreads=" + QString::number(this->applicationSettings->getNThreads()));
+    this->solverArguments.append("--task-id=" + this->taskID.toString());
     this->solverArguments.append("--read-stdin");
+
+    this->localServer = new QLocalServer(this);
+    if (!this->localServer->listen(this->taskID.toString()))
+    {
+        RLogger::warning("Local server failed to listen: %s\n", this->localServer->errorString().toUtf8().constData());
+    }
+    RLogger::info("Listening on: %s\n", this->localServer->serverName().toUtf8().constData());
+    QObject::connect(this->localServer, &QLocalServer::newConnection, this, &SolverTask::onNewConnection);
 }
 
 uint SolverTask::getModelID(void) const
@@ -90,7 +100,21 @@ SolverTaskID &SolverTask::getTaskID(void)
 void SolverTask::stop(void)
 {
     RLogger::info("Stopping solver task (#%s).\n",this->taskID.toString().toUtf8().constData());
-    this->solverProcess->write("STOP\r\n");
+//    this->solverProcess->write("STOP\r\n");
+//    if (this->localServer->hasPendingConnections())
+    foreach (QLocalSocket *localSocket, this->localClients)
+    {
+//        QLocalSocket *localSocket = this->localServer->nextPendingConnection();
+        QByteArray block;
+        QDataStream out(&block, QIODevice::WriteOnly);
+        out.setVersion(QDataStream::Qt_5_7);
+        const QString &message = "STOP";
+        RLogger::info("Sendig signal: %s\n",message.toUtf8().constData());
+        out << quint32(message.size());
+        out << message;
+        localSocket->write(block);
+        localSocket->flush();
+    }
 }
 
 void SolverTask::kill(void)
@@ -207,4 +231,10 @@ void SolverTask::onProcessReadyReadStandardOutput(void)
 void SolverTask::onProcessReadyReadStandardError(void)
 {
     emit this->readyReadStandardError(QString::fromLocal8Bit(this->solverProcess->readAllStandardError()));
+}
+
+void SolverTask::onNewConnection(void)
+{
+    RLogger::info("Client connected\n");
+    this->localClients.append(this->localServer->nextPendingConnection());
 }

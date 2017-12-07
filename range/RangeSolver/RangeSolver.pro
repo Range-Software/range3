@@ -1,4 +1,4 @@
-QT += core
+QT += core network
 QMAKE_CXXFLAGS += -Wno-unused-parameter
 QMAKE_CXXFLAGS += -fopenmp
 LIBS += -fopenmp
