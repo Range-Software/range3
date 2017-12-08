@@ -11,9 +11,6 @@
 #ifndef __SOLVER_TASK_H__
 #define __SOLVER_TASK_H__
 
-#include <QLocalServer>
-#include <QLocalSocket>
-
 #include "application_settings.h"
 #include "job.h"
 #include "solver_process.h"
@@ -47,9 +44,6 @@ class SolverTask : public Job
         //! Monitoring file name.
         QString monitoringFileName;
 
-        QLocalServer *localServer;
-        QList<QLocalSocket*> localClients;
-
     public:
 
         //! Constructor.
@@ -64,8 +58,8 @@ class SolverTask : public Job
         //! Return reference to solver task ID.
         SolverTaskID & getTaskID(void);
 
-        //! Stop task.
-        void stop(void);
+        //! Return const reference to solver task ID.
+        const QString getStopCommand(void) const;
 
         //! Kill task.
         void kill(void);
@@ -88,8 +82,6 @@ class SolverTask : public Job
 
         //! Catch ready read standard error signal.
         void onProcessReadyReadStandardError(void);
-
-        void onNewConnection(void);
 
     signals:
 

@@ -24,7 +24,7 @@ MainTask::MainTask(QObject *parent) :
 
 void MainTask::run(void)
 {
-    QCoreApplication *app = (QCoreApplication*)this->parent();
+    QCoreApplication *application = (QCoreApplication*)this->parent();
 
     QSettings settings(RVendor::name, RVendor::shortName);
 
@@ -42,22 +42,22 @@ void MainTask::run(void)
         validOptions.append(RArgumentOption("monitoring-file",RArgumentOption::Path,QVariant(),"Monitoring file name",false,false));
         validOptions.append(RArgumentOption("nthreads",RArgumentOption::Integer,QVariant(1),"Number of threads to use",false,false));
         validOptions.append(RArgumentOption("restart",RArgumentOption::Switch,QVariant(),"Restart solver",false,false));
-        validOptions.append(RArgumentOption("read-stdin",RArgumentOption::Switch,QVariant(),"Read commands from standard input",false,false));
         validOptions.append(RArgumentOption("task-id",RArgumentOption::Path,QVariant(),"Task ID for inter process communication",false,false));
+        validOptions.append(RArgumentOption("task-server",RArgumentOption::Path,QVariant(),"Task server for inter process communication",false,false));
 
         RArgumentsParser argumentsParser(QCoreApplication::arguments(),validOptions,false);
 
         if (argumentsParser.isSet("help"))
         {
             argumentsParser.printHelp("Solver");
-            app->exit(0);
+            application->exit(0);
             return;
         }
 
         if (argumentsParser.isSet("version"))
         {
             argumentsParser.printVersion();
-            app->exit(0);
+            application->exit(0);
             return;
         }
 
@@ -67,8 +67,9 @@ void MainTask::run(void)
         }
 
         // Command processor.
-        CommandProcessor *commandProcessor = new CommandProcessor(argumentsParser.getValue("task-id").toString(),app);
-        commandProcessor->setEnabled(argumentsParser.isSet("read-stdin"));
+        new CommandProcessor(argumentsParser.getValue("task-server").toString(),
+                             argumentsParser.getValue("task-id").toString(),
+                             application);
 
         SolverInput solverInput(argumentsParser.getValue("file").toString(),
                                 argumentsParser.getValue("module-license-file").toString(),
@@ -93,7 +94,7 @@ void MainTask::run(void)
 
         // Start solver.
         QThread* thread = new QThread;
-        SolverTask *solverTask = new SolverTask(solverInput, app);
+        SolverTask *solverTask = new SolverTask(solverInput, application);
 
         solverTask->moveToThread(thread);
 
@@ -107,6 +108,6 @@ void MainTask::run(void)
     catch (const RError &error)
     {
         RLogger::error("Failed to start solver. %s\n",error.getMessage().toUtf8().constData());
-        app->exit(1);
+        application->exit(1);
     }
 }

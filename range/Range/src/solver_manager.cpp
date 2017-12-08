@@ -13,15 +13,31 @@
 #include "session.h"
 #include "solver_manager.h"
 
-SolverManager::SolverManager(QObject *parent) :
-    JobManager(parent)
+const QString solverTaskServerName("RANGE_SOLVER_TASK_SERVER");
+
+SolverManager::SolverManager(QObject *parent)
+    : JobManager(parent)
+    , taskServer(0)
 {
+    this->taskServerName = "RANGE_SOLVER_TASK_SERVER_" + Session::getInstance().getID();
+    this->taskServer = new QLocalServer(this);
+    if (!this->taskServer->listen(this->taskServerName))
+    {
+        RLogger::warning("Local server failed to listen: %s\n", this->taskServer->errorString().toUtf8().constData());
+    }
+    RLogger::info("Listening on: %s\n", this->taskServer->serverName().toUtf8().constData());
+    QObject::connect(this->taskServer, &QLocalServer::newConnection, this, &SolverManager::onSolverTaskNewConnection);
 }
 
 SolverManager &SolverManager::getInstance(void)
 {
     static SolverManager solverManager;
     return solverManager;
+}
+
+const QString &SolverManager::getTaskServerName(void) const
+{
+    return this->taskServerName;
 }
 
 void SolverManager::submit(SolverTask *solverTask)
@@ -62,7 +78,20 @@ void SolverManager::stopRunningTasks(void)
     {
         foreach (Job *task, this->runningJobs)
         {
-            ((SolverTask *)task)->stop();
+            SolverTask *solverTask = dynamic_cast<SolverTask*>(task);
+            RLogger::info("Stopping solver task (#%s).\n",solverTask->getTaskID().toString().toUtf8().constData());
+            QString message = solverTask->getStopCommand();
+            foreach (QLocalSocket *localSocket, this->taskClients)
+            {
+                QByteArray block;
+                QDataStream out(&block, QIODevice::WriteOnly);
+                out.setVersion(QDataStream::Qt_5_7);
+                RLogger::info("Sendig signal: %s\n",message.toUtf8().constData());
+                out << quint32(message.size());
+                out << message;
+                localSocket->write(block);
+                localSocket->flush();
+            }
         }
     }
 }
@@ -73,7 +102,9 @@ void SolverManager::killRunningTasks(void)
     {
         foreach (Job *task, this->runningJobs)
         {
-            ((SolverTask *)task)->kill();
+            SolverTask *solverTask = dynamic_cast<SolverTask*>(task);
+            RLogger::info("Killing solver task (#%s).\n",solverTask->getTaskID().toString().toUtf8().constData());
+            solverTask->kill();
         }
     }
 }
@@ -91,4 +122,13 @@ void SolverManager::onReadyReadStandardOutput(const QString &message)
 void SolverManager::onReadyReadStandardError(const QString &message)
 {
     emit this->readyReadStandardError(message);
+}
+
+void SolverManager::onSolverTaskNewConnection(void)
+{
+    RLogger::info("Task client connected\n");
+    while (this->taskServer->hasPendingConnections())
+    {
+        this->taskClients.append(this->taskServer->nextPendingConnection());
+    }
 }

@@ -8,69 +8,39 @@
  *  DESCRIPTION: Command processor class definition                  *
  *********************************************************************/
 
-//#include <QTextStream>
 #include <QDataStream>
-
-//#ifdef _WIN32
-//#include <windows.h>
-//#else
-//#include <unistd.h>
-//#endif
 
 #include <rblib.h>
 
 #include "command_processor.h"
 
-CommandProcessor::CommandProcessor(const QString &taskID, QCoreApplication *application) :
-    QObject(application),
-    enabled(false),
-    localSocket(new QLocalSocket(this))
+CommandProcessor::CommandProcessor(const QString &taskServer, const QString &taskID, QCoreApplication *application)
+    : QObject(application)
+    , localSocket(new QLocalSocket(this))
+    , taskServer(taskServer)
+    , taskID(taskID)
 {
-    RLogger::info("Connecting to: %s\n",taskID.toUtf8().constData());
-    this->localSocket->connectToServer(taskID);
+    if (!this->taskServer.isEmpty() && !this->taskID.isEmpty())
+    {
+        this->start();
+    }
+}
+
+void CommandProcessor::start(void)
+{
+    this->localSocket->connectToServer(taskServer);
     if (!this->localSocket->waitForConnected())
     {
-        RLogger::error("Failed to connect to: %s\n",taskID.toUtf8().constData());
+        RLogger::error("Failed to connect to: %s\n",taskServer.toUtf8().constData());
     }
-    RLogger::info("Connected to: %s\n",taskID.toUtf8().constData());
+    RLogger::info("Connected to: %s\n",this->localSocket->serverName().toUtf8().constData());
     QObject::connect(this->localSocket, &QLocalSocket::readyRead, this, &CommandProcessor::readSocket);
-//#ifdef _WIN32
-//    this->stdinNotifier = new QWinEventNotifier(GetStdHandle(STD_INPUT_HANDLE),this);
-//    QObject::connect(this->stdinNotifier,&QWinEventNotifier::activated,this,&CommandProcessor::readStdin);
-//    this->stdinNotifier->setEnabled(false);
-//#else
-//    this->stdinNotifier = new QSocketNotifier(STDIN_FILENO, QSocketNotifier::Read,this);
-
-//    QObject::connect(this->stdinNotifier,
-//                     &QSocketNotifier::activated,
-//                     this,
-//                     &CommandProcessor::readStdin);
-//#endif
 }
 
-void CommandProcessor::setEnabled(bool enabled)
+void CommandProcessor::stop(void)
 {
-    this->enabled = enabled;
+    this->localSocket->disconnectFromServer();
 }
-
-//void CommandProcessor::readStdin(HANDLE socket)
-//{
-//    if (!this->enabled)
-//    {
-//        return;
-//    }
-//    RLogger::warning("Notified\n");
-//    return;
-
-//    QTextStream textStream(stdin,QIODevice::ReadOnly);
-//    textStream.skipWhiteSpace();
-//    QString line = textStream.readLine();
-//    RLogger::info("Received command: \'%s\'\n",line.toUtf8().constData());
-//    if (line.contains("STOP"))
-//    {
-//        RApplicationState::getInstance().setStateType(R_APPLICATION_STATE_STOP);
-//    }
-//}
 
 void CommandProcessor::readSocket(void)
 {
@@ -90,7 +60,7 @@ void CommandProcessor::readSocket(void)
     QString message;
     in >> message;
     RLogger::info("Received command: \'%s\'\n",message.toUtf8().constData());
-    if (message.contains("STOP"))
+    if (message.contains(this->taskID + ":STOP"))
     {
         RApplicationState::getInstance().setStateType(R_APPLICATION_STATE_STOP);
     }

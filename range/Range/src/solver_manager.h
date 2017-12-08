@@ -12,6 +12,8 @@
 #define __SOLVER_MANAGER_H__
 
 #include <QObject>
+#include <QLocalServer>
+#include <QLocalSocket>
 
 #include "job_manager.h"
 #include "solver_task.h"
@@ -23,6 +25,15 @@ class SolverManager : public JobManager
 
     protected:
 
+        //! Task server name.
+        QString taskServerName;
+
+        //! Task server.
+        QLocalServer *taskServer;
+
+        //! Task clients.
+        QList<QLocalSocket*> taskClients;
+
         //! Last solver log file name.
         QString lastLogFileName;
 
@@ -33,6 +44,9 @@ class SolverManager : public JobManager
 
         //! Return static instance of the manager.
         static SolverManager & getInstance(void);
+
+        //! Return task server name.
+        const QString &getTaskServerName(void) const;
 
         //! Add new solver task.
         void submit(SolverTask *solverTask);
@@ -64,6 +78,11 @@ class SolverManager : public JobManager
 
         //! Message on standard error is availabe.
         void onReadyReadStandardError(const QString &message);
+
+    protected slots:
+
+        //! Solver has connected.
+        void onSolverTaskNewConnection(void);
         
 };
 
