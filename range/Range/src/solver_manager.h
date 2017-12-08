@@ -63,6 +63,9 @@ class SolverManager : public JobManager
         //! Return const reference to last log file name.
         const QString & getLastLogFileName(void) const;
 
+        //! Stop server.
+        void stopServer(void);
+
     signals:
 
         //! Message on standard output is availabe.

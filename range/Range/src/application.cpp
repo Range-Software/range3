@@ -235,8 +235,13 @@ void Application::onStarted(void)
     }
 }
 
+#include "solver_manager.h"
+
 void Application::onAboutToQuit(void)
 {
+    //! Stop solver manager server.
+    SolverManager::getInstance().stopServer();
+
     // Stop RRA Session
     RRASession::getInstance().stop();
 

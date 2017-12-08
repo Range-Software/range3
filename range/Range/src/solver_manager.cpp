@@ -114,6 +114,12 @@ const QString &SolverManager::getLastLogFileName(void) const
     return this->lastLogFileName;
 }
 
+void SolverManager::stopServer(void)
+{
+    QObject::disconnect(this->taskServer, &QLocalServer::newConnection, this, &SolverManager::onSolverTaskNewConnection);
+    this->taskServer->close();
+}
+
 void SolverManager::onReadyReadStandardOutput(const QString &message)
 {
     emit this->readyReadStandardOutput(message);
