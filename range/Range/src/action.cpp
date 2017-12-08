@@ -1151,13 +1151,16 @@ void Action::onGeometrySurfaceSwapElementNormal(void)
     for (int i=0;i<modelIDs.size();i++)
     {
         QList<uint> elementIDs;
+        const Model &rModel = Session::getInstance().getModel(modelIDs[i]);
 
         QVector<PickItem> pickItems = pickList.getItems(modelIDs[i]);
         for (int j=0;j<pickItems.size();j++)
         {
             if (pickItems[j].getItemType() == PICK_ITEM_ELEMENT)
             {
-                uint elementID = pickItems[j].getElementID();
+                const SessionEntityID &rEntityID = pickItems[j].getEntityID();
+                uint elementID = rModel.findElementID(rEntityID.getType(),rEntityID.getEid(),pickItems[j].getElementID());
+
                 if (elementID != RConstants::eod)
                 {
                     elementIDs.append(elementID);
