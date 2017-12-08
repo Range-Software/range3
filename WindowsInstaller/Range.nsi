@@ -117,7 +117,7 @@ SectionGroup "Range Software" SecRange
 ;        File ..\range\Range\doc\*.pdf
         SetOutPath "$INSTDIR\help"
 		File ..\range\Range\help\*.html
-;		File ..\range\Range\help\*.png
+		File ..\range\Range\help\*.png
     SectionEnd
     Section "Model Files" SecModelFiles
         SetOutPath "$INSTDIR\data"
