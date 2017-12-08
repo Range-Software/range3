@@ -27,6 +27,7 @@ DocumentWidget::DocumentWidget(QWidget *parent)
     mainLayout->addWidget(splitter);
 
     this->listWidget = new QListWidget;
+    this->listWidget->setSizePolicy(QSizePolicy::Minimum,QSizePolicy::Expanding);
     splitter->addWidget(this->listWidget);
 
     QObject::connect(this->listWidget,&QListWidget::itemSelectionChanged,this,&DocumentWidget::onListSelectionChanged);
@@ -34,7 +35,10 @@ DocumentWidget::DocumentWidget(QWidget *parent)
     this->textBrowser = new QTextBrowser;
     this->textBrowser->setSearchPaths(QStringList() << MainSettings::getInstance().findHelpDir());
     this->textBrowser->setReadOnly(true);
+    this->textBrowser->setSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Expanding);
     splitter->addWidget(this->textBrowser);
+
+    splitter->setStretchFactor(1,1);
 }
 
 void DocumentWidget::addListItem(QIcon icon, const QString &text, const QString &fileName)
