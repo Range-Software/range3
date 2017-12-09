@@ -963,8 +963,6 @@ void MainWindow::closeEvent(QCloseEvent *event)
 
     if (quitDialog.exec() == QDialog::Accepted) {
         this->writeSettings();
-        // Disable logger to sen messages to window.
-        Logger::halt();
         // Accept event -> close window.
         event->accept();
     }
@@ -972,6 +970,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
         // Ignore event -> leave window open.
         event->ignore();
     }
+    RLogger::info("End of event\n");
 }
 
 QDockWidget *MainWindow::findFirstDockWidget(Qt::DockWidgetArea area)

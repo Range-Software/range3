@@ -27,6 +27,7 @@
 #include "job_manager.h"
 #include "rra_session.h"
 #include "update_dialog.h"
+#include "solver_manager.h"
 
 Application::Application(int &argc, char **argv) :
     QApplication(argc,argv)
@@ -235,18 +236,19 @@ void Application::onStarted(void)
     }
 }
 
-#include "solver_manager.h"
-
 void Application::onAboutToQuit(void)
 {
-    //! Stop solver manager server.
+    // Stop solver manager server.
+    RLogger::info("Stoping solver task server\n");
     SolverManager::getInstance().stopServer();
 
     // Stop RRA Session
+    RLogger::info("Stoping RRA Session\n");
     RRASession::getInstance().stop();
 
     // Stop logger
-    Logger::getInstance().halt();
+    RLogger::info("Stoping logger\n");
+    Logger::halt();
 
     // Delete main window
     delete MainWindow::getInstance();
