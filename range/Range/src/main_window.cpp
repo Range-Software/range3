@@ -936,15 +936,6 @@ void MainWindow::writeSettings(void) const
     MainSettings::getInstance().setValue("application/version",RVendor::version.toString());
 
     MainSettings::getInstance().sync();
-
-    try
-    {
-        Session::getInstance().write(sessionFileName);
-    }
-    catch (const RError &error)
-    {
-        RLogger::error("Failed to write the session file \'%s\'. ERROR: %s\n",sessionFileName.toUtf8().constData(),error.getMessage().toUtf8().constData());
-    }
 }
 
 uint MainWindow::getNToolBars(void) const
@@ -970,7 +961,6 @@ void MainWindow::closeEvent(QCloseEvent *event)
         // Ignore event -> leave window open.
         event->ignore();
     }
-    RLogger::info("End of event\n");
 }
 
 QDockWidget *MainWindow::findFirstDockWidget(Qt::DockWidgetArea area)

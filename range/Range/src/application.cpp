@@ -238,6 +238,20 @@ void Application::onStarted(void)
 
 void Application::onAboutToQuit(void)
 {
+    QString sessionFileName = Session::getInstance().getFileName();
+    if (sessionFileName.isEmpty())
+    {
+        sessionFileName = Session::getInstance().getDefaultFileName();
+    }
+    try
+    {
+        Session::getInstance().write(sessionFileName);
+    }
+    catch (const RError &error)
+    {
+        RLogger::error("Failed to write the session file \'%s\'. ERROR: %s\n",sessionFileName.toUtf8().constData(),error.getMessage().toUtf8().constData());
+    }
+
     // Stop solver manager server.
     RLogger::info("Stoping solver task server\n");
     SolverManager::getInstance().stopServer();
