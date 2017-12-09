@@ -549,8 +549,6 @@ void MainWindow::createCentralWidget(void)
     this->centralTabWidget->setTabPosition(QTabWidget::South);
     this->setCentralWidget(this->centralTabWidget);
 
-    QObject::connect(this->centralTabWidget,&QTabWidget::currentChanged,this,&MainWindow::onCurrentChanged);
-
     QMdiArea *mdiArea = new QMdiArea(this);
     mdiArea->setObjectName(QString::fromUtf8("mdiArea"));
     mdiArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
@@ -572,6 +570,7 @@ void MainWindow::createCentralWidget(void)
     this->pickDetailsTabPosition = this->centralTabWidget->addTab(treePickDetails,QString());
     this->setCentralWidgetTabText(this->pickDetailsTabPosition,false);
 
+    QObject::connect(this->centralTabWidget,&QTabWidget::currentChanged,this,&MainWindow::onCurrentChanged);
     QObject::connect(&Session::getInstance().getPickList(),&PickList::pickListChanged,this,&MainWindow::onPickLostChanged);
 }
 
