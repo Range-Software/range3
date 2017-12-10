@@ -107,7 +107,7 @@ bool RElementGroup::findPosition (unsigned int  elementID,
 
 unsigned int RElementGroup::size (void) const
 {
-    return this->elementIDs.size();
+    return (unsigned int)this->elementIDs.size();
 } /* RElementGroup::size */
 
 

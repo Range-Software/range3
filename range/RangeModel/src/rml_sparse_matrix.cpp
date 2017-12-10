@@ -42,7 +42,7 @@ RSparseMatrix &RSparseMatrix::operator =(const RSparseMatrix &matrix)
 
 unsigned int RSparseMatrix::getNRows(void) const
 {
-    return this->data.size();
+    return (unsigned int)this->data.size();
 }
 
 void RSparseMatrix::setNRows(unsigned int nRows)
@@ -52,7 +52,7 @@ void RSparseMatrix::setNRows(unsigned int nRows)
 
 unsigned int RSparseMatrix::getNColumns(unsigned int rowIndex) const
 {
-    return this->data[rowIndex].size();
+    return (unsigned int)this->data[rowIndex].size();
 }
 
 double RSparseMatrix::getValue(unsigned int rowIndex, unsigned int columnPosition) const

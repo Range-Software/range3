@@ -71,7 +71,7 @@ void RStatistics::print(void) const
 
 void RStatistics::calculate(const RRVector &values, unsigned int nDistValues, bool sortValues)
 {
-    this->nValues = values.size();
+    this->nValues = (unsigned int)values.size();
     this->min = RStatistics::findMinimumValue(values);
     this->max = RStatistics::findMaximumValue(values);
     this->avg = RStatistics::findAverageValue(values);
@@ -186,7 +186,7 @@ double RStatistics::findAverageValue(const RRVector &values)
 double RStatistics::findMedianValue(const RRVector &values)
 {
     double value = 0.0;
-    unsigned int nv = values.size();
+    unsigned int nv = (unsigned int)values.size();
     unsigned int pos = 0;
 
     if (nv % 2 != 0) {
@@ -224,7 +224,7 @@ double RStatistics::findPercentileValue(const RRVector &values, double percentil
         p = percentile;
     }
 
-    N = vs.size();
+    N = (unsigned int)vs.size();
 
     n = (p/100.0)*(N-1.0)+1.0;
 
@@ -264,7 +264,7 @@ RRMatrix RStatistics::findDistributedValues(const RRVector &values, unsigned int
 
     dist.fill(0.0);
 
-    nvals = values.size();
+    nvals = (unsigned int)values.size();
 
     for (unsigned int i=0;i<nDistValues;i++) {
         sllim = step*i + llim;

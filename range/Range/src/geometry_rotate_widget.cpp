@@ -99,7 +99,7 @@ void GeometryRotateWidget::resetAngles(void)
     this->zAngleLineEdit->setValue(this->defaultAngles[2]);
 }
 
-void GeometryRotateWidget::onAngleValueChanged(double value)
+void GeometryRotateWidget::onAngleValueChanged(double)
 {
     emit this->rotationChanged(this->rotationCenter->getPosition(),
                                RR3Vector(this->xAngleLineEdit->getValue(),
@@ -107,7 +107,7 @@ void GeometryRotateWidget::onAngleValueChanged(double value)
                                          this->zAngleLineEdit->getValue()));
 }
 
-void GeometryRotateWidget::onPositionChanged(const RR3Vector &position)
+void GeometryRotateWidget::onPositionChanged(const RR3Vector &)
 {
     emit this->rotationChanged(this->rotationCenter->getPosition(),
                                RR3Vector(this->xAngleLineEdit->getValue(),

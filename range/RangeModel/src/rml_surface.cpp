@@ -92,7 +92,7 @@ std::vector<bool> RSurface::pointsInside(const std::vector<RNode> &nodes, const 
         bool isInside = false;
 
 #pragma omp parallel for default(shared)
-        for (uint j=0;j<volumes.size();j++)
+        for (int64_t j=0;j<int64_t(volumes.size());j++)
         {
 #pragma omp flush (isInside)
             if (!isInside)

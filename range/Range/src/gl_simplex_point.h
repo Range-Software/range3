@@ -62,8 +62,7 @@ class GLSimplexPoint : public GLSimplex
                        bool useTexture);
 
         //! Draw nodes.
-        void drawNodes(const RModelRaw &sphereModel,
-                       bool volumeElement);
+        void drawNodes(const RModelRaw &, bool);
 
 };
 

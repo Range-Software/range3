@@ -203,7 +203,7 @@ void GLSimplexPoint::drawWired(const RModelRaw &sphereModel, bool volumeElement,
     GL_SAFE_CALL(lightingEnabled ? glEnable(GL_LIGHTING) : glDisable(GL_LIGHTING));
 }
 
-void GLSimplexPoint::drawNodes(const RModelRaw &sphereModel, bool volumeElement)
+void GLSimplexPoint::drawNodes(const RModelRaw &, bool)
 {
     GLFunctions::begin(GL_POINTS);
     GLObject::glVertexNode(this->nodes[0]);

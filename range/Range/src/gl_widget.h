@@ -203,10 +203,10 @@ class GLWidget : public QOpenGLWidget
         void mouseMoveEvent(QMouseEvent *mouseEvent);
 
         //! Process enter event.
-        void enterEvent(QEvent *event);
+        void enterEvent(QEvent *);
 
         //! Process leave event.
-        void leaveEvent(QEvent *event);
+        void leaveEvent(QEvent *);
 
         //! Mouse wheel event.
         void wheelEvent(QWheelEvent *mouseEvent);
@@ -255,7 +255,7 @@ class GLWidget : public QOpenGLWidget
     private slots:
 
         //! Slot to catch signal emitted when entity visibility have changed.
-        void onEntityVisibilityChanged(uint modelID, REntityGroupType elementGrpType, uint entityID, bool visible);
+        void onEntityVisibilityChanged(uint, REntityGroupType, uint, bool);
 
         //! Slot to catch signal emitted when display properties have changed.
         void onDisplayPropertiesChanged(uint modelID, REntityGroupType elementGrpType, uint entityID);
@@ -264,7 +264,7 @@ class GLWidget : public QOpenGLWidget
         void onVariableDataChanged(uint modelID, RVariableType variableType);
 
         //! Slot to catch signal emitted when variable data has changed.
-        void onVariableDataChanged(const SessionEntityID &entityID, RVariableType variableType);
+        void onVariableDataChanged(const SessionEntityID &entityID, RVariableType);
 
         //! Slot to catch signal emitted when model has changed
         void onModelChanged(uint modelID);
@@ -297,7 +297,7 @@ class GLWidget : public QOpenGLWidget
         void onDrawObjectRemoved(void);
 
         //! Draw object has changed.
-        void onDrawObjectChanged(uint objectID);
+        void onDrawObjectChanged(uint);
 
 };
 

@@ -90,13 +90,13 @@ class DirectionWidget : public QGroupBox
         void onZSliderValueChanged(int value);
 
         //! X spin box value changed.
-        void onXSpinValueChanged(double rate);
+        void onXSpinValueChanged(double);
 
         //! Y spin box value changed.
-        void onYSpinValueChanged(double rate);
+        void onYSpinValueChanged(double);
 
         //! Z spin box value changed.
-        void onZSpinValueChanged(double rate);
+        void onZSpinValueChanged(double);
 
         //! On ok button clicked.
         void onOkButtonClicked(void);

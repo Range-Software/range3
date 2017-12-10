@@ -330,17 +330,17 @@ void ModelEntityDisplayPropertiesTree::populate(void)
     this->setItemWidget(item,DP_TREE_COLUMN_NAME,colorCombo);
 }
 
-void ModelEntityDisplayPropertiesTree::onModelSelectionChanged(uint modelID)
+void ModelEntityDisplayPropertiesTree::onModelSelectionChanged(uint)
 {
     this->populate();
 }
 
-void ModelEntityDisplayPropertiesTree::onModelChanged(uint modelID)
+void ModelEntityDisplayPropertiesTree::onModelChanged(uint)
 {
     this->populate();
 }
 
-void ModelEntityDisplayPropertiesTree::onProblemChanged(uint modelID)
+void ModelEntityDisplayPropertiesTree::onProblemChanged(uint)
 {
     this->populate();
 }

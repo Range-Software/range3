@@ -4313,7 +4313,7 @@ void RFileIO::writeAscii(RFile &outFile, const RPatchBook &patchBook, bool addNe
     {
         RFileIO::writeAscii(outFile,' ',false);
     }
-    uint nElements = patchBook.elementPatchMap.size();
+    uint nElements = uint(patchBook.elementPatchMap.size());
     RFileIO::writeAscii(outFile,nElements,addNewLine);
     if (!addNewLine)
     {
@@ -4339,7 +4339,7 @@ void RFileIO::writeAscii(RFile &outFile, const RPatchBook &patchBook, bool addNe
 void RFileIO::writeBinary(RFile &outFile, const RPatchBook &patchBook)
 {
     RFileIO::writeBinary(outFile,patchBook.patches);
-    uint nElements = patchBook.elementPatchMap.size();
+    uint nElements = uint(patchBook.elementPatchMap.size());
     RFileIO::writeBinary(outFile,nElements);
     std::map<uint,uint>::const_iterator iter;
     uint i = 0;

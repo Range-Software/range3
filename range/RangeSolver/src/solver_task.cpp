@@ -9,7 +9,6 @@
  *********************************************************************/
 
 #include <omp.h>
-#include <unistd.h>
 
 #include <algorithm>
 

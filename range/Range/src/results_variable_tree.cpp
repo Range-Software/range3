@@ -467,12 +467,12 @@ void ResultsVariableTree::onResultsVariableSelected(RVariableType variableType)
     this->populate();
 }
 
-void ResultsVariableTree::onApplyAsScalarStateChanged(int state)
+void ResultsVariableTree::onApplyAsScalarStateChanged(int)
 {
     this->processApplyAsStates();
 }
 
-void ResultsVariableTree::onApplyAsDisplacementStateChanged(int state)
+void ResultsVariableTree::onApplyAsDisplacementStateChanged(int)
 {
     this->processApplyAsStates();
 }

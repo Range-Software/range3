@@ -167,7 +167,7 @@ void RHemiCube::calculateViewFactors(const RModel &model, RViewFactorMatrix &rVi
 
     RProgressInitialize("Calculating view-factors");
     #pragma omp parallel for default(shared)
-    for (uint eyePatchID=0;eyePatchID<rPatchBook.getNPatches();eyePatchID++)
+    for (int64_t eyePatchID=0;eyePatchID<int64_t(rPatchBook.getNPatches());eyePatchID++)
     {
         #pragma omp critical
         {
@@ -243,7 +243,7 @@ void RHemiCube::calculateViewFactors(const RModel &model, RViewFactorMatrix &rVi
         // Calculate view-factor row sum.
         const RSparseVector<double> &viewFactors = rViewFactorRow.getViewFactors();
         double vfRowSum = 0.0;
-        for (uint i=0;i<viewFactors.size();i++)
+        for (uint i=0;i<uint(viewFactors.size());i++)
         {
             vfRowSum += viewFactors.getValue(i);
         }

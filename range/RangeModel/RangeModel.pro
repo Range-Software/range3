@@ -1,6 +1,11 @@
 QT += core
-QMAKE_CXXFLAGS += -fopenmp
-LIBS += -fopenmp
+win*-msvc* {
+    QMAKE_CXXFLAGS += -openmp
+    LIBS += -openmp
+} else {
+    QMAKE_CXXFLAGS += -fopenmp
+    LIBS += -fopenmp
+}
 
 TARGET = RangeModel
 TEMPLATE = lib

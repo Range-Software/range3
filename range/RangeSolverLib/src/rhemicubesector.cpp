@@ -55,7 +55,7 @@ RHemiCubeSector &RHemiCubeSector::operator =(const RHemiCubeSector &hemiCubeSect
 
 uint RHemiCubeSector::getSize(void) const
 {
-    return this->pixels.size();
+    return uint(this->pixels.size());
 }
 
 const RHemiCubePixel &RHemiCubeSector::getPixel(uint position) const

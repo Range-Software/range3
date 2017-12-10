@@ -124,7 +124,7 @@ bool RCondition::checkProblemTypeMask (RProblemType type) const
 
 unsigned int RCondition::size (void) const
 {
-    return this->components.size();
+    return (unsigned int)this->components.size();
 } /* RCondition::size */
 
 

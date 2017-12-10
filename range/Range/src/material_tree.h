@@ -48,7 +48,7 @@ class MaterialTree : public QTreeWidget
     protected slots:
 
         //! Catch onCurrentItemChanged signal.
-        void onCurrentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous);
+        void onCurrentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *);
 
         //! Catch valueChanged signal from MaterialPropertyLineEditor.
         void onValueChanged(RMaterialPropertyType type, double value);

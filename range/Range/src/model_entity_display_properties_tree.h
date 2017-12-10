@@ -31,13 +31,13 @@ class ModelEntityDisplayPropertiesTree : public QTreeWidget
     private slots:
 
         //! Model selection has changed.
-        void onModelSelectionChanged(uint modelID);
+        void onModelSelectionChanged(uint);
 
         //! Model has changed.
-        void onModelChanged(uint modelID);
+        void onModelChanged(uint);
 
         //! Problem has changed.
-        void onProblemChanged(uint modelID);
+        void onProblemChanged(uint);
 
         //! Item data has changed.
         void onItemChanged(QTreeWidgetItem *item, int column);

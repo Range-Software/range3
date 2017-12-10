@@ -56,7 +56,7 @@ void GLSimplexPolygon::finalize(void)
 
 void GLSimplexPolygon::draw(void)
 {
-    uint nn = this->nodes.size();
+    uint nn = uint(this->nodes.size());
 
     if (nn < 3)
     {
@@ -153,7 +153,7 @@ void GLSimplexPolygon::draw(void)
 
 void GLSimplexPolygon::drawNormal(const std::vector<RNode> &nodes1, const std::vector<RNode> &nodes2, bool volumeElement, bool useTexture)
 {
-    uint nn = nodes1.size();
+    uint nn = uint(nodes1.size());
 
     RR3Vector normal(RPolygon(nodes1).getNormal());
 
@@ -257,7 +257,7 @@ void GLSimplexPolygon::drawNormal(const std::vector<RNode> &nodes1, const std::v
 
 void GLSimplexPolygon::drawWired(const std::vector<RNode> &nodes1, const std::vector<RNode> &nodes2, bool volumeElement, bool useTexture)
 {
-    uint nn = nodes1.size();
+    uint nn = uint(nodes1.size());
 
     RR3Vector normal(RPolygon(nodes1).getNormal());
 
@@ -313,7 +313,7 @@ void GLSimplexPolygon::drawWired(const std::vector<RNode> &nodes1, const std::ve
 
 void GLSimplexPolygon::drawNodes(const std::vector<RNode> &nodes1, const std::vector<RNode> &nodes2, bool volumeElement)
 {
-    uint nn = nodes1.size();
+    uint nn = uint(nodes1.size());
 
     for (uint i=0;i<nn;i++)
     {

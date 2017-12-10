@@ -647,7 +647,7 @@ void RSolverGeneric::syncShared(const QString &keyName, RRVector &values)
     }
     else
     {
-        if (this->pSharedData->hasData(keyName,values.size()))
+        if (this->pSharedData->hasData(keyName,uint(values.size())))
         {
             values = this->pSharedData->findData(keyName);
         }

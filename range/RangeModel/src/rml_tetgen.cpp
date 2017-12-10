@@ -342,7 +342,7 @@ void RTetGen::exportMesh(RModel &model, bool keepResults) const
                              this->pointlist[3*i+2]);
     }
 
-    model.setNVariables(variables.size());
+    model.setNVariables(uint(variables.size()));
 
     model.setNElements(numberOfPointElements + numberOfLineElements + this->numberoftrifaces + this->numberoftetrahedra);
 

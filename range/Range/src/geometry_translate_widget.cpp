@@ -145,7 +145,7 @@ void GeometryTranslateWidget::resetDistances(void)
     this->zDistanceLineEdit->setValue(this->defaultTranslation[2]);
 }
 
-void GeometryTranslateWidget::onDistanceValueChanged(double value)
+void GeometryTranslateWidget::onDistanceValueChanged(double)
 {
     emit this->translationChanged(RR3Vector(this->xDistanceLineEdit->getValue(),
                                             this->yDistanceLineEdit->getValue(),

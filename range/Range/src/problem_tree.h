@@ -37,13 +37,13 @@ class ProblemTree : public QTreeWidget
         void populate(void);
 
         //! Model has changed.
-        void onModelChanged(uint modelID);
+        void onModelChanged(uint);
 
         //! Problem has changed.
-        void onProblemChanged(uint modelID);
+        void onProblemChanged(uint);
 
         //! Model selection has changed.
-        void onModelSelectionChanged(uint modelID);
+        void onModelSelectionChanged(uint);
 
         //! Time solver has changed.
         void onTimeSolverChanged(const RTimeSolver &timeSolver);

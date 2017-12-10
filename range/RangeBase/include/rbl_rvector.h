@@ -46,7 +46,7 @@ class RRVector : public std::vector<double>
         //! Return number of rows (size of the vector).
         inline unsigned int getNRows ( void ) const
         {
-            return this->size();
+            return (unsigned int)this->size();
         }
 
         //! Fill vector with specified value.

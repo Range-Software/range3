@@ -42,7 +42,7 @@ RPatchBook &RPatchBook::operator =(const RPatchBook &patchBook)
 
 uint RPatchBook::getNPatches(void) const
 {
-    return this->patches.size();
+    return (unsigned int)this->patches.size();
 }
 
 const RPatch &RPatchBook::getPatch(uint patchID) const
@@ -71,7 +71,7 @@ void RPatchBook::clear(void)
 uint RPatchBook::createNewPatch(uint surfaceID)
 {
     this->patches.push_back(RPatch(surfaceID));
-    return this->patches.size() - 1;
+    return (unsigned int)this->patches.size() - 1;
 }
 
 void RPatchBook::registerElementID(uint patchID, uint elementID)

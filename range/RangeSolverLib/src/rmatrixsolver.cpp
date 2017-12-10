@@ -124,7 +124,7 @@ void RMatrixSolver::solveCG(const RSparseMatrix &A, const RRVector &b, RRVector 
     {
         // Compute initial residual.
 #pragma omp for reduction(+:An,bn)
-        for (unsigned int i=0;i<m;i++)
+        for (int64_t i=0;i<int64_t(m);i++)
         {
             r[i] = b[i];
             bn = bn + (b[i]*b[i]);
@@ -170,7 +170,7 @@ void RMatrixSolver::solveCG(const RSparseMatrix &A, const RRVector &b, RRVector 
 
 #pragma omp barrier
 #pragma omp for
-            for (unsigned int i=0;i<m;i++)
+            for (int64_t i=0;i<int64_t(m);i++)
             {
                 if (it == 0)
                 {
@@ -187,7 +187,7 @@ void RMatrixSolver::solveCG(const RSparseMatrix &A, const RRVector &b, RRVector 
             dot = 0.0;
 #pragma omp barrier
 #pragma omp for reduction(+:dot)
-            for (unsigned int i=0;i<m;i++)
+            for (int64_t i=0;i<int64_t(m);i++)
             {
                 q[i] = 0.0;
                 for (unsigned int j=0;j<index[i].size();j++)
@@ -296,7 +296,7 @@ void RMatrixSolver::solveGMRES(const RSparseMatrix &A, const RRVector &b, RRVect
                 xn = 0.0;
             }
 #pragma omp for reduction(+:xn,beta)
-            for (uint i=0;i<mA;i++)
+            for (int64_t i=0;i<int64_t(mA);i++)
             {
                 ro[i] = b[i];
                 double lxn = 0.0;
@@ -331,7 +331,7 @@ void RMatrixSolver::solveGMRES(const RSparseMatrix &A, const RRVector &b, RRVect
 
             // Define first krylov vector v[0]
 #pragma omp for
-            for (uint i=0;i<mA;i++)
+            for (int64_t i=0;i<int64_t(mA);i++)
             {
                 v[0][i] = (beta == 0.0) ? 0.0 : ro[i] / beta;
             }
@@ -355,7 +355,7 @@ void RMatrixSolver::solveGMRES(const RSparseMatrix &A, const RRVector &b, RRVect
 #pragma omp barrier
                 // A multiplied by the last krylov vector at present
 #pragma omp for
-                for (uint i=0;i<mA;i++)
+                for (int64_t i=0;i<int64_t(mA);i++)
                 {
                     w[i] = 0.0;
                     for (uint j=0;j<indexes[i].size();j++)
@@ -385,7 +385,7 @@ void RMatrixSolver::solveGMRES(const RSparseMatrix &A, const RRVector &b, RRVect
 #pragma omp barrier
                 // New krylov vector formed
 #pragma omp for
-                for (uint i=0;i<mA;i++)
+                for (int64_t i=0;i<int64_t(mA);i++)
                 {
                     v[iti+1][i] = (h[iti+1][iti] == 0.0) ? 0.0 : w[i] / h[iti+1][iti];
                 }
@@ -443,7 +443,7 @@ void RMatrixSolver::solveGMRES(const RSparseMatrix &A, const RRVector &b, RRVect
 #pragma omp barrier
             // Update prod
 #pragma omp for
-            for (uint i=0;i<mA;i++)
+            for (int64_t i=0;i<int64_t(mA);i++)
             {
                 for (uint j=0;j<=iti-1;j++)
                 {

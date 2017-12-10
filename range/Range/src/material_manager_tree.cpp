@@ -252,7 +252,7 @@ void MaterialManagerTree::addMaterial(const QString &materialName, bool setSelec
     }
 }
 
-void MaterialManagerTree::onModelSelectionChanged(uint modelID)
+void MaterialManagerTree::onModelSelectionChanged(uint)
 {
     this->updateProblemTypeMask();
     this->updateCheckStates();
@@ -542,7 +542,7 @@ void MaterialManagerTree::onModelAdded(uint modelID)
     }
 }
 
-void MaterialManagerTree::onProblemChanged(uint modelID)
+void MaterialManagerTree::onProblemChanged(uint)
 {
     this->updateProblemTypeMask();
 }
@@ -674,7 +674,7 @@ void MaterialManagerTree::onMaterialChanged(const QString &materialName)
     this->updateProblemTypeMask();
 }
 
-void MaterialManagerTree::onItemChanged(QTreeWidgetItem *item, int column)
+void MaterialManagerTree::onItemChanged(QTreeWidgetItem *item, int)
 {
     uint id = item->data(MATERIAL_TREE_COLUMN_NAME,Qt::UserRole).toUInt();
     QString oldName = MaterialList::getInstance().findID(id);

@@ -101,17 +101,17 @@ void ProblemTree::populate(void)
     }
 }
 
-void ProblemTree::onModelChanged(uint modelID)
+void ProblemTree::onModelChanged(uint)
 {
     this->populate();
 }
 
-void ProblemTree::onProblemChanged(uint modelID)
+void ProblemTree::onProblemChanged(uint)
 {
     this->populate();
 }
 
-void ProblemTree::onModelSelectionChanged(uint modelID)
+void ProblemTree::onModelSelectionChanged(uint)
 {
     this->populate();
 }

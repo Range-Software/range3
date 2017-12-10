@@ -60,7 +60,7 @@ void RRMatrix::_init (const RRMatrix *pMatrix)
 
 unsigned int RRMatrix::getNRows (void) const
 {
-    return this->array.size();
+    return (unsigned int)this->array.size();
 } /* RRMatrix::getNRows */
 
 
@@ -68,7 +68,7 @@ unsigned int RRMatrix::getNColumns (void) const
 {
     if (this->getNRows() > 0)
     {
-        return this->array[0].size();
+        return (unsigned int)this->array[0].size();
     }
     else
     {

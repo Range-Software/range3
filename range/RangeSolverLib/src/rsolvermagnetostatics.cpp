@@ -88,7 +88,7 @@ void RSolverMagnetostatics::prepare(void)
 
         bool abort = false;
         #pragma omp parallel for default(shared)
-        for (uint j=0;j<volume.size();j++)
+        for (int64_t j=0;j<int64_t(volume.size());j++)
         {
             #pragma omp flush (abort)
             if (abort)

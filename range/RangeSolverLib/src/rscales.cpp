@@ -276,7 +276,7 @@ void RScales::convert(RModel &model, bool invert) const
     {
         // Scale nodes
 #pragma omp for
-        for (uint i=0;i<model.getNNodes();i++)
+        for (int64_t i=0;i<int64_t(model.getNNodes());i++)
         {
             RNode &rNode = model.getNode(i);
             rNode.set(rNode.getX()*lengthScale,
@@ -286,19 +286,19 @@ void RScales::convert(RModel &model, bool invert) const
 
         // Scale geometric values of element groups.
 #pragma omp for
-        for (uint i=0;i<model.getNPoints();i++)
+        for (int64_t i=0;i<int64_t(model.getNPoints());i++)
         {
             RPoint &rPoint = model.getPoint(i);
             rPoint.setVolume(rPoint.getVolume()*volumeScale);
         }
 #pragma omp for
-        for (uint i=0;i<model.getNLines();i++)
+        for (int64_t i=0;i<int64_t(model.getNLines());i++)
         {
             RLine &rLine = model.getLine(i);
             rLine.setCrossArea(rLine.getCrossArea()*areaScale);
         }
 #pragma omp for
-        for (uint i=0;i<model.getNSurfaces();i++)
+        for (int64_t i=0;i<int64_t(model.getNSurfaces());i++)
         {
             RSurface &rSurface = model.getSurface(i);
             rSurface.setThickness(rSurface.getThickness()*lengthScale);
@@ -376,7 +376,7 @@ void RScales::convert(RModel &model, bool invert) const
 
         // Scale materials.
 #pragma omp for
-        for (uint i=0;i<model.getNElementGroups();i++)
+        for (int64_t i=0;i<int64_t(model.getNElementGroups());i++)
         {
             RMaterial &rMaterial = model.getElementGroupPtr(i)->getMaterial();
 
@@ -413,7 +413,7 @@ void RScales::convert(RModel &model, bool invert) const
 
         // Scale variables.
 #pragma omp for
-        for (uint i=0;i<model.getNVariables();i++)
+        for (int64_t i=0;i<int64_t(model.getNVariables());i++)
         {
             RVariable &rVariable = model.getVariable(i);
 

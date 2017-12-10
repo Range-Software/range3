@@ -51,7 +51,7 @@ class MoveNodeDialog : public QDialog
     private slots:
 
         //! Position changed.
-        void onPositionChanged(const RR3Vector &position);
+        void onPositionChanged(const RR3Vector &);
 
 };
 

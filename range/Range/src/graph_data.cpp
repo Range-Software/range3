@@ -290,7 +290,7 @@ RRVector GraphData::findValue(double x) const
 
     ratio = ratio < 0.5 ? 0.0 : 1.0;
 
-    RRVector values(y1.size() > y2.size() ? y1.size() : y2.size());
+    RRVector values(uint(y1.size() > y2.size() ? y1.size() : y2.size()));
     values.fill(0.0);
     for (unsigned int i=0;i<values.size();i++)
     {

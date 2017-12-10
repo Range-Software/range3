@@ -73,7 +73,7 @@ void RValueVector::setUnits (const QString &units)
 
 unsigned int RValueVector::size (void) const
 {
-    return this->values.size();
+    return (unsigned int)this->values.size();
 } /* RValueVector::size */
 
 

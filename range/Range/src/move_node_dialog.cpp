@@ -106,7 +106,7 @@ QMap<SessionNodeID, RR3Vector> MoveNodeDialog::findNodeIdPositionMap(void) const
     return nodeIDMap;
 }
 
-void MoveNodeDialog::onPositionChanged(const RR3Vector &position)
+void MoveNodeDialog::onPositionChanged(const RR3Vector &)
 {
     this->okButton->setEnabled(true);
     Session::getInstance().setBeginDrawMoveNodes(this->findNodeIdPositionMap());

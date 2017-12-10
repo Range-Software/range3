@@ -50,10 +50,10 @@ class GeometryRotateWidget : public QWidget
         void resetAngles(void);
 
         //! Angle value changed.
-        void onAngleValueChanged(double value);
+        void onAngleValueChanged(double);
 
         //! Position changed.
-        void onPositionChanged(const RR3Vector &position);
+        void onPositionChanged(const RR3Vector &);
 
 };
 

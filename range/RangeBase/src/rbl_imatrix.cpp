@@ -62,7 +62,7 @@ void RIMatrix::_init (const RIMatrix *pMatrix)
 
 unsigned int RIMatrix::getNRows (void) const
 {
-    return this->array.size();
+    return (unsigned int)this->array.size();
 } /* RIMatrix::getNRows */
 
 
@@ -70,7 +70,7 @@ unsigned int RIMatrix::getNColumns (void) const
 {
     if (this->getNRows() > 0)
     {
-        return this->array[0].size();
+        return (unsigned int)this->array[0].size();
     }
     else
     {

@@ -54,7 +54,7 @@ RModelRaw DrawEngineSphere::generate(const RR3Vector &center, double radius, uin
     // Perform bisection untill sone refinement is reached
     for (uint iter=0;iter<nIter;iter++)
     {
-        uint nt = s.size();
+        uint nt = uint(s.size());
         for (uint i=0;i<nt;i++)
         {
             RTriangle *t = s.at(i);

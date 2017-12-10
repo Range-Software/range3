@@ -86,7 +86,7 @@ void RProblemTaskItem::setNIterations(unsigned int nIterations)
 
 unsigned int RProblemTaskItem::getNChildren(void) const
 {
-    return this->children.size();
+    return (unsigned int)this->children.size();
 }
 
 const RProblemTaskItem &RProblemTaskItem::getChild(unsigned int position) const

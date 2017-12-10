@@ -11,6 +11,7 @@
 #include "draw_engine_tetrahedron.h"
 
 DrawEngineTetrahedron::DrawEngineTetrahedron(QObject *parent)
+    : DrawEngineObject(parent)
 {
     this->name = tr("tetrahedron");
 

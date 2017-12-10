@@ -860,7 +860,7 @@ void Session::onNHistoryRecordsChanged(uint nHistoryRecords)
 void Session::onSoftwareUpdateFileSaved(uint downloadID, const QString &fileName)
 {
     RLogger::trace("void Session::onSoftwareUpdateFileSaved(uint downloadID, const QString &fileName)\n");
-    RLogger::info("Opening downloaded file \'%s\'\n",fileName.toUtf8().constData());
+    RLogger::info("Opening downloaded file \'%s\' (id=\'%u\')\n",fileName.toUtf8().constData(),downloadID);
 
     if (!QDesktopServices::openUrl(QUrl("file:///" + fileName)))
     {

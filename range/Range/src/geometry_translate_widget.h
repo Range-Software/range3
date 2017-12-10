@@ -54,7 +54,7 @@ class GeometryTranslateWidget : public QWidget
         void resetDistances(void);
 
         //! Distance value changed.
-        void onDistanceValueChanged(double value);
+        void onDistanceValueChanged(double);
 
 };
 

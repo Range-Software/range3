@@ -218,7 +218,7 @@ void RSolverRadiativeHeat::prepare(void)
     }
     for (uint i=0;i<rPatchBook.getNPatches();i++)
     {
-        uint nElements = rPatchBook.getPatch(i).getElementIDs().size();
+        uint nElements = uint(rPatchBook.getPatch(i).getElementIDs().size());
         if (nElements > 0)
         {
             patchEmissivity[i] /= double(nElements);
@@ -229,7 +229,7 @@ void RSolverRadiativeHeat::prepare(void)
 
     // Prepare patch elements.
     #pragma omp parallel for default(shared)
-    for (uint i=0;i<rPatchBook.getNPatches();i++)
+    for (int64_t i=0;i<int64_t(rPatchBook.getNPatches());i++)
     {
         RRVector viewFactors = this->viewFactorMatrix.getRow(i).getViewFactors().getValues(rPatchBook.getNPatches());
 

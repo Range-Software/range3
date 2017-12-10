@@ -105,7 +105,7 @@ void DrawInputWidget::onSelectionChanged(const QList<uint> &objectIDs)
     this->removeButton->setEnabled(objectIDs.size() > 0);
 }
 
-void DrawInputWidget::onInputParameterChanged(uint objectID, uint parameterID)
+void DrawInputWidget::onInputParameterChanged(uint objectID, uint)
 {
     Session::getInstance().getDrawEngine()->getObject(objectID)->updateModel();
 }

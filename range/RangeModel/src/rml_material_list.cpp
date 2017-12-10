@@ -54,7 +54,7 @@ RMaterialList &RMaterialList::operator =(const RMaterialList &materialList)
 
 unsigned int RMaterialList::size(void) const
 {
-    return this->materials.size();
+    return (unsigned int)this->materials.size();
 } /* RMaterialList::size */
 
 

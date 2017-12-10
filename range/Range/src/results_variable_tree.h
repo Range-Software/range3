@@ -67,10 +67,10 @@ class ResultsVariableTree : public QTreeWidget
     protected slots:
 
         //! Apply as scalar toggle state has changed.
-        void onApplyAsScalarStateChanged(int state);
+        void onApplyAsScalarStateChanged(int);
 
         //! Apply as displacement toggle state has changed.
-        void onApplyAsDisplacementStateChanged(int state);
+        void onApplyAsDisplacementStateChanged(int);
 
         //! Apply on node button has been clicked.
         void onApplyOnNodeClicked(void);

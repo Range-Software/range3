@@ -293,7 +293,7 @@ void RElement::setType (RElementType type)
 
 unsigned int RElement::size (void) const
 {
-    return this->nodeIDs.size();
+    return (unsigned int)this->nodeIDs.size();
 } /* RElement::size */
 
 
@@ -2396,7 +2396,7 @@ double RElement::generateTotalWeightFactor(RElementType type)
 unsigned int RElement::getNIntegrationPoints(RElementType type)
 {
     R_ERROR_ASSERT (R_ELEMENT_TYPE_IS_VALID(type));
-    return elementDesc[type].shapeFunctions.size();
+    return (unsigned int)elementDesc[type].shapeFunctions.size();
 } /* RElement::getNIntegrationPoints */
 
 

@@ -236,10 +236,10 @@ class MainWindow : public QMainWindow
         void onDownloadProgress(uint downloadID, qint64 bytesReceived, qint64 bytesTotal, double speed);
 
         //! Initialize download progress.
-        void onDownloadProgressInitialize(uint downloadID);
+        void onDownloadProgressInitialize(uint);
 
         //! Finalize download progress.
-        void onDownloadProgressFinalize(uint downloadID);
+        void onDownloadProgressFinalize(uint);
 
         //! Draw object was added.
         void onDrawObjectAdded(void);
@@ -266,19 +266,19 @@ class MainWindow : public QMainWindow
         void onModelChanged(uint position);
 
         //! Problem has been changed.
-        void onProblemChanged(uint position);
+        void onProblemChanged(uint);
 
         //! Results has been changed.
-        void onResultsChanged(uint position);
+        void onResultsChanged(uint);
 
         //! Model visibility has changed.
-        void onEntityVisibilityChanged(uint modelID, REntityGroupType elementGrpType, uint entityID, bool visible);
+        void onEntityVisibilityChanged(uint modelID, REntityGroupType, uint, bool visible);
 
         //! Finalize geometry transform widget.
         void onGeometryTransformFinalize(void);
 
         //! Called when number of history records has changed.
-        void onNHistoryRecordsChanged(uint nHistoryRecords);
+        void onNHistoryRecordsChanged(uint);
 
         //! Pick list has changed.
         void onPickLostChanged(void);

@@ -47,7 +47,7 @@ RMessage::RMessage (const char *cString, RMessageType type) : QString (cString)
 } /* RMessage::RMessage (copy c string) */
 
 
-RMessage::RMessage (size_t n, char cChar, RMessageType type) : QString (n,cChar)
+RMessage::RMessage (size_t n, char cChar, RMessageType type) : QString (int(n),cChar)
 {
     this->_init ();
     this->setAtimeFrozen(false);

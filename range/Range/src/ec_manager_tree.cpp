@@ -138,12 +138,12 @@ void ECManagerTree::populate(void)
 
     emit this->itemSelectionChanged();
 }
-void ECManagerTree::onModelSelectionChanged(uint modelID)
+void ECManagerTree::onModelSelectionChanged(uint)
 {
     this->populate();
 }
 
-void ECManagerTree::onProblemChanged(uint modelID)
+void ECManagerTree::onProblemChanged(uint)
 {
     this->populate();
 }

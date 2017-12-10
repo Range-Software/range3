@@ -31,7 +31,7 @@ class ModelEntityGeometricPropertiesTree : public QTreeWidget
     private slots:
 
         //! Model selection has changed.
-        void onModelSelectionChanged(uint modelID);
+        void onModelSelectionChanged(uint);
 
         //! Item data has changed.
         void onItemChanged(QTreeWidgetItem *item, int column);

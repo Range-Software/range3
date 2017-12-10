@@ -93,7 +93,7 @@ class RSparseVector
         //! Return size of the vector.
         unsigned int size(void) const
         {
-            return this->data.size();
+            return (unsigned int)this->data.size();
         }
 
         //! Return value at given position.

@@ -214,7 +214,7 @@ std::vector<VectorFieldItem> GLVectorField::calculateField(const RVariable *pSca
     }
 
 #pragma omp parallel for default(shared)
-    for (uint i=0;i<this->elementGroupIDs.size();i++)
+    for (int64_t i=0;i<int64_t(this->elementGroupIDs.size());i++)
     {
         REntityGroupType entityType;
         uint entityID;

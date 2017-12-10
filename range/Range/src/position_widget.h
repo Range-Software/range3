@@ -74,13 +74,13 @@ class PositionWidget : public QGroupBox
         void hideButtons(void);
 
         //! Set X range.
-        void setXRange(double xMin, double xMax, double step = 0.0);
+        void setXRange(double xMin, double xMax);
 
         //! Set Y range.
-        void setYRange(double yMin, double yMax, double step = 0.0);
+        void setYRange(double yMin, double yMax);
 
         //! Set Z range.
-        void setZRange(double zMin, double zMax, double step = 0.0);
+        void setZRange(double zMin, double zMax);
 
         //! Return direction.
         RR3Vector getPosition(void) const;
@@ -116,13 +116,13 @@ class PositionWidget : public QGroupBox
         void onZSliderValueChanged(int value);
 
         //! X line edit value changed.
-        void onXLineEditValueChanged(double value);
+        void onXLineEditValueChanged(double);
 
         //! Y line edit value changed.
-        void onYLineEditValueChanged(double value);
+        void onYLineEditValueChanged(double);
 
         //! Z line edit value changed.
-        void onZLineEditValueChanged(double value);
+        void onZLineEditValueChanged(double);
 
         //! On pick button clicked.
         void onPickButtonClicked(void);

@@ -441,7 +441,7 @@ void ModelRecordsTree::onModelSelectionChanged(uint modelID)
     this->blockSignals(false);
 }
 
-void ModelRecordsTree::onModelChanged(uint modelID)
+void ModelRecordsTree::onModelChanged(uint)
 {
     this->populate();
 }
@@ -479,7 +479,7 @@ void ModelRecordsTree::onItemChanged(QTreeWidgetItem *item, int column)
     }
 }
 
-void ModelRecordsTree::onItemActivated(QTreeWidgetItem *item, int column)
+void ModelRecordsTree::onItemActivated(QTreeWidgetItem *item, int)
 {
     uint modelID = item->data(ModelRecordsTree::ModelID,Qt::UserRole).toUInt();
 

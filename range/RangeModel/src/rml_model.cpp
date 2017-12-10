@@ -355,31 +355,31 @@ void RModel::update(const RModel &rModel)
         this->getVolume(i).setData(updateVolumeGroupData[i]);
     }
 
-    this->setNScalarFields(scalarFields.size());
+    this->setNScalarFields(uint(scalarFields.size()));
     for (uint i=0;i<this->getNScalarFields();i++)
     {
         this->setScalarField(i,scalarFields[i]);
     }
 
-    this->setNVectorFields(vectorFields.size());
+    this->setNVectorFields(uint(vectorFields.size()));
     for (uint i=0;i<this->getNVectorFields();i++)
     {
         this->setVectorField(i,vectorFields[i]);
     }
 
-    this->setNStreamLines(streamLines.size());
+    this->setNStreamLines(uint(streamLines.size()));
     for (uint i=0;i<this->getNStreamLines();i++)
     {
         this->setStreamLine(i,streamLines[i]);
     }
 
-    this->setNCuts(cuts.size());
+    this->setNCuts(uint(cuts.size()));
     for (uint i=0;i<this->getNCuts();i++)
     {
         this->setCut(i,cuts[i]);
     }
 
-    this->setNIsos(isos.size());
+    this->setNIsos(uint(isos.size()));
     for (uint i=0;i<this->getNIsos();i++)
     {
         this->setIso(i,isos[i]);
@@ -1003,7 +1003,7 @@ void RModel::removeAllVariables(void)
 
 uint RModel::getNNodes (void) const
 {
-    return this->nodes.size();
+    return uint(this->nodes.size());
 } /* RModel::getNNodes */
 
 
@@ -1404,7 +1404,7 @@ uint RModel::purgeUnusedNodes(void)
     }
     RLogger::unindent();
 
-    return nodeBook.size() - nNodes;
+    return uint(nodeBook.size()) - nNodes;
 } /* RModel::purgeUnusedNodes */
 
 
@@ -1417,7 +1417,7 @@ uint RModel::getNElements (RElementType elementType) const
 {
     if (elementType == R_ELEMENT_NONE)
     {
-        return this->elements.size();
+        return uint(this->elements.size());
     }
     uint nElements = 0;
     for (uint i=0;i<this->elements.size();i++)
@@ -1435,7 +1435,7 @@ uint RModel::getNElements(REntityGroupType elementGroupType) const
 {
     if (elementGroupType == R_ENTITY_GROUP_NONE)
     {
-        return this->elements.size();
+        return uint(this->elements.size());
     }
     uint nElements = 0;
     for (uint i=0;i<this->elements.size();i++)
@@ -1852,7 +1852,7 @@ void RModel::removeElement (uint                position,
     // Remove node
     for (uint i=0;i<nodesToRemove.size();i++)
     {
-        uint pos = nodesToRemove.size() - i - 1;
+        uint pos = uint(nodesToRemove.size()) - i - 1;
         this->removeNode(nodesToRemove[pos]);
     }
 } /* RModel::removeElement */
@@ -1965,7 +1965,7 @@ uint RModel::purgeUnusedElements(void)
     uint ne = this->getNElements();
 
 #pragma omp parallel for default(shared)
-    for (uint i=0;i<nElementGroups;i++)
+    for (int i=0;i<int(nElementGroups);i++)
     {
         const RElementGroup *pElementGroup = this->getElementGroupPtr(i);
         for (uint j=0;j<pElementGroup->size();j++)
@@ -1975,7 +1975,7 @@ uint RModel::purgeUnusedElements(void)
     }
 
     // Remove unused elements
-    for (uint i=this->elements.size();i>0;i--)
+    for (uint i=uint(this->elements.size());i>0;i--)
     {
         if (elementBook[i-1] == RConstants::eod)
         {
@@ -1995,7 +1995,7 @@ uint RModel::purgeUnusedElements(void)
     }
 
 #pragma omp parallel for default(shared)
-    for (uint i=0;i<nElementGroups;i++)
+    for (int64_t i=0;i<int64_t(nElementGroups);i++)
     {
         RElementGroup *pElementGroup = this->getElementGroupPtr(i);
         for (uint j=0;j<pElementGroup->size();j++)
@@ -2023,7 +2023,7 @@ uint RModel::purgeUnusedElements(void)
                 }
             }
         }
-        for (uint i=elementBook.size();i>0;i--)
+        for (uint i=uint(elementBook.size());i>0;i--)
         {
             uint elementID = i-1;
             if (elementBook[elementID] == RConstants::eod)
@@ -2052,7 +2052,7 @@ uint RModel::purgeUnusedElements(void)
                 }
             }
         }
-        for (uint i=elementBook.size();i>0;i--)
+        for (uint i=uint(elementBook.size());i>0;i--)
         {
             uint elementID = i-1;
             if (elementBook[elementID] == RConstants::eod)
@@ -2965,7 +2965,7 @@ void RModel::removeEntities(REntityGroupType entityType, const QList<uint> &enti
 
 uint RModel::getNPoints (void) const
 {
-    return this->points.size();
+    return uint(this->points.size());
 } /* RModel::getNPoints */
 
 
@@ -3039,7 +3039,7 @@ void RModel::removePoint (uint position)
 
 uint RModel::getNLines (void) const
 {
-    return this->lines.size();
+    return uint(this->lines.size());
 } /* RModel::getNLines */
 
 
@@ -3113,7 +3113,7 @@ void RModel::removeLine (uint position)
 
 uint RModel::getNSurfaces (void) const
 {
-    return this->surfaces.size();
+    return uint(this->surfaces.size());
 } /* RModel::getNSurfaces */
 
 
@@ -3299,7 +3299,7 @@ void RModel::syncSurfaceNormals(void)
 
 uint RModel::getNVolumes (void) const
 {
-    return this->volumes.size();
+    return uint(this->volumes.size());
 } /* RModel::getNVolumes */
 
 
@@ -3373,7 +3373,7 @@ void RModel::removeVolume (uint position)
 
 uint RModel::getNVectorFields(void) const
 {
-    return this->vectorFields.size();
+    return uint(this->vectorFields.size());
 } /* RModel::getNVectorFields */
 
 
@@ -3447,7 +3447,7 @@ void RModel::removeVectorField(uint position)
 
 uint RModel::getNScalarFields(void) const
 {
-    return this->scalarFields.size();
+    return uint(this->scalarFields.size());
 } /* RModel::getNScalarFields */
 
 
@@ -3521,7 +3521,7 @@ void RModel::removeScalarField(uint position)
 
 uint RModel::getNStreamLines(void) const
 {
-    return this->streamLines.size();
+    return uint(this->streamLines.size());
 } /* RModel::getNStreamLines */
 
 
@@ -3592,7 +3592,7 @@ void RModel::removeStreamLine(uint position)
 
 uint RModel::getNCuts(void) const
 {
-    return this->cuts.size();
+    return uint(this->cuts.size());
 } /* RModel::getNCuts */
 
 
@@ -3664,7 +3664,7 @@ void RModel::removeCut(uint position)
 
 uint RModel::getNIsos(void) const
 {
-    return this->isos.size();
+    return uint(this->isos.size());
 } /* RModel::getNIsos */
 
 
@@ -4121,7 +4121,7 @@ RModelProblemTypeMask RModel::checkMesh(bool printOutput) const
 
     // Check element neighbors.
 #pragma omp parallel for default(shared)
-    for (uint i=0;i<this->getNElements();i++)
+    for (int64_t i=0;i<int64_t(this->getNElements());i++)
     {
         const std::vector<uint> *pNeighbors = this->getNeighborIDs(i);
         if (!pNeighbors)
@@ -4473,7 +4473,7 @@ void RModel::createCut(RCut &rCut) const
     rCut.clear();
 
 #pragma omp parallel for default(shared)
-    for (uint i=0;i<elementIDs.size();i++)
+    for (int64_t i=0;i<int64_t(elementIDs.size());i++)
     {
         const RElement &element = this->getElement(elementIDs[i]);
 
@@ -4517,7 +4517,7 @@ void RModel::createIso(RIso &rIso) const
     const RVariable &rVariable = this->getVariable(variablePosition);
 
 #pragma omp parallel for default(shared)
-    for (uint i=0;i<elementIDs.size();i++)
+    for (int64_t i=0;i<int64_t(elementIDs.size());i++)
     {
         const RElement &rElement = this->getElement(elementIDs[i]);
         std::vector<double> nodeValues;
@@ -4566,7 +4566,7 @@ void RModel::createStreamLine(RStreamLine &rStreamLine) const
     uint volumeElementID = RConstants::eod;
 
 #pragma omp parallel for default(shared)
-    for (uint i=0;i<this->getNElements();i++)
+    for (int64_t i=0;i<int64_t(this->getNElements());i++)
     {
         const RElement &rElement = this->getElement(i);
 
@@ -5010,7 +5010,7 @@ QList<uint> RModel::findIntersectedElements(void) const
         this->getElement(i).findLimitBox(this->getNodes(),limitBox1);
 
 #pragma omp parallel for default(shared)
-        for (uint j=i+1;j<this->getNElements();j++)
+        for (int64_t j=int64_t(i)+1;j<int64_t(this->getNElements());j++)
         {
             RLimitBox limitBox2;
             bool bothIntersected = false;
@@ -5110,7 +5110,7 @@ uint RModel::breakIntersectedElements(uint nIterations, const std::vector<uint> 
 
         for (uint i=0;i<bElementIDs.size();i++)
         {
-            RProgressPrint(i,bElementIDs.size());
+            RProgressPrint(i,uint(bElementIDs.size()));
 
             if (this->getElement(bElementIDs[i]).hasDuplicateNodes())
             {
@@ -5121,7 +5121,7 @@ uint RModel::breakIntersectedElements(uint nIterations, const std::vector<uint> 
             this->getElement(bElementIDs[i]).findLimitBox(this->getNodes(),limitBox1);
 
 #pragma omp parallel for default(shared)
-            for (uint j=i+1;j<bElementIDs.size();j++)
+            for (int64_t j=int64_t(i)+1;j<int64_t(bElementIDs.size());j++)
             {
                 if (this->getElement(bElementIDs[j]).hasDuplicateNodes())
                 {
@@ -5245,7 +5245,7 @@ uint RModel::breakIntersectedElements(uint nIterations, const std::vector<uint> 
         RProgressInitialize("Breaking intersected elemets");
         for (uint i=0;i<intersectionPoints.size();i++)
         {
-            RProgressPrint(i,intersectionPoints.size());
+            RProgressPrint(i,uint(intersectionPoints.size()));
             if (intersectionPoints[i].size() > 0)
             {
                 std::vector<uint> breakNodeIDs;
@@ -5517,7 +5517,7 @@ bool RModel::boolIntersection(uint nIterations, QList<uint> surfaceEntityIDs)
     }
 
     QList<uint> elementsToRemove;
-    elementsToRemove.reserve(elementIDsSet.size());
+    elementsToRemove.reserve(int(elementIDsSet.size()));
 
     std::set<uint>::const_iterator iter;
     for (iter=elementIDsSet.begin();iter!=elementIDsSet.end();++iter)
@@ -5590,7 +5590,7 @@ bool RModel::boolUnion(uint nIterations, QList<uint> surfaceEntityIDs)
     }
 
     QList<uint> elementsToRemove;
-    elementsToRemove.reserve(elementIDsSet.size());
+    elementsToRemove.reserve(int(elementIDsSet.size()));
 
     std::set<uint>::const_iterator iter;
     for (iter=elementIDsSet.begin();iter!=elementIDsSet.end();++iter)
@@ -5765,7 +5765,7 @@ uint RModel::tetrahedralizeSurface(const std::vector<uint> surfaceIDs)
         this->addElement(volumeElements[i],true,0);
     }
 
-    return volumeElements.size();
+    return uint(volumeElements.size());
 } /* RModel::tetrahedralizeSurface */
 
 
@@ -5913,7 +5913,7 @@ void RModel::findPatchCenter(const RPatch &rPatch, double &cx, double &cy, doubl
     cx = cy = cz = 0.0;
 
     double x,y,z;
-    uint ne = rElementIDs.size();
+    uint ne = uint(rElementIDs.size());
     for (uint i=0;i<ne;i++)
     {
         const RElement &rElement = this->getElement(rElementIDs[i]);
@@ -5938,7 +5938,7 @@ void RModel::findPatchNormal(const RPatch &rPatch, double &nx, double &ny, doubl
     nx = ny = nz = 0.0;
 
     double x,y,z;
-    uint ne = rElementIDs.size();
+    uint ne = uint(rElementIDs.size());
     for (uint i=0;i<ne;i++)
     {
         const RElement &rElement = this->getElement(rElementIDs[i]);
@@ -5970,7 +5970,7 @@ void RModel::findPatchArea(const RPatch &rPatch, double area) const
     area = 0.0;
 
     double a;
-    uint ne = rElementIDs.size();
+    uint ne = uint(rElementIDs.size());
     for (uint i=0;i<ne;i++)
     {
         const RElement &rElement = this->getElement(rElementIDs[i]);
@@ -7318,12 +7318,12 @@ std::vector<RUVector> RModel::findSurfaceNeighbors(void) const
 
     uint nProcessed = 0;
 #pragma omp parallel for default(shared)
-    for (uint i=0;i<surfaceElements.size();i++)
+    for (int64_t i=0;i<int64_t(surfaceElements.size());i++)
     {
         uint elementID1 = surfaceElements[i];
 #pragma omp critical
         {
-            RProgressPrint(++nProcessed,surfaceElements.size());
+            RProgressPrint(++nProcessed,uint(surfaceElements.size()));
         }
         RLimitBox lb1,lb2;
         this->getElement(elementID1).findLimitBox(this->getNodes(),lb1);
@@ -7379,11 +7379,11 @@ std::vector<RUVector> RModel::findVolumeNeighbors(void) const
 
     uint nProcessed = 0;
 #pragma omp parallel for default(shared)
-    for (uint i=0;i<volumeElements.size();i++)
+    for (int64_t i=0;i<int64_t(volumeElements.size());i++)
     {
 #pragma omp critical
         {
-            RProgressPrint(++nProcessed,volumeElements.size());
+            RProgressPrint(++nProcessed,uint(volumeElements.size()));
         }
         uint elementID1 = volumeElements[i];
 

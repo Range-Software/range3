@@ -115,7 +115,7 @@ void MaterialTree::onMaterialSelected(const QString &materialName)
     this->populate();
 }
 
-void MaterialTree::onCurrentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous)
+void MaterialTree::onCurrentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *)
 {
     if (current)
     {

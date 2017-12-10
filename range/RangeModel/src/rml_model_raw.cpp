@@ -53,7 +53,7 @@ RModelRaw & RModelRaw::operator = (const RModelRaw &modelRaw)
 
 unsigned int RModelRaw::getNNodes(void) const
 {
-    return this->nodes.size();
+    return (unsigned int)this->nodes.size();
 } /* RModelRaw::getNNodes */
 
 
@@ -73,7 +73,7 @@ RNode & RModelRaw::getNode(unsigned int position)
 
 unsigned int RModelRaw::getNElements(void) const
 {
-    return this->elements.size();
+    return (unsigned int)this->elements.size();
 } /* RModelRaw::getNElements */
 
 
@@ -102,13 +102,13 @@ void RModelRaw::addPoint(const RNode &node, bool mergeNodes, double tolerance)
         if (nId == RConstants::eod)
         {
             this->nodes.push_back(node);
-            nId = this->nodes.size() - 1;
+            nId = (unsigned int)this->nodes.size() - 1;
         }
     }
     else
     {
         this->nodes.push_back(node);
-        nId = this->nodes.size() - 1;
+        nId = (unsigned int)this->nodes.size() - 1;
     }
 
     element.setType(R_ELEMENT_POINT);
@@ -132,22 +132,22 @@ void RModelRaw::addSegment(const RNode &node1,
         if (nId1 == RConstants::eod)
         {
             this->nodes.push_back(node1);
-            nId1 = this->nodes.size() - 1;
+            nId1 = (unsigned int)this->nodes.size() - 1;
         }
 
         nId2 = this->findNearNode(node2,tolerance);
         if (nId2 == RConstants::eod)
         {
             this->nodes.push_back(node2);
-            nId2 = this->nodes.size() - 1;
+            nId2 = (unsigned int)this->nodes.size() - 1;
         }
     }
     else
     {
         this->nodes.push_back(node1);
-        nId1 = this->nodes.size() - 1;
+        nId1 = (unsigned int)this->nodes.size() - 1;
         this->nodes.push_back(node2);
-        nId2 = this->nodes.size() - 1;
+        nId2 = (unsigned int)this->nodes.size() - 1;
     }
 
     element.setType(R_ELEMENT_TRUSS1);
@@ -173,31 +173,31 @@ void RModelRaw::addTriangle(const RNode &node1,
         if (nId1 == RConstants::eod)
         {
             this->nodes.push_back(node1);
-            nId1 = this->nodes.size() - 1;
+            nId1 = (unsigned int)this->nodes.size() - 1;
         }
 
         nId2 = this->findNearNode(node2,tolerance);
         if (nId2 == RConstants::eod)
         {
             this->nodes.push_back(node2);
-            nId2 = this->nodes.size() - 1;
+            nId2 = (unsigned int)this->nodes.size() - 1;
         }
 
         nId3 = this->findNearNode(node3,tolerance);
         if (nId3 == RConstants::eod)
         {
             this->nodes.push_back(node3);
-            nId3 = this->nodes.size() - 1;
+            nId3 = (unsigned int)this->nodes.size() - 1;
         }
     }
     else
     {
         this->nodes.push_back(node1);
-        nId1 = this->nodes.size() - 1;
+        nId1 = (unsigned int)this->nodes.size() - 1;
         this->nodes.push_back(node2);
-        nId2 = this->nodes.size() - 1;
+        nId2 = (unsigned int)this->nodes.size() - 1;
         this->nodes.push_back(node3);
-        nId3 = this->nodes.size() - 1;
+        nId3 = (unsigned int)this->nodes.size() - 1;
     }
 
     element.setType(R_ELEMENT_TRI1);
@@ -228,40 +228,40 @@ void RModelRaw::addQuadrilateral(const RNode &node1, const RNode &node2, const R
         if (nId1 == RConstants::eod)
         {
             this->nodes.push_back(nodeList[0]);
-            nId1 = this->nodes.size() - 1;
+            nId1 = (unsigned int)this->nodes.size() - 1;
         }
 
         nId2 = this->findNearNode(nodeList[1],tolerance);
         if (nId2 == RConstants::eod)
         {
             this->nodes.push_back(nodeList[1]);
-            nId2 = this->nodes.size() - 1;
+            nId2 = (unsigned int)this->nodes.size() - 1;
         }
 
         nId3 = this->findNearNode(nodeList[2],tolerance);
         if (nId3 == RConstants::eod)
         {
             this->nodes.push_back(nodeList[2]);
-            nId3 = this->nodes.size() - 1;
+            nId3 = (unsigned int)this->nodes.size() - 1;
         }
 
         nId4 = this->findNearNode(nodeList[3],tolerance);
         if (nId4 == RConstants::eod)
         {
             this->nodes.push_back(nodeList[3]);
-            nId4 = this->nodes.size() - 1;
+            nId4 = (unsigned int)this->nodes.size() - 1;
         }
     }
     else
     {
         this->nodes.push_back(nodeList[0]);
-        nId1 = this->nodes.size() - 1;
+        nId1 = (unsigned int)this->nodes.size() - 1;
         this->nodes.push_back(nodeList[1]);
-        nId2 = this->nodes.size() - 1;
+        nId2 = (unsigned int)this->nodes.size() - 1;
         this->nodes.push_back(nodeList[2]);
-        nId3 = this->nodes.size() - 1;
+        nId3 = (unsigned int)this->nodes.size() - 1;
         this->nodes.push_back(nodeList[3]);
-        nId4 = this->nodes.size() - 1;
+        nId4 = (unsigned int)this->nodes.size() - 1;
     }
 
     element.setType(R_ELEMENT_QUAD1);
@@ -322,7 +322,7 @@ unsigned int RModelRaw::mergeNearNodes (double tolerance)
             continue;
         }
 #pragma omp parallel for default(shared)
-        for (unsigned int j=i+1;j<nn;j++)
+        for (int64_t j=int64_t(i)+1;j<int64_t(nn);j++)
         {
             if (nodeBook[j] != j)
             {

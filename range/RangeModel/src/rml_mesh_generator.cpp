@@ -112,12 +112,12 @@ std::vector<RElement> RMeshGenerator::generate(const std::vector<RNode> &nodes, 
 {
     RModel model;
 
-    model.setNNodes(nodes.size());
+    model.setNNodes(uint(nodes.size()));
     for (uint i=0;i<nodes.size();i++)
     {
         model.setNode(i,nodes[i]);
     }
-    model.setNElements(elements.size());
+    model.setNElements(uint(elements.size()));
     for (uint i=0;i<elements.size();i++)
     {
         model.setElement(i,elements[i],true);

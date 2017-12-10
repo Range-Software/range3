@@ -73,13 +73,13 @@ class ModelRecordsTree : public QTreeWidget
         void onModelSelectionChanged(uint modelID);
 
         //! Model havs changed.
-        void onModelChanged(uint modelID);
+        void onModelChanged(uint);
 
         //! On item changed.
         void onItemChanged(QTreeWidgetItem *item, int column);
 
         //! On item activated.
-        void onItemActivated(QTreeWidgetItem *item, int column);
+        void onItemActivated(QTreeWidgetItem *item, int);
         
 };
 

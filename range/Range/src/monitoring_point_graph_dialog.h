@@ -54,7 +54,7 @@ class MonitoringPointGraphDialog : public QDialog
     protected slots:
 
         //! Monitoring point combo current index changed.
-        void onCurrentIndexChanged(int index);
+        void onCurrentIndexChanged(int);
 
         //! Display values in graph button clicked.
         void onDisplayInGraphClicked(void);

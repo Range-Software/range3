@@ -139,12 +139,12 @@ void ICManagerTree::populate(void)
     emit this->itemSelectionChanged();
 }
 
-void ICManagerTree::onModelSelectionChanged(uint modelID)
+void ICManagerTree::onModelSelectionChanged(uint)
 {
     this->populate();
 }
 
-void ICManagerTree::onProblemChanged(uint modelID)
+void ICManagerTree::onProblemChanged(uint)
 {
     this->populate();
 }

@@ -303,7 +303,7 @@ void DirectionWidget::onZSliderValueChanged(int value)
     this->okButton->setEnabled(true);
 }
 
-void DirectionWidget::onXSpinValueChanged(double rate)
+void DirectionWidget::onXSpinValueChanged(double)
 {
     RR3Vector direction = this->getDirection();
     this->normalize(direction,0);
@@ -312,7 +312,7 @@ void DirectionWidget::onXSpinValueChanged(double rate)
     this->okButton->setEnabled(true);
 }
 
-void DirectionWidget::onYSpinValueChanged(double rate)
+void DirectionWidget::onYSpinValueChanged(double)
 {
     RR3Vector direction = this->getDirection();
     this->normalize(direction,1);
@@ -321,7 +321,7 @@ void DirectionWidget::onYSpinValueChanged(double rate)
     this->okButton->setEnabled(true);
 }
 
-void DirectionWidget::onZSpinValueChanged(double rate)
+void DirectionWidget::onZSpinValueChanged(double)
 {
     RR3Vector direction = this->getDirection();
     this->normalize(direction,2);

@@ -39,7 +39,7 @@ class RBVector : public std::vector<bool>
         //! Return number of rows (size of the vector).
         inline unsigned int getNRows ( void ) const
         {
-            return this->size();
+            return (unsigned int)this->size();
         }
 
 //        //! Access element operator.

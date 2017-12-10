@@ -175,12 +175,12 @@ void BCManagerTree::populate(void)
 
     emit this->itemSelectionChanged();
 }
-void BCManagerTree::onModelSelectionChanged(uint modelID)
+void BCManagerTree::onModelSelectionChanged(uint)
 {
     this->populate();
 }
 
-void BCManagerTree::onProblemChanged(uint modelID)
+void BCManagerTree::onProblemChanged(uint)
 {
     this->populate();
 }

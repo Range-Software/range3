@@ -61,13 +61,13 @@ class MaterialManagerTree : public QTreeWidget
     private slots:
 
         //! Called on entity selection changed.
-        void onModelSelectionChanged(uint modelID);
+        void onModelSelectionChanged(uint);
 
         //! Called when new model is added to session.
         void onModelAdded(uint modelID);
 
         //! Called when problem is changed.
-        void onProblemChanged(uint modelID);
+        void onProblemChanged(uint);
 
         //! Catch materialAdded signal.
         void onMaterialAdded(const QString &materialName, bool isNew);
@@ -83,7 +83,7 @@ class MaterialManagerTree : public QTreeWidget
         void onMaterialChanged(const QString &materialName);
 
         //! Called when data has been changed.
-        void onItemChanged(QTreeWidgetItem *item, int column);
+        void onItemChanged(QTreeWidgetItem *item, int);
 
         //! Catch doubleClicked signal.
         void onItemDoubleClicked(QTreeWidgetItem *item, int column);

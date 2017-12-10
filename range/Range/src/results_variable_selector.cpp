@@ -70,7 +70,7 @@ void ResultsVariableSelector::populate(RVariableType selectedVariableType)
     emit this->currentIndexChanged(this->currentIndex());
 }
 
-void ResultsVariableSelector::onResultsChanged(uint modelID)
+void ResultsVariableSelector::onResultsChanged(uint)
 {
     RVariableType selectedVariableType = RVariableType(this->itemData(this->currentIndex()).toInt());
     this->clear();

@@ -1,7 +1,14 @@
 QT += core
-QMAKE_CXXFLAGS += -Wno-unused-parameter
-QMAKE_CXXFLAGS += -fopenmp
-LIBS += -fopenmp
+win*-msvc* {
+    QMAKE_CXXFLAGS += -openmp
+    LIB_EXT = "lib"
+    LIB_PRE = ""
+} else {
+    QMAKE_CXXFLAGS += -fopenmp
+    LIBS += -fopenmp
+    LIB_EXT = "a"
+    LIB_PRE = "lib"
+}
 
 TARGET = RangeTestApp
 TEMPLATE = app
@@ -45,11 +52,11 @@ LIBS += \
     -lTetGen$${DEBUG_EXT}
 
 PRE_TARGETDEPS += \
-    ../TetGen/libTetGen$${DEBUG_EXT}.a \
-    ../RangeBase/libRangeBase$${DEBUG_EXT}.a \
-    ../RangeAuth/libRangeAuth$${DEBUG_EXT}.a \
-    ../RangeModel/libRangeModel$${DEBUG_EXT}.a \
-    ../RangeSolverLib/libRangeSolverLib$${DEBUG_EXT}.a
+    ../TetGen/$${LIB_PRE}TetGen$${DEBUG_EXT}.$${LIB_EXT} \
+    ../RangeBase/$${LIB_PRE}RangeBase$${DEBUG_EXT}.$${LIB_EXT} \
+    ../RangeAuth/$${LIB_PRE}RangeAuth$${DEBUG_EXT}.$${LIB_EXT} \
+    ../RangeModel/$${LIB_PRE}RangeModel$${DEBUG_EXT}.$${LIB_EXT} \
+    ../RangeSolverLib/$${LIB_PRE}RangeSolverLib$${DEBUG_EXT}.$${LIB_EXT}
 
 INCLUDEPATH += $${_PRO_FILE_PWD_}/../TetGen
 INCLUDEPATH += $${_PRO_FILE_PWD_}/../RangeBase/include

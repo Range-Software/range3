@@ -60,7 +60,7 @@ class DrawInputWidget : public QWidget
         void onSelectionChanged(const QList<uint> &objectIDs);
 
         //! Catch input parameter changed.
-        void onInputParameterChanged(uint objectID, uint parameterID);
+        void onInputParameterChanged(uint objectID, uint);
 
         //! Remove button was clicked.
         void onRemoveClicked(void);

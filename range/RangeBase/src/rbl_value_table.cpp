@@ -101,7 +101,7 @@ void RValueTable::setValueUnits (const QString &units)
 
 unsigned int RValueTable::size (void) const
 {
-    return this->table.size();
+    return (unsigned int)this->table.size();
 } /* RValueTable::size */
 
 

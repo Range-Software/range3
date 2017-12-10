@@ -192,7 +192,7 @@ void RSolverFluidParticle::prepare(void)
 
     // Compute element matrices
     #pragma omp parallel for default(shared) private(matrixManager)
-    for (uint i=0;i<this->pModel->getNElements();i++)
+    for (int64_t i=0;i<int64_t(this->pModel->getNElements());i++)
     {
         uint elementID = i;
 

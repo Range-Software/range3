@@ -51,10 +51,10 @@ class ICManagerTree : public QTreeWidget
     protected slots:
 
         //! Called on entity selection changed.
-        void onModelSelectionChanged(uint modelID);
+        void onModelSelectionChanged(uint);
 
         //! Called on problem mask changed.
-        void onProblemChanged(uint modelID);
+        void onProblemChanged(uint);
 
         //! Called when data has been changed.
         void onItemChanged(QTreeWidgetItem *item, int column);

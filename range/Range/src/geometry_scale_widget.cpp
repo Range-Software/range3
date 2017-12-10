@@ -148,7 +148,7 @@ void GeometryScaleWidget::resetDifferentScale(void)
     this->zScaleLineEdit->setValue(this->defaultScale[2]);
 }
 
-void GeometryScaleWidget::onScaleValueChanged(double value)
+void GeometryScaleWidget::onScaleValueChanged(double)
 {
     if (this->sameScaleGroupBox->isChecked())
     {
@@ -166,7 +166,7 @@ void GeometryScaleWidget::onScaleValueChanged(double value)
     }
 }
 
-void GeometryScaleWidget::onPositionChanged(const RR3Vector &position)
+void GeometryScaleWidget::onPositionChanged(const RR3Vector &)
 {
     emit this->scaleChanged(this->scaleCenter->getPosition(),
                             RR3Vector(this->xScaleLineEdit->getValue(),

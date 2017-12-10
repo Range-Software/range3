@@ -73,7 +73,7 @@ RPatchBook &RViewFactorMatrix::getPatchBook(void)
 
 uint RViewFactorMatrix::size(void) const
 {
-    return this->rows.size();
+    return uint(this->rows.size());
 }
 
 void RViewFactorMatrix::resize(uint nRows)

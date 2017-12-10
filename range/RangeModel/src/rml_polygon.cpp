@@ -84,7 +84,7 @@ double RPolygon::findArea(void) const
 
 uint RPolygon::getNNodes(void) const
 {
-    return this->nodes.size();
+    return uint(this->nodes.size());
 }
 
 struct NodeAngleItem

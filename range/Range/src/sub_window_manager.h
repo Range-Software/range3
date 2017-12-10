@@ -62,7 +62,7 @@ class SubWindowManager : public QObject
         void onModelRemoved(uint modelID);
 
         //! Model was changed.
-        void onModelChanged(uint modelID);
+        void onModelChanged(uint);
 
         //! Window was closed.
         void onWindowClosed(uint modelID);

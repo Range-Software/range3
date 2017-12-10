@@ -63,10 +63,10 @@ class GeometryScaleWidget : public QWidget
         void resetDifferentScale(void);
 
         //! Scale value changed.
-        void onScaleValueChanged(double value);
+        void onScaleValueChanged(double);
 
         //! Position changed.
-        void onPositionChanged(const RR3Vector &position);
+        void onPositionChanged(const RR3Vector &);
 
 };
 

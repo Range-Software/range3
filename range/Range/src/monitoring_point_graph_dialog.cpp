@@ -202,7 +202,7 @@ void MonitoringPointGraphDialog::displayInGraph(void)
     graphDialog.exec();
 }
 
-void MonitoringPointGraphDialog::onCurrentIndexChanged(int index)
+void MonitoringPointGraphDialog::onCurrentIndexChanged(int)
 {
     this->populateValuesTree();
 }

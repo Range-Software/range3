@@ -78,10 +78,10 @@ class GraphWidget : public QWidget
         void mouseMoveEvent(QMouseEvent *mouseEvent);
 
         //! Mouse enter event.
-        void enterEvent(QEvent *event);
+        void enterEvent(QEvent *);
 
         //! Mouse leave event.
-        void leaveEvent(QEvent *event);
+        void leaveEvent(QEvent *);
 
         //! Paint preparations.
         void paintSetup(void);

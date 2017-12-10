@@ -104,7 +104,7 @@ void RSolverElectrostatics::prepare(void)
 
         bool abort = false;
         #pragma omp parallel for default(shared)
-        for (uint j=0;j<point.size();j++)
+        for (int64_t j=0;j<int64_t(point.size());j++)
         {
             try
             {
@@ -164,7 +164,7 @@ void RSolverElectrostatics::prepare(void)
 
         bool abort = false;
         #pragma omp parallel for default(shared)
-        for (uint j=0;j<line.size();j++)
+        for (int64_t j=0;j<int64_t(line.size());j++)
         {
             try
             {
@@ -242,7 +242,7 @@ void RSolverElectrostatics::prepare(void)
 
         bool abort = false;
         #pragma omp parallel for default(shared)
-        for (uint j=0;j<surface.size();j++)
+        for (int64_t j=0;j<int64_t(surface.size());j++)
         {
             try
             {
@@ -321,7 +321,7 @@ void RSolverElectrostatics::prepare(void)
 
         bool abort = false;
         #pragma omp parallel for default(shared)
-        for (uint j=0;j<volume.size();j++)
+        for (int64_t j=0;j<int64_t(volume.size());j++)
         {
             #pragma omp flush (abort)
             if (abort)

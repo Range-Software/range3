@@ -241,7 +241,7 @@ void PickDetailsTree::onPickListChanged(void)
     this->populate();
 }
 
-void PickDetailsTree::onItemExpanded(QTreeWidgetItem *pItem)
+void PickDetailsTree::onItemExpanded(QTreeWidgetItem *)
 {
     this->resizeColumnsToContent();
 }

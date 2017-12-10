@@ -35,7 +35,7 @@ class ResultsVariableSelector : public VariableSelector
     protected slots:
 
         //! Catch Session::resultsChanged signal
-        void onResultsChanged(uint modelID);
+        void onResultsChanged(uint);
         
 };
 

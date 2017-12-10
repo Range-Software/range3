@@ -187,19 +187,19 @@ void PositionWidget::hideButtons(void)
     this->okButton->hide();
 }
 
-void PositionWidget::setXRange(double xMin, double xMax, double step)
+void PositionWidget::setXRange(double xMin, double xMax)
 {
     this->xLineEdit->setRange(xMin,xMax);
     this->setPosition(this->getPosition());
 }
 
-void PositionWidget::setYRange(double yMin, double yMax, double step)
+void PositionWidget::setYRange(double yMin, double yMax)
 {
     this->yLineEdit->setRange(yMin,yMax);
     this->setPosition(this->getPosition());
 }
 
-void PositionWidget::setZRange(double zMin, double zMax, double step)
+void PositionWidget::setZRange(double zMin, double zMax)
 {
     this->zLineEdit->setRange(zMin,zMax);
     this->setPosition(this->getPosition());
@@ -349,21 +349,21 @@ void PositionWidget::onZSliderValueChanged(int value)
     this->okButton->setEnabled(true);
 }
 
-void PositionWidget::onXLineEditValueChanged(double value)
+void PositionWidget::onXLineEditValueChanged(double)
 {
     this->setSlidersPosition(this->getPosition());
     this->okButton->setEnabled(true);
     emit this->changed(this->getPosition());
 }
 
-void PositionWidget::onYLineEditValueChanged(double value)
+void PositionWidget::onYLineEditValueChanged(double)
 {
     this->setSlidersPosition(this->getPosition());
     this->okButton->setEnabled(true);
     emit this->changed(this->getPosition());
 }
 
-void PositionWidget::onZLineEditValueChanged(double value)
+void PositionWidget::onZLineEditValueChanged(double)
 {
     this->setSlidersPosition(this->getPosition());
     this->okButton->setEnabled(true);

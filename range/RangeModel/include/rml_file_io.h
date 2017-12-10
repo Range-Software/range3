@@ -842,7 +842,7 @@ class RFileIO
         //! Write std::vector.
         template <class T> static void writeAscii(RFile &outFile, const std::vector<T> &v, bool addNewLine = true)
         {
-            uint nValues = v.size();
+            uint nValues = uint(v.size());
             RFileIO::writeAscii(outFile,nValues,addNewLine);
             if (!addNewLine)
             {
@@ -860,7 +860,7 @@ class RFileIO
         //! Write std::vector.
         template <class T> static void writeBinary(RFile &outFile, const std::vector<T> &v)
         {
-            uint nValues = v.size();
+            uint nValues = uint(v.size());
             RFileIO::writeBinary(outFile,nValues);
             for (uint i=0;i<nValues;i++)
             {
@@ -913,7 +913,7 @@ class RFileIO
         //! Write RSparseVector.
         template <class T> static void writeAscii(RFile &outFile, const RSparseVector<T> &sparseVector, bool addNewLine = true)
         {
-            uint nValues = sparseVector.size();
+            uint nValues = uint(sparseVector.size());
 
             RFileIO::writeAscii(outFile,nValues,addNewLine);
             if (!addNewLine)

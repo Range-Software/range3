@@ -54,7 +54,7 @@ void GLSimplexTetrahedra::finalize(void)
 
 void GLSimplexTetrahedra::draw(void)
 {
-    uint nn = this->nodes.size();
+    uint nn = uint(this->nodes.size());
 
     if (nn < 4)
     {
@@ -258,7 +258,7 @@ void GLSimplexTetrahedra::drawWired(bool useTexture)
 
 void GLSimplexTetrahedra::drawNodes(void)
 {
-    uint nn = this->nodes.size();
+    uint nn = uint(this->nodes.size());
 
     for (uint i=0;i<nn;i++)
     {

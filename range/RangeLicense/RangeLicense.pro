@@ -1,7 +1,14 @@
 QT += core
-QMAKE_CXXFLAGS += -Wno-unused-parameter
-QMAKE_CXXFLAGS += -fopenmp
-LIBS += -fopenmp
+win*-msvc* {
+    QMAKE_CXXFLAGS += -openmp
+    LIB_EXT = "lib"
+    LIB_PRE = ""
+} else {
+    QMAKE_CXXFLAGS += -fopenmp
+    LIBS += -fopenmp
+    LIB_EXT = "a"
+    LIB_PRE = "lib"
+}
 
 TARGET = RangeLicense
 TEMPLATE = app
@@ -36,8 +43,8 @@ LIBS += \
     -lRangeBase$${DEBUG_EXT}
 
 PRE_TARGETDEPS += \
-    ../RangeBase/libRangeBase$${DEBUG_EXT}.a \
-    ../RangeAuth/libRangeAuth$${DEBUG_EXT}.a
+    ../RangeBase/$${LIB_PRE}RangeBase$${DEBUG_EXT}.$${LIB_EXT} \
+    ../RangeAuth/$${LIB_PRE}RangeAuth$${DEBUG_EXT}.$${LIB_EXT}
 
 INCLUDEPATH += $${_PRO_FILE_PWD_}/../RangeBase/include
 INCLUDEPATH += $${_PRO_FILE_PWD_}/../RangeAuth/include

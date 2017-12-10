@@ -90,7 +90,7 @@ class RElementGroup : public REntityGroup
         //! Return number of applied boundary conditions.
         inline unsigned int getNBoundaryConditions ( void ) const
         {
-            return this->bConditions.size();
+            return (unsigned int)this->bConditions.size();
         }
 
         //! Add boundary condition.
@@ -131,7 +131,7 @@ class RElementGroup : public REntityGroup
         //! Return number of applied environment conditions.
         inline unsigned int getNEnvironmentConditions ( void ) const
         {
-            return this->eConditions.size();
+            return (unsigned int)this->eConditions.size();
         }
 
         //! Add environment condition.
@@ -173,7 +173,7 @@ class RElementGroup : public REntityGroup
         //! Return number of applied initial conditions.
         inline unsigned int getNInitialConditions ( void ) const
         {
-            return this->iConditions.size();
+            return (unsigned int)this->iConditions.size();
         }
 
         //! Add initial condition.

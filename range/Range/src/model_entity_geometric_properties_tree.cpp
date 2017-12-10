@@ -131,7 +131,7 @@ void ModelEntityGeometricPropertiesTree::populate(void)
     this->resizeColumnToContents(GP_TREE_COLUMN_UNITS);
 }
 
-void ModelEntityGeometricPropertiesTree::onModelSelectionChanged(uint modelID)
+void ModelEntityGeometricPropertiesTree::onModelSelectionChanged(uint)
 {
     this->populate();
 }

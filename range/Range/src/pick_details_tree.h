@@ -34,7 +34,7 @@ class PickDetailsTree : public QTreeWidget
         void onPickListChanged(void);
 
         //! Tree item wwas expanded.
-        void onItemExpanded(QTreeWidgetItem *pItem);
+        void onItemExpanded(QTreeWidgetItem *);
 
         //! Resize columns to content.
         void resizeColumnsToContent(void);

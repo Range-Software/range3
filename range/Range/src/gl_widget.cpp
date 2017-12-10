@@ -342,7 +342,7 @@ void GLWidget::drawModel(void)
         glTranslated(this->streamLinePosition[0],this->streamLinePosition[1],this->streamLinePosition[2]);
 
         GLAxis gAxis(this,GL_AXIS_POSITION);
-        gAxis.setSize(0.8);
+        gAxis.setSize(0.8f);
         gAxis.paint();
 
         glPopMatrix();
@@ -386,7 +386,7 @@ void GLWidget::drawModel(void)
 
         // Draw local axis.
         GLAxis lAxis(this,GL_AXIS_LOCAL);
-        lAxis.setSize(0.7);
+        lAxis.setSize(0.7f);
         lAxis.paint();
     }
 
@@ -848,12 +848,12 @@ void GLWidget::mouseMoveEvent(QMouseEvent *mouseEvent)
     this->update();
 }
 
-void GLWidget::enterEvent(QEvent *event)
+void GLWidget::enterEvent(QEvent *)
 {
     this->setFocus();
 }
 
-void GLWidget::leaveEvent(QEvent *event)
+void GLWidget::leaveEvent(QEvent *)
 {
 }
 
@@ -909,7 +909,7 @@ void GLWidget::calculateModelScale(void)
     this->mscale = Session::getInstance().getModel(this->getModelID()).findNodeScale();
     if (this->mscale < RConstants::eps)
     {
-        this->mscale = RConstants::eps;
+        this->mscale = float(RConstants::eps);
     }
 }
 
@@ -1195,7 +1195,7 @@ void GLWidget::setClippingPlane(bool enabled, double distance)
     this->update();
 }
 
-void GLWidget::onEntityVisibilityChanged(uint modelID, REntityGroupType elementGrpType, uint entityID, bool visible)
+void GLWidget::onEntityVisibilityChanged(uint, REntityGroupType, uint, bool )
 {
     this->update();
 }
@@ -1413,7 +1413,7 @@ void GLWidget::onVariableDataChanged(uint modelID, RVariableType variableType)
     this->update();
 }
 
-void GLWidget::onVariableDataChanged(const SessionEntityID &entityID, RVariableType variableType)
+void GLWidget::onVariableDataChanged(const SessionEntityID &entityID, RVariableType)
 {
     if (this->modelID != entityID.getMid())
     {
@@ -1568,7 +1568,7 @@ void GLWidget::onDrawObjectRemoved(void)
     this->update();
 }
 
-void GLWidget::onDrawObjectChanged(uint objectID)
+void GLWidget::onDrawObjectChanged(uint)
 {
     this->update();
 }

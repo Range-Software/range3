@@ -414,7 +414,7 @@ void RLogger::purge (unsigned int nMessages)
     unsigned int n;
     std::vector<RMessage>::iterator iter = this->messages.begin();
 
-    n = this->messages.size();
+    n = (unsigned int)this->messages.size();
     if (n > nMessages)
     {
         n = nMessages;

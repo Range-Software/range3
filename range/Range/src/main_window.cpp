@@ -1184,12 +1184,12 @@ void MainWindow::onDownloadProgress(uint downloadID, qint64 bytesReceived, qint6
     this->progressBar(this->downloadProgressBar,fraction);
 }
 
-void MainWindow::onDownloadProgressInitialize(uint downloadID)
+void MainWindow::onDownloadProgressInitialize(uint)
 {
     this->progressBarInitialize(this->downloadProgressBar,tr("Downloading"),false);
 }
 
-void MainWindow::onDownloadProgressFinalize(uint downloadID)
+void MainWindow::onDownloadProgressFinalize(uint)
 {
     this->progressBarFinalize(this->downloadProgressBar,tr("Download complete"));
 }
@@ -1256,17 +1256,17 @@ void MainWindow::onModelChanged(uint position)
     this->actionList->processAvailability();
 }
 
-void MainWindow::onProblemChanged(uint position)
+void MainWindow::onProblemChanged(uint)
 {
     this->actionList->processAvailability();
 }
 
-void MainWindow::onResultsChanged(uint position)
+void MainWindow::onResultsChanged(uint)
 {
     this->actionList->processAvailability();
 }
 
-void MainWindow::onEntityVisibilityChanged(uint modelID, REntityGroupType elementGrpType, uint entityID, bool visible)
+void MainWindow::onEntityVisibilityChanged(uint modelID, REntityGroupType, uint, bool visible)
 {
     bool modelIsVisible = false;
     if (visible)
@@ -1294,7 +1294,7 @@ void MainWindow::onGeometryTransformFinalize(void)
     this->hideTransformGeometryWidget();
 }
 
-void MainWindow::onNHistoryRecordsChanged(uint nHistoryRecords)
+void MainWindow::onNHistoryRecordsChanged(uint)
 {
     this->actionList->processAvailability();
 }

@@ -51,7 +51,7 @@ void RBook::resize(unsigned int size)
 
 unsigned int RBook::size(void) const
 {
-    return this->book.size();
+    return (unsigned int)this->book.size();
 }
 
 void RBook::initialize(void)
@@ -136,7 +136,7 @@ void RBook::disable(unsigned int position, bool consolidate)
 
 unsigned int RBook::getNEnabled(void) const
 {
-    return this->book.size() - this->getNDisabled();
+    return (unsigned int)this->book.size() - this->getNDisabled();
 }
 
 unsigned int RBook::getNDisabled(void) const

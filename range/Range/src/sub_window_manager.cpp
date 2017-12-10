@@ -118,7 +118,7 @@ void SubWindowManager::onModelRemoved(uint modelID)
     }
 }
 
-void SubWindowManager::onModelChanged(uint modelID)
+void SubWindowManager::onModelChanged(uint)
 {
 
 }

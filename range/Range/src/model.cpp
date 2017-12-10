@@ -2357,7 +2357,7 @@ bool Model::findPickedElement(const RR3Vector &position, const RR3Vector &direct
 
 #pragma omp barrier
 #pragma omp for
-                for (uint j=0;j<pElementGroup->size();j++)
+                for (int64_t j=0;j<int64_t(pElementGroup->size());j++)
                 {
                     uint elementID = pElementGroup->get(j);
                     const RElement &rElement = this->getElement(elementID);
@@ -2395,7 +2395,7 @@ bool Model::findPickedElement(const RR3Vector &position, const RR3Vector &direct
 
 #pragma omp barrier
 #pragma omp for
-                for (uint j=0;j<pIEntity->size();j++)
+                for (int64_t j=0;j<int64_t(pIEntity->size());j++)
                 {
                     RInterpolatedElement iElement(pIEntity->at(j));
 
@@ -2464,7 +2464,7 @@ bool Model::findPickedNode(const RR3Vector &position, const RR3Vector &direction
 
 #pragma omp barrier
 #pragma omp for
-                for (uint j=0;j<pElementGroup->size();j++)
+                for (int64_t j=0;j<int64_t(pElementGroup->size());j++)
                 {
                     uint elementID = pElementGroup->get(j);
                     const RElement &rElement = this->getElement(elementID);
@@ -2509,7 +2509,7 @@ bool Model::findPickedNode(const RR3Vector &position, const RR3Vector &direction
 
 #pragma omp barrier
 #pragma omp for
-                for (uint j=0;j<pIEntity->size();j++)
+                for (int64_t j=0;j<int64_t(pIEntity->size());j++)
                 {
                     RInterpolatedElement iElement(pIEntity->at(j));
 

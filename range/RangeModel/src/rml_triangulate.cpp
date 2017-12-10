@@ -120,7 +120,7 @@ static std::vector<TRIANGLE> triangulate (std::vector<XYZ> &pxyz, bool removeZer
     std::vector<EDGE> edges;
     std::vector<TRIANGLE> v;
 
-    uint nv = pxyz.size();
+    uint nv = uint(pxyz.size());
     uint ntri = 0;
 
     uint nedge = 0;

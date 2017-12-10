@@ -55,7 +55,7 @@ void GLSimplexSegment::finalize(void)
 
 void GLSimplexSegment::draw(void)
 {
-    uint nn = this->nodes.size();
+    uint nn = uint(this->nodes.size());
     uint nd = 0;
 
     // Currently only line with two nodes is supported
@@ -191,7 +191,7 @@ void GLSimplexSegment::drawNormal(const std::vector<RNode> &nodes1, const std::v
 
     if (volumeElement)
     {
-        uint nn = nodes1.size();
+        uint nn = uint(nodes1.size());
 
         GLObject::glNormalVector(RTriangle(this->nodes[0],nodes1[0],nodes1[1]).getNormal());
 
@@ -280,7 +280,7 @@ void GLSimplexSegment::drawWired(const std::vector<RNode> &nodes1, const std::ve
 
     if (volumeElement)
     {
-        uint nn = nodes1.size();
+        uint nn = uint(nodes1.size());
 
         if (useTexture)
         {

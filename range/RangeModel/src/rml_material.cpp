@@ -111,7 +111,7 @@ void RMaterial::setState (RMaterialState state)
 
 unsigned int RMaterial::size (void) const
 {
-    return this->properties.size();
+    return (unsigned int)this->properties.size();
 } /* RMaterial::size */
 
 

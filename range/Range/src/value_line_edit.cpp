@@ -30,6 +30,7 @@ ValueLineEdit::ValueLineEdit(double min, double max, QWidget *parent)
 }
 
 ValueLineEdit::ValueLineEdit(int min, int max, QWidget *parent)
+    : QLineEdit(parent)
 {
     this->createTimer();
     this->setValidator(new QIntValidator(min, max));

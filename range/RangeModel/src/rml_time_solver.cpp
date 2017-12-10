@@ -252,7 +252,7 @@ double RTimeSolver::getLastTime(void) const
 
 unsigned int RTimeSolver::getNTimeSteps(void) const
 {
-    return this->times.size();
+    return (unsigned int)this->times.size();
 } /* RTimeSolver::getNTimeSteps */
 
 bool RTimeSolver::hasTime(double timeValue) const

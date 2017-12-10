@@ -226,7 +226,7 @@ void RVariable::setUnits (const QString &units)
 
 unsigned int RVariable::getNVectors (void) const
 {
-    return this->values.size();
+    return (unsigned int)this->values.size();
 } /* RVariable::getNVectors */
 
 

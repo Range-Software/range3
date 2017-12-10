@@ -242,7 +242,7 @@ bool DrawEngineInput::isValid(bool value) const
     {
         return false;
     }
-    return true;
+    return (value == true || value == false);
 }
 
 bool DrawEngineInput::isValid(int value) const
@@ -278,5 +278,5 @@ bool DrawEngineInput::isValid(const RR3Vector &value) const
     {
         return false;
     }
-    return true;
+    return (value.size() == 3);
 }
