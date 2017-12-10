@@ -69,6 +69,12 @@ Var StartMenuFolder
 !insertmacro MUI_UNPAGE_FINISH
 
 ;--------------------------------
+; Build KIT
+
+!define BUILD_KIT "MSVC2017"
+!define VC_REDIST "VC_redist.x64.exe"
+
+;--------------------------------
 ;Languages
 
 !insertmacro MUI_LANGUAGE "English"
@@ -81,6 +87,22 @@ Function ClosePrograms
     MessageBox MB_OK "Please close all running programs before proceeding with installation."
 FunctionEnd
 
+Function CheckRedistributableInstalled
+    Push $R0
+    ClearErrors
+   
+    ;try to read Version subkey to R0
+    ReadRegDword $R0 HKLM "SOFTWARE\Wow6432Node\Microsoft\VisualStudio\14.0\VC\Runtimes\x64" "Installed"
+
+    ;was there error or not?
+    IfErrors 0 NoErrors
+   
+    ;error occured, copy "Error" to R0
+    StrCpy $R0 "Error"
+
+    NoErrors:
+        Exch $R0 
+FunctionEnd
 
 Section "-global"
     SectionIn RO
@@ -101,13 +123,23 @@ SectionGroup "Range Software" SecRange
     Section "Executables" SecExeFiles
         SectionIn RO
         SetOutPath "$INSTDIR\bin"
-        File ..\build-Release\Range\Range.exe
-        File ..\build-Release\RangeSolver\RangeSolver.exe
-        File bin\*.dll
+        File ..\build-Release-${BUILD_KIT}\Range\Range.exe
+        File ..\build-Release-${BUILD_KIT}\RangeSolver\RangeSolver.exe
+        File bin-${BUILD_KIT}\*.dll
+	    ${If} ${VC_REDIST} != ""
+            ;Check if we have redistributable installed
+            Call  CheckRedistributableInstalled
+            Pop $R0
+
+            ${If} $R0 == "Error"
+                File bin-${BUILD_KIT}\${VC_REDIST}
+                ExecWait '"$INSTDIR\bin\${VC_REDIST}"  /passive /norestart'
+            ${EndIf}
+        ${EndIf}
         SetOutPath "$INSTDIR\bin\imageformats"
-        File bin\imageformats\*
+        File bin-${BUILD_KIT}\imageformats\*
         SetOutPath "$INSTDIR\bin\platforms"
-        File bin\platforms\*
+        File bin-${BUILD_KIT}\platforms\*
     SectionEnd
     Section "Documentation" SecDocFiles
         SectionIn RO
