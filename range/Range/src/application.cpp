@@ -14,6 +14,8 @@
 #include <QPalette>
 #include <QNetworkProxy>
 
+#include <rmlib.h>
+
 #include "application.h"
 #include "locker.h"
 #include "logger.h"
@@ -222,7 +224,7 @@ void Application::onStarted(void)
     else
     {
         QString sessionFileName = MainSettings::getInstance().getSessionFileName();
-        if (!sessionFileName.isEmpty())
+        if (!sessionFileName.isEmpty() && RFileManager::fileExists(sessionFileName))
         {
             try
             {
