@@ -17,6 +17,7 @@
 #include <QLabel>
 
 #include "action_list.h"
+#include "logger.h"
 #include "main_settings.h"
 #include "model_tree.h"
 #include "sub_window_manager.h"
@@ -141,7 +142,7 @@ class MainWindow : public QMainWindow
         void createCentralWidget(void);
 
         //! Set central widget tab text.
-        void setCentralWidgetTabText(int tabPosition, bool important, const QString &additionalText = QString());
+        void setCentralWidgetTabText(int tabPosition, RMessageType messageType = R_MESSAGE_NONE, const QString &additionalText = QString());
 
         //! Create model dock.
         void createModelDock(void);

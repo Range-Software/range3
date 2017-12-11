@@ -554,27 +554,27 @@ void MainWindow::createCentralWidget(void)
     mdiArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     mdiArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     this->modelTabPosition = this->centralTabWidget->addTab(mdiArea,QString());
-    this->setCentralWidgetTabText(this->modelTabPosition,false);
+    this->setCentralWidgetTabText(this->modelTabPosition);
 
     this->modelSubWindows = new SubWindowManager(mdiArea, this);
 
     this->applicationOutputBrowser = new TextBrowser(true);
     this->applicationOutputTabPosition = this->centralTabWidget->addTab(this->applicationOutputBrowser,QString());
-    this->setCentralWidgetTabText(this->applicationOutputTabPosition,false);
+    this->setCentralWidgetTabText(this->applicationOutputTabPosition);
 
     this->processOutputBrowser = new TextBrowser(true);
     this->processOutputTabPosition = this->centralTabWidget->addTab(this->processOutputBrowser,QString());
-    this->setCentralWidgetTabText(this->processOutputTabPosition,false);
+    this->setCentralWidgetTabText(this->processOutputTabPosition);
 
     PickDetailsTree *treePickDetails = new PickDetailsTree;
     this->pickDetailsTabPosition = this->centralTabWidget->addTab(treePickDetails,QString());
-    this->setCentralWidgetTabText(this->pickDetailsTabPosition,false);
+    this->setCentralWidgetTabText(this->pickDetailsTabPosition);
 
     QObject::connect(this->centralTabWidget,&QTabWidget::currentChanged,this,&MainWindow::onCurrentChanged);
     QObject::connect(&Session::getInstance().getPickList(),&PickList::pickListChanged,this,&MainWindow::onPickLostChanged);
 }
 
-void MainWindow::setCentralWidgetTabText(int tabPosition, bool important, const QString &additionalText)
+void MainWindow::setCentralWidgetTabText(int tabPosition, RMessageType messageType, const QString &additionalText)
 {
     QString defaultText;
 
@@ -600,9 +600,17 @@ void MainWindow::setCentralWidgetTabText(int tabPosition, bool important, const 
         defaultText += " (" + additionalText + ")";
     }
 
-    if (important && this->centralTabWidget->currentIndex() != tabPosition)
+    if (messageType == R_MESSAGE_INFO && this->centralTabWidget->currentIndex() != tabPosition)
+    {
+        this->centralTabWidget->setTabIcon(tabPosition,QIcon(":/icons/file/pixmaps/range-information.svg"));
+    }
+    else if (messageType == R_MESSAGE_WARNING && this->centralTabWidget->currentIndex() != tabPosition)
     {
         this->centralTabWidget->setTabIcon(tabPosition,QIcon(":/icons/file/pixmaps/range-important.svg"));
+    }
+    else if (messageType == R_MESSAGE_ERROR && this->centralTabWidget->currentIndex() != tabPosition)
+    {
+        this->centralTabWidget->setTabIcon(tabPosition,QIcon(":/icons/file/pixmaps/range-severe.svg"));
     }
     else
     {
@@ -1049,7 +1057,7 @@ void MainWindow::onInfoPrinted(const QString &message)
     this->applicationOutputBrowser->moveCursor(QTextCursor::End);
     QScrollBar *sb = this->applicationOutputBrowser->verticalScrollBar();
     sb->setValue(sb->maximum());
-    this->setCentralWidgetTabText(this->applicationOutputTabPosition,true);
+    this->setCentralWidgetTabText(this->applicationOutputTabPosition,R_MESSAGE_INFO);
 }
 
 void MainWindow::onNoticePrinted(const QString &message)
@@ -1070,8 +1078,7 @@ void MainWindow::onWarningPrinted(const QString &message)
     this->applicationOutputBrowser->setCurrentCharFormat(charFormat);
     QScrollBar *sb = this->applicationOutputBrowser->verticalScrollBar();
     sb->setValue(sb->maximum());
-    this->centralTabWidget->setCurrentIndex(this->applicationOutputTabPosition);
-    this->setCentralWidgetTabText(this->applicationOutputTabPosition,true);
+    this->setCentralWidgetTabText(this->applicationOutputTabPosition,R_MESSAGE_WARNING);
 }
 
 void MainWindow::onErrorPrinted(const QString &message)
@@ -1089,7 +1096,7 @@ void MainWindow::onErrorPrinted(const QString &message)
     QScrollBar *sb = this->applicationOutputBrowser->verticalScrollBar();
     sb->setValue(sb->maximum());
     this->centralTabWidget->setCurrentIndex(this->applicationOutputTabPosition);
-    this->setCentralWidgetTabText(this->applicationOutputTabPosition,true);
+    this->setCentralWidgetTabText(this->applicationOutputTabPosition,R_MESSAGE_ERROR);
 }
 
 void MainWindow::onProcessReadyStandardOutput(const QString &message)
@@ -1113,7 +1120,7 @@ void MainWindow::onProcessReadyStandardOutput(const QString &message)
         }
     }
 
-    this->setCentralWidgetTabText(this->processOutputTabPosition,true);
+    this->setCentralWidgetTabText(this->processOutputTabPosition,R_MESSAGE_INFO);
 }
 
 void MainWindow::onProcessReadyStandardError(const QString &message)
@@ -1131,7 +1138,7 @@ void MainWindow::onProcessReadyStandardError(const QString &message)
     QScrollBar *sb = this->processOutputBrowser->verticalScrollBar();
     sb->setValue(sb->maximum());
     this->centralTabWidget->setCurrentIndex(this->processOutputTabPosition);
-    this->setCentralWidgetTabText(this->processOutputTabPosition,true);
+    this->setCentralWidgetTabText(this->processOutputTabPosition,R_MESSAGE_ERROR);
 }
 
 void MainWindow::onMainProgress(double fraction)
@@ -1304,11 +1311,11 @@ void MainWindow::onPickLostChanged(void)
     int nItems = Session::getInstance().getPickList().getItems().size();
     if (nItems > 0)
     {
-        this->setCentralWidgetTabText(this->pickDetailsTabPosition,false,QString::number(nItems));
+        this->setCentralWidgetTabText(this->pickDetailsTabPosition,R_MESSAGE_NONE,QString::number(nItems));
     }
     else
     {
-        this->setCentralWidgetTabText(this->pickDetailsTabPosition,false);
+        this->setCentralWidgetTabText(this->pickDetailsTabPosition);
     }
 }
 
@@ -1317,6 +1324,6 @@ void MainWindow::onCurrentChanged(int tabPosition)
     if (tabPosition == this->applicationOutputTabPosition ||
         tabPosition == this->processOutputTabPosition)
     {
-        this->setCentralWidgetTabText(tabPosition,false);
+        this->setCentralWidgetTabText(tabPosition);
     }
 }

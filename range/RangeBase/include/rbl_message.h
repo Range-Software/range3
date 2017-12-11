@@ -29,7 +29,8 @@
 //! Message types.
 typedef enum _RMessageType
 {
-    R_MESSAGE_INFO    = 1 << 0,
+    R_MESSAGE_NONE    = 1 << 0,
+    R_MESSAGE_INFO    = 1 << 1,
     R_MESSAGE_NOTICE  = 1 << 2,
     R_MESSAGE_ERROR   = 1 << 3,
     R_MESSAGE_WARNING = 1 << 4,
