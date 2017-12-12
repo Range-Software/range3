@@ -17,12 +17,12 @@
 #include <QLabel>
 
 #include "action_list.h"
+#include "central_tab_widget.h"
 #include "logger.h"
 #include "main_settings.h"
 #include "model_tree.h"
 #include "sub_window_manager.h"
 #include "progress_bar.h"
-#include "text_browser.h"
 
 class MainWindow : public QMainWindow
 {
@@ -56,11 +56,7 @@ class MainWindow : public QMainWindow
         //! Record manager dock.
         QDockWidget *dockRecords;
         //! Central tab widget.
-        QTabWidget *centralTabWidget;
-        //! Output text area.
-        TextBrowser *applicationOutputBrowser;
-        //! Process output text area.
-        TextBrowser *processOutputBrowser;
+        CentralTabWidget *centralTabWidget;
         //! Model manager.
         ModelTree *treeModelManager;
         //! Progress bar.
@@ -69,15 +65,6 @@ class MainWindow : public QMainWindow
         ProgressBar* downloadProgressBar;
         //! First run flag.
         bool isFirstRun;
-
-        //! Model tab position;
-        int modelTabPosition;
-        //! Application output tab position;
-        int applicationOutputTabPosition;
-        //! Process output tab position;
-        int processOutputTabPosition;
-        //! Pick details tab position;
-        int pickDetailsTabPosition;
 
     private:
 
@@ -141,9 +128,6 @@ class MainWindow : public QMainWindow
         //! Create central widget.
         void createCentralWidget(void);
 
-        //! Set central widget tab text.
-        void setCentralWidgetTabText(int tabPosition, RMessageType messageType = R_MESSAGE_NONE, const QString &additionalText = QString());
-
         //! Create model dock.
         void createModelDock(void);
 
@@ -206,24 +190,6 @@ class MainWindow : public QMainWindow
         //! Disable whole window.
         void disable(void);
 
-        //! Print application info message.
-        void onInfoPrinted(const QString &message);
-
-        //! Print application notice message.
-        void onNoticePrinted(const QString &message);
-
-        //! Print application warning message.
-        void onWarningPrinted(const QString &message);
-
-        //! Print application error message.
-        void onErrorPrinted(const QString &message);
-
-        //! Print process standard output message.
-        void onProcessReadyStandardOutput(const QString &message);
-
-        //! Print process standard error message.
-        void onProcessReadyStandardError(const QString &message);
-
         //! Set main progress fraction.
         void onMainProgress(double fraction);
 
@@ -280,12 +246,6 @@ class MainWindow : public QMainWindow
 
         //! Called when number of history records has changed.
         void onNHistoryRecordsChanged(uint);
-
-        //! Pick list has changed.
-        void onPickLostChanged(void);
-
-        //! Central tab widget current changed.
-        void onCurrentChanged(int tabPosition);
 
 };
 

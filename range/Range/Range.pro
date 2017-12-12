@@ -27,6 +27,7 @@ SOURCES += \
     src/bool_intersection_dialog.cpp \
     src/bool_union_dialog.cpp \
     src/break_intersected_elements_dialog.cpp \
+    src/central_tab_widget.cpp \
     src/clipping_plane_widget.cpp \
     src/coarsen_surface_dialog.cpp \
     src/color_combo_box.cpp \
@@ -225,6 +226,7 @@ HEADERS += \
     src/bool_intersection_dialog.h \
     src/bool_union_dialog.h \
     src/break_intersected_elements_dialog.h \
+    src/central_tab_widget.h \
     src/clipping_plane_widget.h \
     src/coarsen_surface_dialog.h \
     src/color_combo_box.h \

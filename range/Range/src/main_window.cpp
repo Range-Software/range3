@@ -34,7 +34,6 @@
 #include "model_entity_display_properties_tree.h"
 #include "model_entity_geometric_properties_tree.h"
 #include "model_records_selector.h"
-#include "pick_details_tree.h"
 #include "problem_tree.h"
 #include "problem_task_dialog.h"
 #include "solver_manager.h"
@@ -99,12 +98,6 @@ MainWindow::MainWindow (QWidget *parent)
     // Actions signals
     QObject::connect(MainSettings::getInstance().getApplicationSettings(),&ApplicationSettings::shortcutChanged,this->actionList,&ActionList::changeShortcut);
 
-    // Logger signals
-    QObject::connect(&Logger::getInstance(),&Logger::infoPrinted,this,&MainWindow::onInfoPrinted);
-    QObject::connect(&Logger::getInstance(),&Logger::noticePrinted,this,&MainWindow::onNoticePrinted);
-    QObject::connect(&Logger::getInstance(),&Logger::warningPrinted,this,&MainWindow::onWarningPrinted);
-    QObject::connect(&Logger::getInstance(),&Logger::errorPrinted,this,&MainWindow::onErrorPrinted);
-
     // Main progress signals
     QObject::connect(&Progress::getInstance(),&Progress::progress,this,&MainWindow::onMainProgress);
     QObject::connect(&Progress::getInstance(),&Progress::progressInitialize,this,&MainWindow::onMainProgressInitialize);
@@ -116,8 +109,6 @@ MainWindow::MainWindow (QWidget *parent)
     QObject::connect(Session::getInstance().getDownloadManager(),&DownloadManager::finished,this,&MainWindow::onDownloadProgressFinalize);
 
     // Solver manager signals.
-    QObject::connect(&SolverManager::getInstance(),&SolverManager::readyReadStandardOutput,this,&MainWindow::onProcessReadyStandardOutput);
-    QObject::connect(&SolverManager::getInstance(),&SolverManager::readyReadStandardError,this,&MainWindow::onProcessReadyStandardError);
     QObject::connect(&SolverManager::getInstance(),&SolverManager::jobBlocking,this,&MainWindow::onJobBlocking);
 
     // Draw engine signals.
@@ -545,78 +536,9 @@ void MainWindow::createDownloadBar(void)
 
 void MainWindow::createCentralWidget(void)
 {
-    this->centralTabWidget = new QTabWidget;
-    this->centralTabWidget->setTabPosition(QTabWidget::South);
+    this->centralTabWidget = new CentralTabWidget(this);
     this->setCentralWidget(this->centralTabWidget);
-
-    QMdiArea *mdiArea = new QMdiArea(this);
-    mdiArea->setObjectName(QString::fromUtf8("mdiArea"));
-    mdiArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-    mdiArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-    this->modelTabPosition = this->centralTabWidget->addTab(mdiArea,QString());
-    this->setCentralWidgetTabText(this->modelTabPosition);
-
-    this->modelSubWindows = new SubWindowManager(mdiArea, this);
-
-    this->applicationOutputBrowser = new TextBrowser(true);
-    this->applicationOutputTabPosition = this->centralTabWidget->addTab(this->applicationOutputBrowser,QString());
-    this->setCentralWidgetTabText(this->applicationOutputTabPosition);
-
-    this->processOutputBrowser = new TextBrowser(true);
-    this->processOutputTabPosition = this->centralTabWidget->addTab(this->processOutputBrowser,QString());
-    this->setCentralWidgetTabText(this->processOutputTabPosition);
-
-    PickDetailsTree *treePickDetails = new PickDetailsTree;
-    this->pickDetailsTabPosition = this->centralTabWidget->addTab(treePickDetails,QString());
-    this->setCentralWidgetTabText(this->pickDetailsTabPosition);
-
-    QObject::connect(this->centralTabWidget,&QTabWidget::currentChanged,this,&MainWindow::onCurrentChanged);
-    QObject::connect(&Session::getInstance().getPickList(),&PickList::pickListChanged,this,&MainWindow::onPickLostChanged);
-}
-
-void MainWindow::setCentralWidgetTabText(int tabPosition, RMessageType messageType, const QString &additionalText)
-{
-    QString defaultText;
-
-    if (tabPosition == this->modelTabPosition)
-    {
-        defaultText = tr("Model");
-    }
-    else if (tabPosition == this->applicationOutputTabPosition)
-    {
-        defaultText = tr("Application output");
-    }
-    else if (tabPosition == this->processOutputTabPosition)
-    {
-        defaultText = tr("Process output");
-    }
-    else if (tabPosition == this->pickDetailsTabPosition)
-    {
-        defaultText = tr("Pick details");
-    }
-
-    if (!additionalText.isEmpty())
-    {
-        defaultText += " (" + additionalText + ")";
-    }
-
-    if (messageType == R_MESSAGE_INFO && this->centralTabWidget->currentIndex() != tabPosition)
-    {
-        this->centralTabWidget->setTabIcon(tabPosition,QIcon(":/icons/file/pixmaps/range-information.svg"));
-    }
-    else if (messageType == R_MESSAGE_WARNING && this->centralTabWidget->currentIndex() != tabPosition)
-    {
-        this->centralTabWidget->setTabIcon(tabPosition,QIcon(":/icons/file/pixmaps/range-important.svg"));
-    }
-    else if (messageType == R_MESSAGE_ERROR && this->centralTabWidget->currentIndex() != tabPosition)
-    {
-        this->centralTabWidget->setTabIcon(tabPosition,QIcon(":/icons/file/pixmaps/range-severe.svg"));
-    }
-    else
-    {
-        this->centralTabWidget->setTabIcon(tabPosition,QIcon());
-    }
-    this->centralTabWidget->setTabText(tabPosition,defaultText);
+    this->modelSubWindows = new SubWindowManager(this->centralTabWidget->getMdiArea(), this);
 }
 
 void MainWindow::createModelDock(void)
@@ -1048,99 +970,6 @@ void MainWindow::disable(void)
     this->setEnabled(false);
 }
 
-void MainWindow::onInfoPrinted(const QString &message)
-{
-    this->applicationOutputBrowser->moveCursor(QTextCursor::End);
-    this->applicationOutputBrowser->setTextBackgroundColor(QApplication::palette().base().color());
-    this->applicationOutputBrowser->setTextColor(QApplication::palette().text().color());
-    this->applicationOutputBrowser->insertPlainText(message);
-    this->applicationOutputBrowser->moveCursor(QTextCursor::End);
-    QScrollBar *sb = this->applicationOutputBrowser->verticalScrollBar();
-    sb->setValue(sb->maximum());
-    this->setCentralWidgetTabText(this->applicationOutputTabPosition,R_MESSAGE_INFO);
-}
-
-void MainWindow::onNoticePrinted(const QString &message)
-{
-    QMessageBox::information(this,tr("Notice"),QString(message).replace("NOTICE: ",""));
-}
-
-void MainWindow::onWarningPrinted(const QString &message)
-{
-    QTextCharFormat charFormat = this->applicationOutputBrowser->currentCharFormat();
-
-    this->applicationOutputBrowser->moveCursor(QTextCursor::End);
-    this->applicationOutputBrowser->setTextBackgroundColor(QApplication::palette().base().color());
-    this->applicationOutputBrowser->setTextColor(QColor(170,0,0));
-    this->applicationOutputBrowser->insertPlainText(message);
-    this->applicationOutputBrowser->moveCursor(QTextCursor::End);
-    this->applicationOutputBrowser->setTextColor(QApplication::palette().text().color());
-    this->applicationOutputBrowser->setCurrentCharFormat(charFormat);
-    QScrollBar *sb = this->applicationOutputBrowser->verticalScrollBar();
-    sb->setValue(sb->maximum());
-    this->setCentralWidgetTabText(this->applicationOutputTabPosition,R_MESSAGE_WARNING);
-}
-
-void MainWindow::onErrorPrinted(const QString &message)
-{
-    QTextCharFormat charFormat = this->applicationOutputBrowser->currentCharFormat();
-
-    this->applicationOutputBrowser->moveCursor(QTextCursor::End);
-    this->applicationOutputBrowser->setTextBackgroundColor(QColor(170,0,0));
-    this->applicationOutputBrowser->setTextColor(QColor(255,255,255));
-    this->applicationOutputBrowser->insertPlainText(message);
-    this->applicationOutputBrowser->moveCursor(QTextCursor::End);
-    this->applicationOutputBrowser->setTextBackgroundColor(QApplication::palette().base().color());
-    this->applicationOutputBrowser->setTextColor(QApplication::palette().text().color());
-    this->applicationOutputBrowser->setCurrentCharFormat(charFormat);
-    QScrollBar *sb = this->applicationOutputBrowser->verticalScrollBar();
-    sb->setValue(sb->maximum());
-    this->centralTabWidget->setCurrentIndex(this->applicationOutputTabPosition);
-    this->setCentralWidgetTabText(this->applicationOutputTabPosition,R_MESSAGE_ERROR);
-}
-
-void MainWindow::onProcessReadyStandardOutput(const QString &message)
-{
-    this->processOutputBrowser->moveCursor(QTextCursor::End);
-    this->processOutputBrowser->setTextBackgroundColor(QApplication::palette().base().color());
-    this->processOutputBrowser->setTextColor(QApplication::palette().text().color());
-    this->processOutputBrowser->insertPlainText(message);
-    this->processOutputBrowser->moveCursor(QTextCursor::End);
-    QScrollBar *sb = this->processOutputBrowser->verticalScrollBar();
-    sb->setValue(sb->maximum());
-
-    QVector<uint> runningIDs = SolverManager::getInstance().getRunningIDs();
-    static uint lastRunningID = 0;
-    if (runningIDs.size() > 0)
-    {
-        if (runningIDs[0] != lastRunningID)
-        {
-            this->centralTabWidget->setCurrentIndex(this->processOutputTabPosition);
-            lastRunningID = runningIDs[0];
-        }
-    }
-
-    this->setCentralWidgetTabText(this->processOutputTabPosition,R_MESSAGE_INFO);
-}
-
-void MainWindow::onProcessReadyStandardError(const QString &message)
-{
-    QTextCharFormat charFormat = this->processOutputBrowser->currentCharFormat();
-
-    this->processOutputBrowser->moveCursor(QTextCursor::End);
-    this->processOutputBrowser->setTextBackgroundColor(QColor(170,0,0));
-    this->processOutputBrowser->setTextColor(QColor(255,255,255));
-    this->processOutputBrowser->insertPlainText(message);
-    this->processOutputBrowser->moveCursor(QTextCursor::End);
-    this->processOutputBrowser->setTextBackgroundColor(QApplication::palette().base().color());
-    this->processOutputBrowser->setTextColor(QApplication::palette().text().color());
-    this->processOutputBrowser->setCurrentCharFormat(charFormat);
-    QScrollBar *sb = this->processOutputBrowser->verticalScrollBar();
-    sb->setValue(sb->maximum());
-    this->centralTabWidget->setCurrentIndex(this->processOutputTabPosition);
-    this->setCentralWidgetTabText(this->processOutputTabPosition,R_MESSAGE_ERROR);
-}
-
 void MainWindow::onMainProgress(double fraction)
 {
     this->progressBar(this->mainProgressBar,fraction);
@@ -1304,26 +1133,4 @@ void MainWindow::onGeometryTransformFinalize(void)
 void MainWindow::onNHistoryRecordsChanged(uint)
 {
     this->actionList->processAvailability();
-}
-
-void MainWindow::onPickLostChanged(void)
-{
-    int nItems = Session::getInstance().getPickList().getItems().size();
-    if (nItems > 0)
-    {
-        this->setCentralWidgetTabText(this->pickDetailsTabPosition,R_MESSAGE_NONE,QString::number(nItems));
-    }
-    else
-    {
-        this->setCentralWidgetTabText(this->pickDetailsTabPosition);
-    }
-}
-
-void MainWindow::onCurrentChanged(int tabPosition)
-{
-    if (tabPosition == this->applicationOutputTabPosition ||
-        tabPosition == this->processOutputTabPosition)
-    {
-        this->setCentralWidgetTabText(tabPosition);
-    }
 }
