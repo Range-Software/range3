@@ -109,11 +109,6 @@ QSize GLWidget::sizeHint(void) const
 
 void GLWidget::initializeGL(void)
 {
-    GL_SAFE_CALL(glEnable(GL_DEPTH_TEST));
-    GL_SAFE_CALL(glShadeModel(GL_SMOOTH));
-    GL_SAFE_CALL(glEnable(GL_MULTISAMPLE));
-    GL_SAFE_CALL(glDepthFunc(GL_LEQUAL));
-
     this->resetView(-45.0, 0.0, -135.0);
 }
 
@@ -141,6 +136,11 @@ void GLWidget::paintGL(void)
     {
         this->drawBackgroundGradient();
     }
+
+    GL_SAFE_CALL(glEnable(GL_DEPTH_TEST));
+    GL_SAFE_CALL(glShadeModel(GL_SMOOTH));
+    GL_SAFE_CALL(glEnable(GL_MULTISAMPLE));
+    GL_SAFE_CALL(glDepthFunc(GL_LEQUAL));
 
     this->drawModel();
 
