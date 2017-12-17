@@ -73,8 +73,8 @@ class CentralTabWidget : public QTabWidget
 
     private:
 
-        //! Set text for given tab.
-        void setTabText(CentralTabWidget::Type tabType, RMessageType messageType = R_MESSAGE_NONE, const QString &additionalText = QString());
+        //! Set text and icon for given tab.
+        void setTabTitle(CentralTabWidget::Type tabType, RMessageType messageType = R_MESSAGE_NONE, const QString &additionalText = QString());
 
     private slots:
 

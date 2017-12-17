@@ -41,10 +41,10 @@ CentralTabWidget::CentralTabWidget(QWidget *parent)
     this->processOutputTabPosition = this->addTab(this->processOutputBrowser,QString());
     this->pickDetailsTabPosition = this->addTab(this->pickDetailsTree,QString());
 
-    this->setTabText(CentralTabWidget::Model);
-    this->setTabText(CentralTabWidget::ApplicationOutput);
-    this->setTabText(CentralTabWidget::ProcessOutput);
-    this->setTabText(CentralTabWidget::PickDetails);
+    this->setTabTitle(CentralTabWidget::Model);
+    this->setTabTitle(CentralTabWidget::ApplicationOutput);
+    this->setTabTitle(CentralTabWidget::ProcessOutput);
+    this->setTabTitle(CentralTabWidget::PickDetails);
 
     QObject::connect(this,&QTabWidget::currentChanged,this,&CentralTabWidget::onCurrentChanged);
 
@@ -67,7 +67,7 @@ QMdiArea *CentralTabWidget::getMdiArea(void)
     return this->mdiArea;
 }
 
-void CentralTabWidget::setTabText(CentralTabWidget::Type tabType, RMessageType messageType, const QString &additionalText)
+void CentralTabWidget::setTabTitle(CentralTabWidget::Type tabType, RMessageType messageType, const QString &additionalText)
 {
     QString defaultText;
     int tabPosition = 0;
@@ -140,8 +140,29 @@ void CentralTabWidget::setTabText(CentralTabWidget::Type tabType, RMessageType m
         this->processOutputLastIcon = iconFile;
     }
 
-    this->setTabIcon(tabPosition,QIcon(iconFile));
-    this->QTabWidget::setTabText(tabPosition,defaultText);
+    QColor tabTextColor = QApplication::palette().text().color();
+    if (!iconFile.isEmpty())
+    {
+        // TODO: For unknown reason this hangs if text is printed from QDialog::exec()
+//        this->setTabIcon(tabPosition,QIcon(iconFile));
+        if (iconFile == CentralTabWidget::informationIconFile)
+        {
+            defaultText.prepend("* ");
+            tabTextColor = Qt::blue;
+        }
+        else if (iconFile == CentralTabWidget::importantIconFile)
+        {
+            defaultText.prepend("! ");
+            tabTextColor = Qt::yellow;
+        }
+        else if (iconFile == CentralTabWidget::severeIconFile)
+        {
+            defaultText.prepend("!!! ");
+            tabTextColor = Qt::red;
+        }
+    }
+    this->tabBar()->setTabTextColor(tabPosition,tabTextColor);
+    this->setTabText(tabPosition,defaultText);
 }
 
 void CentralTabWidget::onInfoPrinted(const QString &message)
@@ -153,7 +174,7 @@ void CentralTabWidget::onInfoPrinted(const QString &message)
     this->applicationOutputBrowser->moveCursor(QTextCursor::End);
     QScrollBar *sb = this->applicationOutputBrowser->verticalScrollBar();
     sb->setValue(sb->maximum());
-    this->setTabText(CentralTabWidget::ApplicationOutput,R_MESSAGE_INFO);
+    this->setTabTitle(CentralTabWidget::ApplicationOutput,R_MESSAGE_INFO);
 }
 
 void CentralTabWidget::onNoticePrinted(const QString &message)
@@ -174,7 +195,7 @@ void CentralTabWidget::onWarningPrinted(const QString &message)
     this->applicationOutputBrowser->setCurrentCharFormat(charFormat);
     QScrollBar *sb = this->applicationOutputBrowser->verticalScrollBar();
     sb->setValue(sb->maximum());
-    this->setTabText(CentralTabWidget::ApplicationOutput,R_MESSAGE_WARNING);
+    this->setTabTitle(CentralTabWidget::ApplicationOutput,R_MESSAGE_WARNING);
 }
 
 void CentralTabWidget::onErrorPrinted(const QString &message)
@@ -192,7 +213,7 @@ void CentralTabWidget::onErrorPrinted(const QString &message)
     QScrollBar *sb = this->applicationOutputBrowser->verticalScrollBar();
     sb->setValue(sb->maximum());
 //    this->setCurrentIndex(this->applicationOutputTabPosition);
-    this->setTabText(CentralTabWidget::ApplicationOutput,R_MESSAGE_ERROR);
+    this->setTabTitle(CentralTabWidget::ApplicationOutput,R_MESSAGE_ERROR);
 }
 
 void CentralTabWidget::onProcessReadyStandardOutput(const QString &message)
@@ -216,7 +237,7 @@ void CentralTabWidget::onProcessReadyStandardOutput(const QString &message)
         }
     }
 
-    this->setTabText(CentralTabWidget::ProcessOutput,R_MESSAGE_INFO);
+    this->setTabTitle(CentralTabWidget::ProcessOutput,R_MESSAGE_INFO);
 }
 
 void CentralTabWidget::onProcessReadyStandardError(const QString &message)
@@ -234,30 +255,31 @@ void CentralTabWidget::onProcessReadyStandardError(const QString &message)
     QScrollBar *sb = this->processOutputBrowser->verticalScrollBar();
     sb->setValue(sb->maximum());
     this->setCurrentIndex(this->processOutputTabPosition);
-    this->setTabText(CentralTabWidget::ProcessOutput,R_MESSAGE_ERROR);
+    this->setTabTitle(CentralTabWidget::ProcessOutput,R_MESSAGE_ERROR);
 }
 
 void CentralTabWidget::onCurrentChanged(int tabPosition)
 {
+//    this->setTabIcon(tabPosition,QIcon());
     if (tabPosition == this->applicationOutputTabPosition)
     {
-        this->setTabText(CentralTabWidget::ApplicationOutput);
+        this->setTabTitle(CentralTabWidget::ApplicationOutput);
     }
     else if (tabPosition == this->processOutputTabPosition)
     {
-        this->setTabText(CentralTabWidget::ProcessOutput);
+        this->setTabTitle(CentralTabWidget::ProcessOutput);
     }
 }
 
-void CentralTabWidget::onPickLostChanged()
+void CentralTabWidget::onPickLostChanged(void)
 {
     int nItems = Session::getInstance().getPickList().getItems().size();
     if (nItems > 0)
     {
-        this->setTabText(CentralTabWidget::PickDetails,R_MESSAGE_NONE,QString::number(nItems));
+        this->setTabTitle(CentralTabWidget::PickDetails,R_MESSAGE_NONE,QString::number(nItems));
     }
     else
     {
-        this->setTabText(CentralTabWidget::PickDetails);
+        this->setTabTitle(CentralTabWidget::PickDetails);
     }
 }

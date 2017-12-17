@@ -40,6 +40,9 @@ class Logger : public QObject
         //! Return reference to static object.
         static Logger & getInstance(void);
 
+        //! Log handler function.
+        static void logHandler (const RMessage &message);
+
     signals:
 
         //! Signal containing info message.

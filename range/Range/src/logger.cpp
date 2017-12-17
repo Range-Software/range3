@@ -12,21 +12,19 @@
 
 #include "logger.h"
 
-static void logHandler (const RMessage &message);
-
-void Logger::initialize (void)
+void Logger::initialize(void)
 {
     RLogger::getInstance().setLevel(R_LOG_LEVEL_DETAIL);
     RLogger::getInstance().setHalted(true);
-    RLogger::getInstance().setLogHandler(logHandler);
+    RLogger::getInstance().setLogHandler(Logger::logHandler);
 }
 
-void Logger::halt (void)
+void Logger::halt(void)
 {
     RLogger::getInstance().setHalted(true);
 }
 
-void Logger::unhalt (void)
+void Logger::unhalt(void)
 {
     RLogger::getInstance().setHalted(false);
 }
@@ -37,7 +35,7 @@ Logger & Logger::getInstance()
     return logger;
 }
 
-static void logHandler (const RMessage &message)
+void Logger::logHandler(const RMessage &message)
 {
     switch (message.getType())
     {
