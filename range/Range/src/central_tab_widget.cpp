@@ -148,16 +148,17 @@ void CentralTabWidget::setTabTitle(CentralTabWidget::Type tabType, RMessageType 
         if (iconFile == CentralTabWidget::informationIconFile)
         {
             defaultText.prepend("* ");
-            tabTextColor = Qt::blue;
+            tabTextColor = Qt::darkCyan;
         }
         else if (iconFile == CentralTabWidget::importantIconFile)
         {
             defaultText.prepend("! ");
-            tabTextColor = Qt::yellow;
+            tabTextColor = Qt::red;
         }
         else if (iconFile == CentralTabWidget::severeIconFile)
         {
             defaultText.prepend("!!! ");
+            defaultText.append(" !!!");
             tabTextColor = Qt::red;
         }
     }

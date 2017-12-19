@@ -164,6 +164,10 @@ void IsoDialog::createDialog(void)
     for (uint i=0;i<rModel.getNVariables();i++)
     {
         RVariable &rVariable = rModel.getVariable(i);
+        if (rVariable.getApplyType() != R_VARIABLE_APPLY_NODE)
+        {
+            continue;
+        }
 
         if (i == 0)
         {
