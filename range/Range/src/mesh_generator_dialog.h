@@ -35,6 +35,12 @@ class MeshGeneratorDialog : public QDialog
         ValueLineEdit *volumeConstraintEdit;
         //! Keep results check box.
         QCheckBox *keepResultsCheck;
+        //! TetGen parameters group box.
+        QGroupBox *tetgenParamsGroupBox;
+        //! TetGen parameters line edit.
+        QLineEdit *tetgenParamsEdit;
+
+        RMeshInput meshInput;
 
     public:
 
@@ -43,6 +49,25 @@ class MeshGeneratorDialog : public QDialog
 
         //! Overloaded exec function.
         int exec(void);
+
+    private:
+
+        //! Update mesh generator input.
+        void updateMeshInput(void);
+
+    private slots:
+
+        //! Surface integrity checkbox state changed.
+        void onSurfaceIntegrityStateChanged(int);
+
+        //! Quality mesh group box clicked.
+        void onQualityMeshGroupBoxClicked(bool);
+
+        //! Volume constraint value changed.
+        void onVolumeConstraintValueChanged(double);
+
+        //! Keep results checkbox state changed.
+        void onKeepResultsStateChanged(int);
     
 };
 

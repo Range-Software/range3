@@ -21,7 +21,7 @@ MeshGeneratorDialog::MeshGeneratorDialog(uint modelID, QWidget *parent) :
     QDialog(parent),
     modelID(modelID)
 {
-    const RMeshInput &rMeshInput = Session::getInstance().getModel(this->modelID).getMeshInput();
+    this->meshInput = Session::getInstance().getModel(this->modelID).getMeshInput();
 
     this->setWindowTitle(tr("Genenerate 3D mesh"));
 
@@ -35,26 +35,35 @@ MeshGeneratorDialog::MeshGeneratorDialog(uint modelID, QWidget *parent) :
     mainLayout->addWidget(this->surfaceIntegrityCheck);
     this->surfaceIntegrityCheck->setChecked(Session::getInstance().getModel(this->modelID).getNVolumes() == 0);
 
+    this->keepResultsCheck = new QCheckBox(tr("Keep node results"));
+    mainLayout->addWidget(this->keepResultsCheck);
+    this->keepResultsCheck->setChecked(this->meshInput.getKeepResults());
+
     this->qualityMeshGroupBox = new QGroupBox(tr("Quality mesh"));
     mainLayout->addWidget(this->qualityMeshGroupBox);
     this->qualityMeshGroupBox->setCheckable(true);
-    this->qualityMeshGroupBox->setChecked(rMeshInput.getQualityMesh());
+    this->qualityMeshGroupBox->setChecked(this->meshInput.getQualityMesh());
 
-    QGridLayout *qualityMeshLayout = new QGridLayout;
+    QVBoxLayout *qualityMeshLayout = new QVBoxLayout;
     this->qualityMeshGroupBox->setLayout(qualityMeshLayout);
 
-    int qualityMeshLayoutRow = 0;
-
     QLabel *label = new QLabel(tr("Volume constraint:"));
-    qualityMeshLayout->addWidget(label, qualityMeshLayoutRow, 0, 1, 1);
+    qualityMeshLayout->addWidget(label);
 
     this->volumeConstraintEdit = new ValueLineEdit(0.0,1e99);
-    qualityMeshLayout->addWidget(this->volumeConstraintEdit, qualityMeshLayoutRow++, 1, 1, 1);
-    this->volumeConstraintEdit->setValue(rMeshInput.getVolumeConstraint());
+    qualityMeshLayout->addWidget(this->volumeConstraintEdit);
+    this->volumeConstraintEdit->setValue(this->meshInput.getVolumeConstraint());
 
-    this->keepResultsCheck = new QCheckBox(tr("Keep node results"));
-    mainLayout->addWidget(this->keepResultsCheck);
-    this->keepResultsCheck->setChecked(rMeshInput.getKeepResults());
+    this->tetgenParamsGroupBox = new QGroupBox(tr("TetGen parameters"));
+    this->tetgenParamsGroupBox->setCheckable(true);
+    this->tetgenParamsGroupBox->setChecked(false);
+    mainLayout->addWidget(this->tetgenParamsGroupBox);
+
+    QVBoxLayout *tetgenParamsLayout = new QVBoxLayout;
+    this->tetgenParamsGroupBox->setLayout(tetgenParamsLayout);
+
+    this->tetgenParamsEdit = new QLineEdit(this->meshInput.generateTetGenInputParams());
+    tetgenParamsLayout->addWidget(this->tetgenParamsEdit);
 
     QHBoxLayout *buttonsLayout = new QHBoxLayout;
     buttonsLayout->addStretch(1);
@@ -67,6 +76,11 @@ MeshGeneratorDialog::MeshGeneratorDialog(uint modelID, QWidget *parent) :
     okButton->setDefault(true);
     buttonsLayout->addWidget(okButton);
 
+    QObject::connect(this->surfaceIntegrityCheck,&QCheckBox::stateChanged,this,&MeshGeneratorDialog::onSurfaceIntegrityStateChanged);
+    QObject::connect(this->qualityMeshGroupBox,&QGroupBox::clicked,this,&MeshGeneratorDialog::onQualityMeshGroupBoxClicked);
+    QObject::connect(this->volumeConstraintEdit,&ValueLineEdit::valueChanged,this,&MeshGeneratorDialog::onVolumeConstraintValueChanged);
+    QObject::connect(this->keepResultsCheck,&QCheckBox::stateChanged,this,&MeshGeneratorDialog::onKeepResultsStateChanged);
+
     QObject::connect(cancelButton,&QPushButton::clicked,this,&MeshGeneratorDialog::reject);
     QObject::connect(okButton,&QPushButton::clicked,this,&MeshGeneratorDialog::accept);
 }
@@ -77,15 +91,53 @@ int MeshGeneratorDialog::exec(void)
 
     if (retVal == QDialog::Accepted)
     {
-        RMeshInput &rMeshInput = Session::getInstance().getModel(this->modelID).getMeshInput();
+        if (this->tetgenParamsGroupBox->isChecked())
+        {
+            this->meshInput.setUseTetGenInputParams(true);
+            this->meshInput.setTetGenInputParams(this->tetgenParamsEdit->text());
+        }
+        else
+        {
+            this->meshInput.setUseTetGenInputParams(false);
+            this->meshInput.setTetGenInputParams(this->meshInput.generateTetGenInputParams());
+        }
 
-        rMeshInput.setSurfaceIntegrityCheck(this->surfaceIntegrityCheck->isChecked());
-        rMeshInput.setQualityMesh(this->qualityMeshGroupBox->isChecked());
-        rMeshInput.setVolumeConstraint(this->volumeConstraintEdit->getValue());
-        rMeshInput.setKeepResults(this->keepResultsCheck->isChecked());
+        Session::getInstance().getModel(this->modelID).setMeshInput(this->meshInput);
 
         MeshGenerator *meshGenerator = new MeshGenerator(this->modelID);
         JobManager::getInstance().submit(meshGenerator);
     }
     return retVal;
+}
+
+void MeshGeneratorDialog::updateMeshInput(void)
+{
+    this->meshInput.setSurfaceIntegrityCheck(this->surfaceIntegrityCheck->isChecked());
+    this->meshInput.setQualityMesh(this->qualityMeshGroupBox->isChecked());
+    this->meshInput.setVolumeConstraint(this->volumeConstraintEdit->getValue());
+    this->meshInput.setKeepResults(this->keepResultsCheck->isChecked());
+    this->meshInput.setReconstruct( Session::getInstance().getModel(this->modelID).getNVolumes() > 0);
+
+    // Update TetGen parameters line edit.
+    this->tetgenParamsEdit->setText(this->meshInput.generateTetGenInputParams());
+}
+
+void MeshGeneratorDialog::onSurfaceIntegrityStateChanged(int)
+{
+    this->updateMeshInput();
+}
+
+void MeshGeneratorDialog::onQualityMeshGroupBoxClicked(bool)
+{
+    this->updateMeshInput();
+}
+
+void MeshGeneratorDialog::onVolumeConstraintValueChanged(double)
+{
+    this->updateMeshInput();
+}
+
+void MeshGeneratorDialog::onKeepResultsStateChanged(int)
+{
+    this->updateMeshInput();
 }

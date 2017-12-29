@@ -24,7 +24,7 @@ OutFile "range-3.0.rc_1-installer.exe"
 ;UninstallIcon "range.ico"
 
 ;Default installation folder
-InstallDir "$PROGRAMFILES\Range Software 3"
+InstallDir "$PROGRAMFILES64\Range Software 3"
 
 ;Get installation folder from registry if available
 ;InstallDirRegKey HKCU "Software\Range Software Package" ""

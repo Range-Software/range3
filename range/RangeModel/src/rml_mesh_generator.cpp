@@ -27,14 +27,12 @@ void RMeshGenerator::generate(const RMeshInput &meshInput, RModel &model)
         throw RError(R_ERROR_INVALID_INPUT,R_ERROR_REF, "Model contains no surface nor volume elements.");
     }
 
-    bool reconstruct = (model.getNVolumes() > 0);
-
     // Convert Range model to TetGen mesh.
     try
     {
         RLogger::info("Converting Range model to TetGen mesh.\n");
         RLogger::indent();
-        tetgenIn.importModel(model,reconstruct);
+        tetgenIn.importModel(model,meshInput.getReconstruct());
         RLogger::unindent();
         RLogger::info("Successfully converted Range model to TetGen mesh.\n");
     }
@@ -44,31 +42,7 @@ void RMeshGenerator::generate(const RMeshInput &meshInput, RModel &model)
         throw RError(R_ERROR_APPLICATION,R_ERROR_REF,"Failed to export mesh to TetGen format: %s", error.getMessage().toUtf8().constData());
     }
 
-    QString parameters;
-
-    parameters += "npA";
-    if (meshInput.getVerbose())
-    {
-        parameters += "V";
-    }
-    if (meshInput.getOutputEdges())
-    {
-        parameters += "e";
-    }
-    if (reconstruct)
-    {
-        parameters += "r";
-    }
-    if (meshInput.getQualityMesh())
-    {
-        parameters += "q" + QString::number(meshInput.getRadiusEdgeRatio())
-                   + "a" + QString::number(meshInput.getVolumeConstraint())
-                   + "T" + QString::number(meshInput.getTolerance());
-    }
-    else
-    {
-        parameters += "Y";
-    }
+    QString parameters(meshInput.getUseTetGenInputParams() ? meshInput.getTetGenInputParams() : meshInput.generateTetGenInputParams());
 
     char *args = new char[parameters.size() + 1];
     snprintf(args,parameters.size() + 1,"%s",parameters.toUtf8().constData());

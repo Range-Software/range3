@@ -553,7 +553,7 @@ void MaterialManagerTree::onMaterialAdded(const QString &materialName, bool isNe
     this->updateCheckStates();
 }
 
-void MaterialManagerTree::onMaterialRemoved(const QString &materialName, uint removedID)
+void MaterialManagerTree::onMaterialRemoved(const QString &, uint removedID)
 {
     for (int i=this->topLevelItemCount()-1;i>=0;i--)
     {

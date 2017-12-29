@@ -11,6 +11,8 @@
 #ifndef __RML_MESH_INPUT_H__
 #define __RML_MESH_INPUT_H__
 
+#include <QString>
+
 class RMeshInput
 {
 
@@ -24,6 +26,8 @@ class RMeshInput
         bool qualityMesh;
         //! Output edges.
         bool outputEdges;
+        //! Reconstruct.
+        bool reconstruct;
         //! Radius/edge ratio.
         double radiusEdgeRatio;
         //! Volume constrain.
@@ -34,6 +38,11 @@ class RMeshInput
         bool surfaceIntegrityCheck;
         //! Keep results after mesh generation is done.
         bool keepResults;
+
+        //! Use provided TetGen mesh input line directly.
+        bool useTetGenInputParams;
+        //! TetGen input parameters.
+        QString tetGenInputParams;
 
     private:
 
@@ -78,6 +87,12 @@ class RMeshInput
         //! Set output edges.
         void setOutputEdges(bool outputEdges);
 
+        //! Return whether to reconstruct mesh.
+        bool getReconstruct(void) const;
+
+        //! Set whether to reconstruct mesh.
+        void setReconstruct(bool reconstruct);
+
         //! Return radius/edge ratio.
         double getRadiusEdgeRatio(void) const;
 
@@ -107,6 +122,21 @@ class RMeshInput
 
         //! Set whether results should be kept.
         void setKeepResults(bool keepResults);
+
+        //! Return whether to use TetGen input parameters directly.
+        bool getUseTetGenInputParams(void) const;
+
+        //! Set whether to use TetGen input parameters directly.
+        void setUseTetGenInputParams(bool useTetGenInputParams);
+
+        //! Return TetGen input parameters directly.
+        const QString &getTetGenInputParams(void) const;
+
+        //! Set TetGen input parameters directly.
+        void setTetGenInputParams(const QString &tetGenInputParams);
+
+        //! Generate TetGen input parameters.
+        QString generateTetGenInputParams(void) const;
 
 };
 

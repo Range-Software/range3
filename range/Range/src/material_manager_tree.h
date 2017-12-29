@@ -73,7 +73,7 @@ class MaterialManagerTree : public QTreeWidget
         void onMaterialAdded(const QString &materialName, bool isNew);
 
         //! Catch materialRemoved signal.
-        void onMaterialRemoved(const QString &materialName,uint removedID);
+        void onMaterialRemoved(const QString &, uint removedID);
 
         //! Catch materialRenamed signal.
         void onMaterialRenamed(const QString &materialOldName,
