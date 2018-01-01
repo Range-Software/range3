@@ -11,7 +11,7 @@
 #include "rml_file_io.h"
 
 
-void RFileIO::writeNewLineAscii (RFile &outFile)
+void RFileIO::writeNewLineAscii(RSaveFile &outFile)
 {
     outFile.getTextStream() << RConstants::endl;
     if (outFile.getTextStream().status() != QTextStream::Ok)
@@ -26,7 +26,7 @@ void RFileIO::writeNewLineAscii (RFile &outFile)
  *********************************************************************/
 
 
-void RFileIO::readAscii (RFile &inFile, bool &bValue)
+void RFileIO::readAscii(RFile &inFile, bool &bValue)
 {
     char c;
     inFile.getTextStream() >> c;
@@ -38,7 +38,7 @@ void RFileIO::readAscii (RFile &inFile, bool &bValue)
 } /* RFileIO::readAscii */
 
 
-void RFileIO::readBinary (RFile &inFile, bool &bValue)
+void RFileIO::readBinary(RFile &inFile, bool &bValue)
 {
     inFile.read((char*)&bValue,sizeof(bool));
     if (inFile.error() != RFile::NoError)
@@ -48,7 +48,7 @@ void RFileIO::readBinary (RFile &inFile, bool &bValue)
 } /* RFileIO::readBinary */
 
 
-void RFileIO::writeAscii (RFile &outFile, const bool &bValue, bool addNewLine)
+void RFileIO::writeAscii(RSaveFile &outFile, const bool &bValue, bool addNewLine)
 {
     if (!addNewLine)
     {
@@ -65,7 +65,7 @@ void RFileIO::writeAscii (RFile &outFile, const bool &bValue, bool addNewLine)
 } /* RFileIO::writeAscii */
 
 
-void RFileIO::writeBinary (RFile &outFile, const bool &bValue)
+void RFileIO::writeBinary(RSaveFile &outFile, const bool &bValue)
 {
     outFile.write((char*)&bValue,sizeof(bool));
     if (outFile.error() != RFile::NoError)
@@ -80,7 +80,7 @@ void RFileIO::writeBinary (RFile &outFile, const bool &bValue)
  *********************************************************************/
 
 
-void RFileIO::readAscii (RFile &inFile, char &cValue)
+void RFileIO::readAscii(RFile &inFile, char &cValue)
 {
     inFile.getTextStream() >> cValue;
     if (inFile.getTextStream().status() != QTextStream::Ok)
@@ -90,7 +90,7 @@ void RFileIO::readAscii (RFile &inFile, char &cValue)
 } /* RFileIO::readAscii */
 
 
-void RFileIO::readBinary (RFile &inFile, char &cValue)
+void RFileIO::readBinary(RFile &inFile, char &cValue)
 {
 
     inFile.read((char*)&cValue,sizeof(char));
@@ -101,7 +101,7 @@ void RFileIO::readBinary (RFile &inFile, char &cValue)
 } /* RFileIO::readBinary */
 
 
-void RFileIO::writeAscii (RFile &outFile, const char &cValue, bool addNewLine)
+void RFileIO::writeAscii(RSaveFile &outFile, const char &cValue, bool addNewLine)
 {
     if (!addNewLine)
     {
@@ -118,7 +118,7 @@ void RFileIO::writeAscii (RFile &outFile, const char &cValue, bool addNewLine)
 } /* RFileIO::writeAscii */
 
 
-void RFileIO::writeBinary (RFile &outFile, const char &cValue)
+void RFileIO::writeBinary(RSaveFile &outFile, const char &cValue)
 {
     outFile.write((char*)&cValue,sizeof(char));
     if (outFile.error() != RFile::NoError)
@@ -133,7 +133,7 @@ void RFileIO::writeBinary (RFile &outFile, const char &cValue)
  *********************************************************************/
 
 
-void RFileIO::readAscii (RFile &inFile, int &iValue)
+void RFileIO::readAscii(RFile &inFile, int &iValue)
 {
     inFile.getTextStream() >> iValue;
     if (inFile.getTextStream().status() != QTextStream::Ok)
@@ -143,7 +143,7 @@ void RFileIO::readAscii (RFile &inFile, int &iValue)
 } /* RFileIO::readAscii */
 
 
-void RFileIO::readBinary (RFile &inFile, int &iValue)
+void RFileIO::readBinary(RFile &inFile, int &iValue)
 {
     inFile.read((char*)&iValue,sizeof(int));
     if (inFile.error() != RFile::NoError)
@@ -153,7 +153,7 @@ void RFileIO::readBinary (RFile &inFile, int &iValue)
 } /* RFileIO::readBinary */
 
 
-void RFileIO::writeAscii (RFile &outFile, const int &iValue, bool addNewLine)
+void RFileIO::writeAscii(RSaveFile &outFile, const int &iValue, bool addNewLine)
 {
     if (!addNewLine)
     {
@@ -170,7 +170,7 @@ void RFileIO::writeAscii (RFile &outFile, const int &iValue, bool addNewLine)
 } /* RFileIO::writeAscii */
 
 
-void RFileIO::writeBinary (RFile &outFile, const int &iValue)
+void RFileIO::writeBinary(RSaveFile &outFile, const int &iValue)
 {
     outFile.write((char*)&iValue,sizeof(int));
     if (outFile.error() != RFile::NoError)
@@ -185,7 +185,7 @@ void RFileIO::writeBinary (RFile &outFile, const int &iValue)
  *********************************************************************/
 
 
-void RFileIO::readAscii (RFile &inFile, unsigned int &uValue)
+void RFileIO::readAscii(RFile &inFile, unsigned int &uValue)
 {
     inFile.getTextStream() >> uValue;
     if (inFile.getTextStream().status() != QTextStream::Ok)
@@ -195,7 +195,7 @@ void RFileIO::readAscii (RFile &inFile, unsigned int &uValue)
 } /* RFileIO::readAscii */
 
 
-void RFileIO::readBinary (RFile &inFile, unsigned int &uValue)
+void RFileIO::readBinary(RFile &inFile, unsigned int &uValue)
 {
     inFile.read((char*)&uValue,sizeof(unsigned int));
     if (inFile.error() != RFile::NoError)
@@ -205,7 +205,7 @@ void RFileIO::readBinary (RFile &inFile, unsigned int &uValue)
 } /* RFileIO::readBinary */
 
 
-void RFileIO::writeAscii (RFile &outFile, const unsigned int &uValue, bool addNewLine)
+void RFileIO::writeAscii(RSaveFile &outFile, const unsigned int &uValue, bool addNewLine)
 {
     if (!addNewLine)
     {
@@ -222,7 +222,7 @@ void RFileIO::writeAscii (RFile &outFile, const unsigned int &uValue, bool addNe
 } /* RFileIO::writeAscii */
 
 
-void RFileIO::writeBinary (RFile &outFile, const unsigned int &uValue)
+void RFileIO::writeBinary(RSaveFile &outFile, const unsigned int &uValue)
 {
     outFile.write((char*)&uValue,sizeof(unsigned int));
     if (outFile.error() != RFile::NoError)
@@ -237,7 +237,7 @@ void RFileIO::writeBinary (RFile &outFile, const unsigned int &uValue)
  *********************************************************************/
 
 
-void RFileIO::readAscii (RFile &inFile, double &dValue)
+void RFileIO::readAscii(RFile &inFile, double &dValue)
 {
     inFile.getTextStream() >> dValue;
     if (inFile.getTextStream().status() != QTextStream::Ok)
@@ -252,7 +252,7 @@ void RFileIO::readAscii (RFile &inFile, double &dValue)
 } /* RFileIO::readAscii */
 
 
-void RFileIO::readBinary (RFile &inFile, double &dValue)
+void RFileIO::readBinary(RFile &inFile, double &dValue)
 {
     inFile.read((char*)&dValue,sizeof(double));
     if (inFile.error() != RFile::NoError)
@@ -262,7 +262,7 @@ void RFileIO::readBinary (RFile &inFile, double &dValue)
 } /* RFileIO::readBinary */
 
 
-void RFileIO::writeAscii (RFile &outFile, const double &dValue, bool addNewLine)
+void RFileIO::writeAscii(RSaveFile &outFile, const double &dValue, bool addNewLine)
 {
     if (!addNewLine)
     {
@@ -279,7 +279,7 @@ void RFileIO::writeAscii (RFile &outFile, const double &dValue, bool addNewLine)
 } /* RFileIO::writeAscii */
 
 
-void RFileIO::writeBinary (RFile &outFile, const double &dValue)
+void RFileIO::writeBinary(RSaveFile &outFile, const double &dValue)
 {
     outFile.write((char*)&dValue,sizeof(double));
     if (outFile.error() != RFile::NoError)
@@ -294,7 +294,7 @@ void RFileIO::writeBinary (RFile &outFile, const double &dValue)
  *********************************************************************/
 
 
-void RFileIO::readAscii (RFile &inFile, QString &sValue)
+void RFileIO::readAscii(RFile &inFile, QString &sValue)
 {
 //    QTextCodec *textCodec = inFile.codec();
 //    bool autoDetectUnicode = inFile.autoDetectUnicode();
@@ -360,7 +360,7 @@ void RFileIO::readAscii (RFile &inFile, QString &sValue)
 } /* RFileIO::readAscii */
 
 
-void RFileIO::readBinary (RFile &inFile, QString &sValue)
+void RFileIO::readBinary(RFile &inFile, QString &sValue)
 {
     int stringSize = 0;
     RFileIO::readBinary(inFile,stringSize);
@@ -374,7 +374,7 @@ void RFileIO::readBinary (RFile &inFile, QString &sValue)
 } /* RFileIO::readBinary */
 
 
-void RFileIO::writeAscii (RFile &outFile, const QString &sValue, bool addNewLine)
+void RFileIO::writeAscii(RSaveFile &outFile, const QString &sValue, bool addNewLine)
 {
 //    QTextCodec *textCodec = outFile.codec();
 //    outFile.setCodec("UTF-8");
@@ -399,7 +399,7 @@ void RFileIO::writeAscii (RFile &outFile, const QString &sValue, bool addNewLine
 } /* RFileIO::writeAscii */
 
 
-void RFileIO::writeBinary (RFile &outFile, const QString &sValue)
+void RFileIO::writeBinary(RSaveFile &outFile, const QString &sValue)
 {
     QByteArray array = sValue.toUtf8();
     RFileIO::writeBinary(outFile,array.size());
@@ -416,7 +416,7 @@ void RFileIO::writeBinary (RFile &outFile, const QString &sValue)
  *********************************************************************/
 
 
-void RFileIO::readAscii (RFile &inFile, std::string &sValue)
+void RFileIO::readAscii(RFile &inFile, std::string &sValue)
 {
     QString qString;
     RFileIO::readAscii(inFile,qString);
@@ -424,7 +424,7 @@ void RFileIO::readAscii (RFile &inFile, std::string &sValue)
 } /* RFileIO::readAscii */
 
 
-void RFileIO::readBinary (RFile &inFile, std::string &sValue)
+void RFileIO::readBinary(RFile &inFile, std::string &sValue)
 {
     QString qString;
     RFileIO::readBinary(inFile,qString);
@@ -432,25 +432,25 @@ void RFileIO::readBinary (RFile &inFile, std::string &sValue)
 } /* RFileIO::readBinary */
 
 
-void RFileIO::writeAscii (RFile &outFile, const char *sValue, bool addNewLine)
+void RFileIO::writeAscii(RSaveFile &outFile, const char *sValue, bool addNewLine)
 {
     RFileIO::writeAscii(outFile,QString(sValue),addNewLine);
 } /* RFileIO::writeAscii */
 
 
-void RFileIO::writeAscii (RFile &outFile, const std::string &sValue, bool addNewLine)
+void RFileIO::writeAscii(RSaveFile &outFile, const std::string &sValue, bool addNewLine)
 {
     RFileIO::writeAscii(outFile,QString(sValue.c_str()),addNewLine);
 } /* RFileIO::writeAscii */
 
 
-void RFileIO::writeBinary (RFile &outFile, const char *sValue)
+void RFileIO::writeBinary(RSaveFile &outFile, const char *sValue)
 {
     RFileIO::writeBinary(outFile,QString(sValue));
 } /* RFileIO::writeBinary */
 
 
-void RFileIO::writeBinary (RFile &outFile, const std::string &sValue)
+void RFileIO::writeBinary(RSaveFile &outFile, const std::string &sValue)
 {
     RFileIO::writeBinary(outFile,QString(sValue.c_str()));
 } /* RFileIO::writeBinary */
@@ -461,7 +461,7 @@ void RFileIO::writeBinary (RFile &outFile, const std::string &sValue)
  *********************************************************************/
 
 
-void RFileIO::readAscii (RFile &inFile, RIVector &iVector, bool readSize)
+void RFileIO::readAscii(RFile &inFile, RIVector &iVector, bool readSize)
 {
     unsigned int nr = 0;
 
@@ -481,7 +481,7 @@ void RFileIO::readAscii (RFile &inFile, RIVector &iVector, bool readSize)
 } /* RFileIO::readAscii */
 
 
-void RFileIO::readBinary (RFile &inFile, RIVector &iVector, bool readSize)
+void RFileIO::readBinary(RFile &inFile, RIVector &iVector, bool readSize)
 {
     unsigned int nr = 0;
 
@@ -501,7 +501,7 @@ void RFileIO::readBinary (RFile &inFile, RIVector &iVector, bool readSize)
 } /* RFileIO::readBinary */
 
 
-void RFileIO::writeAscii (RFile &outFile, const RIVector &iVector, bool writeSize, bool addNewLine)
+void RFileIO::writeAscii(RSaveFile &outFile, const RIVector &iVector, bool writeSize, bool addNewLine)
 {
     unsigned int nr = iVector.getNRows();
     if (writeSize)
@@ -531,7 +531,7 @@ void RFileIO::writeAscii (RFile &outFile, const RIVector &iVector, bool writeSiz
 } /* RFileIO::writeAscii */
 
 
-void RFileIO::writeBinary (RFile &outFile, const RIVector &iVector, bool writeSize)
+void RFileIO::writeBinary(RSaveFile &outFile, const RIVector &iVector, bool writeSize)
 {
     unsigned int nr = iVector.getNRows();
     if (writeSize)
@@ -550,7 +550,7 @@ void RFileIO::writeBinary (RFile &outFile, const RIVector &iVector, bool writeSi
  *********************************************************************/
 
 
-void RFileIO::readAscii (RFile &inFile, RUVector &uVector, bool readSize)
+void RFileIO::readAscii(RFile &inFile, RUVector &uVector, bool readSize)
 {
     unsigned int nr = 0;
 
@@ -570,7 +570,7 @@ void RFileIO::readAscii (RFile &inFile, RUVector &uVector, bool readSize)
 } /* RFileIO::readAscii */
 
 
-void RFileIO::readBinary (RFile &inFile, RUVector &uVector, bool readSize)
+void RFileIO::readBinary(RFile &inFile, RUVector &uVector, bool readSize)
 {
     unsigned int nr = 0;
 
@@ -590,7 +590,7 @@ void RFileIO::readBinary (RFile &inFile, RUVector &uVector, bool readSize)
 } /* RFileIO::readBinary */
 
 
-void RFileIO::writeAscii (RFile &outFile, const RUVector &uVector, bool writeSize, bool addNewLine)
+void RFileIO::writeAscii(RSaveFile &outFile, const RUVector &uVector, bool writeSize, bool addNewLine)
 {
     unsigned int nr = uVector.getNRows();
     if (writeSize)
@@ -620,7 +620,7 @@ void RFileIO::writeAscii (RFile &outFile, const RUVector &uVector, bool writeSiz
 } /* RFileIO::writeAscii */
 
 
-void RFileIO::writeBinary (RFile &outFile, const RUVector &uVector, bool writeSize)
+void RFileIO::writeBinary(RSaveFile &outFile, const RUVector &uVector, bool writeSize)
 {
     unsigned int nr = uVector.getNRows();
     if (writeSize)
@@ -639,7 +639,7 @@ void RFileIO::writeBinary (RFile &outFile, const RUVector &uVector, bool writeSi
  *********************************************************************/
 
 
-void RFileIO::readAscii (RFile &inFile, RRVector &rVector, bool readSize)
+void RFileIO::readAscii(RFile &inFile, RRVector &rVector, bool readSize)
 {
     unsigned int nr = 0;
 
@@ -659,7 +659,7 @@ void RFileIO::readAscii (RFile &inFile, RRVector &rVector, bool readSize)
 } /* RFileIO::readAscii */
 
 
-void RFileIO::readBinary (RFile &inFile, RRVector &rVector, bool readSize)
+void RFileIO::readBinary(RFile &inFile, RRVector &rVector, bool readSize)
 {
     unsigned int nr = 0;
 
@@ -679,7 +679,7 @@ void RFileIO::readBinary (RFile &inFile, RRVector &rVector, bool readSize)
 } /* RFileIO::readBinary */
 
 
-void RFileIO::writeAscii (RFile &outFile, const RRVector &rVector, bool writeSize, bool addNewLine)
+void RFileIO::writeAscii(RSaveFile &outFile, const RRVector &rVector, bool writeSize, bool addNewLine)
 {
     unsigned int nr = rVector.getNRows();
     if (writeSize)
@@ -705,7 +705,7 @@ void RFileIO::writeAscii (RFile &outFile, const RRVector &rVector, bool writeSiz
 } /* RFileIO::writeAscii */
 
 
-void RFileIO::writeBinary (RFile &outFile, const RRVector &rVector, bool writeSize)
+void RFileIO::writeBinary(RSaveFile &outFile, const RRVector &rVector, bool writeSize)
 {
     unsigned int nr = rVector.getNRows();
     if (writeSize)
@@ -740,7 +740,7 @@ void RFileIO::readBinary(RFile &inFile, RR3Vector &rVector)
 } /* RFileIO::readAscii */
 
 
-void RFileIO::writeAscii(RFile &outFile, const RR3Vector &rVector, bool addNewLine)
+void RFileIO::writeAscii(RSaveFile &outFile, const RR3Vector &rVector, bool addNewLine)
 {
     RFileIO::writeAscii(outFile,rVector[0],addNewLine);
     if (!addNewLine)
@@ -756,7 +756,7 @@ void RFileIO::writeAscii(RFile &outFile, const RR3Vector &rVector, bool addNewLi
 } /* RFileIO::readAscii */
 
 
-void RFileIO::writeBinary(RFile &outFile, const RR3Vector &rVector)
+void RFileIO::writeBinary(RSaveFile &outFile, const RR3Vector &rVector)
 {
     RFileIO::writeBinary(outFile,rVector[0]);
     RFileIO::writeBinary(outFile,rVector[1]);
@@ -769,7 +769,7 @@ void RFileIO::writeBinary(RFile &outFile, const RR3Vector &rVector)
  *********************************************************************/
 
 
-void RFileIO::readAscii (RFile &inFile, RIMatrix &iMatrix, bool readSize)
+void RFileIO::readAscii(RFile &inFile, RIMatrix &iMatrix, bool readSize)
 {
     unsigned int nr = 0;
 
@@ -791,7 +791,7 @@ void RFileIO::readAscii (RFile &inFile, RIMatrix &iMatrix, bool readSize)
 } /* RFileIO::readAscii */
 
 
-void RFileIO::readBinary (RFile &inFile, RIMatrix &iMatrix, bool readSize)
+void RFileIO::readBinary(RFile &inFile, RIMatrix &iMatrix, bool readSize)
 {
     unsigned int nr = 0;
 
@@ -813,7 +813,7 @@ void RFileIO::readBinary (RFile &inFile, RIMatrix &iMatrix, bool readSize)
 } /* RFileIO::readBinary */
 
 
-void RFileIO::writeAscii (RFile &outFile, const RIMatrix &iMatrix, bool writeSize, bool addNewLine)
+void RFileIO::writeAscii(RSaveFile &outFile, const RIMatrix &iMatrix, bool writeSize, bool addNewLine)
 {
     unsigned int nr = iMatrix.getNRows();
     if (writeSize)
@@ -842,7 +842,7 @@ void RFileIO::writeAscii (RFile &outFile, const RIMatrix &iMatrix, bool writeSiz
 } /* RFileIO::writeAscii */
 
 
-void RFileIO::writeBinary (RFile &outFile, const RIMatrix &iMatrix, bool writeSize)
+void RFileIO::writeBinary(RSaveFile &outFile, const RIMatrix &iMatrix, bool writeSize)
 {
     unsigned int nr = iMatrix.getNRows();
     if (writeSize)
@@ -862,7 +862,7 @@ void RFileIO::writeBinary (RFile &outFile, const RIMatrix &iMatrix, bool writeSi
  *********************************************************************/
 
 
-void RFileIO::readAscii (RFile &inFile, RRMatrix &rMatrix, bool readSize)
+void RFileIO::readAscii(RFile &inFile, RRMatrix &rMatrix, bool readSize)
 {
 
     unsigned int nr = 0;
@@ -891,7 +891,7 @@ void RFileIO::readAscii (RFile &inFile, RRMatrix &rMatrix, bool readSize)
 } /* RFileIO::readAscii */
 
 
-void RFileIO::readBinary (RFile &inFile, RRMatrix &rMatrix, bool readSize)
+void RFileIO::readBinary(RFile &inFile, RRMatrix &rMatrix, bool readSize)
 {
     unsigned int nr = 0;
 
@@ -913,7 +913,7 @@ void RFileIO::readBinary (RFile &inFile, RRMatrix &rMatrix, bool readSize)
 } /* RFileIO::readBinary */
 
 
-void RFileIO::writeAscii(RFile &outFile, const RRMatrix &rMatrix, bool writeSize, bool addNewLine)
+void RFileIO::writeAscii(RSaveFile &outFile, const RRMatrix &rMatrix, bool writeSize, bool addNewLine)
 {
     unsigned int nr = rMatrix.getNRows();
     if (writeSize)
@@ -942,7 +942,7 @@ void RFileIO::writeAscii(RFile &outFile, const RRMatrix &rMatrix, bool writeSize
 } /* RFileIO::writeAscii */
 
 
-void RFileIO::writeBinary (RFile  &outFile, const RRMatrix &rMatrix, bool writeSize)
+void RFileIO::writeBinary(RSaveFile  &outFile, const RRMatrix &rMatrix, bool writeSize)
 {
     unsigned int nr = rMatrix.getNRows();
     if (writeSize)
@@ -962,7 +962,7 @@ void RFileIO::writeBinary (RFile  &outFile, const RRMatrix &rMatrix, bool writeS
  *********************************************************************/
 
 
-void RFileIO::readAscii (RFile &inFile, RVersion &version)
+void RFileIO::readAscii(RFile &inFile, RVersion &version)
 {
     QString versionStr;
     RFileIO::readAscii(inFile,versionStr);
@@ -970,7 +970,7 @@ void RFileIO::readAscii (RFile &inFile, RVersion &version)
 } /* RFileIO::readAscii */
 
 
-void RFileIO::readBinary (RFile &inFile, RVersion &version)
+void RFileIO::readBinary(RFile &inFile, RVersion &version)
 {
     unsigned int major = 0;
     unsigned int minor = 0;
@@ -984,13 +984,13 @@ void RFileIO::readBinary (RFile &inFile, RVersion &version)
 } /* RFileIO::readBinary */
 
 
-void RFileIO::writeAscii (RFile &outFile, const RVersion &version, bool addNewLine)
+void RFileIO::writeAscii(RSaveFile &outFile, const RVersion &version, bool addNewLine)
 {
     RFileIO::writeAscii(outFile,version.toString(),addNewLine);
 } /* RFileIO::writeAscii */
 
 
-void RFileIO::writeBinary (RFile  &outFile, const RVersion &version)
+void RFileIO::writeBinary(RSaveFile  &outFile, const RVersion &version)
 {
     RFileIO::writeBinary(outFile,version.getMajor());
     RFileIO::writeBinary(outFile,version.getMinor());
@@ -1004,7 +1004,7 @@ void RFileIO::writeBinary (RFile  &outFile, const RVersion &version)
  *********************************************************************/
 
 
-void RFileIO::readAscii (RFile &inFile, RValueVector &valueVector)
+void RFileIO::readAscii(RFile &inFile, RValueVector &valueVector)
 {
     unsigned int n;
     QString name;
@@ -1025,7 +1025,7 @@ void RFileIO::readAscii (RFile &inFile, RValueVector &valueVector)
 } /* RFileIO::readAscii */
 
 
-void RFileIO::readBinary (RFile &inFile, RValueVector &valueVector)
+void RFileIO::readBinary(RFile &inFile, RValueVector &valueVector)
 {
     unsigned int n;
     QString name;
@@ -1046,7 +1046,7 @@ void RFileIO::readBinary (RFile &inFile, RValueVector &valueVector)
 } /* RFileIO::readBinary */
 
 
-void RFileIO::writeAscii (RFile &outFile, const RValueVector &valueVector, bool addNewLine)
+void RFileIO::writeAscii(RSaveFile &outFile, const RValueVector &valueVector, bool addNewLine)
 {
     unsigned int n = valueVector.size();
 
@@ -1077,7 +1077,7 @@ void RFileIO::writeAscii (RFile &outFile, const RValueVector &valueVector, bool 
 } /* RFileIO::writeAscii */
 
 
-void RFileIO::writeBinary (RFile &outFile, const RValueVector &valueVector)
+void RFileIO::writeBinary(RSaveFile &outFile, const RValueVector &valueVector)
 {
     unsigned int n = valueVector.size();
 
@@ -1123,7 +1123,7 @@ void RFileIO::readBinary(RFile &inFile, RPlane &plane)
 } /* RFileIO::readBinary */
 
 
-void RFileIO::writeAscii(RFile &outFile, const RPlane &plane, bool addNewLine)
+void RFileIO::writeAscii(RSaveFile &outFile, const RPlane &plane, bool addNewLine)
 {
     RFileIO::writeAscii(outFile,plane.getPosition(),addNewLine);
     if (!addNewLine)
@@ -1134,7 +1134,7 @@ void RFileIO::writeAscii(RFile &outFile, const RPlane &plane, bool addNewLine)
 } /* RFileIO::writeAscii */
 
 
-void RFileIO::writeBinary(RFile &outFile, const RPlane &plane)
+void RFileIO::writeBinary(RSaveFile &outFile, const RPlane &plane)
 {
     RFileIO::writeBinary(outFile,plane.getPosition());
     RFileIO::writeBinary(outFile,plane.getNormal());
@@ -1146,7 +1146,7 @@ void RFileIO::writeBinary(RFile &outFile, const RPlane &plane)
  *********************************************************************/
 
 
-void RFileIO::readAscii (RFile &inFile, RValueTable &valueTable)
+void RFileIO::readAscii(RFile &inFile, RValueTable &valueTable)
 {
     unsigned int n;
     QString keyName;
@@ -1178,7 +1178,7 @@ void RFileIO::readAscii (RFile &inFile, RValueTable &valueTable)
 } /* RFileIO::readAscii */
 
 
-void RFileIO::readBinary (RFile &inFile, RValueTable &valueTable)
+void RFileIO::readBinary(RFile &inFile, RValueTable &valueTable)
 {
     unsigned int n;
     QString keyName;
@@ -1210,7 +1210,7 @@ void RFileIO::readBinary (RFile &inFile, RValueTable &valueTable)
 } /* RFileIO::readBinary */
 
 
-void RFileIO::writeAscii (RFile &outFile, const RValueTable &valueTable, bool addNewLine)
+void RFileIO::writeAscii(RSaveFile &outFile, const RValueTable &valueTable, bool addNewLine)
 {
     unsigned int n = valueTable.size();
 
@@ -1256,7 +1256,7 @@ void RFileIO::writeAscii (RFile &outFile, const RValueTable &valueTable, bool ad
 } /* RFileIO::writeAscii */
 
 
-void RFileIO::writeBinary (RFile &outFile, const RValueTable &valueTable)
+void RFileIO::writeBinary(RSaveFile &outFile, const RValueTable &valueTable)
 {
     unsigned int n = valueTable.size();
 
@@ -1301,7 +1301,7 @@ void RFileIO::readBinary(RFile &inFile, QColor &color)
 } /* RFileIO::readBinary */
 
 
-void RFileIO::writeAscii(RFile &outFile, const QColor &color, bool addNewLine)
+void RFileIO::writeAscii(RSaveFile &outFile, const QColor &color, bool addNewLine)
 {
     RFileIO::writeAscii(outFile,color.red(),addNewLine);
     if (!addNewLine)
@@ -1322,7 +1322,7 @@ void RFileIO::writeAscii(RFile &outFile, const QColor &color, bool addNewLine)
 } /* RFileIO::writeAscii */
 
 
-void RFileIO::writeBinary(RFile &outFile, const QColor &color)
+void RFileIO::writeBinary(RSaveFile &outFile, const QColor &color)
 {
     RFileIO::writeBinary(outFile,color.red());
     RFileIO::writeBinary(outFile,color.green());
@@ -1360,7 +1360,7 @@ void RFileIO::readBinary(RFile &inFile, RGLLight &light)
 } /* RFileIO::readBinary */
 
 
-void RFileIO::writeAscii(RFile &outFile, const RGLLight &light, bool addNewLine)
+void RFileIO::writeAscii(RSaveFile &outFile, const RGLLight &light, bool addNewLine)
 {
     RFileIO::writeAscii(outFile,light.enabled,addNewLine);
     if (!addNewLine)
@@ -1396,7 +1396,7 @@ void RFileIO::writeAscii(RFile &outFile, const RGLLight &light, bool addNewLine)
 } /* RFileIO::writeAscii */
 
 
-void RFileIO::writeBinary(RFile &outFile, const RGLLight &light)
+void RFileIO::writeBinary(RSaveFile &outFile, const RGLLight &light)
 {
     RFileIO::writeBinary(outFile,light.enabled);
     RFileIO::writeBinary(outFile,light.lightNum);
@@ -1451,7 +1451,7 @@ void RFileIO::readBinary(RFile &inFile, RGLDisplayProperties &displayProperties)
 } /* RFileIO::readBinary */
 
 
-void RFileIO::writeAscii(RFile &outFile, const RGLDisplayProperties &displayProperties, bool addNewLine)
+void RFileIO::writeAscii(RSaveFile &outFile, const RGLDisplayProperties &displayProperties, bool addNewLine)
 {
     RFileIO::writeAscii(outFile,displayProperties.drawGlobalAxis,addNewLine);
     if (!addNewLine)
@@ -1504,7 +1504,7 @@ void RFileIO::writeAscii(RFile &outFile, const RGLDisplayProperties &displayProp
 } /* RFileIO::writeAscii */
 
 
-void RFileIO::writeBinary(RFile &outFile, const RGLDisplayProperties &displayProperties)
+void RFileIO::writeBinary(RSaveFile &outFile, const RGLDisplayProperties &displayProperties)
 {
     RFileIO::writeBinary(outFile,displayProperties.drawGlobalAxis);
     RFileIO::writeBinary(outFile,displayProperties.drawLocalAxis);
@@ -1538,13 +1538,13 @@ void RFileIO::readBinary(RFile &inFile, RModelData &modelData)
 } /* RFileIO::readBinary */
 
 
-void RFileIO::writeAscii(RFile &outFile, const RModelData &modelData, bool addNewLine)
+void RFileIO::writeAscii(RSaveFile &outFile, const RModelData &modelData, bool addNewLine)
 {
     RFileIO::writeAscii(outFile,modelData.selected,addNewLine);
 } /* RFileIO::writeAscii */
 
 
-void RFileIO::writeBinary(RFile &outFile, const RModelData &modelData)
+void RFileIO::writeBinary(RSaveFile &outFile, const RModelData &modelData)
 {
     RFileIO::writeBinary(outFile,modelData.selected);
 } /* RFileIO::writeBinary */
@@ -1571,13 +1571,13 @@ void RFileIO::readBinary(RFile &inFile, RVariableType &variableType)
 } /* RFileIO::readBinary */
 
 
-void RFileIO::writeAscii(RFile &outFile, const RVariableType &variableType, bool addNewLine)
+void RFileIO::writeAscii(RSaveFile &outFile, const RVariableType &variableType, bool addNewLine)
 {
     RFileIO::writeAscii(outFile,RVariable::getId(variableType),addNewLine);
 } /* RFileIO::writeAscii */
 
 
-void RFileIO::writeBinary(RFile &outFile, const RVariableType &variableType)
+void RFileIO::writeBinary(RSaveFile &outFile, const RVariableType &variableType)
 {
     RFileIO::writeBinary(outFile,RVariable::getId(variableType));
 } /* RFileIO::writeBinary */
@@ -1610,7 +1610,7 @@ void RFileIO::readBinary(RFile &inFile, RVariableApplyType &variableApplyType)
 } /* RFileIO::readBinary */
 
 
-void RFileIO::writeAscii(RFile &outFile, const RVariableApplyType &variableApplyType, bool addNewLine)
+void RFileIO::writeAscii(RSaveFile &outFile, const RVariableApplyType &variableApplyType, bool addNewLine)
 {
     if (!addNewLine)
     {
@@ -1627,7 +1627,7 @@ void RFileIO::writeAscii(RFile &outFile, const RVariableApplyType &variableApply
 } /* RFileIO::writeAscii */
 
 
-void RFileIO::writeBinary(RFile &outFile, const RVariableApplyType &variableApplyType)
+void RFileIO::writeBinary(RSaveFile &outFile, const RVariableApplyType &variableApplyType)
 {
     outFile.write((char*)&variableApplyType,sizeof(RVariableApplyType));
     if (outFile.error() != RFile::NoError)
@@ -1662,7 +1662,7 @@ void RFileIO::readBinary(RFile &inFile, RVariableData &variableData)
 } /* RFileIO::readBinary */
 
 
-void RFileIO::writeAscii(RFile &outFile, const RVariableData &variableData, bool addNewLine)
+void RFileIO::writeAscii(RSaveFile &outFile, const RVariableData &variableData, bool addNewLine)
 {
     RFileIO::writeAscii(outFile,variableData.minDisplayValue,addNewLine);
     if (!addNewLine)
@@ -1688,7 +1688,7 @@ void RFileIO::writeAscii(RFile &outFile, const RVariableData &variableData, bool
 } /* RFileIO::writeAscii */
 
 
-void RFileIO::writeBinary(RFile &outFile, const RVariableData &variableData)
+void RFileIO::writeBinary(RSaveFile &outFile, const RVariableData &variableData)
 {
     RFileIO::writeBinary(outFile,variableData.minDisplayValue);
     RFileIO::writeBinary(outFile,variableData.maxDisplayValue);
@@ -1737,7 +1737,7 @@ void RFileIO::readBinary(RFile &inFile, RVariable &variable)
 } /* RFileIO::readBinary */
 
 
-void RFileIO::writeAscii(RFile &outFile, const RVariable &variable, bool addNewLine)
+void RFileIO::writeAscii(RSaveFile &outFile, const RVariable &variable, bool addNewLine)
 {
     RFileIO::writeAscii(outFile,variable.type,addNewLine);
     if (!addNewLine)
@@ -1776,7 +1776,7 @@ void RFileIO::writeAscii(RFile &outFile, const RVariable &variable, bool addNewL
 } /* RFileIO::writeAscii */
 
 
-void RFileIO::writeBinary(RFile &outFile, const RVariable &variable)
+void RFileIO::writeBinary(RSaveFile &outFile, const RVariable &variable)
 {
     RFileIO::writeBinary(outFile,variable.type);
     RFileIO::writeBinary(outFile,variable.applyType);
@@ -1812,13 +1812,13 @@ void RFileIO::readBinary(RFile &inFile, RBoundaryConditionType &bcType)
 } /* RFileIO::readBinary */
 
 
-void RFileIO::writeAscii(RFile &outFile, const RBoundaryConditionType &bcType, bool addNewLine)
+void RFileIO::writeAscii(RSaveFile &outFile, const RBoundaryConditionType &bcType, bool addNewLine)
 {
     RFileIO::writeAscii(outFile,RBoundaryCondition::getId(bcType),addNewLine);
 } /* RFileIO::writeAscii */
 
 
-void RFileIO::writeBinary(RFile &outFile, const RBoundaryConditionType &bcType)
+void RFileIO::writeBinary(RSaveFile &outFile, const RBoundaryConditionType &bcType)
 {
     RFileIO::writeBinary(outFile,RBoundaryCondition::getId(bcType));
 } /* RFileIO::writeBinary */
@@ -1845,13 +1845,13 @@ void RFileIO::readBinary(RFile &inFile, RInitialConditionType &icType)
 } /* RFileIO::readBinary */
 
 
-void RFileIO::writeAscii(RFile &outFile, const RInitialConditionType &icType, bool addNewLine)
+void RFileIO::writeAscii(RSaveFile &outFile, const RInitialConditionType &icType, bool addNewLine)
 {
     RFileIO::writeAscii(outFile,RInitialCondition::getId(icType),addNewLine);
 } /* RFileIO::writeAscii */
 
 
-void RFileIO::writeBinary(RFile &outFile, const RInitialConditionType &icType)
+void RFileIO::writeBinary(RSaveFile &outFile, const RInitialConditionType &icType)
 {
     RFileIO::writeBinary(outFile,RInitialCondition::getId(icType));
 } /* RFileIO::writeBinary */
@@ -1878,13 +1878,13 @@ void RFileIO::readBinary(RFile &inFile, REnvironmentConditionType &ecType)
 } /* RFileIO::readBinary */
 
 
-void RFileIO::writeAscii(RFile &outFile, const REnvironmentConditionType &ecType, bool addNewLine)
+void RFileIO::writeAscii(RSaveFile &outFile, const REnvironmentConditionType &ecType, bool addNewLine)
 {
     RFileIO::writeAscii(outFile,REnvironmentCondition::getId(ecType),addNewLine);
 } /* RFileIO::writeAscii */
 
 
-void RFileIO::writeBinary(RFile &outFile, const REnvironmentConditionType &ecType)
+void RFileIO::writeBinary(RSaveFile &outFile, const REnvironmentConditionType &ecType)
 {
     RFileIO::writeBinary(outFile,REnvironmentCondition::getId(ecType));
 } /* RFileIO::writeBinary */
@@ -1911,7 +1911,7 @@ void RFileIO::readBinary(RFile &inFile, RConditionComponent &conditionComponent)
     RFileIO::readBinary(inFile,conditionComponent.enabled);
 }
 
-void RFileIO::writeAscii(RFile &outFile, const RConditionComponent &conditionComponent, bool addNewLine)
+void RFileIO::writeAscii(RSaveFile &outFile, const RConditionComponent &conditionComponent, bool addNewLine)
 {
     RFileIO::writeAscii(outFile,static_cast<const RValueTable&>(conditionComponent),addNewLine);
     if (!addNewLine)
@@ -1931,7 +1931,7 @@ void RFileIO::writeAscii(RFile &outFile, const RConditionComponent &conditionCom
     RFileIO::writeAscii(outFile,conditionComponent.enabled,addNewLine);
 }
 
-void RFileIO::writeBinary(RFile &outFile, const RConditionComponent &conditionComponent)
+void RFileIO::writeBinary(RSaveFile &outFile, const RConditionComponent &conditionComponent)
 {
     RFileIO::writeBinary(outFile,static_cast<const RValueTable&>(conditionComponent));
     RFileIO::writeBinary(outFile,conditionComponent.keyType);
@@ -1981,7 +1981,7 @@ void RFileIO::readBinary(RFile &inFile, RCondition &condition)
 }
 
 
-void RFileIO::writeAscii(RFile &outFile, const RCondition &condition, bool addNewLine)
+void RFileIO::writeAscii(RSaveFile &outFile, const RCondition &condition, bool addNewLine)
 {
     RFileIO::writeAscii(outFile,"\"" + condition.name + "\"",addNewLine);
     if (!addNewLine)
@@ -2025,7 +2025,7 @@ void RFileIO::writeAscii(RFile &outFile, const RCondition &condition, bool addNe
 }
 
 
-void RFileIO::writeBinary(RFile &outFile, const RCondition &condition)
+void RFileIO::writeBinary(RSaveFile &outFile, const RCondition &condition)
 {
     RFileIO::writeBinary(outFile,condition.name);
     RFileIO::writeBinary(outFile,condition.size());
@@ -2072,7 +2072,7 @@ void RFileIO::readBinary(RFile &inFile, RBoundaryCondition &boundaryCondition)
 }
 
 
-void RFileIO::writeAscii(RFile &outFile, const RBoundaryCondition &boundaryCondition, bool addNewLine)
+void RFileIO::writeAscii(RSaveFile &outFile, const RBoundaryCondition &boundaryCondition, bool addNewLine)
 {
     RFileIO::writeAscii(outFile,static_cast<const RCondition&>(boundaryCondition),addNewLine);
     if (!addNewLine)
@@ -2113,7 +2113,7 @@ void RFileIO::writeAscii(RFile &outFile, const RBoundaryCondition &boundaryCondi
 }
 
 
-void RFileIO::writeBinary(RFile &outFile, const RBoundaryCondition &boundaryCondition)
+void RFileIO::writeBinary(RSaveFile &outFile, const RBoundaryCondition &boundaryCondition)
 {
     RFileIO::writeBinary(outFile,static_cast<const RCondition&>(boundaryCondition));
     RFileIO::writeBinary(outFile,boundaryCondition.type);
@@ -2145,7 +2145,7 @@ void RFileIO::readBinary(RFile &inFile, RInitialCondition &initialCondition)
 }
 
 
-void RFileIO::writeAscii(RFile &outFile, const RInitialCondition &initialCondition, bool addNewLine)
+void RFileIO::writeAscii(RSaveFile &outFile, const RInitialCondition &initialCondition, bool addNewLine)
 {
     RFileIO::writeAscii(outFile,static_cast<const RCondition&>(initialCondition),addNewLine);
     if (!addNewLine)
@@ -2156,7 +2156,7 @@ void RFileIO::writeAscii(RFile &outFile, const RInitialCondition &initialConditi
 }
 
 
-void RFileIO::writeBinary(RFile &outFile, const RInitialCondition &initialCondition)
+void RFileIO::writeBinary(RSaveFile &outFile, const RInitialCondition &initialCondition)
 {
     RFileIO::writeBinary(outFile,static_cast<const RCondition&>(initialCondition));
     RFileIO::writeBinary(outFile,initialCondition.type);
@@ -2182,7 +2182,7 @@ void RFileIO::readBinary(RFile &inFile, REnvironmentCondition &environmentCondit
 }
 
 
-void RFileIO::writeAscii(RFile &outFile, const REnvironmentCondition &environmentCondition, bool addNewLine)
+void RFileIO::writeAscii(RSaveFile &outFile, const REnvironmentCondition &environmentCondition, bool addNewLine)
 {
     RFileIO::writeAscii(outFile,static_cast<const RCondition&>(environmentCondition),addNewLine);
     if (!addNewLine)
@@ -2193,7 +2193,7 @@ void RFileIO::writeAscii(RFile &outFile, const REnvironmentCondition &environmen
 }
 
 
-void RFileIO::writeBinary(RFile &outFile, const REnvironmentCondition &environmentCondition)
+void RFileIO::writeBinary(RSaveFile &outFile, const REnvironmentCondition &environmentCondition)
 {
     RFileIO::writeBinary(outFile,static_cast<const RCondition&>(environmentCondition));
     RFileIO::writeBinary(outFile,environmentCondition.type);
@@ -2221,13 +2221,13 @@ void RFileIO::readBinary(RFile &inFile, RMaterialPropertyType &mpType)
 } /* RFileIO::readBinary */
 
 
-void RFileIO::writeAscii(RFile &outFile, const RMaterialPropertyType &mpType, bool addNewLine)
+void RFileIO::writeAscii(RSaveFile &outFile, const RMaterialPropertyType &mpType, bool addNewLine)
 {
     RFileIO::writeAscii(outFile,RMaterialProperty::getId(mpType),addNewLine);
 } /* RFileIO::writeAscii */
 
 
-void RFileIO::writeBinary(RFile &outFile, const RMaterialPropertyType &mpType)
+void RFileIO::writeBinary(RSaveFile &outFile, const RMaterialPropertyType &mpType)
 {
     RFileIO::writeBinary(outFile,RMaterialProperty::getId(mpType));
 
@@ -2261,7 +2261,7 @@ void RFileIO::readBinary(RFile &inFile, RMaterialState &state)
 } /* RFileIO::readBinary */
 
 
-void RFileIO::writeAscii(RFile &outFile, const RMaterialState &state, bool addNewLine)
+void RFileIO::writeAscii(RSaveFile &outFile, const RMaterialState &state, bool addNewLine)
 {
     if (!addNewLine)
     {
@@ -2278,7 +2278,7 @@ void RFileIO::writeAscii(RFile &outFile, const RMaterialState &state, bool addNe
 } /* RFileIO::writeAscii */
 
 
-void RFileIO::writeBinary(RFile &outFile, const RMaterialState &state)
+void RFileIO::writeBinary(RSaveFile &outFile, const RMaterialState &state)
 {
     outFile.write((char*)&state,sizeof(RMaterialState));
     if (outFile.error() != RFile::NoError)
@@ -2311,7 +2311,7 @@ void RFileIO::readBinary(RFile &inFile, RMaterialProperty &materialProperty)
     materialProperty.keyType = R_VARIABLE_TEMPERATURE;
 }
 
-void RFileIO::writeAscii(RFile &outFile, const RMaterialProperty &materialProperty, bool addNewLine)
+void RFileIO::writeAscii(RSaveFile &outFile, const RMaterialProperty &materialProperty, bool addNewLine)
 {
     RFileIO::writeAscii(outFile,static_cast<const RValueTable&>(materialProperty),addNewLine);
     if (!addNewLine)
@@ -2326,7 +2326,7 @@ void RFileIO::writeAscii(RFile &outFile, const RMaterialProperty &materialProper
     RFileIO::writeAscii(outFile,materialProperty.type,addNewLine);
 }
 
-void RFileIO::writeBinary(RFile &outFile, const RMaterialProperty &materialProperty)
+void RFileIO::writeBinary(RSaveFile &outFile, const RMaterialProperty &materialProperty)
 {
     RFileIO::writeBinary(outFile,static_cast<const RValueTable&>(materialProperty));
     RFileIO::writeBinary(outFile,materialProperty.keyType);
@@ -2369,7 +2369,7 @@ void RFileIO::readBinary(RFile &inFile, RMaterial &material)
 }
 
 
-void RFileIO::writeAscii(RFile &outFile, const RMaterial &material, bool addNewLine)
+void RFileIO::writeAscii(RSaveFile &outFile, const RMaterial &material, bool addNewLine)
 {
     RFileIO::writeAscii(outFile,material.id,addNewLine);
     if (!addNewLine)
@@ -2402,7 +2402,7 @@ void RFileIO::writeAscii(RFile &outFile, const RMaterial &material, bool addNewL
 }
 
 
-void RFileIO::writeBinary(RFile &outFile, const RMaterial &material)
+void RFileIO::writeBinary(RSaveFile &outFile, const RMaterial &material)
 {
     RFileIO::writeBinary(outFile,material.id);
     RFileIO::writeBinary(outFile,material.name);
@@ -2436,7 +2436,7 @@ void RFileIO::readBinary(RFile &inFile, RNode &node)
 }
 
 
-void RFileIO::writeAscii(RFile &outFile, const RNode &node, bool addNewLine)
+void RFileIO::writeAscii(RSaveFile &outFile, const RNode &node, bool addNewLine)
 {
     RFileIO::writeAscii(outFile,node.x,addNewLine);
     if (!addNewLine)
@@ -2452,7 +2452,7 @@ void RFileIO::writeAscii(RFile &outFile, const RNode &node, bool addNewLine)
 }
 
 
-void RFileIO::writeBinary(RFile &outFile, const RNode &node)
+void RFileIO::writeBinary(RSaveFile &outFile, const RNode &node)
 {
     RFileIO::writeBinary(outFile,node.x);
     RFileIO::writeBinary(outFile,node.y);
@@ -2481,13 +2481,13 @@ void RFileIO::readBinary(RFile &inFile, RElementType &elementType)
 } /* RFileIO::readBinary */
 
 
-void RFileIO::writeAscii(RFile &outFile, const RElementType &elementType, bool addNewLine)
+void RFileIO::writeAscii(RSaveFile &outFile, const RElementType &elementType, bool addNewLine)
 {
     RFileIO::writeAscii(outFile,RElement::getId(elementType),addNewLine);
 } /* RFileIO::writeAscii */
 
 
-void RFileIO::writeBinary(RFile &outFile, const RElementType &elementType)
+void RFileIO::writeBinary(RSaveFile &outFile, const RElementType &elementType)
 {
     RFileIO::writeBinary(outFile,RElement::getId(elementType));
 } /* RFileIO::writeBinary */
@@ -2524,7 +2524,7 @@ void RFileIO::readBinary(RFile &inFile, RElement &element)
 }
 
 
-void RFileIO::writeAscii(RFile &outFile, const RElement &element, bool addNewLine)
+void RFileIO::writeAscii(RSaveFile &outFile, const RElement &element, bool addNewLine)
 {
     RFileIO::writeAscii(outFile,element.type,addNewLine);
     if (!addNewLine)
@@ -2547,7 +2547,7 @@ void RFileIO::writeAscii(RFile &outFile, const RElement &element, bool addNewLin
 }
 
 
-void RFileIO::writeBinary(RFile &outFile, const RElement &element)
+void RFileIO::writeBinary(RSaveFile &outFile, const RElement &element)
 {
     RFileIO::writeBinary(outFile,element.type);
     RFileIO::writeBinary(outFile,element.size());
@@ -2585,7 +2585,7 @@ void RFileIO::readBinary(RFile &inFile, REntityGroupVariableDisplayType &element
 } /* RFileIO::readBinary */
 
 
-void RFileIO::writeAscii(RFile &outFile, const REntityGroupVariableDisplayType &elementGroupVariableDisplayType, bool addNewLine)
+void RFileIO::writeAscii(RSaveFile &outFile, const REntityGroupVariableDisplayType &elementGroupVariableDisplayType, bool addNewLine)
 {
     if (!addNewLine)
     {
@@ -2602,7 +2602,7 @@ void RFileIO::writeAscii(RFile &outFile, const REntityGroupVariableDisplayType &
 } /* RFileIO::writeAscii */
 
 
-void RFileIO::writeBinary(RFile &outFile, const REntityGroupVariableDisplayType &elementGroupVariableDisplayType)
+void RFileIO::writeBinary(RSaveFile &outFile, const REntityGroupVariableDisplayType &elementGroupVariableDisplayType)
 {
     outFile.write((char*)&elementGroupVariableDisplayType,sizeof(REntityGroupVariableDisplayType));
     if (outFile.error() != RFile::NoError)
@@ -2681,7 +2681,7 @@ void RFileIO::readBinary(RFile &inFile, REntityGroupData &elementGroupData)
 }
 
 
-void RFileIO::writeAscii(RFile &outFile, const REntityGroupData &elementGroupData, bool addNewLine)
+void RFileIO::writeAscii(RSaveFile &outFile, const REntityGroupData &elementGroupData, bool addNewLine)
 {
     RFileIO::writeAscii(outFile,elementGroupData.selected,addNewLine);
     if (!addNewLine)
@@ -2784,7 +2784,7 @@ void RFileIO::writeAscii(RFile &outFile, const REntityGroupData &elementGroupDat
 }
 
 
-void RFileIO::writeBinary(RFile &outFile, const REntityGroupData &elementGroupData)
+void RFileIO::writeBinary(RSaveFile &outFile, const REntityGroupData &elementGroupData)
 {
     RFileIO::writeBinary(outFile,elementGroupData.selected);
     RFileIO::writeBinary(outFile,elementGroupData.visible);
@@ -2828,7 +2828,7 @@ void RFileIO::readBinary(RFile &inFile, REntityGroup &entityGroup)
     RFileIO::readBinary(inFile,entityGroup.data);
 }
 
-void RFileIO::writeAscii(RFile &outFile, const REntityGroup &entityGroup, bool addNewLine)
+void RFileIO::writeAscii(RSaveFile &outFile, const REntityGroup &entityGroup, bool addNewLine)
 {
     RFileIO::writeAscii(outFile,"\"" + entityGroup.name + "\"",addNewLine);
     if (!addNewLine)
@@ -2838,7 +2838,7 @@ void RFileIO::writeAscii(RFile &outFile, const REntityGroup &entityGroup, bool a
     RFileIO::writeAscii(outFile,entityGroup.data,addNewLine);
 }
 
-void RFileIO::writeBinary(RFile &outFile, const REntityGroup &entityGroup)
+void RFileIO::writeBinary(RSaveFile &outFile, const REntityGroup &entityGroup)
 {
     RFileIO::writeBinary(outFile,entityGroup.name);
     RFileIO::writeBinary(outFile,entityGroup.data);
@@ -2926,7 +2926,7 @@ void RFileIO::readBinary(RFile &inFile, RElementGroup &elementGroup)
 }
 
 
-void RFileIO::writeAscii(RFile &outFile, const RElementGroup &elementGroup, bool addNewLine)
+void RFileIO::writeAscii(RSaveFile &outFile, const RElementGroup &elementGroup, bool addNewLine)
 {
     RFileIO::writeAscii(outFile,static_cast<const REntityGroup&>(elementGroup),addNewLine);
     if (!addNewLine)
@@ -2989,7 +2989,7 @@ void RFileIO::writeAscii(RFile &outFile, const RElementGroup &elementGroup, bool
 }
 
 
-void RFileIO::writeBinary(RFile &outFile, const RElementGroup &elementGroup)
+void RFileIO::writeBinary(RSaveFile &outFile, const RElementGroup &elementGroup)
 {
     RFileIO::writeBinary(outFile,static_cast<const REntityGroup&>(elementGroup));
     RFileIO::writeBinary(outFile,elementGroup.size());
@@ -3033,7 +3033,7 @@ void RFileIO::readBinary(RFile &inFile, RPoint &point)
     RFileIO::readBinary(inFile,point.volume);
 }
 
-void RFileIO::writeAscii(RFile &outFile, const RPoint &point, bool addNewLine)
+void RFileIO::writeAscii(RSaveFile &outFile, const RPoint &point, bool addNewLine)
 {
     RFileIO::writeAscii(outFile,static_cast<const RElementGroup&>(point),addNewLine);
     if (!addNewLine)
@@ -3043,7 +3043,7 @@ void RFileIO::writeAscii(RFile &outFile, const RPoint &point, bool addNewLine)
     RFileIO::writeAscii(outFile,point.volume,addNewLine);
 }
 
-void RFileIO::writeBinary(RFile &outFile, const RPoint &point)
+void RFileIO::writeBinary(RSaveFile &outFile, const RPoint &point)
 {
     RFileIO::writeBinary(outFile,static_cast<const RElementGroup&>(point));
     RFileIO::writeBinary(outFile,point.volume);
@@ -3067,7 +3067,7 @@ void RFileIO::readBinary(RFile &inFile, RLine &line)
     RFileIO::readBinary(inFile,line.crossArea);
 }
 
-void RFileIO::writeAscii(RFile &outFile, const RLine &line, bool addNewLine)
+void RFileIO::writeAscii(RSaveFile &outFile, const RLine &line, bool addNewLine)
 {
     RFileIO::writeAscii(outFile,static_cast<const RElementGroup&>(line),addNewLine);
     if (!addNewLine)
@@ -3077,7 +3077,7 @@ void RFileIO::writeAscii(RFile &outFile, const RLine &line, bool addNewLine)
     RFileIO::writeAscii(outFile,line.crossArea,addNewLine);
 }
 
-void RFileIO::writeBinary(RFile &outFile, const RLine &line)
+void RFileIO::writeBinary(RSaveFile &outFile, const RLine &line)
 {
     RFileIO::writeBinary(outFile,static_cast<const RElementGroup&>(line));
     RFileIO::writeBinary(outFile,line.crossArea);
@@ -3101,7 +3101,7 @@ void RFileIO::readBinary(RFile &inFile, RSurface &surface)
     RFileIO::readBinary(inFile,surface.thickness);
 }
 
-void RFileIO::writeAscii(RFile &outFile, const RSurface &surface, bool addNewLine)
+void RFileIO::writeAscii(RSaveFile &outFile, const RSurface &surface, bool addNewLine)
 {
     RFileIO::writeAscii(outFile,static_cast<const RElementGroup&>(surface),addNewLine);
     if (!addNewLine)
@@ -3111,7 +3111,7 @@ void RFileIO::writeAscii(RFile &outFile, const RSurface &surface, bool addNewLin
     RFileIO::writeAscii(outFile,surface.thickness,addNewLine);
 }
 
-void RFileIO::writeBinary(RFile &outFile, const RSurface &surface)
+void RFileIO::writeBinary(RSaveFile &outFile, const RSurface &surface)
 {
     RFileIO::writeBinary(outFile,static_cast<const RElementGroup&>(surface));
     RFileIO::writeBinary(outFile,surface.thickness);
@@ -3133,12 +3133,12 @@ void RFileIO::readBinary(RFile &inFile, RVolume &volume)
     RFileIO::readBinary(inFile,static_cast<RElementGroup&>(volume));
 }
 
-void RFileIO::writeAscii(RFile &outFile, const RVolume &volume, bool addNewLine)
+void RFileIO::writeAscii(RSaveFile &outFile, const RVolume &volume, bool addNewLine)
 {
     RFileIO::writeAscii(outFile,static_cast<const RElementGroup&>(volume),addNewLine);
 }
 
-void RFileIO::writeBinary(RFile &outFile, const RVolume &volume)
+void RFileIO::writeBinary(RSaveFile &outFile, const RVolume &volume)
 {
     RFileIO::writeBinary(outFile,static_cast<const RElementGroup&>(volume));
 }
@@ -3185,7 +3185,7 @@ void RFileIO::readBinary(RFile &inFile, RVectorField &vectorField)
 }
 
 
-void RFileIO::writeAscii(RFile &outFile, const RVectorField &vectorField, bool addNewLine)
+void RFileIO::writeAscii(RSaveFile &outFile, const RVectorField &vectorField, bool addNewLine)
 {
     RFileIO::writeAscii(outFile,static_cast<const REntityGroup&>(vectorField),addNewLine);
     if (!addNewLine)
@@ -3218,7 +3218,7 @@ void RFileIO::writeAscii(RFile &outFile, const RVectorField &vectorField, bool a
 }
 
 
-void RFileIO::writeBinary(RFile &outFile, const RVectorField &vectorField)
+void RFileIO::writeBinary(RSaveFile &outFile, const RVectorField &vectorField)
 {
     RFileIO::writeBinary(outFile,static_cast<const REntityGroup&>(vectorField));
     RFileIO::writeBinary(outFile,vectorField.variableType);
@@ -3246,12 +3246,12 @@ void RFileIO::readBinary(RFile &inFile, RScalarField &scalarField)
     RFileIO::readBinary(inFile,static_cast<RVectorField&>(scalarField));
 }
 
-void RFileIO::writeAscii(RFile &outFile, const RScalarField &scalarField, bool addNewLine)
+void RFileIO::writeAscii(RSaveFile &outFile, const RScalarField &scalarField, bool addNewLine)
 {
     RFileIO::writeAscii(outFile,static_cast<const RVectorField&>(scalarField),addNewLine);
 }
 
-void RFileIO::writeBinary(RFile &outFile, const RScalarField &scalarField)
+void RFileIO::writeBinary(RSaveFile &outFile, const RScalarField &scalarField)
 {
     RFileIO::writeBinary(outFile,static_cast<const RVectorField&>(scalarField));
 }
@@ -3278,7 +3278,7 @@ void RFileIO::readBinary(RFile &inFile, RStreamLine &streamLine)
 }
 
 
-void RFileIO::writeAscii(RFile &outFile, const RStreamLine &streamLine, bool addNewLine)
+void RFileIO::writeAscii(RSaveFile &outFile, const RStreamLine &streamLine, bool addNewLine)
 {
     RFileIO::writeAscii(outFile,static_cast<const REntityGroup&>(streamLine),addNewLine);
     if (!addNewLine)
@@ -3294,7 +3294,7 @@ void RFileIO::writeAscii(RFile &outFile, const RStreamLine &streamLine, bool add
 }
 
 
-void RFileIO::writeBinary(RFile &outFile, const RStreamLine &streamLine)
+void RFileIO::writeBinary(RSaveFile &outFile, const RStreamLine &streamLine)
 {
     RFileIO::writeBinary(outFile,static_cast<const REntityGroup&>(streamLine));
     RFileIO::writeBinary(outFile,streamLine.variableType);
@@ -3335,7 +3335,7 @@ void RFileIO::readBinary(RFile &inFile, RCut &cut)
 } /* RFileIO::readBinary */
 
 
-void RFileIO::writeAscii(RFile &outFile, const RCut &cut, bool addNewLine)
+void RFileIO::writeAscii(RSaveFile &outFile, const RCut &cut, bool addNewLine)
 {
     RFileIO::writeAscii(outFile,static_cast<const REntityGroup&>(cut),addNewLine);
     if (!addNewLine)
@@ -3359,7 +3359,7 @@ void RFileIO::writeAscii(RFile &outFile, const RCut &cut, bool addNewLine)
 } /* RFileIO::writeAscii */
 
 
-void RFileIO::writeBinary(RFile &outFile, const RCut &cut)
+void RFileIO::writeBinary(RSaveFile &outFile, const RCut &cut)
 {
     RFileIO::writeBinary(outFile,static_cast<const REntityGroup&>(cut));
     RFileIO::writeBinary(outFile,cut.plane);
@@ -3406,7 +3406,7 @@ void RFileIO::readBinary(RFile &inFile, RIso &iso)
 } /* RFileIO::readBinary */
 
 
-void RFileIO::writeAscii(RFile &outFile, const RIso &iso, bool addNewLine)
+void RFileIO::writeAscii(RSaveFile &outFile, const RIso &iso, bool addNewLine)
 {
     RFileIO::writeAscii(outFile,static_cast<const REntityGroup&>(iso),addNewLine);
     if (!addNewLine)
@@ -3435,7 +3435,7 @@ void RFileIO::writeAscii(RFile &outFile, const RIso &iso, bool addNewLine)
 } /* RFileIO::writeAscii */
 
 
-void RFileIO::writeBinary(RFile &outFile, const RIso &iso)
+void RFileIO::writeBinary(RSaveFile &outFile, const RIso &iso)
 {
     RFileIO::writeBinary(outFile,static_cast<const REntityGroup&>(iso));
     RFileIO::writeBinary(outFile,iso.variableType);
@@ -3478,7 +3478,7 @@ void RFileIO::readBinary(RFile &inFile, RFileType &fileType)
 } /* RFileIO::readBinary */
 
 
-void RFileIO::writeAscii(RFile &outFile, const RFileType &fileType, bool addNewLine)
+void RFileIO::writeAscii(RSaveFile &outFile, const RFileType &fileType, bool addNewLine)
 {
     if (!addNewLine)
     {
@@ -3495,7 +3495,7 @@ void RFileIO::writeAscii(RFile &outFile, const RFileType &fileType, bool addNewL
 } /* RFileIO::writeAscii */
 
 
-void RFileIO::writeBinary(RFile &outFile, const RFileType &fileType)
+void RFileIO::writeBinary(RSaveFile &outFile, const RFileType &fileType)
 {
     RFileIO::writeBinary(outFile,int(fileType));
 //    outFile.write((char*)&fileType,sizeof(RFileType));
@@ -3525,7 +3525,7 @@ void RFileIO::readBinary(RFile &inFile, RFileHeader &fileHeader)
     RFileIO::readBinary(inFile,fileHeader.information);
 }
 
-void RFileIO::writeAscii(RFile &outFile, const RFileHeader &fileHeader, bool addNewLine)
+void RFileIO::writeAscii(RSaveFile &outFile, const RFileHeader &fileHeader, bool addNewLine)
 {
     RFileIO::writeAscii(outFile,fileHeader.version,addNewLine);
     if (!addNewLine)
@@ -3540,7 +3540,7 @@ void RFileIO::writeAscii(RFile &outFile, const RFileHeader &fileHeader, bool add
     RFileIO::writeAscii(outFile,fileHeader.information,addNewLine);
 }
 
-void RFileIO::writeBinary(RFile &outFile, const RFileHeader &fileHeader)
+void RFileIO::writeBinary(RSaveFile &outFile, const RFileHeader &fileHeader)
 {
     RFileIO::writeBinary(outFile,fileHeader.version);
     RFileIO::writeBinary(outFile,fileHeader.type);
@@ -3575,7 +3575,7 @@ void RFileIO::readBinary(RFile &inFile, RTimeMarchApproximation &timeMarchApprox
 } /* RFileIO::readBinary */
 
 
-void RFileIO::writeAscii(RFile &outFile, const RTimeMarchApproximation &timeMarchApproximation, bool addNewLine)
+void RFileIO::writeAscii(RSaveFile &outFile, const RTimeMarchApproximation &timeMarchApproximation, bool addNewLine)
 {
     if (!addNewLine)
     {
@@ -3592,7 +3592,7 @@ void RFileIO::writeAscii(RFile &outFile, const RTimeMarchApproximation &timeMarc
 } /* RFileIO::writeAscii */
 
 
-void RFileIO::writeBinary(RFile &outFile, const RTimeMarchApproximation &timeMarchApproximation)
+void RFileIO::writeBinary(RSaveFile &outFile, const RTimeMarchApproximation &timeMarchApproximation)
 {
     outFile.write((char*)&timeMarchApproximation,sizeof(RTimeMarchApproximation));
     if (outFile.error() != RFile::NoError)
@@ -3629,7 +3629,7 @@ void RFileIO::readBinary(RFile &inFile, RModalMethod &method)
 } /* RFileIO::readBinary */
 
 
-void RFileIO::writeAscii(RFile &outFile, const RModalMethod &method, bool addNewLine)
+void RFileIO::writeAscii(RSaveFile &outFile, const RModalMethod &method, bool addNewLine)
 {
     if (!addNewLine)
     {
@@ -3646,7 +3646,7 @@ void RFileIO::writeAscii(RFile &outFile, const RModalMethod &method, bool addNew
 } /* RFileIO::writeAscii */
 
 
-void RFileIO::writeBinary(RFile &outFile, const RModalMethod &method)
+void RFileIO::writeBinary(RSaveFile &outFile, const RModalMethod &method)
 {
     outFile.write((char*)&method,sizeof(RModalMethod));
     if (outFile.error() != RFile::NoError)
@@ -3699,7 +3699,7 @@ void RFileIO::readBinary(RFile &inFile, RTimeSolver &timeSolver)
     RFileIO::readBinary(inFile,timeSolver.outputFrequency);
 }
 
-void RFileIO::writeAscii(RFile &outFile, const RTimeSolver &timeSolver, bool addNewLine)
+void RFileIO::writeAscii(RSaveFile &outFile, const RTimeSolver &timeSolver, bool addNewLine)
 {
     RFileIO::writeAscii(outFile,timeSolver.enabled,addNewLine);
     if (!addNewLine)
@@ -3752,7 +3752,7 @@ void RFileIO::writeAscii(RFile &outFile, const RTimeSolver &timeSolver, bool add
     RFileIO::writeAscii(outFile,timeSolver.outputFrequency,addNewLine);
 }
 
-void RFileIO::writeBinary(RFile &outFile, const RTimeSolver &timeSolver)
+void RFileIO::writeBinary(RSaveFile &outFile, const RTimeSolver &timeSolver)
 {
     RFileIO::writeBinary(outFile,timeSolver.enabled);
     RFileIO::writeBinary(outFile,timeSolver.timeMarchApproximation);
@@ -3795,7 +3795,7 @@ void RFileIO::readBinary(RFile &inFile, RMatrixSolverConf &matrixSolver)
 } /* RFileIO::readBinary */
 
 
-void RFileIO::writeAscii(RFile &outFile, const RMatrixSolverConf &matrixSolver, bool addNewLine)
+void RFileIO::writeAscii(RSaveFile &outFile, const RMatrixSolverConf &matrixSolver, bool addNewLine)
 {
     RFileIO::writeAscii(outFile,matrixSolver.type,addNewLine);
     if (!addNewLine)
@@ -3821,7 +3821,7 @@ void RFileIO::writeAscii(RFile &outFile, const RMatrixSolverConf &matrixSolver, 
 } /* RFileIO::writeAscii */
 
 
-void RFileIO::writeBinary(RFile &outFile, const RMatrixSolverConf &matrixSolver)
+void RFileIO::writeBinary(RSaveFile &outFile, const RMatrixSolverConf &matrixSolver)
 {
     RFileIO::writeBinary(outFile,matrixSolver.type);
     RFileIO::writeBinary(outFile,matrixSolver.nInnerIterations);
@@ -3850,7 +3850,7 @@ void RFileIO::readBinary(RFile &inFile, RMonitoringPoint &monitoringPoint)
 }
 
 
-void RFileIO::writeAscii(RFile &outFile, const RMonitoringPoint &monitoringPoint, bool addNewLine)
+void RFileIO::writeAscii(RSaveFile &outFile, const RMonitoringPoint &monitoringPoint, bool addNewLine)
 {
     RFileIO::writeAscii(outFile,monitoringPoint.variableType,addNewLine);
     if (!addNewLine)
@@ -3861,7 +3861,7 @@ void RFileIO::writeAscii(RFile &outFile, const RMonitoringPoint &monitoringPoint
 }
 
 
-void RFileIO::writeBinary(RFile &outFile, const RMonitoringPoint &monitoringPoint)
+void RFileIO::writeBinary(RSaveFile &outFile, const RMonitoringPoint &monitoringPoint)
 {
     RFileIO::writeBinary(outFile,monitoringPoint.variableType);
     RFileIO::writeBinary(outFile,monitoringPoint.position);
@@ -3897,7 +3897,7 @@ void RFileIO::readBinary(RFile &inFile, RMonitoringPointManager &monitoringPoint
 }
 
 
-void RFileIO::writeAscii(RFile &outFile, const RMonitoringPointManager &monitoringPointManager, bool addNewLine)
+void RFileIO::writeAscii(RSaveFile &outFile, const RMonitoringPointManager &monitoringPointManager, bool addNewLine)
 {
     RFileIO::writeAscii(outFile,(unsigned int)monitoringPointManager.size(),addNewLine);
     if (!addNewLine)
@@ -3915,7 +3915,7 @@ void RFileIO::writeAscii(RFile &outFile, const RMonitoringPointManager &monitori
 }
 
 
-void RFileIO::writeBinary(RFile &outFile, const RMonitoringPointManager &monitoringPointManager)
+void RFileIO::writeBinary(RSaveFile &outFile, const RMonitoringPointManager &monitoringPointManager)
 {
     RFileIO::writeBinary(outFile,(unsigned int)monitoringPointManager.size());
     for (unsigned int i=0;i<monitoringPointManager.size();i++)
@@ -3943,12 +3943,12 @@ void RFileIO::readBinary(RFile &inFile, RProblemType &problemType)
     problemType = RProblem::getTypeFromId(id);
 }
 
-void RFileIO::writeAscii(RFile &outFile, const RProblemType &problemType, bool addNewLine)
+void RFileIO::writeAscii(RSaveFile &outFile, const RProblemType &problemType, bool addNewLine)
 {
     RFileIO::writeAscii(outFile,RProblem::getId(problemType),addNewLine);
 }
 
-void RFileIO::writeBinary(RFile &outFile, const RProblemType &problemType)
+void RFileIO::writeBinary(RSaveFile &outFile, const RProblemType &problemType)
 {
     RFileIO::writeBinary(outFile,RProblem::getId(problemType));
 }
@@ -3986,7 +3986,7 @@ void RFileIO::readBinary(RFile &inFile, RProblemTaskItem &problemTaskItem)
     }
 }
 
-void RFileIO::writeAscii(RFile &outFile, const RProblemTaskItem &problemTaskItem, bool addNewLine)
+void RFileIO::writeAscii(RSaveFile &outFile, const RProblemTaskItem &problemTaskItem, bool addNewLine)
 {
     RFileIO::writeAscii(outFile,problemTaskItem.problemType,addNewLine);
     if (!addNewLine)
@@ -4013,7 +4013,7 @@ void RFileIO::writeAscii(RFile &outFile, const RProblemTaskItem &problemTaskItem
     }
 }
 
-void RFileIO::writeBinary(RFile &outFile, const RProblemTaskItem &problemTaskItem)
+void RFileIO::writeBinary(RSaveFile &outFile, const RProblemTaskItem &problemTaskItem)
 {
     RFileIO::writeBinary(outFile,problemTaskItem.problemType);
     RFileIO::writeBinary(outFile,problemTaskItem.nIterations);
@@ -4043,7 +4043,7 @@ void RFileIO::readBinary(RFile &inFile, RProblemSetup &problemSetup)
     RFileIO::readBinary(inFile,problemSetup.modalSetup);
 }
 
-void RFileIO::writeAscii(RFile &outFile, const RProblemSetup &problemSetup, bool addNewLine)
+void RFileIO::writeAscii(RSaveFile &outFile, const RProblemSetup &problemSetup, bool addNewLine)
 {
     RFileIO::writeAscii(outFile,problemSetup.restart,addNewLine);
     if (!addNewLine)
@@ -4058,7 +4058,7 @@ void RFileIO::writeAscii(RFile &outFile, const RProblemSetup &problemSetup, bool
     RFileIO::writeAscii(outFile,problemSetup.modalSetup,addNewLine);
 }
 
-void RFileIO::writeBinary(RFile &outFile, const RProblemSetup &problemSetup)
+void RFileIO::writeBinary(RSaveFile &outFile, const RProblemSetup &problemSetup)
 {
     RFileIO::writeBinary(outFile,problemSetup.restart);
     RFileIO::writeBinary(outFile,problemSetup.radiationSetup);
@@ -4090,7 +4090,7 @@ void RFileIO::readBinary(RFile &inFile, RRadiationResolution &radiationResolutio
     }
 }
 
-void RFileIO::writeAscii(RFile &outFile, const RRadiationResolution &radiationResolution, bool addNewLine)
+void RFileIO::writeAscii(RSaveFile &outFile, const RRadiationResolution &radiationResolution, bool addNewLine)
 {
     if (!addNewLine)
     {
@@ -4106,7 +4106,7 @@ void RFileIO::writeAscii(RFile &outFile, const RRadiationResolution &radiationRe
     }
 }
 
-void RFileIO::writeBinary(RFile &outFile, const RRadiationResolution &radiationResolution)
+void RFileIO::writeBinary(RSaveFile &outFile, const RRadiationResolution &radiationResolution)
 {
     outFile.write((char*)&radiationResolution,sizeof(RRadiationResolution));
     if (outFile.error() != RFile::NoError)
@@ -4132,7 +4132,7 @@ void RFileIO::readBinary(RFile &inFile, RRadiationSetup &radiationSetup)
     RFileIO::readBinary(inFile,radiationSetup.viewFactorMatrixFile);
 }
 
-void RFileIO::writeAscii(RFile &outFile, const RRadiationSetup &radiationSetup, bool addNewLine)
+void RFileIO::writeAscii(RSaveFile &outFile, const RRadiationSetup &radiationSetup, bool addNewLine)
 {
     RFileIO::writeAscii(outFile,radiationSetup.resolution,addNewLine);
     if (!addNewLine)
@@ -4142,7 +4142,7 @@ void RFileIO::writeAscii(RFile &outFile, const RRadiationSetup &radiationSetup, 
     RFileIO::writeAscii(outFile,radiationSetup.viewFactorMatrixFile,addNewLine);
 }
 
-void RFileIO::writeBinary(RFile &outFile, const RRadiationSetup &radiationSetup)
+void RFileIO::writeBinary(RSaveFile &outFile, const RRadiationSetup &radiationSetup)
 {
     RFileIO::writeBinary(outFile,radiationSetup.resolution);
     RFileIO::writeBinary(outFile,radiationSetup.viewFactorMatrixFile);
@@ -4173,7 +4173,7 @@ void RFileIO::readBinary(RFile &inFile, RModalSetup &modalSetup)
     RFileIO::readBinary(inFile,modalSetup.frequency);
 }
 
-void RFileIO::writeAscii(RFile &outFile, const RModalSetup &modalSetup, bool addNewLine)
+void RFileIO::writeAscii(RSaveFile &outFile, const RModalSetup &modalSetup, bool addNewLine)
 {
     RFileIO::writeAscii(outFile,modalSetup.method,addNewLine);
     if (!addNewLine)
@@ -4203,7 +4203,7 @@ void RFileIO::writeAscii(RFile &outFile, const RModalSetup &modalSetup, bool add
     RFileIO::writeAscii(outFile,modalSetup.frequency,addNewLine);
 }
 
-void RFileIO::writeBinary(RFile &outFile, const RModalSetup &modalSetup)
+void RFileIO::writeBinary(RSaveFile &outFile, const RModalSetup &modalSetup)
 {
     RFileIO::writeBinary(outFile,modalSetup.method);
     RFileIO::writeBinary(outFile,modalSetup.nIterations);
@@ -4228,12 +4228,12 @@ void RFileIO::readBinary(RFile &inFile, RBook &book)
     RFileIO::readBinary(inFile,book.book,true);
 }
 
-void RFileIO::writeAscii(RFile &outFile, const RBook &book, bool addNewLine)
+void RFileIO::writeAscii(RSaveFile &outFile, const RBook &book, bool addNewLine)
 {
     RFileIO::writeAscii(outFile,book.book,true,addNewLine);
 }
 
-void RFileIO::writeBinary(RFile &outFile, const RBook &book)
+void RFileIO::writeBinary(RSaveFile &outFile, const RBook &book)
 {
     RFileIO::writeBinary(outFile,book.book,true);
 }
@@ -4255,7 +4255,7 @@ void RFileIO::readBinary(RFile &inFile, RPatch &patch)
     RFileIO::readBinary(inFile,patch.elementIDs,true);
 }
 
-void RFileIO::writeAscii(RFile &outFile, const RPatch &patch, bool addNewLine)
+void RFileIO::writeAscii(RSaveFile &outFile, const RPatch &patch, bool addNewLine)
 {
     RFileIO::writeAscii(outFile,patch.surfaceID,addNewLine);
     if (!addNewLine)
@@ -4265,7 +4265,7 @@ void RFileIO::writeAscii(RFile &outFile, const RPatch &patch, bool addNewLine)
     RFileIO::writeAscii(outFile,patch.elementIDs,true,addNewLine);
 }
 
-void RFileIO::writeBinary(RFile &outFile, const RPatch &patch)
+void RFileIO::writeBinary(RSaveFile &outFile, const RPatch &patch)
 {
     RFileIO::writeBinary(outFile,patch.surfaceID);
     RFileIO::writeBinary(outFile,patch.elementIDs,true);
@@ -4306,7 +4306,7 @@ void RFileIO::readBinary(RFile &inFile, RPatchBook &patchBook)
     }
 }
 
-void RFileIO::writeAscii(RFile &outFile, const RPatchBook &patchBook, bool addNewLine)
+void RFileIO::writeAscii(RSaveFile &outFile, const RPatchBook &patchBook, bool addNewLine)
 {
     RFileIO::writeAscii(outFile,patchBook.patches,addNewLine);
     if (!addNewLine)
@@ -4336,7 +4336,7 @@ void RFileIO::writeAscii(RFile &outFile, const RPatchBook &patchBook, bool addNe
     }
 }
 
-void RFileIO::writeBinary(RFile &outFile, const RPatchBook &patchBook)
+void RFileIO::writeBinary(RSaveFile &outFile, const RPatchBook &patchBook)
 {
     RFileIO::writeBinary(outFile,patchBook.patches);
     uint nElements = uint(patchBook.elementPatchMap.size());
@@ -4377,7 +4377,7 @@ void RFileIO::readBinary(RFile &inFile, RPatchInput &patchInput)
     RFileIO::readBinary(inFile,patchInput.receiver);
 }
 
-void RFileIO::writeAscii(RFile &outFile, const RPatchInput &patchInput, bool addNewLine)
+void RFileIO::writeAscii(RSaveFile &outFile, const RPatchInput &patchInput, bool addNewLine)
 {
     RFileIO::writeAscii(outFile,patchInput.patchArea,addNewLine);
     if (!addNewLine)
@@ -4402,7 +4402,7 @@ void RFileIO::writeAscii(RFile &outFile, const RPatchInput &patchInput, bool add
     RFileIO::writeAscii(outFile,patchInput.receiver,addNewLine);
 }
 
-void RFileIO::writeBinary(RFile &outFile, const RPatchInput &patchInput)
+void RFileIO::writeBinary(RSaveFile &outFile, const RPatchInput &patchInput)
 {
     RFileIO::writeBinary(outFile,patchInput.patchArea);
     RFileIO::writeBinary(outFile,patchInput.patchSize);
@@ -4430,7 +4430,7 @@ void RFileIO::readBinary(RFile &inFile, RViewFactorMatrixHeader &viewFactorMatri
     RFileIO::readBinary(inFile,viewFactorMatrixHeader.nElements);
 }
 
-void RFileIO::writeAscii(RFile &outFile, const RViewFactorMatrixHeader &viewFactorMatrixHeader, bool addNewLine)
+void RFileIO::writeAscii(RSaveFile &outFile, const RViewFactorMatrixHeader &viewFactorMatrixHeader, bool addNewLine)
 {
     RFileIO::writeAscii(outFile,viewFactorMatrixHeader.patchInput,addNewLine);
     if (!addNewLine)
@@ -4445,7 +4445,7 @@ void RFileIO::writeAscii(RFile &outFile, const RViewFactorMatrixHeader &viewFact
     RFileIO::writeAscii(outFile,viewFactorMatrixHeader.nElements,addNewLine);
 }
 
-void RFileIO::writeBinary(RFile &outFile, const RViewFactorMatrixHeader &viewFactorMatrixHeader)
+void RFileIO::writeBinary(RSaveFile &outFile, const RViewFactorMatrixHeader &viewFactorMatrixHeader)
 {
     RFileIO::writeBinary(outFile,viewFactorMatrixHeader.patchInput);
     RFileIO::writeBinary(outFile,viewFactorMatrixHeader.hemicubeResolution);
@@ -4467,12 +4467,12 @@ void RFileIO::readBinary(RFile &inFile, RViewFactorRow &viewFactorRow)
     RFileIO::readBinary(inFile,viewFactorRow.viewFactors);
 }
 
-void RFileIO::writeAscii(RFile &outFile, const RViewFactorRow &viewFactorRow, bool addNewLine)
+void RFileIO::writeAscii(RSaveFile &outFile, const RViewFactorRow &viewFactorRow, bool addNewLine)
 {
     RFileIO::writeAscii(outFile,viewFactorRow.viewFactors,addNewLine);
 }
 
-void RFileIO::writeBinary(RFile &outFile, const RViewFactorRow &viewFactorRow)
+void RFileIO::writeBinary(RSaveFile &outFile, const RViewFactorRow &viewFactorRow)
 {
     RFileIO::writeBinary(outFile,viewFactorRow.viewFactors);
 }

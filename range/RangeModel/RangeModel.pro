@@ -67,6 +67,7 @@ SOURCES += \
     src/rml_problem_task_item.cpp \
     src/rml_radiation_setup.cpp \
     src/rml_results.cpp \
+    src/rml_save_file.cpp \
     src/rml_scalar_field.cpp \
     src/rml_segment.cpp \
     src/rml_shape_generator.cpp \
@@ -136,6 +137,7 @@ HEADERS += \
     include/rml_problem_type.h \
     include/rml_radiation_setup.h \
     include/rml_results.h \
+    include/rml_save_file.h \
     include/rml_scalar_field.h \
     include/rml_segment.h \
     include/rml_shape_generator.h \

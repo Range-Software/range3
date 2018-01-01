@@ -642,7 +642,7 @@ void Session::write(const QString &fileName, bool writeModels)
 
     this->fileName = fileName;
 
-    RFile sessionFile(this->fileName,RFile::ASCII);
+    RSaveFile sessionFile(this->fileName,RSaveFile::ASCII);
 
     if (!sessionFile.open(QIODevice::WriteOnly | QIODevice::Text))
     {
@@ -677,7 +677,7 @@ void Session::write(const QString &fileName, bool writeModels)
         }
     }
 
-    sessionFile.close();
+    sessionFile.commit();
 }
 
 void Session::clear(void)

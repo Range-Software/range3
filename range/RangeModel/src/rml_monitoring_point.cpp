@@ -10,11 +10,9 @@
 
 #include <cmath>
 
-#include <QFile>
-#include <QTextStream>
-
 #include "rml_monitoring_point.h"
 #include "rml_file_io.h"
+#include "rml_save_file.h"
 
 void RMonitoringPoint::_init(const RMonitoringPoint *pMonitoringPoint)
 {
@@ -133,7 +131,7 @@ void RMonitoringPoint::writeValueVectorToFile(unsigned int iteration, const RVal
         throw RError(R_ERROR_INVALID_FILE_NAME,R_ERROR_REF,"Empty file name was provided");
     }
 
-    RFile file(this->outputFileName,RFile::ASCII);
+    RSaveFile file(this->outputFileName,RSaveFile::ASCII);
 
     if (!file.open(QIODevice::Append | QIODevice::Text))
     {
@@ -147,7 +145,7 @@ void RMonitoringPoint::writeValueVectorToFile(unsigned int iteration, const RVal
     RFileIO::writeAscii(file,valueVector.getDataVector(),true,false);
     RFileIO::writeNewLineAscii(file);
 
-    file.close();
+    file.commit();
 }
 
 void RMonitoringPoint::readRecordFromFile(RFile &in, unsigned int &iteration, RRVector &valueVector)

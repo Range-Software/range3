@@ -892,7 +892,7 @@ void RModelMsh::writeAscii (const QString &fileName) const
         throw RError(R_ERROR_INVALID_FILE_NAME,R_ERROR_REF,"No file name was provided.");
     }
 
-    RFile mshFile(fileName,RFile::ASCII);
+    RSaveFile mshFile(fileName,RSaveFile::ASCII);
 
     if (!mshFile.open(QIODevice::WriteOnly | QIODevice::Text))
     {
@@ -1049,7 +1049,7 @@ void RModelMsh::writeAscii (const QString &fileName) const
     RFileIO::writeAscii(mshFile,tmpMat,false);
     RProgressPrint(cstep++,nsteps);
 
-    mshFile.close();
+    mshFile.commit();
 
     RProgressFinalize("Done");
 } /* RModelMsh::writeAscii */

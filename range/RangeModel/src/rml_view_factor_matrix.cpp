@@ -378,7 +378,7 @@ void RViewFactorMatrix::writeAscii(const QString &fileName) const
 
     RLogger::info("Writing ascii file \'%s\'\n",fileName.toUtf8().constData());
 
-    RFile file(fileName,RFile::ASCII);
+    RSaveFile file(fileName,RSaveFile::ASCII);
 
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
     {
@@ -395,7 +395,7 @@ void RViewFactorMatrix::writeAscii(const QString &fileName) const
         RFileIO::writeNewLineAscii(file);
     }
 
-    file.close();
+    file.commit();
 }
 
 void RViewFactorMatrix::writeBinary(const QString &fileName) const
@@ -407,7 +407,7 @@ void RViewFactorMatrix::writeBinary(const QString &fileName) const
 
     RLogger::info("Writing binary file \'%s\'\n",fileName.toUtf8().constData());
 
-    RFile file(fileName,RFile::BINARY);
+    RSaveFile file(fileName,RSaveFile::BINARY);
 
     if (!file.open(QIODevice::WriteOnly))
     {
@@ -423,7 +423,7 @@ void RViewFactorMatrix::writeBinary(const QString &fileName) const
         RFileIO::writeBinary(file,this->rows[i]);
     }
 
-    file.close();
+    file.commit();
 }
 
 QString RViewFactorMatrix::readAsciiHeader(const QString &fileName, RViewFactorMatrixHeader &header)

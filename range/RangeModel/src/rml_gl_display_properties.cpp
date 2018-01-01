@@ -386,7 +386,7 @@ void RGLDisplayProperties::writeAscii(const QString &fileName) const
 
     RLogger::info("Writing ascii display properties file \'%s\'\n",fileName.toUtf8().constData());
 
-    RFile file(fileName,RFile::ASCII);
+    RSaveFile file(fileName,RSaveFile::ASCII);
 
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
     {
@@ -396,7 +396,7 @@ void RGLDisplayProperties::writeAscii(const QString &fileName) const
     RFileIO::writeAscii(file,RFileHeader(R_FILE_TYPE_DISPLAY_PROPERTIES,_version));
     RFileIO::writeAscii(file,(*this));
 
-    file.close();
+    file.commit();
 }
 
 void RGLDisplayProperties::writeBinary(const QString &fileName) const
@@ -408,7 +408,7 @@ void RGLDisplayProperties::writeBinary(const QString &fileName) const
 
     RLogger::info("Writing binary display properties file \'%s\'\n",fileName.toUtf8().constData());
 
-    RFile file(fileName,RFile::BINARY);
+    RSaveFile file(fileName,RSaveFile::BINARY);
 
     if (!file.open(QIODevice::WriteOnly))
     {
@@ -418,5 +418,5 @@ void RGLDisplayProperties::writeBinary(const QString &fileName) const
     RFileIO::writeBinary(file,RFileHeader(R_FILE_TYPE_DISPLAY_PROPERTIES,_version));
     RFileIO::writeBinary(file,(*this));
 
-    file.close();
+    file.commit();
 }

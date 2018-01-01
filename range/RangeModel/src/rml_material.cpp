@@ -550,7 +550,7 @@ void RMaterial::writeAscii(const QString &fileName) const
         throw RError(R_ERROR_INVALID_FILE_NAME,R_ERROR_REF,"No file name was provided.");
     }
 
-    RFile materialFile(fileName,RFile::ASCII);
+    RSaveFile materialFile(fileName,RSaveFile::ASCII);
 
     if (!materialFile.open(QIODevice::WriteOnly | QIODevice::Text))
     {
@@ -560,7 +560,7 @@ void RMaterial::writeAscii(const QString &fileName) const
     RFileIO::writeAscii(materialFile,RFileHeader(R_FILE_TYPE_MATERIAL,_version));
     RFileIO::writeAscii(materialFile,*this);
 
-    materialFile.close();
+    materialFile.commit();
 } /* RMaterial::writeAscii */
 
 
@@ -571,7 +571,7 @@ void RMaterial::writeBinary(const QString &fileName) const
         throw RError(R_ERROR_INVALID_FILE_NAME,R_ERROR_REF,"No file name was provided.");
     }
 
-    RFile materialFile(fileName,RFile::BINARY);
+    RSaveFile materialFile(fileName,RSaveFile::BINARY);
 
     if (!materialFile.open(QIODevice::WriteOnly))
     {
@@ -581,7 +581,7 @@ void RMaterial::writeBinary(const QString &fileName) const
     RFileIO::writeBinary(materialFile,RFileHeader(R_FILE_TYPE_MATERIAL,_version));
     RFileIO::writeBinary(materialFile,*this);
 
-    materialFile.close();
+    materialFile.commit();
 } /* RMaterial::writeBinary */
 
 

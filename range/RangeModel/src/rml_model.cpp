@@ -9,6 +9,7 @@
  *********************************************************************/
 
 #include <QDir>
+#include <QSaveFile>
 #include <QFile>
 #include <QFileInfo>
 #include <QTextStream>
@@ -7011,7 +7012,7 @@ void RModel::writeAscii(const QString &fileName) const
 
     RLogger::info("Writing ascii model file \'%s\'\n",fileName.toUtf8().constData());
 
-    RFile modelFile(fileName,RFile::ASCII);
+    RSaveFile modelFile(fileName,RSaveFile::ASCII);
 
     if (!modelFile.open(QIODevice::WriteOnly | QIODevice::Text))
     {
@@ -7147,7 +7148,7 @@ void RModel::writeAscii(const QString &fileName) const
         RFileIO::writeAscii(modelFile,this->volumeNeigs[i]);
     }
 
-    modelFile.close();
+    modelFile.commit();
 
     RProgressFinalize("Done");
 } /* RModel::writeAscii */
@@ -7164,7 +7165,7 @@ void RModel::writeBinary(const QString &fileName) const
 
     RLogger::info("Writing binary model file \'%s\'\n",fileName.toUtf8().constData());
 
-    RFile modelFile(fileName,RFile::BINARY);
+    RSaveFile modelFile(fileName,RSaveFile::BINARY);
 
     if (!modelFile.open(QIODevice::WriteOnly))
     {
@@ -7289,7 +7290,7 @@ void RModel::writeBinary(const QString &fileName) const
         RFileIO::writeBinary(modelFile,this->volumeNeigs[i]);
     }
 
-    modelFile.close();
+    modelFile.commit();
 
     RProgressFinalize("Done");
 } /* RModel::writeBinary */

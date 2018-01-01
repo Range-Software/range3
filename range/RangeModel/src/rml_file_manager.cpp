@@ -253,7 +253,7 @@ void RFileManager::writeLink(const QString &linkFileName, const QString &targetF
     {
         RLogger::info("Writing binary link file \'%s\'\n",linkFileName.toUtf8().constData());
 
-        RFile linkFile(linkFileName,RFile::BINARY);
+        RSaveFile linkFile(linkFileName,RSaveFile::BINARY);
 
         if (!linkFile.open(QIODevice::WriteOnly))
         {
@@ -262,13 +262,13 @@ void RFileManager::writeLink(const QString &linkFileName, const QString &targetF
 
         RFileIO::writeBinary(linkFile,RFileHeader(R_FILE_TYPE_LINK,version,relativeTargetFileName));
 
-        linkFile.close();
+        linkFile.commit();
     }
     else
     {
         RLogger::info("Writing ascii link file \'%s\'\n",linkFileName.toUtf8().constData());
 
-        RFile linkFile(linkFileName,RFile::ASCII);
+        RSaveFile linkFile(linkFileName,RSaveFile::ASCII);
 
         if (!linkFile.open(QIODevice::WriteOnly | QIODevice::Text))
         {
@@ -277,7 +277,7 @@ void RFileManager::writeLink(const QString &linkFileName, const QString &targetF
 
         RFileIO::writeAscii(linkFile,RFileHeader(R_FILE_TYPE_LINK,version,"\"" + relativeTargetFileName + "\""));
 
-        linkFile.close();
+        linkFile.commit();
     }
 }
 
