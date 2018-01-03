@@ -395,7 +395,7 @@ class Model : public RModel
         void glDrawUnlock(void);
 
         //! Draw model to OpenGL context.
-        void glDraw(GLWidget *glWidget, bool useGlLists = true) const;
+        void glDraw(GLWidget *glWidget) const;
 
         //! Draw picked items to OpenGL context.
         void glDraw(GLWidget *glWidget, const QVector<PickItem> &pickedItems) const;

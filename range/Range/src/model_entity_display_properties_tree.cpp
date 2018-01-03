@@ -77,6 +77,7 @@ void ModelEntityDisplayPropertiesTree::populate(void)
     {
         return;
     }
+    this->blockSignals(true);
 
     int nDrawWire = 0;
     int nDrawEdges = 0;
@@ -328,6 +329,7 @@ void ModelEntityDisplayPropertiesTree::populate(void)
     this->connect(colorCombo,SIGNAL(colorChanged(QColor)),SLOT(onColorChanged(QColor)));
 
     this->setItemWidget(item,DP_TREE_COLUMN_NAME,colorCombo);
+    this->blockSignals(false);
 }
 
 void ModelEntityDisplayPropertiesTree::onModelSelectionChanged(uint)

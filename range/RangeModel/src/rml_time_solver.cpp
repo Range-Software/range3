@@ -126,9 +126,10 @@ void RTimeSolver::setTimes(const std::vector<double> &times)
 
 void RTimeSolver::addTimes(unsigned int startTimeStep, unsigned int nTimeSteps, double timeStepSize)
 {
-    R_ERROR_ASSERT(startTimeStep <= this->getNTimeSteps());
-
-    this->times.erase(this->times.begin()+startTimeStep,this->times.end());
+    if (startTimeStep < this->getNTimeSteps())
+    {
+        this->times.erase(this->times.begin()+startTimeStep,this->times.end());
+    }
     std::vector<double> newTimes = RTimeSolver::findTimesVector(nTimeSteps,this->times.back(),timeStepSize);
     this->times.insert(this->times.end(),newTimes.begin(),newTimes.end());
 } /* RTimeSolver::addTimes */
@@ -266,6 +267,10 @@ void RTimeSolver::harmonizeTimesWithInput(bool restart)
     {
         if (restart)
         {
+            if (this->getCurrentTimeStep() >= this->getNTimeSteps())
+            {
+                this->setCurrentTimeStep(this->getNTimeSteps()-1);
+            }
             this->addTimes(this->getCurrentTimeStep()+1,
                            this->getInputNTimeSteps(),
                            this->getInputTimeStepSize());

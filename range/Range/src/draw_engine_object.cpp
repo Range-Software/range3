@@ -66,7 +66,7 @@ void DrawEngineObject::glDraw(GLWidget *glWidget) const
     glWidget->setUseGLVoidModelList(true);
 
     glWidget->getGLModelList().clear();
-    this->model.glDraw(glWidget,true);
+    this->model.glDraw(glWidget);
     glWidget->getGLModelList().clear();
 
     glWidget->setUseGLVoidModelList(useGlModelList);

@@ -706,6 +706,8 @@ void GLWidget::applyTransformations(void)
 
 void GLWidget::processActionEvent(void)
 {
+    RLogger::trace("GLWidget::processActionEvent(void)\n");
+
     GLActionEventType glActionEventType = this->actionEvent.getType();
 
     if (glActionEventType == GL_ACTION_EVENT_PICK_CLEAR)
@@ -1202,6 +1204,8 @@ void GLWidget::onEntityVisibilityChanged(uint, REntityGroupType, uint, bool )
 
 void GLWidget::onDisplayPropertiesChanged(uint modelID, REntityGroupType elementGrpType, uint entityID)
 {
+    RLogger::trace("GLWidget::onDisplayPropertiesChanged(uint modelID, REntityGroupType elementGrpType, uint entityID)\n");
+
     if (this->modelID != modelID)
     {
         return;
@@ -1279,6 +1283,8 @@ void GLWidget::onDisplayPropertiesChanged(uint modelID, REntityGroupType element
 
 void GLWidget::onVariableDataChanged(uint modelID, RVariableType variableType)
 {
+    RLogger::trace("GLWidget::onVariableDataChanged(uint modelID, RVariableType variableType)\n");
+
     if (this->modelID != modelID)
     {
         return;
@@ -1415,6 +1421,8 @@ void GLWidget::onVariableDataChanged(uint modelID, RVariableType variableType)
 
 void GLWidget::onVariableDataChanged(const SessionEntityID &entityID, RVariableType)
 {
+    RLogger::trace("GLWidget::onVariableDataChanged(const SessionEntityID &entityID, RVariableType)\n");
+
     if (this->modelID != entityID.getMid())
     {
         return;

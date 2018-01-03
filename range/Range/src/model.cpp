@@ -1723,7 +1723,7 @@ void Model::glDrawUnlock(void)
     this->drawLock.unlock();
 }
 
-void Model::glDraw(GLWidget *glWidget, bool useGlLists) const
+void Model::glDraw(GLWidget *glWidget) const
 {
     try
     {
@@ -1749,7 +1749,7 @@ void Model::glDraw(GLWidget *glWidget, bool useGlLists) const
         {
             GLElementGroup glElementGroup(glWidget,this->getVolume(i),SessionEntityID(modelID,R_ENTITY_GROUP_VOLUME,i));
             glElementGroup.setParentModel(this);
-            glElementGroup.setUseGlList(useGlLists);
+            glElementGroup.setUseGlList(true);
             glElementGroup.paint();
         }
 
@@ -1759,7 +1759,7 @@ void Model::glDraw(GLWidget *glWidget, bool useGlLists) const
             GLElementGroup glElementGroup(glWidget,this->getSurface(i),SessionEntityID(modelID,R_ENTITY_GROUP_SURFACE,i));
             glElementGroup.setParentModel(this);
             glElementGroup.setSurfaceThickness(this->getSurface(i).getThickness());
-            glElementGroup.setUseGlList(useGlLists);
+            glElementGroup.setUseGlList(true);
             glElementGroup.setUseGlCullFace(glWidget->getUseGlCullFace());
             glElementGroup.paint();
         }
@@ -1770,7 +1770,7 @@ void Model::glDraw(GLWidget *glWidget, bool useGlLists) const
             GLElementGroup glElementGroup(glWidget,this->getLine(i),SessionEntityID(modelID,R_ENTITY_GROUP_LINE,i));
             glElementGroup.setParentModel(this);
             glElementGroup.setLineCrossArea(this->getLine(i).getCrossArea());
-            glElementGroup.setUseGlList(useGlLists);
+            glElementGroup.setUseGlList(true);
             glElementGroup.paint();
         }
 
@@ -1780,7 +1780,7 @@ void Model::glDraw(GLWidget *glWidget, bool useGlLists) const
             GLElementGroup glElementGroup(glWidget,this->getPoint(i),SessionEntityID(modelID,R_ENTITY_GROUP_POINT,i));
             glElementGroup.setParentModel(this);
             glElementGroup.setPointVolume(this->getPoint(i).getVolume());
-            glElementGroup.setUseGlList(useGlLists);
+            glElementGroup.setUseGlList(true);
             glElementGroup.paint();
         }
 
@@ -1790,7 +1790,7 @@ void Model::glDraw(GLWidget *glWidget, bool useGlLists) const
             GLVectorField glVectorField(glWidget,this->getVectorField(i),SessionEntityID(modelID,R_ENTITY_GROUP_VECTOR_FIELD,i));
             glVectorField.setApplyEnvironmentSettings(false);
             glVectorField.setParentModel(this);
-            glVectorField.setUseGlList(useGlLists);
+            glVectorField.setUseGlList(true);
             glVectorField.paint();
         }
 
@@ -1800,7 +1800,7 @@ void Model::glDraw(GLWidget *glWidget, bool useGlLists) const
             GLScalarField glScalarField(glWidget,this->getScalarField(i),SessionEntityID(modelID,R_ENTITY_GROUP_SCALAR_FIELD,i));
             glScalarField.setApplyEnvironmentSettings(false);
             glScalarField.setParentModel(this);
-            glScalarField.setUseGlList(useGlLists);
+            glScalarField.setUseGlList(true);
             glScalarField.paint();
         }
 
@@ -1810,7 +1810,7 @@ void Model::glDraw(GLWidget *glWidget, bool useGlLists) const
             GLInterpolatedEntity glStreamLine(glWidget,this->getStreamLine(i),SessionEntityID(modelID,R_ENTITY_GROUP_STREAM_LINE,i));
             glStreamLine.setApplyEnvironmentSettings(false);
             glStreamLine.setParentModel(this);
-            glStreamLine.setUseGlList(useGlLists);
+            glStreamLine.setUseGlList(true);
             glStreamLine.paint();
         }
 
@@ -1820,7 +1820,7 @@ void Model::glDraw(GLWidget *glWidget, bool useGlLists) const
             GLInterpolatedEntity glCut(glWidget,this->getCut(i),SessionEntityID(modelID,R_ENTITY_GROUP_CUT,i));
             glCut.setApplyEnvironmentSettings(false);
             glCut.setParentModel(this);
-            glCut.setUseGlList(useGlLists);
+            glCut.setUseGlList(true);
             glCut.paint();
         }
 
@@ -1830,7 +1830,7 @@ void Model::glDraw(GLWidget *glWidget, bool useGlLists) const
             GLInterpolatedEntity glIso(glWidget,this->getIso(i),SessionEntityID(modelID,R_ENTITY_GROUP_ISO,i));
             glIso.setApplyEnvironmentSettings(false);
             glIso.setParentModel(this);
-            glIso.setUseGlList(useGlLists);
+            glIso.setUseGlList(true);
             glIso.paint();
         }
 

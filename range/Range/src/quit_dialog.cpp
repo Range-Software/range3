@@ -14,6 +14,7 @@
 #include <QPushButton>
 
 #include "quit_dialog.h"
+#include "solver_manager.h"
 
 QuitDialog::QuitDialog (QWidget *parent) : QDialog(parent)
 {
@@ -27,7 +28,13 @@ QuitDialog::QuitDialog (QWidget *parent) : QDialog(parent)
     quitButton->setDefault(true);
     connect (quitButton, SIGNAL(clicked()), this, SLOT(accept()));
 
-    QLabel *quitLabel = new QLabel(tr("Are you sure you want to quit?"));
+    QString quitMessage(tr("Are you sure you want to quit?"));
+    if (SolverManager::getInstance().getNRunning() > 0)
+    {
+        quitMessage += "<br/>" + tr("If you quit now solver will continue executing in the background.");
+    }
+
+    QLabel *quitLabel = new QLabel(quitMessage);
 
     QHBoxLayout *buttonsLayout = new QHBoxLayout;
     buttonsLayout->addStretch(1);
