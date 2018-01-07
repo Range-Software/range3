@@ -105,10 +105,16 @@ class MainSettings : public QSettings
         //! Return const reference to stored version.
         const RVersion &getStoredVersion(void) const;
 
-        //! Return supported image formats (sextensions).
+        //! Return supported image formats (extensions).
         static QList<QString> getSupportedImageFormats(void);
 
-        //! Return supported document formats (sextensions).
+        //! Return supported video formats (extensions).
+        static QList<QString> getSupportedVideoFormats(void);
+
+        //! Return default video format (extensions).
+        static QString getDefaultVideoFormat(void);
+
+        //! Return supported document formats (extensions).
         static QList<QString> getSupportedDocumentFormats(void);
 
         //! Return and construct directory path.

@@ -22,9 +22,9 @@
 #include <QImage>
 
 extern "C" {
-#include "libavutil/mathematics.h"
-#include "libavformat/avformat.h"
-#include "libswscale/swscale.h"
+#include <libavutil/mathematics.h>
+#include <libavformat/avformat.h>
+#include <libswscale/swscale.h>
 }
 
 class VideoOutput : public QObject
@@ -41,10 +41,10 @@ class VideoOutput : public QObject
         AVPicture srcPicture;
         AVPicture dstPicture;
         AVPixelFormat streamPixFmt;
+        uint streamFrameRate;
         int swsFlags;
-        int streamFrameRate;
-        int width;
-        int height;
+        uint width;
+        uint height;
         int frameCount;
 	
     public:
@@ -57,14 +57,17 @@ class VideoOutput : public QObject
 
         //! Open file for writing.
         bool openMediaFile(int width,
-                          int height,
-                          const QString & filename);
+                           int height,
+                           const QString & filename);
 
         //! Close file and write the trailer, if any.
         bool closeMediaFile();
 
+        //! Set stream rate.
+        void setStreamRate(uint streamFrameRate);
+
         //! Set file resolution.
-        void setResolution(int width, int height);
+        void setResolution(uint width, uint height);
 	   
 	public slots:
 	

@@ -8,6 +8,9 @@ win*-msvc* {
     LIBS += -fopenmp
     LIB_EXT = "a"
     LIB_PRE = "lib"
+
+    CONFIG += link_pkgconfig
+    PKGCONFIG += libavutil libavformat libswscale
 }
 
 TARGET = Range
@@ -211,7 +214,9 @@ SOURCES += \
     src/variable_selector.cpp \
     src/variable_value_edit.cpp \
     src/vector_field_dialog.cpp \
-    src/video_output.cpp
+    src/video_output.cpp \
+    src/video_settings.cpp \
+    src/video_settings_dialog.cpp
 
 HEADERS += \
     src/action.h \
@@ -411,7 +416,9 @@ HEADERS += \
     src/variable_selector.h \
     src/variable_value_edit.h \
     src/vector_field_dialog.h \
-    src/video_output.h
+    src/video_output.h \
+    src/video_settings.h \
+    src/video_settings_dialog.h
 
 CONFIG -= debug_and_release
 #CONFIG += rtti
@@ -425,6 +432,13 @@ CONFIG(debug, debug|release) {
     DEBUG_EXT = "_debug"
 }
 
+win*-msvc* {
+    LIBS += \
+        -L../../ffmpeg/ffmpeg-3.4.1-win64/bin/ \
+        -L../../ffmpeg/ffmpeg-3.4.1-win64/lib/
+    #QMAKE_LFLAGS += /OPT:NOREF
+}
+
 LIBS += \
     -L../TetGen/ \
     -L../RangeBase/ \
@@ -435,22 +449,15 @@ LIBS += \
     -lRangeModel$${DEBUG_EXT} \
     -lRangeBase$${DEBUG_EXT} \
     -lRangeAuth$${DEBUG_EXT} \
-    -lTetGen$${DEBUG_EXT}
-
-win32-msvc* {
-    LIBS += \
-        -L../../ffmpeg/ffmpeg-3.4.1-win64/bin/ \
-        -L../../ffmpeg/ffmpeg-3.4.1-win64/lib/ \
-        -lavcodec \
-        -lavdevice \
-        -lavfilter \
-        -lavformat \
-        -lavutil \
-        -lpostproc \
-        -lswresample \
-        -lswscale
-    #QMAKE_LFLAGS += /OPT:NOREF
-}
+    -lTetGen$${DEBUG_EXT} \
+    -lavcodec \
+    -lavdevice \
+    -lavfilter \
+    -lavformat \
+    -lavutil \
+    -lpostproc \
+    -lswresample \
+    -lswscale
 
 PRE_TARGETDEPS += \
     ../TetGen/$${LIB_PRE}TetGen$${DEBUG_EXT}.$${LIB_EXT} \

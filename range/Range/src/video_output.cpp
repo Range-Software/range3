@@ -13,32 +13,24 @@
 #include <rblib.h>
 
 #include "video_output.h"
-////////////////////////////////////////////////////////////////////////////////
+
 // Macro redefinition since original does not compile in c++
-///////////////////////////////////////////////////////////////////////////////
 #undef av_err2str
 #define av_err2str(errnum) \
-        av_make_error_string(reinterpret_cast<char*>(_alloca(AV_ERROR_MAX_STRING_SIZE)),\
+        av_make_error_string(reinterpret_cast<char*>(alloca(AV_ERROR_MAX_STRING_SIZE)),\
                              AV_ERROR_MAX_STRING_SIZE, errnum)
-////////////////////////////////////////////////////////////////////////////////
-//  VideoOutput::VideoOutput
-//!
-//! @brief Constructor
-//!
-//! @param[in] parent : A parent object.
-//!
-////////////////////////////////////////////////////////////////////////////////
+
 VideoOutput::VideoOutput(QObject *parent)
     : QObject(parent)
-    , swsContext(0x0)
     , formatContext(0x0)
     , outputFormat(0x0)
     , videoStream(0x0)
     , videoCodec(0x0)
+    , swsContext(0x0)
     , frame(0x0)
-    , swsFlags(SWS_BICUBIC)
     , streamPixFmt(AV_PIX_FMT_YUV420P) // default pix_fmt
     , streamFrameRate(25)              // 25 images/s
+    , swsFlags(SWS_BICUBIC)
     , width(640)
     , height(480)
 {
@@ -69,13 +61,13 @@ bool VideoOutput::openMediaFile(int width, int height, const QString &filename)
     this->videoStream = NULL;
     if (this->outputFormat->video_codec != AV_CODEC_ID_NONE)
     {
-        this->videoStream = addStream(this->formatContext, &this->videoCodec, this->outputFormat->video_codec);
+        this->videoStream = this->addStream(this->formatContext, &this->videoCodec, this->outputFormat->video_codec);
     }
     // Now that all the parameters are set, we can open the audio and
     // video codecs and allocate the necessary encode buffers.
     if (this->videoStream)
     {
-        openVideo(this->videoCodec, this->videoStream);
+        this->openVideo(this->videoCodec, this->videoStream);
     }
     av_dump_format(this->formatContext, 0, filename.toUtf8().constData(), 1);
     int ret = 0;
@@ -114,7 +106,7 @@ bool VideoOutput::closeMediaFile()
     // Close each codec.
     if (this->videoStream)
     {
-        closeVideo(this->videoStream);
+        this->closeVideo(this->videoStream);
     }
     if (this->swsContext)
     {
@@ -127,7 +119,7 @@ bool VideoOutput::closeMediaFile()
         av_freep(&this->formatContext->streams[i]->codec);
         av_freep(&this->formatContext->streams[i]);
     }
-    if (!(outputFormat->flags & AVFMT_NOFILE))
+    if (!(this->outputFormat->flags & AVFMT_NOFILE))
     {
         // Close the output file.
         avio_close(this->formatContext->pb);
@@ -137,12 +129,19 @@ bool VideoOutput::closeMediaFile()
     return true;
 }
 
-void VideoOutput::setResolution(int inWidth, int inHeight)
+void VideoOutput::setStreamRate(uint streamFrameRate)
 {
-    Q_ASSERT(inWidth%2  == 0);
-    Q_ASSERT(inHeight%2 == 0);
-    this->width  = inWidth;
-    this->height = inHeight;
+    Q_ASSERT(streamFrameRate >= 24);
+    Q_ASSERT(streamFrameRate <= 60);
+    this->streamFrameRate = streamFrameRate;
+}
+
+void VideoOutput::setResolution(uint width, uint height)
+{
+    Q_ASSERT(width%2  == 0);
+    Q_ASSERT(height%2 == 0);
+    this->width  = width;
+    this->height = height;
 }
 
 bool VideoOutput::newFrame(const QImage &image)
@@ -158,7 +157,7 @@ bool VideoOutput::newFrame(const QImage &image)
             this->srcPicture.data[0][y*this->srcPicture.linesize[0]+x] = scanline[x];
         }
     }
-    writeVideoFrame(this->srcPicture, width, height, this->formatContext, this->videoStream);
+    this->writeVideoFrame(this->srcPicture, width, height, this->formatContext, this->videoStream);
     this->frame->pts += av_rescale_q(1,
                                      this->videoStream->codec->time_base,
                                      this->videoStream->time_base);
@@ -276,19 +275,19 @@ bool VideoOutput::writeVideoFrame(const AVPicture &src,
                                   AVStream *stream)
 {
     int ret;
-    AVCodecContext *c = stream->codec;
-    if (c->pix_fmt != AV_PIX_FMT_RGBA)
+    AVCodecContext *codec = stream->codec;
+    if (codec->pix_fmt != AV_PIX_FMT_RGBA)
     {
         // as we only use RGBA picture, we must convert it
         // to the codec pixel format if needed
-        if (!swsContext)
+        if (!this->swsContext)
         {
             this->swsContext = sws_getContext(srcWidth,
                                               srcHeight,
                                               AV_PIX_FMT_BGRA,
-                                              c->width,
-                                              c->height,
-                                              c->pix_fmt,
+                                              codec->width,
+                                              codec->height,
+                                              codec->pix_fmt,
                                               this->swsFlags,
                                               NULL,
                                               NULL,
@@ -303,7 +302,7 @@ bool VideoOutput::writeVideoFrame(const AVPicture &src,
                   (const uint8_t * const *)src.data,
                   src.linesize,
                   0,
-                  c->height,
+                  codec->height,
                   this->dstPicture.data,
                   this->dstPicture.linesize);
     }
@@ -326,7 +325,7 @@ bool VideoOutput::writeVideoFrame(const AVPicture &src,
         av_init_packet(&pkt);
         pkt.data = NULL;    // packet data will be allocated by the encoder
         pkt.size = 0;
-        ret = avcodec_encode_video2(c, &pkt, this->frame, &gotOutput);
+        ret = avcodec_encode_video2(codec, &pkt, this->frame, &gotOutput);
         if (ret < 0)
         {
             RLogger::error("Error encoding video frame: %s\n", av_err2str(ret));
@@ -335,7 +334,7 @@ bool VideoOutput::writeVideoFrame(const AVPicture &src,
         // If size is zero, it means the image was buffered.
         if (gotOutput)
         {
-            if (c->coded_frame->key_frame)
+            if (codec->coded_frame->key_frame)
             {
                 pkt.flags |= AV_PKT_FLAG_KEY;
             }

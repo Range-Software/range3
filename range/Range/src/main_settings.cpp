@@ -156,6 +156,22 @@ QList<QString> MainSettings::getSupportedImageFormats(void)
     return formats;
 }
 
+QList<QString> MainSettings::getSupportedVideoFormats(void)
+{
+    QList<QString> formats;
+
+    formats.append("avi");
+    formats.append("mpeg");
+    formats.append("ogg");
+
+    return formats;
+}
+
+QString MainSettings::getDefaultVideoFormat(void)
+{
+    return QString("avi");
+}
+
 QList<QString> MainSettings::getSupportedDocumentFormats(void)
 {
     QList<QString> formats;

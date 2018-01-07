@@ -2815,6 +2815,7 @@ QList<QString> Model::getDocumentFiles(void) const
 
     QList<QString> documentFormats = MainSettings::getSupportedDocumentFormats();
     QList<QString> imageFormats = MainSettings::getSupportedImageFormats();
+    QList<QString> videoFormats = MainSettings::getSupportedVideoFormats();
 
     QString baseName(fi.baseName());
 
@@ -2827,6 +2828,10 @@ QList<QString> Model::getDocumentFiles(void) const
     for (int i=0;i<imageFormats.size();i++)
     {
         filters << baseName + "*." + imageFormats[i];
+    }
+    for (int i=0;i<videoFormats.size();i++)
+    {
+        filters << baseName + "*." + videoFormats[i];
     }
 
     foreach (QString file, docDir.entryList(filters, QDir::Files))

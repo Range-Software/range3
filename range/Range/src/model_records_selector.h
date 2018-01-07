@@ -15,6 +15,7 @@
 #include <QAction>
 
 #include "model_records_tree.h"
+#include "video_settings.h"
 
 class ModelRecordsSelector : public QWidget
 {
@@ -35,6 +36,8 @@ class ModelRecordsSelector : public QWidget
         bool recordIndicator;
         //! Model records tree.
         ModelRecordsTree *tree;
+        //! Video settings.
+        VideoSettings videoSettings;
 
     public:
 

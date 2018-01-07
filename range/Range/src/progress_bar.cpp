@@ -50,6 +50,14 @@ void ProgressBar::setMessage(const QString &message)
 void ProgressBar::setAutoHide(bool autoHide)
 {
     this->autoHide = autoHide;
+    if (this->autoHide && this->value() == 100)
+    {
+        this->hide();
+    }
+    else
+    {
+        this->show();
+    }
 }
 
 void ProgressBar::hide(void)

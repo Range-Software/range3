@@ -22,11 +22,12 @@
 #include "session.h"
 #include "main_window.h"
 #include "video_output.h"
+#include "video_settings_dialog.h"
 
-ModelRecordsSelector::ModelRecordsSelector(QWidget *parent) :
-    QWidget(parent),
-    markNextIndicator(false),
-    recordIndicator(false)
+ModelRecordsSelector::ModelRecordsSelector(QWidget *parent)
+    : QWidget(parent)
+    , markNextIndicator(false)
+    , recordIndicator(false)
 {
     QVBoxLayout *layout = new QVBoxLayout;
     layout->setSpacing(0);
@@ -98,24 +99,20 @@ void ModelRecordsSelector::createAnimation(bool modelID)
 
     if (imageFileNames.size() > 0)
     {
-        QString fileName(rModel.buildAnimationFileName("mp4"));
+        QString fileName(rModel.buildAnimationFileName(this->videoSettings.getFormat()));
 
         RLogger::info("Creating animation file \'%s\'\n",fileName.toUtf8().constData());
 
-        int width = 640;
-        int height = 480;
-
-        width += width%2;
-        height += height%2;
-
         VideoOutput videoOutput;
-        videoOutput.setResolution(width,height);
-        if (!videoOutput.openMediaFile(width,height,fileName))
+        videoOutput.setStreamRate(this->videoSettings.getFps());
+        videoOutput.setResolution(this->videoSettings.getWidth(),this->videoSettings.getHeight());
+        if (!videoOutput.openMediaFile(this->videoSettings.getWidth(),this->videoSettings.getHeight(),fileName))
         {
             RLogger::error("Failed to create animation file \'%s\'\n",fileName.toUtf8().constData());
             return;
         }
 
+        uint cnt=0;
         foreach (const QString &imageFileName, imageFileNames)
         {
             QImage image;
@@ -124,18 +121,44 @@ void ModelRecordsSelector::createAnimation(bool modelID)
                 RLogger::error("Failed to load image file \'%s\'\n",imageFileName.toUtf8().constData());
                 return;
             }
-            QImage sImage = image.scaled(640,480,Qt::KeepAspectRatio);
+            QImage sImage = image.scaled(this->videoSettings.getWidth(),this->videoSettings.getHeight(),Qt::KeepAspectRatio,Qt::SmoothTransformation);
             if (sImage.isNull())
             {
                 RLogger::error("Failed to scale image\n");
                 return;
             }
-            RLogger::info("Adding frame from image file \'%s\'\n",imageFileName.toUtf8().constData());
-            if (!videoOutput.newFrame(image))
+            if (sImage.height() > int(this->videoSettings.getHeight()))
             {
-                RLogger::error("Failed to add frame from image file \'%s\'\n",imageFileName.toUtf8().constData());
-                return;
+                sImage = image.scaled(this->videoSettings.getWidth(),this->videoSettings.getHeight(),Qt::KeepAspectRatioByExpanding,Qt::SmoothTransformation);
+                if (sImage.isNull())
+                {
+                    RLogger::error("Failed to scale image\n");
+                    return;
+                }
             }
+
+            QImage fImage(this->videoSettings.getWidth(),this->videoSettings.getHeight(),sImage.format());
+            QPainter painter;
+            painter.begin(&fImage);
+            painter.setBackground(QBrush(Qt::black));
+            painter.setBrush(QBrush(Qt::black));
+            painter.setPen(Qt::black);
+            painter.drawRect(0,0,this->videoSettings.getWidth(),this->videoSettings.getHeight());
+            painter.drawImage((this->videoSettings.getWidth()-sImage.width())/2,
+                              (this->videoSettings.getHeight()-sImage.height())/2,
+                              sImage);
+            painter.end();
+
+            RLogger::info("Adding frame from image file \'%s\'\n",imageFileName.toUtf8().constData());
+            for (uint i=0;i<this->videoSettings.getFpp();i++)
+            {
+                if (!videoOutput.newFrame(fImage))
+                {
+                    RLogger::error("Failed to add frame from image file \'%s\'\n",imageFileName.toUtf8().constData());
+                    return;
+                }
+            }
+            RProgressPrint(cnt++,imageFileNames.size());
         }
 
         if (!videoOutput.closeMediaFile())
@@ -210,7 +233,9 @@ void ModelRecordsSelector::loadNextRecord(bool jumpToFirst)
             QList<uint> selectedModelIDs = Session::getInstance().getSelectedModelIDs();
             for (int i=0;i<selectedModelIDs.size();i++)
             {
+                RProgressInitialize("Creating a video file");
                 this->createAnimation(selectedModelIDs.at(i));
+                RProgressFinalize();
             }
         }
         this->markNextIndicator = false;
@@ -242,7 +267,11 @@ void ModelRecordsSelector::loadNextRecord(bool jumpToFirst)
 
 void ModelRecordsSelector::onRecordVideo(void)
 {
-    this->recordIndicator = true;
-    this->recordAction->setDisabled(true);
-    this->playToggle(true);
+    VideoSettingsDialog videoSettingsDialog(&this->videoSettings);
+    if (videoSettingsDialog.exec() == QDialog::Accepted)
+    {
+        this->recordIndicator = true;
+        this->recordAction->setDisabled(true);
+        this->playToggle(true);
+    }
 }
