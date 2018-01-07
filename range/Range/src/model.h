@@ -449,7 +449,7 @@ class Model : public RModel
         QString buildScreenShotFileName(const QString &format = QString("png")) const;
 
         //! Build animation file name.
-        QString buildAnimationFileName(const QString &format = QString("avi")) const;
+        QString buildAnimationFileName(const QString &format = QString("mp4")) const;
 
         //! Return list of existing results record files.
         QList<QString> getRecordFiles(bool onlyExistingFiles = false) const;

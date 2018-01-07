@@ -143,6 +143,7 @@ int SolverStartDialog::exec(void)
     if (retVal == QDialog::Accepted)
     {
         Session::getInstance().getModel(this->modelID).getProblemSetup().setRestart(this->restartSolverCheck->isChecked());
+        Session::getInstance().getModel(this->modelID).getTimeSolver().harmonizeTimesWithInput(this->restartSolverCheck->isChecked());
 
         // Start solver task
         Session::getInstance().getModel(this->modelID).setFileName(this->modelFileName);

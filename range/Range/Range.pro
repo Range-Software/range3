@@ -210,7 +210,8 @@ SOURCES += \
     src/value_table.cpp \
     src/variable_selector.cpp \
     src/variable_value_edit.cpp \
-    src/vector_field_dialog.cpp
+    src/vector_field_dialog.cpp \
+    src/video_output.cpp
 
 HEADERS += \
     src/action.h \
@@ -409,7 +410,8 @@ HEADERS += \
     src/variable_data.h \
     src/variable_selector.h \
     src/variable_value_edit.h \
-    src/vector_field_dialog.h
+    src/vector_field_dialog.h \
+    src/video_output.h
 
 CONFIG -= debug_and_release
 #CONFIG += rtti
@@ -435,6 +437,21 @@ LIBS += \
     -lRangeAuth$${DEBUG_EXT} \
     -lTetGen$${DEBUG_EXT}
 
+win32-msvc* {
+    LIBS += \
+        -L../../ffmpeg/ffmpeg-3.4.1-win64/bin/ \
+        -L../../ffmpeg/ffmpeg-3.4.1-win64/lib/ \
+        -lavcodec \
+        -lavdevice \
+        -lavfilter \
+        -lavformat \
+        -lavutil \
+        -lpostproc \
+        -lswresample \
+        -lswscale
+    #QMAKE_LFLAGS += /OPT:NOREF
+}
+
 PRE_TARGETDEPS += \
     ../TetGen/$${LIB_PRE}TetGen$${DEBUG_EXT}.$${LIB_EXT} \
     ../RangeBase/$${LIB_PRE}RangeBase$${DEBUG_EXT}.$${LIB_EXT} \
@@ -447,6 +464,7 @@ INCLUDEPATH += $${_PRO_FILE_PWD_}/../RangeBase/include
 INCLUDEPATH += $${_PRO_FILE_PWD_}/../RangeAuth/include
 INCLUDEPATH += $${_PRO_FILE_PWD_}/../RangeModel/include
 INCLUDEPATH += $${_PRO_FILE_PWD_}/../RangeSolverLib/include
+INCLUDEPATH += $${_PRO_FILE_PWD_}/../../ffmpeg/ffmpeg-3.4.1-win64/include
 
 win32 {
     LIBS += -lopengl32

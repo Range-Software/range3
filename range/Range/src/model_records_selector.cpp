@@ -21,6 +21,7 @@
 #include "model_io.h"
 #include "session.h"
 #include "main_window.h"
+#include "video_output.h"
 
 ModelRecordsSelector::ModelRecordsSelector(QWidget *parent) :
     QWidget(parent),
@@ -88,18 +89,62 @@ void ModelRecordsSelector::createAnimation(bool modelID)
 
     for (uint j=0;j<rTimes.size();j++)
     {
-        QString recordFileName(RFileManager::getFileNameWithTimeStep(rModel.getFileName(),j+1));
+        QString recordFileName(RFileManager::getFileNameWithTimeStep(rModel.buildScreenShotFileName(),j+1));
         if (RFileManager::fileExists(recordFileName))
         {
             imageFileNames.append(recordFileName);
         }
     }
 
-    QString fileName(rModel.buildAnimationFileName());
+    if (imageFileNames.size() > 0)
+    {
+        QString fileName(rModel.buildAnimationFileName("mp4"));
 
-    RLogger::info("Creating animation file \'%s\'\n",fileName.toUtf8().constData());
+        RLogger::info("Creating animation file \'%s\'\n",fileName.toUtf8().constData());
 
-    // TODO: Implement
+        int width = 640;
+        int height = 480;
+
+        width += width%2;
+        height += height%2;
+
+        VideoOutput videoOutput;
+        videoOutput.setResolution(width,height);
+        if (!videoOutput.openMediaFile(width,height,fileName))
+        {
+            RLogger::error("Failed to create animation file \'%s\'\n",fileName.toUtf8().constData());
+            return;
+        }
+
+        foreach (const QString &imageFileName, imageFileNames)
+        {
+            QImage image;
+            if (!image.load(imageFileName))
+            {
+                RLogger::error("Failed to load image file \'%s\'\n",imageFileName.toUtf8().constData());
+                return;
+            }
+            QImage sImage = image.scaled(640,480,Qt::KeepAspectRatio);
+            if (sImage.isNull())
+            {
+                RLogger::error("Failed to scale image\n");
+                return;
+            }
+            RLogger::info("Adding frame from image file \'%s\'\n",imageFileName.toUtf8().constData());
+            if (!videoOutput.newFrame(image))
+            {
+                RLogger::error("Failed to add frame from image file \'%s\'\n",imageFileName.toUtf8().constData());
+                return;
+            }
+        }
+
+        if (!videoOutput.closeMediaFile())
+        {
+            RLogger::error("Failed to create animation file \'%s\'\n",fileName.toUtf8().constData());
+            return;
+        }
+        RLogger::info("Animation file \'%s\' created\n",fileName.toUtf8().constData());
+    }
 }
 
 void ModelRecordsSelector::onRecordMarked(uint modelID, const QString &recordFileName)

@@ -284,6 +284,10 @@ void RTimeSolver::harmonizeTimesWithInput(bool restart)
                                                         this->getInputTimeStepSize()));
         }
     }
+    else
+    {
+        this->times.resize(R_TIME_STEP_DEFAULT_NUMBER,R_TIME_STEP_DEFAULT_START + R_TIME_STEP_DEFAULT_SIZE);
+    }
 } /* RTimeSolver::harmonizeTimesWithInput */
 
 const QString &RTimeSolver::getTimeMarchApproximationName(RTimeMarchApproximation timeApproximation)

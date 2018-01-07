@@ -167,9 +167,9 @@ void RSolverGeneric::updateOldRecords(const RTimeSolver &rTimeSolver, const QStr
     if (rTimeSolver.getEnabled())
     {
         // Update previous records.
-        for (unsigned int i=0;i<rTimeSolver.getCurrentTimeStep();i++)
+        for (unsigned int i=0;i<=rTimeSolver.getCurrentTimeStep();i++)
         {
-            QString fileName = RFileManager::getFileNameWithTimeStep(modelFileName,i+1);
+            QString fileName = RFileManager::getFileNameWithTimeStep(modelFileName,i);
 
             if (RFileManager::fileExists(fileName))
             {
