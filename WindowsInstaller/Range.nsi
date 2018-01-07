@@ -126,6 +126,7 @@ SectionGroup "Range Software" SecRange
         File ..\build-Release-${BUILD_KIT}\Range\Range.exe
         File ..\build-Release-${BUILD_KIT}\RangeSolver\RangeSolver.exe
         File bin-${BUILD_KIT}\*.dll
+		File ..\ffmpeg\ffmpeg-3.4.1-win64\bin\*.dll
 	    ${If} ${VC_REDIST} != ""
             ;Check if we have redistributable installed
             Call  CheckRedistributableInstalled
