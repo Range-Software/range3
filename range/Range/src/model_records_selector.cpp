@@ -90,10 +90,11 @@ void ModelRecordsSelector::createAnimation(bool modelID)
 
     for (uint j=0;j<rTimes.size();j++)
     {
-        QString recordFileName(RFileManager::getFileNameWithTimeStep(rModel.buildScreenShotFileName(),j+1));
-        if (RFileManager::fileExists(recordFileName))
+        QString recordFileName(RFileManager::getFileNameWithTimeStep(rModel.getFileName(),j+1));
+        QString imageFileName(RFileManager::getFileNameWithTimeStep(rModel.buildScreenShotFileName(),j+1));
+        if (RFileManager::fileExists(recordFileName) && RFileManager::fileExists(imageFileName))
         {
-            imageFileNames.append(recordFileName);
+            imageFileNames.append(imageFileName);
         }
     }
 
