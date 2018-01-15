@@ -18,6 +18,11 @@ HelpGeneralWidget::HelpGeneralWidget(QWidget *parent)
 {
     QStringList general;
 
+    general.append("Problem");
+    general.append("Boundary condition");
+    general.append("Initial condition");
+    general.append("Environment condition");
+    general.append("Material");
 
     foreach (const QString &tipName, general)
     {
