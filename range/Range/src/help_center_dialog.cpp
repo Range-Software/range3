@@ -14,6 +14,7 @@
 #include <QPushButton>
 
 #include "help_center_dialog.h"
+#include "help_general_widget.h"
 #include "help_actions_widget.h"
 #include "help_tutorial_widget.h"
 #include "help_tips_widget.h"
@@ -32,6 +33,9 @@ HelpCenterDialog::HelpCenterDialog(QWidget *parent)
 
     QTabWidget *tabWidget = new QTabWidget;
     mainLayout->addWidget(tabWidget);
+
+    HelpGeneralWidget *helpGeneralWidget = new HelpGeneralWidget;
+    tabWidget->addTab(helpGeneralWidget,tr("General"));
 
     HelpActionsWidget *helpActionsWidget = new HelpActionsWidget(MainSettings::getInstance().getApplicationSettings()->getActionDefinition());
     tabWidget->addTab(helpActionsWidget,tr("Actions"));

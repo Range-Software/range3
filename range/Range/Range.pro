@@ -114,6 +114,7 @@ SOURCES += \
     src/graph_widget.cpp \
     src/help_actions_widget.cpp \
     src/help_center_dialog.cpp \
+    src/help_general_widget.cpp \
     src/help_tips_widget.cpp \
     src/help_tutorial_widget.cpp \
     src/http_request_input.cpp \
@@ -316,6 +317,7 @@ HEADERS += \
     src/graph_widget.h \
     src/help_actions_widget.h \
     src/help_center_dialog.h \
+    src/help_general_widget.h \
     src/help_tips_widget.h \
     src/help_tutorial_widget.h \
     src/http_request_input.h \
