@@ -33,7 +33,7 @@ DocumentWidget::DocumentWidget(QWidget *parent)
     QObject::connect(this->listWidget,&QListWidget::itemSelectionChanged,this,&DocumentWidget::onListSelectionChanged);
 
     this->textBrowser = new QTextBrowser;
-    this->textBrowser->setSearchPaths(QStringList() << MainSettings::getInstance().findHelpDir());
+    this->textBrowser->setSearchPaths(QStringList() << MainSettings::getInstance().getApplicationSettings()->getHelpDir());
     this->textBrowser->setReadOnly(true);
     this->textBrowser->setSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Expanding);
     splitter->addWidget(this->textBrowser);

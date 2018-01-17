@@ -29,8 +29,10 @@ class ApplicationSettingsDialog : public QDialog
 
         //! Application settings.
         ApplicationSettings *applicationSettings;
-        //! Solver file chooser.
+        //! Solver path file chooser.
         FileChooserButton *solverFileChooserButton;
+        //! Help directory file chooser.
+        FileChooserButton *helpFileChooserButton;
         //! Number of threads spin button.
         QSpinBox *nThreadsSpin;
         //! Number of history records spin button.

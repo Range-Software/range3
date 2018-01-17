@@ -70,6 +70,7 @@ int ApplicationSettingsDialog::exec(void)
     if (retVal == QDialog::Accepted)
     {
         this->applicationSettings->setSolverPath(this->solverFileChooserButton->getFileName());
+        this->applicationSettings->setHelpDir(this->helpFileChooserButton->getFileName());
         this->applicationSettings->setNThreads(this->nThreadsSpin->value());
         this->applicationSettings->setNHistoryRecords(this->nHistoryRecordsSpin->value());
         this->applicationSettings->setStyle(this->styleCombo->currentText());
@@ -95,7 +96,7 @@ QWidget *ApplicationSettingsDialog::createGeneralTab(void)
     widget->setLayout(layout);
 
     this->solverFileChooserButton = new FileChooserButton("Solver executable:",
-                                                          false,
+                                                          FileChooserButton::OpenFile,
                                                           this,
                                                           "Select Range solver executable",
                                                           this->applicationSettings->getSolverPath(),
@@ -118,7 +119,7 @@ QWidget *ApplicationSettingsDialog::createGeneralTab(void)
     this->nHistoryRecordsSpin->setRange(1,INT_MAX);
     this->nHistoryRecordsSpin->setValue(this->applicationSettings->getNHistoryRecords());
     this->nHistoryRecordsSpin->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Minimum);
-    layout->addWidget(this->nHistoryRecordsSpin,2,1,1,1);
+    layout->addWidget(this->nHistoryRecordsSpin,3,1,1,1);
 
     QLabel *styleLabel = new QLabel(tr("Style:"));
     layout->addWidget(styleLabel,3,0,1,1);
@@ -135,9 +136,16 @@ QWidget *ApplicationSettingsDialog::createGeneralTab(void)
     }
     layout->addWidget(this->styleCombo,3,1,1,1);
 
+    this->helpFileChooserButton = new FileChooserButton("Help directory:",
+                                                        FileChooserButton::Directory,
+                                                        this,
+                                                        "Select directory containing help files",
+                                                        this->applicationSettings->getHelpDir());
+    layout->addWidget(this->helpFileChooserButton,4,0,1,2);
+
     QWidget *spacer = new QWidget();
     spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    layout->addWidget(spacer,4,0,1,2);
+    layout->addWidget(spacer,5,0,1,2);
 
     return widget;
 }

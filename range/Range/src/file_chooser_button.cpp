@@ -14,12 +14,13 @@
 #include <QPushButton>
 #include <QFileDialog>
 
+#include <rblib.h>
+
 #include "file_chooser_button.h"
 
-
-FileChooserButton::FileChooserButton(const QString &labelText, bool saveFile, QWidget *parent, const QString &caption, const QString &path, const QString &filter)
+FileChooserButton::FileChooserButton(const QString &labelText, Type type, QWidget *parent, const QString &caption, const QString &path, const QString &filter)
     : QWidget(parent)
-    , saveFile(saveFile)
+    , type(type)
     , caption(caption)
     , path(path)
     , filter(filter)
@@ -80,25 +81,49 @@ void FileChooserButton::onPushButtonClicked(void)
 {
     QString fileName;
 
-    if (this->saveFile)
+    switch (this->type)
     {
-        fileName = QFileDialog::getSaveFileName(this,
-                                                this->caption,
-                                                this->getFileName(),
-                                                this->filter);
-    }
-    else
-    {
-        fileName = QFileDialog::getOpenFileName(this,
-                                                this->caption,
-                                                this->getFileName(),
-                                                this->filter);
-        if (!fileName.isEmpty())
+        case FileChooserButton::SaveFile:
         {
-            if (!QFile::exists(fileName))
+            fileName = QFileDialog::getSaveFileName(this,
+                                                    this->caption,
+                                                    this->getFileName(),
+                                                    this->filter);
+            break;
+        }
+        case FileChooserButton::OpenFile:
+        {
+            fileName = QFileDialog::getOpenFileName(this,
+                                                    this->caption,
+                                                    this->getFileName(),
+                                                    this->filter);
+            if (!fileName.isEmpty())
             {
-                fileName.clear();
+                if (!QFile::exists(fileName))
+                {
+                    fileName.clear();
+                }
             }
+            break;
+        }
+        case FileChooserButton::Directory:
+        {
+            fileName = QFileDialog::getExistingDirectory(this,
+                                                         this->caption,
+                                                         this->getFileName());
+            if (!fileName.isEmpty())
+            {
+                if (!QFile::exists(fileName))
+                {
+                    fileName.clear();
+                }
+            }
+            break;
+        }
+        default:
+        {
+            RLogger::error("Unknown FileChooserButton::type\n");
+            break;
         }
     }
 

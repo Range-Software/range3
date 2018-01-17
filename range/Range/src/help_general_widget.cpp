@@ -19,6 +19,7 @@ HelpGeneralWidget::HelpGeneralWidget(QWidget *parent)
     QStringList general;
 
     general.append("Problem");
+    general.append("Problem type");
     general.append("Boundary condition");
     general.append("Initial condition");
     general.append("Environment condition");
@@ -27,6 +28,6 @@ HelpGeneralWidget::HelpGeneralWidget(QWidget *parent)
     foreach (const QString &tipName, general)
     {
         this->addListItem(tipName,
-                          RFileManager::buildPath(MainSettings::getInstance().findHelpDir(),"general_" + tipName + ".html"));
+                          RFileManager::buildPath(MainSettings::getInstance().getApplicationSettings()->getHelpDir(),"general_" + tipName + ".html"));
     }
 }

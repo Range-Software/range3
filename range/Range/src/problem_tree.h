@@ -22,10 +22,6 @@ class ProblemTree : public QTreeWidget
 
     Q_OBJECT
 
-    protected:
-
-        FileChooserButton *radiationVfFileButton;
-
     public:
 
         //! Constructor.

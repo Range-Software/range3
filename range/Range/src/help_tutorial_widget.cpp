@@ -27,6 +27,6 @@ HelpTutorialWidget::HelpTutorialWidget(QWidget *parent)
     foreach (const QString &tutorialName, tutorials)
     {
         this->addListItem(tutorialName,
-                          RFileManager::buildPath(MainSettings::getInstance().findHelpDir(),"tutorial_" + tutorialName + ".html"));
+                          RFileManager::buildPath(MainSettings::getInstance().getApplicationSettings()->getHelpDir(),"tutorial_" + tutorialName + ".html"));
     }
 }

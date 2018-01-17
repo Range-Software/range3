@@ -40,7 +40,7 @@ HelpActionsWidget::HelpActionsWidget(const ActionDefinition *actionDefinition, Q
             const QString &actionText(actionDefinition->getText(actionTypes[j]));
             this->addListItem(QIcon(iconName),
                               ActionDefinitionItem::getGroupName(actionGroupTypes[i]) + " >> " + actionText,
-                              RFileManager::buildPath(MainSettings::getInstance().findHelpDir(),"action_" + actionText + ".html"));
+                              RFileManager::buildPath(MainSettings::getInstance().getApplicationSettings()->getHelpDir(),"action_" + actionText + ".html"));
         }
     }
 }

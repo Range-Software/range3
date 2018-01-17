@@ -88,7 +88,7 @@ RadiationSetupWidget::RadiationSetupWidget(const RRadiationSetup &radiationSetup
 
     this->viewFactorFileButton = new FileChooserButton(
                                                     "View-factor file:",
-                                                    false,
+                                                    FileChooserButton::OpenFile,
                                                     this,
                                                     "Select view-factor file",
                                                     viewFactorFile,

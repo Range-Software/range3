@@ -62,7 +62,12 @@ ReportDialog::ReportDialog(uint modelID, QWidget *parent)
     QVBoxLayout *htmlFileLayout = new QVBoxLayout;
     this->htmlGroupBox->setLayout(htmlFileLayout);
 
-    this->htmlFileChooserButton = new FileChooserButton("Report file:",true,this,"Select file",htmlFileName,"HTML files (*.html *.htm);;Any files (*)");
+    this->htmlFileChooserButton = new FileChooserButton("Report file:",
+                                                        FileChooserButton::SaveFile,
+                                                        this,
+                                                        "Select file",
+                                                        htmlFileName,
+                                                        "HTML files (*.html *.htm);;Any files (*)");
     htmlFileLayout->addWidget(this->htmlFileChooserButton);
 
     this->odfGroupBox = new QGroupBox("Portable Document Format (ODF)");
@@ -73,7 +78,11 @@ ReportDialog::ReportDialog(uint modelID, QWidget *parent)
     QVBoxLayout *odfFileLayout = new QVBoxLayout;
     this->odfGroupBox->setLayout(odfFileLayout);
 
-    this->odfFileChooserButton = new FileChooserButton("Report file:",true,this,"Select file",odfFileName,"ODF files (*.odf);;Any files (*)");
+    this->odfFileChooserButton = new FileChooserButton("Report file:",
+                                                       FileChooserButton::SaveFile,
+                                                       this,"Select file",
+                                                       odfFileName,
+                                                       "ODF files (*.odf);;Any files (*)");
     odfFileLayout->addWidget(this->odfFileChooserButton);
 
     this->pdfGroupBox = new QGroupBox("Portable Document Format (PDF)");
@@ -84,7 +93,12 @@ ReportDialog::ReportDialog(uint modelID, QWidget *parent)
     QVBoxLayout *pdfFileLayout = new QVBoxLayout;
     this->pdfGroupBox->setLayout(pdfFileLayout);
 
-    this->pdfFileChooserButton = new FileChooserButton("Report file:",true,this,"Select file",pdfFileName,"PDF files (*.pdf);;Any files (*)");
+    this->pdfFileChooserButton = new FileChooserButton("Report file:",
+                                                       FileChooserButton::SaveFile,
+                                                       this,
+                                                       "Select file",
+                                                       pdfFileName,
+                                                       "PDF files (*.pdf);;Any files (*)");
     pdfFileLayout->addWidget(this->pdfFileChooserButton);
 
     QHBoxLayout *buttonsLayout = new QHBoxLayout;

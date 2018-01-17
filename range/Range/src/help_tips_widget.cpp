@@ -22,6 +22,6 @@ HelpTipsWidget::HelpTipsWidget(QWidget *parent)
     foreach (const QString &tipName, tips)
     {
         this->addListItem(tipName,
-                          RFileManager::buildPath(MainSettings::getInstance().findHelpDir(),"tip_" + tipName + ".html"));
+                          RFileManager::buildPath(MainSettings::getInstance().getApplicationSettings()->getHelpDir(),"tip_" + tipName + ".html"));
     }
 }

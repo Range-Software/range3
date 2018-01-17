@@ -769,12 +769,17 @@ void MainWindow::readSettings(void)
     if (version <= RVendor::version)
     {
         pApplicationSettings->setSolverPath(MainSettings::getInstance().value("application/SolverPath").toString());
-
         if (pApplicationSettings->getSolverPath().isEmpty())
         {
             QDir solverExecDir(QApplication::applicationDirPath());
             QString solverPath = solverExecDir.filePath(ApplicationSettings::getDefaultRangeSolverExecutable());
             pApplicationSettings->setSolverPath(solverPath);
+        }
+
+        pApplicationSettings->setHelpDir(MainSettings::getInstance().value("application/HelpDir").toString());
+        if (pApplicationSettings->getHelpDir().isEmpty())
+        {
+            pApplicationSettings->setHelpDir(MainSettings::getInstance().findHelpDir());
         }
 
         pApplicationSettings->setNThreads(MainSettings::getInstance().value("application/nThreads",pApplicationSettings->getNThreads()).toUInt());
@@ -844,6 +849,7 @@ void MainWindow::writeSettings(void) const
     MainSettings::getInstance().setValue("session/fileName", sessionFileName.toUtf8().constData());
     // Application settings
     MainSettings::getInstance().setValue("application/SolverPath", MainSettings::getInstance().getApplicationSettings()->getSolverPath());
+    MainSettings::getInstance().setValue("application/HelpDir", MainSettings::getInstance().getApplicationSettings()->getHelpDir());
     MainSettings::getInstance().setValue("application/nThreads", MainSettings::getInstance().getApplicationSettings()->getNThreads());
     MainSettings::getInstance().setValue("application/nHistoryRecords", MainSettings::getInstance().getApplicationSettings()->getNHistoryRecords());
     MainSettings::getInstance().setValue("application/style", MainSettings::getInstance().getApplicationSettings()->getStyle());

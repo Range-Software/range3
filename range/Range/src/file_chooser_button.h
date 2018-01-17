@@ -20,9 +20,18 @@ class FileChooserButton : public QWidget
 
     Q_OBJECT
 
+    public:
+
+        enum Type
+        {
+            SaveFile = 0,
+            OpenFile,
+            Directory
+        };
+
     protected:
 
-        bool saveFile;
+        Type type;
         QString caption;
         QString path;
         QString filter;
@@ -33,7 +42,7 @@ class FileChooserButton : public QWidget
 
         //! Constructor.
         explicit FileChooserButton(const QString &labelText,
-                                   bool saveFile,
+                                   Type type,
                                    QWidget *parent = 0,
                                    const QString &caption = QString(),
                                    const QString &path = QString(),

@@ -54,6 +54,16 @@ void ApplicationSettings::setSolverPath(const QString &rangeSolverPath)
     this->solverPath = rangeSolverPath;
 }
 
+const QString &ApplicationSettings::getHelpDir(void) const
+{
+    return this->helpDir;
+}
+
+void ApplicationSettings::setHelpDir(const QString &helpDir)
+{
+    this->helpDir = helpDir;
+}
+
 uint ApplicationSettings::getNThreads(void) const
 {
     return this->nThreads;

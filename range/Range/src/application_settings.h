@@ -29,6 +29,8 @@ class ApplicationSettings : public QObject
 
         //! Range solver path.
         QString solverPath;
+        //! Path to help directory.
+        QString helpDir;
         //! Number of CPUs to be used by solver.
         uint nThreads;
         //! Number of history records.
@@ -59,17 +61,23 @@ class ApplicationSettings : public QObject
         //! Constructor.
         explicit ApplicationSettings(QObject *parent = 0);
 
-        //! Return const reference to Range solver path.
-        const QString & getSolverPath(void) const;
-
         //! Return const pointer to action definition.
         const ActionDefinition *getActionDefinition(void) const;
 
         //! Return pointer to action definition.
         ActionDefinition *getActionDefinition(void);
 
+        //! Return const reference to Range solver path.
+        const QString & getSolverPath(void) const;
+
         //! Set new Range solver path.
         void setSolverPath(const QString &solverPath);
+
+        //! Return const reference to help directory.
+        const QString & getHelpDir(void) const;
+
+        //! Set new help directory.
+        void setHelpDir(const QString &helpDir);
 
         //! Return number of threads to be used in calculation.
         uint getNThreads(void) const;
