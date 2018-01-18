@@ -70,6 +70,29 @@ KeyboardShortcutsEdit::KeyboardShortcutsEdit(const ActionDefinition *actionDefin
                      &KeyboardShortcutsEdit::onShortcutChanged);
 }
 
+void KeyboardShortcutsEdit::resetToDefault(void)
+{
+    QList<ActionDefinitionItem> actionDesc;
+
+    ActionDefinition::generateActionDescList(actionDesc);
+
+    for (int i=0;i<this->tree->topLevelItemCount();i++)
+    {
+        for (int j=0;j<this->tree->topLevelItem(i)->childCount();j++)
+        {
+            ActionType type = ActionType(this->tree->topLevelItem(i)->child(j)->data(0,Qt::UserRole).toInt());
+            const QString &shortcut = actionDesc[type].getShortcut();
+            if (this->tree->topLevelItem(i)->child(j)->text(1) != shortcut)
+            {
+                this->tree->blockSignals(true);
+                this->tree->topLevelItem(i)->child(j)->setText(1,shortcut);
+                this->tree->blockSignals(false);
+                emit this->shortcutChanged(type,shortcut);
+            }
+        }
+    }
+}
+
 void KeyboardShortcutsEdit::populateTree(void)
 {
     this->tree = new QTreeWidget;
@@ -176,25 +199,7 @@ void KeyboardShortcutsEdit::onSelectionChanged(void)
 
 void KeyboardShortcutsEdit::onResetAllClicked(void)
 {
-    QList<ActionDefinitionItem> actionDesc;
-
-    ActionDefinition::generateActionDescList(actionDesc);
-
-    for (int i=0;i<this->tree->topLevelItemCount();i++)
-    {
-        for (int j=0;j<this->tree->topLevelItem(i)->childCount();j++)
-        {
-            ActionType type = ActionType(this->tree->topLevelItem(i)->child(j)->data(0,Qt::UserRole).toInt());
-            const QString &shortcut = actionDesc[type].getShortcut();
-            if (this->tree->topLevelItem(i)->child(j)->text(1) != shortcut)
-            {
-                this->tree->blockSignals(true);
-                this->tree->topLevelItem(i)->child(j)->setText(1,shortcut);
-                this->tree->blockSignals(false);
-                emit this->shortcutChanged(type,shortcut);
-            }
-        }
-    }
+    this->resetToDefault();
 }
 
 void KeyboardShortcutsEdit::onShortcutChanged(const QString &shortcut)

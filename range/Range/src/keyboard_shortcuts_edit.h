@@ -36,6 +36,9 @@ class KeyboardShortcutsEdit : public QWidget
         //! Constructor.
         explicit KeyboardShortcutsEdit(const ActionDefinition *actionDefinition,QWidget *parent = 0);
 
+        //! Reset to default.
+        void resetToDefault(void);
+
     protected:
 
         //! Populate tree.

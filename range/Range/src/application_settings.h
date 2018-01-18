@@ -127,17 +127,41 @@ class ApplicationSettings : public QObject
         //! Set Range password.
         void setRangePassword(const QString &rangePassword);
 
-        //! Return default range solver executable.
-        static QString getDefaultRangeSolverExecutable(void);
-
         //! Return maximum number of Threads.
         static uint getMaxThreads(void);
 
         //! Return list of styles.
         static QStringList getStyles(void);
 
+        //! Return default range solver executable.
+        static QString getDefaultRangeSolverExecutable(void);
+
+        //! Return default help directory.
+        static QString getDefaultHelpDir(void);
+
+        //! Return default number of threads.
+        static uint getDefaultNThreads(void);
+
+        //! Return default number of history records.
+        static uint getDefaultNHistoryRecords(void);
+
         //! Return list of styles.
         static QString getDefaultStyle(void);
+
+        //! Return default send usage info.
+        static bool getDefaultSendUsageInfo(void);
+
+        //! Return default Range API allowed.
+        static bool getDefaultRangeApiAllowed(void);
+
+        //! Return default Range API server.
+        static const QString getDefaultRangeApiServer(void);
+
+        //! Return default Range account.
+        static const QString getDefaultRangeAccount(void);
+
+        //! Return default Range password.
+        static const QString getDefaultRangePassword(void);
 
         //! Return default background color for style.
         static QColor getDefaultBackgroundColor(const QString &style);

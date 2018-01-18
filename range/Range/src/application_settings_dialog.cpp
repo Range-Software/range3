@@ -30,6 +30,7 @@ ApplicationSettingsDialog::ApplicationSettingsDialog(ApplicationSettings *applic
     this->setWindowTitle(tr("Application settings"));
     this->resize(500,500);
 
+    QIcon defaultIcon(":/icons/file/pixmaps/range-undo.svg");
     QIcon cancelIcon(":/icons/file/pixmaps/range-cancel.svg");
     QIcon okIcon(":/icons/file/pixmaps/range-ok.svg");
 
@@ -49,18 +50,24 @@ ApplicationSettingsDialog::ApplicationSettingsDialog(ApplicationSettings *applic
     tabWidget->addTab(rangeAccountWidget,tr("Range account"));
 
     QHBoxLayout *buttonsLayout = new QHBoxLayout;
-    buttonsLayout->addStretch(1);
     mainLayout->addLayout(buttonsLayout, 1, 0, 1, 1);
+
+    QPushButton *defaultButton = new QPushButton(defaultIcon, tr("Default"));
+    buttonsLayout->addWidget(defaultButton);
+
+    buttonsLayout->addStretch(1);
 
     QPushButton *cancelButton = new QPushButton(cancelIcon, tr("Cancel"));
     buttonsLayout->addWidget(cancelButton);
 
-    QPushButton *okButton = new QPushButton(okIcon, tr("Ok"));
-    okButton->setDefault(true);
-    buttonsLayout->addWidget(okButton);
+    this->okButton = new QPushButton(okIcon, tr("Ok"));
+    this->okButton->setDefault(true);
+    this->okButton->setDisabled(true);
+    buttonsLayout->addWidget(this->okButton);
 
+    QObject::connect(defaultButton,&QPushButton::clicked,this,&ApplicationSettingsDialog::onDefaultClicked);
     QObject::connect(cancelButton,&QPushButton::clicked,this,&QDialog::reject);
-    QObject::connect(okButton,&QPushButton::clicked,this,&QDialog::accept);
+    QObject::connect(this->okButton,&QPushButton::clicked,this,&QDialog::accept);
 }
 
 int ApplicationSettingsDialog::exec(void)
@@ -119,7 +126,7 @@ QWidget *ApplicationSettingsDialog::createGeneralTab(void)
     this->nHistoryRecordsSpin->setRange(1,INT_MAX);
     this->nHistoryRecordsSpin->setValue(this->applicationSettings->getNHistoryRecords());
     this->nHistoryRecordsSpin->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Minimum);
-    layout->addWidget(this->nHistoryRecordsSpin,3,1,1,1);
+    layout->addWidget(this->nHistoryRecordsSpin,2,1,1,1);
 
     QLabel *styleLabel = new QLabel(tr("Style:"));
     layout->addWidget(styleLabel,3,0,1,1);
@@ -147,14 +154,26 @@ QWidget *ApplicationSettingsDialog::createGeneralTab(void)
     spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     layout->addWidget(spacer,5,0,1,2);
 
+    this->connect(this->solverFileChooserButton,SIGNAL(fileNameChanged(QString)),SLOT(onSolverPathChanged(QString)));
+    this->connect(this->helpFileChooserButton,SIGNAL(fileNameChanged(QString)),SLOT(onHelpDirChanged(QString)));
+    this->connect(this->nThreadsSpin,SIGNAL(valueChanged(int)),SLOT(onNThreadsChanged(int)));
+    this->connect(this->nHistoryRecordsSpin,SIGNAL(valueChanged(int)),SLOT(onNHistoryRecordsChanged(int)));
+    this->connect(this->styleCombo,SIGNAL(currentIndexChanged(int)),SLOT(onStyleChanged(int)));
+
     return widget;
 }
 
 QWidget *ApplicationSettingsDialog::createShortcutsTab(void)
 {
-    KeyboardShortcutsEdit *widget = new KeyboardShortcutsEdit(this->applicationSettings->getActionDefinition());
+    QWidget *widget = new QWidget;
 
-    QObject::connect(widget,
+    QVBoxLayout *layout = new QVBoxLayout;
+    widget->setLayout(layout);
+
+    this->keyboardShortcutsEdit = new KeyboardShortcutsEdit(this->applicationSettings->getActionDefinition());
+    layout->addWidget(this->keyboardShortcutsEdit);
+
+    QObject::connect(this->keyboardShortcutsEdit,
                      &KeyboardShortcutsEdit::shortcutChanged,
                      this,
                      &ApplicationSettingsDialog::onKeyboardShortcutChanged);
@@ -215,10 +234,90 @@ QWidget *ApplicationSettingsDialog::createRangeAccountTab(void)
     spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     layout->addWidget(spacer,++rowCount,0,1,2);
 
+    this->connect(this->rangeApiAllowed,SIGNAL(toggled(bool)),SLOT(onRangeApiAllowedToggled(bool)));
+    this->connect(this->sendUsageInfoAllowed,SIGNAL(toggled(bool)),SLOT(onSendUsageInfoAllowedToggled(bool)));
+    this->connect(this->rangeApiServer,SIGNAL(textChanged(QString)),SLOT(onRangeApiServerChanged(QString)));
+    this->connect(this->rangeAccountEdit,SIGNAL(textChanged(QString)),SLOT(onRangeAccountChanged(QString)));
+    this->connect(this->rangePasswordEdit,SIGNAL(textChanged(QString)),SLOT(onRangePasswordChanged(QString)));
+
     return widget;
+}
+
+void ApplicationSettingsDialog::onSolverPathChanged(const QString &)
+{
+    this->okButton->setEnabled(true);
+}
+
+void ApplicationSettingsDialog::onHelpDirChanged(const QString &)
+{
+    this->okButton->setEnabled(true);
+}
+
+void ApplicationSettingsDialog::onNThreadsChanged(int)
+{
+    this->okButton->setEnabled(true);
+}
+
+void ApplicationSettingsDialog::onNHistoryRecordsChanged(int)
+{
+    this->okButton->setEnabled(true);
+}
+
+void ApplicationSettingsDialog::onStyleChanged(int)
+{
+    this->okButton->setEnabled(true);
 }
 
 void ApplicationSettingsDialog::onKeyboardShortcutChanged(ActionType actionType, const QString &shortcut)
 {
     this->changedShortcut.insert(actionType,shortcut);
+    this->okButton->setEnabled(true);
+}
+
+void ApplicationSettingsDialog::onRangeApiAllowedToggled(bool)
+{
+    this->okButton->setEnabled(true);
+}
+
+void ApplicationSettingsDialog::onSendUsageInfoAllowedToggled(bool)
+{
+    this->okButton->setEnabled(true);
+}
+
+void ApplicationSettingsDialog::onRangeApiServerChanged(const QString &)
+{
+    this->okButton->setEnabled(true);
+}
+
+void ApplicationSettingsDialog::onRangeAccountChanged(const QString &)
+{
+    this->okButton->setEnabled(true);
+}
+
+void ApplicationSettingsDialog::onRangePasswordChanged(const QString &)
+{
+    this->okButton->setEnabled(true);
+}
+
+void ApplicationSettingsDialog::onDefaultClicked(void)
+{
+    this->solverFileChooserButton->setFileName(ApplicationSettings::getDefaultRangeSolverExecutable());
+    this->helpFileChooserButton->setFileName(ApplicationSettings::getDefaultHelpDir());
+    this->nThreadsSpin->setValue(ApplicationSettings::getDefaultNThreads());
+    this->nHistoryRecordsSpin->setValue(ApplicationSettings::getDefaultNThreads());
+    for (int i=0;i<this->styleCombo->count();i++)
+    {
+        if (this->styleCombo->itemText(i) == ApplicationSettings::getDefaultStyle())
+        {
+            this->styleCombo->setCurrentIndex(i);
+            break;
+        }
+    }
+    this->keyboardShortcutsEdit->resetToDefault();
+    this->changedShortcut.clear();
+    this->sendUsageInfoAllowed->setChecked(ApplicationSettings::getDefaultSendUsageInfo());
+    this->rangeApiAllowed->setChecked(ApplicationSettings::getDefaultRangeApiAllowed());
+    this->rangeApiServer->setText(ApplicationSettings::getDefaultRangeApiServer());
+    this->rangeAccountEdit->setText(ApplicationSettings::getDefaultRangeAccount());
+    this->rangePasswordEdit->setText(ApplicationSettings::getDefaultRangePassword());
 }

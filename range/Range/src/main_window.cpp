@@ -771,15 +771,13 @@ void MainWindow::readSettings(void)
         pApplicationSettings->setSolverPath(MainSettings::getInstance().value("application/SolverPath").toString());
         if (pApplicationSettings->getSolverPath().isEmpty())
         {
-            QDir solverExecDir(QApplication::applicationDirPath());
-            QString solverPath = solverExecDir.filePath(ApplicationSettings::getDefaultRangeSolverExecutable());
-            pApplicationSettings->setSolverPath(solverPath);
+            pApplicationSettings->setSolverPath(ApplicationSettings::getDefaultRangeSolverExecutable());
         }
 
         pApplicationSettings->setHelpDir(MainSettings::getInstance().value("application/HelpDir").toString());
         if (pApplicationSettings->getHelpDir().isEmpty())
         {
-            pApplicationSettings->setHelpDir(MainSettings::getInstance().findHelpDir());
+            pApplicationSettings->setHelpDir(ApplicationSettings::getDefaultHelpDir());
         }
 
         pApplicationSettings->setNThreads(MainSettings::getInstance().value("application/nThreads",pApplicationSettings->getNThreads()).toUInt());

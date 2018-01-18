@@ -19,6 +19,7 @@
 
 #include "application_settings.h"
 #include "file_chooser_button.h"
+#include "keyboard_shortcuts_edit.h"
 
 class ApplicationSettingsDialog : public QDialog
 {
@@ -26,6 +27,9 @@ class ApplicationSettingsDialog : public QDialog
     Q_OBJECT
 
     protected:
+
+        //! OK button.
+        QPushButton *okButton;
 
         //! Application settings.
         ApplicationSettings *applicationSettings;
@@ -41,6 +45,8 @@ class ApplicationSettingsDialog : public QDialog
         QMap<ActionType,QString> changedShortcut;
         //! Style combo box.
         QComboBox *styleCombo;
+        //! Keyboard shortcuts widget.
+        KeyboardShortcutsEdit *keyboardShortcutsEdit;
         //! Send usage info allowed.
         QCheckBox *sendUsageInfoAllowed;
         //! Range API allowed checkbox.
@@ -73,8 +79,41 @@ class ApplicationSettingsDialog : public QDialog
 
     protected slots:
 
+        //! Range solver path changed.
+        void onSolverPathChanged(const QString &);
+
+        //! Help directory changed.
+        void onHelpDirChanged(const QString &);
+
+        //! Number of threads changed.
+        void onNThreadsChanged(int);
+
+        //! Number of history records changed.
+        void onNHistoryRecordsChanged(int);
+
+        //! Style changed.
+        void onStyleChanged(int);
+
         //! Keyboard shortcut has changed.
         void onKeyboardShortcutChanged(ActionType actionType, const QString &shortcut);
+
+        //! On Range API allowed toggled.
+        void onRangeApiAllowedToggled(bool);
+
+        //! On Send usage information allowd toggled.
+        void onSendUsageInfoAllowedToggled(bool);
+
+        //! Range API server changed.
+        void onRangeApiServerChanged(const QString &);
+
+        //! Range account changed.
+        void onRangeAccountChanged(const QString &);
+
+        //! Range password changed.
+        void onRangePasswordChanged(const QString &);
+
+        //! Default button was clicked.
+        void onDefaultClicked(void);
         
 };
 

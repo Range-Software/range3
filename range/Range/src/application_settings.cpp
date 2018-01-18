@@ -11,21 +11,26 @@
 #include <omp.h>
 
 #include <QStyleFactory>
+#include <QApplication>
+#include <QDir>
 
 #include "application_settings.h"
+#include "main_settings.h"
 
 const QString ApplicationSettings::FusionDark = "Fusion-dark";
 const QString ApplicationSettings::Fusion = "Fusion";
 
 ApplicationSettings::ApplicationSettings(QObject *parent)
     : QObject(parent)
-    , nHistoryRecords(3)
+    , nThreads(ApplicationSettings::getDefaultNThreads())
+    , nHistoryRecords(ApplicationSettings::getDefaultNHistoryRecords())
     , style(ApplicationSettings::getDefaultStyle())
-    , sendUsageInfo(true)
-    , rangeApiAllowed(false)
-    , rangeApiServer("http://range-software.com")
+    , sendUsageInfo(ApplicationSettings::getDefaultSendUsageInfo())
+    , rangeApiAllowed(ApplicationSettings::getDefaultRangeApiAllowed())
+    , rangeApiServer(ApplicationSettings::getDefaultRangeApiServer())
+    , rangeAccount(ApplicationSettings::getDefaultRangeAccount())
+    , rangePassword(ApplicationSettings::getDefaultRangePassword())
 {
-    this->nThreads = ApplicationSettings::getMaxThreads();
     this->actionDefinition = new ActionDefinition(this);
 
     QObject::connect(this->actionDefinition,
@@ -71,7 +76,7 @@ uint ApplicationSettings::getNThreads(void) const
 
 void ApplicationSettings::setNThreads(uint nCPUs)
 {
-    uint defaultNCPUs = ApplicationSettings::getMaxThreads();
+    uint defaultNCPUs = ApplicationSettings::getDefaultNThreads();
     this->nThreads = (nCPUs < 1 || nCPUs > defaultNCPUs) ? defaultNCPUs : nCPUs;
 }
 
@@ -164,15 +169,6 @@ void ApplicationSettings::setRangePassword(const QString &rangePassword)
     this->rangePassword = rangePassword;
 }
 
-QString ApplicationSettings::getDefaultRangeSolverExecutable(void)
-{
-#ifdef DEBUG
-    return QString("RangeSolver_debug");
-#else
-    return QString("RangeSolver");
-#endif
-}
-
 uint ApplicationSettings::getMaxThreads(void)
 {
     return (uint)omp_get_num_procs();
@@ -186,6 +182,32 @@ QStringList ApplicationSettings::getStyles(void)
     return styles;
 }
 
+QString ApplicationSettings::getDefaultRangeSolverExecutable(void)
+{
+#ifdef DEBUG
+    QString baseName("RangeSolver_debug");
+#else
+    QString baseName("RangeSolver");
+#endif
+
+    return QDir(QApplication::applicationDirPath()).filePath(baseName);
+}
+
+QString ApplicationSettings::getDefaultHelpDir(void)
+{
+    return MainSettings::getInstance().findHelpDir();
+}
+
+uint ApplicationSettings::getDefaultNThreads(void)
+{
+    return ApplicationSettings::getMaxThreads();
+}
+
+uint ApplicationSettings::getDefaultNHistoryRecords(void)
+{
+    return 3;
+}
+
 QString ApplicationSettings::getDefaultStyle(void)
 {
     QStringList styles = QStyleFactory::keys();
@@ -194,6 +216,31 @@ QString ApplicationSettings::getDefaultStyle(void)
         return ApplicationSettings::Fusion;
     }
     return ApplicationSettings::FusionDark;
+}
+
+bool ApplicationSettings::getDefaultSendUsageInfo(void)
+{
+    return true;
+}
+
+bool ApplicationSettings::getDefaultRangeApiAllowed(void)
+{
+    return false;
+}
+
+const QString ApplicationSettings::getDefaultRangeApiServer(void)
+{
+    return QString("http://range-software.com");
+}
+
+const QString ApplicationSettings::getDefaultRangeAccount(void)
+{
+    return QString();
+}
+
+const QString ApplicationSettings::getDefaultRangePassword(void)
+{
+    return QString();
 }
 
 QColor ApplicationSettings::getDefaultBackgroundColor(const QString &style)

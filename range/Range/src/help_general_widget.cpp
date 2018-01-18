@@ -24,6 +24,7 @@ HelpGeneralWidget::HelpGeneralWidget(QWidget *parent)
     general.append("Initial condition");
     general.append("Environment condition");
     general.append("Material");
+    general.append("Results");
 
     foreach (const QString &tipName, general)
     {
