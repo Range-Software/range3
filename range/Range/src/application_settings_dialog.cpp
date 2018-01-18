@@ -304,7 +304,7 @@ void ApplicationSettingsDialog::onDefaultClicked(void)
     this->solverFileChooserButton->setFileName(ApplicationSettings::getDefaultRangeSolverExecutable());
     this->helpFileChooserButton->setFileName(ApplicationSettings::getDefaultHelpDir());
     this->nThreadsSpin->setValue(ApplicationSettings::getDefaultNThreads());
-    this->nHistoryRecordsSpin->setValue(ApplicationSettings::getDefaultNThreads());
+    this->nHistoryRecordsSpin->setValue(ApplicationSettings::getDefaultNHistoryRecords());
     for (int i=0;i<this->styleCombo->count();i++)
     {
         if (this->styleCombo->itemText(i) == ApplicationSettings::getDefaultStyle())
