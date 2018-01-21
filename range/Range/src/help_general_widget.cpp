@@ -18,12 +18,14 @@ HelpGeneralWidget::HelpGeneralWidget(QWidget *parent)
 {
     QStringList general;
 
+    general.append("Model");
     general.append("Problem");
     general.append("Problem type");
     general.append("Boundary condition");
     general.append("Initial condition");
     general.append("Environment condition");
     general.append("Material");
+    general.append("Solver");
     general.append("Results");
 
     foreach (const QString &tipName, general)
