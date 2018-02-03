@@ -573,6 +573,9 @@ void GLWidget::drawMessageBox(QPainter &painter, bool drawBox)
 
     QList<QString> messages;
 
+    messages.push_back(rModel.getName() + " (" + rModel.getDescription() + ")");
+    messages.push_back(QString());
+
     if (rModel.getNIntersected() > 0)
     {
         messages.push_back(QString("Number of intersected elements: ") + QString::number(rModel.getNIntersected()));
