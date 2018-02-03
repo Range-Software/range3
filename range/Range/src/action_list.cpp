@@ -98,6 +98,7 @@ void ActionList::processAvailability(void)
         this->getAction(ACTION_MODEL_CLOSE)->setEnabled(true);
         this->getAction(ACTION_MODEL_RELOAD_RESULTS)->setEnabled(true);
         this->getAction(ACTION_MODEL_DROP_RESULTS)->setEnabled(true);
+        this->getAction(ACTION_MODEL_RENAME)->setEnabled(true);
         this->getAction(ACTION_GEOMETRY_DRAW_POINT)->setEnabled(true);
         this->getAction(ACTION_GEOMETRY_DRAW_LINE)->setEnabled(true);
         this->getAction(ACTION_GEOMETRY_DRAW_TRIANGLE)->setEnabled(true);
@@ -210,6 +211,7 @@ void ActionList::setDisabled(bool allActions)
     this->getAction(ACTION_MODEL_CLOSE)->setEnabled(enabled);
     this->getAction(ACTION_MODEL_RELOAD_RESULTS)->setEnabled(enabled);
     this->getAction(ACTION_MODEL_DROP_RESULTS)->setEnabled(enabled);
+    this->getAction(ACTION_MODEL_RENAME)->setEnabled(enabled);
     this->getAction(ACTION_GEOMETRY_UNDO)->setEnabled(enabled);
     this->getAction(ACTION_GEOMETRY_REDO)->setEnabled(enabled);
     this->getAction(ACTION_GEOMETRY_DRAW_POINT)->setEnabled(enabled);

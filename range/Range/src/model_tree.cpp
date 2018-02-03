@@ -103,6 +103,8 @@ ModelTree::ModelTree(ActionList *actionList,
     this->addAction(this->actionList->getAction(ACTION_MODEL_SAVE_AS));
     this->addAction(this->actionList->getAction(ACTION_MODEL_CLOSE));
     this->addAction(this->actionList->getAction(ACTION_SEPARATOR));
+    this->addAction(this->actionList->getAction(ACTION_MODEL_RENAME));
+    this->addAction(this->actionList->getAction(ACTION_SEPARATOR));
     this->addAction(this->actionList->getAction(ACTION_GEOMETRY_ENTITY_MERGE));
     this->addAction(this->actionList->getAction(ACTION_GEOMETRY_ENTITY_REMOVE));
     this->addAction(this->actionList->getAction(ACTION_SEPARATOR));
@@ -1520,8 +1522,7 @@ void ModelTree::onItemDoubleClicked(QTreeWidgetItem *item, int column)
 
     if (column == MODEL_TREE_COLUMN_NAME)
     {
-        if (entityType == MODEL_TREE_MODEL ||
-            entityType == MODEL_TREE_POINT ||
+        if (entityType == MODEL_TREE_POINT ||
             entityType == MODEL_TREE_LINE ||
             entityType == MODEL_TREE_SURFACE ||
             entityType == MODEL_TREE_VOLUME ||

@@ -52,6 +52,7 @@
 #include "point_inside_surface_dialog.h"
 #include "problem_selector_dialog.h"
 #include "problem_task_dialog.h"
+#include "rename_model_dialog.h"
 #include "report_dialog.h"
 #include "rra_session.h"
 #include "session_entity_id.h"
@@ -215,16 +216,7 @@ void Action::onSessionClose(void)
 
 void Action::onModelNew(void)
 {
-    NewModelDialog newModelDialog(this->mainWindow);
-
-    if (newModelDialog.exec() == QDialog::Accepted)
-    {
-        Model *pNewModel = new Model;
-        pNewModel->setName(newModelDialog.getName());
-        pNewModel->setDescription(newModelDialog.getDescription());
-
-        JobManager::getInstance().submit(new ModelIO(MODEL_IO_ADD, QString(), pNewModel));
-    }
+    NewModelDialog(this->mainWindow).exec();
 }
 
 void Action::onModelOpen(void)
@@ -432,12 +424,15 @@ void Action::onModelReloadResults(void)
     {
         Job *updateJob = new ModelIO(MODEL_IO_UPDATE, Session::getInstance().getModel(modelIDs[i]).getFileName(), &Session::getInstance().getModel(modelIDs[i]));
         JobManager::getInstance().submit(updateJob);
-//        Session::getInstance().setModelChanged(this->updateModelID);
+    }
+}
 
-//        QObject::connect(updateJob,
-//                         &Job::finished,
-//                         this,
-//                         &Action::onModelReloadResultsFinished);
+void Action::onModelRename(void)
+{
+    QList<uint> modelIDs = Session::getInstance().getSelectedModelIDs();
+    for (int i=0;i<modelIDs.size();i++)
+    {
+        RenameModelDialog(modelIDs.at(i)).exec();
     }
 }
 

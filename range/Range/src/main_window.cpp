@@ -277,6 +277,8 @@ void MainWindow::createMenus(void)
     menuFile->addAction(this->actionList->getAction(ACTION_MODEL_RELOAD_RESULTS));
     menuFile->addAction(this->actionList->getAction(ACTION_MODEL_DROP_RESULTS));
     menuFile->addAction(this->actionList->getAction(ACTION_SEPARATOR));
+    menuFile->addAction(this->actionList->getAction(ACTION_MODEL_RENAME));
+    menuFile->addAction(this->actionList->getAction(ACTION_SEPARATOR));
     menuFile->addAction(this->actionList->getAction(ACTION_APPLICATION_QUIT));
     menubar->addAction(menuFile->menuAction());
 

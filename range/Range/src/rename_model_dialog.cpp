@@ -1,29 +1,28 @@
 /*********************************************************************
  *  AUTHOR: Tomas Soltys                                             *
- *  FILE:   new_model_dialog.cpp                                     *
+ *  FILE:   rename_model_dialog.cpp                                  *
  *  GROUP:  Range                                                    *
  *  TYPE:   source file (*.cpp)                                      *
- *  DATE:   31-st August 2012                                        *
+ *  DATE:   3-rd February 2018                                       *
  *                                                                   *
- *  DESCRIPTION: New model dialog class definition                   *
+ *  DESCRIPTION: Rename model dialog class definition                *
  *********************************************************************/
 
 #include <QGridLayout>
 #include <QLabel>
 #include <QPushButton>
 
-#include "model.h"
-#include "new_model_dialog.h"
-#include "model_io.h"
-#include "job_manager.h"
+#include "rename_model_dialog.h"
+#include "session.h"
 
-NewModelDialog::NewModelDialog(QWidget *parent) :
-    QDialog(parent)
+RenameModelDialog::RenameModelDialog(uint modelId, QWidget *parent)
+	: QDialog(parent)
+    , modelId(modelId)
 {
     QIcon cancelIcon(":/icons/file/pixmaps/range-cancel.svg");
     QIcon okIcon(":/icons/file/pixmaps/range-ok.svg");
 
-    this->setWindowTitle(tr("Create a new model"));
+    this->setWindowTitle(tr("Rename model"));
 
     QGridLayout *mainLayout = new QGridLayout;
     this->setLayout (mainLayout);
@@ -31,15 +30,15 @@ NewModelDialog::NewModelDialog(QWidget *parent) :
     QLabel *labelName = new QLabel(tr("Name:"));
     mainLayout->addWidget(labelName, 0, 0, 1, 1);
 
-    this->editName = new QLineEdit;
-    this->editName->setPlaceholderText(tr("New model name"));
+    this->editName = new QLineEdit(Session::getInstance().getModel(this->modelId).getName());
+    this->editName->setPlaceholderText(tr("Model name"));
     mainLayout->addWidget(this->editName, 0, 1, 1, 1);
 
     QLabel *labelDesc = new QLabel(tr("Description:"));
     mainLayout->addWidget(labelDesc, 1, 0, 1, 1);
 
-    this->editDesc = new QLineEdit;
-    this->editDesc->setPlaceholderText(tr("New model description"));
+    this->editDesc = new QLineEdit(Session::getInstance().getModel(this->modelId).getDescription());
+    this->editDesc->setPlaceholderText(tr("Model description"));
     mainLayout->addWidget(this->editDesc, 1, 1, 1, 1);
 
     QHBoxLayout *buttonsLayout = new QHBoxLayout;
@@ -53,31 +52,29 @@ NewModelDialog::NewModelDialog(QWidget *parent) :
     okButton->setDefault(true);
     buttonsLayout->addWidget(okButton);
 
-    QObject::connect(cancelButton,&QPushButton::clicked,this,&NewModelDialog::reject);
-    QObject::connect(okButton,&QPushButton::clicked,this,&NewModelDialog::accept);
+    QObject::connect(cancelButton,&QPushButton::clicked,this,&RenameModelDialog::reject);
+    QObject::connect(okButton,&QPushButton::clicked,this,&RenameModelDialog::accept);
 }
 
-int NewModelDialog::exec(void)
+int RenameModelDialog::exec(void)
 {
     int retVal = this->QDialog::exec();
 
     if (retVal == QDialog::Accepted)
     {
-        Model *pNewModel = new Model;
-        pNewModel->setName(this->getName());
-        pNewModel->setDescription(this->getDescription());
-
-        JobManager::getInstance().submit(new ModelIO(MODEL_IO_ADD, QString(), pNewModel));
+        Session::getInstance().getModel(this->modelId).setName(this->getName());
+        Session::getInstance().getModel(this->modelId).setDescription(this->getDescription());
+        Session::getInstance().setModelChanged(this->modelId);
     }
     return retVal;
 }
 
-QString NewModelDialog::getName(void) const
+QString RenameModelDialog::getName(void) const
 {
     return this->editName->text().isEmpty() ? tr("New model") : this->editName->text();
 }
 
-QString NewModelDialog::getDescription(void) const
+QString RenameModelDialog::getDescription(void) const
 {
     return this->editDesc->text().isEmpty() ? tr("New model") : this->editDesc->text();
 }

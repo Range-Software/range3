@@ -1,25 +1,27 @@
 /*********************************************************************
  *  AUTHOR: Tomas Soltys                                             *
- *  FILE:   new_model_dialog.h                                       *
+ *  FILE:   rename_model_dialog.h                                    *
  *  GROUP:  Range                                                    *
  *  TYPE:   header file (*.h)                                        *
- *  DATE:   31-st August 2012                                        *
+ *  DATE:   3-rd February 2018                                       *
  *                                                                   *
- *  DESCRIPTION: New model dialog class declaration                  *
+ *  DESCRIPTION: Rename model dialog class declaration               *
  *********************************************************************/
 
-#ifndef __NEW_MODEL_DIALOG_H__
-#define __NEW_MODEL_DIALOG_H__
+#ifndef __RENAME_MODEL_DIALOG_H__
+#define __RENAME_MODEL_DIALOG_H__
 
 #include <QDialog>
 #include <QLineEdit>
 
-class NewModelDialog : public QDialog
+class RenameModelDialog : public QDialog
 {
     Q_OBJECT
 
     protected:
 
+		//! Model ID.
+        uint modelId;
         //! Name editor.
         QLineEdit *editName;
         //! Description editor.
@@ -28,7 +30,7 @@ class NewModelDialog : public QDialog
     public:
 
         //! Constructor.
-        explicit NewModelDialog(QWidget *parent = 0);
+        explicit RenameModelDialog(uint modelId, QWidget *parent = 0);
 
         //! Execute dialog.
         int exec(void);
@@ -43,4 +45,4 @@ class NewModelDialog : public QDialog
         
 };
 
-#endif /* __NEW_MODEL_DIALOG_H__ */
+#endif /* __RENAME_MODEL_DIALOG_H__ */

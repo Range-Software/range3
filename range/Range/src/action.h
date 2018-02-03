@@ -98,6 +98,9 @@ class Action : public QAction
         //! Reload results.
         void onModelReloadResults(void);
 
+        //! Rename model.
+        void onModelRename(void);
+
         //! Drop results.
         void onModelDropResults(void);
 

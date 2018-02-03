@@ -217,7 +217,8 @@ SOURCES += \
     src/vector_field_dialog.cpp \
     src/video_output.cpp \
     src/video_settings.cpp \
-    src/video_settings_dialog.cpp
+    src/video_settings_dialog.cpp \
+    src/rename_model_dialog.cpp
 
 HEADERS += \
     src/action.h \
@@ -420,7 +421,8 @@ HEADERS += \
     src/vector_field_dialog.h \
     src/video_output.h \
     src/video_settings.h \
-    src/video_settings_dialog.h
+    src/video_settings_dialog.h \
+    src/rename_model_dialog.h
 
 CONFIG -= debug_and_release
 #CONFIG += rtti
