@@ -121,10 +121,10 @@ void ActionDefinition::generateActionDescList(QList<ActionDefinitionItem> &actio
     actionDesc.push_back(ActionDefinitionItem(ACTION_MODEL_EXPORT_RAW, ACTION_GROUP_MODEL, "Export RAW model", "", "", ":/icons/file/pixmaps/range-export-raw.svg", &Action::onModelExportRaw));
     actionDesc.push_back(ActionDefinitionItem(ACTION_MODEL_EXPORT_STL_ASCII, ACTION_GROUP_MODEL, "Export STL model (ascii)", "", "", ":/icons/file/pixmaps/range-export-stl.svg", &Action::onModelExportStlAscii));
     actionDesc.push_back(ActionDefinitionItem(ACTION_MODEL_EXPORT_STL_BINARY, ACTION_GROUP_MODEL, "Export STL model (binary)", "", "", ":/icons/file/pixmaps/range-export-stl.svg", &Action::onModelExportStlBinary));
-    actionDesc.push_back(ActionDefinitionItem(ACTION_MODEL_CLOSE, ACTION_GROUP_MODEL, "Close model", "", "Ctrl+W", ":/icons/file/pixmaps/range-close.svg", &Action::onModelClose));
-    actionDesc.push_back(ActionDefinitionItem(ACTION_MODEL_RELOAD_RESULTS, ACTION_GROUP_MODEL, "Reload results", "", "", ":/icons/file/pixmaps/range-refresh.svg", &Action::onModelReloadResults));
-    actionDesc.push_back(ActionDefinitionItem(ACTION_MODEL_DROP_RESULTS, ACTION_GROUP_MODEL, "Drop results", "", "", ":/icons/file/pixmaps/range-clear.svg", &Action::onModelDropResults));
-    actionDesc.push_back(ActionDefinitionItem(ACTION_MODEL_RENAME, ACTION_GROUP_MODEL, "Rename model", "", "", "", &Action::onModelRename));
+    actionDesc.push_back(ActionDefinitionItem(ACTION_MODEL_CLOSE, ACTION_GROUP_MODEL, "Close Model", "", "Ctrl+W", ":/icons/file/pixmaps/range-close.svg", &Action::onModelClose));
+    actionDesc.push_back(ActionDefinitionItem(ACTION_MODEL_RELOAD_RESULTS, ACTION_GROUP_MODEL, "Reload Results", "", "", ":/icons/file/pixmaps/range-refresh.svg", &Action::onModelReloadResults));
+    actionDesc.push_back(ActionDefinitionItem(ACTION_MODEL_DROP_RESULTS, ACTION_GROUP_MODEL, "Drop Results", "", "", ":/icons/file/pixmaps/range-clear.svg", &Action::onModelDropResults));
+    actionDesc.push_back(ActionDefinitionItem(ACTION_MODEL_RENAME, ACTION_GROUP_MODEL, "Rename Model", "", "", "", &Action::onModelRename));
     actionDesc.push_back(ActionDefinitionItem(ACTION_MATERIAL_NEW, ACTION_GROUP_MATERIAL, "New Material", "", "Ctrl+Alt+M", ":/icons/file/pixmaps/range-new.svg", &Action::onMaterialNew));
     actionDesc.push_back(ActionDefinitionItem(ACTION_MATERIAL_IMPORT, ACTION_GROUP_MATERIAL, "Import Material", "", "", ":/icons/file/pixmaps/range-open.svg", &Action::onMaterialImport));
     actionDesc.push_back(ActionDefinitionItem(ACTION_MATERIAL_DELETE, ACTION_GROUP_MATERIAL, "Delete Material", "", "Ctrl+Alt+D", ":/icons/file/pixmaps/range-close.svg", &Action::onMaterialDelete));
