@@ -26,7 +26,7 @@ HelpCenterDialog::HelpCenterDialog(QWidget *parent)
     QIcon closeIcon(":/icons/file/pixmaps/range-close.svg");
 
     this->setWindowTitle(tr("Help"));
-    this->resize(800,500);
+    this->resize(1300,700);
 
     QVBoxLayout *mainLayout = new QVBoxLayout;
     this->setLayout(mainLayout);
