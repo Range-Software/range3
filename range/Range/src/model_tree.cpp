@@ -779,6 +779,7 @@ void ModelTree::onModelChanged(uint modelID)
     this->blockSignals(false);
     Session::getInstance().setModelSelectionChanged(modelID);
     this->actionList->processAvailability();
+    this->onSelectionChanged();
 }
 
 void ModelTree::onSelectionChanged(void)

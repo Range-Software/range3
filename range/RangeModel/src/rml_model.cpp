@@ -3990,6 +3990,10 @@ RRVector RModel::getInterpolatedResultsValues(RVariableType variableType, const 
 
 void RModel::rotateGeometry(const QSet<uint> &nodeIDs, const RR3Vector &rotationVector, const RR3Vector &rotationCenter)
 {
+    RLogger::info("Rotate\n");
+    RLogger::info("  Vector: %s\n",rotationVector.toString(true).toUtf8().constData());
+    RLogger::info("  Center: %s\n",rotationCenter.toString(true).toUtf8().constData());
+
     RR3Vector t(-rotationCenter[0],-rotationCenter[1],-rotationCenter[2]);
 
     double rx = R_DEG_TO_RAD(rotationVector[0]);
@@ -4008,6 +4012,10 @@ void RModel::rotateGeometry(const QSet<uint> &nodeIDs, const RR3Vector &rotation
 
 void RModel::scaleGeometry(const QSet<uint> &nodeIDs, const RR3Vector &scaleVector, const RR3Vector &scaleCenter)
 {
+    RLogger::info("Scale\n");
+    RLogger::info("  Vector: %s\n",scaleVector.toString(true).toUtf8().constData());
+    RLogger::info("  Center: %s\n",scaleCenter.toString(true).toUtf8().constData());
+
     foreach (uint i, nodeIDs)
     {
         this->getNode(i).translate(scaleCenter.getOpposite());
@@ -4019,6 +4027,9 @@ void RModel::scaleGeometry(const QSet<uint> &nodeIDs, const RR3Vector &scaleVect
 
 void RModel::scaleGeometry(double scaleFactor)
 {
+    RLogger::info("Scale\n");
+    RLogger::info("  Factor: %g\n",scaleFactor);
+
     for (uint i=0;i<this->nodes.size();i++)
     {
         this->nodes[i].scale(scaleFactor);
@@ -4028,6 +4039,8 @@ void RModel::scaleGeometry(double scaleFactor)
 
 void RModel::translateGeometry(const QSet<uint> &nodeIDs, const RR3Vector &translateVector)
 {
+    RLogger::info("Translate\n");
+    RLogger::info("  Vector: %s\n",translateVector.toString(true).toUtf8().constData());
     foreach (uint i, nodeIDs)
     {
         this->getNode(i).translate(translateVector);

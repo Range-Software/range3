@@ -635,10 +635,10 @@ void Model::transformGeometry(const GeometryTransformInput &geometryTransformInp
     {
         GeometryTransformInput input(geometryTransformInput);
 
+        RLogger::info("Performing sweep step %u of %u\n",sweepStep+1,nSweepSteps);
+
         if (nSweepSteps > 1)
         {
-            RLogger::info("Performing sweep step %u of %u\n",sweepStep+1,nSweepSteps);
-
             double scale = 1.0/double(nSweepSteps);
             if (input.isTranslateActive())
             {

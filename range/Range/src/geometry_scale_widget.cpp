@@ -168,8 +168,12 @@ void GeometryScaleWidget::onScaleValueChanged(double)
 
 void GeometryScaleWidget::onPositionChanged(const RR3Vector &)
 {
-    emit this->scaleChanged(this->scaleCenter->getPosition(),
-                            RR3Vector(this->xScaleLineEdit->getValue(),
-                                      this->yScaleLineEdit->getValue(),
-                                      this->zScaleLineEdit->getValue()));
+    RR3Vector scaleVector(this->xScaleLineEdit->getValue(),
+                          this->yScaleLineEdit->getValue(),
+                          this->zScaleLineEdit->getValue());
+    if (this->sameScaleGroupBox->isChecked())
+    {
+        scaleVector.fill(this->sameScaleLineEdit->getValue());
+    }
+    emit this->scaleChanged(this->scaleCenter->getPosition(),scaleVector);
 }

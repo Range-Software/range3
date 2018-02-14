@@ -102,6 +102,7 @@ GeometryTransformWidget::GeometryTransformWidget(QWidget *parent) :
     buttonsLayout->addWidget(this->cancelButton);
 
     this->okButton = new QPushButton(QIcon(":/icons/file/pixmaps/range-ok.svg"),tr("Ok"));
+    this->okButton->setEnabled(false);
     buttonsLayout->addWidget(this->okButton);
 
     QObject::connect(scaleWidget,
@@ -143,10 +144,6 @@ GeometryTransformWidget::GeometryTransformWidget(QWidget *parent) :
                      this,
                      &GeometryTransformWidget::onSweepSharedNodesClicked);
     this->connect(this->sweepNStepsSpin,SIGNAL(valueChanged(int)),SLOT(onSweepNStepsSpinChanged(int)));
-//    QObject::connect(this->sweepNStepsSpin,
-//                     &QSpinBox::valueChanged,
-//                     this,
-//                     &GeometryTransformWidget::onSweepNStepsSpinChanged);
 
     QObject::connect(this->cancelButton,
                      &QPushButton::clicked,
@@ -158,21 +155,29 @@ GeometryTransformWidget::GeometryTransformWidget(QWidget *parent) :
                      &GeometryTransformWidget::onOkClicked);
 }
 
+void GeometryTransformWidget::enableOkButton(void)
+{
+    this->okButton->setEnabled(this->input.isRotateActive() || this->input.isScaleActive() || this->input.isTranslateActive());
+}
+
 void GeometryTransformWidget::onScaleChanged(const RR3Vector &center, const RR3Vector &scales)
 {
     this->input.setScale(scales);
     this->input.setScaleCenter(center);
+    this->enableOkButton();
 }
 
 void GeometryTransformWidget::onRotationChanged(const RR3Vector &center, const RR3Vector &rotations)
 {
     this->input.setRotation(rotations);
     this->input.setRotationCenter(center);
+    this->enableOkButton();
 }
 
 void GeometryTransformWidget::onTranslationChanged(const RR3Vector &distances)
 {
     this->input.setTranslation(distances);
+    this->enableOkButton();
 }
 
 void GeometryTransformWidget::onApplyToAllClicked(bool checked)
@@ -182,6 +187,7 @@ void GeometryTransformWidget::onApplyToAllClicked(bool checked)
         this->input.setApplyTo(GeometryTransformInput::ApplyToAll);
     }
     this->includeSharedNodesCheck->setDisabled(checked);
+    this->enableOkButton();
 }
 
 void GeometryTransformWidget::onApplyToSelectedClicked(bool checked)
@@ -191,6 +197,7 @@ void GeometryTransformWidget::onApplyToSelectedClicked(bool checked)
         this->input.setApplyTo(GeometryTransformInput::ApplyToSelected);
     }
     this->includeSharedNodesCheck->setEnabled(checked);
+    this->enableOkButton();
 }
 
 void GeometryTransformWidget::onApplyToVisibleClicked(bool checked)
@@ -200,26 +207,31 @@ void GeometryTransformWidget::onApplyToVisibleClicked(bool checked)
         this->input.setApplyTo(GeometryTransformInput::ApplyToVisible);
     }
     this->includeSharedNodesCheck->setEnabled(checked);
+    this->enableOkButton();
 }
 
 void GeometryTransformWidget::onIncludeSharedNodesClicked(bool checked)
 {
     this->input.setIncludeSharedNodes(checked);
+    this->enableOkButton();
 }
 
 void GeometryTransformWidget::onSplitSharedNodesClicked(bool checked)
 {
     this->input.setSplitSharedNodes(checked);
+    this->enableOkButton();
 }
 
 void GeometryTransformWidget::onSweepSharedNodesClicked(bool checked)
 {
     this->input.setSweepSharedNodes(checked);
+    this->enableOkButton();
 }
 
 void GeometryTransformWidget::onSweepNStepsSpinChanged(int nSweepSteps)
 {
     this->input.setNSweepSteps(uint(nSweepSteps));
+    this->enableOkButton();
 }
 
 void GeometryTransformWidget::onCancelClicked(void)

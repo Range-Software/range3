@@ -55,6 +55,11 @@ class GeometryTransformWidget : public QWidget
         //! Constructor.
         explicit GeometryTransformWidget(QWidget *parent = 0);
 
+    private:
+
+        //! Enable OK button if all conditions are met.
+        void enableOkButton(void);
+
     signals:
 
         //! Finalize signal.
