@@ -1,3 +1,21 @@
 <h1>Transform geometry</h1>
 <p>This tutorial is a sequel to the <b>Draw cube</b> tutorial and will demonstrate how to scale, rotate and translate whole geometry or only its parts.</p>
-<p style="background-color: grey;"><b>Menu:</b> <i>Geometry -> Scale, translate, rotate</i></p>
+<p>If <b>Cube</b> model is not already loaded it can be don so with <b><i>Open Model</i></b> menu action.</p>
+<p style="background-color: #999999;"><b>Menu:</b> <i>File -> Open Model</i></p>
+<p>This will show and <b>Open model</b> dialog. Select file <b>Cube.rbm</b> and click <b>Open</b></p>
+<p>Once model is ready its geometry (whole or part) can be modified (transformed).</p>
+<p style="background-color: #999999;"><b>Menu:</b> <i>Geometry -> Scale, translate, rotate</i></p>
+<p>Once menu item is activated a <b>Transform geometry</b> control will be shown on the right side of the main window where with three tabs <b>Scale</b>, <b>Rotate</b> and <b>Translate</b>.</p>
+<p><center><img src="image-Transform_geometry.png"/><center></p>
+<p>In this tutorial all transformations will be applied consecutively on one side of the cube.</p>
+<p>At this moment all sides of the <b>Cube</b> model are grouped in the same <b>surface entity</b>. Therefore, one side needs to be <b>marked</b> as separate <b>surface entity</b> so the transormations can be applied only on this side and not on the others. This can be done with menu action <b><i>Mark Surface</i></b>. But first cube side needs to be picked.</p>
+<h2>Pick a side</h2>
+<p>Press and hold <b><i>Ctrl</i></b> key and click with <b><i>Left mouse button</i></b> on one side of the cube. This will highlight the picked element. Since the <b>Cube</b> model consist of 6 rectangular (Quadrilateral) elements, then one element equals to one side of the <b>Cube</b>.</p>
+<h2>Mark a surface</h2>
+<p style="background-color: #999999;"><b>Menu:</b> <i>Geometry -> Surface -> Mark surface</i></p>
+<p><center><img src="image-Mark_surface_dialog.png"/><center></p>
+<p>This action will show <b>Mark entity (surface)</b> dialog. Because in previous step one element was <b>picked</b> an option <b><i>Mark only selected and related elements</i></b> is preselected. By clicking <b>Ok</b> button one side of the <b>Cube</b> model will be marked as a separate <b>Surface entity</b>.</p>
+<p><i><b>Note:</b> Any entity can be renamed by <b>doubleclicking</b> with <b>Left mouse button</b> on entity name in the <b>Model tree</b> on the left side of the main window.</i></p>
+<p><center><img src="image-Marked_surface.png"/><center></p>
+<h2>Scale selected entity (cube side)</h2>
+<p><center><img src="image-Scale_selected_entity.png"/><center></p>

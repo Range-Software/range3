@@ -67,7 +67,8 @@ void PickDetailsTree::populate(void)
         const Model &rModel = Session::getInstance().getModel(rPickItems[i].getEntityID().getMid());
 
         const SessionEntityID &rEntityID = rPickItems[i].getEntityID();
-        uint elementID = rModel.findElementID(rEntityID.getType(),rEntityID.getEid(),rPickItems[i].getElementID());
+        uint elementID = rPickItems[i].getElementID();
+        uint nodeID = rPickItems[i].getNodeID();
 
         switch (rPickItems[i].getItemType())
         {
@@ -99,15 +100,15 @@ void PickDetailsTree::populate(void)
                 }
                 else
                 {
-                    itemText = tr("Interpolated element") + " # " + QString::number(rPickItems[i].getElementID());
+                    itemText = tr("Interpolated element") + " # " + QString::number(rPickItems[i].getElementPosition());
                     const RInterpolatedElement *pIElement = 0;
                     switch (rEntityID.getType())
                     {
                         case R_ENTITY_GROUP_CUT:
-                            pIElement = &rModel.getCut(rEntityID.getEid()).at(rPickItems[i].getElementID());
+                            pIElement = &rModel.getCut(rEntityID.getEid()).at(rPickItems[i].getElementPosition());
                             break;
                         case R_ENTITY_GROUP_ISO:
-                            pIElement = &rModel.getIso(rEntityID.getEid()).at(rPickItems[i].getElementID());
+                            pIElement = &rModel.getIso(rEntityID.getEid()).at(rPickItems[i].getElementPosition());
                             break;
                         default:
                             break;
@@ -135,14 +136,11 @@ void PickDetailsTree::populate(void)
             {
                 QTreeWidgetItem *childItem = 0;
 
-                QString nodeNumber;
                 if (REntityGroup::typeIsElementGroup(rEntityID.getType()))
                 {
-                    const RElement &rElement = rModel.getElement(elementID);
-                    nodeNumber = QString::number(rElement.getNodeId(rPickItems[i].getNodeID()));
-                    itemText = tr("Node") + " # " + nodeNumber;
+                    itemText = tr("Node") + " # " + QString::number(nodeID);
 
-                    const RNode &rNode = rModel.getNode(rElement.getNodeId(rPickItems[i].getNodeID()));
+                    const RNode &rNode = rModel.getNode(nodeID);
 
                     childItem = new QTreeWidgetItem(topItem);
                     childItem->setText(PICK_DETAILS_TREE_COLUMN_1,tr("Coordinates") + ":");
@@ -153,8 +151,7 @@ void PickDetailsTree::populate(void)
                 }
                 else if (REntityGroup::typeIsInterpolatedElementGroup(rEntityID.getType()))
                 {
-                    nodeNumber = QString::number(rPickItems[i].getElementID()) + " / " + QString::number(rPickItems[i].getNodeID());
-                    itemText = tr("Interpolated node") + " # " + nodeNumber;
+                    itemText = tr("Interpolated node") + " # " + QString::number(rPickItems[i].getElementPosition()) + " / " + QString::number(rPickItems[i].getNodePosition());
                 }
 
                 // Type
@@ -166,7 +163,7 @@ void PickDetailsTree::populate(void)
             }
             case PICK_ITEM_HOLE_ELEMENT:
             {
-                itemText = tr("Edge") + " # " + QString::number(rPickItems[i].getElementID());
+                itemText = tr("Edge") + " # " + QString::number(rPickItems[i].getElementPosition());
                 break;
             }
             default:

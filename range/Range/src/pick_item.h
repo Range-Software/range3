@@ -40,9 +40,17 @@ class PickItem
         //! Entity ID.
         SessionEntityID entityID;
         //! Element ID.
+        //! For interpolated elements and holes element ID equals element position.
         uint elementID;
+        //! Element position.
+        //! For interpolated elements and holes element position equals element ID.
+        uint elementPosition;
         //! Node ID.
+        //! For interpolated elements and holes node ID equals node position.
         uint nodeID;
+        //! Node position.
+        //! For interpolated elements and holes node position equals node ID.
+        uint nodePosition;
 
     public:
 
@@ -50,7 +58,7 @@ class PickItem
         PickItem();
 
         //! Constructor.
-        PickItem(const SessionEntityID &entityID, uint elementID = RConstants::eod, uint nodeID = RConstants::eod);
+        PickItem(const SessionEntityID &entityID, uint elementID = RConstants::eod, uint elementPosition = RConstants::eod, uint nodeID = RConstants::eod, uint nodePosition = RConstants::eod);
 
         //! Copy constructor.
         PickItem(const PickItem &pickItem);
@@ -67,8 +75,14 @@ class PickItem
         //! Return element ID.
         uint getElementID(void) const;
 
-        //! Return element ID.
+        //! Return element position.
+        uint getElementPosition(void) const;
+
+        //! Return node ID.
         uint getNodeID(void) const;
+
+        //! Return node position.
+        uint getNodePosition(void) const;
 
         //! Return item pick type.
         PickItemType getItemType(void) const;

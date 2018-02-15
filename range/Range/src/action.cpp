@@ -694,7 +694,7 @@ void Action::onGeometryCreateElement(void)
                 uint nodeID = pickItems[j].getNodeID();
                 if (elementID != RConstants::eod && nodeID != RConstants::eod)
                 {
-                    nodeIDs.append(Session::getInstance().getModel(modelIDs[i]).getElement(elementID).getNodeId(nodeID));
+                    nodeIDs.append(nodeID);
                     pickList.removeItem(pickItems[j]);
                 }
             }
@@ -930,7 +930,7 @@ void Action::onGeometryMoveNode(void)
                 uint lNodeID = pickItems[j].getNodeID();
                 if (elementID != RConstants::eod && lNodeID != RConstants::eod)
                 {
-                    nodeIDs.append(Session::getInstance().getModel(modelIDs[i]).getElement(elementID).getNodeId(lNodeID));
+                    nodeIDs.append(lNodeID);
                 }
             }
         }
@@ -981,7 +981,7 @@ void Action::onGeometryRemoveNode(void)
                 uint nodeID = pickItems[j].getNodeID();
                 if (elementID != RConstants::eod && nodeID != RConstants::eod)
                 {
-                    nodeIDs.append(Session::getInstance().getModel(modelIDs[i]).getElement(elementID).getNodeId(nodeID));
+                    nodeIDs.append(nodeID);
                     pickList.removeItem(pickItems[j]);
                 }
             }
@@ -1033,7 +1033,7 @@ void Action::onGeometryRemoveNodeAndCloseHole(void)
                 uint nodeID = pickItems[j].getNodeID();
                 if (elementID != RConstants::eod && nodeID != RConstants::eod)
                 {
-                    nodeIDs.append(Session::getInstance().getModel(modelIDs[i]).getElement(elementID).getNodeId(nodeID));
+                    nodeIDs.append(nodeID);
                     pickList.removeItem(pickItems[j]);
                 }
             }
@@ -1081,18 +1081,11 @@ void Action::onGeometryRemoveElement(void)
         {
             if (pickItems[j].getItemType() == PICK_ITEM_ELEMENT)
             {
-                uint entityID = pickItems[j].getEntityID().getEid();
-                REntityGroupType entityType = pickItems[j].getEntityID().getType();
-                uint elementPosition = pickItems[j].getElementID();
-
-                if (elementPosition != RConstants::eod)
+                uint elementID = pickItems[j].getElementID();
+                if (elementID != RConstants::eod)
                 {
-                    uint elementID = Session::getInstance().getModel(modelIDs[i]).findElementID(entityType,entityID,elementPosition);
-                    if (elementID != RConstants::eod)
-                    {
-                        elementIDs.append(elementID);
-                        pickList.removeItem(pickItems[j]);
-                    }
+                    elementIDs.append(elementID);
+                    pickList.removeItem(pickItems[j]);
                 }
             }
         }
@@ -1146,16 +1139,12 @@ void Action::onGeometrySurfaceSwapElementNormal(void)
     for (int i=0;i<modelIDs.size();i++)
     {
         QList<uint> elementIDs;
-        const Model &rModel = Session::getInstance().getModel(modelIDs[i]);
-
         QVector<PickItem> pickItems = pickList.getItems(modelIDs[i]);
         for (int j=0;j<pickItems.size();j++)
         {
             if (pickItems[j].getItemType() == PICK_ITEM_ELEMENT)
             {
-                const SessionEntityID &rEntityID = pickItems[j].getEntityID();
-                uint elementID = rModel.findElementID(rEntityID.getType(),rEntityID.getEid(),pickItems[j].getElementID());
-
+                uint elementID = pickItems[j].getElementID();
                 if (elementID != RConstants::eod)
                 {
                     elementIDs.append(elementID);

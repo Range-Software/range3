@@ -196,6 +196,7 @@ void GLElementGroup::draw(void)
                     {
                         continue;
                     }
+
                     uint patchID = rPatchBook.findPatchID(pickList[i].getElementID());
                     if (patchID == RConstants::eod)
                     {

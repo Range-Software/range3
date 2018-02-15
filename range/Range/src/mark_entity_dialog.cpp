@@ -153,14 +153,14 @@ bool MarkEntityDialog::markEntities(uint modelID, const QVector<PickItem> &pickL
     QList<uint> elementIDs;
     for (int j=0;j<pickList.size();j++)
     {
-        if (pickList[j].getEntityID().getMid() == modelID &&
-            pickList[j].getEntityID().getType() == this->entityType)
+        const SessionEntityID &pickEntityID = pickList[j].getEntityID();
+        if (pickEntityID.getMid() == modelID && pickEntityID.getType() == this->entityType)
         {
             uint elementID = pickList[j].getElementID();
             if (elementID < Session::getInstance().getModel(modelID).getNElements() &&
                 R_ELEMENT_TYPE_IS_SURFACE(Session::getInstance().getModel(modelID).getElement(elementID).getType()))
             {
-                elementIDs.append(pickList[j].getElementID());
+                elementIDs.append(elementID);
             }
         }
     }

@@ -1917,10 +1917,10 @@ void Model::glDraw(GLWidget *glWidget, const QVector<PickItem> &pickedItems) con
             PickItemType itemType = pickedItems[i].getItemType();
             REntityGroupType entityType = pickedItems[i].getEntityID().getType();
             uint entityID = pickedItems[i].getEntityID().getEid();
-            uint elementPosition = pickedItems[i].getElementID();
-            uint elementID = this->findElementID(entityType,entityID,elementPosition);
-            uint nodePosition = pickedItems[i].getNodeID();
-            uint nodeID = this->findNodeID(entityType,entityID,pickedItems[i].getElementID(),nodePosition);
+            uint elementPosition = pickedItems[i].getElementPosition();
+            uint elementID = pickedItems[i].getElementID();
+            uint nodePosition = pickedItems[i].getNodePosition();
+            uint nodeID = pickedItems[i].getNodeID();
 
             if (itemType == PICK_ITEM_HOLE_ELEMENT)
             {
@@ -2120,7 +2120,7 @@ QMap<RVariableType, PickValue> Model::getPickedResultsValues(const PickItem &rPi
             std::vector<RR3Vector> positionVector;
             if (REntityGroup::typeIsElementGroup(rPickItem.getEntityID().getType()))
             {
-                uint elementID = this->findElementID(rPickItem.getEntityID().getType(),rPickItem.getEntityID().getEid(),rPickItem.getElementID());
+                uint elementID = rPickItem.getElementID();
                 if (elementID == RConstants::eod)
                 {
                     continue;
@@ -2170,10 +2170,10 @@ QMap<RVariableType, PickValue> Model::getPickedResultsValues(const PickItem &rPi
                 resultsValuesVector = this->getInterpolatedElementResultsValues(rVariable.getType(),
                                                                                 rPickItem.getEntityID().getType(),
                                                                                 rPickItem.getEntityID().getEid(),
-                                                                                rPickItem.getElementID());
+                                                                                rPickItem.getElementPosition());
                 const RInterpolatedElement *pIElement = this->getInterpolatedElement(rPickItem.getEntityID().getType(),
                                                                                      rPickItem.getEntityID().getEid(),
-                                                                                     rPickItem.getElementID());
+                                                                                     rPickItem.getElementPosition());
                 std::vector<RR3Vector> displacementValues;
                 if (pDisplacementVariable)
                 {
@@ -2224,17 +2224,17 @@ QMap<RVariableType, PickValue> Model::getPickedResultsValues(const PickItem &rPi
                 RR3Vector displacement(0.0,0.0,0.0);
                 if (pDisplacementVariable)
                 {
-                    uint elementID = this->findElementID(rPickItem.getEntityID().getType(),rPickItem.getEntityID().getEid(),rPickItem.getElementID());
+                    uint elementID = rPickItem.getElementID();
                     if (elementID != RConstants::eod)
                     {
                         const RElement &rElement = this->getElement(elementID);
                         std::vector<RR3Vector> displacementNodeValues;
                         rElement.findDisplacementNodeValues(elementID,*pDisplacementVariable,displacementNodeValues);
-                        displacement = displacementNodeValues[rPickItem.getNodeID()];
+                        displacement = displacementNodeValues[rPickItem.getNodePosition()];
                     }
                 }
 
-                uint nodeID = this->findNodeID(rPickItem.getEntityID().getType(),rPickItem.getEntityID().getEid(),rPickItem.getElementID(),rPickItem.getNodeID());
+                uint nodeID = rPickItem.getNodeID();
                 if (nodeID == RConstants::eod)
                 {
                     continue;
@@ -2251,26 +2251,26 @@ QMap<RVariableType, PickValue> Model::getPickedResultsValues(const PickItem &rPi
                 {
                     const RInterpolatedElement *pIElement = this->getInterpolatedElement(rPickItem.getEntityID().getType(),
                                                                                          rPickItem.getEntityID().getEid(),
-                                                                                         rPickItem.getElementID());
+                                                                                         rPickItem.getElementPosition());
                     if (pIElement)
                     {
                         std::vector<RR3Vector> displacementNodeValues;
                         pIElement->findDisplacementNodeValues(this->getNodes(),this->getElements(),*pDisplacementVariable,displacementNodeValues);
-                        displacement = displacementNodeValues[rPickItem.getNodeID()];
+                        displacement = displacementNodeValues[rPickItem.getNodePosition()];
                     }
                 }
 
                 resultsValuesVector = this->getInterpolatedNodeResultsValues(rVariable.getType(),
                                                                              rPickItem.getEntityID().getType(),
                                                                              rPickItem.getEntityID().getEid(),
-                                                                             rPickItem.getElementID(),
-                                                                             rPickItem.getNodeID());
+                                                                             rPickItem.getElementPosition(),
+                                                                             rPickItem.getNodePosition());
                 const RInterpolatedElement *pIElement = this->getInterpolatedElement(rPickItem.getEntityID().getType(),
                                                                                      rPickItem.getEntityID().getEid(),
-                                                                                     rPickItem.getElementID());
-                position[0] = pIElement->at(rPickItem.getNodeID()).getX() + displacement[0];
-                position[1] = pIElement->at(rPickItem.getNodeID()).getY() + displacement[1];
-                position[2] = pIElement->at(rPickItem.getNodeID()).getZ() + displacement[2];
+                                                                                     rPickItem.getElementPosition());
+                position[0] = pIElement->at(rPickItem.getNodePosition()).getX() + displacement[0];
+                position[1] = pIElement->at(rPickItem.getNodePosition()).getY() + displacement[1];
+                position[2] = pIElement->at(rPickItem.getNodePosition()).getZ() + displacement[2];
             }
             resultsValues[rVariable.getType()] = PickValue(position,resultsValuesVector);
         }
@@ -2381,7 +2381,7 @@ bool Model::findPickedElement(const RR3Vector &position, const RR3Vector &direct
                         if (!found || minDistance > distance)
                         {
                             minDistance = distance;
-                            pickItem = PickItem(SessionEntityID(0,entityType,entityID),j);
+                            pickItem = PickItem(SessionEntityID(0,entityType,entityID),elementID,j);
                             found = true;
                         }
                     }
@@ -2414,7 +2414,7 @@ bool Model::findPickedElement(const RR3Vector &position, const RR3Vector &direct
                         if (!found || minDistance > distance)
                         {
                             minDistance = distance;
-                            pickItem = PickItem(SessionEntityID(0,entityType,entityID),j);
+                            pickItem = PickItem(SessionEntityID(0,entityType,entityID),j,j);
                             found = true;
                         }
                     }
@@ -2494,7 +2494,7 @@ bool Model::findPickedNode(const RR3Vector &position, const RR3Vector &direction
                             if (!found || minDistance > distance)
                             {
                                 minDistance = distance;
-                                pickItem = PickItem(SessionEntityID(0,entityType,entityID),j,k);
+                                pickItem = PickItem(SessionEntityID(0,entityType,entityID),elementID,j,nodeID,k);
                                 found = true;
                             }
                         }
@@ -2531,7 +2531,7 @@ bool Model::findPickedNode(const RR3Vector &position, const RR3Vector &direction
                             if (!found || minDistance > distance)
                             {
                                 minDistance = distance;
-                                pickItem = PickItem(SessionEntityID(0,entityType,entityID),j,k);
+                                pickItem = PickItem(SessionEntityID(0,entityType,entityID),j,j,k,k);
                                 found = true;
                             }
                         }
@@ -2556,7 +2556,7 @@ bool Model::findPickedHoleElement(const RR3Vector &position, const RR3Vector &di
             if (!found || distance < minDistance)
             {
                 minDistance = distance;
-                pickItem = PickItem(SessionEntityID(0,R_ENTITY_GROUP_NONE,RConstants::eod),i);
+                pickItem = PickItem(SessionEntityID(0,R_ENTITY_GROUP_NONE,RConstants::eod),i,i);
                 found = true;
             }
         }

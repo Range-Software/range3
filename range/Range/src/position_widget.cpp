@@ -382,25 +382,16 @@ void PositionWidget::onPickButtonClicked(void)
 
         if (pickItems[i].getItemType() == PICK_ITEM_NODE)
         {
-            uint mid = pickEntityID.getMid();
-            uint nodeID = Session::getInstance().getModel(mid).getElement(pickItems[i].getElementID()).getNodeId(pickItems[i].getNodeID());
-
-            this->setPosition(Session::getInstance().getModel(mid).getNode(nodeID).toVector());
+            this->setPosition(Session::getInstance().getModel(pickEntityID.getMid()).getNode(pickItems[i].getNodeID()).toVector());
             this->okButton->setEnabled(true);
 
             return;
         }
         else if (pickItems[i].getItemType() == PICK_ITEM_ELEMENT)
         {
-            uint mid = pickEntityID.getMid();
-            uint elementID = pickItems[i].getElementID();
-
-            RElement &element = Session::getInstance().getModel(mid).getElement(elementID);
-
             double cx, cy, cz;
-
-            element.findCenter(Session::getInstance().getModel(mid).getNodes(),cx,cy,cz);
-
+            const Model &rModel = Session::getInstance().getModel(pickEntityID.getMid());
+            rModel.getElement(pickItems[i].getElementID()).findCenter(rModel.getNodes(),cx,cy,cz);
             this->setPosition(RR3Vector(cx, cy, cz));
             this->okButton->setEnabled(true);
 
