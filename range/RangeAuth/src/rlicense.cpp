@@ -118,6 +118,15 @@ bool RLicense::validateRecord(const QString &recordName, const QString &account,
     return false;
 }
 
+bool RLicense::checkRecordExpiry(const QString &recordName, uint nMonthsToExpire) const
+{
+    if (this->records.contains(recordName))
+    {
+        return this->records.value(recordName).checkExpiry(nMonthsToExpire);
+    }
+    return false;
+}
+
 QDate RLicense::findRecordExpirationDate(const QString &recordName) const
 {
     if (this->records.contains(recordName))

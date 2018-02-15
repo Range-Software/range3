@@ -218,6 +218,18 @@ void SolverSetupChecker::checkLicense(QStringList &warnings, QStringList &errors
                               RProblem::getId(problemTypes[i]) +
                               "</strong>)");
             }
+            else
+            {
+                uint nMonthsToExpire = 1;
+                if (license.checkRecordExpiry(RProblem::getId(problemTypes[i]),nMonthsToExpire))
+                {
+                    warnings.append("License for \'<strong>" +
+                                    RProblem::getName(problemTypes[i]) +
+                                    "</strong>\' (product-id: <strong>" +
+                                    RProblem::getId(problemTypes[i]) +
+                                    "</strong>) will soon expire");
+                }
+            }
         }
     }
     catch (const RError &rError)

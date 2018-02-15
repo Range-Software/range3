@@ -146,6 +146,11 @@ bool RLicenseRecord::validate(const QString &account, const QString &password) c
     return (this->code == this->generateAuthCode(account,password));
 }
 
+bool RLicenseRecord::checkExpiry(uint nMonthsToExpire) const
+{
+    return (this->getExpirationDate() < QDate::currentDate().addMonths(nMonthsToExpire));
+}
+
 QString RLicenseRecord::generateSoftwareKey(void)
 {
     // min 32

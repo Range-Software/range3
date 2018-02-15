@@ -64,6 +64,9 @@ class RLicense
         //! Validate license record with given name.
         bool validateRecord(const QString &recordName, const QString &account, const QString &password) const;
 
+        //! Check license record with given name whether its expiry fits in specified number of months from now.
+        bool checkRecordExpiry(const QString &recordName, uint nMonthsToExpire) const;
+
         //! Find record expiry date.
         QDate findRecordExpirationDate(const QString &recordName) const;
 

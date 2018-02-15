@@ -82,6 +82,9 @@ class RLicenseRecord
         //! Validate record.
         bool validate(const QString &account, const QString &password) const;
 
+        //! Check record for expiry.
+        bool checkExpiry(uint nMonthsToExpire) const;
+
         //! Generate software key.
         static QString generateSoftwareKey(void);
 
