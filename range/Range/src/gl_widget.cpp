@@ -585,21 +585,37 @@ void GLWidget::drawMessageBox(QPainter &painter, bool drawBox)
         messages.push_back(QString("Number of hole elements: ") + QString::number(rModel.getNHoleElements()));
     }
 
-    QStringList actionMessage;
-    QString keyMouseMessage(this->actionEvent.getKeyMouseCombination());
-    QString eventMessage(GLActionEvent::toString(this->actionEvent.getType()));
+    const PickList &rPickList = Session::getInstance().getPickList();
+    if (!rPickList.isEmpty())
+    {
+        messages.append("Picked entities:");
 
-    if (keyMouseMessage.length() != 0)
-    {
-        actionMessage.append(keyMouseMessage);
-    }
-    if (eventMessage.length() != 0)
-    {
-        actionMessage.append(eventMessage);
-    }
-    if (actionMessage.size() > 0)
-    {
-        messages.append(actionMessage.join(" - "));
+        const Model &rModel = Session::getInstance().getModel(this->modelID);
+        QVector<PickItem> pickItems = rPickList.getItems(this->modelID);
+        std::vector<REntityGroupType> entityTypes = REntityGroup::getAllTypes();
+        for (uint i=0;i<entityTypes.size();i++)
+        {
+            QMap<QString,uint> pickedEntities;
+            for (int j=0;j<pickItems.size();j++)
+            {
+                if (pickItems.at(j).getEntityID().getType() == entityTypes[i])
+                {
+                    uint gid = rModel.getEntityGroupID(pickItems.at(j).getEntityID().getType(),pickItems.at(j).getEntityID().getEid());
+                    const QString eName = rModel.getEntityGroupPtr(gid)->getName();
+                    pickedEntities.insert(eName,pickedEntities.value(eName,0)+1);
+                }
+            }
+
+            if (!pickedEntities.isEmpty())
+            {
+                QList<QString> pickedEntityNames = pickedEntities.uniqueKeys();
+
+                foreach (const QString &pickedEntityName, pickedEntityNames)
+                {
+                    messages.append("    " + REntityGroup::getTypeName(entityTypes[i]) + ":  " + pickedEntityName + "    (" + QString::number(pickedEntities.value(pickedEntityName)) + ")");
+                }
+            }
+        }
     }
 
     if (messages.size() == 0)
@@ -642,7 +658,24 @@ void GLWidget::drawInfoBox(QPainter &painter, bool drawBox)
 
     QList<QString> messages;
 
-    messages.append("Zoom: " + QString::number(this->scale));
+    QStringList actionMessage;
+    QString keyMouseMessage(this->actionEvent.getKeyMouseCombination());
+    QString eventMessage(GLActionEvent::toString(this->actionEvent.getType()));
+
+    if (keyMouseMessage.length() != 0)
+    {
+        actionMessage.append(keyMouseMessage);
+    }
+    if (eventMessage.length() != 0)
+    {
+        actionMessage.append(eventMessage);
+    }
+    if (actionMessage.size() > 0)
+    {
+        messages.append(tr("Action") + ": " + actionMessage.join(" - "));
+    }
+
+    messages.append(tr("Zoom") + ": " + QString::number(this->scale));
 
     if (messages.size() == 0)
     {
