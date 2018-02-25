@@ -68,6 +68,15 @@ class GeometryTransformWidget : public QWidget
 
     protected slots:
 
+        //! Model selection changed.
+        void onModelSelectionChanged(uint);
+
+        //! Model visibility changed.
+        void onModelVisibilityChanged(uint);
+
+        //! Pick-list changed.
+        void onPickListChanged(void);
+
         //! Scale changed.
         void onScaleChanged(const RR3Vector &center, const RR3Vector &scales);
 

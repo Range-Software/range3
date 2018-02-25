@@ -686,21 +686,6 @@ void Model::transformGeometry(const GeometryTransformInput &geometryTransformInp
                  input.getApplyTo() == GeometryTransformInput::ApplyToPicked ||
                  input.getApplyTo() == GeometryTransformInput::ApplyToVisible)
         {
-//            QList<SessionEntityID> entityIDs;
-
-//            if (input.getApplyTo() == GeometryTransformInput::ApplyToSelected)
-//            {
-//                entityIDs = this->getSelectedEntityIDs(0);
-//            }
-//            else if (input.getApplyTo() == GeometryTransformInput::ApplyToPicked)
-//            {
-//                entityIDs = this->getPickedEntityIDs(0);
-//            }
-//            else if (input.getApplyTo() == GeometryTransformInput::ApplyToVisible)
-//            {
-//                entityIDs = this->getVisibleEntityIDs(0);
-//            }
-
             QSet<uint> elementIDs = this->getElementIDs(entityIDs);
             QSet<uint> edgeNodeIDs = this->findEdgeNodeIDs(entityIDs);
 

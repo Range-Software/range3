@@ -58,10 +58,12 @@ GeometryTransformWidget::GeometryTransformWidget(QWidget *parent) :
 
     this->applyToSelectedRadio = new QRadioButton(tr("Selected entities"));
     this->applyToSelectedRadio->setChecked(this->input.getApplyTo() == GeometryTransformInput::ApplyToSelected);
+    this->applyToSelectedRadio->setEnabled(Session::getInstance().getSelectedEntityIDs().size() > 0);
     applyToLayout->addWidget(this->applyToSelectedRadio);
 
     this->applyToPickedRadio = new QRadioButton(tr("Picked entities"));
     this->applyToPickedRadio->setChecked(this->input.getApplyTo() == GeometryTransformInput::ApplyToPicked);
+    this->applyToPickedRadio->setEnabled(!Session::getInstance().getPickList().isEmpty());
     applyToLayout->addWidget(this->applyToPickedRadio);
 
     this->applyToVisibleRadio = new QRadioButton(tr("Visible entities"));
@@ -108,6 +110,19 @@ GeometryTransformWidget::GeometryTransformWidget(QWidget *parent) :
     this->okButton = new QPushButton(QIcon(":/icons/file/pixmaps/range-ok.svg"),tr("Ok"));
     this->okButton->setEnabled(false);
     buttonsLayout->addWidget(this->okButton);
+
+    QObject::connect(&Session::getInstance(),
+                     &Session::modelSelectionChanged,
+                     this,
+                     &GeometryTransformWidget::onModelSelectionChanged);
+    QObject::connect(&Session::getInstance(),
+                     &Session::pickListChanged,
+                     this,
+                     &GeometryTransformWidget::onPickListChanged);
+    QObject::connect(&Session::getInstance(),
+                     &Session::modelVisibilityChanged,
+                     this,
+                     &GeometryTransformWidget::onModelVisibilityChanged);
 
     QObject::connect(scaleWidget,
                      &GeometryScaleWidget::scaleChanged,
@@ -166,6 +181,21 @@ GeometryTransformWidget::GeometryTransformWidget(QWidget *parent) :
 void GeometryTransformWidget::enableOkButton(void)
 {
     this->okButton->setEnabled(this->input.isRotateActive() || this->input.isScaleActive() || this->input.isTranslateActive());
+}
+
+void GeometryTransformWidget::onModelSelectionChanged(uint)
+{
+    this->applyToSelectedRadio->setEnabled(!Session::getInstance().getSelectedEntityIDs().isEmpty());
+}
+
+void GeometryTransformWidget::onModelVisibilityChanged(uint)
+{
+    this->applyToVisibleRadio->setEnabled(!Session::getInstance().getVisibleEntityIDs().isEmpty());
+}
+
+void GeometryTransformWidget::onPickListChanged(void)
+{
+    this->applyToPickedRadio->setEnabled(!Session::getInstance().getPickList().isEmpty());
 }
 
 void GeometryTransformWidget::onScaleChanged(const RR3Vector &center, const RR3Vector &scales)
