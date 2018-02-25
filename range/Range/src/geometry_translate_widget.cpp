@@ -9,6 +9,7 @@
  *********************************************************************/
 
 #include <QGridLayout>
+#include <QGroupBox>
 #include <QLabel>
 #include <QPushButton>
 
@@ -23,10 +24,13 @@ GeometryTranslateWidget::GeometryTranslateWidget(const RR3Vector &translation, Q
     QVBoxLayout *vBoxLayout = new QVBoxLayout;
     this->setLayout(vBoxLayout);
 
-    QGridLayout *layout = new QGridLayout;
-    vBoxLayout->addLayout(layout);
+    QGroupBox *groupBox = new QGroupBox(tr("Distance"));
+    vBoxLayout->addWidget(groupBox);
 
-    QLabel *xDistanceLabel = new QLabel(tr("X translation")+":");
+    QGridLayout *layout = new QGridLayout;
+    groupBox->setLayout(layout);
+
+    QLabel *xDistanceLabel = new QLabel("X:");
     layout->addWidget(xDistanceLabel,0,0,1,1);
 
     this->xDistanceLineEdit = new ValueLineEdit;
@@ -34,7 +38,10 @@ GeometryTranslateWidget::GeometryTranslateWidget(const RR3Vector &translation, Q
     this->xDistanceLineEdit->setValue(translation[0]);
     layout->addWidget(this->xDistanceLineEdit,0,1,1,1);
 
-    QLabel *yDistanceLabel = new QLabel(tr("Y translation")+":");
+    QLabel *xDistanceUnit = new QLabel("[m]");
+    layout->addWidget(xDistanceUnit,0,2,1,1);
+
+    QLabel *yDistanceLabel = new QLabel("Y:");
     layout->addWidget(yDistanceLabel,1,0,1,1);
 
     this->yDistanceLineEdit = new ValueLineEdit;
@@ -42,7 +49,10 @@ GeometryTranslateWidget::GeometryTranslateWidget(const RR3Vector &translation, Q
     this->yDistanceLineEdit->setValue(translation[1]);
     layout->addWidget(this->yDistanceLineEdit,1,1,1,1);
 
-    QLabel *zDistanceLabel = new QLabel(tr("Z translation")+":");
+    QLabel *yDistanceUnit = new QLabel("[m]");
+    layout->addWidget(yDistanceUnit,1,2,1,1);
+
+    QLabel *zDistanceLabel = new QLabel("Z:");
     layout->addWidget(zDistanceLabel,2,0,1,1);
 
     this->zDistanceLineEdit = new ValueLineEdit;
@@ -50,8 +60,11 @@ GeometryTranslateWidget::GeometryTranslateWidget(const RR3Vector &translation, Q
     this->zDistanceLineEdit->setValue(translation[2]);
     layout->addWidget(this->zDistanceLineEdit,2,1,1,1);
 
+    QLabel *zDistanceUnit = new QLabel("[m]");
+    layout->addWidget(zDistanceUnit,2,2,1,1);
+
     QPushButton *originButton = new QPushButton(QIcon(":/icons/file/pixmaps/range-undo.svg"),tr("Origin"));
-    layout->addWidget(originButton,0,2,1,1);
+    layout->addWidget(originButton,3,0,1,3);
 
     QObject::connect(originButton,
                      &QPushButton::clicked,
@@ -59,7 +72,7 @@ GeometryTranslateWidget::GeometryTranslateWidget(const RR3Vector &translation, Q
                      &GeometryTranslateWidget::setOrigin);
 
     QPushButton *centerButton = new QPushButton(QIcon(":/icons/file/pixmaps/range-undo.svg"),tr("Center"));
-    layout->addWidget(centerButton,1,2,1,1);
+    layout->addWidget(centerButton,4,0,1,3);
 
     QObject::connect(centerButton,
                      &QPushButton::clicked,
@@ -67,7 +80,7 @@ GeometryTranslateWidget::GeometryTranslateWidget(const RR3Vector &translation, Q
                      &GeometryTranslateWidget::setCenter);
 
     QPushButton *resetButton = new QPushButton(QIcon(":/icons/file/pixmaps/range-undo.svg"),tr("Reset"));
-    layout->addWidget(resetButton,2,2,1,1);
+    layout->addWidget(resetButton,5,0,1,3);
 
     QObject::connect(resetButton,
                      &QPushButton::clicked,

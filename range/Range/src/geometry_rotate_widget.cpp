@@ -9,6 +9,7 @@
  *********************************************************************/
 
 #include <QGridLayout>
+#include <QGroupBox>
 #include <QLabel>
 #include <QPushButton>
 
@@ -22,10 +23,13 @@ GeometryRotateWidget::GeometryRotateWidget(const RR3Vector &center, const RR3Vec
     QVBoxLayout *vBoxLayout = new QVBoxLayout;
     this->setLayout(vBoxLayout);
 
-    QGridLayout *layout = new QGridLayout;
-    vBoxLayout->addLayout(layout);
+    QGroupBox *groupBox = new QGroupBox(tr("Rotation angles"));
+    vBoxLayout->addWidget(groupBox);
 
-    QLabel *xAngleLabel = new QLabel(tr("X rotation")+":");
+    QGridLayout *layout = new QGridLayout;
+    groupBox->setLayout(layout);
+
+    QLabel *xAngleLabel = new QLabel("X:");
     layout->addWidget(xAngleLabel,0,0,1,1);
 
     double maxAngle = R_RAD_TO_DEG(2.0*RConstants::pi);
@@ -36,7 +40,10 @@ GeometryRotateWidget::GeometryRotateWidget(const RR3Vector &center, const RR3Vec
     this->xAngleLineEdit->setValue(rotation[0]);
     layout->addWidget(this->xAngleLineEdit,0,1,1,1);
 
-    QLabel *yAngleLabel = new QLabel(tr("Y rotation")+":");
+    QLabel *xAngleUnit = new QLabel(QString::fromUtf8("[°]"));
+    layout->addWidget(xAngleUnit,0,2,1,1);
+
+    QLabel *yAngleLabel = new QLabel("Y:");
     layout->addWidget(yAngleLabel,1,0,1,1);
 
     this->yAngleLineEdit = new ValueLineEdit;
@@ -45,7 +52,10 @@ GeometryRotateWidget::GeometryRotateWidget(const RR3Vector &center, const RR3Vec
     this->yAngleLineEdit->setValue(rotation[1]);
     layout->addWidget(this->yAngleLineEdit,1,1,1,1);
 
-    QLabel *zAngleLabel = new QLabel(tr("Z rotation")+":");
+    QLabel *yAngleUnit = new QLabel(QString::fromUtf8("[°]"));
+    layout->addWidget(yAngleUnit,1,2,1,1);
+
+    QLabel *zAngleLabel = new QLabel("Z:");
     layout->addWidget(zAngleLabel,2,0,1,1);
 
     this->zAngleLineEdit = new ValueLineEdit;
@@ -54,13 +64,16 @@ GeometryRotateWidget::GeometryRotateWidget(const RR3Vector &center, const RR3Vec
     this->zAngleLineEdit->setValue(rotation[2]);
     layout->addWidget(this->zAngleLineEdit,2,1,1,1);
 
+    QLabel *zAngleUnit = new QLabel(QString::fromUtf8("[°]"));
+    layout->addWidget(zAngleUnit,2,2,1,1);
+
+    QPushButton *anglesResetButton = new QPushButton(QIcon(":/icons/file/pixmaps/range-undo.svg"),tr("Reset"));
+    layout->addWidget(anglesResetButton,2,3,1,1);
+
     this->rotationCenter = new PositionWidget(tr("Rotation center"),center,false);
     this->rotationCenter->hideButtons();
     this->rotationCenter->hideSliders();
-    layout->addWidget(this->rotationCenter,3,0,1,2);
-
-    QPushButton *anglesResetButton = new QPushButton(QIcon(":/icons/file/pixmaps/range-undo.svg"),tr("Reset"));
-    layout->addWidget(anglesResetButton,2,2,1,1);
+    vBoxLayout->addWidget(this->rotationCenter);
 
     QObject::connect(anglesResetButton,
                      &QPushButton::clicked,

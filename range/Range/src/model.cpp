@@ -3143,10 +3143,10 @@ void Model::createSweepEdgeElements(const QList<RElement> &edgeElements, const Q
                 {
                     RElement e;
                     e.setType(R_ELEMENT_QUAD1);
-                    e.setNodeId(0,edgeElements[i].getNodeId(0));
-                    e.setNodeId(1,edgeElements[i].getNodeId(1));
-                    e.setNodeId(2,edgeNodeMap[edgeElements[i].getNodeId(1)]);
-                    e.setNodeId(3,edgeNodeMap[edgeElements[i].getNodeId(0)]);
+                    e.setNodeId(0,edgeElements[i].getNodeId(1));
+                    e.setNodeId(1,edgeElements[i].getNodeId(0));
+                    e.setNodeId(2,edgeNodeMap[edgeElements[i].getNodeId(0)]);
+                    e.setNodeId(3,edgeNodeMap[edgeElements[i].getNodeId(1)]);
                     surfaceElements.push_back(e);
                 }
                 break;
