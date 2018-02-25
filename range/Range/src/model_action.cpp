@@ -826,6 +826,11 @@ void ModelAction::geometryTransform(const ModelActionInput &modelActionInput)
             entityIDs = Session::getInstance().getModel(modelID).getSelectedEntityIDs(modelID);
             break;
         }
+        case GeometryTransformInput::ApplyToPicked:
+        {
+            entityIDs = Session::getInstance().getModel(modelID).getPickedEntityIDs(modelID);
+            break;
+        }
         case GeometryTransformInput::ApplyToVisible:
         {
             entityIDs = Session::getInstance().getModel(modelID).getVisibleEntityIDs(modelID);
@@ -838,7 +843,7 @@ void ModelAction::geometryTransform(const ModelActionInput &modelActionInput)
     }
 
     // Model transformation
-    rModel.transformGeometry(modelActionInput.getGeometryTransformInput());
+    rModel.transformGeometry(modelActionInput.getGeometryTransformInput(),entityIDs);
 
     RLogger::unindent();
 

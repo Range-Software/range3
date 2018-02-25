@@ -49,25 +49,29 @@ GeometryTransformWidget::GeometryTransformWidget(QWidget *parent) :
     QGroupBox *applyToGroupBox = new QGroupBox(tr("Apply to"));
     containerLayout->addWidget(applyToGroupBox);
 
-    QGridLayout *applyToLayout = new QGridLayout;
+    QVBoxLayout *applyToLayout = new QVBoxLayout;
     applyToGroupBox->setLayout(applyToLayout);
 
     this->applyToAllRadio = new QRadioButton(tr("All"));
     this->applyToAllRadio->setChecked(this->input.getApplyTo() == GeometryTransformInput::ApplyToAll);
-    applyToLayout->addWidget(this->applyToAllRadio,0,0,1,1);
+    applyToLayout->addWidget(this->applyToAllRadio);
 
-    this->applyToVisibleRadio = new QRadioButton(tr("Visible"));
-    this->applyToVisibleRadio->setChecked(this->input.getApplyTo() == GeometryTransformInput::ApplyToVisible);
-    applyToLayout->addWidget(this->applyToVisibleRadio,0,1,1,1);
-
-    this->applyToSelectedRadio = new QRadioButton(tr("Selected"));
+    this->applyToSelectedRadio = new QRadioButton(tr("Selected entities"));
     this->applyToSelectedRadio->setChecked(this->input.getApplyTo() == GeometryTransformInput::ApplyToSelected);
-    applyToLayout->addWidget(this->applyToSelectedRadio,0,2,1,1);
+    applyToLayout->addWidget(this->applyToSelectedRadio);
+
+    this->applyToPickedRadio = new QRadioButton(tr("Picked entities"));
+    this->applyToPickedRadio->setChecked(this->input.getApplyTo() == GeometryTransformInput::ApplyToPicked);
+    applyToLayout->addWidget(this->applyToPickedRadio);
+
+    this->applyToVisibleRadio = new QRadioButton(tr("Visible entities"));
+    this->applyToVisibleRadio->setChecked(this->input.getApplyTo() == GeometryTransformInput::ApplyToVisible);
+    applyToLayout->addWidget(this->applyToVisibleRadio);
 
     this->includeSharedNodesCheck = new QGroupBox(tr("Include shared nodes"));
     this->includeSharedNodesCheck->setCheckable(true);
     this->includeSharedNodesCheck->setChecked(this->input.getIncludeSharedNodes());
-    applyToLayout->addWidget(this->includeSharedNodesCheck,1,0,1,3);
+    containerLayout->addWidget(this->includeSharedNodesCheck);
     this->includeSharedNodesCheck->setDisabled(this->input.getApplyTo() == GeometryTransformInput::ApplyToAll);
 
     QVBoxLayout *includeSharedNodesLayout = new QVBoxLayout;
@@ -126,6 +130,10 @@ GeometryTransformWidget::GeometryTransformWidget(QWidget *parent) :
                      &QRadioButton::clicked,
                      this,
                      &GeometryTransformWidget::onApplyToSelectedClicked);
+    QObject::connect(this->applyToPickedRadio,
+                     &QRadioButton::clicked,
+                     this,
+                     &GeometryTransformWidget::onApplyToPickedClicked);
     QObject::connect(this->applyToVisibleRadio,
                      &QRadioButton::clicked,
                      this,
@@ -195,6 +203,16 @@ void GeometryTransformWidget::onApplyToSelectedClicked(bool checked)
     if (checked)
     {
         this->input.setApplyTo(GeometryTransformInput::ApplyToSelected);
+    }
+    this->includeSharedNodesCheck->setEnabled(checked);
+    this->enableOkButton();
+}
+
+void GeometryTransformWidget::onApplyToPickedClicked(bool checked)
+{
+    if (checked)
+    {
+        this->input.setApplyTo(GeometryTransformInput::ApplyToPicked);
     }
     this->includeSharedNodesCheck->setEnabled(checked);
     this->enableOkButton();

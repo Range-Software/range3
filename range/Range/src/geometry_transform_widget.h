@@ -36,8 +36,9 @@ class GeometryTransformWidget : public QWidget
         GeometryRotateWidget *rotateWidget;
         GeometryTranslateWidget *translateWidget;
         QRadioButton *applyToAllRadio;
-        QRadioButton *applyToVisibleRadio;
         QRadioButton *applyToSelectedRadio;
+        QRadioButton *applyToPickedRadio;
+        QRadioButton *applyToVisibleRadio;
         QGroupBox *includeSharedNodesCheck;
         QGroupBox *splitSharedNodesCheck;
         QGroupBox *sweepNodesCheck;
@@ -81,6 +82,9 @@ class GeometryTransformWidget : public QWidget
 
         //! Apply to selected radio was clicked.
         void onApplyToSelectedClicked(bool checked);
+
+        //! Apply to picked radio was clicked.
+        void onApplyToPickedClicked(bool checked);
 
         //! Apply to visible radio was clicked.
         void onApplyToVisibleClicked(bool checked);

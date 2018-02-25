@@ -21,8 +21,9 @@ class GeometryTransformInput
         enum ApplyTo
         {
             ApplyToAll = 0,
-            ApplyToVisible,
-            ApplyToSelected
+            ApplyToSelected,
+            ApplyToPicked,
+            ApplyToVisible
         };
 
     protected:

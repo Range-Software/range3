@@ -615,7 +615,7 @@ void Model::closeSurfaceHole(QList<uint> edgeIDs)
     RLogger::unindent();
 }
 
-void Model::transformGeometry(const GeometryTransformInput &geometryTransformInput)
+void Model::transformGeometry(const GeometryTransformInput &geometryTransformInput, const QList<SessionEntityID> &entityIDs)
 {
     this->consolidate(Model::ConsolidateActionAll);
 
@@ -683,18 +683,23 @@ void Model::transformGeometry(const GeometryTransformInput &geometryTransformInp
             }
         }
         else if (input.getApplyTo() == GeometryTransformInput::ApplyToSelected ||
+                 input.getApplyTo() == GeometryTransformInput::ApplyToPicked ||
                  input.getApplyTo() == GeometryTransformInput::ApplyToVisible)
         {
-            QList<SessionEntityID> entityIDs;
+//            QList<SessionEntityID> entityIDs;
 
-            if (input.getApplyTo() == GeometryTransformInput::ApplyToSelected)
-            {
-                entityIDs = this->getSelectedEntityIDs(0);
-            }
-            else if (input.getApplyTo() == GeometryTransformInput::ApplyToVisible)
-            {
-                entityIDs = this->getVisibleEntityIDs(0);
-            }
+//            if (input.getApplyTo() == GeometryTransformInput::ApplyToSelected)
+//            {
+//                entityIDs = this->getSelectedEntityIDs(0);
+//            }
+//            else if (input.getApplyTo() == GeometryTransformInput::ApplyToPicked)
+//            {
+//                entityIDs = this->getPickedEntityIDs(0);
+//            }
+//            else if (input.getApplyTo() == GeometryTransformInput::ApplyToVisible)
+//            {
+//                entityIDs = this->getVisibleEntityIDs(0);
+//            }
 
             QSet<uint> elementIDs = this->getElementIDs(entityIDs);
             QSet<uint> edgeNodeIDs = this->findEdgeNodeIDs(entityIDs);
@@ -1205,7 +1210,27 @@ QList<SessionEntityID> Model::getSelectedEntityIDs(uint modelID) const
     }
 
     return selectedEntityIDs;
-} /* Model::getSelectedEntityIDs(void) */
+} /* Model::getSelectedEntityIDs(uint modelID) */
+
+QList<SessionEntityID> Model::getPickedEntityIDs(uint modelID) const
+{
+    QList<SessionEntityID> pickedEntityIDs;
+
+    const PickList &rPickList = Session::getInstance().getPickList();
+    if (!rPickList.isEmpty())
+    {
+        QVector<PickItem> pickItems = rPickList.getItems(modelID);
+        for (int i=0;i<pickItems.size();i++)
+        {
+            if (!pickedEntityIDs.contains(pickItems.at(i).getEntityID()))
+            {
+                pickedEntityIDs.append(pickItems.at(i).getEntityID());
+            }
+        }
+    }
+
+    return pickedEntityIDs;
+} /* Model::getPickedEntityIDs(uint modelID) */
 
 QList<SessionEntityID> Model::getVisibleEntityIDs(uint modelID) const
 {

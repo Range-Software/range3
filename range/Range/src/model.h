@@ -180,7 +180,7 @@ class Model : public RModel
         void closeSurfaceHole(QList<uint> edgeIDs);
 
         //! Transform model geometry.
-        void transformGeometry(const GeometryTransformInput &geometryTransformInput);
+        void transformGeometry(const GeometryTransformInput &geometryTransformInput, const QList<SessionEntityID> &entityIDs);
 
         //! Coarsen surface elements.
         uint coarsenSurfaceElements(const std::vector<uint> surfaceIDs, double edgeLength, double elementArea);
@@ -252,6 +252,9 @@ class Model : public RModel
 
         //! Return list of all selected entity IDs.
         QList<SessionEntityID> getSelectedEntityIDs(uint modelID) const;
+
+        //! Return list of all picked entity IDs.
+        QList<SessionEntityID> getPickedEntityIDs(uint modelID) const;
 
         //! Return list of all visible entity IDs.
         QList<SessionEntityID> getVisibleEntityIDs(uint modelID) const;
