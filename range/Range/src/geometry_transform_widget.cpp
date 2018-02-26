@@ -108,8 +108,9 @@ GeometryTransformWidget::GeometryTransformWidget(QWidget *parent) :
     buttonsLayout->addWidget(this->cancelButton);
 
     this->okButton = new QPushButton(QIcon(":/icons/file/pixmaps/range-ok.svg"),tr("Ok"));
-    this->okButton->setEnabled(false);
     buttonsLayout->addWidget(this->okButton);
+
+    this->enableOkButton();
 
     QObject::connect(&Session::getInstance(),
                      &Session::modelSelectionChanged,
@@ -180,22 +181,40 @@ GeometryTransformWidget::GeometryTransformWidget(QWidget *parent) :
 
 void GeometryTransformWidget::enableOkButton(void)
 {
-    this->okButton->setEnabled(this->input.isRotateActive() || this->input.isScaleActive() || this->input.isTranslateActive());
+    bool entityIsSelected = true;
+
+    if (this->input.getApplyTo() == GeometryTransformInput::ApplyToSelected)
+    {
+        entityIsSelected = !Session::getInstance().getSelectedModelIDs().isEmpty();
+    }
+    else if (this->input.getApplyTo() == GeometryTransformInput::ApplyToPicked)
+    {
+        entityIsSelected = !Session::getInstance().getPickList().getModelIDs().isEmpty();
+    }
+    else if (this->input.getApplyTo() == GeometryTransformInput::ApplyToVisible)
+    {
+        entityIsSelected = !Session::getInstance().getVisibleEntityIDs().isEmpty();
+    }
+
+    this->okButton->setEnabled(entityIsSelected && (this->input.isRotateActive() || this->input.isScaleActive() || this->input.isTranslateActive()));
 }
 
 void GeometryTransformWidget::onModelSelectionChanged(uint)
 {
     this->applyToSelectedRadio->setEnabled(!Session::getInstance().getSelectedEntityIDs().isEmpty());
+    this->enableOkButton();
 }
 
 void GeometryTransformWidget::onModelVisibilityChanged(uint)
 {
     this->applyToVisibleRadio->setEnabled(!Session::getInstance().getVisibleEntityIDs().isEmpty());
+    this->enableOkButton();
 }
 
 void GeometryTransformWidget::onPickListChanged(void)
 {
     this->applyToPickedRadio->setEnabled(!Session::getInstance().getPickList().isEmpty());
+    this->enableOkButton();
 }
 
 void GeometryTransformWidget::onScaleChanged(const RR3Vector &center, const RR3Vector &scales)
@@ -289,11 +308,31 @@ void GeometryTransformWidget::onCancelClicked(void)
 
 void GeometryTransformWidget::onOkClicked(void)
 {
-    QList<uint> selectedModelIDs = Session::getInstance().getSelectedModelIDs();
+    QList<uint> modelIDs;
 
-    for (int i=0;i<selectedModelIDs.size();i++)
+    if (this->input.getApplyTo() == GeometryTransformInput::ApplyToAll)
     {
-        ModelActionInput modelActionInput(selectedModelIDs.at(i));
+        for (uint i=0;i<Session::getInstance().getNModels();i++)
+        {
+            modelIDs.push_back(i);
+        }
+    }
+    else if (this->input.getApplyTo() == GeometryTransformInput::ApplyToSelected)
+    {
+        modelIDs = Session::getInstance().getSelectedModelIDs();
+    }
+    else if (this->input.getApplyTo() == GeometryTransformInput::ApplyToPicked)
+    {
+        modelIDs = Session::getInstance().getPickList().getModelIDs();
+    }
+    else if (this->input.getApplyTo() == GeometryTransformInput::ApplyToVisible)
+    {
+        modelIDs = Session::getInstance().getVisibleModelIDs();
+    }
+
+    for (int i=0;i<modelIDs.size();i++)
+    {
+        ModelActionInput modelActionInput(modelIDs.at(i));
         modelActionInput.setGeometryTransform(this->input);
         ModelAction *modelAction = new ModelAction;
         modelAction->setAutoDelete(true);

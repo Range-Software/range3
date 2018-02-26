@@ -258,6 +258,23 @@ QList<uint> Session::getSelectedModelIDs(void) const
     return selectedModelIDs;
 }
 
+QList<uint> Session::getVisibleModelIDs(void) const
+{
+    RLogger::trace("QList<uint> Session::getVisibleModelIDs(void) const\n");
+    QList<uint> visibleModelIDs;
+
+    for (uint i=0;i<this->getNModels();i++)
+    {
+        // Check if model is partialy visible (NOT completely unselected)
+        if (!this->getModel(i).isVisible(false))
+        {
+            visibleModelIDs.push_back(i);
+        }
+    }
+
+    return visibleModelIDs;
+}
+
 bool Session::isModelSelected(uint modelID)
 {
 //    RLogger::trace("bool Session::isModelSelected(uint modelID)\n");

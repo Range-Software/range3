@@ -113,6 +113,9 @@ class Session : public QObject
         //! Return list of positions of selected models.
         QList<uint> getSelectedModelIDs(void) const;
 
+        //! Return list of positions of visible models.
+        QList<uint> getVisibleModelIDs(void) const;
+
         //! Return true if given model ID is selected.
         bool isModelSelected(uint modelID);
 
