@@ -14,14 +14,18 @@ void GLAxis::_init(const GLAxis *pGlAxis)
 {
     if (pGlAxis)
     {
-        this->setType(pGlAxis->getType());
-        this->setSize(pGlAxis->getSize());
+        this->type = pGlAxis->type;
+        this->size = pGlAxis->size;
+        this->name = pGlAxis->name;
     }
 }
 
-GLAxis::GLAxis(GLWidget *glWidget, GLAxisType type) : GLObject(glWidget), size(1.0)
+GLAxis::GLAxis(GLWidget *glWidget, GLAxisType type, const QString &name)
+    : GLObject(glWidget)
+    , type(type)
+    , size(1.0)
+    , name(name)
 {
-    this->setType(type);
     this->_init();
 }
 
@@ -103,18 +107,20 @@ void GLAxis::draw(void)
     QColor blue(Qt::blue);
     QColor gray(Qt::gray);
 
+    QString postFix(this->name.length() == 0 ? QString() : QString(" - ") + this->name);
+
     switch (this->getType())
     {
         case GL_AXIS_GLOBAL:
         {
             this->getGLWidget()->qglColor(red);
-            this->getGLWidget()->renderText(axisScale,0.0,0.0,QString("X"));
+            this->getGLWidget()->renderText(axisScale,0.0,0.0,QString("X") + postFix);
 
             this->getGLWidget()->qglColor(green);
-            this->getGLWidget()->renderText(0.0,axisScale,0.0,QString("Y"));
+            this->getGLWidget()->renderText(0.0,axisScale,0.0,QString("Y") + postFix);
 
             this->getGLWidget()->qglColor(blue);
-            this->getGLWidget()->renderText(0.0,0.0,axisScale,QString("Z"));
+            this->getGLWidget()->renderText(0.0,0.0,axisScale,QString("Z") + postFix);
 
             GLboolean stipple;
             GL_SAFE_CALL(glGetBooleanv(GL_LINE_STIPPLE,&stipple));
@@ -240,13 +246,13 @@ void GLAxis::draw(void)
         default:
         {
             this->getGLWidget()->qglColor(QColor("#ffffff"));
-            this->getGLWidget()->renderText(axisScale,0.0,0.0,QString("X"));
+            this->getGLWidget()->renderText(axisScale,0.0,0.0,QString("X") + postFix);
 
             this->getGLWidget()->qglColor(QColor("#ffffff"));
-            this->getGLWidget()->renderText(0.0,axisScale,0.0,QString("Y"));
+            this->getGLWidget()->renderText(0.0,axisScale,0.0,QString("Y") + postFix);
 
             this->getGLWidget()->qglColor(QColor("#ffffff"));
-            this->getGLWidget()->renderText(0.0,0.0,axisScale,QString("Z"));
+            this->getGLWidget()->renderText(0.0,0.0,axisScale,QString("Z") + postFix);
 
             GLFunctions::begin(GL_LINES);
 

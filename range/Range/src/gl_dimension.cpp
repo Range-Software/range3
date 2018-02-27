@@ -89,15 +89,15 @@ void GLDimension::draw(void)
     GLArrow(this->getGLWidget(),RR3Vector(this->xMin,this->yMin,this->zMin),RR3Vector( dx,0.0,0.0),true,true,dxScale).paint();
     GLArrow(this->getGLWidget(),RR3Vector(this->xMax,this->yMin,this->zMin),RR3Vector(-dx,0.0,0.0),true,true,dxScale).paint();
 
-    this->getGLWidget()->renderText((this->xMin+this->xMax)/2.0,this->yMin,this->zMin,QString::number(dx) + " " + RVariable::getUnits(R_VARIABLE_LENGTH),QFont("Courier",20));
+    this->getGLWidget()->renderText((this->xMin+this->xMax)/2.0,this->yMin,this->zMin,"∆x = " + QString::number(dx) + " " + RVariable::getUnits(R_VARIABLE_LENGTH),QFont("Courier",20));
 
     GLArrow(this->getGLWidget(),RR3Vector(this->xMin,this->yMin,this->zMin),RR3Vector(0.0, dy,0.0),true,true,dyScale).paint();
     GLArrow(this->getGLWidget(),RR3Vector(this->xMin,this->yMax,this->zMin),RR3Vector(0.0,-dy,0.0),true,true,dyScale).paint();
 
-    this->getGLWidget()->renderText(this->xMin,(this->yMin+this->yMax)/2.0,this->zMin,QString::number(dy) + " " + RVariable::getUnits(R_VARIABLE_LENGTH),QFont("Courier",20));
+    this->getGLWidget()->renderText(this->xMin,(this->yMin+this->yMax)/2.0,this->zMin,"∆y = " + QString::number(dy) + " " + RVariable::getUnits(R_VARIABLE_LENGTH),QFont("Courier",20));
 
     GLArrow(this->getGLWidget(),RR3Vector(this->xMin,this->yMin,this->zMin),RR3Vector(0.0,0.0, dz),true,true,dzScale).paint();
     GLArrow(this->getGLWidget(),RR3Vector(this->xMin,this->yMin,this->zMax),RR3Vector(0.0,0.0,-dz),true,true,dzScale).paint();
 
-    this->getGLWidget()->renderText(this->xMin,this->yMin,(this->zMin+this->zMax)/2.0,QString::number(dz) + " " + RVariable::getUnits(R_VARIABLE_LENGTH),QFont("Courier",20));
+    this->getGLWidget()->renderText(this->xMin,this->yMin,(this->zMin+this->zMax)/2.0,"∆z = " + QString::number(dz) + " " + RVariable::getUnits(R_VARIABLE_LENGTH),QFont("Courier",20));
 }

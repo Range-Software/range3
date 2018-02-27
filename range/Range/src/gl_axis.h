@@ -42,6 +42,8 @@ class GLAxis : public GLObject
         GLAxisType type;
         //! Axis size.
         float size;
+        //! Axis name.
+        QString name;
 
     private:
 
@@ -51,7 +53,7 @@ class GLAxis : public GLObject
     public:
 
         //! Constructor.
-        explicit GLAxis(GLWidget *glWidget, GLAxisType type = GL_AXIS_NONE);
+        explicit GLAxis(GLWidget *glWidget, GLAxisType type = GL_AXIS_NONE, const QString &name = QString());
 
         //! Copy constructor.
         GLAxis(const GLAxis &glAxis);

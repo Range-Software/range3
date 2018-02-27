@@ -341,13 +341,13 @@ void GLWidget::drawModel(void)
     }
 
     // Draw stream line position
-    if (this->drawStreamLinePosition)
+    if (this->drawStreamLinePosition && this->streamLinePosition != RR3Vector(0.0,0.0,0.0))
     {
         glPushMatrix();
 
         glTranslated(this->streamLinePosition[0],this->streamLinePosition[1],this->streamLinePosition[2]);
 
-        GLAxis gAxis(this,GL_AXIS_POSITION);
+        GLAxis gAxis(this,GL_AXIS_POSITION,tr("Stream line"));
         gAxis.setSize(0.8f);
         gAxis.paint();
 
@@ -355,13 +355,13 @@ void GLWidget::drawModel(void)
     }
 
     // Draw geometry scale origin
-    if (this->drawScaleOrigin)
+    if (this->drawScaleOrigin && this->scaleOrigin != RR3Vector(0.0,0.0,0.0))
     {
         glPushMatrix();
 
         glTranslated(this->scaleOrigin[0],this->scaleOrigin[1],this->scaleOrigin[2]);
 
-        GLAxis gAxis(this,GL_AXIS_POSITION);
+        GLAxis gAxis(this,GL_AXIS_POSITION,tr("Scale"));
         gAxis.setSize(0.8f);
         gAxis.paint();
 
@@ -369,13 +369,13 @@ void GLWidget::drawModel(void)
     }
 
     // Draw geometry rotation origin
-    if (this->drawRotationOrigin)
+    if (this->drawRotationOrigin && this->rotationOrigin != RR3Vector(0.0,0.0,0.0))
     {
         glPushMatrix();
 
         glTranslated(this->rotationOrigin[0],this->rotationOrigin[1],this->rotationOrigin[2]);
 
-        GLAxis gAxis(this,GL_AXIS_POSITION);
+        GLAxis gAxis(this,GL_AXIS_POSITION,tr("Rotation"));
         gAxis.setSize(0.8f);
         gAxis.paint();
 
