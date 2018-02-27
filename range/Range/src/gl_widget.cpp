@@ -46,6 +46,8 @@ GLWidget::GLWidget(uint modelID, QWidget *parent)
       mscale(1.0),
       scale(1.0),
       drawStreamLinePosition(false),
+      drawScaleOrigin(false),
+      drawRotationOrigin(false),
       drawCutPlane(false),
       drawMoveNodes(false),
       useGlVoidModelList(false),
@@ -76,6 +78,10 @@ GLWidget::GLWidget(uint modelID, QWidget *parent)
     QObject::connect(&Session::getInstance(),&Session::resultsChanged,this,&GLWidget::onResultsChanged);
     QObject::connect(&Session::getInstance(),&Session::beginDrawStreamLinePosition,this,&GLWidget::onBeginDrawStreamLinePosition);
     QObject::connect(&Session::getInstance(),&Session::endDrawStreamLinePosition,this,&GLWidget::onEndDrawStreamLinePosition);
+    QObject::connect(&Session::getInstance(),&Session::beginDrawScaleOrigin,this,&GLWidget::onBeginDrawScaleOrigin);
+    QObject::connect(&Session::getInstance(),&Session::endDrawScaleOrigin,this,&GLWidget::onEndDrawScaleOrigin);
+    QObject::connect(&Session::getInstance(),&Session::beginDrawRotationOrigin,this,&GLWidget::onBeginDrawRotationOrigin);
+    QObject::connect(&Session::getInstance(),&Session::endDrawRotationOrigin,this,&GLWidget::onEndDrawRotationOrigin);
     QObject::connect(&Session::getInstance(),&Session::beginDrawCutPlane,this,&GLWidget::onBeginDrawCutPlane);
     QObject::connect(&Session::getInstance(),&Session::endDrawCutPlane,this,&GLWidget::onEndDrawCutPlane);
     QObject::connect(&Session::getInstance(),&Session::beginDrawMoveNodes,this,&GLWidget::onBeginDrawMoveNodes);
@@ -340,6 +346,34 @@ void GLWidget::drawModel(void)
         glPushMatrix();
 
         glTranslated(this->streamLinePosition[0],this->streamLinePosition[1],this->streamLinePosition[2]);
+
+        GLAxis gAxis(this,GL_AXIS_POSITION);
+        gAxis.setSize(0.8f);
+        gAxis.paint();
+
+        glPopMatrix();
+    }
+
+    // Draw geometry scale origin
+    if (this->drawScaleOrigin)
+    {
+        glPushMatrix();
+
+        glTranslated(this->scaleOrigin[0],this->scaleOrigin[1],this->scaleOrigin[2]);
+
+        GLAxis gAxis(this,GL_AXIS_POSITION);
+        gAxis.setSize(0.8f);
+        gAxis.paint();
+
+        glPopMatrix();
+    }
+
+    // Draw geometry rotation origin
+    if (this->drawRotationOrigin)
+    {
+        glPushMatrix();
+
+        glTranslated(this->rotationOrigin[0],this->rotationOrigin[1],this->rotationOrigin[2]);
 
         GLAxis gAxis(this,GL_AXIS_POSITION);
         gAxis.setSize(0.8f);
@@ -1573,6 +1607,32 @@ void GLWidget::onBeginDrawStreamLinePosition(const RR3Vector &streamLinePosition
 void GLWidget::onEndDrawStreamLinePosition(void)
 {
     this->drawStreamLinePosition = false;
+    this->update();
+}
+
+void GLWidget::onBeginDrawScaleOrigin(const RR3Vector &scaleOrigin)
+{
+    this->drawScaleOrigin = true;
+    this->scaleOrigin = scaleOrigin;
+    this->update();
+}
+
+void GLWidget::onEndDrawScaleOrigin(void)
+{
+    this->drawScaleOrigin = false;
+    this->update();
+}
+
+void GLWidget::onBeginDrawRotationOrigin(const RR3Vector &rotationOrigin)
+{
+    this->drawRotationOrigin = true;
+    this->rotationOrigin = rotationOrigin;
+    this->update();
+}
+
+void GLWidget::onEndDrawRotationOrigin(void)
+{
+    this->drawRotationOrigin = false;
     this->update();
 }
 

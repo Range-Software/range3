@@ -540,6 +540,30 @@ void Session::setEndDrawStreamLinePosition(void)
     emit this->endDrawStreamLinePosition();
 }
 
+void Session::setBeginDrawScaleOrigin(const RR3Vector &position)
+{
+    RLogger::trace("void Session::setBeginDrawScaleOrigin(const RR3Vector &position)\n");
+    emit this->beginDrawScaleOrigin(position);
+}
+
+void Session::setEndDrawScaleOrigin(void)
+{
+    RLogger::trace("void Session::setEndDrawScaleOrigin(void)\n");
+    emit this->endDrawScaleOrigin();
+}
+
+void Session::setBeginDrawRotationOrigin(const RR3Vector &position)
+{
+    RLogger::trace("void Session::setBeginDrawRotationOrigin(const RR3Vector &position)\n");
+    emit this->beginDrawRotationOrigin(position);
+}
+
+void Session::setEndDrawRotationOrigin(void)
+{
+    RLogger::trace("void Session::setEndDrawRotationOrigin(void)\n");
+    emit this->endDrawRotationOrigin();
+}
+
 void Session::setBeginDrawCutPlane(const RPlane &plane)
 {
     RLogger::trace("void Session::setBeginDrawCutPlane(const RPlane &plane)\n");

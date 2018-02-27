@@ -107,6 +107,15 @@ void GLAxis::draw(void)
     {
         case GL_AXIS_GLOBAL:
         {
+            this->getGLWidget()->qglColor(red);
+            this->getGLWidget()->renderText(axisScale,0.0,0.0,QString("X"));
+
+            this->getGLWidget()->qglColor(green);
+            this->getGLWidget()->renderText(0.0,axisScale,0.0,QString("Y"));
+
+            this->getGLWidget()->qglColor(blue);
+            this->getGLWidget()->renderText(0.0,0.0,axisScale,QString("Z"));
+
             GLboolean stipple;
             GL_SAFE_CALL(glGetBooleanv(GL_LINE_STIPPLE,&stipple));
 
@@ -232,6 +241,12 @@ void GLAxis::draw(void)
         {
             this->getGLWidget()->qglColor(QColor("#ffffff"));
             this->getGLWidget()->renderText(axisScale,0.0,0.0,QString("X"));
+
+            this->getGLWidget()->qglColor(QColor("#ffffff"));
+            this->getGLWidget()->renderText(0.0,axisScale,0.0,QString("Y"));
+
+            this->getGLWidget()->qglColor(QColor("#ffffff"));
+            this->getGLWidget()->renderText(0.0,0.0,axisScale,QString("Z"));
 
             GLFunctions::begin(GL_LINES);
 

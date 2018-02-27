@@ -39,6 +39,9 @@ class GeometryRotateWidget : public QWidget
         //! Constructor.
         explicit GeometryRotateWidget(const RR3Vector &center = RR3Vector(), const RR3Vector &rotation = RR3Vector(), QWidget *parent = 0);
 
+        //! Destructor.
+        ~GeometryRotateWidget();
+
     signals:
 
         //! Rotation changed.

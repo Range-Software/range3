@@ -196,6 +196,18 @@ class Session : public QObject
         //! Emit signal that stream line position drawing should end.
         void setEndDrawStreamLinePosition(void);
 
+        //! Emit signal that geometry scale origin drawing should begin.
+        void setBeginDrawScaleOrigin(const RR3Vector &position);
+
+        //! Emit signal that geometry scale origin drawing should end.
+        void setEndDrawScaleOrigin(void);
+
+        //! Emit signal that geometry rotation origin drawing should begin.
+        void setBeginDrawRotationOrigin(const RR3Vector &position);
+
+        //! Emit signal that geometry rotation origin drawing should end.
+        void setEndDrawRotationOrigin(void);
+
         //! Emit signal that cut plane drawing should begin.
         void setBeginDrawCutPlane(const RPlane &plane);
 
@@ -314,6 +326,18 @@ class Session : public QObject
 
         //! Stream line position drawing should end.
         void endDrawStreamLinePosition(void);
+
+        //! Geometry scale origin drawing should begin.
+        void beginDrawScaleOrigin(const RR3Vector &position);
+
+        //! Geometry scale origin drawing should end.
+        void endDrawScaleOrigin(void);
+
+        //! Geometry rotation origin drawing should begin.
+        void beginDrawRotationOrigin(const RR3Vector &position);
+
+        //! Geometry rotation origin drawing should end.
+        void endDrawRotationOrigin(void);
 
         //! Cut plane drawing should begin.
         void beginDrawCutPlane(const RPlane &plane);

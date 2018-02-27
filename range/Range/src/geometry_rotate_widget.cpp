@@ -14,6 +14,7 @@
 #include <QPushButton>
 
 #include "geometry_rotate_widget.h"
+#include "session.h"
 
 const RR3Vector GeometryRotateWidget::defaultAngles = RR3Vector(0.0,0.0,0.0);
 
@@ -103,6 +104,13 @@ GeometryRotateWidget::GeometryRotateWidget(const RR3Vector &center, const RR3Vec
     this->resetAngles();
 
     vBoxLayout->addStretch(10);
+
+    Session::getInstance().setBeginDrawRotationOrigin(center);
+}
+
+GeometryRotateWidget::~GeometryRotateWidget()
+{
+    Session::getInstance().setEndDrawRotationOrigin();
 }
 
 void GeometryRotateWidget::resetAngles(void)
@@ -126,4 +134,5 @@ void GeometryRotateWidget::onPositionChanged(const RR3Vector &)
                                RR3Vector(this->xAngleLineEdit->getValue(),
                                          this->yAngleLineEdit->getValue(),
                                          this->zAngleLineEdit->getValue()));
+    Session::getInstance().setBeginDrawRotationOrigin(this->rotationCenter->getPosition());
 }

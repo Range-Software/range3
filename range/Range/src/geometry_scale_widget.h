@@ -43,6 +43,9 @@ class GeometryScaleWidget : public QWidget
         //! Constructor.
         explicit GeometryScaleWidget(const RR3Vector &center = RR3Vector(), const RR3Vector &scale = RR3Vector(1.0,1.0,1.0), QWidget *parent = 0);
 
+        //! Destructor.
+        ~GeometryScaleWidget();
+
     signals:
 
         //! Scale changed.

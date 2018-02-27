@@ -14,6 +14,7 @@
 #include <QPushButton>
 
 #include "geometry_scale_widget.h"
+#include "session.h"
 
 GeometryScaleWidget::GeometryScaleWidget(const RR3Vector &center, const RR3Vector &scale, QWidget *parent)
     : QWidget(parent)
@@ -124,6 +125,13 @@ GeometryScaleWidget::GeometryScaleWidget(const RR3Vector &center, const RR3Vecto
                      &GeometryScaleWidget::onPositionChanged);
 
     vBoxLayout->addStretch(10);
+
+    Session::getInstance().setBeginDrawScaleOrigin(center);
+}
+
+GeometryScaleWidget::~GeometryScaleWidget()
+{
+    Session::getInstance().setEndDrawScaleOrigin();
 }
 
 void GeometryScaleWidget::onSameScaleToggled(bool checked)
@@ -176,4 +184,6 @@ void GeometryScaleWidget::onPositionChanged(const RR3Vector &)
         scaleVector.fill(this->sameScaleLineEdit->getValue());
     }
     emit this->scaleChanged(this->scaleCenter->getPosition(),scaleVector);
+
+    Session::getInstance().setBeginDrawScaleOrigin(this->scaleCenter->getPosition());
 }

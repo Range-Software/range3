@@ -69,10 +69,18 @@ class GLWidget : public QOpenGLWidget
         GLModelList glVoidModelList;
         //! GLText renderer.
         GLTextRenderer glTextRenderer;
-        //! Draw cut plane.
+        //! Draw stream line position.
         bool drawStreamLinePosition;
-        //! Cut plane.
+        //! Stream line position.
         RR3Vector streamLinePosition;
+        //! Draw geometry scale origin.
+        bool drawScaleOrigin;
+        //! Geometry scale origin.
+        RR3Vector scaleOrigin;
+        //! Draw geometry rotation origin.
+        bool drawRotationOrigin;
+        //! Geometry rotation origin.
+        RR3Vector rotationOrigin;
         //! Draw cut plane.
         bool drawCutPlane;
         //! Cut plane.
@@ -277,6 +285,18 @@ class GLWidget : public QOpenGLWidget
 
         //! Stream line position drawing should end.
         void onEndDrawStreamLinePosition(void);
+
+        //! Geometry scale origin drawing should begin.
+        void onBeginDrawScaleOrigin(const RR3Vector &scaleOrigin);
+
+        //! Geometry scale origin drawing should end.
+        void onEndDrawScaleOrigin(void);
+
+        //! Geometry rotation origin drawing should begin.
+        void onBeginDrawRotationOrigin(const RR3Vector &rotationOrigin);
+
+        //! Geometry rotation origin drawing should end.
+        void onEndDrawRotationOrigin(void);
 
         //! Cut plane drawing should begin.
         void onBeginDrawCutPlane(const RPlane &plane);
