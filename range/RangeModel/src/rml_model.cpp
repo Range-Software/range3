@@ -5274,14 +5274,17 @@ uint RModel::breakIntersectedElements(uint nIterations, const std::vector<uint> 
                 std::vector<RElement> newElements;
 
                 this->getElement(bElementIDs[i]).breakWithNodes(this->getNodes(),breakNodeIDs,newElements);
-                for (uint j=0;j<newElements.size();j++)
+                if (newElements.size() > 0)
                 {
-                    this->addElement(newElements[j],
-                                     elementGroupBook[i] != RConstants::eod,
-                                     elementGroupBook[i]);
-                    bElementIDs.push_back(this->getNElements()-1);
+                    for (uint j=0;j<newElements.size();j++)
+                    {
+                        this->addElement(newElements[j],
+                                         elementGroupBook[i] != RConstants::eod,
+                                         elementGroupBook[i]);
+                        bElementIDs.push_back(this->getNElements()-1);
+                    }
+                    nIntersected++;
                 }
-                nIntersected++;
             }
         }
 
@@ -5304,7 +5307,7 @@ uint RModel::breakIntersectedElements(uint nIterations, const std::vector<uint> 
         RLogger::info("Merged near/duplicate nodes = %u\n",nMerged);
         RLogger::unindent();
 
-        // Remove duplicate elements / making them having duplicate nodes.
+        // Remove duplicate elements / making them having duplicate nodes (degenerated).
         RLogger::info("Removing duplicate elements\n");
         RLogger::indent();
 
