@@ -1877,12 +1877,14 @@ void Model::glDraw(GLWidget *glWidget) const
             }
 
             //Draw intersected elements.
+            REntityGroupData intersectedGroupData;
+            intersectedGroupData.setDrawWire(true);
             for (int i=0;i<this->intersectedElements.size();i++)
             {
                 GLElement glElement(glWidget,
                                     this,
                                     this->intersectedElements[i],
-                                    REntityGroupData(),
+                                    intersectedGroupData,
                                     Qt::red,
                                     GL_ELEMENT_DRAW_NORMAL);
                 glElement.setApplyEnvironmentSettings(false);
