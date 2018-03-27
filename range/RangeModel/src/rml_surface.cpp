@@ -60,7 +60,7 @@ bool RSurface::pointInside(const std::vector<RNode> &nodes, const std::vector<RE
 {
     std::vector<RR3Vector> points;
     points.push_back(point);
-    std::vector<bool> isInside = this->pointsInside(nodes,elements,points);
+    std::vector<bool> isInside = this->pointsInside(nodes,elements,points,false);
     if (isInside.size() != 1)
     {
         throw RError(R_ERROR_APPLICATION,R_ERROR_REF,"Unexpected error, size of the array = \'%u\'",isInside.size());
@@ -69,7 +69,7 @@ bool RSurface::pointInside(const std::vector<RNode> &nodes, const std::vector<RE
 } /* RSurface::pointInside */
 
 
-std::vector<bool> RSurface::pointsInside(const std::vector<RNode> &nodes, const std::vector<RElement> &elements, const std::vector<RR3Vector> &points) const
+std::vector<bool> RSurface::pointsInside(const std::vector<RNode> &nodes, const std::vector<RElement> &elements, const std::vector<RR3Vector> &points, bool excludeSurface) const
 {
     std::vector<RElement> volumes;
 
@@ -105,13 +105,16 @@ std::vector<bool> RSurface::pointsInside(const std::vector<RNode> &nodes, const 
             }
         }
 
-        // Check that point is not on the surface.
-        for (uint j=0;j<this->size();j++)
+        if (!excludeSurface)
         {
-            if (elements[this->get(j)].isInside(nodes,node))
+            // Check that point is not on the surface.
+            for (uint j=0;j<this->size();j++)
             {
-                isInside = false;
-                break;
+                if (elements[this->get(j)].isInside(nodes,node))
+                {
+                    isInside = false;
+                    break;
+                }
             }
         }
 

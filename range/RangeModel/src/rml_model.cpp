@@ -2728,7 +2728,9 @@ uint RModel::findNodeID(REntityGroupType entityType, uint entityID, uint element
 
 std::vector<uint> RModel::findElementIDs(REntityGroupType entityType, const std::vector<uint> entityIDs) const
 {
-    std::set<uint> elementIDsSet;
+    std::vector<uint> elementIDsSet;
+    elementIDsSet.resize(this->getNElements(),RConstants::eod);
+    uint nElementIDs = 0;
 
     for (uint i=0;i<entityIDs.size();i++)
     {
@@ -2744,14 +2746,21 @@ std::vector<uint> RModel::findElementIDs(REntityGroupType entityType, const std:
         }
         for (uint j=0;j<pElementGroup->size();j++)
         {
-            elementIDsSet.insert(pElementGroup->get(j));
+            if (elementIDsSet[pElementGroup->get(j)] == RConstants::eod)
+            {
+                elementIDsSet[pElementGroup->get(j)] = nElementIDs++;
+            }
         }
     }
 
-    std::vector<uint> elementIDs;
-    elementIDs.resize(elementIDsSet.size());
-    std::copy(elementIDsSet.begin(),elementIDsSet.end(),elementIDs.begin());
-    elementIDsSet.clear();
+    std::vector<uint> elementIDs(nElementIDs);
+    for (uint i=0;i<elementIDsSet.size();i++)
+    {
+        if (elementIDsSet[i] != RConstants::eod)
+        {
+            elementIDs[elementIDsSet[i]] = i;
+        }
+    }
 
     return elementIDs;
 } /* RModel::findElementIDs */
@@ -5120,8 +5129,6 @@ uint RModel::breakIntersectedElements(uint nIterations, const std::vector<uint> 
         RProgressPrintToLog(false);
         RProgressInitialize("Finding intersection points");
 
-//        std::set<RR3Vector> allPointsList;
-
         for (uint i=0;i<bElementIDs.size();i++)
         {
             RProgressPrint(i,uint(bElementIDs.size()));
@@ -5279,8 +5286,8 @@ uint RModel::breakIntersectedElements(uint nIterations, const std::vector<uint> 
                     for (uint j=0;j<newElements.size();j++)
                     {
                         this->addElement(newElements[j],
-                                         elementGroupBook[i] != RConstants::eod,
-                                         elementGroupBook[i]);
+                                         elementGroupBook[bElementIDs[i]] != RConstants::eod,
+                                         elementGroupBook[bElementIDs[i]]);
                         bElementIDs.push_back(this->getNElements()-1);
                     }
                     nIntersected++;
@@ -5369,11 +5376,11 @@ bool RModel::boolDifference(uint nIterations, QList<uint> surfaceEntityIDs, uint
     try
     {
         std::vector<uint> allSurfaceEntityIDs;
+        allSurfaceEntityIDs.push_back(cuttingSurfaceEntityId);
         for (int i=0;i<surfaceEntityIDs.size();i++)
         {
             allSurfaceEntityIDs.push_back(surfaceEntityIDs[i]);
         }
-        allSurfaceEntityIDs.push_back(cuttingSurfaceEntityId);
         uint nIntersected = this->breakIntersectedElements(nIterations,this->findElementIDs(R_ENTITY_GROUP_SURFACE,allSurfaceEntityIDs));
         if (nIntersected == 0)
         {
@@ -5406,7 +5413,7 @@ bool RModel::boolDifference(uint nIterations, QList<uint> surfaceEntityIDs, uint
         }
         try
         {
-            insideBook = rCuttingSurface.pointsInside(this->nodes,this->elements,elementCenters);
+            insideBook = rCuttingSurface.pointsInside(this->nodes,this->elements,elementCenters,false);
         }
         catch (const RError &error)
         {
@@ -5432,7 +5439,7 @@ bool RModel::boolDifference(uint nIterations, QList<uint> surfaceEntityIDs, uint
 
         try
         {
-            insideBook = rSurface.pointsInside(this->nodes,this->elements,elementCenters);
+            insideBook = rSurface.pointsInside(this->nodes,this->elements,elementCenters,true);
         }
         catch (const RError &error)
         {
@@ -5515,7 +5522,7 @@ bool RModel::boolIntersection(uint nIterations, QList<uint> surfaceEntityIDs)
             std::vector<bool> insideBook;
             try
             {
-                insideBook = rSurface1.pointsInside(this->nodes,this->elements,elementCenters);
+                insideBook = rSurface1.pointsInside(this->nodes,this->elements,elementCenters,true);
             }
             catch (const RError &error)
             {
@@ -5588,7 +5595,7 @@ bool RModel::boolUnion(uint nIterations, QList<uint> surfaceEntityIDs)
             std::vector<bool> insideBook;
             try
             {
-                insideBook = rSurface1.pointsInside(this->nodes,this->elements,elementCenters);
+                insideBook = rSurface1.pointsInside(this->nodes,this->elements,elementCenters,true);
             }
             catch (const RError &error)
             {

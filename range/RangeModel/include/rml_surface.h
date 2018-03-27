@@ -58,7 +58,7 @@ class RSurface : public RElementGroup
 
         //! Check if points are inside the surface.
         //! Surface must be enclosed.
-        std::vector<bool> pointsInside(const std::vector<RNode> &nodes, const std::vector<RElement> &elements, const std::vector<RR3Vector> &points) const;
+        std::vector<bool> pointsInside(const std::vector<RNode> &nodes, const std::vector<RElement> &elements, const std::vector<RR3Vector> &points, bool excludeSurface) const;
 
         //! Tetrahedralize surface.
         std::vector<RElement> tetrahedralize(const std::vector<RNode> &nodes, const std::vector<RElement> &elements) const;
