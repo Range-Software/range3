@@ -5373,6 +5373,17 @@ bool RModel::boolDifference(uint nIterations, QList<uint> surfaceEntityIDs, uint
         throw RError(R_ERROR_APPLICATION,R_ERROR_REF,"Cutting surface \'%s\' is not closed.\n",this->getSurface(cuttingSurfaceEntityId).getName().toUtf8().constData());
     }
 
+
+    std::vector <RNode> nodesBkp(this->nodes);
+    std::vector <RElement> elementsBkp(this->elements);
+
+    RSurface cuttingSurfaceBkp(this->getSurface(cuttingSurfaceEntityId));
+    std::vector<RSurface> surfacesBkp;
+    for (int i=0;i<surfaceEntityIDs.size();i++)
+    {
+        surfacesBkp.push_back(this->getSurface(surfaceEntityIDs[i]));
+    }
+
     try
     {
         std::vector<uint> allSurfaceEntityIDs;
@@ -5413,7 +5424,8 @@ bool RModel::boolDifference(uint nIterations, QList<uint> surfaceEntityIDs, uint
         }
         try
         {
-            insideBook = rCuttingSurface.pointsInside(this->nodes,this->elements,elementCenters,false);
+//            insideBook = rCuttingSurface.pointsInside(this->nodes,this->elements,elementCenters,false);
+            insideBook = cuttingSurfaceBkp.pointsInside(nodesBkp,elementsBkp,elementCenters,false);
         }
         catch (const RError &error)
         {
@@ -5439,7 +5451,8 @@ bool RModel::boolDifference(uint nIterations, QList<uint> surfaceEntityIDs, uint
 
         try
         {
-            insideBook = rSurface.pointsInside(this->nodes,this->elements,elementCenters,true);
+//            insideBook = rSurface.pointsInside(this->nodes,this->elements,elementCenters,true);
+            insideBook = surfacesBkp[i].pointsInside(nodesBkp,elementsBkp,elementCenters,false);
         }
         catch (const RError &error)
         {
@@ -5449,7 +5462,6 @@ bool RModel::boolDifference(uint nIterations, QList<uint> surfaceEntityIDs, uint
 
         for (uint j=0;j<rCuttingSurface.size();j++)
         {
-
             if (insideBook[j])
             {
                 elementRemoveBook[rCuttingSurface.get(j)] = false;
