@@ -5373,10 +5373,9 @@ bool RModel::boolDifference(uint nIterations, QList<uint> surfaceEntityIDs, uint
         throw RError(R_ERROR_APPLICATION,R_ERROR_REF,"Cutting surface \'%s\' is not closed.\n",this->getSurface(cuttingSurfaceEntityId).getName().toUtf8().constData());
     }
 
-
+    // Backup arrays
     std::vector <RNode> nodesBkp(this->nodes);
     std::vector <RElement> elementsBkp(this->elements);
-
     RSurface cuttingSurfaceBkp(this->getSurface(cuttingSurfaceEntityId));
     std::vector<RSurface> surfacesBkp;
     for (int i=0;i<surfaceEntityIDs.size();i++)
@@ -5384,6 +5383,7 @@ bool RModel::boolDifference(uint nIterations, QList<uint> surfaceEntityIDs, uint
         surfacesBkp.push_back(this->getSurface(surfaceEntityIDs[i]));
     }
 
+    // Break intersected elemements
     try
     {
         std::vector<uint> allSurfaceEntityIDs;
@@ -5403,6 +5403,7 @@ bool RModel::boolDifference(uint nIterations, QList<uint> surfaceEntityIDs, uint
         throw RError(R_ERROR_APPLICATION,R_ERROR_REF,"Failed to break intersected elements. %s", error.getMessage().toUtf8().constData());
     }
 
+    // Remove elements
     std::vector<bool> elementRemoveBook;
     elementRemoveBook.resize(this->getNElements(),true);
 
@@ -5424,7 +5425,6 @@ bool RModel::boolDifference(uint nIterations, QList<uint> surfaceEntityIDs, uint
         }
         try
         {
-//            insideBook = rCuttingSurface.pointsInside(this->nodes,this->elements,elementCenters,false);
             insideBook = cuttingSurfaceBkp.pointsInside(nodesBkp,elementsBkp,elementCenters,false);
         }
         catch (const RError &error)
@@ -5451,8 +5451,7 @@ bool RModel::boolDifference(uint nIterations, QList<uint> surfaceEntityIDs, uint
 
         try
         {
-//            insideBook = rSurface.pointsInside(this->nodes,this->elements,elementCenters,true);
-            insideBook = surfacesBkp[i].pointsInside(nodesBkp,elementsBkp,elementCenters,false);
+            insideBook = surfacesBkp[i].pointsInside(nodesBkp,elementsBkp,elementCenters,true);
         }
         catch (const RError &error)
         {
@@ -5477,16 +5476,6 @@ bool RModel::boolDifference(uint nIterations, QList<uint> surfaceEntityIDs, uint
             elementsToRemove.push_back(i);
         }
     }
-//    elementsToRemove.reserve(elementIDsSet.size());
-
-//    std::set<uint>::const_iterator iter;
-//    for (iter=elementIDsSet.begin();iter!=elementIDsSet.end();++iter)
-//    {
-//        if (tmpElementIDsSet.find(*iter) == tmpElementIDsSet.end())
-//        {
-//            elementsToRemove.push_back(*iter);
-//        }
-//    }
 
     this->removeElements(elementsToRemove,false);
 
@@ -5496,6 +5485,16 @@ bool RModel::boolDifference(uint nIterations, QList<uint> surfaceEntityIDs, uint
 
 bool RModel::boolIntersection(uint nIterations, QList<uint> surfaceEntityIDs)
 {
+    // Backup arrays
+    std::vector <RNode> nodesBkp(this->nodes);
+    std::vector <RElement> elementsBkp(this->elements);
+    std::vector<RSurface> surfacesBkp;
+    for (int i=0;i<surfaceEntityIDs.size();i++)
+    {
+        surfacesBkp.push_back(this->getSurface(surfaceEntityIDs[i]));
+    }
+
+    // Break intersected elemements
     try
     {
         uint nIntersected = this->breakIntersectedElements(nIterations,this->findElementIDs(R_ENTITY_GROUP_SURFACE,surfaceEntityIDs.toVector().toStdVector()));
@@ -5509,32 +5508,30 @@ bool RModel::boolIntersection(uint nIterations, QList<uint> surfaceEntityIDs)
         throw RError(R_ERROR_APPLICATION,R_ERROR_REF,"Failed to break intersected elements. %s", error.getMessage().toUtf8().constData());
     }
 
+    // Remove elements
     std::set<uint> elementIDsSet;
-
     for (int i=0;i<surfaceEntityIDs.size();i++)
     {
-        const RSurface &rSurface1 = this->getSurface(surfaceEntityIDs[i]);
-
         for (int j=0;j<surfaceEntityIDs.size();j++)
         {
             if (i == j)
             {
                 continue;
             }
-            const RSurface &rSurface2 = this->getSurface(surfaceEntityIDs[j]);
+            const RSurface &rSurface = this->getSurface(surfaceEntityIDs[j]);
 
             std::vector<RR3Vector> elementCenters;
-            elementCenters.resize(rSurface2.size());
+            elementCenters.resize(rSurface.size());
 
-            for (uint k=0;k<rSurface2.size();k++)
+            for (uint k=0;k<rSurface.size();k++)
             {
-                this->getElement(rSurface2.get(k)).findCenter(this->nodes,elementCenters[k][0],elementCenters[k][1],elementCenters[k][2]);
+                this->getElement(rSurface.get(k)).findCenter(this->nodes,elementCenters[k][0],elementCenters[k][1],elementCenters[k][2]);
             }
 
             std::vector<bool> insideBook;
             try
             {
-                insideBook = rSurface1.pointsInside(this->nodes,this->elements,elementCenters,true);
+                insideBook = surfacesBkp[i].pointsInside(nodesBkp,elementsBkp,elementCenters,true);
             }
             catch (const RError &error)
             {
@@ -5542,11 +5539,11 @@ bool RModel::boolIntersection(uint nIterations, QList<uint> surfaceEntityIDs)
                              error.getMessage().toUtf8().constData());
             }
 
-            for (uint k=0;k<rSurface2.size();k++)
+            for (uint k=0;k<rSurface.size();k++)
             {
                 if (!insideBook[k])
                 {
-                    elementIDsSet.insert(rSurface2.get(k));
+                    elementIDsSet.insert(rSurface.get(k));
                 }
             }
         }
@@ -5569,6 +5566,16 @@ bool RModel::boolIntersection(uint nIterations, QList<uint> surfaceEntityIDs)
 
 bool RModel::boolUnion(uint nIterations, QList<uint> surfaceEntityIDs)
 {
+    // Backup arrays
+    std::vector <RNode> nodesBkp(this->nodes);
+    std::vector <RElement> elementsBkp(this->elements);
+    std::vector<RSurface> surfacesBkp;
+    for (int i=0;i<surfaceEntityIDs.size();i++)
+    {
+        surfacesBkp.push_back(this->getSurface(surfaceEntityIDs[i]));
+    }
+
+    // Break intersected elemements
     try
     {
         uint nIntersected = this->breakIntersectedElements(nIterations,this->findElementIDs(R_ENTITY_GROUP_SURFACE,surfaceEntityIDs.toVector().toStdVector()));
@@ -5582,32 +5589,30 @@ bool RModel::boolUnion(uint nIterations, QList<uint> surfaceEntityIDs)
         throw RError(R_ERROR_APPLICATION,R_ERROR_REF,"Failed to break intersected elements. %s", error.getMessage().toUtf8().constData());
     }
 
+    // Remove elements
     std::set<uint> elementIDsSet;
-
     for (int i=0;i<surfaceEntityIDs.size();i++)
     {
-        const RSurface &rSurface1 = this->getSurface(surfaceEntityIDs[i]);
-
         for (int j=0;j<surfaceEntityIDs.size();j++)
         {
             if (i == j)
             {
                 continue;
             }
-            const RSurface &rSurface2 = this->getSurface(surfaceEntityIDs[j]);
+            const RSurface &rSurface = this->getSurface(surfaceEntityIDs[j]);
 
             std::vector<RR3Vector> elementCenters;
-            elementCenters.resize(rSurface2.size());
+            elementCenters.resize(rSurface.size());
 
-            for (uint k=0;k<rSurface2.size();k++)
+            for (uint k=0;k<rSurface.size();k++)
             {
-                this->getElement(rSurface2.get(k)).findCenter(this->nodes,elementCenters[k][0],elementCenters[k][1],elementCenters[k][2]);
+                this->getElement(rSurface.get(k)).findCenter(this->nodes,elementCenters[k][0],elementCenters[k][1],elementCenters[k][2]);
             }
 
             std::vector<bool> insideBook;
             try
             {
-                insideBook = rSurface1.pointsInside(this->nodes,this->elements,elementCenters,true);
+                insideBook = surfacesBkp[i].pointsInside(nodesBkp,elementsBkp,elementCenters,false);
             }
             catch (const RError &error)
             {
@@ -5615,11 +5620,11 @@ bool RModel::boolUnion(uint nIterations, QList<uint> surfaceEntityIDs)
                              error.getMessage().toUtf8().constData());
             }
 
-            for (uint k=0;k<rSurface2.size();k++)
+            for (uint k=0;k<rSurface.size();k++)
             {
                 if (insideBook[k])
                 {
-                    elementIDsSet.insert(rSurface2.get(k));
+                    elementIDsSet.insert(rSurface.get(k));
                 }
             }
         }

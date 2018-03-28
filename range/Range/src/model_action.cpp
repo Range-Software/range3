@@ -582,13 +582,13 @@ void ModelAction::checkPointInsideSurface(const ModelActionInput &modelActionInp
     const QList<SessionEntityID> &entityIDs = modelActionInput.getEntityIDs();
     const RR3Vector &point = modelActionInput.getPoint();
 
-    RLogger::info("Performing union geometry operation\n");
+    RLogger::info("Checking if point is inside selected surfaces.\n");
     RLogger::indent();
 
     for (int i=0;i<entityIDs.size();i++)
     {
         const RSurface &rSurface = rModel.getSurface(entityIDs.at(i).getEid());
-        bool isInside = rSurface.pointInside(rModel.getNodes(),rModel.getElements(),point);
+        bool isInside = rSurface.pointInside(rModel.getNodes(),rModel.getElements(),point,false);
         RLogger::info("Point [%g %g %g] is inside the surface %s: %s\n",point[0],point[1],point[2],rSurface.getName().toUtf8().constData(),isInside?"TRUE":"FALSE");
     }
 

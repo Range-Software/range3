@@ -56,11 +56,11 @@ void RSurface::setThickness (double thickness)
 } /* RSurface::setThickness */
 
 
-bool RSurface::pointInside(const std::vector<RNode> &nodes, const std::vector<RElement> &elements, const RR3Vector &point) const
+bool RSurface::pointInside(const std::vector<RNode> &nodes, const std::vector<RElement> &elements, const RR3Vector &point, bool includeSurface) const
 {
     std::vector<RR3Vector> points;
     points.push_back(point);
-    std::vector<bool> isInside = this->pointsInside(nodes,elements,points,false);
+    std::vector<bool> isInside = this->pointsInside(nodes,elements,points,includeSurface);
     if (isInside.size() != 1)
     {
         throw RError(R_ERROR_APPLICATION,R_ERROR_REF,"Unexpected error, size of the array = \'%u\'",isInside.size());
@@ -69,7 +69,7 @@ bool RSurface::pointInside(const std::vector<RNode> &nodes, const std::vector<RE
 } /* RSurface::pointInside */
 
 
-std::vector<bool> RSurface::pointsInside(const std::vector<RNode> &nodes, const std::vector<RElement> &elements, const std::vector<RR3Vector> &points, bool excludeSurface) const
+std::vector<bool> RSurface::pointsInside(const std::vector<RNode> &nodes, const std::vector<RElement> &elements, const std::vector<RR3Vector> &points, bool includeSurface) const
 {
     std::vector<RElement> volumes;
 
@@ -105,7 +105,7 @@ std::vector<bool> RSurface::pointsInside(const std::vector<RNode> &nodes, const 
             }
         }
 
-        if (!excludeSurface)
+        if (!includeSurface)
         {
             // Check that point is not on the surface.
             for (uint j=0;j<this->size();j++)
