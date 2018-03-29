@@ -59,7 +59,7 @@ void MainTask::run(void)
 
         if (argumentsParser.isSet("help"))
         {
-            argumentsParser.printHelp("Test Application");
+            argumentsParser.printHelp();
             app->exit(0);
             return;
         }

@@ -156,7 +156,7 @@ void DocumentGenerator::generateHeader(void)
 void DocumentGenerator::generateFooter(void)
 {
     QTextCursor cursor(this->docFooter);
-    cursor.insertHtml(QString("<center><b>") + RVendor::name + QString("</b> - ") + RVendor::author + QString(" &copy; ") + QString::number(RVendor::year) + "</center>");
+    cursor.insertHtml(QString("<center><b>") + RVendor::name + QString("</b> - ") + RVendor::author.toHtmlEscaped() + QString(" &copy; ") + QString::number(RVendor::year) + "</center>");
     cursor.insertBlock(QTextBlockFormat(),QTextCharFormat());
 }
 

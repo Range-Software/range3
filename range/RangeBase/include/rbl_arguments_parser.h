@@ -68,10 +68,16 @@ class RArgumentsParser
         const QStringList &getFiles(void) const;
 
         //! Print help message.
-        void printHelp(const QString &name) const;
+        void printHelp(void) const;
 
         //! Print version.
         void printVersion(void) const;
+
+        //! Print header.
+        static void printHeader(const QString &applicationName);
+
+        //! Print footr.
+        static void printFooter(void);
 
     protected:
 

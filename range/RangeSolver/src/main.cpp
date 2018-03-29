@@ -20,6 +20,8 @@ int main(int argc, char *argv[])
     int exitValue = 0;
     Application app(argc, argv);
 
+    RArgumentsParser::printHeader("Solver");
+
     MainTask *mainTask = new MainTask(&app);
     QTimer::singleShot(0, mainTask, SLOT(run()));
 
@@ -28,5 +30,6 @@ int main(int argc, char *argv[])
         RLogger::info("Application has terminated with error code (%d).\n", exitValue);
     }
 
+    RArgumentsParser::printFooter();
     return exitValue;
 }

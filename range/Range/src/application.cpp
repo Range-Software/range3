@@ -102,7 +102,7 @@ void Application::onStarted(void)
 
         if (argumentsParser.isSet("help"))
         {
-            argumentsParser.printHelp("GUI");
+            argumentsParser.printHelp();
             this->exit(0);
             return;
         }

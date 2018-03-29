@@ -87,9 +87,8 @@ const QStringList &RArgumentsParser::getFiles() const
     return this->files;
 }
 
-void RArgumentsParser::printHelp(const QString &name) const
+void RArgumentsParser::printHelp(void) const
 {
-    RLogger::info("%s :: %s - %s\n",RVendor::name.toUtf8().constData(),name.toUtf8().constData(),RVendor::version.toString().toUtf8().constData());
     RLogger::info("Usage: %s%s <mandatory arguments> [optional arguments]\n",
                   this->executable.toUtf8().constData(),
                   this->filesEnabled ? " [file(s)]" : "");
@@ -111,15 +110,36 @@ void RArgumentsParser::printHelp(const QString &name) const
             RLogger::info("    %s\n",option.getHelpMessage(30).toUtf8().constData());
         }
     }
-    RLogger::info("\n");
-    QTextDocument plain;
-    plain.setHtml(RVendor::author + " (c) " + QString::number(RVendor::year));
-    RLogger::info("%s\n",plain.toPlainText().toUtf8().constData());
 }
 
 void RArgumentsParser::printVersion(void) const
 {
     RLogger::info("%s\n",RVendor::version.toString().toUtf8().constData());
+}
+
+void RArgumentsParser::printHeader(const QString &applicationName)
+{
+    RLogger::info(" ____                          ____         __ _                          \n");
+    RLogger::info("|  _ \\ __ _ _ __   __ _  ___  / ___|  ___  / _| |___      ____ _ _ __ ___ \n");
+    RLogger::info("| |_) / _` | \'_ \\ / _` |/ _ \\ \\___ \\ / _ \\| |_| __\\ \\ /\\ / / _` | '__/ _ \\\n");
+    RLogger::info("|  _ < (_| | | | | (_| |  __/  ___) | (_) |  _| |_ \\ V  V / (_| | | |  __/\n");
+    RLogger::info("|_| \\_\\__,_|_| |_|\\__, |\\___| |____/ \\___/|_|  \\__| \\_/\\_/ \\__,_|_|  \\___|\n");
+    RLogger::info("                  |___/                                                   \n");
+    RLogger::info("\n");
+    RLogger::info("%s %s\n",RVendor::shortName.toUtf8().constData(),applicationName.toUtf8().constData());
+    RLogger::info("%s\n",RVendor::title.toUtf8().constData());
+    RLogger::info("Version: %s\n",RVendor::version.toString().toUtf8().constData());
+    RLogger::info("--------------------------------------------------------------------------\n");
+    RLogger::info("\n");
+}
+
+void RArgumentsParser::printFooter(void)
+{
+    RLogger::info("\n");
+    RLogger::info("--------------------------------------------------------------------------\n");
+    RLogger::info("%s (c) %d\n",RVendor::author.toUtf8().constData(),RVendor::year);
+    RLogger::info("%s\n",RVendor::email.toUtf8().constData());
+    RLogger::info("%s\n",RVendor::www.toUtf8().constData());
 }
 
 void RArgumentsParser::processArgumentList(const QStringList &argumentList)

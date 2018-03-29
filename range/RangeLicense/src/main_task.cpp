@@ -52,7 +52,7 @@ void MainTask::run(void)
 
         if (argumentsParser.isSet("help"))
         {
-            argumentsParser.printHelp("License generator");
+            argumentsParser.printHelp();
             app->exit(0);
             return;
         }

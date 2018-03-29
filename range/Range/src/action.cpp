@@ -1833,7 +1833,7 @@ void Action::onAbout(void)
                  + QString("<h2>") + RVendor::description + QString("</h2>")
                  + RVendor::version.toString()
                  + QString("<br/>")
-                 + RVendor::author + QString(" &copy; ") + QString::number(RVendor::year) + QString("<br/>")
+                 + RVendor::author.toHtmlEscaped() + QString(" &copy; ") + QString::number(RVendor::year) + QString("<br/>")
                  + QString("<a href=\"mailto:") + RVendor::email + QString("\">") + RVendor::email + QString("</a><br/>")
                  + QString("<a href=\"") + RVendor::www + QString("\">") + RVendor::www + QString("</a>");
 

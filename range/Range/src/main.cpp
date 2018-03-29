@@ -14,12 +14,16 @@
 
 int main (int argc, char *argv[])
 {
+    RArgumentsParser::printHeader("GUI");
+
     QLocale::setDefault(QLocale("en_US"));
 
-    if (int exitValue = Application(argc, argv).exec() != 0)
+    int exitValue = 0;
+    if ((exitValue = Application(argc, argv).exec()) != 0)
     {
         RLogger::info ("Application has terminated with error code (%d).\n", exitValue);
-        return exitValue;
     }
-    return 0;
+
+    RArgumentsParser::printFooter();
+    return exitValue;
 } /* main */

@@ -17,6 +17,8 @@
 
 int main(int argc, char *argv[])
 {
+    RArgumentsParser::printHeader("License");
+
     int exitValue = 0;
     Application app(argc, argv);
 
@@ -28,5 +30,6 @@ int main(int argc, char *argv[])
         RLogger::info("Application has terminated with error code (%d).\n", exitValue);
     }
 
+    RArgumentsParser::printFooter();
     return exitValue;
 }

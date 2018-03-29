@@ -5416,7 +5416,7 @@ bool RModel::boolDifference(uint nIterations, QList<uint> surfaceEntityIDs, uint
         std::vector<RR3Vector> elementCenters;
         std::vector<bool> insideBook;
 
-        // Remove cut surface
+        // Remove elements from cutted surface
         elementCenters.resize(rSurface.size());
 
         for (uint j=0;j<rSurface.size();j++)
@@ -5425,7 +5425,7 @@ bool RModel::boolDifference(uint nIterations, QList<uint> surfaceEntityIDs, uint
         }
         try
         {
-            insideBook = cuttingSurfaceBkp.pointsInside(nodesBkp,elementsBkp,elementCenters,false);
+            insideBook = cuttingSurfaceBkp.pointsInside(nodesBkp,elementsBkp,elementCenters,true);
         }
         catch (const RError &error)
         {
@@ -5441,7 +5441,7 @@ bool RModel::boolDifference(uint nIterations, QList<uint> surfaceEntityIDs, uint
             }
         }
 
-        // Remove cutting surface
+        // Remove elements from cutting surface
         elementCenters.resize(rCuttingSurface.size());
 
         for (uint j=0;j<rCuttingSurface.size();j++)
@@ -5451,7 +5451,7 @@ bool RModel::boolDifference(uint nIterations, QList<uint> surfaceEntityIDs, uint
 
         try
         {
-            insideBook = surfacesBkp[i].pointsInside(nodesBkp,elementsBkp,elementCenters,true);
+            insideBook = surfacesBkp[i].pointsInside(nodesBkp,elementsBkp,elementCenters,false);
         }
         catch (const RError &error)
         {
