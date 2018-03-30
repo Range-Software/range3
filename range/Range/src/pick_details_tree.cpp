@@ -212,6 +212,7 @@ void PickDetailsTree::populate(void)
 
         topItem->setText(PICK_DETAILS_TREE_COLUMN_1,itemText);
         topItem->setFirstColumnSpanned(true);
+        topItem->setExpanded(true);
     }
 
     for (int i=0;i<this->topLevelItemCount();i++)
