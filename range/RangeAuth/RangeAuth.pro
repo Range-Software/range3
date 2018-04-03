@@ -9,14 +9,14 @@ INCLUDEPATH += include
 
 SOURCES += \
     src/rauthenticator.cpp \
-    src/rlicenserecord.cpp \
-    src/rlicense.cpp
+    src/rlicense.cpp \
+    src/rlicenserecord.cpp
 
 HEADERS += \
     include/ralib.h \
     include/rauthenticator.h \
-    include/rlicenserecord.h \
-    include/rlicense.h
+    include/rlicense.h \
+    include/rlicenserecord.h
 
 CONFIG -= debug_and_release
 CONFIG += copy_dir_files

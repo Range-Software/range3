@@ -20,8 +20,8 @@ INCLUDEPATH += include
 
 SOURCES += \
     src/rml_boundary_condition.cpp \
-    src/rml_condition_component.cpp \
     src/rml_condition.cpp \
+    src/rml_condition_component.cpp \
     src/rml_cut.cpp \
     src/rml_eigen_value_solver_conf.cpp \
     src/rml_element.cpp \
@@ -31,10 +31,10 @@ SOURCES += \
     src/rml_entity_group.cpp \
     src/rml_entity_group_data.cpp \
     src/rml_environment_condition.cpp \
+    src/rml_file.cpp \
     src/rml_file_header.cpp \
     src/rml_file_io.cpp \
     src/rml_file_manager.cpp \
-    src/rml_file.cpp \
     src/rml_gl_display_properties.cpp \
     src/rml_initial_condition.cpp \
     src/rml_interpolated_element.cpp \
@@ -57,8 +57,8 @@ SOURCES += \
     src/rml_monitoring_point.cpp \
     src/rml_monitoring_point_manager.cpp \
     src/rml_node.cpp \
-    src/rml_patch_book.cpp \
     src/rml_patch.cpp \
+    src/rml_patch_book.cpp \
     src/rml_patch_input.cpp \
     src/rml_point.cpp \
     src/rml_polygon.cpp \
@@ -89,21 +89,21 @@ SOURCES += \
 
 HEADERS += \
     include/rml_boundary_condition.h \
-    include/rml_condition_component.h \
     include/rml_condition.h \
+    include/rml_condition_component.h \
     include/rml_cut.h \
     include/rml_eigen_value_solver_conf.h \
-    include/rml_element_group.h \
     include/rml_element.h \
+    include/rml_element_group.h \
     include/rml_element_shape_derivation.h \
     include/rml_element_shape_function.h \
-    include/rml_entity_group_data.h \
     include/rml_entity_group.h \
+    include/rml_entity_group_data.h \
     include/rml_environment_condition.h \
+    include/rml_file.h \
     include/rml_file_header.h \
     include/rml_file_io.h \
     include/rml_file_manager.h \
-    include/rml_file.h \
     include/rml_gl_display_properties.h \
     include/rml_initial_condition.h \
     include/rml_interpolated_element.h \
@@ -118,16 +118,16 @@ HEADERS += \
     include/rml_mesh_generator.h \
     include/rml_mesh_input.h \
     include/rml_modal_setup.h \
-    include/rml_model_data.h \
     include/rml_model.h \
+    include/rml_model_data.h \
     include/rml_model_msh.h \
     include/rml_model_raw.h \
     include/rml_model_stl.h \
     include/rml_monitoring_point.h \
     include/rml_monitoring_point_manager.h \
     include/rml_node.h \
-    include/rml_patch_book.h \
     include/rml_patch.h \
+    include/rml_patch_book.h \
     include/rml_patch_input.h \
     include/rml_point.h \
     include/rml_polygon.h \
@@ -150,8 +150,8 @@ HEADERS += \
     include/rml_time_solver.h \
     include/rml_triangle.h \
     include/rml_triangulate.h \
-    include/rml_variable_data.h \
     include/rml_variable.h \
+    include/rml_variable_data.h \
     include/rml_vector_field.h \
     include/rml_view_factor_matrix.h \
     include/rml_view_factor_matrix_header.h \

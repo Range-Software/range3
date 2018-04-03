@@ -14,8 +14,8 @@ TARGET = RangeLicense
 TEMPLATE = app
 
 SOURCES += \
-    src/main.cpp \
     src/application.cpp \
+    src/main.cpp \
     src/main_task.cpp
 
 HEADERS += \

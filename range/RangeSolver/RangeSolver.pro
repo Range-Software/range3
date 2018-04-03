@@ -16,19 +16,19 @@ TEMPLATE = app
 BUILDPATH = $${PWD}/../../build-range3
 
 SOURCES += \
-    src/main.cpp \
     src/application.cpp \
-    src/solver_task.cpp \
-    src/main_task.cpp \
     src/command_processor.cpp \
-    src/solver_input.cpp
+    src/main.cpp \
+    src/main_task.cpp \
+    src/solver_input.cpp \
+    src/solver_task.cpp
 
 HEADERS += \
     src/application.h \
-    src/solver_task.h \
-    src/main_task.h \
     src/command_processor.h \
-    src/solver_input.h
+    src/main_task.h \
+    src/solver_input.h \
+    src/solver_task.h
 
 
 CONFIG -= debug_and_release

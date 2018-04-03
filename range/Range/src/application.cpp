@@ -164,43 +164,63 @@ void Application::onStarted(void)
     MaterialList::getInstance().setStorePath(MainSettings::getInstance().getMaterialsDir() + QDir::separator());
 
     // Check current version.
-    if (RVendor::version > MainSettings::getInstance().getStoredVersion())
+    RLogger::info("Checking current against last used software version.\n");
+    RLogger::indent();
+    RLogger::info("Last used version: %s\n",MainSettings::getInstance().getStoredVersion().toString().toUtf8().constData());
+    RLogger::info("Currently used version: %s\n",RVendor::version.toString().toUtf8().constData());
+    if (RVendor::version >= MainSettings::getInstance().getStoredVersion())
     {
         // Newer version is being executed.
 
         // Perform material database update.
+        RLogger::info("Preparing material database update.\n");
+        RLogger::indent();
+
         MaterialUpdater *pMaterialUpdater = new MaterialUpdater;
 
         QDir matSrcDir(QDir::cleanPath(QDir(this->applicationDirPath()).filePath("../materials")));
+
+        RLogger::info("Source directory: \'%s\'\n",matSrcDir.absolutePath().toUtf8().constData());
 
         if (matSrcDir.exists())
         {
             QStringList files = matSrcDir.entryList(QDir::Files | QDir::NoDotAndDotDot | QDir::Readable, QDir::Name);
             foreach (QString file, files)
             {
+                RLogger::info("Adding material: \'%s\'\n",matSrcDir.filePath(file).toUtf8().constData());
                 pMaterialUpdater->addMaterial(matSrcDir.filePath(file));
             }
         }
 
         JobManager::getInstance().submit(pMaterialUpdater);
+        RLogger::unindent();
 
         // Perform data files update.
+        RLogger::info("Preparing data files update.\n");
+        RLogger::indent();
+
         FileUpdater *pFileUpdater = new FileUpdater;
 
         QDir dataSrcDir(QDir::cleanPath(QDir(this->applicationDirPath()).filePath("../data")));
         QDir dataDstDir(MainSettings::getInstance().getDataDir());
+
+        RLogger::info("Source directory: \'%s\'\n",dataSrcDir.absolutePath().toUtf8().constData());
+        RLogger::info("Destination directory: \'%s\'\n",dataDstDir.absolutePath().toUtf8().constData());
 
         if (dataSrcDir.exists())
         {
             QStringList files = dataSrcDir.entryList(QDir::Files | QDir::NoDotAndDotDot | QDir::Readable, QDir::Name);
             foreach (QString file, files)
             {
+                RLogger::info("Adding file: \'%s\' -> \'%s\'\n",dataSrcDir.filePath(file).toUtf8().constData(),dataDstDir.filePath(file).toUtf8().constData());
                 pFileUpdater->addFile(dataSrcDir.filePath(file),dataDstDir.filePath(file));
             }
         }
 
         JobManager::getInstance().submit(pFileUpdater);
+        RLogger::unindent();
     }
+    RLogger::unindent();
 
     // Start RRA Session
     RRASession::getInstance().start();
