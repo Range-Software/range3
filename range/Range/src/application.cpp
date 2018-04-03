@@ -168,7 +168,7 @@ void Application::onStarted(void)
     RLogger::indent();
     RLogger::info("Last used version: %s\n",MainSettings::getInstance().getStoredVersion().toString().toUtf8().constData());
     RLogger::info("Currently used version: %s\n",RVendor::version.toString().toUtf8().constData());
-    if (RVendor::version >= MainSettings::getInstance().getStoredVersion())
+    if (RVendor::version > MainSettings::getInstance().getStoredVersion())
     {
         // Newer version is being executed.
 
@@ -191,8 +191,6 @@ void Application::onStarted(void)
                 pMaterialUpdater->addMaterial(matSrcDir.filePath(file));
             }
         }
-
-        JobManager::getInstance().submit(pMaterialUpdater);
         RLogger::unindent();
 
         // Perform data files update.
@@ -216,9 +214,10 @@ void Application::onStarted(void)
                 pFileUpdater->addFile(dataSrcDir.filePath(file),dataDstDir.filePath(file));
             }
         }
-
-        JobManager::getInstance().submit(pFileUpdater);
         RLogger::unindent();
+
+        JobManager::getInstance().submit(pMaterialUpdater);
+        JobManager::getInstance().submit(pFileUpdater);
     }
     RLogger::unindent();
 
