@@ -14,7 +14,7 @@
 #include "main_settings.h"
 
 HelpGeneralWidget::HelpGeneralWidget(QWidget *parent)
-    : DocumentWidget(parent)
+    : DocumentWidget(RFileManager::buildPath(MainSettings::getInstance().getApplicationSettings()->getHelpDir(),"general_index.html"),parent)
 {
     QStringList general;
 

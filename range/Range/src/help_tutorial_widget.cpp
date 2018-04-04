@@ -14,7 +14,7 @@
 #include "main_settings.h"
 
 HelpTutorialWidget::HelpTutorialWidget(QWidget *parent)
-    : DocumentWidget(parent)
+    : DocumentWidget(RFileManager::buildPath(MainSettings::getInstance().getApplicationSettings()->getHelpDir(),"tutorial_index.html"),parent)
 {
     QStringList tutorials;
 

@@ -16,8 +16,9 @@
 #include "document_widget.h"
 #include "main_settings.h"
 
-DocumentWidget::DocumentWidget(QWidget *parent)
+DocumentWidget::DocumentWidget(const QString &defaultFileName, QWidget *parent)
     : QWidget(parent)
+    , defaultFileName(defaultFileName)
 {
     QVBoxLayout *mainLayout = new QVBoxLayout;
     this->setLayout(mainLayout);
@@ -39,6 +40,8 @@ DocumentWidget::DocumentWidget(QWidget *parent)
     splitter->addWidget(this->textBrowser);
 
     splitter->setStretchFactor(1,1);
+
+    this->loadFile(this->defaultFileName);
 }
 
 void DocumentWidget::addListItem(QIcon icon, const QString &text, const QString &fileName)
@@ -56,28 +59,39 @@ void DocumentWidget::addListItem(const QString &text, const QString &fileName)
     item->setData(Qt::UserRole,fileName);
 }
 
+void DocumentWidget::loadFile(const QString &fileName)
+{
+    if (fileName.isEmpty())
+    {
+        this->textBrowser->clear();
+    }
+    else
+    {
+        QFile file(fileName);
+        if (!file.open(QFile::ReadOnly | QFile::Text))
+        {
+            RLogger::warning("Failed to load document file \'%s\'\n",fileName.toUtf8().constData());
+            this->textBrowser->setHtml(tr("No document file available."));
+        }
+        else
+        {
+            QTextStream in(&file);
+            this->textBrowser->setHtml(in.readAll());
+            file.close();
+        }
+    }
+}
+
 void DocumentWidget::onListSelectionChanged(void)
 {
     QList<QListWidgetItem*> selectedItems = this->listWidget->selectedItems();
 
     if (selectedItems.size() == 0)
     {
-        this->textBrowser->clear();
-        return;
-    }
-
-    const QString &helpFile(selectedItems.at(0)->data(Qt::UserRole).toString());
-
-    QFile file(helpFile);
-    if (!file.open(QFile::ReadOnly | QFile::Text))
-    {
-        RLogger::warning("Failed to load help file \'%s\'\n",helpFile.toUtf8().constData());
-        this->textBrowser->setHtml(tr("No help available."));
+        this->loadFile(this->defaultFileName);
     }
     else
     {
-        QTextStream in(&file);
-        this->textBrowser->setHtml(in.readAll());
-        file.close();
+        this->loadFile(selectedItems.at(0)->data(Qt::UserRole).toString());
     }
 }

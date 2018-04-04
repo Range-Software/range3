@@ -19,7 +19,7 @@
 #include "main_settings.h"
 
 HelpActionsWidget::HelpActionsWidget(const ActionDefinition *actionDefinition, QWidget *parent)
-    : DocumentWidget(parent)
+    : DocumentWidget(RFileManager::buildPath(MainSettings::getInstance().getApplicationSettings()->getHelpDir(),"action_index.html"),parent)
 {
     QList<ActionGroupType> actionGroupTypes = ActionDefinitionItem::getGroupTypes();
 

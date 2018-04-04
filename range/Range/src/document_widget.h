@@ -22,15 +22,17 @@ class DocumentWidget : public QWidget
 
     protected:
 
-        //! List widget
+        //! List widget.
         QListWidget *listWidget;
-        //! Text browser
+        //! Text browser.
         QTextBrowser *textBrowser;
+        //! Default document.
+        QString defaultFileName;
 
     public:
 
         //! Constructor
-        explicit DocumentWidget(QWidget *parent = nullptr);
+        explicit DocumentWidget(const QString &defaultFileName, QWidget *parent = nullptr);
 
     protected:
 
@@ -39,6 +41,9 @@ class DocumentWidget : public QWidget
 
         //! Add list item.
         void addListItem(const QString &text, const QString &fileName);
+
+        //! Load file.
+        void loadFile(const QString &fileName);
 
     private slots:
 

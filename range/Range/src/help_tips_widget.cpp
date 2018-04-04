@@ -14,7 +14,7 @@
 #include "main_settings.h"
 
 HelpTipsWidget::HelpTipsWidget(QWidget *parent)
-    : DocumentWidget(parent)
+    : DocumentWidget(RFileManager::buildPath(MainSettings::getInstance().getApplicationSettings()->getHelpDir(),"tip_index.html"),parent)
 {
     QStringList tips;
 

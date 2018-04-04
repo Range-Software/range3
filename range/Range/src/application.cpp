@@ -168,6 +168,8 @@ void Application::onStarted(void)
     RLogger::indent();
     RLogger::info("Last used version: %s\n",MainSettings::getInstance().getStoredVersion().toString().toUtf8().constData());
     RLogger::info("Currently used version: %s\n",RVendor::version.toString().toUtf8().constData());
+    RLogger::unindent();
+
     if (RVendor::version > MainSettings::getInstance().getStoredVersion())
     {
         // Newer version is being executed.
@@ -219,7 +221,6 @@ void Application::onStarted(void)
         JobManager::getInstance().submit(pMaterialUpdater);
         JobManager::getInstance().submit(pFileUpdater);
     }
-    RLogger::unindent();
 
     // Start RRA Session
     RRASession::getInstance().start();
