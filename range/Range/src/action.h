@@ -71,15 +71,6 @@ class Action : public QAction
         //! Save model as.
         void onModelSaveAs(void);
 
-        //! Import MSH model.
-        void onModelImportMsh(void);
-
-        //! Import RAW model.
-        void onModelImportRaw(void);
-
-        //! Import STL model.
-        void onModelImportStl(void);
-
         //! Export MSH model.
         void onModelExportMsh(void);
 

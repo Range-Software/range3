@@ -223,7 +223,12 @@ void Action::onModelOpen(void)
 {
     QString binaryExtension = RModel::getDefaultFileExtension(true);
     QString asciiExtension = RModel::getDefaultFileExtension(false);
-    QString dialogDesc = "Range model files (*." + binaryExtension + " *." + asciiExtension + ");;Any files (*)";
+    QString dialogDesc = "All supported files (*." + binaryExtension + " *." + asciiExtension + " *.tmsh *.bmsh *.raw *.stl);;";
+                       + "Range model files (*." + binaryExtension + " *." + asciiExtension + ");;" +
+                       + "Old Range model mesh files (*.tmsh *.bmsh);;"
+                       + "RAW triangle files (*.raw);;"
+                       + "STL triangle files (*.stl);;"
+                       + "Any files (*)";
     QString fileName = QFileDialog::getOpenFileName(this->mainWindow,
                                                     tr("Open model"),
                                                     MainSettings::getInstance().getDataDir(),
@@ -233,7 +238,27 @@ void Action::onModelOpen(void)
         return;
     }
 
-    JobManager::getInstance().submit(new ModelIO(MODEL_IO_OPEN, fileName));
+    ModelIOType modelIOType;
+
+    QString extension = RFileManager::getExtension(fileName).toLower();
+    if (extension == "tmsh" || extension == "bmsh")
+    {
+        modelIOType = MODEL_IO_MSH_IMPORT;
+    }
+    else if (extension == "raw")
+    {
+        modelIOType = MODEL_IO_RAW_IMPORT;
+    }
+    else if (extension == "stl")
+    {
+        modelIOType = MODEL_IO_STL_IMPORT;
+    }
+    else
+    {
+        modelIOType = MODEL_IO_OPEN;
+    }
+
+    JobManager::getInstance().submit(new ModelIO(modelIOType, fileName));
 }
 
 void Action::onModelSave(void)
@@ -272,48 +297,6 @@ void Action::onModelSaveAs(void)
 
         JobManager::getInstance().submit(new ModelIO(MODEL_IO_SAVE, fileName, &model));
     }
-}
-
-void Action::onModelImportMsh(void)
-{
-    QString fileName = QFileDialog::getOpenFileName(this->mainWindow,
-                                                    tr("Import model from MSH file"),
-                                                    MainSettings::getInstance().getDataDir(),
-                                                    "Range mesh files (*.tmsh *.bmsh);;Any files (*)");
-    if (fileName.isEmpty())
-    {
-        return;
-    }
-
-    JobManager::getInstance().submit(new ModelIO(MODEL_IO_MSH_IMPORT, fileName));
-}
-
-void Action::onModelImportRaw(void)
-{
-    QString fileName = QFileDialog::getOpenFileName(this->mainWindow,
-                                                    tr("Import model from RAW file"),
-                                                    MainSettings::getInstance().getDataDir(),
-                                                    "RAW triangle files (*.raw);;Any files (*)");
-    if (fileName.isEmpty())
-    {
-        return;
-    }
-
-    JobManager::getInstance().submit(new ModelIO(MODEL_IO_RAW_IMPORT, fileName));
-}
-
-void Action::onModelImportStl(void)
-{
-    QString fileName = QFileDialog::getOpenFileName(this->mainWindow,
-                                                    tr("Import model from STL file"),
-                                                    MainSettings::getInstance().getDataDir(),
-                                                    "STL triangle files (*.stl);;Any files (*)");
-    if (fileName.isEmpty())
-    {
-        return;
-    }
-
-    JobManager::getInstance().submit(new ModelIO(MODEL_IO_STL_IMPORT, fileName));
 }
 
 void Action::onModelExportMsh(void)

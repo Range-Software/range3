@@ -259,12 +259,6 @@ void MainWindow::createMenus(void)
     menuFile->addAction(this->actionList->getAction(ACTION_MODEL_OPEN));
     menuFile->addAction(this->actionList->getAction(ACTION_MODEL_SAVE));
     menuFile->addAction(this->actionList->getAction(ACTION_MODEL_SAVE_AS));
-    QMenu *menuFileImport = new QMenu(menuFile);
-    menuFileImport->setTitle(QApplication::translate("MainWindow", "Import"));
-    menuFileImport->addAction(this->actionList->getAction(ACTION_MODEL_IMPORT_MSH));
-    menuFileImport->addAction(this->actionList->getAction(ACTION_MODEL_IMPORT_RAW));
-    menuFileImport->addAction(this->actionList->getAction(ACTION_MODEL_IMPORT_STL));
-    menuFile->addAction(menuFileImport->menuAction());
     QMenu *menuFileExport = new QMenu(menuFile);
     menuFileExport->setTitle(QApplication::translate("MainWindow", "Export"));
     menuFileExport->addAction(this->actionList->getAction(ACTION_MODEL_EXPORT_MSH));

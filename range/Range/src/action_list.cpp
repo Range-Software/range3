@@ -82,9 +82,6 @@ void ActionList::processAvailability(void)
     this->getAction(ACTION_SESSION_CLOSE)->setEnabled(true);
     this->getAction(ACTION_MODEL_NEW)->setEnabled(true);
     this->getAction(ACTION_MODEL_OPEN)->setEnabled(true);
-    this->getAction(ACTION_MODEL_IMPORT_MSH)->setEnabled(true);
-    this->getAction(ACTION_MODEL_IMPORT_RAW)->setEnabled(true);
-    this->getAction(ACTION_MODEL_IMPORT_STL)->setEnabled(true);
 
     QList<uint> selectedModelIDs = Session::getInstance().getSelectedModelIDs();
     if (!selectedModelIDs.empty())
@@ -198,9 +195,6 @@ void ActionList::setDisabled(bool allActions)
         this->getAction(ACTION_SESSION_CLOSE)->setEnabled(enabled);
         this->getAction(ACTION_MODEL_NEW)->setEnabled(enabled);
         this->getAction(ACTION_MODEL_OPEN)->setEnabled(enabled);
-        this->getAction(ACTION_MODEL_IMPORT_MSH)->setEnabled(enabled);
-        this->getAction(ACTION_MODEL_IMPORT_RAW)->setEnabled(enabled);
-        this->getAction(ACTION_MODEL_IMPORT_STL)->setEnabled(enabled);
     }
     this->getAction(ACTION_MODEL_SAVE)->setEnabled(enabled);
     this->getAction(ACTION_MODEL_SAVE_AS)->setEnabled(enabled);

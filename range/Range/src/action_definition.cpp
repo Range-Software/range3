@@ -114,9 +114,6 @@ void ActionDefinition::generateActionDescList(QList<ActionDefinitionItem> &actio
     actionDesc.push_back(ActionDefinitionItem(ACTION_MODEL_OPEN, ACTION_GROUP_MODEL, "Open Model", "Open previously saved model.", "Ctrl+O", ":/icons/file/pixmaps/range-open.svg", &Action::onModelOpen));
     actionDesc.push_back(ActionDefinitionItem(ACTION_MODEL_SAVE, ACTION_GROUP_MODEL, "Save Model", "Save selected model. ", "Ctrl+S", ":/icons/file/pixmaps/range-save.svg", &Action::onModelSave));
     actionDesc.push_back(ActionDefinitionItem(ACTION_MODEL_SAVE_AS, ACTION_GROUP_MODEL, "Save Model As", "Save selected model under a different filename.", "Ctrl+Shift+S", ":/icons/file/pixmaps/range-save-as.svg", &Action::onModelSaveAs));
-    actionDesc.push_back(ActionDefinitionItem(ACTION_MODEL_IMPORT_MSH, ACTION_GROUP_MODEL, "Import MSH model", "", "", ":/icons/file/pixmaps/range-import-msh.svg", &Action::onModelImportMsh));
-    actionDesc.push_back(ActionDefinitionItem(ACTION_MODEL_IMPORT_RAW, ACTION_GROUP_MODEL, "Import RAW model", "", "", ":/icons/file/pixmaps/range-import-raw.svg", &Action::onModelImportRaw));
-    actionDesc.push_back(ActionDefinitionItem(ACTION_MODEL_IMPORT_STL, ACTION_GROUP_MODEL, "Import STL model", "", "", ":/icons/file/pixmaps/range-import-stl.svg", &Action::onModelImportStl));
     actionDesc.push_back(ActionDefinitionItem(ACTION_MODEL_EXPORT_MSH, ACTION_GROUP_MODEL, "Export MSH model", "", "", ":/icons/file/pixmaps/range-export-msh.svg", &Action::onModelExportMsh));
     actionDesc.push_back(ActionDefinitionItem(ACTION_MODEL_EXPORT_RAW, ACTION_GROUP_MODEL, "Export RAW model", "", "", ":/icons/file/pixmaps/range-export-raw.svg", &Action::onModelExportRaw));
     actionDesc.push_back(ActionDefinitionItem(ACTION_MODEL_EXPORT_STL_ASCII, ACTION_GROUP_MODEL, "Export STL model (ascii)", "", "", ":/icons/file/pixmaps/range-export-stl.svg", &Action::onModelExportStlAscii));
