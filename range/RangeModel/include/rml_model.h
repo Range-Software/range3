@@ -818,6 +818,9 @@ class RModel : public RProblem, public RResults
         //! Return list of nodes forming ring around node made of edge elements form elements which contain given node.
         QList<uint> findNodeEdgeRing(uint nodeID) const;
 
+        //! Return minimum distance between two nodes.
+        double findMinimumNodeDistance(void) const;
+
         //! Create interpolated entity from plane and list of element IDs.
         void createCut( RCut &rCut ) const;
 
@@ -854,6 +857,11 @@ class RModel : public RProblem, public RResults
         //! Fix sliver elements.
         //! Return number of affected elements.
         uint fixSliverElements(double edgeRatio);
+
+        //! Fix element to group relations.
+        //! Move elements from inapropriate to apropriate groups.
+        //! Return number of affected elements.
+        uint fixElementGroupRelations(void);
 
         //! Find list of intersected elements.
         QList<uint> findIntersectedElements(void) const;

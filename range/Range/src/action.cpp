@@ -223,7 +223,7 @@ void Action::onModelOpen(void)
 {
     QString binaryExtension = RModel::getDefaultFileExtension(true);
     QString asciiExtension = RModel::getDefaultFileExtension(false);
-    QString dialogDesc = "All supported files (*." + binaryExtension + " *." + asciiExtension + " *.tmsh *.bmsh *.raw *.stl);;";
+    QString dialogDesc = "All supported files (*." + binaryExtension + " *." + asciiExtension + " *.tmsh *.bmsh *.raw *.stl);;"
                        + "Range model files (*." + binaryExtension + " *." + asciiExtension + ");;" +
                        + "Old Range model mesh files (*.tmsh *.bmsh);;"
                        + "RAW triangle files (*.raw);;"

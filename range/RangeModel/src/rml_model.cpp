@@ -1242,6 +1242,8 @@ uint RModel::mergeNearNodes(double tolerance)
             nodeID++;
         }
     }
+
+    this->fixElementGroupRelations();
     return nMerged;
 } /* RModel::mergeNearNodes */
 
@@ -4079,7 +4081,7 @@ RModelProblemTypeMask RModel::checkMesh(bool printOutput) const
                 problemType |= R_MODEL_PROBLEM_INVALID_ELEMENT_TYPE;
                 if (printOutput)
                 {
-                    RLogger::warning("Point element #%u has an invalid type %d (%s)\n",elementID,int(elementType),RElement::getName(elementType).toUtf8().constData());
+                    RLogger::warning("Point element #%u (%u nodes) has an invalid type %d (%s)\n",elementID,this->getElement(elementID).size(),int(elementType),RElement::getName(elementType).toUtf8().constData());
                 }
             }
         }
@@ -4098,7 +4100,7 @@ RModelProblemTypeMask RModel::checkMesh(bool printOutput) const
                 problemType |= R_MODEL_PROBLEM_INVALID_ELEMENT_TYPE;
                 if (printOutput)
                 {
-                    RLogger::warning("Line element #%u has an invalid type %d (%s)\n",elementID,int(elementType),RElement::getName(elementType).toUtf8().constData());
+                    RLogger::warning("Line element #%u (%u nodes) has an invalid type %d (%s)\n",elementID,this->getElement(elementID).size(),int(elementType),RElement::getName(elementType).toUtf8().constData());
                 }
             }
         }
@@ -4117,7 +4119,7 @@ RModelProblemTypeMask RModel::checkMesh(bool printOutput) const
                 problemType |= R_MODEL_PROBLEM_INVALID_ELEMENT_TYPE;
                 if (printOutput)
                 {
-                    RLogger::warning("Surface element #%u has an invalid type %d (%s)\n",elementID,int(elementType),RElement::getName(elementType).toUtf8().constData());
+                    RLogger::warning("Surface element #%u (%u nodes) has an invalid type %d (%s)\n",elementID,this->getElement(elementID).size(),int(elementType),RElement::getName(elementType).toUtf8().constData());
                 }
             }
         }
@@ -4136,7 +4138,7 @@ RModelProblemTypeMask RModel::checkMesh(bool printOutput) const
                 problemType |= R_MODEL_PROBLEM_INVALID_ELEMENT_TYPE;
                 if (printOutput)
                 {
-                    RLogger::warning("Volume element #%u has an invalid type %d (%s)\n",elementID,int(elementType),RElement::getName(elementType).toUtf8().constData());
+                    RLogger::warning("Volume element #%u (%u nodes) has an invalid type %d (%s)\n",elementID,this->getElement(elementID).size(),int(elementType),RElement::getName(elementType).toUtf8().constData());
                 }
             }
         }
@@ -4474,6 +4476,32 @@ QList<uint> RModel::findNodeEdgeRing(uint nodeID) const
 
     return nodeIDs;
 } /* RModel::findNodeEdgeRing */
+
+
+double RModel::findMinimumNodeDistance(void) const
+{
+    double minDistance = 0.0;
+    bool first = true;
+
+    for (uint i=0;i<this->getNNodes()-1;i++)
+    {
+        for (uint j=i+1;j<this->getNNodes();j++)
+        {
+            double distance = this->getNode(i).getDistance(this->getNode(j));
+            if (first)
+            {
+                minDistance = distance;
+                first = false;
+            }
+            else
+            {
+                minDistance = std::min(minDistance,distance);
+            }
+        }
+    }
+
+    return minDistance;
+} /* RModel::findShortestEdgeLength */
 
 
 void RModel::createCut(RCut &rCut) const
@@ -4894,6 +4922,18 @@ uint RModel::fixSliverElements(double edgeRatio)
         }
     }
 
+    this->fixElementGroupRelations();
+
+    RLogger::unindent();
+    return nAffected;
+} /* RModel::fixSliverElements */
+
+
+uint RModel::fixElementGroupRelations(void)
+{
+    RLogger::info("Moving elements to apropriate groups.\n");
+    RLogger::indent();
+
     RPoint pointGroup;
     RLine lineGroup;
     RSurface surfaceGroup;
@@ -4901,6 +4941,8 @@ uint RModel::fixSliverElements(double edgeRatio)
     pointGroup.setName("Downgraded");
     lineGroup.setName("Downgraded");
     surfaceGroup.setName("Downgraded");
+
+    uint nAffected = 0;
 
     // Move elements to appropriate groups.
     for (uint i=0;i<this->getNLines();i++)
@@ -4914,6 +4956,7 @@ uint RModel::fixSliverElements(double edgeRatio)
                 rLine.remove(j);
                 pointGroup.add(elementID);
                 j--;
+                nAffected++;
             }
         }
     }
@@ -4928,12 +4971,14 @@ uint RModel::fixSliverElements(double edgeRatio)
                 rSurface.remove(j);
                 pointGroup.add(elementID);
                 j--;
+                nAffected++;
             }
             else if (R_ELEMENT_TYPE_IS_LINE(this->getElement(elementID).getType()))
             {
                 rSurface.remove(j);
                 lineGroup.add(elementID);
                 j--;
+                nAffected++;
             }
         }
     }
@@ -4948,18 +4993,21 @@ uint RModel::fixSliverElements(double edgeRatio)
                 rVolume.remove(j);
                 pointGroup.add(elementID);
                 j--;
+                nAffected++;
             }
             else if (R_ELEMENT_TYPE_IS_LINE(this->getElement(elementID).getType()))
             {
                 rVolume.remove(j);
                 lineGroup.add(elementID);
                 j--;
+                nAffected++;
             }
             else if (R_ELEMENT_TYPE_IS_SURFACE(this->getElement(elementID).getType()))
             {
                 rVolume.remove(j);
                 surfaceGroup.add(elementID);
                 j--;
+                nAffected++;
             }
         }
     }
@@ -5009,11 +5057,11 @@ uint RModel::fixSliverElements(double edgeRatio)
             i--;
         }
     }
-
+    RLogger::info("Number of affected elements: %u\n",nAffected);
     RLogger::unindent();
-    return nAffected;
-} /* RModel::fixSliverElements */
 
+    return nAffected;
+}
 
 QList<uint> RModel::findIntersectedElements(void) const
 {

@@ -41,7 +41,7 @@ MergeNearNodesDialog::MergeNearNodesDialog(uint modelID, QWidget *parent)
     toleranceLayout->addWidget(toleranceLabel);
 
     this->toleranceEdit = new ValueLineEdit(0.0,1e10);
-    this->toleranceEdit->setValue(RConstants::findMachineDoubleEpsilon());
+    this->toleranceEdit->setValue(Session::getInstance().getModel(this->modelID).findMinimumNodeDistance());
     toleranceLayout->addWidget(this->toleranceEdit);
 
     QHBoxLayout *buttonsLayout = new QHBoxLayout;

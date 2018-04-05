@@ -97,6 +97,21 @@ void PickDetailsTree::populate(void)
                         childItem->setText(PICK_DETAILS_TREE_COLUMN_4,QString::number(rNode.getZ()));
                         childItem->setText(PICK_DETAILS_TREE_COLUMN_5,"[m]");
                     }
+
+                    std::vector<RElement> edgeElements = rElement.generateEdgeElements();
+
+                    for (uint j=0;j<edgeElements.size();j++)
+                    {
+                        double edgeLength = 0.0;
+
+                        if (edgeElements[j].findLength(rModel.getNodes(),edgeLength))
+                        {
+                            childItem = new QTreeWidgetItem(topItem);
+                            childItem->setText(PICK_DETAILS_TREE_COLUMN_1,tr("Edge ") + QString::number(edgeElements[j].getNodeId(0)) + "-" + QString::number(edgeElements[j].getNodeId(1)) + ":");
+                            childItem->setText(PICK_DETAILS_TREE_COLUMN_2,QString::number(edgeLength));
+                            childItem->setText(PICK_DETAILS_TREE_COLUMN_5,"[m]");
+                        }
+                    }
                 }
                 else
                 {
