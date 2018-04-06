@@ -610,13 +610,17 @@ void GLWidget::drawMessageBox(QPainter &painter, bool drawBox)
     messages.push_back(rModel.getName() + " (" + rModel.getDescription() + ")");
     messages.push_back(QString());
 
+    if (rModel.getNSlivers() > 0)
+    {
+        messages.push_back(QString("W: Number of sliver elements: ") + QString::number(rModel.getNSlivers()));
+    }
     if (rModel.getNIntersected() > 0)
     {
-        messages.push_back(QString("Number of intersected elements: ") + QString::number(rModel.getNIntersected()));
+        messages.push_back(QString("E: Number of intersected elements: ") + QString::number(rModel.getNIntersected()));
     }
     if (rModel.getNHoleElements() > 0)
     {
-        messages.push_back(QString("Number of hole elements: ") + QString::number(rModel.getNHoleElements()));
+        messages.push_back(QString("E: Number of hole elements: ") + QString::number(rModel.getNHoleElements()));
     }
 
     const PickList &rPickList = Session::getInstance().getPickList();

@@ -229,6 +229,12 @@ void ModelActionInput::setGenerateLinesFromEdges(double separationAngle)
     this->separationAngle = separationAngle;
 }
 
+void ModelActionInput::setFindSliverElements(double edgeRatio)
+{
+    this->type = MODEL_ACTION_FIND_SLIVER_ELEMENTS;
+    this->edgeRatio = edgeRatio;
+}
+
 void ModelActionInput::setFixSliverElements(double edgeRatio)
 {
     this->type = MODEL_ACTION_FIX_SLIVER_ELEMENTS;
@@ -244,6 +250,11 @@ void ModelActionInput::setBreakIntersectedElements(uint nIterations)
 {
     this->type = MODEL_ACTION_BREAK_INTERSECTED_ELEMENTS;
     this->nIterations = nIterations;
+}
+
+void ModelActionInput::setExportSliverElements(void)
+{
+    this->type = MODEL_ACTION_EXPORT_SLIVER_ELEMENTS;
 }
 
 void ModelActionInput::setExportIntersectedElements(void)

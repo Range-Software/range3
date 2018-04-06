@@ -31,9 +31,11 @@ typedef enum _ModelActionType
     MODEL_ACTION_PURGE_UNUSED_ELEMENTS,
     MODEL_ACTION_REMOVE_ELEMENTS,
     MODEL_ACTION_GENERATE_LINE_FROM_EDGES,
+    MODEL_ACTION_FIND_SLIVER_ELEMENTS,
     MODEL_ACTION_FIX_SLIVER_ELEMENTS,
     MODEL_ACTION_FIND_INTERSECTED_ELEMENTS,
     MODEL_ACTION_BREAK_INTERSECTED_ELEMENTS,
+    MODEL_ACTION_EXPORT_SLIVER_ELEMENTS,
     MODEL_ACTION_EXPORT_INTERSECTED_ELEMENTS,
     MODEL_ACTION_BOOL_DIFFERENCE,
     MODEL_ACTION_BOOL_INTERSECTION,
@@ -199,6 +201,9 @@ class ModelActionInput
         //! Set generate lines from surface edges.
         void setGenerateLinesFromEdges(double separationAngle);
 
+        //! Set find sliver elements.
+        void setFindSliverElements(double edgeRatio);
+
         //! Set fix sliver elements.
         void setFixSliverElements(double edgeRatio);
 
@@ -207,6 +212,9 @@ class ModelActionInput
 
         //! Set break intersected surface elements.
         void setBreakIntersectedElements(uint nIterations);
+
+        //! Set export sliver surface elements.
+        void setExportSliverElements(void);
 
         //! Set export intersected surface elements.
         void setExportIntersectedElements(void);

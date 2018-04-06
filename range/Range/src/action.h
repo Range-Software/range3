@@ -143,6 +143,9 @@ class Action : public QAction
         //! Create element.
         void onGeometryCreateElement(void);
 
+        //! Find sliver elements.
+        void onGeometryFindSliverElements(void);
+
         //! Fix sliver elements.
         void onGeometryFixSliverElements(void);
 
@@ -238,6 +241,9 @@ class Action : public QAction
 
         //! Transform geometry.
         void onGeometryTransform(void);
+
+        //! Export sliver elements.
+        void onGeometryDevExportSliverElements(void);
 
         //! Export intersected elements.
         void onGeometryDevExportIntersectedElements(void);

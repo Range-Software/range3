@@ -31,8 +31,11 @@ const int Model::ConsolidateActionAll = Model::ConsolidateSurfaceNeighbors |
                                         Model::ConsolidateEdgeNodes |
                                         Model::ConsolidateEdgeElements |
                                         Model::ConsolidateHoleElements |
+                                        Model::ConsolidateSliverElements |
                                         Model::ConsolidateIntersectedElements |
                                         Model::ConsolidateMeshInput;
+
+const double Model::SliverElementEdgeRatio = 30.0;
 
 void Model::_init(const Model *pModel)
 {
@@ -41,6 +44,7 @@ void Model::_init(const Model *pModel)
         this->edgeNodes = pModel->edgeNodes;
         this->edgeElements = pModel->edgeElements;
         this->holeElements = pModel->holeElements;
+        this->sliverElements = pModel->sliverElements;
         this->intersectedElements = pModel->intersectedElements;
         this->surfaceNeigs = pModel->surfaceNeigs;
         this->volumeNeigs = pModel->volumeNeigs;
@@ -65,13 +69,13 @@ Model::Model(const Model &model) : RModel(model)
 Model::Model (const RModelMsh &modelMsh) : RModel(modelMsh)
 {
     this->_init();
-    this->consolidate(Model::ConsolidateEdgeElements | Model::ConsolidateHoleElements);
+    this->consolidate(Model::ConsolidateEdgeElements | Model::ConsolidateHoleElements | Model::ConsolidateSliverElements | Model::ConsolidateIntersectedElements);
 }
 
 Model::Model (const RModelStl &modelStl) : RModel(modelStl)
 {
     this->_init();
-    this->consolidate(Model::ConsolidateEdgeElements | Model::ConsolidateHoleElements);
+    this->consolidate(Model::ConsolidateEdgeElements | Model::ConsolidateHoleElements | Model::ConsolidateSliverElements | Model::ConsolidateIntersectedElements);
 }
 
 Model::Model (const RModelRaw &modelRaw,
@@ -81,7 +85,7 @@ Model::Model (const RModelRaw &modelRaw,
     this->_init();
     if (consolidate)
     {
-        this->consolidate(Model::ConsolidateEdgeElements | Model::ConsolidateHoleElements);
+        this->consolidate(Model::ConsolidateEdgeElements | Model::ConsolidateHoleElements | Model::ConsolidateSliverElements | Model::ConsolidateIntersectedElements);
     }
 }
 
@@ -266,7 +270,7 @@ void Model::insertModel(const Model &model, bool mergeNearNodes, double toleranc
             rIso.setName(this->generateNextEntityName(R_ENTITY_GROUP_ISO));
         }
     }
-    this->consolidate(Model::ConsolidateEdgeElements | Model::ConsolidateHoleElements);
+    this->consolidate(Model::ConsolidateEdgeElements | Model::ConsolidateHoleElements | Model::ConsolidateSliverElements | Model::ConsolidateIntersectedElements);
 }
 
 const QString &Model::getFileName(void) const
@@ -610,7 +614,7 @@ void Model::closeSurfaceHole(QList<uint> edgeIDs)
         }
     }
 
-    this->consolidate(Model::ConsolidateEdgeElements | Model::ConsolidateHoleElements);
+    this->consolidate(Model::ConsolidateEdgeElements | Model::ConsolidateHoleElements | Model::ConsolidateSliverElements | Model::ConsolidateIntersectedElements);
 
     RLogger::unindent();
 }
@@ -785,7 +789,7 @@ uint Model::purgeUnusedElements(void)
 {
     uint nPurged = this->RModel::purgeUnusedElements();
 
-    this->consolidate(Model::ConsolidateEdgeElements | Model::ConsolidateHoleElements);
+    this->consolidate(Model::ConsolidateEdgeElements | Model::ConsolidateHoleElements | Model::ConsolidateSliverElements | Model::ConsolidateIntersectedElements);
 
     return nPurged;
 }
@@ -807,6 +811,20 @@ uint Model::fixSliverElements(double edgeRatio)
     }
 
     return nAffected;
+}
+
+void Model::updateSliverElements(double edgeRatio)
+{
+    this->sliverElements = this->findSliverElements(edgeRatio);
+    uint ni = this->sliverElements.size();
+    if (ni == 0)
+    {
+        RLogger::info("No sliver elements were found.\n");
+    }
+    else
+    {
+        RLogger::warning("Number of sliver elements found = %d.\n", ni);
+    }
 }
 
 void Model::updateIntersectedElements(void)
@@ -841,7 +859,62 @@ uint Model::breakIntersectedElements(uint nIterations)
     return ni;
 }
 
-bool Model::exportIntersectedElements(void)
+bool Model::exportSliverElements(void) const
+{
+    if (this->sliverElements.size() == 0)
+    {
+        RLogger::warning("No intersecting elements were found.\n");
+        return false;
+    }
+
+    std::vector<uint> nodeBook;
+    nodeBook.resize(this->getNNodes(),RConstants::eod);
+
+    for (int i=0;i<this->sliverElements.size();i++)
+    {
+        uint elementID = this->sliverElements[i];
+        const RElement &rElement = this->getElement(elementID);
+        for (uint j=0;j<rElement.size();j++)
+        {
+            nodeBook[rElement.getNodeId(j)] = 0;
+        }
+    }
+
+    Model model;
+
+    uint nn = 0;
+    for (uint i=0;i<nodeBook.size();i++)
+    {
+        if (nodeBook[i] == 0)
+        {
+            nodeBook[i] = nn++;
+            model.addNode(this->getNode(i));
+        }
+    }
+
+    for (int i=0;i<this->sliverElements.size();i++)
+    {
+        uint elementID = this->sliverElements[i];
+        RElement element = this->getElement(elementID);
+        for (uint j=0;j<element.size();j++)
+        {
+            element.setNodeId(j,nodeBook[element.getNodeId(j)]);
+        }
+        model.addElement(element,true,0);
+    }
+
+    model.setName(this->getName() + " - sliver");
+    model.setDescription("Sliver elements");
+    model.consolidate(Model::ConsolidateActionAll);
+
+    Session::getInstance().addModel(model);
+
+    RLogger::warning("Sliver elements were found (%u).\n",model.getNElements());
+
+    return true;
+}
+
+bool Model::exportIntersectedElements(void) const
 {
     if (this->intersectedElements.size() == 0)
     {
@@ -887,6 +960,7 @@ bool Model::exportIntersectedElements(void)
 
     model.setName(this->getName() + " - intersected");
     model.setDescription("Reuslt of element intersections");
+    model.consolidate(Model::ConsolidateActionAll);
 
     Session::getInstance().addModel(model);
 
@@ -920,6 +994,11 @@ bool Model::boolUnion(uint nIterations, QList<uint> surfaceEntityIDs)
     this->consolidate(Model::ConsolidateActionAll);
 
     return success;
+}
+
+bool Model::isSliver(uint elementID) const
+{
+    return (this->sliverElements.indexOf(elementID) >= 0);
 }
 
 bool Model::isIntersected(uint elementID) const
@@ -1381,6 +1460,12 @@ QSet<uint> Model::getNodeIDs(const QSet<uint> &elementIDs) const
 
     return nodeIDs;
 } /* Model::getNodeIDs */
+
+
+uint Model::getNSlivers(void) const
+{
+    return this->sliverElements.size();
+} /* Model::getNSlivers */
 
 
 uint Model::getNIntersected(void) const
@@ -1874,6 +1959,21 @@ void Model::glDraw(GLWidget *glWidget) const
                 GLLine line(glWidget,node1.toVector(),node2.toVector(),2.0);
 
                 line.paint();
+            }
+
+            //Draw sliver elements.
+            REntityGroupData sliverGroupData;
+            sliverGroupData.setDrawWire(true);
+            for (int i=0;i<this->sliverElements.size();i++)
+            {
+                GLElement glElement(glWidget,
+                                    this,
+                                    this->sliverElements[i],
+                                    sliverGroupData,
+                                    QColor(255,100,0),
+                                    GL_ELEMENT_DRAW_NORMAL);
+                glElement.setApplyEnvironmentSettings(false);
+                glElement.paint();
             }
 
             //Draw intersected elements.
@@ -2595,7 +2695,7 @@ void Model::read(const QString &fileName)
     {
         this->unloadViewFactorMatrix();
     }
-    this->consolidate(Model::ConsolidateEdgeElements | Model::ConsolidateHoleElements);
+    this->consolidate(Model::ConsolidateEdgeElements | Model::ConsolidateHoleElements | Model::ConsolidateSliverElements | Model::ConsolidateIntersectedElements);
     // Fix missing color scales in variable data.
     for (uint i=0;i<this->getNVariables();i++)
     {
@@ -2671,6 +2771,7 @@ void Model::consolidate(int consolidateActionMask)
             consolidateActionMask |= Model::ConsolidateMeshInput;
             consolidateActionMask |= Model::ConsolidateEdgeElements;
             consolidateActionMask |= Model::ConsolidateHoleElements;
+            consolidateActionMask |= Model::ConsolidateSliverElements;
         }
         if (consolidateActionMask & Model::ConsolidateVolumeNeighbors || this->getNElements() != this->volumeNeigs.size())
         {
@@ -2689,6 +2790,10 @@ void Model::consolidate(int consolidateActionMask)
         if (consolidateActionMask & Model::ConsolidateHoleElements)
         {
             this->holeElements = this->findHoleElements();
+        }
+        if (consolidateActionMask & Model::ConsolidateSliverElements)
+        {
+            this->updateSliverElements(Model::SliverElementEdgeRatio);
         }
         if (consolidateActionMask & Model::ConsolidateIntersectedElements)
         {

@@ -93,6 +93,10 @@ void ModelAction::executeAction(const ModelActionInput &modelActionInput)
                 Session::getInstance().storeCurentModelVersion(modelActionInput.getModelID(),tr("Generate line entities from model edges"));
                 this->generateLineFromEdges(modelActionInput);
                 break;
+            case MODEL_ACTION_FIND_SLIVER_ELEMENTS:
+                Session::getInstance().storeCurentModelVersion(modelActionInput.getModelID(),tr("Find sliver elements"));
+                this->findSliverElements(modelActionInput);
+                break;
             case MODEL_ACTION_FIX_SLIVER_ELEMENTS:
                 Session::getInstance().storeCurentModelVersion(modelActionInput.getModelID(),tr("Fix sliver elements"));
                 this->fixSliverElements(modelActionInput);
@@ -104,6 +108,10 @@ void ModelAction::executeAction(const ModelActionInput &modelActionInput)
             case MODEL_ACTION_BREAK_INTERSECTED_ELEMENTS:
                 Session::getInstance().storeCurentModelVersion(modelActionInput.getModelID(),tr("Break intersected elements"));
                 this->breakIntersectedElements(modelActionInput);
+                break;
+            case MODEL_ACTION_EXPORT_SLIVER_ELEMENTS:
+                Session::getInstance().storeCurentModelVersion(modelActionInput.getModelID(),tr("Export intersected elements"));
+                this->exportSliverElements(modelActionInput);
                 break;
             case MODEL_ACTION_EXPORT_INTERSECTED_ELEMENTS:
                 Session::getInstance().storeCurentModelVersion(modelActionInput.getModelID(),tr("Export intersected elements"));
@@ -261,7 +269,7 @@ void ModelAction::removeEntities(const ModelActionInput &modelActionInput)
     rModel.RModel::purgeUnusedElements();
     rModel.RModel::purgeUnusedNodes();
 
-    int consolidateActionMask = Model::ConsolidateEdgeNodes | Model::ConsolidateEdgeElements | Model::ConsolidateHoleElements | Model::ConsolidateMeshInput;
+    int consolidateActionMask = Model::ConsolidateEdgeNodes | Model::ConsolidateEdgeElements | Model::ConsolidateHoleElements | Model::ConsolidateMeshInput | Model::ConsolidateSliverElements;
 
     if (nSurfaceEntities > 0)
     {
@@ -317,7 +325,7 @@ void ModelAction::createElement(const ModelActionInput &modelActionInput)
 
     rModel.addElement(e);
 
-    rModel.consolidate(Model::ConsolidateEdgeElements | Model::ConsolidateHoleElements);
+    rModel.consolidate(Model::ConsolidateEdgeElements | Model::ConsolidateHoleElements | Model::ConsolidateSliverElements);
     RLogger::unindent();
 
     Session::getInstance().setModelChanged(modelActionInput.getModelID());
@@ -389,7 +397,7 @@ void ModelAction::removeElements(const ModelActionInput &modelActionInput)
         }
     }
 
-    int consolidateActionMask = Model::ConsolidateEdgeNodes | Model::ConsolidateEdgeElements | Model::ConsolidateHoleElements | Model::ConsolidateMeshInput;
+    int consolidateActionMask = Model::ConsolidateEdgeNodes | Model::ConsolidateEdgeElements | Model::ConsolidateHoleElements | Model::ConsolidateMeshInput | Model::ConsolidateSliverElements;
 
     if (nSurfaceElements > 0)
     {
@@ -426,6 +434,20 @@ void ModelAction::generateLineFromEdges(const ModelActionInput &modelActionInput
     Session::getInstance().setModelChanged(modelActionInput.getModelID());
 }
 
+void ModelAction::findSliverElements(const ModelActionInput &modelActionInput)
+{
+    Model &rModel = Session::getInstance().getModel(modelActionInput.getModelID());
+
+    RLogger::info("Finding sliver elements\n");
+    RLogger::indent();
+
+    rModel.updateSliverElements(modelActionInput.getEdgeRatio());
+
+    RLogger::unindent();
+
+    Session::getInstance().setModelChanged(modelActionInput.getModelID());
+}
+
 void ModelAction::fixSliverElements(const ModelActionInput &modelActionInput)
 {
     Model &rModel = Session::getInstance().getModel(modelActionInput.getModelID());
@@ -438,6 +460,18 @@ void ModelAction::fixSliverElements(const ModelActionInput &modelActionInput)
     RLogger::unindent();
 
     Session::getInstance().setModelChanged(modelActionInput.getModelID());
+}
+
+void ModelAction::exportSliverElements(const ModelActionInput &modelActionInput)
+{
+    Model &rModel = Session::getInstance().getModel(modelActionInput.getModelID());
+
+    RLogger::info("Exporting sliver elements\n");
+    RLogger::indent();
+
+    rModel.exportSliverElements();
+
+    RLogger::unindent();
 }
 
 void ModelAction::findIntersectedElements(const ModelActionInput &modelActionInput)
@@ -721,8 +755,7 @@ void ModelAction::syncSurfaceNormals(const ModelActionInput &modelActionInput)
     RLogger::indent();
 
     rModel.syncSurfaceNormals();
-    rModel.consolidate(Model::ConsolidateHoleElements);
-    rModel.consolidate(Model::ConsolidateEdgeElements);
+    rModel.consolidate(Model::ConsolidateHoleElements | Model::ConsolidateEdgeElements | Model::ConsolidateSliverElements);
 
     RLogger::unindent();
 

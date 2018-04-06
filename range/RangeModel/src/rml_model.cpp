@@ -1667,154 +1667,138 @@ void RModel::removeElement (uint                position,
         // Remove element from element groups
         RElementType elementType = this->getElement(position).getType();
         uint ePosition;
-
-        if (R_ELEMENT_TYPE_IS_POINT(elementType))
+        for (std::vector<RPoint>::reverse_iterator rIter = this->points.rbegin();rIter != this->points.rend();++rIter)
         {
-            std::vector<RPoint>::reverse_iterator rIter;
-            for (rIter = this->points.rbegin();
-                 rIter != this->points.rend();
-                 ++rIter)
+            if (R_ELEMENT_TYPE_IS_POINT(elementType))
             {
-                if (rIter->findPosition (position, &ePosition))
+                if (rIter->findPosition(position,&ePosition))
                 {
                     rIter->remove(ePosition);
                 }
-                // Check if element group is empty
-                if (rIter->empty())
+            }
+            // Check if element group is empty
+            if (rIter->empty())
+            {
+                // Remove empty element group
+                if (removedPoints)
                 {
-                    // Remove empty element group
-                    if (removedPoints)
-                    {
-                        uint gPosition = std::distance (this->points.begin(),
-                                                   (rIter+1).base());
-                        removedPoints->push_back (gPosition);
-                    }
-                    this->points.erase ((rIter+1).base());
+                    uint gPosition = std::distance(this->points.begin(),(rIter+1).base());
+                    removedPoints->push_back(gPosition);
                 }
-                else
+                this->points.erase ((rIter+1).base());
+            }
+            else
+            {
+                // Decrease all element IDs by one which element ID
+                // is greater then position of remved element.
+                for (uint i=0;i<rIter->size();i++)
                 {
-                    // Decrease all element IDs by one which element ID
-                    // is greater then position of remved element.
-                    for (uint i=0;i<rIter->size();i++)
+                    uint elementID = rIter->get(i);
+                    if (elementID > position)
                     {
-                        uint elementID = rIter->get(i);
-                        if (elementID > position)
-                        {
-                            rIter->set(i,elementID-1);
-                        }
+                        rIter->set(i,elementID-1);
                     }
                 }
             }
         }
-        else if (R_ELEMENT_TYPE_IS_LINE(elementType))
+        for (std::vector<RLine>::reverse_iterator rIter = this->lines.rbegin();rIter != this->lines.rend();++rIter)
         {
-            std::vector<RLine>::reverse_iterator rIter;
-            for (rIter = this->lines.rbegin();
-                 rIter != this->lines.rend();
-                 ++rIter)
+            if (R_ELEMENT_TYPE_IS_LINE(elementType))
             {
-                if (rIter->findPosition (position, &ePosition))
+                if (rIter->findPosition(position,&ePosition))
                 {
                     rIter->remove(ePosition);
                 }
-                // Check if element group is empty
-                if (rIter->empty())
+            }
+            // Check if element group is empty
+            if (rIter->empty())
+            {
+                // Remove empty element group
+                if (removedLines)
                 {
-                    // Remove empty element group
-                    if (removedLines)
-                    {
-                        uint gPosition = std::distance (this->lines.begin(),
-                                                   (rIter+1).base());
-                        removedLines->push_back (gPosition);
-                    }
-                    this->lines.erase ((rIter+1).base());
+                    uint gPosition = std::distance(this->lines.begin(),(rIter+1).base());
+                    removedLines->push_back(gPosition);
                 }
-                else
+                this->lines.erase((rIter+1).base());
+            }
+            else
+            {
+                // Decrease all element IDs by one which element ID
+                // is greater then position of removed element.
+                for (uint i=0;i<rIter->size();i++)
                 {
-                    // Decrease all element IDs by one which element ID
-                    // is greater then position of remved element.
-                    for (uint i=0;i<rIter->size();i++)
+                    uint elementID = rIter->get(i);
+                    if (elementID > position)
                     {
-                        uint elementID = rIter->get(i);
-                        if (elementID > position)
-                        {
-                            rIter->set(i,elementID-1);
-                        }
+                        rIter->set(i,elementID-1);
                     }
                 }
             }
         }
-        else if (R_ELEMENT_TYPE_IS_SURFACE(elementType))
+        for (std::vector<RSurface>::reverse_iterator rIter = this->surfaces.rbegin();rIter != this->surfaces.rend();++rIter)
         {
-            std::vector<RSurface>::reverse_iterator rIter;
-            for (rIter = this->surfaces.rbegin();
-                 rIter != this->surfaces.rend();
-                 ++rIter)
+            if (R_ELEMENT_TYPE_IS_SURFACE(elementType))
             {
                 if (rIter->findPosition (position, &ePosition))
                 {
                     rIter->remove(ePosition);
                 }
-                // Check if element group is empty
-                if (rIter->empty())
+            }
+            // Check if element group is empty
+            if (rIter->empty())
+            {
+                // Remove empty element group
+                if (removedSurfaces)
                 {
-                    // Remove empty element group
-                    if (removedSurfaces)
-                    {
-                        uint gPosition = std::distance (this->surfaces.begin(),(rIter+1).base());
-                        removedSurfaces->push_back (gPosition);
-                    }
-                    this->surfaces.erase ((rIter+1).base());
+                    uint gPosition = std::distance(this->surfaces.begin(),(rIter+1).base());
+                    removedSurfaces->push_back(gPosition);
                 }
-                else
+                this->surfaces.erase((rIter+1).base());
+            }
+            else
+            {
+                // Decrease all element IDs by one which element ID
+                // is greater then position of remved element.
+                for (uint i=0;i<rIter->size();i++)
                 {
-                    // Decrease all element IDs by one which element ID
-                    // is greater then position of remved element.
-                    for (uint i=0;i<rIter->size();i++)
+                    uint elementID = rIter->get(i);
+                    if (elementID > position)
                     {
-                        uint elementID = rIter->get(i);
-                        if (elementID > position)
-                        {
-                            rIter->set(i,elementID-1);
-                        }
+                        rIter->set(i,elementID-1);
                     }
                 }
             }
         }
-        else if (R_ELEMENT_TYPE_IS_VOLUME(elementType))
+        for (std::vector<RVolume>::reverse_iterator rIter = this->volumes.rbegin();rIter != this->volumes.rend();++rIter)
         {
-            std::vector<RVolume>::reverse_iterator rIter;
-            for (rIter = this->volumes.rbegin();
-                 rIter != this->volumes.rend();
-                 ++rIter)
+            if (R_ELEMENT_TYPE_IS_VOLUME(elementType))
             {
-                if (rIter->findPosition (position, &ePosition))
+                if (rIter->findPosition(position,&ePosition))
                 {
                     rIter->remove(ePosition);
                 }
-                // Check if element group is empty
-                if (rIter->empty())
+            }
+            // Check if element group is empty
+            if (rIter->empty())
+            {
+                // Remove empty element group
+                if (removedVolumes)
                 {
-                    // Remove empty element group
-                    if (removedVolumes)
-                    {
-                        uint gPosition = std::distance (this->volumes.begin(),
-                                                   (rIter+1).base());
-                        removedVolumes->push_back (gPosition);
-                    }
-                    this->volumes.erase ((rIter+1).base());
+                    uint gPosition = std::distance(this->volumes.begin(),(rIter+1).base());
+                    removedVolumes->push_back(gPosition);
                 }
-                else
+                this->volumes.erase((rIter+1).base());
+            }
+            else
+            {
+                // Decrease all element IDs by one which element ID
+                // is greater then position of remved element.
+                for (uint i=0;i<rIter->size();i++)
                 {
-                    // Decrease all element IDs by one which element ID
-                    // is greater then position of remved element.
-                    for (uint i=0;i<rIter->size();i++)
+                    uint elementID = rIter->get(i);
+                    if (elementID > position)
                     {
-                        uint elementID = rIter->get(i);
-                        if (elementID > position)
-                        {
-                            rIter->set(i,elementID-1);
-                        }
+                        rIter->set(i,elementID-1);
                     }
                 }
             }
@@ -5062,6 +5046,67 @@ uint RModel::fixElementGroupRelations(void)
 
     return nAffected;
 }
+
+QList<uint> RModel::findSliverElements(double edgeRatio) const
+{
+    RLogger::info("Finding sliver elements\n");
+    RLogger::indent();
+
+    QList<uint> elementIDs;
+    elementIDs.reserve(this->getNElements());
+
+    uint nSlivers = 0;
+
+    for (uint i=0;i<this->getNElements();i++)
+    {
+        const RElement &rElement = this->getElement(i);
+        double lMax = 0.0;
+        double lMin = 0.0;
+        bool firstTime = true;
+        uint n1 = RConstants::eod;
+        uint n2 = RConstants::eod;
+        for (uint j=0;j<rElement.size();j++)
+        {
+            for (uint k=j+1;k<rElement.size();k++)
+            {
+                double distance = this->nodes[rElement.getNodeId(j)].getDistance(this->nodes[rElement.getNodeId(k)]);
+                if (firstTime)
+                {
+                    lMax = lMin = distance;
+                    n1 = rElement.getNodeId(j);
+                    n2 = rElement.getNodeId(k);
+                    firstTime = false;
+                }
+                else
+                {
+                    lMax = std::max(lMax,distance);
+                    if (lMin > distance)
+                    {
+                        lMin = distance;
+                        n1 = rElement.getNodeId(j);
+                        n2 = rElement.getNodeId(k);
+                    }
+                }
+            }
+        }
+
+        if (n1 == RConstants::eod || n2 == RConstants::eod || n1 == n2)
+        {
+            continue;
+        }
+
+        if (lMin <= RConstants::eps || (lMax/lMin) >= edgeRatio)
+        {
+            elementIDs.append(i);
+            nSlivers++;
+        }
+    }
+    elementIDs.reserve(nSlivers);
+
+    RLogger::unindent();
+
+    return elementIDs;
+} /* RModel::findSliverElements */
 
 QList<uint> RModel::findIntersectedElements(void) const
 {

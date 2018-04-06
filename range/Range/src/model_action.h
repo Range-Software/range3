@@ -79,8 +79,14 @@ class ModelAction : public Job
         //! Generate line from surface edges.
         void generateLineFromEdges(const ModelActionInput &modelActionInput);
 
+        //! Find sliver elements.
+        void findSliverElements(const ModelActionInput &modelActionInput);
+
         //! Fix sliver elements.
         void fixSliverElements(const ModelActionInput &modelActionInput);
+
+        //! Export sliver elements.
+        void exportSliverElements(const ModelActionInput &modelActionInput);
 
         //! Find intersected elements.
         void findIntersectedElements(const ModelActionInput &modelActionInput);

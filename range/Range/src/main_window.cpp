@@ -353,6 +353,7 @@ void MainWindow::createMenus(void)
     menuGeometry->addAction(this->actionList->getAction(ACTION_GEOMETRY_ENTITY_MERGE));
     menuGeometry->addAction(this->actionList->getAction(ACTION_GEOMETRY_ENTITY_REMOVE));
     menuGeometry->addAction(this->actionList->getAction(ACTION_SEPARATOR));
+    menuGeometry->addAction(this->actionList->getAction(ACTION_GEOMETRY_FIND_SLIVER_ELEMENTS));
     menuGeometry->addAction(this->actionList->getAction(ACTION_GEOMETRY_FIX_SLIVER_ELEMENTS));
     menuGeometry->addAction(this->actionList->getAction(ACTION_GEOMETRY_MERGE_NEAR_NODES));
     menuGeometry->addAction(this->actionList->getAction(ACTION_GEOMETRY_MOVE_NODE));
@@ -365,7 +366,8 @@ void MainWindow::createMenus(void)
     menuGeometry->addAction(this->actionList->getAction(ACTION_GEOMETRY_TRANSFORM));
     menuGeometry->addAction(this->actionList->getAction(ACTION_SEPARATOR));
     QMenu *menuGeometryDevelopement = new QMenu(menuGeometry);
-    menuGeometryDevelopement->setTitle(QApplication::translate("MainWindow", "Developement menu"));
+    menuGeometryDevelopement->setTitle(QApplication::translate("MainWindow", "Special tools"));
+    menuGeometryDevelopement->addAction(this->actionList->getAction(ACTION_GEOMETRY_DEV_EXPORT_SLIVER_ELEMENTS));
     menuGeometryDevelopement->addAction(this->actionList->getAction(ACTION_GEOMETRY_DEV_EXPORT_INTERSECTED_ELEMENTS));
     menuGeometryDevelopement->addAction(this->actionList->getAction(ACTION_GEOMETRY_DEV_PURGE_UNUSED_NODES));
     menuGeometryDevelopement->addAction(this->actionList->getAction(ACTION_GEOMETRY_DEV_PURGE_UNUSED_ELEMENTS));

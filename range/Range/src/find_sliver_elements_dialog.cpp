@@ -1,11 +1,11 @@
 /*********************************************************************
  *  AUTHOR: Tomas Soltys                                             *
- *  FILE:   fix_sliver_elements_dialog.cpp                           *
+ *  FILE:   find_sliver_elements_dialog.cpp                          *
  *  GROUP:  Range                                                    *
  *  TYPE:   source file (*.cpp)                                      *
- *  DATE:   1-st December 2016                                       *
+ *  DATE:   6-th April 2018                                          *
  *                                                                   *
- *  DESCRIPTION: Fix sliver elements dialog class definition         *
+ *  DESCRIPTION: Find sliver elements dialog class definition        *
  *********************************************************************/
 
 #include <QIcon>
@@ -14,24 +14,24 @@
 #include <QLabel>
 #include <QPushButton>
 
-#include "fix_sliver_elements_dialog.h"
+#include "find_sliver_elements_dialog.h"
 #include "session.h"
 #include "model_action.h"
 #include "job_manager.h"
 
-FixSliverElementsDialog::FixSliverElementsDialog(uint modelID, QWidget *parent)
+FindSliverElementsDialog::FindSliverElementsDialog(uint modelID, QWidget *parent)
     : QDialog(parent)
     , modelID(modelID)
 {
     QIcon cancelIcon(":/icons/file/pixmaps/range-cancel.svg");
     QIcon okIcon(":/icons/file/pixmaps/range-ok.svg");
 
-    this->setWindowTitle(tr("Fix sliver elements"));
+    this->setWindowTitle(tr("Find sliver elements"));
 
     QVBoxLayout *mainLayout = new QVBoxLayout;
     this->setLayout (mainLayout);
 
-    QLabel *label = new QLabel(tr("Fix sliver elements for model") + " <b>" + Session::getInstance().getModel(this->modelID).getName() + "</b>");
+    QLabel *label = new QLabel(tr("Find sliver elements for model") + " <b>" + Session::getInstance().getModel(this->modelID).getName() + "</b>");
     mainLayout->addWidget(label);
 
     QHBoxLayout *toleranceLayout = new QHBoxLayout;
@@ -55,18 +55,18 @@ FixSliverElementsDialog::FixSliverElementsDialog(uint modelID, QWidget *parent)
     okButton->setDefault(true);
     buttonsLayout->addWidget(okButton);
 
-    QObject::connect(cancelButton,&QPushButton::clicked,this,&FixSliverElementsDialog::reject);
-    QObject::connect(okButton,&QPushButton::clicked,this,&FixSliverElementsDialog::accept);
+    QObject::connect(cancelButton,&QPushButton::clicked,this,&FindSliverElementsDialog::reject);
+    QObject::connect(okButton,&QPushButton::clicked,this,&FindSliverElementsDialog::accept);
 }
 
-int FixSliverElementsDialog::exec(void)
+int FindSliverElementsDialog::exec(void)
 {
     int retVal = QDialog::exec();
 
     if (retVal == QDialog::Accepted)
     {
         ModelActionInput modelActionInput(this->modelID);
-        modelActionInput.setFixSliverElements(this->edgeRatioEdit->getValue());
+        modelActionInput.setFindSliverElements(this->edgeRatioEdit->getValue());
 
         ModelAction *modelAction = new ModelAction;
         modelAction->setAutoDelete(true);

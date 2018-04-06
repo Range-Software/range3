@@ -138,6 +138,7 @@ void ActionDefinition::generateActionDescList(QList<ActionDefinitionItem> &actio
     actionDesc.push_back(ActionDefinitionItem(ACTION_GEOMETRY_DRAW_CYLINDER, ACTION_GROUP_GEOMETRY, "Draw cylinder", "", "", "", &Action::onGeometryDrawCylinder));
     actionDesc.push_back(ActionDefinitionItem(ACTION_GEOMETRY_DRAW_SPHERE, ACTION_GROUP_GEOMETRY, "Draw sphere", "", "", "", &Action::onGeometryDrawSphere));
     actionDesc.push_back(ActionDefinitionItem(ACTION_GEOMETRY_CREATE_ELEMENT, ACTION_GROUP_GEOMETRY, "Create element", "", "Ctrl+Alt+E", "", &Action::onGeometryCreateElement));
+    actionDesc.push_back(ActionDefinitionItem(ACTION_GEOMETRY_FIND_SLIVER_ELEMENTS, ACTION_GROUP_GEOMETRY, "Find sliver elements", "", "", "", &Action::onGeometryFindSliverElements));
     actionDesc.push_back(ActionDefinitionItem(ACTION_GEOMETRY_FIX_SLIVER_ELEMENTS, ACTION_GROUP_GEOMETRY, "Fix sliver elements", "", "", "", &Action::onGeometryFixSliverElements));
     actionDesc.push_back(ActionDefinitionItem(ACTION_GEOMETRY_FIND_INTERSECTED_ELEMENTS, ACTION_GROUP_GEOMETRY, "Find intersected elements", "", "Ctrl+I", "", &Action::onGeometryFindIntersectedElements));
     actionDesc.push_back(ActionDefinitionItem(ACTION_GEOMETRY_BREAK_INTERSECTED_ELEMENTS, ACTION_GROUP_GEOMETRY, "Break intersected elements", "", "Ctrl+J", "", &Action::onGeometryBreakIntersectedElements));
@@ -170,6 +171,7 @@ void ActionDefinition::generateActionDescList(QList<ActionDefinitionItem> &actio
     actionDesc.push_back(ActionDefinitionItem(ACTION_GEOMETRY_ENTITY_MERGE, ACTION_GROUP_GEOMETRY, "Merge selected entities", "", "Ctrl+M", "", &Action::onGeometryEntityMerge));
     actionDesc.push_back(ActionDefinitionItem(ACTION_GEOMETRY_ENTITY_REMOVE, ACTION_GROUP_GEOMETRY, "Remove selected entities", "", "Ctrl+X", "", &Action::onGeometryEntityRemove));
     actionDesc.push_back(ActionDefinitionItem(ACTION_GEOMETRY_TRANSFORM, ACTION_GROUP_GEOMETRY, "Scale, translate, rotate", "", "Ctrl+T", ":/icons/geometry/pixmaps/range-geometry_transform.svg", &Action::onGeometryTransform));
+    actionDesc.push_back(ActionDefinitionItem(ACTION_GEOMETRY_DEV_EXPORT_SLIVER_ELEMENTS, ACTION_GROUP_GEOMETRY, "Export sliver elements", "", "", "", &Action::onGeometryDevExportSliverElements));
     actionDesc.push_back(ActionDefinitionItem(ACTION_GEOMETRY_DEV_EXPORT_INTERSECTED_ELEMENTS, ACTION_GROUP_GEOMETRY, "Export intersected elements", "", "", "", &Action::onGeometryDevExportIntersectedElements));
     actionDesc.push_back(ActionDefinitionItem(ACTION_GEOMETRY_DEV_PURGE_UNUSED_NODES, ACTION_GROUP_GEOMETRY, "Purge unused nodes", "", "", "", &Action::onGeometryDevPurgeUnusedNodes));
     actionDesc.push_back(ActionDefinitionItem(ACTION_GEOMETRY_DEV_PURGE_UNUSED_ELEMENTS, ACTION_GROUP_GEOMETRY, "Purge unused elements", "", "", "", &Action::onGeometryDevPurgeUnusedElements));

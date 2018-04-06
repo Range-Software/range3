@@ -32,6 +32,7 @@
 #include "iso_dialog.h"
 #include "job_manager.h"
 #include "log_browser_dialog.h"
+#include "find_sliver_elements_dialog.h"
 #include "fix_sliver_elements_dialog.h"
 #include "main_window.h"
 #include "mark_entity_dialog.h"
@@ -690,6 +691,17 @@ void Action::onGeometryCreateElement(void)
         modelAction->setAutoDelete(true);
         modelAction->addAction(modelActionInput);
         JobManager::getInstance().submit(modelAction);
+    }
+}
+
+void Action::onGeometryFindSliverElements(void)
+{
+    QList<uint> modelIDs = Session::getInstance().getSelectedModelIDs();
+
+    for (int i=0;i<modelIDs.size();i++)
+    {
+        FindSliverElementsDialog findliverElementsDialog(modelIDs[i],this->mainWindow);
+        findliverElementsDialog.exec();
     }
 }
 
@@ -1410,6 +1422,22 @@ void Action::onGeometryGenerateTetrahedra(void)
 void Action::onGeometryTransform(void)
 {
     MainWindow::getInstance()->showTransformGeometryWidget();
+}
+
+void Action::onGeometryDevExportSliverElements(void)
+{
+    QList<uint> modelIDs = Session::getInstance().getSelectedModelIDs();
+
+    for (int i=0;i<modelIDs.size();i++)
+    {
+        ModelActionInput modelActionInput(modelIDs[i]);
+        modelActionInput.setExportSliverElements();
+
+        ModelAction *modelAction = new ModelAction;
+        modelAction->setAutoDelete(true);
+        modelAction->addAction(modelActionInput);
+        JobManager::getInstance().submit(modelAction);
+    }
 }
 
 void Action::onGeometryDevExportIntersectedElements(void)

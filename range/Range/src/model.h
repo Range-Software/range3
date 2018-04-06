@@ -36,11 +36,14 @@ class Model : public RModel
             ConsolidateEdgeNodes           = 1 << 3,
             ConsolidateEdgeElements        = 1 << 4,
             ConsolidateHoleElements        = 1 << 5,
-            ConsolidateIntersectedElements = 1 << 6,
-            ConsolidateMeshInput           = 1 << 7
+            ConsolidateSliverElements      = 1 << 6,
+            ConsolidateIntersectedElements = 1 << 7,
+            ConsolidateMeshInput           = 1 << 8
         };
 
         static const int ConsolidateActionAll;
+
+        static const double SliverElementEdgeRatio;
 
     protected:
 
@@ -53,6 +56,8 @@ class Model : public RModel
         QVector<RElement> edgeElements;
         //! Set of hole elements.
         QVector<RElement> holeElements;
+        //! List of sliver elements.
+        QList<uint> sliverElements;
         //! List of intersected elements.
         QList<uint> intersectedElements;
         //! Model filename.
@@ -201,14 +206,20 @@ class Model : public RModel
         //! Return number of affected elements.
         uint fixSliverElements(double edgeRatio);
 
+        //! Update sliver elements list.
+        void updateSliverElements(double edgeRatio);
+
         //! Update intersected elements list.
         void updateIntersectedElements(void);
 
         //! Break intersected elements list.
         uint breakIntersectedElements(uint nIterations);
 
+        //! Export sliver elements list.
+        bool exportSliverElements(void)const;
+
         //! Export intersected elements list.
-        bool exportIntersectedElements(void);
+        bool exportIntersectedElements(void) const;
 
         //! Perform boolean difference operation.
         //! Return true if successful.
@@ -222,6 +233,9 @@ class Model : public RModel
         //! Perform boolean union operation.
         //! Return true if successful.
         bool boolUnion(uint nIterations, QList<uint> surfaceEntityIDs);
+
+        //! Chech whether the element with given id is sliver.
+        bool isSliver(uint elementID) const;
 
         //! Chech whether the element with given id is intersecting with other element.
         bool isIntersected(uint elementID) const;
@@ -264,6 +278,9 @@ class Model : public RModel
 
         //! Return list of node IDs for given list of element IDs.
         QSet<uint> getNodeIDs(const QSet<uint> &elementIDs) const;
+
+        //! Return number of sliver elements.
+        uint getNSlivers(void) const;
 
         //! Return number of intersected elements.
         uint getNIntersected(void) const;

@@ -863,6 +863,9 @@ class RModel : public RProblem, public RResults
         //! Return number of affected elements.
         uint fixElementGroupRelations(void);
 
+        //! Find list of sliver elements.
+        QList<uint> findSliverElements(double edgeRatio) const;
+
         //! Find list of intersected elements.
         QList<uint> findIntersectedElements(void) const;
 

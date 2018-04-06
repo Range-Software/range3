@@ -55,7 +55,7 @@ void MeshGenerator::run(void)
 
     try
     {
-        model.consolidate(Model::ConsolidateEdgeElements | Model::ConsolidateHoleElements);
+        model.consolidate(Model::ConsolidateEdgeElements | Model::ConsolidateHoleElements | Model::ConsolidateSliverElements);
     }
     catch (const RError &error)
     {

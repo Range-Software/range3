@@ -107,6 +107,7 @@ void ActionList::processAvailability(void)
         this->getAction(ACTION_GEOMETRY_DRAW_CYLINDER)->setEnabled(true);
         this->getAction(ACTION_GEOMETRY_DRAW_SPHERE)->setEnabled(true);
         this->getAction(ACTION_GEOMETRY_CREATE_ELEMENT)->setEnabled(true);
+        this->getAction(ACTION_GEOMETRY_FIND_SLIVER_ELEMENTS)->setEnabled(true);
         this->getAction(ACTION_GEOMETRY_FIX_SLIVER_ELEMENTS)->setEnabled(true);
         this->getAction(ACTION_GEOMETRY_FIND_INTERSECTED_ELEMENTS)->setEnabled(true);
         this->getAction(ACTION_GEOMETRY_BREAK_INTERSECTED_ELEMENTS)->setEnabled(true);
@@ -139,6 +140,7 @@ void ActionList::processAvailability(void)
         this->getAction(ACTION_GEOMETRY_ENTITY_REMOVE)->setEnabled(true);
         this->getAction(ACTION_GEOMETRY_TRANSFORM)->setEnabled(true);
         this->getAction(ACTION_GEOMETRY_VOLUME_GENERATE_TETRAHEDRA)->setEnabled(true);
+        this->getAction(ACTION_GEOMETRY_DEV_EXPORT_SLIVER_ELEMENTS)->setEnabled(true);
         this->getAction(ACTION_GEOMETRY_DEV_EXPORT_INTERSECTED_ELEMENTS)->setEnabled(true);
         this->getAction(ACTION_GEOMETRY_DEV_PURGE_UNUSED_NODES)->setEnabled(true);
         this->getAction(ACTION_GEOMETRY_DEV_PURGE_UNUSED_ELEMENTS)->setEnabled(true);
@@ -219,6 +221,7 @@ void ActionList::setDisabled(bool allActions)
     this->getAction(ACTION_GEOMETRY_DRAW_CYLINDER)->setEnabled(enabled);
     this->getAction(ACTION_GEOMETRY_DRAW_SPHERE)->setEnabled(enabled);
     this->getAction(ACTION_GEOMETRY_CREATE_ELEMENT)->setEnabled(enabled);
+    this->getAction(ACTION_GEOMETRY_FIND_SLIVER_ELEMENTS)->setEnabled(enabled);
     this->getAction(ACTION_GEOMETRY_FIX_SLIVER_ELEMENTS)->setEnabled(enabled);
     this->getAction(ACTION_GEOMETRY_FIND_INTERSECTED_ELEMENTS)->setEnabled(enabled);
     this->getAction(ACTION_GEOMETRY_BREAK_INTERSECTED_ELEMENTS)->setEnabled(enabled);
@@ -251,6 +254,7 @@ void ActionList::setDisabled(bool allActions)
     this->getAction(ACTION_GEOMETRY_ENTITY_REMOVE)->setEnabled(enabled);
     this->getAction(ACTION_GEOMETRY_TRANSFORM)->setEnabled(enabled);
     this->getAction(ACTION_GEOMETRY_VOLUME_GENERATE_TETRAHEDRA)->setEnabled(enabled);
+    this->getAction(ACTION_GEOMETRY_DEV_EXPORT_SLIVER_ELEMENTS)->setEnabled(enabled);
     this->getAction(ACTION_GEOMETRY_DEV_EXPORT_INTERSECTED_ELEMENTS)->setEnabled(enabled);
     this->getAction(ACTION_GEOMETRY_DEV_PURGE_UNUSED_NODES)->setEnabled(enabled);
     this->getAction(ACTION_GEOMETRY_DEV_PURGE_UNUSED_ELEMENTS)->setEnabled(enabled);
