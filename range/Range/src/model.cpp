@@ -1964,6 +1964,7 @@ void Model::glDraw(GLWidget *glWidget) const
             //Draw sliver elements.
             REntityGroupData sliverGroupData;
             sliverGroupData.setDrawWire(true);
+            glLineWidth(2.0f);
             for (int i=0;i<this->sliverElements.size();i++)
             {
                 GLElement glElement(glWidget,
@@ -1972,13 +1973,14 @@ void Model::glDraw(GLWidget *glWidget) const
                                     sliverGroupData,
                                     QColor(255,100,0),
                                     GL_ELEMENT_DRAW_NORMAL);
-                glElement.setApplyEnvironmentSettings(false);
+                glElement.setApplyEnvironmentSettings(true);
                 glElement.paint();
             }
 
             //Draw intersected elements.
             REntityGroupData intersectedGroupData;
             intersectedGroupData.setDrawWire(true);
+            glLineWidth(2.0f);
             for (int i=0;i<this->intersectedElements.size();i++)
             {
                 GLElement glElement(glWidget,
@@ -1987,7 +1989,7 @@ void Model::glDraw(GLWidget *glWidget) const
                                     intersectedGroupData,
                                     Qt::red,
                                     GL_ELEMENT_DRAW_NORMAL);
-                glElement.setApplyEnvironmentSettings(false);
+                glElement.setApplyEnvironmentSettings(true);
                 glElement.paint();
             }
         }
