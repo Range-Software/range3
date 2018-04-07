@@ -20,7 +20,7 @@ HelpTutorialWidget::HelpTutorialWidget(QWidget *parent)
 
     tutorials.append("Draw cube");
     tutorials.append("Transform geometry");
-    tutorials.append("Heat transfer");
+    tutorials.append("Stress and deformation analysis");
     tutorials.append("Multiphysics");
     tutorials.append("Contaminant dispersion in fluids");
 
