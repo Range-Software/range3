@@ -2697,7 +2697,12 @@ void Model::read(const QString &fileName)
     {
         this->unloadViewFactorMatrix();
     }
-    this->consolidate(Model::ConsolidateEdgeElements | Model::ConsolidateHoleElements | Model::ConsolidateSliverElements | Model::ConsolidateIntersectedElements);
+    int consolidateActionMask = Model::ConsolidateEdgeElements | Model::ConsolidateHoleElements;
+    if (this->getNVolumes() == 0)
+    {
+        consolidateActionMask |= Model::ConsolidateSliverElements | Model::ConsolidateIntersectedElements;
+    }
+    this->consolidate(consolidateActionMask);
     // Fix missing color scales in variable data.
     for (uint i=0;i<this->getNVariables();i++)
     {
