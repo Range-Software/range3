@@ -1956,9 +1956,7 @@ void Model::glDraw(GLWidget *glWidget) const
                 const RNode &node1 = this->getNode(this->holeElements[i].getNodeId(0));
                 const RNode &node2 = this->getNode(this->holeElements[i].getNodeId(1));
                 glWidget->qglColor(QColor(255,0,0));
-                GLLine line(glWidget,node1.toVector(),node2.toVector(),2.0);
-
-                line.paint();
+                GLLine(glWidget,node1.toVector(),node2.toVector(),2.0).paint();
             }
 
             //Draw sliver elements.
@@ -1973,7 +1971,7 @@ void Model::glDraw(GLWidget *glWidget) const
                                     sliverGroupData,
                                     QColor(255,100,0),
                                     GL_ELEMENT_DRAW_NORMAL);
-                glElement.setApplyEnvironmentSettings(true);
+                glElement.setApplyEnvironmentSettings(false);
                 glElement.paint();
             }
 
@@ -1989,7 +1987,7 @@ void Model::glDraw(GLWidget *glWidget) const
                                     intersectedGroupData,
                                     Qt::red,
                                     GL_ELEMENT_DRAW_NORMAL);
-                glElement.setApplyEnvironmentSettings(true);
+                glElement.setApplyEnvironmentSettings(false);
                 glElement.paint();
             }
         }
