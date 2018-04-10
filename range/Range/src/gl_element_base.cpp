@@ -26,6 +26,8 @@ void GLElementBase::_init(const GLElementBase *pGlElement)
         this->setApplyEnvironmentSettings(pGlElement->getApplyEnvironmentSettings());
         this->pScalarVariable = pGlElement->pScalarVariable;
         this->pDisplacementVariable = pGlElement->pDisplacementVariable;
+        this->nodePointSize = pGlElement->nodePointSize;
+        this->edgeLineWidth = pGlElement->edgeLineWidth;
     }
 }
 
@@ -38,6 +40,8 @@ GLElementBase::GLElementBase(GLWidget *glWidget, const Model *pModel, uint eleme
     , elementID(elementID)
     , pScalarVariable(0)
     , pDisplacementVariable(0)
+    , nodePointSize(10.0f)
+    , edgeLineWidth(1.0f)
 {
     this->_init();
 }
@@ -104,6 +108,16 @@ void GLElementBase::setDisplacementVariable(const RVariable *pDisplacementVariab
     this->pDisplacementVariable = pDisplacementVariable;
 }
 
+void GLElementBase::setNodePointSize(GLfloat nodePointSize)
+{
+    this->nodePointSize = nodePointSize;
+}
+
+void GLElementBase::setEdgeLineWidth(GLfloat edgeLineWidth)
+{
+    this->edgeLineWidth = edgeLineWidth;
+}
+
 void GLElementBase::initialize(void)
 {
     if (this->getApplyEnvironmentSettings())
@@ -131,8 +145,8 @@ void GLElementBase::initialize(void)
         default:
         {
             GL_SAFE_CALL(glEnable(GL_NORMALIZE));
-            GL_SAFE_CALL(glPointSize(10.0f));
-            GL_SAFE_CALL(glLineWidth(1.0f));
+            GL_SAFE_CALL(glPointSize(this->nodePointSize));
+            GL_SAFE_CALL(glLineWidth(this->edgeLineWidth));
             if (this->elementGroupData.getDrawWire())
             {
                 GL_SAFE_CALL(glDisable(GL_LIGHTING));

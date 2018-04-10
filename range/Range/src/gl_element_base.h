@@ -40,7 +40,10 @@ class GLElementBase : public GLObject
         const RVariable *pScalarVariable;
         //! Const pointer to displacement variable.
         const RVariable *pDisplacementVariable;
-        //! Scalar variable min value.
+        //! Node point size.
+        GLfloat nodePointSize;
+        //! Edge line width.
+        GLfloat edgeLineWidth;
         // Environment settings
         GLboolean lineSmoothEnabled;
         GLboolean lightingEnabled;
@@ -93,6 +96,12 @@ class GLElementBase : public GLObject
 
         //! Set displacement variable position.
         void setDisplacementVariable(const RVariable *pDisplacementVariable);
+
+        //! Set node point size.
+        void setNodePointSize(GLfloat nodePointSize);
+
+        //! Set edge line width.
+        void setEdgeLineWidth(GLfloat edgeLineWidth);
 
     protected:
 
