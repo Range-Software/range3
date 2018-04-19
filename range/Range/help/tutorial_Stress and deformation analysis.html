@@ -62,7 +62,18 @@
 <p>Solver process is running in the background and all its output is displayed in the <b>Process output</b> tab as it can be seen on the screenshot below.
 <p><center><img src="image-Process_output.png"/><center></p>
 <h2>7. Apply computed results</h2>
-<p>After the solver process is successfully completed computed results should be loaded automatically. To display these results they need to be applied on model entities.</p>
+<p>After the solver process is successfully completed computed results should be loaded automatically. To display these results they need to be applied on model entities. This is done in <b>Results</b> tab control. Results are applied to the selected model entities. For this purpose hide all surface entities and show only <b>Volumes</b>.</p>
+<p><center><img src="image-Selected_volume_entity.png"/><center></p>
 <h3>7.1. Displacement</h3>
+<p>From dropdown menu select <b>Displacement</b> (if not already selected). <b>Displacement</b> is a vector variable it can be appliead as a <b>Scalar</b> (entity will be colored by its magnitude) and/or as a <b>Displacement</b> (entity will bend). This time select <b>Displacement</b> check-box. And set <b>Scale</b> to <b>500</b> to see the deformation.</p>
+<p><center><img src="image-Applied_displacement.png"/><center></p>
 <h3>7.2. Von Mises Stress</h3>
+<p>Similarly as <b>Displacement</b> apply <b>Von Mises Stress</b> on selected <b>Volume</b> model entity. Additionally select <b>Display value range</b> check-box to display value range in 3D area.</p>
+<p><center><img src="image-Applied_stress.png"/><center></p>
 <h2>8. Produce report</h2>
+<p>Sometimes it is needed to produce a report to publish computed results.</p>
+<p style="background-color: #999999;"><b>Menu:</b> <i>Report -> Create report</i></p>
+<p><center><img src="image-Create_report.png"/><center></p>
+<p>Software can produce reports in multiple formats. This time it is enough to produce only <b>PDF</b> document, so select <b>Portable Document Format (PDF)</b> check-box and click <b>Ok</b> button.</p>
+<p>Generated documents are not displayed automatically. To do so navigate to <b>Documents</b> tree and double click on the document you would like to view.</p>
+<p><center><img src="image-Document_tree.png"/><center></p>
