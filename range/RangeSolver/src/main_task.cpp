@@ -99,9 +99,10 @@ void MainTask::run(void)
         solverTask->moveToThread(thread);
 
         QObject::connect(thread, &QThread::started, solverTask, &SolverTask::run);
-        QObject::connect(solverTask, &SolverTask::finished, thread, &QThread::quit);
         QObject::connect(solverTask, &SolverTask::finished, solverTask, &SolverTask::deleteLater);
+        QObject::connect(solverTask, &SolverTask::destroyed, thread, &QThread::quit);
         QObject::connect(thread, &QThread::finished, thread, &QThread::deleteLater);
+        QObject::connect(thread, &QThread::finished, application, &QCoreApplication::quit);
 
         thread->start();
     }

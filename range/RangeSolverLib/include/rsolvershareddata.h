@@ -53,6 +53,9 @@ class RSolverSharedData
         //! If given vector does not exist it will be created.
         RRVector &findData(const QString &name);
 
+        //! Clear shared data.
+        void clearData(void);
+
 };
 
 #endif // __RSOLVERSHAREDDATA_H__

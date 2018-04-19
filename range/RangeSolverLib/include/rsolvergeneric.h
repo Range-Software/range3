@@ -122,6 +122,9 @@ class RSolverGeneric
         //! Update local rotations.
         void updateLocalRotations(void);
 
+        //! Clear shared data.
+        virtual void clearSharedData(void);
+
         //! Store shared data.
         virtual void storeSharedData(void);
 

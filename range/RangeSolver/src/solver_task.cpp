@@ -142,5 +142,4 @@ void SolverTask::run(void)
     }
 
     emit this->finished();
-    this->app->exit(0);
 }

@@ -184,12 +184,11 @@ void SolverSetupChecker::checkBoundaryConditions(QStringList &warnings, QStringL
             }
         }
 
-        if (!this->rModel.getTimeSolver().getEnabled() && !hasExplicit && RBoundaryCondition::getHasExplicit(problemTypes[i]))
+        if (!hasExplicit)
         {
-            errors.append("<b>" + RProblem::getName(problemTypes[i]) + ":</b> " + QObject::tr("Steady-state setup requires at least one explicit boundary condition."));
+            warnings.append("<b>" + RProblem::getName(problemTypes[i]) + ":</b> " + QObject::tr("No explicit boundary condition assigned."));
         }
-
-        if (hasExplicit && !hasImplicit)
+        if (!hasImplicit)
         {
             warnings.append("<b>" + RProblem::getName(problemTypes[i]) + ":</b> " + QObject::tr("No implicit boundary condition assigned."));
         }

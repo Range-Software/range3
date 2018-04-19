@@ -342,6 +342,11 @@ void RSolverGeneric::updateLocalRotations(void)
     }
 }
 
+void RSolverGeneric::clearSharedData(void)
+{
+    this->pSharedData->clearData();
+}
+
 void RSolverGeneric::storeSharedData(void)
 {
     this->pSharedData->addData("element-temperature",this->elementTemperature);

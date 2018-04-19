@@ -58,3 +58,8 @@ RRVector &RSolverSharedData::findData(const QString &name)
     return this->data[name];
 }
 
+void RSolverSharedData::clearData(void)
+{
+    this->data.clear();
+}
+
