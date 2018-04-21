@@ -17,7 +17,6 @@
 #include "main_settings.h"
 
 const QString MainSettings::licenseFileName("LICENSE.txt");
-const QString MainSettings::moduleLicenseFileName("module_license.txt");
 const QString MainSettings::releaseNotesFileName("RELEASE_NOTES.txt");
 
 MainSettings::MainSettings(const QString &organization,
@@ -98,12 +97,6 @@ QString MainSettings::findLicenseFileName(void) const
     dir.cdUp();
     dir.cd("doc");
     return dir.filePath(MainSettings::licenseFileName);
-}
-
-QString MainSettings::findModuleLicenseFileName(void) const
-{
-    QDir dir(this->getTmpDir());
-    return dir.filePath(MainSettings::moduleLicenseFileName);
 }
 
 QString MainSettings::findReleaseNotesFileName(void) const

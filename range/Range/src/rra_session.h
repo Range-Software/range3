@@ -40,8 +40,6 @@ class RRASession : public QObject
         QString availableSoftwareLink;
         //! Logged in.
         bool loggedIn;
-        //! License.
-        RLicense license;
 
         //! Next request type.
         RRARequestInput::Type nextRequest;
@@ -85,9 +83,6 @@ class RRASession : public QObject
         //! Catch login status.
         void onRraLoginStatus(const QString &status, bool loggedIn, const QString &responseMessage);
 
-        //! Catch client license.
-        void onRraLicense(const RLicense &license, const QString &responseMessage);
-
         //! Catch RRA failed signal.
         void onRraFailed(RRARequestInput::Type type, const QString &errorMessage);
 
@@ -110,9 +105,6 @@ class RRASession : public QObject
 
         //! User signed out.
         void signedOut(void);
-
-        //! License received.
-        void licenseReceived(const RLicense &license);
 
 };
 

@@ -308,9 +308,6 @@ class Action : public QAction
         //! Application settings.
         void onApplicationSettings(void);
 
-        //! Module licenses.
-        void onApplicationModuleLicenses(void);
-
         //! Check for update.
         void onUpdate(void);
 

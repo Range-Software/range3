@@ -59,17 +59,6 @@ RRARequestInput *RRARequestInput::logOut(const QString &account)
     return pInput;
 }
 
-RRARequestInput *RRARequestInput::requestClientLicense(void)
-{
-    RRARequestInput *pInput = new RRARequestInput;
-
-    pInput->type = CLIENT_LICENSE;
-    pInput->addVariable("pageMode","false");
-    pInput->addVariable("data","client_license");
-
-    return pInput;
-}
-
 RRARequestInput *RRARequestInput::sendUsageInfo(const QString &usageInfo)
 {
     RRARequestInput *pInput = new RRARequestInput;

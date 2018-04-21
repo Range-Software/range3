@@ -191,7 +191,6 @@ void ActionDefinition::generateActionDescList(QList<ActionDefinitionItem> &actio
     actionDesc.push_back(ActionDefinitionItem(ACTION_REPORT_MONITORING_POINT_GRAPH, ACTION_GROUP_REPORT, "Monitoring points", "", "", "", &Action::onReportMonitoringPointGraph));
     actionDesc.push_back(ActionDefinitionItem(ACTION_REPORT_CREATE_REPORT, ACTION_GROUP_REPORT, "Create report", "", "Ctrl+Shift+R", ":/icons/report/pixmaps/range-report.svg", &Action::onReportCreateReport));
     actionDesc.push_back(ActionDefinitionItem(ACTION_APPLICATION_SETTINGS, ACTION_GROUP_APPLICATION, "Application settings", "", "Ctrl+A", ":/icons/file/pixmaps/range-preferences.svg", &Action::onApplicationSettings));
-    actionDesc.push_back(ActionDefinitionItem(ACTION_APPLICATION_MODULE_LICENSES, ACTION_GROUP_APPLICATION, "Module licenses", "", "Ctrl+L", ":/icons/file/pixmaps/range-keys.svg", &Action::onApplicationModuleLicenses));
     actionDesc.push_back(ActionDefinitionItem(ACTION_APPLICATION_UPDATE, ACTION_GROUP_APPLICATION, "Update", "", "", ":/icons/file/pixmaps/range-download.svg", &Action::onUpdate));
     actionDesc.push_back(ActionDefinitionItem(ACTION_APPLICATION_ABOUT, ACTION_GROUP_APPLICATION, "About", "", "F1", ":/icons/logos/pixmaps/range-logo-128.png", &Action::onAbout));
     actionDesc.push_back(ActionDefinitionItem(ACTION_APPLICATION_ABOUT_QT, ACTION_GROUP_APPLICATION, "About Qt", "", "", ":/icons/file/pixmaps/range-qt.svg", &Action::onAboutQt));

@@ -46,7 +46,6 @@
 #include "model_action.h"
 #include "model_io.h"
 #include "model_statistics_dialog.h"
-#include "module_licenses_dialog.h"
 #include "monitoring_points_dialog.h"
 #include "monitoring_point_graph_dialog.h"
 #include "move_node_dialog.h"
@@ -1821,12 +1820,6 @@ void Action::onApplicationSettings(void)
     ApplicationSettingsDialog applicationSettingsDialog(MainSettings::getInstance().getApplicationSettings(),
                                                         this->mainWindow);
     applicationSettingsDialog.exec();
-}
-
-void Action::onApplicationModuleLicenses(void)
-{
-    ModuleLicensesDialog moduleLicensesDialog(MainSettings::getInstance().findModuleLicenseFileName(),this->mainWindow);
-    moduleLicensesDialog.exec();
 }
 
 void Action::onUpdate(void)

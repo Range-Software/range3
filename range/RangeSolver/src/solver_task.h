@@ -25,12 +25,6 @@ class SolverTask : public QObject
 
         //! Model file.
         QString modelFileName;
-        //! License file.
-        QString moduleLicenseFileName;
-        //! Range account.
-        QString account;
-        //! Range password.
-        QString password;
         //! Convergence file name.
         QString convergenceFileName;
         //! Monitoring file name.

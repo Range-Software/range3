@@ -160,8 +160,6 @@ SOURCES += \
     src/model_statistics_dialog.cpp \
     src/model_tree.cpp \
     src/model_tree_simple.cpp \
-    src/module_licenses_dialog.cpp \
-    src/module_licenses_tree.cpp \
     src/monitoring_point_graph_dialog.cpp \
     src/monitoring_points_dialog.cpp \
     src/move_node_dialog.cpp \
@@ -364,8 +362,6 @@ HEADERS += \
     src/model_statistics_dialog.h \
     src/model_tree.h \
     src/model_tree_simple.h \
-    src/module_licenses_dialog.h \
-    src/module_licenses_tree.h \
     src/monitoring_point_graph_dialog.h \
     src/monitoring_points_dialog.h \
     src/move_node_dialog.h \
@@ -448,13 +444,11 @@ win*-msvc* {
 LIBS += \
     -L../TetGen/ \
     -L../RangeBase/ \
-    -L../RangeAuth/ \
     -L../RangeModel/ \
     -L../RangeSolverLib/ \
     -lRangeSolverLib$${DEBUG_EXT} \
     -lRangeModel$${DEBUG_EXT} \
     -lRangeBase$${DEBUG_EXT} \
-    -lRangeAuth$${DEBUG_EXT} \
     -lTetGen$${DEBUG_EXT} \
     -lavcodec \
     -lavdevice \
@@ -468,13 +462,11 @@ LIBS += \
 PRE_TARGETDEPS += \
     ../TetGen/$${LIB_PRE}TetGen$${DEBUG_EXT}.$${LIB_EXT} \
     ../RangeBase/$${LIB_PRE}RangeBase$${DEBUG_EXT}.$${LIB_EXT} \
-    ../RangeAuth/$${LIB_PRE}RangeAuth$${DEBUG_EXT}.$${LIB_EXT} \
     ../RangeModel/$${LIB_PRE}RangeModel$${DEBUG_EXT}.$${LIB_EXT} \
     ../RangeSolverLib/$${LIB_PRE}RangeSolverLib$${DEBUG_EXT}.$${LIB_EXT}
 
 INCLUDEPATH += $${_PRO_FILE_PWD_}/../TetGen
 INCLUDEPATH += $${_PRO_FILE_PWD_}/../RangeBase/include
-INCLUDEPATH += $${_PRO_FILE_PWD_}/../RangeAuth/include
 INCLUDEPATH += $${_PRO_FILE_PWD_}/../RangeModel/include
 INCLUDEPATH += $${_PRO_FILE_PWD_}/../RangeSolverLib/include
 INCLUDEPATH += $${_PRO_FILE_PWD_}/../../ffmpeg/ffmpeg-3.4.1-win64/include

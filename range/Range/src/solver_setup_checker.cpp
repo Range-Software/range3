@@ -8,7 +8,6 @@
  *  DESCRIPTION: Solver setup checker class definition               *
  *********************************************************************/
 
-#include <ralib.h>
 
 #include "main_settings.h"
 #include "solver_setup_checker.h"
@@ -53,7 +52,6 @@ void SolverSetupChecker::perform(QStringList &warnings, QStringList &errors) con
     this->checkElements(warnings,errors);
     this->checkMaterials(warnings,errors);
     this->checkBoundaryConditions(warnings,errors);
-    this->checkLicense(warnings,errors);
 }
 
 void SolverSetupChecker::checkElements(QStringList &warnings, QStringList &errors) const
@@ -192,47 +190,5 @@ void SolverSetupChecker::checkBoundaryConditions(QStringList &warnings, QStringL
         {
             warnings.append("<b>" + RProblem::getName(problemTypes[i]) + ":</b> " + QObject::tr("No implicit boundary condition assigned."));
         }
-    }
-}
-
-void SolverSetupChecker::checkLicense(QStringList &warnings, QStringList &errors) const
-{
-    std::vector<RProblemType> problemTypes(RProblem::getTypes(this->rModel.getProblemTaskTree().getProblemTypeMask()));
-
-    QString moduleLicenseFileName(MainSettings::getInstance().findModuleLicenseFileName());
-    try
-    {
-        RLicense license;
-        license.read(moduleLicenseFileName);
-
-        for (uint i=0;i<problemTypes.size();i++)
-        {
-            if (!license.validateRecord(RProblem::getId(problemTypes[i]),
-                                        MainSettings::getInstance().getApplicationSettings()->getRangeAccount(),
-                                        MainSettings::getInstance().getApplicationSettings()->getRangePassword()))
-            {
-                errors.append("Invalid license for \'<strong>" +
-                              RProblem::getName(problemTypes[i]) +
-                              "</strong>\' (product-id: <strong>" +
-                              RProblem::getId(problemTypes[i]) +
-                              "</strong>)");
-            }
-            else
-            {
-                uint nMonthsToExpire = 1;
-                if (license.checkRecordExpiry(RProblem::getId(problemTypes[i]),nMonthsToExpire))
-                {
-                    warnings.append("License for \'<strong>" +
-                                    RProblem::getName(problemTypes[i]) +
-                                    "</strong>\' (product-id: <strong>" +
-                                    RProblem::getId(problemTypes[i]) +
-                                    "</strong>) will soon expire");
-                }
-            }
-        }
-    }
-    catch (const RError &rError)
-    {
-        errors.append("Failed to validate module license file \'" + moduleLicenseFileName + "\'. " + rError.getMessage());
     }
 }

@@ -44,14 +44,6 @@ void RRARequestWorker::logOut(const QString &account)
     delete pInput;
 }
 
-void RRARequestWorker::requestClientLicense(void)
-{
-    RRARequestInput *pInput = RRARequestInput::requestClientLicense();
-    this->requestType = pInput->getType();
-    this->execute(pInput);
-    delete pInput;
-}
-
 void RRARequestWorker::sendUsageInfo(const QString &usageInfo)
 {
     RRARequestInput *pInput = RRARequestInput::sendUsageInfo(usageInfo);
@@ -145,11 +137,6 @@ void RRARequestWorker::onHttpRequestFinished(void)
         case RRARequestInput::LOGOUT:
         {
             emit this->loginStatus(QString(html),false,responseMessages);
-            return;
-        }
-        case RRARequestInput::CLIENT_LICENSE:
-        {
-            emit this->clientLicense(RLicense(html),responseMessages);
             return;
         }
         case RRARequestInput::SEND_USAGE_INFO:

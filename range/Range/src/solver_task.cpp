@@ -8,7 +8,6 @@
  *  DESCRIPTION: Solver task class definition                        *
  *********************************************************************/
 
-#include <ralib.h>
 #include <rblib.h>
 
 #include "model_io.h"
@@ -31,31 +30,6 @@ SolverTask::SolverTask(const ApplicationSettings *applicationSettings, uint mode
 
     std::vector<RProblemType> problemTypes(RProblem::getTypes(rModel.getProblemTaskTree().getProblemTypeMask()));
 
-    QString moduleLicenseFileName(MainSettings::getInstance().findModuleLicenseFileName());
-    try
-    {
-        RLicense license;
-        license.read(moduleLicenseFileName);
-
-        for (uint i=0;i<problemTypes.size();i++)
-        {
-            if (!license.validateRecord(RProblem::getId(problemTypes[i]),
-                                        MainSettings::getInstance().getApplicationSettings()->getRangeAccount(),
-                                        MainSettings::getInstance().getApplicationSettings()->getRangePassword()))
-            {
-                RLogger::warning("Invalid license for \'%s\' (product-id: %s)\n",
-                                 RProblem::getName(problemTypes[i]).toUtf8().constData(),
-                                 RProblem::getId(problemTypes[i]).toUtf8().constData());
-            }
-        }
-    }
-    catch (const RError &rError)
-    {
-        RLogger::error("Failed to validate module license file \'%s\'. %s\n",
-                       moduleLicenseFileName.toUtf8().constData(),
-                       rError.getMessage().toUtf8().constData());
-    }
-
     QFileInfo modelFileInfo(rModel.getFileName());
 
     this->modelFileName = modelFileInfo.absoluteFilePath();
@@ -65,7 +39,6 @@ SolverTask::SolverTask(const ApplicationSettings *applicationSettings, uint mode
 
     this->solverArguments.append("--file=" + this->modelFileName);
     this->solverArguments.append("--log-file=" + this->logFileName);
-    this->solverArguments.append("--module-license-file=" + moduleLicenseFileName);
     this->solverArguments.append("--convergence-file=" + this->convergenceFileName);
     this->solverArguments.append("--monitoring-file=" + this->monitoringFileName);
     this->solverArguments.append("--nthreads=" + QString::number(this->applicationSettings->getNThreads()));

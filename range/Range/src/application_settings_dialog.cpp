@@ -84,8 +84,6 @@ int ApplicationSettingsDialog::exec(void)
         this->applicationSettings->setSendUsageInfo(this->sendUsageInfoAllowed->isChecked());
         this->applicationSettings->setRangeApiAllowed(this->rangeApiAllowed->isChecked());
         this->applicationSettings->setRangeApiServer(this->rangeApiServer->text());
-        this->applicationSettings->setRangeAccount(this->rangeAccountEdit->text());
-        this->applicationSettings->setRangePassword(this->rangePasswordEdit->text());
 
         for (QMap<ActionType,QString>::iterator iter = this->changedShortcut.begin(); iter != this->changedShortcut.end(); ++iter)
         {
@@ -211,25 +209,6 @@ QWidget *ApplicationSettingsDialog::createRangeAccountTab(void)
     this->rangeApiServer->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Minimum);
     rraLayout->addWidget(this->rangeApiServer,rowCount,1,1,1);
 
-    QLabel *rangeAccountLabel = new QLabel(tr("Username:"));
-    rangeAccountLabel->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Minimum);
-    rraLayout->addWidget(rangeAccountLabel,++rowCount,0,1,1);
-
-    this->rangeAccountEdit = new QLineEdit(this->applicationSettings->getRangeAccount());
-    this->rangeAccountEdit->setPlaceholderText(tr("username"));
-    this->rangeAccountEdit->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Minimum);
-    rraLayout->addWidget(this->rangeAccountEdit,rowCount,1,1,1);
-
-    QLabel *rangePasswordLabel = new QLabel(tr("Password:"));
-    rangePasswordLabel->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Minimum);
-    rraLayout->addWidget(rangePasswordLabel,++rowCount,0,1,1);
-
-    this->rangePasswordEdit = new QLineEdit(this->applicationSettings->getRangePassword());
-    this->rangePasswordEdit->setPlaceholderText(tr("password"));
-    this->rangePasswordEdit->setEchoMode(QLineEdit::Password);
-    this->rangePasswordEdit->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Minimum);
-    rraLayout->addWidget(this->rangePasswordEdit,rowCount,1,1,1);
-
     QWidget *spacer = new QWidget();
     spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     layout->addWidget(spacer,++rowCount,0,1,2);
@@ -237,8 +216,6 @@ QWidget *ApplicationSettingsDialog::createRangeAccountTab(void)
     this->connect(this->rangeApiAllowed,SIGNAL(toggled(bool)),SLOT(onRangeApiAllowedToggled(bool)));
     this->connect(this->sendUsageInfoAllowed,SIGNAL(toggled(bool)),SLOT(onSendUsageInfoAllowedToggled(bool)));
     this->connect(this->rangeApiServer,SIGNAL(textChanged(QString)),SLOT(onRangeApiServerChanged(QString)));
-    this->connect(this->rangeAccountEdit,SIGNAL(textChanged(QString)),SLOT(onRangeAccountChanged(QString)));
-    this->connect(this->rangePasswordEdit,SIGNAL(textChanged(QString)),SLOT(onRangePasswordChanged(QString)));
 
     return widget;
 }
@@ -289,16 +266,6 @@ void ApplicationSettingsDialog::onRangeApiServerChanged(const QString &)
     this->okButton->setEnabled(true);
 }
 
-void ApplicationSettingsDialog::onRangeAccountChanged(const QString &)
-{
-    this->okButton->setEnabled(true);
-}
-
-void ApplicationSettingsDialog::onRangePasswordChanged(const QString &)
-{
-    this->okButton->setEnabled(true);
-}
-
 void ApplicationSettingsDialog::onDefaultClicked(void)
 {
     this->solverFileChooserButton->setFileName(ApplicationSettings::getDefaultRangeSolverExecutable());
@@ -318,6 +285,4 @@ void ApplicationSettingsDialog::onDefaultClicked(void)
     this->sendUsageInfoAllowed->setChecked(ApplicationSettings::getDefaultSendUsageInfo());
     this->rangeApiAllowed->setChecked(ApplicationSettings::getDefaultRangeApiAllowed());
     this->rangeApiServer->setText(ApplicationSettings::getDefaultRangeApiServer());
-    this->rangeAccountEdit->setText(ApplicationSettings::getDefaultRangeAccount());
-    this->rangePasswordEdit->setText(ApplicationSettings::getDefaultRangePassword());
 }

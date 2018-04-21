@@ -22,12 +22,6 @@ class SolverInput
 
         //! Model file.
         QString modelFileName;
-        //! License file.
-        QString moduleLicenseFileName;
-        //! Range account.
-        QString account;
-        //! Range password.
-        QString password;
         //! Convergence file.
         QString convergenceFileName;
         //! Monitoring file.
@@ -45,10 +39,7 @@ class SolverInput
     public:
 
         //! Constructor.
-        SolverInput(const QString &modelFileName,
-                    const QString &moduleLicenseFileName,
-                    const QString &account,
-                    const QString &password);
+        SolverInput(const QString &modelFileName);
 
         //! Copy constructor.
         SolverInput(const SolverInput &solverInput);

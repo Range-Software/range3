@@ -228,7 +228,6 @@ void Application::onStarted(void)
     QObject::connect(&RRASession::getInstance(),&RRASession::availableSoftware,this,&Application::onAvailableSoftware);
     QObject::connect(&RRASession::getInstance(),&RRASession::signedIn,this,&Application::onSignedIn);
     QObject::connect(&RRASession::getInstance(),&RRASession::signedOut,this,&Application::onSignedOut);
-    QObject::connect(&RRASession::getInstance(),&RRASession::licenseReceived,this,&Application::onLicenseReceived);
 
     if (!filesToLoad.isEmpty())
     {
@@ -312,18 +311,4 @@ void Application::onSignedIn(void)
 void Application::onSignedOut(void)
 {
 
-}
-
-void Application::onLicenseReceived(const RLicense &license)
-{
-    QString licenseFileName(MainSettings::getInstance().findModuleLicenseFileName());
-    try
-    {
-        RLogger::info("Writing license file \'%s\'\n",licenseFileName.toUtf8().constData());
-        license.write(licenseFileName);
-    }
-    catch (const RError &rError)
-    {
-        RLogger::error("Failed to write license file \'%s\': %s\n",licenseFileName.toUtf8().constData(),rError.getMessage().toUtf8().constData());
-    }
 }

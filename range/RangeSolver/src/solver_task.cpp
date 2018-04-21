@@ -12,7 +12,6 @@
 
 #include <algorithm>
 
-#include <ralib.h>
 #include <rmlib.h>
 #include <rsolverlib.h>
 
@@ -21,9 +20,6 @@
 SolverTask::SolverTask(const SolverInput &solverInput, QCoreApplication *app, QObject *parent)
     : QObject(parent)
     , modelFileName(solverInput.modelFileName)
-    , moduleLicenseFileName(solverInput.moduleLicenseFileName)
-    , account(solverInput.account)
-    , password(solverInput.password)
     , convergenceFileName(solverInput.convergenceFileName)
     , monitoringFileName(solverInput.monitoringFileName)
     , nThreads(solverInput.nThreads)
@@ -40,7 +36,6 @@ void SolverTask::run(void)
     omp_set_num_threads(this->nThreads);
 
     RModel model;
-    RLicense license;
 
     // Load model
     try
@@ -51,43 +46,6 @@ void SolverTask::run(void)
     catch (const RError &error)
     {
         RLogger::error("Failed to load model from file \'%s\'. %s\n", this->modelFileName.toUtf8().constData(), error.getMessage().toUtf8().constData());
-
-        emit this->finished();
-        this->app->exit(1);
-        return;
-    }
-
-    // Load license
-    try
-    {
-        license.read(this->moduleLicenseFileName);
-        RLogger::info("License has been successfully loaded from file \'%s\'.\n", this->moduleLicenseFileName.toUtf8().constData());
-    }
-    catch (const RError &error)
-    {
-        RLogger::error("Failed to load license from file \'%s\'. %s\n", this->moduleLicenseFileName.toUtf8().constData(), error.getMessage().toUtf8().constData());
-
-        emit this->finished();
-        this->app->exit(1);
-        return;
-    }
-
-    // Validate problem types against licenses.
-    std::vector<RProblemType> problemTypes(RProblem::getTypes(model.getProblemTaskTree().getProblemTypeMask()));
-    bool licenseValid = true;
-    for (uint i=0;i<problemTypes.size();i++)
-    {
-        if (!license.validateRecord(RProblem::getId(problemTypes[i]),this->account,this->password))
-        {
-            RLogger::warning("Invalid license for \'%s\' (product-id: %s)\n",
-                             RProblem::getName(problemTypes[i]).toUtf8().constData(),
-                             RProblem::getId(problemTypes[i]).toUtf8().constData());
-            licenseValid = false;
-        }
-    }
-    if (!licenseValid)
-    {
-        RLogger::error("Failed to validate problem types against license file \'%s\'.\n", this->moduleLicenseFileName.toUtf8().constData());
 
         emit this->finished();
         this->app->exit(1);

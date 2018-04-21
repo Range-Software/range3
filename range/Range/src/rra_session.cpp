@@ -25,26 +25,12 @@ RRASession::RRASession(QObject *parent)
     , availableSoftwareVersion(RVendor::version)
     , loggedIn(false)
 {
-    QString moduleLicenseFileName(MainSettings::getInstance().findModuleLicenseFileName());
-    try
-    {
-        this->license.read(moduleLicenseFileName);
-    }
-    catch (const RError &rError)
-    {
-        RLogger::warning("Failed to read module license file \'%s\'. %s\n",
-                         moduleLicenseFileName.toUtf8().constData(),
-                         rError.getMessage().toUtf8().constData());
-    }
-
     this->networkAccessManager = new QNetworkAccessManager(this);
 
     this->rraRequestWorker = new RRARequestWorker(this->networkAccessManager,this);
 
     this->connect(this->rraRequestWorker,SIGNAL(availableSoftware(RVersion,QString,QString)),SLOT(onRraAvailableSoftware(RVersion,QString,QString)));
     QObject::connect(this->rraRequestWorker,&RRARequestWorker::loginStatus,this,&RRASession::onRraLoginStatus);
-    QObject::connect(this->rraRequestWorker,&RRARequestWorker::clientLicense,this,&RRASession::onRraLicense);
-
     QObject::connect(this->rraRequestWorker,&RRARequestWorker::failed,this,&RRASession::onRraFailed);
 }
 
@@ -53,12 +39,10 @@ RRARequestInput::Type RRASession::getNextType(RRARequestInput::Type type)
     switch (type)
     {
         case RRARequestInput::AVAILABLE_SOFTWARE:
-            return RRARequestInput::LOGIN;
-        case RRARequestInput::LOGIN:
+//            return RRARequestInput::LOGIN;
+//        case RRARequestInput::LOGIN:
 //            return RRARequestInput::LOGOUT;
 //        case RRARequestInput::LOGOUT:
-            return RRARequestInput::CLIENT_LICENSE;
-        case RRARequestInput::CLIENT_LICENSE:
             return RRARequestInput::SEND_USAGE_INFO;
         case RRARequestInput::SEND_USAGE_INFO:
         default:
@@ -132,11 +116,6 @@ void RRASession::submitNextRequest(void)
             this->rraRequestWorker->logOut(MainSettings::getInstancePtr()->getApplicationSettings()->getRangeAccount());
             break;
         }
-        case RRARequestInput::CLIENT_LICENSE:
-        {
-            this->rraRequestWorker->requestClientLicense();
-            break;
-        }
         case RRARequestInput::SEND_USAGE_INFO:
         {
             if (MainSettings::getInstancePtr()->getApplicationSettings()->getSendUsageInfo())
@@ -188,21 +167,6 @@ void RRASession::onRraLoginStatus(const QString &status, bool loggedIn, const QS
     QTimer::singleShot(RRASession::relaxInterval,Qt::VeryCoarseTimer,this,&RRASession::submitNextRequest);
 }
 
-void RRASession::onRraLicense(const RLicense &license, const QString &responseMessage)
-{
-    if (!responseMessage.isEmpty())
-    {
-        RLogger::info("RRA response: %s\n",responseMessage.toUtf8().constData());
-    }
-    if (this->license != license)
-    {
-        this->license = license;
-        RLogger::info("License received\n");
-        emit this->licenseReceived(this->license);
-    }
-    QTimer::singleShot(RRASession::relaxInterval,Qt::VeryCoarseTimer,this,&RRASession::submitNextRequest);
-}
-
 void RRASession::onRraFailed(RRARequestInput::Type type, const QString &errorMessage)
 {
     QString requestStr;
@@ -222,11 +186,6 @@ void RRASession::onRraFailed(RRARequestInput::Type type, const QString &errorMes
         case RRARequestInput::LOGOUT:
         {
             requestStr = "log out";
-            break;
-        }
-        case RRARequestInput::CLIENT_LICENSE:
-        {
-            requestStr = "client license";
             break;
         }
         case RRARequestInput::SEND_USAGE_INFO:

@@ -23,7 +23,6 @@ class RRARequestInput : public HttpRequestInput
             AVAILABLE_SOFTWARE = 0,
             LOGIN,
             LOGOUT,
-            CLIENT_LICENSE,
             SEND_USAGE_INFO
         };
 
@@ -50,9 +49,6 @@ class RRARequestInput : public HttpRequestInput
 
         //! Log out.
         static RRARequestInput *logOut(const QString &account);
-
-        //! Request latest software version.
-        static RRARequestInput *requestClientLicense(void);
 
         //! Send usage info.
         static RRARequestInput *sendUsageInfo(const QString &usageInfo);

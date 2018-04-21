@@ -36,7 +36,6 @@ void MainTask::run(void)
         // Process command line arguments.
         QList<RArgumentOption> validOptions;
         validOptions.append(RArgumentOption("file",RArgumentOption::Path,QVariant(),"File name",true,false));
-        validOptions.append(RArgumentOption("module-license-file",RArgumentOption::Path,QVariant(),"Module license file name",true,false));
         validOptions.append(RArgumentOption("log-file",RArgumentOption::Path,QVariant(),"Log file name",false,false));
         validOptions.append(RArgumentOption("convergence-file",RArgumentOption::Path,QVariant(),"Convergence file name",false,false));
         validOptions.append(RArgumentOption("monitoring-file",RArgumentOption::Path,QVariant(),"Monitoring file name",false,false));
@@ -71,10 +70,7 @@ void MainTask::run(void)
                              argumentsParser.getValue("task-id").toString(),
                              application);
 
-        SolverInput solverInput(argumentsParser.getValue("file").toString(),
-                                argumentsParser.getValue("module-license-file").toString(),
-                                rangeAccount,
-                                rangePassword);
+        SolverInput solverInput(argumentsParser.getValue("file").toString());
         if (argumentsParser.isSet("convergence-file"))
         {
             solverInput.setConvergenceFileName(argumentsParser.getValue("convergence-file").toString());

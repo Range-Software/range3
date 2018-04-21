@@ -16,21 +16,12 @@ void SolverInput::_init(const SolverInput *pSolverInput)
     {
         this->modelFileName = pSolverInput->modelFileName;
         this->convergenceFileName = pSolverInput->convergenceFileName;
-        this->moduleLicenseFileName = pSolverInput->moduleLicenseFileName;
-        this->account = pSolverInput->account;
-        this->password = pSolverInput->password;
         this->restart = pSolverInput->restart;
     }
 }
 
-SolverInput::SolverInput(const QString &modelFileName,
-                         const QString &moduleLicenseFileName,
-                         const QString &account,
-                         const QString &password)
+SolverInput::SolverInput(const QString &modelFileName)
     : modelFileName(modelFileName)
-    , moduleLicenseFileName(moduleLicenseFileName)
-    , account(account)
-    , password(password)
     , restart(false)
 {
     this->_init();

@@ -406,7 +406,6 @@ void MainWindow::createMenus(void)
     QMenu *menuTools = new QMenu(menubar);
     menuTools->setTitle(QApplication::translate("MainWindow", "Tools"));
     menuTools->addAction(this->actionList->getAction(ACTION_APPLICATION_SETTINGS));
-    menuTools->addAction(this->actionList->getAction(ACTION_APPLICATION_MODULE_LICENSES));
     menubar->addAction(menuTools->menuAction());
 
     menubar->addSeparator();

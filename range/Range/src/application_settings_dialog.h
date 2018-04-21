@@ -53,10 +53,6 @@ class ApplicationSettingsDialog : public QDialog
         QGroupBox *rangeApiAllowed;
         //! Range API server edit.
         QLineEdit *rangeApiServer;
-        //! Range account edit.
-        QLineEdit *rangeAccountEdit;
-        //! Range password edit.
-        QLineEdit *rangePasswordEdit;
 
     public:
 
@@ -105,12 +101,6 @@ class ApplicationSettingsDialog : public QDialog
 
         //! Range API server changed.
         void onRangeApiServerChanged(const QString &);
-
-        //! Range account changed.
-        void onRangeAccountChanged(const QString &);
-
-        //! Range password changed.
-        void onRangePasswordChanged(const QString &);
 
         //! Default button was clicked.
         void onDefaultClicked(void);

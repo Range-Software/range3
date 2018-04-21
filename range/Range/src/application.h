@@ -14,7 +14,6 @@
 #include <QApplication>
 #include <QPalette>
 
-#include <ralib.h>
 #include <rblib.h>
 
 class Application : public QApplication
@@ -54,9 +53,6 @@ class Application : public QApplication
 
         //! User signed out.
         void onSignedOut(void);
-
-        //! Client license received.
-        void onLicenseReceived(const RLicense &license);
         
 };
 

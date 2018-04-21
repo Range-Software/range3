@@ -27,8 +27,6 @@ class MainSettings : public QSettings
 
         //! License file name without path.
         static const QString licenseFileName;
-        //! Module license file name without path.
-        static const QString moduleLicenseFileName;
         //! Release notes file name without path.
         static const QString releaseNotesFileName;
 
@@ -83,9 +81,6 @@ class MainSettings : public QSettings
 
         //! Return license file name.
         QString findLicenseFileName(void) const;
-
-        //! Return module license file name.
-        QString findModuleLicenseFileName(void) const;
 
         //! Return release notes file name.
         QString findReleaseNotesFileName(void) const;

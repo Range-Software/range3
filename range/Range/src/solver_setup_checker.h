@@ -54,9 +54,6 @@ class SolverSetupChecker
         //! Check boundary conditions.
         void checkBoundaryConditions(QStringList &warnings,QStringList &errors) const;
 
-        //! Check license.
-        void checkLicense(QStringList &warnings,QStringList &errors) const;
-
 };
 
 #endif // __SOLVER_SETUP_CHECKER_H__

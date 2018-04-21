@@ -13,7 +13,6 @@
 
 #include <QNetworkAccessManager>
 
-#include <ralib.h>
 #include <rblib.h>
 
 #include "http_request_worker.h"
@@ -43,9 +42,6 @@ class RRARequestWorker : public HttpRequestWorker
         //! Log out.
         void logOut(const QString &account);
 
-        //! Request client license.
-        void requestClientLicense(void);
-
         //! Send usage info.
         void sendUsageInfo(const QString &usageInfo);
 
@@ -74,9 +70,6 @@ class RRARequestWorker : public HttpRequestWorker
 
         //! Login status.
         void loginStatus(const QString &status, bool loggedIn, const QString &responseMessage);
-
-        //! Client license request is complete.
-        void clientLicense(const RLicense &license, const QString &responseMessage);
 
         //! Usage request is complete.
         void usage(const QString &data, const QString &responseMessage);
