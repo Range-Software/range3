@@ -25,11 +25,10 @@ namespace RVendor
     static const QString shortName("Range");
     static const QString title("Finite Element Analysis");
     static const QString description("Engineering simulation software");
-//    static const QString author("Tom&aacute;&#353; &#352;oltys");
     static const QString author("Tomáš Šoltys");
     static const QString email("tomas.soltys@range-software.com");
     static const QString www("http://www.range-software.com");
-    static const RVersion version(3,0,1,RVersion::ReleaseCandidate);
+    static const RVersion version(3,0,0,RVersion::Release);
     static const short year = 2018;
 }
 
