@@ -15,6 +15,8 @@
 
 #include <rmlib.h>
 
+#include "value_line_edit.h"
+
 class TimeSolverSetupWidget : public QWidget
 {
 
@@ -24,11 +26,18 @@ class TimeSolverSetupWidget : public QWidget
 
         //! Time solver.
         RTimeSolver timeSolver;
+        //! End time - readonly.
+        ValueLineEdit *lineEndTime;
 
     public:
 
         //! Constructor.
         explicit TimeSolverSetupWidget(const RTimeSolver &timeSolver, QWidget *parent = 0);
+
+    protected:
+
+        //! Find end time.
+        double findEndTime(void) const;
 
     signals:
 

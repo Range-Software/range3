@@ -64,6 +64,17 @@ TimeSolverSetupWidget::TimeSolverSetupWidget(const RTimeSolver &timeSolver, QWid
 
     QObject::connect(lineStartTime,&ValueLineEdit::valueChanged,this,&TimeSolverSetupWidget::onStartTimeChanged);
 
+    // End time
+    QLabel *labelEndTime = new QLabel(tr("End time") + " (" + tr("read only") + ")");
+    groupLayout->addWidget(labelEndTime,groupLayoutRow,0);
+
+    this->lineEndTime = new ValueLineEdit;
+    this->lineEndTime->setDoubleValidator();
+    this->lineEndTime->setValue(this->findEndTime());
+    this->lineEndTime->setToolTip(tr("End time in seconds."));
+    this->lineEndTime->setReadOnly(true);
+    groupLayout->addWidget(this->lineEndTime,groupLayoutRow++,1);
+
     // Default time-step size
     QLabel *labelTimeStepSize = new QLabel(tr("Time-step size"));
     groupLayout->addWidget(labelTimeStepSize,groupLayoutRow,0);
@@ -102,6 +113,11 @@ TimeSolverSetupWidget::TimeSolverSetupWidget(const RTimeSolver &timeSolver, QWid
     this->connect(spinOutputFrequency,SIGNAL(valueChanged(int)),SLOT(onOutputFrequencyChanged(int)));
 }
 
+double TimeSolverSetupWidget::findEndTime(void) const
+{
+    return this->timeSolver.getInputStartTime() + this->timeSolver.getInputTimeStepSize() * this->timeSolver.getInputNTimeSteps();
+}
+
 void TimeSolverSetupWidget::onTimeSolverEnabledChanged(bool checked)
 {
     this->timeSolver.setEnabled(checked);
@@ -121,23 +137,27 @@ void TimeSolverSetupWidget::onTimeApproximationChanged(int index)
 void TimeSolverSetupWidget::onStartTimeChanged(double startTime)
 {
     this->timeSolver.setInputStartTime(startTime);
+    this->lineEndTime->setValue(this->findEndTime());
     emit this->changed(this->timeSolver);
 }
 
 void TimeSolverSetupWidget::onTimeStepSizeChanged(double timeStepSize)
 {
     this->timeSolver.setInputTimeStepSize(timeStepSize);
+    this->lineEndTime->setValue(this->findEndTime());
     emit this->changed(this->timeSolver);
 }
 
 void TimeSolverSetupWidget::onNTimeStepsChanged(int nTimeSteps)
 {
     this->timeSolver.setInputNTimeSteps(nTimeSteps);
+    this->lineEndTime->setValue(this->findEndTime());
     emit this->changed(this->timeSolver);
 }
 
 void TimeSolverSetupWidget::onOutputFrequencyChanged(int outputFrequency)
 {
     this->timeSolver.setOutputFrequency(outputFrequency);
+    this->lineEndTime->setValue(this->findEndTime());
     emit this->changed(this->timeSolver);
 }
