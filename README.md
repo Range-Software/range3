@@ -1,7 +1,7 @@
 # Range Software
 Finite Element Analysis
 
-![Range Software](http://www.range-software.com/new/files/common/Range3-CFD.png)
+![Range Software](http://www.range-software.com/files/common/Range3-CFD.png)
 
 ## Based on
 
