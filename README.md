@@ -3,11 +3,6 @@ Finite Element Analysis
 
 ![Range Software](http://www.range-software.com/files/common/Range3-CFD.png)
 
-## Based on
-
-* Qt - https://www.qt.io/
-* TetGen - http://tetgen.org
-
 ## Build
 ```
 $ ./scripts/build.sh --clean
@@ -20,3 +15,8 @@ Where **<linux_distribution>** needs to be replaced with short string identifyin
 
 ## Download
 To download already built binaries please visit http://range-software.com
+
+## Powered by
+
+* Qt - https://www.qt.io/
+* TetGen - http://tetgen.org
