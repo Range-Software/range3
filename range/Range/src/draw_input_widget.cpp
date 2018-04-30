@@ -1,0 +1,155 @@
+/*********************************************************************
+ *  AUTHOR: Tomas Soltys                                             *
+ *  FILE:   draw_input_widget.cpp                                    *
+ *  GROUP:  Range                                                    *
+ *  TYPE:   source file (*.cpp)                                      *
+ *  DATE:   14-th October 2014                                       *
+ *                                                                   *
+ *  DESCRIPTION: Draw input widget class definition                  *
+ *********************************************************************/
+
+#include <QGridLayout>
+#include <QStackedLayout>
+#include <QPushButton>
+#include <QMessageBox>
+
+#include "draw_input_widget.h"
+#include "session.h"
+
+DrawInputWidget::DrawInputWidget(QWidget *parent) :
+    QWidget(parent)
+{
+    this->stackedLayout = new QStackedLayout;
+    this->setLayout(this->stackedLayout);
+
+    this->positionWidget = new PositionWidget(tr("Position"),RR3Vector());
+    this->positionWidget->hideSliders();
+    this->positionWidget->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Minimum);
+    this->stackedLayout->addWidget(this->positionWidget);
+
+    QObject::connect(this->positionWidget,
+                     &PositionWidget::changed,
+                     this,
+                     &DrawInputWidget::onPositionWidgetChanged);
+    QObject::connect(this->positionWidget,
+                     &PositionWidget::closed,
+                     this,
+                     &DrawInputWidget::onPositionWidgetClosed);
+
+    this->layoutWidget = new QWidget;
+    this->stackedLayout->addWidget(this->layoutWidget);
+    this->stackedLayout->setCurrentWidget(this->layoutWidget);
+
+    QGridLayout *layout = new QGridLayout;
+    this->layoutWidget->setLayout(layout);
+
+    this->tree = new DrawInputTree;
+    layout->addWidget(this->tree,0,0,1,2);
+
+    QObject::connect(this->tree,
+                     &DrawInputTree::selectionChanged,
+                     this,
+                     &DrawInputWidget::onSelectionChanged);
+    QObject::connect(this->tree,
+                     &DrawInputTree::positionRequest,
+                     this,
+                     &DrawInputWidget::onPositionRequest);
+    QObject::connect(this->tree,
+                     &DrawInputTree::inputParameterChanged,
+                     this,
+                     &DrawInputWidget::onInputParameterChanged);
+
+    this->mergeNodesCheck = new QCheckBox(tr("Merge near nodes"));
+    this->mergeNodesCheck->setCheckState(Qt::Checked);
+    layout->addWidget(this->mergeNodesCheck,1,0,1,2);
+
+    QIcon removeIcon(":/icons/file/pixmaps/range-remove.svg");
+    QIcon okIcon(":/icons/file/pixmaps/range-ok.svg");
+
+    this->removeButton = new QPushButton(removeIcon,tr("Remove"));
+    this->removeButton->setDisabled(true);
+    layout->addWidget(this->removeButton,2,0,1,1);
+
+    QObject::connect(this->removeButton,
+                     &QPushButton::clicked,
+                     this,
+                     &DrawInputWidget::onRemoveClicked);
+
+    this->okButton = new QPushButton(okIcon,tr("Ok"));
+    layout->addWidget(this->okButton,2,1,1,1);
+
+    QObject::connect(this->okButton,
+                     &QPushButton::clicked,
+                     this,
+                     &DrawInputWidget::onOkClicked);
+}
+
+void DrawInputWidget::onPositionRequest(const RR3Vector &position)
+{
+    this->stackedLayout->setCurrentWidget(this->positionWidget);
+    this->positionWidget->setPosition(position);
+}
+
+void DrawInputWidget::onPositionWidgetChanged(const RR3Vector &position)
+{
+    this->tree->setRequestedItemVectorValue(position);
+}
+
+void DrawInputWidget::onPositionWidgetClosed(void)
+{
+    this->stackedLayout->setCurrentWidget(this->layoutWidget);
+}
+
+void DrawInputWidget::onSelectionChanged(const QList<uint> &objectIDs)
+{
+    this->removeButton->setEnabled(objectIDs.size() > 0);
+}
+
+void DrawInputWidget::onInputParameterChanged(uint objectID, uint)
+{
+    Session::getInstance().getDrawEngine()->getObject(objectID)->updateModel();
+}
+
+void DrawInputWidget::onRemoveClicked(void)
+{
+    QList<uint> objectIDs = this->tree->getSelectedObjectIDs();
+
+    for (int i=objectIDs.size()-1;i>=0;--i)
+    {
+        Session::getInstance().getDrawEngine()->removeObject(objectIDs[i]);
+    }
+}
+
+void DrawInputWidget::onOkClicked(void)
+{
+    QList<uint> modelIDs = Session::getInstance().getSelectedModelIDs();
+
+    if (modelIDs.size() == 0)
+    {
+        QMessageBox::warning(this,tr("No model is selected"),tr("To draw an object at least one model must be selected."),QMessageBox::Ok);
+        return;
+    }
+
+    QString message = "Prepared objects will be added to following (selected) models:<ul>";
+    for (int i=0;i<modelIDs.size();i++)
+    {
+        message += "<li>" + Session::getInstance().getModel(modelIDs[i]).getName() + "</li>";
+    }
+    message += "</ul>";
+
+    int response = QMessageBox::question(this,
+                                         "Draw objects(s)?",
+                                         message,
+                                         QMessageBox::Ok | QMessageBox::Cancel,
+                                         QMessageBox::Cancel);
+    if (response == QMessageBox::Cancel)
+    {
+        return;
+    }
+
+    this->tree->releaseRequestedItem();
+    Session::getInstance().getDrawEngine()->processObjects(modelIDs,
+                                                           this->mergeNodesCheck->checkState() != Qt::Unchecked,
+                                                           RConstants::eps,
+                                                           true);
+}
