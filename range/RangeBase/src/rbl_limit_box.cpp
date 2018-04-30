@@ -27,6 +27,12 @@ void RLimitBox::_init(const RLimitBox *pBox)
 }
 
 RLimitBox::RLimitBox()
+    : xl(0.0)
+    , xu(0.0)
+    , yl(0.0)
+    , yu(0.0)
+    , zl(0.0)
+    , zu(0.0)
 {
     this->_init();
 }

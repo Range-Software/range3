@@ -60,11 +60,11 @@ void RMeshGenerator::generate(const RMeshInput &meshInput, RModel &model)
     catch (int errorCode)
     {
         RLogger::unindent();
-        free(args);
+        delete [] args;
         throw RError(R_ERROR_APPLICATION,R_ERROR_REF,"Mesh generation failed with error code \"%d\"", errorCode);
     }
 
-    free(args);
+    delete [] args;
 
     // Convert TetGen mesh to Range model.
     try

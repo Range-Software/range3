@@ -235,7 +235,7 @@ void RTetGen::importModel(const RModel &model, bool reconstruct)
                     this->facetlist[ce].polygonlist[0].vertexlist[j] = model.getElement(i).getNodeId(j) + this->firstnumber;
                 }
 
-                this->facetmarkerlist[i] = 0;
+                this->facetmarkerlist[ce] = 0;
 
                 faceBook[i] = ce;
 
