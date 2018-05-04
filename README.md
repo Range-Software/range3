@@ -7,7 +7,7 @@ Finite Element Analysis
 ```
 $ ./scripts/build.sh --clean
 ```
-To create an RPM package 
+To create an RPM package
 ```
 $ ./scripts/create_package.sh --version=3.0.0 --distro=<linux_distribution>
 ```
