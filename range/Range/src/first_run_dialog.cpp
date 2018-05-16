@@ -68,9 +68,5 @@ FirstRunDialog::FirstRunDialog(QWidget *parent)
 void FirstRunDialog::onSendUsageInfoToggled(bool checked)
 {
     MainSettings::getInstance().getApplicationSettings()->setSendUsageInfo(checked);
+    MainSettings::getInstance().getApplicationSettings()->setRangeApiAllowed(true);
 }
-
-//void FirstRunDialog::onApplicationSettingsButtonClicked(bool checked)
-//{
-//    ApplicationSettingsDialog(MainSettings::getInstance().getApplicationSettings(),this).exec();
-//}
