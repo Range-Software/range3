@@ -225,7 +225,7 @@ bool ApplicationSettings::getDefaultSendUsageInfo(void)
 
 bool ApplicationSettings::getDefaultRangeApiAllowed(void)
 {
-    return false;
+    return true;
 }
 
 const QString ApplicationSettings::getDefaultRangeApiServer(void)
