@@ -61,16 +61,18 @@
         <file alias="pixmaps/range-scale-10-Grayscale R">pixmaps/range-scale-grayscale_r.png</file>
         <file alias="pixmaps/range-scale-11-Grayscale RS">pixmaps/range-scale-grayscale_rs.png</file>
         <file alias="pixmaps/range-scale-12-Grayscale RSO">pixmaps/range-scale-grayscale_rso.png</file>
-        <file alias="pixmaps/range-scale-13-Fire">pixmaps/range-scale-fire_n.png</file>
-        <file alias="pixmaps/range-scale-14-Fire R">pixmaps/range-scale-fire_r.png</file>
-        <file alias="pixmaps/range-scale-15-WhiteBlue">pixmaps/range-scale-wb_n.png</file>
-        <file alias="pixmaps/range-scale-16-WhiteBlue R">pixmaps/range-scale-wb_r.png</file>
-        <file alias="pixmaps/range-scale-17-WhiteGreen">pixmaps/range-scale-wg_n.png</file>
-        <file alias="pixmaps/range-scale-18-WhiteGreen R">pixmaps/range-scale-wg_r.png</file>
-        <file alias="pixmaps/range-scale-19-WhiteRed">pixmaps/range-scale-wr_n.png</file>
-        <file alias="pixmaps/range-scale-20-WhiteRed R">pixmaps/range-scale-wr_r.png</file>
-        <file alias="pixmaps/range-scale-21-Value limits">pixmaps/range-scale-limit_n.png</file>
-        <file alias="pixmaps/range-scale-22-Value limits R">pixmaps/range-scale-limit_r.png</file>
+        <file alias="pixmaps/range-scale-13-RWB">pixmaps/range-scale-rwb_n.png</file>
+        <file alias="pixmaps/range-scale-14-RWB R">pixmaps/range-scale-rwb_r.png</file>
+        <file alias="pixmaps/range-scale-15-Fire">pixmaps/range-scale-fire_n.png</file>
+        <file alias="pixmaps/range-scale-16-Fire R">pixmaps/range-scale-fire_r.png</file>
+        <file alias="pixmaps/range-scale-17-WhiteBlue">pixmaps/range-scale-wb_n.png</file>
+        <file alias="pixmaps/range-scale-18-WhiteBlue R">pixmaps/range-scale-wb_r.png</file>
+        <file alias="pixmaps/range-scale-19-WhiteGreen">pixmaps/range-scale-wg_n.png</file>
+        <file alias="pixmaps/range-scale-20-WhiteGreen R">pixmaps/range-scale-wg_r.png</file>
+        <file alias="pixmaps/range-scale-21-WhiteRed">pixmaps/range-scale-wr_n.png</file>
+        <file alias="pixmaps/range-scale-22-WhiteRed R">pixmaps/range-scale-wr_r.png</file>
+        <file alias="pixmaps/range-scale-23-Value limits">pixmaps/range-scale-limit_n.png</file>
+        <file alias="pixmaps/range-scale-24-Value limits R">pixmaps/range-scale-limit_r.png</file>
     </qresource>
     <qresource prefix="/icons/media">
         <file>pixmaps/range-play_play.svg</file>
