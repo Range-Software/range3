@@ -41,7 +41,7 @@ path_lnk='desktop'
 path_pix='pixmaps'
 
 # path where pacgage will be installed after un-packing
-installDir='/opt/range3'
+rpmInstallDir='/opt/range3'
 
 # RPM package information
 summary='Range Software Package'
@@ -52,6 +52,7 @@ license='Commercial'
 group='Application/Engineering'
 desc='Range Software Package.\nSoftware for engineering simulations.\nFinite Element Analysis.'
 
+installToDir=
 version="3.0.1"
 distro=
 createRpm=false
@@ -70,22 +71,24 @@ function print_help
     echo ""
     echo " optional"
     echo ""
-    echo "  --rpm                      Create RPM"
-    echo "  --version=[VERSION]        Version string"
-    echo "  --distro=[STRING]          Distribution string"
+    echo "  --install-to=[DIRECTORY]       Install created package to 'DIRECTORY'"
     echo ""
-    echo "  --debug                    Create debug package"
+    echo "  --rpm                          Create RPM"
+    echo "  --version=[VERSION]            Version string"
+    echo "  --distro=[STRING]              Distribution string"
     echo ""
-    echo "  --build-dir=[DIRECTORY]    Custom build directory"
-    echo "  --install-dir=[DIRECTORY]  Custom install directory"
-    echo "  --help, -h, -?             Print this help and exit"
+    echo "  --debug                        Create debug package"
+    echo ""
+    echo "  --build-dir=[DIRECTORY]        Custom build directory"
+    echo "  --rpm-install-dir=[DIRECTORY]  Custom RPM install directory"
+    echo "  --help, -h, -?                 Print this help and exit"
 }
 
 while [ $# -gt 0 ]
 do
     case $1 in
-        --install-dir=*)
-            installDir=$( echo $1 | awk 'BEGIN{ FS="=" } { print $2 }' )
+        --install-to=*)
+            installToDir=$( echo $1 | awk 'BEGIN{ FS="=" } { print $2 }' )
             ;;
         --version=*)
             version=$( echo $1 | awk 'BEGIN{ FS="=" } { print $2 }' )
@@ -95,6 +98,9 @@ do
             ;;
         --rpm)
             createRpm=true
+            ;;
+        --rpm-install-dir=*)
+            rpmInstallDir=$( echo $1 | awk 'BEGIN{ FS="=" } { print $2 }' )
             ;;
         --debug)
             debug=true
@@ -182,14 +188,14 @@ source_path_mat=$packageDir'/'$path_mat
 source_path_lnk=$packageDir'/'$path_lnk
 source_path_pix=$packageDir'/'$path_pix
 
-inst_path_bin=$installDir'/'$path_bin
+inst_path_bin=$rpmInstallDir'/'$path_bin
 inst_path_man='/usr/share/man/man1'
-inst_path_doc=$installDir'/'$path_doc
-inst_path_hlp=$installDir'/'$path_hlp
-inst_path_dat=$installDir'/'$path_dat
-inst_path_mat=$installDir'/'$path_mat
+inst_path_doc=$rpmInstallDir'/'$path_doc
+inst_path_hlp=$rpmInstallDir'/'$path_hlp
+inst_path_dat=$rpmInstallDir'/'$path_dat
+inst_path_mat=$rpmInstallDir'/'$path_mat
 inst_path_lnk='/usr/share/applications'
-inst_path_pix=$installDir'/'$path_pix
+inst_path_pix=$rpmInstallDir'/'$path_pix
 
 # Set-up section - End ----------------------------------------------------
 
@@ -447,7 +453,7 @@ then
     echo '%files'                                 >> $packageSpec
     echo '%defattr(-,root,root)'                  >> $packageSpec
     echo                                          >> $packageSpec
-    echo '%dir '$installDir                       >> $packageSpec
+    echo '%dir '$rpmInstallDir                    >> $packageSpec
     for idx in ${!directories[*]}
     do
         directory=${directories[$idx]}
@@ -470,8 +476,20 @@ then
 fi
 # RPM creation section - End ----------------------------------------------
 
-echo_i "Cleanup"
-rm -rf $packageDir
+if [ ! -z "$installToDir" ]
+then
+    echo "Installing package"
+    touch_dir $installToDir
+    if [ $? -ne 0 ]
+    then
+        echo_e "Failed to touch install directory '${installToDir}'"
+        exit 1
+    fi
+    mv $packageDir $installToDir
+else
+    echo_i "Cleanup"
+    rm -rf $packageDir
+fi
 
 echo_i "Package file: $packageFile"
 
