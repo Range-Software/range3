@@ -3,15 +3,14 @@ Finite Element Analysis
 
 ![Range Software](http://www.range-software.com/files/common/Range3-CFD.png)
 
-## Build
+## Build && Install
 ```
-$ ./scripts/build.sh --clean
+$ ./scripts/build.sh --clean && ./scripts/create_package.sh --install-to=$HOME/bin
 ```
-To create an RPM package
+## Running the software
 ```
-$ ./scripts/create_package.sh --version=3.0.0 --distro=<linux_distribution>
+$ $HOME/bin/range-3.0.1/bin/Range
 ```
-Where **<linux_distribution>** needs to be replaced with short string identifying linux distribution on which the software was built.
 
 ## Download
 To download already built binaries please visit http://range-software.com
