@@ -638,9 +638,20 @@ void GLWidget::drawMessageBox(QPainter &painter, bool drawBox)
             {
                 if (pickItems.at(j).getEntityID().getType() == entityTypes[i])
                 {
-                    uint gid = rModel.getEntityGroupID(pickItems.at(j).getEntityID().getType(),pickItems.at(j).getEntityID().getEid());
-                    const QString eName = rModel.getEntityGroupPtr(gid)->getName();
-                    pickedEntities.insert(eName,pickedEntities.value(eName,0)+1);
+                    if (pickItems.at(j).getItemType() == PICK_ITEM_HOLE_ELEMENT)
+                    {
+                        const QString eName = tr("Hole edge");
+                        pickedEntities.insert(eName,pickedEntities.value(eName,0)+1);
+                    }
+                    else
+                    {
+                        if (pickItems.at(j).getEntityID().getType() != R_ENTITY_GROUP_NONE)
+                        {
+                            uint gid = rModel.getEntityGroupID(pickItems.at(j).getEntityID().getType(),pickItems.at(j).getEntityID().getEid());
+                            const QString eName = rModel.getEntityGroupPtr(gid)->getName();
+                            pickedEntities.insert(eName,pickedEntities.value(eName,0)+1);
+                        }
+                    }
                 }
             }
 
