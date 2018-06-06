@@ -57,7 +57,7 @@ GLScalarField::GLScalarField(GLWidget *glWidget, const RScalarField &scalarField
 }
 
 GLScalarField::GLScalarField(const GLScalarField &glScalarField)
-    : GLObject(glWidget)
+    : GLObject(glScalarField)
     , RScalarField(glScalarField)
 {
     this->_init(&glScalarField);
