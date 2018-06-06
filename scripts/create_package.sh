@@ -52,7 +52,7 @@ license='Commercial'
 group='Application/Engineering'
 desc='Range Software Package.\nSoftware for engineering simulations.\nFinite Element Analysis.'
 
-installToDir=
+installToDir=$HOME/bin
 version="3.0.1"
 distro=
 createRpm=false
@@ -71,7 +71,7 @@ function print_help
     echo ""
     echo " optional"
     echo ""
-    echo "  --install-to=[DIRECTORY]       Install created package to 'DIRECTORY'"
+    echo "  --install-to=[DIRECTORY]       Install created package to 'DIRECTORY' (default='$installToDir')"
     echo ""
     echo "  --rpm                          Create RPM"
     echo "  --version=[VERSION]            Version string"
