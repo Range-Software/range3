@@ -48,7 +48,7 @@ GLDimension::GLDimension(GLWidget *glWidget,
 }
 
 GLDimension::GLDimension(const GLDimension &glDimension)
-    : GLObject(glWidget)
+    : GLObject(glDimension)
 {
     this->_init(&glDimension);
 }

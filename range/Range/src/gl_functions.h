@@ -15,7 +15,7 @@
 
 #include <qglfunctions.h>
 
-#define GL_SAFE_CALL(__safe_call) __safe_call; GLFunctions::printError(#__safe_call,__FILE__,__LINE__)
+#define GL_SAFE_CALL(__safe_call) { __safe_call; GLFunctions::printError(#__safe_call,__FILE__,__LINE__); }
 
 namespace GLFunctions
 {
