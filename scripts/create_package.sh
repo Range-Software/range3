@@ -164,6 +164,7 @@ packagesDir="${buildDir}/packages"
 packageDir="${packagesDir}/$package"
 packageSpec="${packagesDir}/${package}.spec"
 packageFile="${packagesDir}/${package}.tar.gz"
+packageInstallDir="$installToDir/$package"
 
 touch_dir $packagesDir
 if [ $? -ne 0 ]
@@ -476,22 +477,26 @@ then
 fi
 # RPM creation section - End ----------------------------------------------
 
-if [ ! -z "$installToDir" ]
+if [ ! -z "$packageInstallDir" ]
 then
-    echo "Installing package"
-    touch_dir $installToDir
+    echo_i "Cleaning package installation directory '${packageInstallDir}'"
+    touch_dir $packageInstallDir true
     if [ $? -ne 0 ]
     then
-        echo_e "Failed to touch install directory '${installToDir}'"
+        echo_e "Failed to touch install directory '${packageInstallDir}'"
         exit 1
     fi
-    mv $packageDir $installToDir
-else
-    echo_i "Cleanup"
-    rm -rf $packageDir
+    echo_i "Installing package to '$packageInstallDir'"
+    mv -v $packageDir/* $packageInstallDir
 fi
+echo_i "Cleanup"
+rm -rfv $packageDir
 
-echo_i "Package file: $packageFile"
+echo_i "Package file: '$packageFile'"
+if [ ! -z "$packageInstallDir" ]
+then
+    echo_i "Package installation directory: '$packageInstallDir'"
+fi
 
 # End of script -----------------------------------------------------------
 
