@@ -14,6 +14,7 @@
 
 #include "rbl_value_vector.h"
 #include "rbl_error.h"
+#include "rbl_utils.h"
 
 RValueVector::RValueVector ()
 {
@@ -99,6 +100,20 @@ void RValueVector::remove (unsigned int position)
     std::advance (iter, position);
 
     this->values.erase (iter);
+}
+
+void RValueVector::remove(const std::vector<uint> &valueBook)
+{
+    RRVector valuesNew;
+    valuesNew.reserve(this->values.size());
+    for (uint i=0;i<this->values.size();i++)
+    {
+        if (valueBook[i] != RConstants::eod)
+        {
+            valuesNew.push_back(this->values[i]);
+        }
+    }
+    this->values = valuesNew;
 } /* RValueVector::remove */
 
 

@@ -460,9 +460,22 @@ void RVariable::removeValue (unsigned int valpos)
          iter != this->values.end();
          ++iter)
     {
-        iter->remove (valpos);
+        iter->remove(valpos);
     }
 } /* RVariable::removeValue */
+
+
+void RVariable::removeValues(const std::vector<uint> &valueBook)
+{    std::vector<RValueVector>::iterator iter;
+
+     for (iter = this->values.begin();
+          iter != this->values.end();
+          ++iter)
+     {
+         iter->remove(valueBook);
+     }
+
+} /* RVariable::removeValues */
 
 
 const RVariableData &RVariable::getVariableData(void) const

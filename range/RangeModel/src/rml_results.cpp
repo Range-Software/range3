@@ -293,4 +293,28 @@ void RResults::removeElement (unsigned int position)
     }
 
     this->nelements--;
-} /* RResults::removeElement */
+}
+
+void RResults::removeElements(const std::vector<uint> &elementBook)
+{
+    std::vector<RVariable>::iterator iter;
+
+    for (iter = this->variables.begin();
+         iter != this->variables.end();
+         ++iter)
+    {
+        if (iter->getApplyType() == R_VARIABLE_APPLY_ELEMENT)
+        {
+            iter->removeValues(elementBook);
+        }
+    }
+
+    this->nelements = 0;
+    for (uint i=0;i<uint(elementBook.size());i++)
+    {
+        if (elementBook[i] != RConstants::eod)
+        {
+            this->nelements++;
+        }
+    }
+} /* RResults::removeElements */

@@ -1946,6 +1946,7 @@ uint RModel::purgeUnusedElements(void)
 
     uint nElementGroups = this->getNElementGroups();
 
+    RLogger::info("Finding unused elements\n");
     // Find unused elements
     std::vector<uint> elementBook(this->getNElements(),RConstants::eod);
 
@@ -1961,16 +1962,24 @@ uint RModel::purgeUnusedElements(void)
         }
     }
 
+    RLogger::info("Removing unused elements\n");
+    RLogger::indent();
     // Remove unused elements
-    for (uint i=uint(this->elements.size());i>0;i--)
+    std::vector<RElement> elementsNew;
+    elementsNew.reserve(ne);
+    for (uint i=0;i<ne;i++)
     {
-        if (elementBook[i-1] == RConstants::eod)
+        if (elementBook[i] != RConstants::eod)
         {
-            this->elements.erase(this->elements.begin()+i-1);
-            this->RResults::removeElement(i-1);
+            elementsNew.push_back(this->elements[i]);
         }
     }
+    this->elements = elementsNew;
+    elementsNew.resize(0);
+    this->RResults::removeElements(elementBook);
+    RLogger::unindent();
 
+    RLogger::info("Fixing element ID references in element groups\n");
     // Fix element ID references in element groups
     uint nElements = 0;
     for (uint i=0;i<elementBook.size();i++)
@@ -1991,6 +2000,7 @@ uint RModel::purgeUnusedElements(void)
         }
     }
 
+    RLogger::info("Updating surface neighbors\n");
     // Update surface neighbors
     if (this->surfaceNeigs.size() == elementBook.size())
     {
@@ -2010,16 +2020,22 @@ uint RModel::purgeUnusedElements(void)
                 }
             }
         }
-        for (uint i=uint(elementBook.size());i>0;i--)
+
+        std::vector<RUVector> surfaceNeigsNew;
+        surfaceNeigsNew.reserve(elementBook.size());
+
+        for (uint i=0;i<uint(elementBook.size());i++)
         {
-            uint elementID = i-1;
-            if (elementBook[elementID] == RConstants::eod)
+            if (elementBook[i] != RConstants::eod)
             {
-                this->surfaceNeigs.erase(this->surfaceNeigs.begin() + elementID);
+                surfaceNeigsNew.push_back(surfaceNeigs[i]);
             }
         }
+        this->surfaceNeigs = surfaceNeigsNew;
+        surfaceNeigsNew.resize(0);
     }
 
+    RLogger::info("Updating volume neighbors\n");
     // Update volume neighbors
     if (this->volumeNeigs.size() == elementBook.size())
     {
@@ -2039,14 +2055,19 @@ uint RModel::purgeUnusedElements(void)
                 }
             }
         }
-        for (uint i=uint(elementBook.size());i>0;i--)
+
+        std::vector<RUVector> volumeNeigsNew;
+        volumeNeigsNew.reserve(elementBook.size());
+
+        for (uint i=0;i<uint(elementBook.size());i++)
         {
-            uint elementID = i-1;
-            if (elementBook[elementID] == RConstants::eod)
+            if (elementBook[i] != RConstants::eod)
             {
-                this->volumeNeigs.erase(this->volumeNeigs.begin() + elementID);
+                volumeNeigsNew.push_back(volumeNeigs[i]);
             }
         }
+        this->volumeNeigs = volumeNeigsNew;
+        volumeNeigsNew.resize(0);
     }
     RLogger::unindent();
 
