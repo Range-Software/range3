@@ -112,23 +112,38 @@ Model * Session::getModelPtr(uint position)
 void Session::addModel(const Model &model)
 {
     RLogger::trace("void Session::addModel(const Model &model)\n");
+    bool locked = this->trylock();
     this->models.push_back(model);
     this->models.last().initializeMeshInput();
+    if (locked)
+    {
+        this->unlock();
+    }
     emit this->modelAdded(this->models.size()-1);
 }
 
 void Session::setModel(uint position, const Model &model)
 {
     RLogger::trace("void Session::setModel(uint position, const Model &model)\n");
+    bool locked = this->trylock();
     this->models[position] = model;
+    if (locked)
+    {
+        this->unlock();
+    }
     this->setModelChanged(position);
 }
 
 void Session::removeModel(uint position)
 {
     RLogger::trace("void Session::removeModel(uint position)\n");
+    bool locked = this->trylock();
     this->models.removeAt(int(position));
     this->pickList.removeItems(position);
+    if (locked)
+    {
+        this->unlock();
+    }
     emit this->modelRemoved(position);
 }
 

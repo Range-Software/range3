@@ -67,6 +67,10 @@ class RValueVector
         //! Remove item at given position from the value vector.
         void remove ( unsigned int position );
 
+        //! Remove item at given position from the value vector.
+        //! If valueBook[i] == RConstants::eod then value will be removed.
+        void remove(const std::vector<uint> &valueBook);
+
         //! Fill values with given value.
         void fill ( double value );
 

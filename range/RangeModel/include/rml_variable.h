@@ -284,6 +284,10 @@ class RVariable
         //! Remove value at given position from all vectors.
         void removeValue ( unsigned int valpos );
 
+        //! Remove values at given positions from all vectors.
+        //! If valueBook[i] == RConstants::eod then value will be removed.
+        void removeValues(const std::vector<uint> &valueBook);
+
         //! Return const reference to variable data.
         const RVariableData & getVariableData ( void ) const;
 

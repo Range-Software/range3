@@ -120,6 +120,10 @@ class RResults
         //! Remove element from results at give position.
         virtual void removeElement ( unsigned int position );
 
+        //! Remove elements from results at give positions.
+        //! If elementBook[i] == RConstants::eod then element will be removed.
+        void removeElements(const std::vector<uint>&elementBook);
+
 };
 
 #endif /* __RML_RESULTS_H__ */
