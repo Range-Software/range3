@@ -1,4 +1,10 @@
 ------------------------------------------------------------------
+Version 3.0.2
+
+* Improved performance when removing entity from the model
+* Fixed crash when hole element is selected
+
+------------------------------------------------------------------
 Version 3.0.1
 
 * Enable Range Remote API (RRA) if sending user data is allowed
