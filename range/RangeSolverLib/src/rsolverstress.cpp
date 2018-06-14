@@ -1820,22 +1820,30 @@ void RSolverStress::applyLocalRotations(unsigned int elementID, RRMatrix &Ae)
 {
     const RElement &rElement = this->pModel->getElement(elementID);
     RRMatrix T;
-    T.setIdentity(Ae.getNRows());
+
+    bool first = true;
 
     for (uint i=0;i<rElement.size();i++)
     {
         uint nodeId = rElement.getNodeId(i);
         if (this->localRotations[nodeId].isActive())
         {
+            if (first)
+            {
+                T.setIdentity(Ae.getNRows());
+                first = false;
+            }
             T.setBlock(this->localRotations[nodeId].getR(),3*i,3*i);
         }
     }
+    if (!first)
+    {
+        RRMatrix Tt(T);
+        Tt.transpose();
 
-    RRMatrix Tt(T);
-    Tt.transpose();
+        RRMatrix Aetmp;
 
-    RRMatrix Aetmp;
-
-    RRMatrix::mlt(Tt,Ae,Aetmp);
-    RRMatrix::mlt(Aetmp,T,Ae);
+        RRMatrix::mlt(Tt,Ae,Aetmp);
+        RRMatrix::mlt(Aetmp,T,Ae);
+    }
 }
