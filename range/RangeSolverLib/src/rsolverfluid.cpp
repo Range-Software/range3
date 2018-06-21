@@ -771,6 +771,7 @@ void RSolverFluid::findInputVectors(void)
     }
 
     RBVector elementWall(this->pModel->getNElements(),false);
+    RBVector elementFrictionlessWall(this->pModel->getNElements(),false);
 
     // Apply boundary conditions
     for (uint i=0;i<this->pModel->getNElementGroups();i++)
@@ -787,6 +788,7 @@ void RSolverFluid::findInputVectors(void)
             double pressure = 0.0;
 
             bool wallSet = false;
+            bool frictionlessWallSet = false;
             bool velocitySet = false;
             bool pressureSet = false;
 
@@ -796,6 +798,10 @@ void RSolverFluid::findInputVectors(void)
             {
                 wallSet = true;
                 velocitySet = true;
+            }
+            else if (bc.getType() == R_BOUNDARY_CONDITION_WALL_FRICTIONLESS)
+            {
+                frictionlessWallSet = true;
             }
             else if (bc.getType() == R_BOUNDARY_CONDITION_INFLOW_VELOCITY)
             {
@@ -878,7 +884,7 @@ void RSolverFluid::findInputVectors(void)
 //                pressureSet = true;
 //            }
 
-            if (!wallSet && !velocitySet && !pressureSet)
+            if (!wallSet && !frictionlessWallSet && !velocitySet && !pressureSet)
             {
                 continue;
             }
@@ -888,6 +894,10 @@ void RSolverFluid::findInputVectors(void)
                 if (wallSet)
                 {
                     elementWall[pElementGroup->get(k)] = true;
+                }
+                if (frictionlessWallSet)
+                {
+                    elementFrictionlessWall[pElementGroup->get(k)] = true;
                 }
                 if (velocitySet)
                 {
@@ -926,6 +936,14 @@ void RSolverFluid::findInputVectors(void)
                 this->nodeVelocity.x[rElement.getNodeId(j)] = 0.0;
                 this->nodeVelocity.y[rElement.getNodeId(j)] = 0.0;
                 this->nodeVelocity.z[rElement.getNodeId(j)] = 0.0;
+            }
+        }
+        if (elementFrictionlessWall[i])
+        {
+            const RElement &rElement = this->pModel->getElement(i);
+            for (uint j=0;j<rElement.size();j++)
+            {
+                this->nodeVelocity.x[rElement.getNodeId(j)] = 0.0;
             }
         }
     }
