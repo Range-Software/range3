@@ -8,6 +8,7 @@
  *  DESCRIPTION: Stop-watch definition                               *
  *********************************************************************/
 
+#include <QDateTime>
 #include <cmath>
 
 #include "rbl_stop_watch.h"
@@ -44,33 +45,28 @@ RStopWatch &RStopWatch::operator =(const RStopWatch &stopWatch)
 
 void RStopWatch::reset(void)
 {
-    this->startTime = std::clock();
+    this->startTime = QDateTime::currentMSecsSinceEpoch();
     this->pauseTime = this->startTime;
 }
 
 void RStopWatch::pause(void)
 {
-    this->pauseTime = std::clock();
+    this->pauseTime = QDateTime::currentMSecsSinceEpoch();
 }
 
 void RStopWatch::resume(void)
 {
-    this->startTime += std::clock() - this->pauseTime;
+    this->startTime += QDateTime::currentMSecsSinceEpoch() - this->pauseTime;
 }
 
-clock_t RStopWatch::getClock(void) const
+qint64 RStopWatch::getClock(void) const
 {
-    return std::clock() - this->startTime;
+    return QDateTime::currentMSecsSinceEpoch() - this->startTime;
 }
 
-unsigned int RStopWatch::getMiliSeconds(void) const
+qint64 RStopWatch::getMiliSeconds(void) const
 {
-    return (unsigned int)(std::ceil((1000.0 * this->getClock()) / CLOCKS_PER_SEC));
-}
-
-unsigned int RStopWatch::getSeconds(void) const
-{
-    return (unsigned int)(std::ceil(double(this->getClock()) / CLOCKS_PER_SEC));
+    return this->getClock();
 }
 
 void RStopWatch::addElapsedTime(clock_t elapsedTime)

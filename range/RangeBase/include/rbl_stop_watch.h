@@ -11,7 +11,7 @@
 #ifndef __RBL_STOP_WATCH_H__
 #define __RBL_STOP_WATCH_H__
 
-#include <ctime>
+#include <QtGlobal>
 
 class RStopWatch
 {
@@ -19,9 +19,9 @@ class RStopWatch
     protected:
 
         //! Start time.
-        clock_t startTime;
+        qint64 startTime;
         //! Pause time.
-        clock_t pauseTime;
+        qint64 pauseTime;
 
     private:
 
@@ -52,13 +52,10 @@ class RStopWatch
         void resume(void);
 
         //! Return elapsed clock.
-        clock_t getClock(void) const;
+        qint64 getClock(void) const;
 
         //! Return elapsed time in mili seconds.
-        unsigned int getMiliSeconds(void) const;
-
-        //! Return elapsed time in seconds.
-        unsigned int getSeconds(void) const;
+        qint64 getMiliSeconds(void) const;
 
         //! Add elapsed time to stop watch.
         void addElapsedTime(clock_t elapsedTime);

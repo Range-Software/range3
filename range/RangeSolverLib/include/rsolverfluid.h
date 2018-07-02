@@ -60,6 +60,10 @@ class RSolverFluid : public RSolverGeneric
         //! Pressure convergence.
         double cvgP;
 
+        //! Vector of surface normals.
+        std::vector<RR3Vector> elementNormals;
+        //! Element gravity magnitude.
+        RRVector elementGravityMagnitude;
         //! Vector of element level shape function derivatives.
         std::vector<RElementShapeDerivation *> shapeDerivations;
 

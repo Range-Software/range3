@@ -295,11 +295,14 @@ void RSolverFluid::prepare(void)
     this->pModel->convertNodeToElementVector(this->nodeVelocity.y,this->elementVelocity.y);
     this->pModel->convertNodeToElementVector(this->nodeVelocity.z,this->elementVelocity.z);
 
+    if (this->meshChanged)
+    {
+        this->computeElementScales();
+        this->computeShapeDerivatives();
+    }
     if (this->taskIteration == 0)
     {
         this->computeFreePressureNodeHeight();
-        this->computeElementScales();
-        this->computeShapeDerivatives();
         this->streamVelocity = RSolverFluid::computeStreamVelocity(*this->pModel,this->nodeVelocity,false);
     }
 
@@ -318,6 +321,14 @@ void RSolverFluid::prepare(void)
     bool abort = false;
 
     RMatrixManager<FluidMatrixContainer> matrixManager;
+
+    if (this->meshChanged)
+    {
+        this->elementNormals.resize(this->pModel->getNElements(),RR3Vector(0.0,0.0,0.0));
+        this->elementGravityMagnitude.resize(this->pModel->getNElements());
+    }
+
+    this->buildStopWatch.resume();
 
     // Compute element matrices
     #pragma omp parallel for default(shared) private(matrixManager)
@@ -347,22 +358,26 @@ void RSolverFluid::prepare(void)
                     continue;
                 }
 
-                RR3Vector normal;
-                element.findNormal(this->pModel->getNodes(),normal[0],normal[1],normal[2]); // no need to recalculate if mesh does not change !!!
+                RR3Vector &normal = this->elementNormals[elementID];
+                if (this->meshChanged)
+                {
+                    // no need to recalculate if mesh does not change !!!
+                    element.findNormal(this->pModel->getNodes(),normal[0],normal[1],normal[2]);
+                    this->elementGravityMagnitude[elementID] = std::sqrt(  std::pow(elementGravity.x[elementID],2)
+                                                                         + std::pow(elementGravity.y[elementID],2)
+                                                                         + std::pow(elementGravity.z[elementID],2));
+                }
 
                 double ro = this->elementDensity[elementID];
 
                 double fp = elementFreePressure[elementID];
-                double gm = std::sqrt(  std::pow(elementGravity.x[elementID],2)
-                                      + std::pow(elementGravity.y[elementID],2)
-                                      + std::pow(elementGravity.z[elementID],2));
+                double gm = this->elementGravityMagnitude[elementID];
 
                 for (uint intPoint=0;intPoint<nInp;intPoint++)
                 {
                     const RElementShapeFunction &shapeFunc = RElement::getShapeFunction(element.getType(),intPoint);
                     const RRVector &N = shapeFunc.getN();
-                    RRMatrix J, Rt;
-                    double detJ = element.findJacobian(this->pModel->getNodes(),intPoint,J,Rt); // no need to recalculate if mesh does not change !!!
+                    double detJ = this->shapeDerivations[elementID]->getJacobian(intPoint);
                     double integValue = detJ * shapeFunc.getW();
 
                     for (uint m=0;m<element.size();m++)
@@ -382,23 +397,16 @@ void RSolverFluid::prepare(void)
                 }
             }
 
-            RStopWatch localStopWatch;
-            localStopWatch.reset();
-
             if (R_ELEMENT_TYPE_IS_VOLUME(element.getType()))
             {
                 if (!this->computableElements[elementID])
                 {
                     continue;
                 }
-                localStopWatch.resume();
                 this->computeElement(elementID,Ae,be,matrixManager);
-                localStopWatch.pause();
             }
             #pragma omp critical
             {
-                this->buildStopWatch.addElapsedTime(localStopWatch.getClock());
-
                 this->assemblyStopWatch.resume();
                 this->applyLocalRotations(elementID,Ae);
                 this->assemblyMatrix(elementID,Ae,be);
@@ -415,6 +423,8 @@ void RSolverFluid::prepare(void)
             #pragma omp flush (abort)
         }
     }
+
+    this->buildStopWatch.pause();
 
     if (abort)
     {
@@ -670,10 +680,10 @@ void RSolverFluid::statistics(void)
 
     RLogger::info("Convergence:   %-13g\n",residual);
 
-    RLogger::info("Build time:    %9u [ms]\n",this->buildStopWatch.getMiliSeconds());
-    RLogger::info("Assembly time: %9u [ms]\n",this->assemblyStopWatch.getMiliSeconds());
-    RLogger::info("Solver time:   %9u [ms]\n",this->solverStopWatch.getMiliSeconds());
-    RLogger::info("Update time:   %9u [ms]\n",this->updateStopWatch.getMiliSeconds());
+    RLogger::info("Build time:        %9u [ms]\n",this->buildStopWatch.getMiliSeconds());
+    RLogger::info(" -> Assembly time: %9u [ms]\n",this->assemblyStopWatch.getMiliSeconds());
+    RLogger::info("Solver time:       %9u [ms]\n",this->solverStopWatch.getMiliSeconds());
+    RLogger::info("Update time:       %9u [ms]\n",this->updateStopWatch.getMiliSeconds());
 
     counter++;
 }
@@ -1120,7 +1130,7 @@ void RSolverFluid::computeShapeDerivatives(void)
         uint elementID = i;
 
         const RElement &rElement = this->pModel->getElement(elementID);
-        if (R_ELEMENT_TYPE_IS_VOLUME(rElement.getType()))
+//        if (R_ELEMENT_TYPE_IS_VOLUME(rElement.getType()))
         {
             if (!this->computableElements[elementID])
             {

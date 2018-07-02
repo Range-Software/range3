@@ -161,7 +161,7 @@ class RSparseVector
             return values;
         }
 
-        //! Clear vetor.
+        //! Clear vector.
         void clear(void)
         {
             this->data.clear();
