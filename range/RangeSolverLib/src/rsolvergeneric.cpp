@@ -21,6 +21,7 @@ void RSolverGeneric::_init(const RSolverGeneric *pGenericSolver)
 {
     if (pGenericSolver)
     {
+        this->meshChanged = pGenericSolver->meshChanged;
         this->problemType = pGenericSolver->problemType;
         this->pModel = pGenericSolver->pModel;
         this->M = pGenericSolver->M;
@@ -38,7 +39,8 @@ void RSolverGeneric::_init(const RSolverGeneric *pGenericSolver)
 }
 
 RSolverGeneric::RSolverGeneric(RModel *pModel, const QString &modelFileName, const QString &convergenceFileName, RSolverSharedData &sharedData)
-    : problemType(R_PROBLEM_NONE)
+    : meshChanged(true)
+    , problemType(R_PROBLEM_NONE)
     , pModel(pModel)
     , modelFileName(modelFileName)
     , convergenceFileName(convergenceFileName)
@@ -160,6 +162,8 @@ void RSolverGeneric::run(bool firstRun, uint taskIteration)
         this->writeResults();
         this->statistics();
     }
+
+    this->meshChanged = false;
 }
 
 void RSolverGeneric::updateOldRecords(const RTimeSolver &rTimeSolver, const QString &modelFileName)

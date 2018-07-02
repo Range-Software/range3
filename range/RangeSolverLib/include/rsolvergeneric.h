@@ -43,6 +43,9 @@ class RSolverGeneric
 
     protected:
 
+        //! Indicator whether the mesh has changed.
+        bool meshChanged;
+
         //! Problem type.
         RProblemType problemType;
         //! Pointer to model object.
