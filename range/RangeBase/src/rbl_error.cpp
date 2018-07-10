@@ -56,12 +56,11 @@ RError::RError(RErrorType type, const char *file, unsigned int line, const QStri
 
 RError::RError(RErrorType type, const char *file, unsigned int line, const char *format, ...)
 {
-    char buffer[1024];
+    QString buffer;
 
 #ifdef DEBUG
-    snprintf(buffer,1024,"%s@%u: ",file,line);
+    buffer = QString::asprintf("%s@%u: ",file,line);
 #else
-    memset(buffer,'\0',1024);
     // Suppress unused parameter warnings
     (void)file;
     (void)line;
@@ -69,7 +68,7 @@ RError::RError(RErrorType type, const char *file, unsigned int line, const char 
 
     va_list ap;
     va_start(ap, format);
-    vsprintf (buffer+strlen(buffer), format, ap);
+    buffer += QString::vasprintf(format,ap);
     va_end(ap);
     this->_init();
     this->setType(type);

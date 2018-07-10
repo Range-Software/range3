@@ -429,73 +429,61 @@ void RLogger::purge (unsigned int nMessages)
 
 int RLogger::trace(const char *format, ...)
 {
-    char buffer[1024];
     va_list ap;
     va_start(ap, format);
-    int retVal = vsprintf (buffer, format, ap);
+    RLogger::getInstance().print(QString::vasprintf(format, ap), R_MESSAGE_TRACE);
     va_end(ap);
-    RLogger::getInstance().print(buffer, R_MESSAGE_TRACE);
-    return retVal;
+    return 0;
 } /* RLogger::trace */
 
 
 int RLogger::debug(const char *format, ...)
 {
-    char buffer[1024];
     va_list ap;
     va_start(ap, format);
-    int retVal = vsprintf (buffer, format, ap);
+    RLogger::getInstance().print(QString::vasprintf(format, ap), R_MESSAGE_DEBUG);
     va_end(ap);
-    RLogger::getInstance().print(buffer, R_MESSAGE_DEBUG);
-    return retVal;
+    return 0;
 } /* RLogger::debug */
 
 
-int RLogger::info (const char *format, ...)
+int RLogger::info(const char *format, ...)
 {
-    char buffer[1024];
     va_list ap;
     va_start(ap, format);
-    int retVal = vsprintf (buffer, format, ap);
+    RLogger::getInstance().print(QString::vasprintf(format, ap), R_MESSAGE_INFO);
     va_end(ap);
-    RLogger::getInstance().print(buffer, R_MESSAGE_INFO);
-    return retVal;
+    return 0;
 } /* RLogger::info */
 
 
 int RLogger::notice(const char *format, ...)
 {
-    char buffer[1024];
     va_list ap;
     va_start(ap, format);
-    int retVal = vsprintf (buffer, format, ap);
+    RLogger::getInstance().print(QString::vasprintf(format, ap), R_MESSAGE_NOTICE);
     va_end(ap);
-    RLogger::getInstance().print(buffer, R_MESSAGE_NOTICE);
-    return retVal;
+    return 0;
 } /* RLogger::notice */
 
 
-int RLogger::warning (const char *format, ...)
+int RLogger::warning(const char *format, ...)
 {
-    char buffer[1024];
     va_list ap;
     va_start(ap, format);
-    int retVal = vsprintf (buffer, format, ap);
+    RLogger::getInstance().print(QString::vasprintf(format, ap), R_MESSAGE_WARNING);
     va_end(ap);
-    RLogger::getInstance().print(buffer, R_MESSAGE_WARNING);
-    return retVal;
+    return 0;
 } /* RLogger::warning */
 
 
-int RLogger::error (const char *format, ...)
+int RLogger::error(const char *format, ...)
 {
-    char buffer[1024];
     va_list ap;
     va_start(ap, format);
-    int retVal = vsprintf (buffer, format, ap);
+    RLogger::getInstance().print(QString::vasprintf(format, ap), R_MESSAGE_ERROR);
     va_end(ap);
-    RLogger::getInstance().print(buffer, R_MESSAGE_ERROR);
-    return retVal;
+    return 0;
 } /* RLogger::error */
 
 
