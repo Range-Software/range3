@@ -1,8 +1,10 @@
 ------------------------------------------------------------------
 Version 3.0.2
 
+* Improved CFD solver performance
 * Improved performance when removing entity from the model
 * Fixed crash when hole element is selected
+* Fixed incomplete locale setting which was causing problem when generating 3D mesh
 
 ------------------------------------------------------------------
 Version 3.0.1
