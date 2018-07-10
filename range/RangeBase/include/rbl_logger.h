@@ -178,7 +178,7 @@ class RLogger
         static int notice ( const char *format, ... );
 
         //! Convenience function to log warning message.
-        static int warning ( const char *format, ... );
+        static int warning( const char *format, ... );
 
         //! Convenience function to log error message.
         static int error ( const char *format, ... );

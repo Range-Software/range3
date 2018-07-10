@@ -16,7 +16,7 @@ int main (int argc, char *argv[])
 {
     RArgumentsParser::printHeader("GUI");
 
-    QLocale::setDefault(QLocale("en_US"));
+    QLocale::setDefault(QLocale::c());
 
     int exitValue = 0;
     if ((exitValue = Application(argc, argv).exec()) != 0)
