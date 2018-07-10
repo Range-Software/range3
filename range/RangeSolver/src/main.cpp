@@ -22,6 +22,8 @@ int main(int argc, char *argv[])
 
     RArgumentsParser::printHeader("Solver");
 
+    QLocale::setDefault(QLocale::c());
+
     MainTask *mainTask = new MainTask(&app);
     QTimer::singleShot(0, mainTask, SLOT(run()));
 

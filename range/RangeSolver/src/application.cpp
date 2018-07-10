@@ -15,5 +15,7 @@
 Application::Application(int &argc, char **argv) :
     QCoreApplication(argc,argv)
 {
+    // Needed for printf functions family to work correctly.
+    setlocale(LC_ALL,"C");
     QTimer::singleShot(0, this, SIGNAL(started()));
 }
