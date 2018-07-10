@@ -233,7 +233,7 @@ AVStream *VideoOutput::addStream(AVFormatContext *inFormatContext,
     // Some formats want stream headers to be separate.
     if (inFormatContext->oformat->flags & AVFMT_GLOBALHEADER)
     {
-        c->flags |= CODEC_FLAG_GLOBAL_HEADER;
+        c->flags |= AV_CODEC_FLAG_GLOBAL_HEADER;
     }
     return st;
 }
@@ -306,7 +306,7 @@ bool VideoOutput::writeVideoFrame(const AVPicture &src,
                   this->dstPicture.data,
                   this->dstPicture.linesize);
     }
-    if (inFormatContext->oformat->flags & AVFMT_RAWPICTURE)
+    if (inFormatContext->oformat->flags & AVFMT_NOFILE)
     {
         // Raw video case - directly store the picture in the packet
         AVPacket pkt;
