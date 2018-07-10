@@ -365,7 +365,7 @@ std::vector<VectorFieldItem> GLVectorField::calculateField(const RVariable *pSca
                     pIEntity = rModel.getStreamLinePtr(entityID);
                     break;
                 default:
-                    RLogger::warning("Non element-type entities are not implemented for vector fields.\n");
+                    RLogger::warning("Non element-type entities '%s' (%d) are not implemented for vector fields.\n",REntityGroup::getTypeName(entityType).toUtf8().constData(),entityType);
                     continue;
             }
 
