@@ -80,8 +80,12 @@ int VectorFieldDialog::exec(void)
 
                 for (int i=0;i<entities.size();i++)
                 {
-                    uint elementGroupId = Session::getInstance().getModel(this->modelID).getElementGroupID(entities[i].getType(),
-                                                                                                           entities[i].getEid());
+                    uint elementGroupId = Session::getInstance().getModel(this->modelID).getEntityGroupID(entities[i].getType(),
+                                                                                                          entities[i].getEid());
+                    if (elementGroupId == RConstants::eod)
+                    {
+                        continue;
+                    }
                     vectorField.addElementGroupID(elementGroupId);
                 }
 
