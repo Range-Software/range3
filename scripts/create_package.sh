@@ -9,7 +9,7 @@
 selfDebug=false
 
 myName=$(basename $0 .sh)
-myPath=$(dirname  $(readlink -f ${BASH_SOURCE[0]}))
+myPath=$(dirname  $(realpath ${BASH_SOURCE[0]}))
 myUser=$(id -nu)
 myNode=$(hostname -s)
 timeStamp=$(date +%H%M%S)
