@@ -53,7 +53,7 @@ group='Application/Engineering'
 desc='Range Software Package.\nSoftware for engineering simulations.\nFinite Element Analysis.'
 
 installToDir=$HOME/bin
-version="3.0.1"
+version="3.0.2"
 distro=
 createRpm=false
 debug=false
