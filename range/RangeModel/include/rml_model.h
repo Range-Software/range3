@@ -994,6 +994,10 @@ class RModel : public RProblem, public RResults
                                   const std::vector<RUVector> &neighbors,
                                   std::vector<uint>           &marks);
 
+        //! Add group ID reference.
+        //! Increase all group ID references +1 if equal or grater than groupID.
+        void addEntityGroupIdReference(uint entityGroupId);
+
         //! Remove all references to group ID.
         void removeEntityGroupIdReferences(uint entityGroupId);
 
