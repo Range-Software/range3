@@ -69,7 +69,7 @@ qint64 RStopWatch::getMiliSeconds(void) const
     return this->getClock();
 }
 
-void RStopWatch::addElapsedTime(clock_t elapsedTime)
+void RStopWatch::addElapsedTime(qint64 elapsedTime)
 {
     this->startTime -= elapsedTime;
 }

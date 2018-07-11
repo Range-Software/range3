@@ -58,7 +58,7 @@ class RStopWatch
         qint64 getMiliSeconds(void) const;
 
         //! Add elapsed time to stop watch.
-        void addElapsedTime(clock_t elapsedTime);
+        void addElapsedTime(qint64 elapsedTime);
 
 };
 
