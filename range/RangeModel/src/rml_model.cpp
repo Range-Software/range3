@@ -3023,7 +3023,7 @@ RPoint & RModel::getPoint (uint position)
 void RModel::addPoint (const RPoint &point)
 {
     this->points.push_back (point);
-    this->addEntityGroupIdReference(this->getEntityGroupID(R_ENTITY_GROUP_POINT,this->points.size()-1));
+    this->addEntityGroupIdReference(this->getEntityGroupID(R_ENTITY_GROUP_POINT,uint(this->points.size()-1)));
 } /* RModel::addPoint */
 
 
@@ -3098,7 +3098,7 @@ RLine & RModel::getLine (uint position)
 void RModel::addLine (const RLine &line)
 {
     this->lines.push_back (line);
-    this->addEntityGroupIdReference(this->getEntityGroupID(R_ENTITY_GROUP_LINE,this->lines.size()-1));
+    this->addEntityGroupIdReference(this->getEntityGroupID(R_ENTITY_GROUP_LINE,uint(this->lines.size()-1)));
 } /* RModel::addLine */
 
 
@@ -3173,7 +3173,7 @@ RSurface & RModel::getSurface (uint position)
 void RModel::addSurface (const RSurface &surface)
 {
     this->surfaces.push_back (surface);
-    this->addEntityGroupIdReference(this->getEntityGroupID(R_ENTITY_GROUP_SURFACE,this->surfaces.size()-1));
+    this->addEntityGroupIdReference(this->getEntityGroupID(R_ENTITY_GROUP_SURFACE,uint(this->surfaces.size()-1)));
 } /* RModel::add_surface */
 
 
@@ -3360,7 +3360,7 @@ RVolume & RModel::getVolume (uint position)
 void RModel::addVolume (const RVolume &volume)
 {
     this->volumes.push_back (volume);
-    this->addEntityGroupIdReference(this->getEntityGroupID(R_ENTITY_GROUP_VOLUME,this->volumes.size()-1));
+    this->addEntityGroupIdReference(this->getEntityGroupID(R_ENTITY_GROUP_VOLUME,uint(this->volumes.size()-1)));
 } /* RModel::addVolume */
 
 
@@ -3437,7 +3437,7 @@ RVectorField &RModel::getVectorField(uint position)
 void RModel::addVectorField(const RVectorField &vectorField)
 {
     this->vectorFields.push_back(vectorField);
-    this->addEntityGroupIdReference(this->getEntityGroupID(R_ENTITY_GROUP_VECTOR_FIELD,this->vectorFields.size()-1));
+    this->addEntityGroupIdReference(this->getEntityGroupID(R_ENTITY_GROUP_VECTOR_FIELD,uint(this->vectorFields.size()-1)));
 } /* RModel::addVectorField */
 
 
@@ -3514,7 +3514,7 @@ RScalarField &RModel::getScalarField(uint position)
 void RModel::addScalarField(const RScalarField &scalarField)
 {
     this->scalarFields.push_back(scalarField);
-    this->addEntityGroupIdReference(this->getEntityGroupID(R_ENTITY_GROUP_SCALAR_FIELD,this->scalarFields.size()-1));
+    this->addEntityGroupIdReference(this->getEntityGroupID(R_ENTITY_GROUP_SCALAR_FIELD,uint(this->scalarFields.size()-1)));
 } /* RModel::addScalarField */
 
 
@@ -3589,7 +3589,7 @@ RStreamLine &RModel::getStreamLine(uint position)
 void RModel::addStreamLine(const RStreamLine &streamLine)
 {
     this->streamLines.push_back(streamLine);
-    this->addEntityGroupIdReference(this->getEntityGroupID(R_ENTITY_GROUP_STREAM_LINE,this->streamLines.size()-1));
+    this->addEntityGroupIdReference(this->getEntityGroupID(R_ENTITY_GROUP_STREAM_LINE,uint(this->streamLines.size()-1)));
 } /* RModel::addStreamLine */
 
 
@@ -3663,7 +3663,7 @@ RCut &RModel::getCut(uint position)
 void RModel::addCut(const RCut &cut)
 {
     this->cuts.push_back(cut);
-    this->addEntityGroupIdReference(this->getEntityGroupID(R_ENTITY_GROUP_CUT,this->cuts.size()-1));
+    this->addEntityGroupIdReference(this->getEntityGroupID(R_ENTITY_GROUP_CUT,uint(this->cuts.size()-1)));
 } /* RModel::addCut */
 
 
@@ -3738,7 +3738,7 @@ RIso &RModel::getIso(uint position)
 void RModel::addIso(const RIso &iso)
 {
     this->isos.push_back(iso);
-    this->addEntityGroupIdReference(this->getEntityGroupID(R_ENTITY_GROUP_ISO,this->isos.size()-1));
+    this->addEntityGroupIdReference(this->getEntityGroupID(R_ENTITY_GROUP_ISO,uint(this->isos.size()-1)));
 } /* RModel::addIso */
 
 
