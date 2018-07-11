@@ -3023,6 +3023,7 @@ RPoint & RModel::getPoint (uint position)
 void RModel::addPoint (const RPoint &point)
 {
     this->points.push_back (point);
+    this->addEntityGroupIdReference(this->getEntityGroupID(R_ENTITY_GROUP_POINT,this->points.size()-1));
 } /* RModel::addPoint */
 
 
@@ -3097,6 +3098,7 @@ RLine & RModel::getLine (uint position)
 void RModel::addLine (const RLine &line)
 {
     this->lines.push_back (line);
+    this->addEntityGroupIdReference(this->getEntityGroupID(R_ENTITY_GROUP_LINE,this->lines.size()-1));
 } /* RModel::addLine */
 
 
@@ -3171,6 +3173,7 @@ RSurface & RModel::getSurface (uint position)
 void RModel::addSurface (const RSurface &surface)
 {
     this->surfaces.push_back (surface);
+    this->addEntityGroupIdReference(this->getEntityGroupID(R_ENTITY_GROUP_SURFACE,this->surfaces.size()-1));
 } /* RModel::add_surface */
 
 
@@ -3357,6 +3360,7 @@ RVolume & RModel::getVolume (uint position)
 void RModel::addVolume (const RVolume &volume)
 {
     this->volumes.push_back (volume);
+    this->addEntityGroupIdReference(this->getEntityGroupID(R_ENTITY_GROUP_VOLUME,this->volumes.size()-1));
 } /* RModel::addVolume */
 
 
@@ -3433,6 +3437,7 @@ RVectorField &RModel::getVectorField(uint position)
 void RModel::addVectorField(const RVectorField &vectorField)
 {
     this->vectorFields.push_back(vectorField);
+    this->addEntityGroupIdReference(this->getEntityGroupID(R_ENTITY_GROUP_VECTOR_FIELD,this->vectorFields.size()-1));
 } /* RModel::addVectorField */
 
 
@@ -3446,6 +3451,8 @@ void RModel::setVectorField(uint position, const RVectorField &vectorField)
 
 void RModel::removeVectorField(uint position)
 {
+    this->removeEntityGroupIdReferences(this->getEntityGroupID(R_ENTITY_GROUP_VECTOR_FIELD,position));
+
     std::vector<RVectorField>::iterator iter;
 
     R_ERROR_ASSERT (position < this->vectorFields.size());
@@ -3507,6 +3514,7 @@ RScalarField &RModel::getScalarField(uint position)
 void RModel::addScalarField(const RScalarField &scalarField)
 {
     this->scalarFields.push_back(scalarField);
+    this->addEntityGroupIdReference(this->getEntityGroupID(R_ENTITY_GROUP_SCALAR_FIELD,this->scalarFields.size()-1));
 } /* RModel::addScalarField */
 
 
@@ -3520,6 +3528,8 @@ void RModel::setScalarField(uint position, const RScalarField &scalarField)
 
 void RModel::removeScalarField(uint position)
 {
+    this->removeEntityGroupIdReferences(this->getEntityGroupID(R_ENTITY_GROUP_SCALAR_FIELD,position));
+
     std::vector<RScalarField>::iterator iter;
 
     R_ERROR_ASSERT (position < this->scalarFields.size());
@@ -3579,6 +3589,7 @@ RStreamLine &RModel::getStreamLine(uint position)
 void RModel::addStreamLine(const RStreamLine &streamLine)
 {
     this->streamLines.push_back(streamLine);
+    this->addEntityGroupIdReference(this->getEntityGroupID(R_ENTITY_GROUP_STREAM_LINE,this->streamLines.size()-1));
 } /* RModel::addStreamLine */
 
 
@@ -3591,6 +3602,8 @@ void RModel::setStreamLine(uint position, const RStreamLine &streamLine)
 
 void RModel::removeStreamLine(uint position)
 {
+    this->removeEntityGroupIdReferences(this->getEntityGroupID(R_ENTITY_GROUP_STREAM_LINE,position));
+
     std::vector<RStreamLine>::iterator iter;
 
     R_ERROR_ASSERT (position < this->streamLines.size());
@@ -3650,6 +3663,7 @@ RCut &RModel::getCut(uint position)
 void RModel::addCut(const RCut &cut)
 {
     this->cuts.push_back(cut);
+    this->addEntityGroupIdReference(this->getEntityGroupID(R_ENTITY_GROUP_CUT,this->cuts.size()-1));
 } /* RModel::addCut */
 
 
@@ -3663,6 +3677,8 @@ void RModel::setCut(uint position, const RCut &cut)
 
 void RModel::removeCut(uint position)
 {
+    this->removeEntityGroupIdReferences(this->getEntityGroupID(R_ENTITY_GROUP_CUT,position));
+
     std::vector<RCut>::iterator iter;
 
     R_ERROR_ASSERT (position < this->cuts.size());
@@ -3722,6 +3738,7 @@ RIso &RModel::getIso(uint position)
 void RModel::addIso(const RIso &iso)
 {
     this->isos.push_back(iso);
+    this->addEntityGroupIdReference(this->getEntityGroupID(R_ENTITY_GROUP_ISO,this->isos.size()-1));
 } /* RModel::addIso */
 
 
@@ -3734,6 +3751,8 @@ void RModel::setIso(uint position, const RIso &iso)
 
 void RModel::removeIso(uint position)
 {
+    this->removeEntityGroupIdReferences(this->getEntityGroupID(R_ENTITY_GROUP_ISO,position));
+
     std::vector<RIso>::iterator iter;
 
     R_ERROR_ASSERT (position < this->isos.size());
@@ -7648,6 +7667,55 @@ void RModel::markSurfaceNeighbors(uint elementID,
         }
     }
 } /* RModel::markSurfaceNeighbors */
+
+
+void RModel::addEntityGroupIdReference(uint entityGroupId)
+{
+    for (uint i=0;i<this->getNVectorFields();i++)
+    {
+        std::vector<uint> &groupIDs(this->getVectorField(i).getElementGroupIDs());
+        for (uint i=0;i<groupIDs.size();i++)
+        {
+            if (groupIDs[i] >= entityGroupId)
+            {
+                groupIDs[i]++;
+            }
+        }
+    }
+    for (uint i=0;i<this->getNScalarFields();i++)
+    {
+        std::vector<uint> &groupIDs(this->getScalarField(i).getElementGroupIDs());
+        for (uint i=0;i<groupIDs.size();i++)
+        {
+            if (groupIDs[i] >= entityGroupId)
+            {
+                groupIDs[i]++;
+            }
+        }
+    }
+    for (uint i=0;i<this->getNCuts();i++)
+    {
+        std::vector<uint> &groupIDs(this->getCut(i).getElementGroupIDs());
+        for (uint i=0;i<groupIDs.size();i++)
+        {
+            if (groupIDs[i] >= entityGroupId)
+            {
+                groupIDs[i]++;
+            }
+        }
+    }
+    for (uint i=0;i<this->getNIsos();i++)
+    {
+        std::vector<uint> &groupIDs(this->getIso(i).getElementGroupIDs());
+        for (uint i=0;i<groupIDs.size();i++)
+        {
+            if (groupIDs[i] >= entityGroupId)
+            {
+                groupIDs[i]++;
+            }
+        }
+    }
+} /* RModel::addEntityGroupIdReference */
 
 
 void RModel::removeEntityGroupIdReferences(uint entityGroupId)
