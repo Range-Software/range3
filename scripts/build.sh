@@ -2,6 +2,9 @@
 
 moduleList="range"
 qmakeCmd=$(which qmake-qt5)
+if [[ ! -x $qmakeCmd ]]; then
+    qmakeCmd=$(which qmake)
+fi
 selfDebug=false
 
 clean=false
@@ -150,4 +153,3 @@ do
 done
 
 cd $currentDir
-
