@@ -68,7 +68,7 @@ namespace RUtil
     };
 
     template <typename T>
-    void qSort(std::vector<T> &a, std::vector<uint> &indexes = std::vector<uint>())
+    void qSort(std::vector<T> &a, std::vector<uint> &indexes)
     {
         std::vector<SortRentry<T> > arr;
 
