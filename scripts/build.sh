@@ -27,10 +27,16 @@ if [ -f /proc/cpuinfo ]
 then
     np=$(cat /proc/cpuinfo | grep processor | wc -l)
     np=$[np-1]
-    if [ $np -gt $[1] ]
-    then
-        MAKE=$MAKE" -j$np"
-    fi
+elif [ $(uname -s) == "Darwin" ]
+then
+    # This could be logical CPUs (hw.ncpu) if you wanted to use hyperthreading.
+    np=$(sysctl -n hw.physicalcpu)
+    np=$[np-1]
+fi
+if [ $np -gt $[1] ]
+then
+    echo "Using $np cores to compile."
+    MAKE=$MAKE" -j$np"
 fi
 
 function print_help
