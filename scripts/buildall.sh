@@ -6,8 +6,10 @@ if [[ ! $(basename $(pwd)) == "scripts" ]]; then
 fi
 
 if [ -f "/etc/redhat-release" ]; then
+    echo "Building on Fedora."
     ./prereqs-fedora.sh
 elif [ $(uname) == "Darwin" ]; then
+    echo "Building on Mac."
     ./prereqs-mac.sh
 else
     echo "Don't know how to build on this OS ($(uname))."
