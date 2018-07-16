@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+
 if [[ ! $(basename $(pwd)) == "scripts" ]]; then
     pushd scripts
     need_pop=1
