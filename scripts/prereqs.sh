@@ -17,3 +17,8 @@ if [[ ! -x $(which ffmpeg) ]]; then
     echo "Instaling ffmpeg"
     brew install ffmpeg
 fi
+
+if [[ ! -x /usr/local/opt/llvm/bin/clang ]]; then
+    echo "Installing llvm/clang"
+    brew install llvm
+fi
