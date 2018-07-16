@@ -132,7 +132,7 @@ do
     echo_i "Building $module"
     set_indent
     # QMAKE
-    echo_i "Running qmake"
+    echo_i "Running qmake as $qmakeCmd"
     $qmakeCmd $projectFile $qmakeArgs -o $makefile | tee -a $qmakeLogFile
     if [ ${PIPESTATUS[0]} -ne 0 ]
     then
