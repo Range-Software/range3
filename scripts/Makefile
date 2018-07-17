@@ -1,7 +1,7 @@
-.PHONY buildall
+.PHONY: buildall
 buildall:
 	./buildall.sh
 
-.PHONY clean
+.PHONY: clean
 clean:
 	rm -f *~
