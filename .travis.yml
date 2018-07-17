@@ -2,4 +2,7 @@ language: cpp
 
 install: true
 
-script: cd scripts && make
+compiler:
+  - clang
+
+script:   OMP_NUM_THREADS=4 && cd scripts && make
