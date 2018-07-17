@@ -1,8 +1,20 @@
-language: cpp
+sudo: required
+env:
+  matrix:
+  - OS_TYPE=fedora OS_VERSION=28
 
-install: true
+services:
+  - docker
 
-compiler:
-  - clang
+before_install:
+  - sudo apt-get update
+  - echo 'DOCKER_OPTS="-H tcp://127.0.0.1:2375 -H unix:///var/run/docker.sock -s devicemapper"' | sudo tee /etc/default/docker > /dev/null
+  - sudo service docker restart
+  - sleep 5
+  - sudo docker pull fedora:fedora${OS_VERSION}
 
-script:   OMP_NUM_THREADS=4 && cd scripts && make
+
+script:
+  - OMP_NUM_THREADS=4 && cd scripts && make
+  # Run tests in Container
+  - tests/setup_tests.sh ${OS_VERSION}
