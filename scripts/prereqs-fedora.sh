@@ -2,7 +2,7 @@
 
 if [[ ! -x /usr/bin/which ]]; then
     # This is probably our super basic Docker Fedora image, so install this stuff:
-    dnf install -y which sudo make
+    dnf install -y which sudo make hostname
 fi
 
 if [[ ! -x $(which qmake) ]]; then
