@@ -15,4 +15,4 @@ before_install:
 
 
 script:
-  - ./docker-fedora.sh
+  - ./scripts/docker-fedora.sh
