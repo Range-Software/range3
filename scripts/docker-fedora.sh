@@ -1,4 +1,13 @@
 #!/usr/bin/env bash
-echo $pwd
-ls
-sudo docker run --rm=true -v `pwd`:rw fedora:${OS_VERSION} "pwd && cd scripts && make"
+
+# This needs to work no matter where it was invoked from.
+getScriptPath () {
+    cd ${0%/*}/; pwd;
+}
+myPath=$(getScriptPath)
+
+range_dir="$(dirname ${myPath})"
+
+echo "Mounting $range_dir"
+
+docker run -it --mount src="${range_dir}",target=/mnt/src,type=bind fedora /mnt/src/scripts/buildall.sh
