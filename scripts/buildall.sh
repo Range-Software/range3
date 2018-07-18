@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
 
-if [[ ! $(basename $(pwd)) == "scripts" ]]; then
-    pushd scripts
-    need_pop=1
-fi
+getScriptPath () {
+	echo ${0%/*}/
+}
+myPath=$(getScriptPath)
+pushd $myPath
 
 if [ -f "/etc/redhat-release" ]; then
     echo "Building on Fedora."
@@ -18,6 +19,4 @@ fi
 
 ./build.sh --clean && ./create_package.sh --install-to=$HOME/bin
 
-if [[ $need_pop ]]; then
-    popd
-fi
+popd
