@@ -1,7 +1,7 @@
 sudo: required
 env:
   matrix:
-  - OS_TYPE=fedora OS_VERSION=28
+  - OS_TYPE=fedora OS_VERSION=28 OMP_NUM_THREADS=4
 
 services:
   - docker
@@ -15,6 +15,4 @@ before_install:
 
 
 script:
-  - OMP_NUM_THREADS=4 && cd scripts && make
-  # Run tests in Container
-  - tests/setup_tests.sh ${OS_VERSION}
+  - ./docker-fedora.sh
