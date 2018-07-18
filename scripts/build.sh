@@ -33,9 +33,9 @@ then
     np=$(sysctl -n hw.physicalcpu)
     np=$[np-1]
 fi
+echo "Using $np core(s) to compile."
 if [ $np -gt $[1] ]
 then
-    echo "Using $np cores to compile."
     MAKE=$MAKE" -j$np"
 fi
 
@@ -130,15 +130,18 @@ currentDir=$(pwd)
 
 cd $buildDir
 
-echo_i "Setting path to include llvm clang for OpenMP support."
-OLDPATH=$PATH
-export PATH=/usr/local/opt/llvm/bin:$PATH
-export LLVM_INCLUDE_FLAGS="-L/usr/local/opt/llvm/lib -I/usr/local/opt/llvm/include"
-export CC=clang
-export CXX=clang++
+if [[ $(uname -s) == "Darwin" ]]; then
+    # This doesn't work yet.
+    echo_i "Setting path to include llvm clang for OpenMP support."
+    OLDPATH=$PATH
+    export PATH=/usr/local/opt/llvm/bin:$PATH
+    export LLVM_INCLUDE_FLAGS="-L/usr/local/opt/llvm/lib -I/usr/local/opt/llvm/include"
+    export CC=clang
+    export CXX=clang++
 
-echo_i "Jeez, what does it take to get qmake to use the right compiler?"
-qmakeArgs+=" CC=/usr/local/opt/llvm/bin/clang CXX=/usr/local/opt/llvm/bin/clang++"
+    echo_i "Jeez, what does it take to get qmake to use the right compiler?"
+    qmakeArgs+=" CC=/usr/local/opt/llvm/bin/clang CXX=/usr/local/opt/llvm/bin/clang++"
+fi
 
 for module in $moduleList
 do
