@@ -2,9 +2,6 @@
 
 moduleList="range"
 qmakeCmd=$(which qmake-qt5)
-if [[ ! -x $qmakeCmd ]]; then
-    qmakeCmd=$(which qmake)
-fi
 selfDebug=false
 
 clean=false
@@ -27,16 +24,10 @@ if [ -f /proc/cpuinfo ]
 then
     np=$(cat /proc/cpuinfo | grep processor | wc -l)
     np=$[np-1]
-elif [ $(uname -s) == "Darwin" ]
-then
-    # This could be logical CPUs (hw.ncpu) if you wanted to use hyperthreading.
-    np=$(sysctl -n hw.physicalcpu)
-    np=$[np-1]
-fi
-echo "Using $np core(s) to compile."
-if [ $np -gt $[1] ]
-then
-    MAKE=$MAKE" -j$np"
+    if [ $np -gt $[1] ]
+    then
+        MAKE=$MAKE" -j$np"
+    fi
 fi
 
 function print_help
@@ -130,19 +121,6 @@ currentDir=$(pwd)
 
 cd $buildDir
 
-if [[ $(uname -s) == "Darwin" ]]; then
-    # This doesn't work yet.
-    echo_i "Setting path to include llvm clang for OpenMP support."
-    OLDPATH=$PATH
-    export PATH=/usr/local/opt/llvm/bin:$PATH
-    export LLVM_INCLUDE_FLAGS="-L/usr/local/opt/llvm/lib -I/usr/local/opt/llvm/include"
-    export CC=clang
-    export CXX=clang++
-
-    echo_i "Jeez, what does it take to get qmake to use the right compiler?"
-    qmakeArgs+=" CC=/usr/local/opt/llvm/bin/clang CXX=/usr/local/opt/llvm/bin/clang++"
-fi
-
 for module in $moduleList
 do
     projectFile="$moduleDir/$module.pro"
@@ -151,7 +129,7 @@ do
     echo_i "Building $module"
     set_indent
     # QMAKE
-    echo_i "Running qmake as $qmakeCmd"
+    echo_i "Running qmake"
     $qmakeCmd $projectFile $qmakeArgs -o $makefile | tee -a $qmakeLogFile
     if [ ${PIPESTATUS[0]} -ne 0 ]
     then
@@ -172,3 +150,4 @@ do
 done
 
 cd $currentDir
+
