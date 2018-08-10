@@ -1,6 +1,6 @@
 .PHONY: buildall
 buildall:
-	./buildall.sh
+	./build_all.sh
 
 .PHONY: clean
 clean:

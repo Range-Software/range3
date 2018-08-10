@@ -10,4 +10,4 @@ range_dir="$(dirname ${myPath})"
 
 echo "Mounting $range_dir"
 
-docker run -it --mount src="${range_dir}",target=/mnt/src,type=bind fedora /mnt/src/scripts/buildall.sh
+docker run -it --mount src="${range_dir}",target=/mnt/src,type=bind fedora /mnt/src/scripts/build_all.sh

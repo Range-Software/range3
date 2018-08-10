@@ -33,7 +33,7 @@ then
     np=$(sysctl -n hw.physicalcpu)
     np=$[np-1]
 fi
-echo "Using $np core(s) to compile."
+echo_i "Using $np core(s) to compile."
 if [ $np -gt $[1] ]
 then
     MAKE=$MAKE" -j$np"
