@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/Range-Software/range3.svg?branch=master)](https://travis-ci.org/Range-Software/range3)
+
 # Range Software
 Finite Element Analysis
 
