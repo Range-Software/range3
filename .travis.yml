@@ -15,4 +15,5 @@ before_install:
 
 
 script:
+  - dnf install -y which sudo make hostname
   - ./scripts/docker_fedora.sh
