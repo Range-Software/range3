@@ -2179,7 +2179,7 @@ void RSolverFluid::computeElementConstantDerivative(unsigned int elementID, RRMa
 
 double RSolverFluid::findReScale(void) const
 {
-    double v = RSolverFluid::computeStreamVelocity(*this->pModel,this->nodeVelocity,false);
+    double v = RSolverFluid::computeStreamVelocity(*this->pModel,this->nodeVelocity,true);
     double l = 1.0 / this->scales.getMetre();
 
     double Re = (this->avgU == 0.0) ? 1.0 : this->avgRo * v * l / this->avgU;
@@ -2189,7 +2189,7 @@ double RSolverFluid::findReScale(void) const
 
 double RSolverFluid::findWeightScale(void) const
 {
-    double v = RSolverFluid::computeStreamVelocity(*this->pModel,this->nodeVelocity,false);
+    double v = RSolverFluid::computeStreamVelocity(*this->pModel,this->nodeVelocity,true);
     double l = 1.0 / this->scales.getMetre();
 
     double ws = (this->avgU == 0.0) ? 1.0 : 1.0 *  v / (this->avgU * l * l);
@@ -2406,10 +2406,18 @@ double RSolverFluid::computeStreamVelocity(const RModel &rModel, const RSolverCa
     {
         double vm = 0.0;
 
-        for (uint i=0;i<rModel.getNNodes();i++)
-        for (uint i=0;i<rModel.getNNodes();i++)
+#pragma omp parallel default(shared)
         {
-            vm += std::sqrt(std::pow(nodeVelocity.x[i],2) + std::pow(nodeVelocity.y[i],2) + std::pow(nodeVelocity.z[i],2));
+        double vm_local = 0.0;
+#pragma omp for
+            for (uint i=0;i<rModel.getNNodes();i++)
+            {
+                vm_local += std::sqrt(std::pow(nodeVelocity.x[i],2) + std::pow(nodeVelocity.y[i],2) + std::pow(nodeVelocity.z[i],2));
+            }
+#pragma omp critical
+            {
+                vm += vm_local;
+            }
         }
         if (rModel.getNNodes())
         {
