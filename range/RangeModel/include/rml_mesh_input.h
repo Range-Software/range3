@@ -13,6 +13,8 @@
 
 #include <QString>
 
+#include <rblib.h>
+
 class RMeshInput
 {
 
@@ -28,6 +30,10 @@ class RMeshInput
         bool outputEdges;
         //! Reconstruct.
         bool reconstruct;
+        //! Use size function.
+        bool useSizeFunction;
+        //! Size function values.
+        RRVector sizeFunctionValues;
         //! Radius/edge ratio.
         double radiusEdgeRatio;
         //! Volume constrain.
@@ -92,6 +98,18 @@ class RMeshInput
 
         //! Set whether to reconstruct mesh.
         void setReconstruct(bool reconstruct);
+
+        //! Return whether to use size function.
+        bool getUseSizeFunction(void) const;
+
+        //! Set whether to use size function.
+        void setUseSizeFunction(bool useSizeFunction);
+
+        //! Return size function values.
+        const RRVector &getSizeFunctionValues(void) const;
+
+        //! Set size function values.
+        void setSizeFunctionValues(const RRVector &sizeFunctionValues);
 
         //! Return radius/edge ratio.
         double getRadiusEdgeRatio(void) const;
