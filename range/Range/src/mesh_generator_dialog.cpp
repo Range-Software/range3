@@ -22,6 +22,7 @@ MeshGeneratorDialog::MeshGeneratorDialog(uint modelID, QWidget *parent) :
     modelID(modelID)
 {
     this->meshInput = Session::getInstance().getModel(this->modelID).getMeshInput();
+    this->meshInput.setReconstruct(Session::getInstance().getModel(this->modelID).getNVolumes() > 0);
 
     this->setWindowTitle(tr("Genenerate 3D mesh"));
 
@@ -116,7 +117,7 @@ void MeshGeneratorDialog::updateMeshInput(void)
     this->meshInput.setQualityMesh(this->qualityMeshGroupBox->isChecked());
     this->meshInput.setVolumeConstraint(this->volumeConstraintEdit->getValue());
     this->meshInput.setKeepResults(this->keepResultsCheck->isChecked());
-    this->meshInput.setReconstruct( Session::getInstance().getModel(this->modelID).getNVolumes() > 0);
+    this->meshInput.setReconstruct(Session::getInstance().getModel(this->modelID).getNVolumes() > 0);
 
     // Update TetGen parameters line edit.
     this->tetgenParamsEdit->setText(this->meshInput.generateTetGenInputParams());

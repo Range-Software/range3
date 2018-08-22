@@ -22,10 +22,10 @@ const int RTetGen::pointMarkerOffset = INT_MAX - 1000;
 
 RTetGen::RTetGen(const RModel &model)
 {
-    this->importModel(model);
+    this->importModel(model,false);
 }
 
-void RTetGen::importModel(const RModel &model, bool reconstruct)
+void RTetGen::importModel(const RModel &model, bool reconstruct, const RRVector &nodeMeshSizeValues)
 {
     this->firstnumber = 0;
 
@@ -33,6 +33,7 @@ void RTetGen::importModel(const RModel &model, bool reconstruct)
 
     this->numberofpoints = model.getNNodes();
     this->numberofpointattributes = 1;
+    this->numberofpointmtrs = nodeMeshSizeValues.size() == model.getNNodes() ? 1 : 0;
 
     if (this->numberofpoints)
     {
@@ -52,9 +53,21 @@ void RTetGen::importModel(const RModel &model, bool reconstruct)
             this->pointlist[3*i+0] = REAL(model.getNode(i).getX());
             this->pointlist[3*i+1] = REAL(model.getNode(i).getY());
             this->pointlist[3*i+2] = REAL(model.getNode(i).getZ());
-            if (this->numberofpointattributes > 0)
+            if (this->numberofpointattributes)
             {
-                this->pointattributelist[this->numberofpointmtrs*i+0] = REAL(i);
+                this->pointattributelist[this->numberofpointattributes*i+0] = REAL(i);
+                for (int j=1;j<this->numberofpointattributes;j++)
+                {
+                    this->pointattributelist[this->numberofpointattributes*i+j] = 0.0;
+                }
+            }
+            if (this->numberofpointmtrs)
+            {
+                this->pointmtrlist[this->numberofpointmtrs*i+0] = nodeMeshSizeValues[i];
+                for (int j=1;j<this->numberofpointmtrs;j++)
+                {
+                    this->pointmtrlist[this->numberofpointmtrs*i+j] = 0.0;
+                }
             }
             this->pointmarkerlist[i] = 0;
         }
@@ -264,14 +277,6 @@ void RTetGen::exportMesh(RModel &model, bool keepResults) const
     std::vector<RVariable> variables;
     if (keepResults)
     {
-//        RVariable variable = model.getVariable(0);
-//        variable.resize(1,this->numberofpoints);
-//        for (int i=0;i<this->numberofpoints;i++)
-//        {
-//            variable.setValue(0,i,this->pointmtrlist[this->numberofpoints*this->numberofpointmtrs+0]);
-//        }
-//        variables.push_back(variable);
-
         RLogger::info("Interpolating results\n");
         RLogger::indent();
 

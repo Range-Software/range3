@@ -29,7 +29,7 @@ class RTetGen : public tetgenio
         explicit RTetGen(const RModel &model = RModel());
 
         //! Import RModel object.
-        void importModel(const RModel &model, bool reconstruct = false);
+        void importModel(const RModel &model, bool reconstruct, const RRVector &nodeMeshSizeValues = RRVector());
 
         //! Export mesh to RModel.
         void exportMesh(RModel &model, bool keepResults = true) const;

@@ -32,7 +32,7 @@ void RMeshGenerator::generate(const RMeshInput &meshInput, RModel &model)
     {
         RLogger::info("Converting Range model to TetGen mesh.\n");
         RLogger::indent();
-        tetgenIn.importModel(model,meshInput.getReconstruct());
+        tetgenIn.importModel(model,meshInput.getReconstruct(),meshInput.getUseSizeFunction() ? meshInput.getSizeFunctionValues() : RRVector());
         RLogger::unindent();
         RLogger::info("Successfully converted Range model to TetGen mesh.\n");
     }

@@ -19,6 +19,8 @@ void RMeshInput::_init(const RMeshInput *pMeshInput)
         this->qualityMesh = pMeshInput->qualityMesh;
         this->outputEdges = pMeshInput->outputEdges;
         this->reconstruct = pMeshInput->reconstruct;
+        this->useSizeFunction = pMeshInput->useSizeFunction;
+        this->sizeFunctionValues = pMeshInput->sizeFunctionValues;
         this->radiusEdgeRatio = pMeshInput->radiusEdgeRatio;
         this->volumeConstraint = pMeshInput->volumeConstraint;
         this->tolerance = pMeshInput->tolerance;
@@ -35,6 +37,7 @@ RMeshInput::RMeshInput() :
     qualityMesh(true),
     outputEdges(false),
     reconstruct(false),
+    useSizeFunction(false),
     radiusEdgeRatio(1.6),
     volumeConstraint(0.1),
     tolerance(1.0e-10),
@@ -109,6 +112,26 @@ bool RMeshInput::getReconstruct(void) const
 void RMeshInput::setReconstruct(bool reconstruct)
 {
     this->reconstruct = reconstruct;
+}
+
+bool RMeshInput::getUseSizeFunction(void) const
+{
+    return this->useSizeFunction;
+}
+
+void RMeshInput::setUseSizeFunction(bool useSizeFunction)
+{
+    this->useSizeFunction = useSizeFunction;
+}
+
+const RRVector &RMeshInput::getSizeFunctionValues(void) const
+{
+    return this->sizeFunctionValues;
+}
+
+void RMeshInput::setSizeFunctionValues(const RRVector &sizeFunctionValues)
+{
+    this->sizeFunctionValues = sizeFunctionValues;
 }
 
 double RMeshInput::getRadiusEdgeRatio(void) const
@@ -197,6 +220,10 @@ QString RMeshInput::generateTetGenInputParams(void) const
     if (this->reconstruct)
     {
         parameters += "r";
+    }
+    if (this->useSizeFunction)
+    {
+        parameters += "m";
     }
     if (this->qualityMesh)
     {
