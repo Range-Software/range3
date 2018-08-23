@@ -2410,7 +2410,7 @@ double RSolverFluid::computeStreamVelocity(const RModel &rModel, const RSolverCa
         {
         double vm_local = 0.0;
 #pragma omp for
-            for (uint i=0;i<rModel.getNNodes();i++)
+            for (int64_t i=0;i<rModel.getNNodes();i++)
             {
                 vm_local += std::sqrt(std::pow(nodeVelocity.x[i],2) + std::pow(nodeVelocity.y[i],2) + std::pow(nodeVelocity.z[i],2));
             }
