@@ -22,4 +22,7 @@ jobs:
           command: dnf install -y ffmpeg ffmpeg-devel
       - run:
           name: Build
-          command: ./scripts/build.sh --clean && ./scripts/create_package.sh
+          command: ./scripts/build.sh --clean && ./scripts/create_package.sh --rpm --distro=f$(rpm -E %fedora)
+      - run:
+          name: Upload
+          command: scp build-Release/packages/rpmbuild/RPMS/$(uname -m)/*.rpm $UPLOAD_USER@$UPLOAD_HOST -P $UPLOAD_PORT
