@@ -17,7 +17,6 @@ jobs:
       - run:
           name: Build
           command: ./scripts/build.sh --clean && ./scripts/create_package.sh --rpm --distro=f$(rpm -E %fedora)
-      - run: ls build-Release/packages/rpmbuild/RPMS && uname -m && ls build-Release/packages/rpmbuild/RPMS/$(uname -m)/
       - run:
           name: Upload
-          command: scp build-Release/packages/rpmbuild/RPMS/$(uname -m)/*.rpm $UPLOAD_USER@$UPLOAD_HOST -P $UPLOAD_PORT
+          command: -P $UPLOAD_PORT scp build-Release/packages/rpmbuild/RPMS/$(uname -m)/*.rpm $UPLOAD_USER@$UPLOAD_HOST
