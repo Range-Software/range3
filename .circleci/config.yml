@@ -13,7 +13,7 @@ jobs:
           command: dnf install -y https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
       - run:
           name: Install tools, Qt and ffmpeg
-          command: dnf install -y which sudo make hostname openssh-clients qt qt5-qtbase-devel qt5-qtsvg ffmpeg ffmpeg-devel
+          command: dnf install -y which sudo make hostname openssh-clients rpm-build qt qt5-qtbase-devel qt5-qtsvg ffmpeg ffmpeg-devel
       - run:
           name: Build
           command: ./scripts/build.sh --clean && ./scripts/create_package.sh --rpm --distro=f$(rpm -E %fedora)
