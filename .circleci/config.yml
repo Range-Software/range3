@@ -9,6 +9,9 @@ jobs:
           name: Update
           command: dnf update -y
       - run:
+          name: Install tools
+          command: dnf install -y which sudo make hostname
+      - run:
           name: Install Qt
           command: dnf install -y qt qt5-qtbase-devel qt5-qtsvg
       - run:
