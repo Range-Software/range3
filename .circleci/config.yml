@@ -16,7 +16,7 @@ jobs:
           command: yum install -y which sudo make hostname openssh-clients rpm-build gcc-c++ qt qt5-qtbase-devel qt5-qtsvg ffmpeg ffmpeg-devel
       - run:
           name: Build
-          command: ./scripts/build.sh --clean && ./scripts/create_package.sh --rpm --distro=el$(rpm -E %centos)
+          command: ./scripts/build.sh --clean --max-nc=2 && ./scripts/create_package.sh --rpm --distro=el$(rpm -E %centos)
       - run:
           name: Upload
           command: scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -P $UPLOAD_PORT build-Release/packages/rpmbuild/RPMS/$(uname -m)/*.rpm $UPLOAD_USER@$UPLOAD_HOST:.
@@ -36,7 +36,7 @@ jobs:
           command: dnf install -y which sudo make hostname openssh-clients rpm-build qt qt5-qtbase-devel qt5-qtsvg ffmpeg ffmpeg-devel
       - run:
           name: Build
-          command: ./scripts/build.sh --clean && ./scripts/create_package.sh --rpm --distro=f$(rpm -E %fedora)
+          command: ./scripts/build.sh --clean --max-nc=2 && ./scripts/create_package.sh --rpm --distro=f$(rpm -E %fedora)
       - run:
           name: Upload
           command: scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -P $UPLOAD_PORT build-Release/packages/rpmbuild/RPMS/$(uname -m)/*.rpm $UPLOAD_USER@$UPLOAD_HOST:.
@@ -56,7 +56,7 @@ jobs:
           command: apt-get install -y pkg-config build-essential alien openssh-client rpm qt5-default libavutil-dev libavformat-dev libswscale-dev libavdevice-dev ffmpeg
       - run:
           name: Build
-          command: ./scripts/build.sh --clean && ./scripts/create_package.sh --rpm --distro=ubuntu$(lsb_release -r -s)
+          command: ./scripts/build.sh --clean --max-nc=2 && ./scripts/create_package.sh --rpm --distro=ubuntu$(lsb_release -r -s)
       - run:
           name: Alien
           command: alien -k -d build-Release/packages/rpmbuild/RPMS/$(uname -m)/*.rpm
