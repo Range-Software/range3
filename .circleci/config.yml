@@ -1,5 +1,25 @@
 version: 2
 jobs:
+  build-centos7:
+    docker:
+      - image: centos:centos7
+    steps:
+      - checkout
+      - run:
+          name: Update
+          command: yum update -y
+      - run:
+          name: Install rpmfusion.org repository
+          command: yum install -y https://download1.rpmfusion.org/free/el/rpmfusion-free-release-$(rpm -E %centos).noarch.rpm https://download1.rpmfusion.org/nonfree/el/rpmfusion-nonfree-release-$(rpm -E %centos).noarch.rpm
+      - run:
+          name: Install tools, Qt and ffmpeg
+          command: yum install -y which sudo make hostname openssh-clients rpm-build gcc-c++ qt qt5-qtbase-devel qt5-qtsvg ffmpeg ffmpeg-devel
+      - run:
+          name: Build
+          command: ./scripts/build.sh --clean && ./scripts/create_package.sh --rpm --distro=el$(rpm -E %centos)
+      - run:
+          name: Upload
+          command: scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -P $UPLOAD_PORT build-Release/packages/rpmbuild/RPMS/$(uname -m)/*.rpm $UPLOAD_USER@$UPLOAD_HOST:.
   build-fedora28:
     docker:
       - image: fedora:28
@@ -47,5 +67,6 @@ workflows:
   version: 2
   build_all:
     jobs:
+      - build-centos7
       - build-fedora28
       - build-ubuntu1804
