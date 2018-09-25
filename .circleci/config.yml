@@ -42,7 +42,7 @@ jobs:
           command: scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -P $UPLOAD_PORT build-Release/packages/rpmbuild/RPMS/$(uname -m)/*.rpm $UPLOAD_USER@$UPLOAD_HOST:.
 workflows:
   version: 2
-    buil_all:
-      jobs:
-        - build-fedora28
-        - build-ubuntu1804
+  build_all:
+    jobs:
+      - build-fedora28
+      - build-ubuntu1804
