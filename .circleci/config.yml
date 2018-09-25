@@ -27,10 +27,10 @@ jobs:
       - checkout
       - run:
           name: Update
-          command: sudo apt-get update -q
+          command: apt-get update -q
       - run:
           name: Install software-properties-common
-          command: sudo apt-get install -y software-properties-common
+          command: apt-get install -y software-properties-common
       - run:
           name: Install tools, Qt and ffmpeg
           command: apt-get install -y build-essential openssh-client rpm qt5-default libavutil-dev ffmpeg
