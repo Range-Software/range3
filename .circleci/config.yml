@@ -40,6 +40,49 @@ jobs:
       - run:
           name: Upload
           command: scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -P $UPLOAD_PORT build-Release/packages/rpmbuild/RPMS/$(uname -m)/*.rpm $UPLOAD_USER@$UPLOAD_HOST:.
+  build-opensuseleap:
+    docker:
+      - image: opensuse:leap
+    steps:
+      - checkout
+      - run:
+          name: Update
+          command: zypper update -y
+      - run:
+          name: Instal; packman repository
+          command: if [ -e /etc/os-release ]; then . /etc/os-release; else . /usr/lib/os-release; fi && zypper ar -cfp 90 http://ftp.gwdg.de/pub/linux/misc/packman/suse/${PRETTY_NAME// /_}/ packman
+      - run:
+          name: Install tools, Qt and ffmpeg
+          command: zypper --gpg-auto-import-keys install -y sudo make openssh rpm-build libqt5-qtbase-common-devel libqt5-qtbase-devel libqt5-qtsvg-devel ffmpeg-devel
+      - run:
+          name: Build
+          command: if [ -e /etc/os-release ]; then . /etc/os-release; else . /usr/lib/os-release; fi && ./scripts/build.sh --clean --max-nc=2 && ./scripts/create_package.sh --rpm --distro=suse$VERSION_ID
+      - run:
+          name: Upload
+          command: scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -P $UPLOAD_PORT build-Release/packages/rpmbuild/RPMS/$(uname -m)/*.rpm $UPLOAD_USER@$UPLOAD_HOST:.
+  build-debian9:
+    docker:
+      - image: debian:9
+    steps:
+      - checkout
+      - run:
+          name: Update
+          command: apt-get update -q
+      - run:
+          name: Install software-properties-common
+          command: apt-get install -y software-properties-common
+      - run:
+          name: Install tools, Qt and ffmpeg
+          command: apt-get install -y pkg-config build-essential alien openssh-client rpm qt5-default libavutil-dev libavformat-dev libswscale-dev libavdevice-dev ffmpeg
+      - run:
+          name: Build
+          command: ./scripts/build.sh --clean --max-nc=2 && ./scripts/create_package.sh --rpm --distro=debian$(lsb_release -r -s)
+      - run:
+          name: Alien
+          command: alien -k -d build-Release/packages/rpmbuild/RPMS/$(uname -m)/*.rpm
+      - run:
+          name: Upload
+          command: scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -P $UPLOAD_PORT *.deb $UPLOAD_USER@$UPLOAD_HOST:.
   build-ubuntu1804:
     docker:
       - image: ubuntu:bionic
@@ -69,4 +112,6 @@ workflows:
     jobs:
       - build-centos7
       - build-fedora28
+      - build-opensuseleap
+      - build-debian9
       - build-ubuntu1804
