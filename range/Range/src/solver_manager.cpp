@@ -85,7 +85,7 @@ void SolverManager::stopRunningTasks(void)
             {
                 QByteArray block;
                 QDataStream out(&block, QIODevice::WriteOnly);
-                out.setVersion(QDataStream::Qt_5_7);
+                out.setVersion(QDataStream::Qt_5_6);
                 RLogger::info("Sendig signal: %s\n",message.toUtf8().constData());
                 out << quint32(message.size());
                 out << message;

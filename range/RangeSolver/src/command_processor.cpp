@@ -50,7 +50,7 @@ void CommandProcessor::readSocket(void)
     }
     QDataStream in;
     in.setDevice(this->localSocket);
-    in.setVersion(QDataStream::Qt_5_7);
+    in.setVersion(QDataStream::Qt_5_6);
     quint32 blockSize;
     in >> blockSize;
     if (this->localSocket->bytesAvailable() < blockSize || in.atEnd())

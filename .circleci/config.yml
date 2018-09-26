@@ -40,7 +40,7 @@ jobs:
       - run:
           name: Upload
           command: scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -P $UPLOAD_PORT build-Release/packages/rpmbuild/RPMS/$(uname -m)/*.rpm $UPLOAD_USER@$UPLOAD_HOST:.
-  build-opensuseleap15:
+  build-opensuseleap:
     docker:
       - image: opensuse:leap
     steps:
@@ -50,13 +50,13 @@ jobs:
           command: zypper update -y
       - run:
           name: Instal; packman repository
-          command: zypper ar -cfp 90 http://ftp.gwdg.de/pub/linux/misc/packman/suse/openSUSE_Leap_15.0/ packman
+          command: if [ -e /etc/os-release ]; then . /etc/os-release; else . /usr/lib/os-release; fi && zypper ar -cfp 90 http://ftp.gwdg.de/pub/linux/misc/packman/suse/${PRETTY_NAME// /_}/ packman
       - run:
           name: Install tools, Qt and ffmpeg
-          command: zypper --gpg-auto-import-keys install -y sudo hostname make openssh rpm-build libqt5-qtbase-common-devel libqt5-qtsvg-devel ffmpeg-devel
+          command: zypper --gpg-auto-import-keys install -y sudo make openssh rpm-build libqt5-qtbase-common-devel libqt5-qtbase-devel libqt5-qtsvg-devel ffmpeg-devel
       - run:
           name: Build
-          command: ./scripts/build.sh --clean --max-nc=2 && ./scripts/create_package.sh --rpm --distro=suse$(sed -n '/^VERSION_ID=/s/^.*=//p' /usr/lib/os-release | cut -d "\"" -f2)
+          command: if [ -e /etc/os-release ]; then . /etc/os-release; else . /usr/lib/os-release; fi && ./scripts/build.sh --clean --max-nc=2 && ./scripts/create_package.sh --rpm --distro=suse$VERSION_ID
       - run:
           name: Upload
           command: scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -P $UPLOAD_PORT build-Release/packages/rpmbuild/RPMS/$(uname -m)/*.rpm $UPLOAD_USER@$UPLOAD_HOST:.
@@ -89,5 +89,5 @@ workflows:
     jobs:
       - build-centos7
       - build-fedora28
-      - build-opensuseleap15
+      - build-opensuseleap
       - build-ubuntu1804
