@@ -144,6 +144,20 @@ function echo_e
     fi
 }
 
+function assert_success
+{
+    local _return_value=$1
+    local _error_message=$2
+    local _exit=$3
+    if [ $_return_value -ne 0 ]; then
+        echo_e "$_error_message"
+        if [ "$_exit" = "true" ]; then
+            exit 2
+        fi
+    fi  
+    return $_return_value
+}
+
 function touch_dir
 {
     local dir=$1
