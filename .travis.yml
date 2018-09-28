@@ -1,7 +1,7 @@
 sudo: required
 env:
   matrix:
-  - OS_TYPE=fedora OS_VERSION=7 OMP_NUM_THREADS=4
+  - OS_TYPE=centos OS_VERSION=7 OMP_NUM_THREADS=4
 
 services:
   - docker
