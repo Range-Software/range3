@@ -24,6 +24,13 @@ if [ -f "/etc/redhat-release" ]; then
         fi
     fi
     if [ -z "$prereqsScript" ]; then
+        grep -qi "rhel" /etc/redhat-release
+        if [ $? -eq 0 ]; then
+            echo_i "Building on $(cat /etc/redhat-release)"
+            prereqsScript="${myPath}/prereqs_rhel.sh"
+        fi
+    fi
+    if [ -z "$prereqsScript" ]; then
         echo_e "Don't know how to build on $(cat /etc/redhat-release)"
     fi
 elif [ -f "/etc/os-release" ]; then
