@@ -6,6 +6,11 @@ Finite Element Analysis
 
 ![Range Software](http://www.range-software.com/files/common/Range3-CFD.png)
 
+## Prepare build environment
+Following command will download and install all required packages, therefore it must be executed under priviledged (root) user.
+```
+$ sudo ./scripts/prereqs.sh
+```
 ## Build & Install
 ```
 $ ./scripts/build.sh --clean && ./scripts/create_package.sh --install-to=$HOME/bin
