@@ -5943,6 +5943,89 @@ uint RModel::tetrahedralizeSurface(const std::vector<uint> surfaceIDs)
 } /* RModel::tetrahedralizeSurface */
 
 
+RRVector RModel::generateMeshSizeFunction(RVariableType variableType, double minValue, double maxValue) const
+{
+    uint variablePosition = this->findVariable(variableType);
+
+    if (variablePosition == RConstants::eod)
+    {
+        return RRVector();
+    }
+
+    RRVector nodeValues(this->getNNodes());
+
+    const RVariable &rVariable = this->getVariable(variablePosition);
+    if (rVariable.getType() != variableType)
+    {
+        return RRVector();
+
+    }
+    if (rVariable.getApplyType() == R_VARIABLE_APPLY_NODE)
+    {
+        for (uint i=0;i<rVariable.getNValues();i++)
+        {
+            nodeValues[i] = rVariable.getValue(i);
+        }
+    }
+    else
+    {
+        RVariable newVariable(rVariable);
+        newVariable.setApplyType(R_VARIABLE_APPLY_NODE);
+        newVariable.resize(rVariable.getNVectors(),this->getNNodes());
+        for (uint j=0;j<rVariable.getNVectors();j++)
+        {
+            RRVector elementValues = rVariable.getValues(j);
+            RRVector nodeValues(this->getNNodes());
+            RBVector explicitFlags;
+            explicitFlags.resize(this->getNElements(),false);
+            this->convertElementToNodeVector(elementValues,explicitFlags,nodeValues);
+            for (uint k=0;k<this->getNNodes();k++)
+            {
+                newVariable.setValue(j,k,nodeValues[k]);
+            }
+        }
+        for (uint i=0;i<newVariable.getNValues();i++)
+        {
+            nodeValues[i] = newVariable.getValue(i);
+        }
+    }
+
+    RRVector nodeWeights(this->getNNodes(),0.0);
+
+    for (uint i=0;i<this->getNElements();i++)
+    {
+        const RElement &rElement = this->getElement(i);
+        for (uint j=0;j<rElement.size();j++)
+        {
+            uint nodeId1 = rElement.getNodeId(j);
+            for (uint k=j+1;k<rElement.size();k++)
+            {
+                uint nodeId2 = rElement.getNodeId(k);
+                double nodeWeight = std::abs(nodeValues[nodeId1] - nodeValues[nodeId2]);
+                nodeWeights[nodeId1] = std::max(nodeWeights[nodeId1],nodeWeight);
+                nodeWeights[nodeId2] = std::max(nodeWeights[nodeId2],nodeWeight);
+            }
+        }
+    }
+
+    double minWeight = RStatistics::findMinimumValue(nodeWeights);
+    double maxWeight = RStatistics::findMaximumValue(nodeWeights);
+    double scaleWeight = maxWeight - minWeight;
+
+    double scaleValue = maxValue - minValue;
+
+    RRVector meshSizes(this->getNNodes(),0.0);
+
+    for (uint i=0;i<this->getNNodes();i++)
+    {
+        meshSizes[i] = (nodeWeights[i] - minWeight) / scaleWeight;
+        meshSizes[i] = (meshSizes[i] * scaleValue) + minValue;
+    }
+
+    return meshSizes;
+} /* RModel::generateMeshSizeFunction */
+
+
 void RModel::generatePatchSurface(const std::vector<RPatchInput> &patchInput, RPatchBook &book) const
 {
     R_ERROR_ASSERT (patchInput.size() == this->getNSurfaces());
@@ -6429,7 +6512,7 @@ QString RModel::generateNextEntityName(REntityGroupType groupType, const QString
 void RModel::convertElementToNodeVector(const RRVector &elementValues,
                                         const RBVector &setValues,
                                         RRVector &nodeValues,
-                                        bool onlySetValues)
+                                        bool onlySetValues) const
 {
     nodeValues.resize(this->getNNodes(),0.0);
 
