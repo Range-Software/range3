@@ -3994,7 +3994,6 @@ RRVector RModel::getInterpolatedResultsValues(RVariableType variableType, const 
     if (rVariable.getApplyType() == R_VARIABLE_APPLY_ELEMENT)
     {
         return rVariable.getValueVector(elementPos);
-
     }
     else if (rVariable.getApplyType() == R_VARIABLE_APPLY_NODE)
     {
