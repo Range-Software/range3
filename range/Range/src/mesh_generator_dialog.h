@@ -14,6 +14,7 @@
 #include <QDialog>
 #include <QCheckBox>
 #include <QGroupBox>
+#include <QComboBox>
 
 #include <rmlib.h>
 
@@ -33,6 +34,16 @@ class MeshGeneratorDialog : public QDialog
         QGroupBox *qualityMeshGroupBox;
         //! Volume constraint.
         ValueLineEdit *volumeConstraintEdit;
+        //! Mesh size function group box.
+        QGroupBox *meshSizeFunctionGroupBox;
+        //! Mesh size source variable.
+        QComboBox *meshSizeFunctionSourceComboBox;
+        //! Mesh size function minimum value.
+        ValueLineEdit *meshSizeFunctionMinValueEdit;
+        //! Mesh size function maximum value.
+        ValueLineEdit *meshSizeFunctionMaxValueEdit;
+        //! Reconstruct check box.
+        QCheckBox *reconstructCheck;
         //! Keep results check box.
         QCheckBox *keepResultsCheck;
         //! TetGen parameters group box.
@@ -52,6 +63,9 @@ class MeshGeneratorDialog : public QDialog
 
     private:
 
+        //! Generate mesh input.
+        QString generateTetGenInputParams(void) const;
+
         //! Update mesh generator input.
         void updateMeshInput(void);
 
@@ -66,8 +80,20 @@ class MeshGeneratorDialog : public QDialog
         //! Volume constraint value changed.
         void onVolumeConstraintValueChanged(double);
 
+        //! Mesh size function minimum value changed.
+        void onMeshSizeFunctionMinValueChanged(double);
+
+        //! Mesh size function maximum value changed.
+        void onMeshSizeFunctionMaxValueChanged(double);
+
+        //! Reconstruct checkbox state changed.
+        void onReconstructStateChanged(int);
+
         //! Keep results checkbox state changed.
         void onKeepResultsStateChanged(int);
+
+        //! Tetgen parameters group box clicked.
+        void onTetgenParamsGroupBoxClicked(bool);
     
 };
 

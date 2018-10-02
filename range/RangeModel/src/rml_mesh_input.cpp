@@ -36,7 +36,7 @@ RMeshInput::RMeshInput() :
     volumeMesh(true),
     qualityMesh(true),
     outputEdges(false),
-    reconstruct(false),
+    reconstruct(true),
     useSizeFunction(false),
     radiusEdgeRatio(1.6),
     volumeConstraint(0.1),
@@ -202,38 +202,4 @@ const QString &RMeshInput::getTetGenInputParams(void) const
 void RMeshInput::setTetGenInputParams(const QString &tetGenInputParams)
 {
     this->tetGenInputParams = tetGenInputParams;
-}
-
-QString RMeshInput::generateTetGenInputParams(void) const
-{
-    QString parameters;
-
-    parameters += "npA";
-    if (this->verbose)
-    {
-        parameters += "V";
-    }
-    if (this->outputEdges)
-    {
-        parameters += "e";
-    }
-    if (this->reconstruct)
-    {
-        parameters += "r";
-    }
-    if (this->useSizeFunction)
-    {
-        parameters += "m";
-    }
-    if (this->qualityMesh)
-    {
-        parameters += "q" + QString::number(this->radiusEdgeRatio)
-                   + "a" + QString::number(this->volumeConstraint)
-                   + "T" + QString::number(this->tolerance);
-    }
-    else
-    {
-        parameters += "Y";
-    }
-    return parameters;
 }

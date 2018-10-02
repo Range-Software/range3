@@ -894,8 +894,11 @@ class RModel : public RProblem, public RResults
         //! Tetrahedralize surface.
         uint tetrahedralizeSurface(const std::vector<uint> surfaceIDs);
 
+        //! Generate vector of mesh size values for each node.
+        RRVector generateMeshSizeFunction(RVariableType variableType, double minValue, double maxValue, double trimValueRatio) const;
+
         //! Generate patch surface.
-        void generatePatchSurface(const std::vector<RPatchInput> &patchInput,RPatchBook &book) const;
+        void generatePatchSurface(const std::vector<RPatchInput> &patchInput, RPatchBook &book) const;
 
         //! Generate patch input vector.
         void generatePatchInputVector(std::vector<RPatchInput> &patchInput) const;
@@ -928,7 +931,7 @@ class RModel : public RProblem, public RResults
         void convertElementToNodeVector(const RRVector &elementValues,
                                         const RBVector &setValues,
                                         RRVector &nodeValues,
-                                        bool onlySetValues = false);
+                                        bool onlySetValues = false) const;
 
         //! Fill node vector to element vector values.
         void convertNodeToElementVector(const RRVector &nodeValues,

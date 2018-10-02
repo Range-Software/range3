@@ -273,47 +273,6 @@ void RTetGen::importModel(const RModel &model, bool reconstruct, const RRVector 
 
 void RTetGen::exportMesh(RModel &model, bool keepResults) const
 {
-    // Interpolate element results.
-    std::vector<RVariable> variables;
-
-    if (keepResults)
-    {
-        RLogger::info("Interpolating results\n");
-        RLogger::indent();
-
-        RProgressInitialize("Interpolating results");
-        for (uint i=0;i<model.getNVariables();i++)
-        {
-            RProgressPrint(i,model.getNVariables());
-            // Only node results can be safely interpolated.
-            if (model.getVariable(i).getApplyType() == R_VARIABLE_APPLY_NODE)
-            {
-                RVariable variable = model.getVariable(i);
-                RLogger::info("Interpolating %s\n",variable.getName().toUtf8().constData());
-                RLogger::indent();
-                variable.resize(variable.getNVectors(),this->numberofpoints);
-#pragma omp parallel for default(shared)
-                for (int j=0;j<this->numberofpoints;j++)
-                {
-
-                    RNode node(this->pointlist[3*j+0],
-                               this->pointlist[3*j+1],
-                               this->pointlist[3*j+2]);
-                    RRVector values = model.getInterpolatedResultsValues(variable.getType(),node);
-                    for (uint k=0;k<values.size();k++)
-                    {
-                        variable.setValue(k,j,values[k]);
-                    }
-                }
-                variables.push_back(variable);
-                RLogger::unindent();
-            }
-        }
-        RProgressFinalize();
-        RLogger::unindent();
-    }
-
-
     // Find number of point elements.
     uint numberOfPointElements = 0;
     if (this->pointmarkerlist)
@@ -322,7 +281,7 @@ void RTetGen::exportMesh(RModel &model, bool keepResults) const
         {
             if (this->pointmarkerlist[i] < -RTetGen::pointMarkerOffset)
             {
-                numberOfPointElements ++;
+                numberOfPointElements++;
             }
         }
     }
@@ -335,9 +294,76 @@ void RTetGen::exportMesh(RModel &model, bool keepResults) const
         {
             if (this->edgemarkerlist[i] < 0)
             {
-                numberOfLineElements ++;
+                numberOfLineElements++;
             }
         }
+    }
+
+    // Interpolate element results.
+    std::vector<RVariable> variables;
+
+    if (keepResults)
+    {
+        RLogger::info("Interpolating results\n");
+        RLogger::indent();
+
+        RProgressInitialize("Interpolating results");
+        for (uint i=0;i<model.getNVariables();i++)
+        {
+            RProgressPrint(i,model.getNVariables());
+            RVariable variable = model.getVariable(i);
+            RLogger::info("Interpolating %s\n",variable.getName().toUtf8().constData());
+            RLogger::indent();
+            if (model.getVariable(i).getApplyType() == R_VARIABLE_APPLY_NODE)
+            {
+                variable.resize(variable.getNVectors(),this->numberofpoints);
+#pragma omp parallel for default(shared)
+                for (int j=0;j<this->numberofpoints;j++)
+                {
+                    RNode node(this->pointlist[3*j+0],this->pointlist[3*j+1],this->pointlist[3*j+2]);
+                    RRVector values = model.getInterpolatedResultsValues(variable.getType(),node);
+                    for (uint k=0;k<values.size();k++)
+                    {
+                        variable.setValue(k,j,values[k]);
+                    }
+                }
+                variables.push_back(variable);
+            }
+            else if (model.getVariable(i).getApplyType() == R_VARIABLE_APPLY_ELEMENT)
+            {
+                variable.resize(variable.getNVectors(),numberOfPointElements + numberOfLineElements + this->numberoftrifaces + this->numberoftetrahedra);
+#pragma omp parallel for default(shared)
+                for (int j=0;j<this->numberoftetrahedra;j++)
+                {
+                    int n1 = this->tetrahedronlist[4*j+0] - this->firstnumber;
+                    int n2 = this->tetrahedronlist[4*j+1] - this->firstnumber;
+                    int n3 = this->tetrahedronlist[4*j+2] - this->firstnumber;
+                    int n4 = this->tetrahedronlist[4*j+3] - this->firstnumber;
+
+                    RNode node1(this->pointlist[3*n1+0],this->pointlist[3*n1+1],this->pointlist[3*n1+2]);
+                    RNode node2(this->pointlist[3*n2+0],this->pointlist[3*n2+1],this->pointlist[3*n2+2]);
+                    RNode node3(this->pointlist[3*n3+0],this->pointlist[3*n3+1],this->pointlist[3*n3+2]);
+                    RNode node4(this->pointlist[3*n4+0],this->pointlist[3*n4+1],this->pointlist[3*n4+2]);
+
+                    RNode node((node1.getX()+node2.getX()+node3.getX()+node4.getX())/4.0,
+                               (node1.getY()+node2.getY()+node3.getY()+node4.getY())/4.0,
+                               (node1.getZ()+node2.getZ()+node3.getZ()+node4.getZ())/4.0);
+
+                    RRVector values = model.getInterpolatedResultsValues(variable.getType(),node);
+
+                    uint offset = numberOfPointElements + numberOfLineElements + uint(this->numberoftrifaces);
+
+                    for (uint k=0;k<values.size();k++)
+                    {
+                        variable.setValue(k,offset+j,values[k]);
+                    }
+                }
+                variables.push_back(variable);
+            }
+            RLogger::unindent();
+        }
+        RProgressFinalize();
+        RLogger::unindent();
     }
 
     // NODES

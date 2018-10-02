@@ -153,9 +153,6 @@ class RMeshInput
         //! Set TetGen input parameters directly.
         void setTetGenInputParams(const QString &tetGenInputParams);
 
-        //! Generate TetGen input parameters.
-        QString generateTetGenInputParams(void) const;
-
 };
 
 #endif // __RML_MESH_INPUT_H__
