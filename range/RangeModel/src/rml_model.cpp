@@ -6017,8 +6017,7 @@ RRVector RModel::generateMeshSizeFunction(RVariableType variableType, double min
 
     for (uint i=0;i<this->getNNodes();i++)
     {
-        double meshVolume = ((1.0 - (nodeWeights[i] - minWeight) / scaleWeight) * scaleValue) + minValue;
-        meshSizes[i] = std::cbrt(12.0 * meshVolume / std::sqrt(2.0));
+        meshSizes[i] = ((1.0 - (nodeWeights[i] - minWeight) / scaleWeight) * scaleValue) + minValue;
     }
 
     return meshSizes;

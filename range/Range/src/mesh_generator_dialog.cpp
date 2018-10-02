@@ -42,7 +42,7 @@ MeshGeneratorDialog::MeshGeneratorDialog(uint modelID, QWidget *parent) :
     this->reconstructCheck->setChecked(this->meshInput.getReconstruct());
     this->reconstructCheck->setEnabled(rModel.getNVolumes() > 0);
 
-    this->keepResultsCheck = new QCheckBox(tr("Keep node results"));
+    this->keepResultsCheck = new QCheckBox(tr("Keep computed results"));
     mainLayout->addWidget(this->keepResultsCheck);
     this->keepResultsCheck->setChecked(this->meshInput.getKeepResults());
     this->keepResultsCheck->setEnabled(rModel.getNVariables() > 0);
@@ -52,18 +52,21 @@ MeshGeneratorDialog::MeshGeneratorDialog(uint modelID, QWidget *parent) :
     this->qualityMeshGroupBox->setCheckable(true);
     this->qualityMeshGroupBox->setChecked(this->meshInput.getQualityMesh());
 
-    QVBoxLayout *qualityMeshLayout = new QVBoxLayout;
+    QGridLayout *qualityMeshLayout = new QGridLayout;
     this->qualityMeshGroupBox->setLayout(qualityMeshLayout);
 
-    QLabel *label = new QLabel(tr("Volume constraint:"));
-    qualityMeshLayout->addWidget(label);
+    QLabel *label = new QLabel(tr("Maximum element volume:"));
+    qualityMeshLayout->addWidget(label,0,0,1,1);
 
     this->volumeConstraintEdit = new ValueLineEdit(0.0,1e99);
-    qualityMeshLayout->addWidget(this->volumeConstraintEdit);
+    qualityMeshLayout->addWidget(this->volumeConstraintEdit,0,1,1,1);
     this->volumeConstraintEdit->setValue(this->meshInput.getVolumeConstraint());
 
+    QLabel *volumeConstraintUnitsLabel = new QLabel("[m^3]");
+    qualityMeshLayout->addWidget(volumeConstraintUnitsLabel,0,2,1,1);
+
     this->meshSizeFunctionGroupBox = new QGroupBox(tr("Generate mesh size function"));
-    qualityMeshLayout->addWidget(this->meshSizeFunctionGroupBox);
+    qualityMeshLayout->addWidget(this->meshSizeFunctionGroupBox,1,0,1,3);
     this->meshSizeFunctionGroupBox->setCheckable(true);
     this->meshSizeFunctionGroupBox->setChecked(false);
     this->meshSizeFunctionGroupBox->setEnabled(rModel.getNVariables() > 0);
@@ -75,7 +78,7 @@ MeshGeneratorDialog::MeshGeneratorDialog(uint modelID, QWidget *parent) :
     meshSizeFunctionLayout->addWidget(meshSizeFunctionLabel,0,0,1,1);
 
     this->meshSizeFunctionSourceComboBox = new QComboBox;
-    meshSizeFunctionLayout->addWidget(this->meshSizeFunctionSourceComboBox,0,1,1,1);
+    meshSizeFunctionLayout->addWidget(this->meshSizeFunctionSourceComboBox,0,1,1,2);
 
     for (uint i=0;i<rModel.getNVariables();i++)
     {
@@ -83,21 +86,27 @@ MeshGeneratorDialog::MeshGeneratorDialog(uint modelID, QWidget *parent) :
                                                       QVariant(int(rModel.getVariable(i).getType())));
     }
 
-    QLabel *meshSizeFunctionMinValueLabel = new QLabel(tr("Minimum size"));
+    double initEdgeLenght = std::cbrt(12.0 * this->meshInput.getVolumeConstraint() / std::sqrt(2.0));
+
+    QLabel *meshSizeFunctionMinValueLabel = new QLabel(tr("Minimum edge length"));
     meshSizeFunctionLayout->addWidget(meshSizeFunctionMinValueLabel,1,0,1,1);
 
-    this->meshSizeFunctionMinValueEdit = new ValueLineEdit(this->volumeConstraintEdit->getMinimum(),
-                                                       this->volumeConstraintEdit->getMaximum());
-    this->meshSizeFunctionMinValueEdit->setValue(this->volumeConstraintEdit->getValue()*0.1);
+    this->meshSizeFunctionMinValueEdit = new ValueLineEdit(0.0,1e10);
+    this->meshSizeFunctionMinValueEdit->setValue(initEdgeLenght*0.1);
     meshSizeFunctionLayout->addWidget(this->meshSizeFunctionMinValueEdit,1,1,1,1);
 
-    QLabel *meshSizeFunctionMaxValueLabel = new QLabel(tr("Maximum size"));
+    QLabel *meshSizeFunctionMinValueUnitsLabel = new QLabel("[m]");
+    meshSizeFunctionLayout->addWidget(meshSizeFunctionMinValueUnitsLabel,1,2,1,1);
+
+    QLabel *meshSizeFunctionMaxValueLabel = new QLabel(tr("Maximum edge length"));
     meshSizeFunctionLayout->addWidget(meshSizeFunctionMaxValueLabel,2,0,1,1);
 
-    this->meshSizeFunctionMaxValueEdit = new ValueLineEdit(this->volumeConstraintEdit->getMinimum(),
-                                                       this->volumeConstraintEdit->getMaximum());
-    this->meshSizeFunctionMaxValueEdit->setValue(this->volumeConstraintEdit->getValue());
+    this->meshSizeFunctionMaxValueEdit = new ValueLineEdit(0.0,1e10);
+    this->meshSizeFunctionMaxValueEdit->setValue(initEdgeLenght);
     meshSizeFunctionLayout->addWidget(this->meshSizeFunctionMaxValueEdit,2,1,1,1);
+
+    QLabel *meshSizeFunctionMaxValueUnitsLabel = new QLabel("[m]");
+    meshSizeFunctionLayout->addWidget(meshSizeFunctionMaxValueUnitsLabel,2,2,1,1);
 
     this->tetgenParamsGroupBox = new QGroupBox(tr("TetGen parameters"));
     this->tetgenParamsGroupBox->setCheckable(true);
@@ -205,8 +214,6 @@ void MeshGeneratorDialog::updateMeshInput(void)
     this->meshInput.setReconstruct(this->reconstructCheck->isChecked() && this->reconstructCheck->isEnabled());
     this->meshInput.setKeepResults(this->keepResultsCheck->isChecked() && this->keepResultsCheck->isEnabled());
 
-    this->meshSizeFunctionMaxValueEdit->setRange(this->volumeConstraintEdit->getMinimum(),
-                                                 this->volumeConstraintEdit->getValue());
     if (this->meshSizeFunctionMaxValueEdit->getValue() > this->meshSizeFunctionMaxValueEdit->getMaximum())
     {
         this->meshSizeFunctionMaxValueEdit->setValue(this->meshSizeFunctionMaxValueEdit->getMaximum());
