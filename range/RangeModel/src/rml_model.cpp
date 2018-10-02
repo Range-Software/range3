@@ -5942,7 +5942,7 @@ uint RModel::tetrahedralizeSurface(const std::vector<uint> surfaceIDs)
 } /* RModel::tetrahedralizeSurface */
 
 
-RRVector RModel::generateMeshSizeFunction(RVariableType variableType, double minValue, double maxValue) const
+RRVector RModel::generateMeshSizeFunction(RVariableType variableType, double minValue, double maxValue, double trimValueRatio) const
 {
     uint variablePosition = this->findVariable(variableType);
 
@@ -6009,15 +6009,17 @@ RRVector RModel::generateMeshSizeFunction(RVariableType variableType, double min
 
     double minWeight = RStatistics::findMinimumValue(nodeWeights);
     double maxWeight = RStatistics::findMaximumValue(nodeWeights);
-    double scaleWeight = maxWeight - minWeight;
 
+    maxWeight = maxWeight - trimValueRatio * (maxWeight - minWeight);
+
+    double scaleWeight = maxWeight - minWeight;
     double scaleValue = maxValue - minValue;
 
     RRVector meshSizes(this->getNNodes(),0.0);
 
     for (uint i=0;i<this->getNNodes();i++)
     {
-        meshSizes[i] = ((1.0 - (nodeWeights[i] - minWeight) / scaleWeight) * scaleValue) + minValue;
+        meshSizes[i] = ((1.0 - (std::min(nodeWeights[i],maxWeight) - minWeight) / scaleWeight) * scaleValue) + minValue;
     }
 
     return meshSizes;

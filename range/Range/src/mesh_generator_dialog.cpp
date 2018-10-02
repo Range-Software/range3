@@ -159,7 +159,8 @@ int MeshGeneratorDialog::exec(void)
 
             RRVector meshSizeFunction = Session::getInstance().getModel(this->modelID).generateMeshSizeFunction(meshSizeFunctionVariableType,
                                                                                                                 meshSizeFunctionMinValue,
-                                                                                                                meshSizeFunctionMaxValue);
+                                                                                                                meshSizeFunctionMaxValue,
+                                                                                                                0.5);
             this->meshInput.setSizeFunctionValues(meshSizeFunction);
         }
 
