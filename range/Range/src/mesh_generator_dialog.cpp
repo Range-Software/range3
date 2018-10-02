@@ -128,6 +128,7 @@ MeshGeneratorDialog::MeshGeneratorDialog(uint modelID, QWidget *parent) :
     QObject::connect(this->meshSizeFunctionMaxValueEdit,&ValueLineEdit::valueChanged,this,&MeshGeneratorDialog::onVolumeConstraintValueChanged);
     QObject::connect(this->reconstructCheck,&QCheckBox::stateChanged,this,&MeshGeneratorDialog::onReconstructStateChanged);
     QObject::connect(this->keepResultsCheck,&QCheckBox::stateChanged,this,&MeshGeneratorDialog::onKeepResultsStateChanged);
+    QObject::connect(this->tetgenParamsGroupBox,&QGroupBox::clicked,this,&MeshGeneratorDialog::onTetgenParamsGroupBoxClicked);
 
     QObject::connect(cancelButton,&QPushButton::clicked,this,&MeshGeneratorDialog::reject);
     QObject::connect(okButton,&QPushButton::clicked,this,&MeshGeneratorDialog::accept);
@@ -139,32 +140,18 @@ int MeshGeneratorDialog::exec(void)
 
     if (retVal == QDialog::Accepted)
     {
-        if (this->tetgenParamsGroupBox->isChecked())
+        this->updateMeshInput();
+
+        if (this->meshInput.getUseSizeFunction())
         {
-            this->meshInput.setUseTetGenInputParams(true);
-            this->meshInput.setTetGenInputParams(this->tetgenParamsEdit->text());
-        }
-        else
-        {
+            RVariableType meshSizeFunctionVariableType = RVariableType(this->meshSizeFunctionSourceComboBox->currentData().toInt());
+            double meshSizeFunctionMinValue = this->meshSizeFunctionMinValueEdit->getValue();
+            double meshSizeFunctionMaxValue = this->meshSizeFunctionMaxValueEdit->getValue();
 
-            if (this->qualityMeshGroupBox->isChecked() && this->meshSizeFunctionGroupBox->isChecked())
-            {
-                const Model &rModel = Session::getInstance().getModel(this->modelID);
-
-                RVariableType meshSizeFunctionVariableType = RVariableType(this->meshSizeFunctionSourceComboBox->currentData().toInt());
-                double meshSizeFunctionMinValue = this->meshSizeFunctionMinValueEdit->getValue();
-                double meshSizeFunctionMaxValue = this->meshSizeFunctionMaxValueEdit->getValue();
-
-                RRVector meshSizeFunction = rModel.generateMeshSizeFunction(meshSizeFunctionVariableType,
-                                                                            meshSizeFunctionMinValue,
-                                                                            meshSizeFunctionMaxValue);
-
-                this->meshInput.setUseSizeFunction(true);
-                this->meshInput.setSizeFunctionValues(meshSizeFunction);
-            }
-
-            this->meshInput.setUseTetGenInputParams(false);
-            this->meshInput.setTetGenInputParams(this->generateTetGenInputParams());
+            RRVector meshSizeFunction = Session::getInstance().getModel(this->modelID).generateMeshSizeFunction(meshSizeFunctionVariableType,
+                                                                                                                meshSizeFunctionMinValue,
+                                                                                                                meshSizeFunctionMaxValue);
+            this->meshInput.setSizeFunctionValues(meshSizeFunction);
         }
 
         Session::getInstance().getModel(this->modelID).setMeshInput(this->meshInput);
@@ -213,6 +200,7 @@ void MeshGeneratorDialog::updateMeshInput(void)
 {
     this->meshInput.setSurfaceIntegrityCheck(this->surfaceIntegrityCheck->isChecked());
     this->meshInput.setQualityMesh(this->qualityMeshGroupBox->isChecked());
+    this->meshInput.setUseSizeFunction(this->qualityMeshGroupBox->isChecked() && this->meshSizeFunctionGroupBox->isChecked());
     this->meshInput.setVolumeConstraint(this->volumeConstraintEdit->getValue());
     this->meshInput.setReconstruct(this->reconstructCheck->isChecked() && this->reconstructCheck->isEnabled());
     this->meshInput.setKeepResults(this->keepResultsCheck->isChecked() && this->keepResultsCheck->isEnabled());
@@ -231,8 +219,16 @@ void MeshGeneratorDialog::updateMeshInput(void)
         this->meshSizeFunctionMinValueEdit->setValue(this->meshSizeFunctionMinValueEdit->getMaximum());
     }
 
-    // Update TetGen parameters line edit.
-    this->tetgenParamsEdit->setText(this->generateTetGenInputParams());
+
+    this->meshInput.setUseTetGenInputParams(this->tetgenParamsGroupBox->isChecked());
+    if (!this->tetgenParamsGroupBox->isChecked())
+    {
+        // Update TetGen parameters line edit.
+        bool oldState = this->tetgenParamsEdit->blockSignals(true);
+        this->tetgenParamsEdit->setText(this->generateTetGenInputParams());
+        this->tetgenParamsEdit->blockSignals(oldState);
+    }
+    this->meshInput.setTetGenInputParams(this->tetgenParamsEdit->text());
 }
 
 void MeshGeneratorDialog::onSurfaceIntegrityStateChanged(int)
@@ -266,6 +262,11 @@ void MeshGeneratorDialog::onReconstructStateChanged(int)
 }
 
 void MeshGeneratorDialog::onKeepResultsStateChanged(int)
+{
+    this->updateMeshInput();
+}
+
+void MeshGeneratorDialog::onTetgenParamsGroupBoxClicked(bool)
 {
     this->updateMeshInput();
 }

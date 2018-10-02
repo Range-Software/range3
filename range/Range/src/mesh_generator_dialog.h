@@ -91,6 +91,9 @@ class MeshGeneratorDialog : public QDialog
 
         //! Keep results checkbox state changed.
         void onKeepResultsStateChanged(int);
+
+        //! Tetgen parameters group box clicked.
+        void onTetgenParamsGroupBoxClicked(bool);
     
 };
 
