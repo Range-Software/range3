@@ -32,7 +32,9 @@ void RMeshGenerator::generate(const RMeshInput &meshInput, RModel &model)
     {
         RLogger::info("Converting Range model to TetGen mesh.\n");
         RLogger::indent();
-        tetgenIn.importModel(model,meshInput.getReconstruct(),meshInput.getUseSizeFunction() ? meshInput.getSizeFunctionValues() : RRVector());
+        tetgenIn.importModel(model,
+                             meshInput.getReconstruct() && model.getNVolumes() > 0,
+                             meshInput.getUseSizeFunction() ? meshInput.getSizeFunctionValues() : RRVector());
         RLogger::unindent();
         RLogger::info("Successfully converted Range model to TetGen mesh.\n");
     }
@@ -42,7 +44,7 @@ void RMeshGenerator::generate(const RMeshInput &meshInput, RModel &model)
         throw RError(R_ERROR_APPLICATION,R_ERROR_REF,"Failed to export mesh to TetGen format: %s", error.getMessage().toUtf8().constData());
     }
 
-    QString parameters(meshInput.getUseTetGenInputParams() ? meshInput.getTetGenInputParams() : meshInput.generateTetGenInputParams());
+    QString parameters(meshInput.getTetGenInputParams());
 
     char *args = new char[parameters.size() + 1];
     snprintf(args,parameters.size() + 1,"%s",parameters.toUtf8().constData());

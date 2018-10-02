@@ -42,6 +42,8 @@ class MeshGeneratorDialog : public QDialog
         ValueLineEdit *meshSizeFunctionMinValueEdit;
         //! Mesh size function maximum value.
         ValueLineEdit *meshSizeFunctionMaxValueEdit;
+        //! Reconstruct check box.
+        QCheckBox *reconstructCheck;
         //! Keep results check box.
         QCheckBox *keepResultsCheck;
         //! TetGen parameters group box.
@@ -60,6 +62,9 @@ class MeshGeneratorDialog : public QDialog
         int exec(void);
 
     private:
+
+        //! Generate mesh input.
+        QString generateTetGenInputParams(void) const;
 
         //! Update mesh generator input.
         void updateMeshInput(void);
@@ -80,6 +85,9 @@ class MeshGeneratorDialog : public QDialog
 
         //! Mesh size function maximum value changed.
         void onMeshSizeFunctionMaxValueChanged(double);
+
+        //! Reconstruct checkbox state changed.
+        void onReconstructStateChanged(int);
 
         //! Keep results checkbox state changed.
         void onKeepResultsStateChanged(int);
