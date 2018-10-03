@@ -22,22 +22,20 @@ topDir="$(dirname $myPath)"
 moduleDir="${topDir}/range"
 buildDir="${topDir}/build"
 
+np=$[1]
 MAKE="make"
 if [ -f /proc/cpuinfo ]
 then
-    np=$(cat /proc/cpuinfo | grep processor | wc -l)
+    np=$(grep -c ^processor /proc/cpuinfo)
     np=$[np-1]
 elif [ $(uname -s) == "Darwin" ]
 then
     # This could be logical CPUs (hw.ncpu) if you wanted to use hyperthreading.
     np=$(sysctl -n hw.physicalcpu)
+    maxNp=$np
     np=$[np-1]
 fi
-echo_i "Using $np core(s) to compile."
-if [ $np -gt $[1] ]
-then
-    MAKE=$MAKE" -j$np"
-fi
+maxNp=$np
 
 function print_help
 {
@@ -48,6 +46,7 @@ function print_help
     echo ""
     echo " optional"
     echo ""
+    echo "  --max-nc=[NUMBER]        Maximum number of cores used to compile (default=$maxNp)"
     echo "  --clean                  Clean old build"
     echo "  --debug                  Build debug version"
     echo "  --help, -h, -?           Print this help and exit"
@@ -56,6 +55,9 @@ function print_help
 while [ $# -gt 0 ]
 do
     case $1 in
+        --max-nc=*)
+            maxNp=$( echo $1 | awk 'BEGIN{ FS="=" } { print $2 }' )
+            ;;
         --clean)
             clean=true
             ;;
@@ -71,6 +73,17 @@ do
     esac
     shift
 done
+
+if [ $np -gt $maxNp ]
+then
+    np=$maxNp
+fi
+
+echo_i "Using $np core(s) to compile."
+if [ $np -gt $[1] ]
+then
+    MAKE=$MAKE" -j$np"
+fi
 
 if [ $debug = true ]
 then

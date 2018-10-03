@@ -35,7 +35,6 @@ SolverStartDialog::SolverStartDialog(uint modelID, QWidget *parent)
     solverSetupChecker.perform(this->warnings,this->errors);
 
     const Model &rModel = Session::getInstance().getModel(this->modelID);
-    this->modelFileName = ModelIO::getModelSaveName(MainSettings::getInstance(),this,rModel);
 
     this->pSolverTask = new SolverTask(MainSettings::getInstance().getApplicationSettings(),this->modelID);
     this->pSolverTask->setBlocking(false);
@@ -146,7 +145,6 @@ int SolverStartDialog::exec(void)
         Session::getInstance().getModel(this->modelID).getTimeSolver().harmonizeTimesWithInput(this->restartSolverCheck->isChecked());
 
         // Start solver task
-        Session::getInstance().getModel(this->modelID).setFileName(this->modelFileName);
         SolverManager::getInstance().submit(this->pSolverTask);
     }
     else

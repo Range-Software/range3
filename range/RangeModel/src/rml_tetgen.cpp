@@ -32,16 +32,16 @@ void RTetGen::importModel(const RModel &model, bool reconstruct, const RRVector 
     // Set nodes
 
     this->numberofpoints = model.getNNodes();
-    this->numberofpointattributes = 1;
+    this->numberofpointattributes = 0;
     this->numberofpointmtrs = nodeMeshSizeValues.size() == model.getNNodes() ? 1 : 0;
 
     if (this->numberofpoints)
     {
         this->pointlist = new REAL [this->numberofpoints*3];
-        if (this->numberofpointattributes)
-        {
-            this->pointattributelist = new REAL [this->numberofpoints*this->numberofpointattributes];
-        }
+//        if (this->numberofpointattributes)
+//        {
+//            this->pointattributelist = new REAL [this->numberofpoints*this->numberofpointattributes];
+//        }
         if (this->numberofpointmtrs)
         {
             this->pointmtrlist = new REAL [this->numberofpoints*this->numberofpointmtrs];
@@ -53,14 +53,14 @@ void RTetGen::importModel(const RModel &model, bool reconstruct, const RRVector 
             this->pointlist[3*i+0] = REAL(model.getNode(i).getX());
             this->pointlist[3*i+1] = REAL(model.getNode(i).getY());
             this->pointlist[3*i+2] = REAL(model.getNode(i).getZ());
-            if (this->numberofpointattributes)
-            {
-                this->pointattributelist[this->numberofpointattributes*i+0] = REAL(i);
-                for (int j=1;j<this->numberofpointattributes;j++)
-                {
-                    this->pointattributelist[this->numberofpointattributes*i+j] = 0.0;
-                }
-            }
+//            if (this->numberofpointattributes)
+//            {
+//                this->pointattributelist[this->numberofpointattributes*i+0] = REAL(i);
+//                for (int j=1;j<this->numberofpointattributes;j++)
+//                {
+//                    this->pointattributelist[this->numberofpointattributes*i+j] = 0.0;
+//                }
+//            }
             if (this->numberofpointmtrs)
             {
                 this->pointmtrlist[this->numberofpointmtrs*i+0] = nodeMeshSizeValues[i];
@@ -159,7 +159,7 @@ void RTetGen::importModel(const RModel &model, bool reconstruct, const RRVector 
         if (this->numberoftetrahedra)
         {
             this->numberofcorners = 4;
-            this->numberoftetrahedronattributes = 2;
+            this->numberoftetrahedronattributes = 1;
             this->tetrahedronlist = new int[this->numberoftetrahedra*4];
             this->tetrahedronattributelist = new REAL[this->numberoftetrahedra*this->numberoftetrahedronattributes];
             this->tetrahedronvolumelist = new REAL[this->numberoftetrahedra];
@@ -179,19 +179,19 @@ void RTetGen::importModel(const RModel &model, bool reconstruct, const RRVector 
                 this->tetrahedronlist[4*ce+2] = model.getElement(i).getNodeId(2) + this->firstnumber;
                 this->tetrahedronlist[4*ce+3] = model.getElement(i).getNodeId(3) + this->firstnumber;
 
-                this->tetrahedronattributelist[this->numberoftetrahedronattributes*ce+0] = 1.0;
-                this->tetrahedronattributelist[this->numberoftetrahedronattributes*ce+1] = 1234.5;
+                this->tetrahedronattributelist[this->numberoftetrahedronattributes*ce+0] = 0.0;
 
-                this->tetrahedronvolumelist[ce] = 0.1;
+                this->tetrahedronvolumelist[ce] = -1.0;
 
                 volumeBook[i] = ce;
 
                 ce++;
             }
 
+            // Set volume marker for each tetrahedra
             for (unsigned int i=0;i<model.getNVolumes();i++)
             {
-                int marker = int(i+1);
+                int marker = int(i);
                 for (unsigned int j=0;j<model.getVolume(i).size();j++)
                 {
                     unsigned int elementPosition = volumeBook[model.getVolume(i).get(j)];
@@ -273,44 +273,6 @@ void RTetGen::importModel(const RModel &model, bool reconstruct, const RRVector 
 
 void RTetGen::exportMesh(RModel &model, bool keepResults) const
 {
-    // Interpolate element results.
-    std::vector<RVariable> variables;
-    if (keepResults)
-    {
-        RLogger::info("Interpolating results\n");
-        RLogger::indent();
-
-        for (uint i=0;i<model.getNVariables();i++)
-        {
-            // Only node results can be safely interpolated.
-            if (model.getVariable(i).getApplyType() == R_VARIABLE_APPLY_NODE)
-            {
-                RVariable variable = model.getVariable(i);
-                RLogger::info("Interpolating %s\n",variable.getName().toUtf8().constData());
-                RLogger::indent();
-                RProgressInitialize("Interpolating " + variable.getName());
-                variable.resize(variable.getNVectors(),this->numberofpoints);
-                for (int j=0;j<this->numberofpoints;j++)
-                {
-                    RProgressPrint(j+1,this->numberofpoints);
-
-                    RNode node(this->pointlist[3*j+0],
-                               this->pointlist[3*j+1],
-                               this->pointlist[3*j+2]);
-                    RRVector values = model.getInterpolatedResultsValues(variable.getType(),node);
-                    for (uint k=0;k<values.size();k++)
-                    {
-                        variable.setValue(k,j,values[k]);
-                    }
-                }
-                variables.push_back(variable);
-                RProgressFinalize();
-                RLogger::unindent();
-            }
-        }
-        RLogger::unindent();
-    }
-
     // Find number of point elements.
     uint numberOfPointElements = 0;
     if (this->pointmarkerlist)
@@ -319,7 +281,7 @@ void RTetGen::exportMesh(RModel &model, bool keepResults) const
         {
             if (this->pointmarkerlist[i] < -RTetGen::pointMarkerOffset)
             {
-                numberOfPointElements ++;
+                numberOfPointElements++;
             }
         }
     }
@@ -332,9 +294,76 @@ void RTetGen::exportMesh(RModel &model, bool keepResults) const
         {
             if (this->edgemarkerlist[i] < 0)
             {
-                numberOfLineElements ++;
+                numberOfLineElements++;
             }
         }
+    }
+
+    // Interpolate element results.
+    std::vector<RVariable> variables;
+
+    if (keepResults && model.getNVariables() > 0)
+    {
+        RLogger::info("Interpolating results\n");
+        RLogger::indent();
+
+        RProgressInitialize("Interpolating results");
+        for (uint i=0;i<model.getNVariables();i++)
+        {
+            RProgressPrint(i,model.getNVariables());
+            RVariable variable = model.getVariable(i);
+            RLogger::info("Interpolating %s\n",variable.getName().toUtf8().constData());
+            RLogger::indent();
+            if (model.getVariable(i).getApplyType() == R_VARIABLE_APPLY_NODE)
+            {
+                variable.resize(variable.getNVectors(),this->numberofpoints);
+#pragma omp parallel for default(shared)
+                for (int j=0;j<this->numberofpoints;j++)
+                {
+                    RNode node(this->pointlist[3*j+0],this->pointlist[3*j+1],this->pointlist[3*j+2]);
+                    RRVector values = model.getInterpolatedResultsValues(variable.getType(),node);
+                    for (uint k=0;k<values.size();k++)
+                    {
+                        variable.setValue(k,j,values[k]);
+                    }
+                }
+                variables.push_back(variable);
+            }
+            else if (model.getVariable(i).getApplyType() == R_VARIABLE_APPLY_ELEMENT)
+            {
+                variable.resize(variable.getNVectors(),numberOfPointElements + numberOfLineElements + this->numberoftrifaces + this->numberoftetrahedra);
+#pragma omp parallel for default(shared)
+                for (int j=0;j<this->numberoftetrahedra;j++)
+                {
+                    int n1 = this->tetrahedronlist[4*j+0] - this->firstnumber;
+                    int n2 = this->tetrahedronlist[4*j+1] - this->firstnumber;
+                    int n3 = this->tetrahedronlist[4*j+2] - this->firstnumber;
+                    int n4 = this->tetrahedronlist[4*j+3] - this->firstnumber;
+
+                    RNode node1(this->pointlist[3*n1+0],this->pointlist[3*n1+1],this->pointlist[3*n1+2]);
+                    RNode node2(this->pointlist[3*n2+0],this->pointlist[3*n2+1],this->pointlist[3*n2+2]);
+                    RNode node3(this->pointlist[3*n3+0],this->pointlist[3*n3+1],this->pointlist[3*n3+2]);
+                    RNode node4(this->pointlist[3*n4+0],this->pointlist[3*n4+1],this->pointlist[3*n4+2]);
+
+                    RNode node((node1.getX()+node2.getX()+node3.getX()+node4.getX())/4.0,
+                               (node1.getY()+node2.getY()+node3.getY()+node4.getY())/4.0,
+                               (node1.getZ()+node2.getZ()+node3.getZ()+node4.getZ())/4.0);
+
+                    RRVector values = model.getInterpolatedResultsValues(variable.getType(),node);
+
+                    uint offset = numberOfPointElements + numberOfLineElements + uint(this->numberoftrifaces);
+
+                    for (uint k=0;k<values.size();k++)
+                    {
+                        variable.setValue(k,offset+j,values[k]);
+                    }
+                }
+                variables.push_back(variable);
+            }
+            RLogger::unindent();
+        }
+        RProgressFinalize();
+        RLogger::unindent();
     }
 
     // NODES
@@ -443,43 +472,44 @@ void RTetGen::exportMesh(RModel &model, bool keepResults) const
     }
 
     // VOLUMES
-    RUVector tetrahedraAttributes(this->numberoftetrahedra);
-    std::fill(tetrahedraAttributes.begin(),tetrahedraAttributes.end(),0);
+    RUVector tetrahedraVolumeMarker(this->numberoftetrahedra,0);
     if (this->numberoftetrahedronattributes > 0)
     {
-        uint minAttribute = 0;
-        uint maxAttribute = 0;
+        uint minTetrahedraVolumeMarker = 0;
+        uint maxTetrahedraVolumeMarker = 0;
         for (int i=0;i<this->numberoftetrahedra;i++)
         {
-            tetrahedraAttributes[i] = uint(this->tetrahedronattributelist[this->numberoftetrahedronattributes*i + 0]);
-            minAttribute = std::min(minAttribute,tetrahedraAttributes[i]);
-            maxAttribute = std::max(maxAttribute,tetrahedraAttributes[i]);
+            tetrahedraVolumeMarker[i] = uint(this->tetrahedronattributelist[this->numberoftetrahedronattributes*i + 0]);
+            minTetrahedraVolumeMarker = std::min(minTetrahedraVolumeMarker,tetrahedraVolumeMarker[i]);
+            maxTetrahedraVolumeMarker = std::max(maxTetrahedraVolumeMarker,tetrahedraVolumeMarker[i]);
         }
-        RUVector attributeBook(maxAttribute+1);
-        std::fill(attributeBook.begin(),attributeBook.end(),0);
+        RUVector tetrahedraVolumeMarkerBook(maxTetrahedraVolumeMarker+1,RConstants::eod);
         for (int i=0;i<this->numberoftetrahedra;i++)
         {
-            attributeBook[tetrahedraAttributes[i]]++;
+            tetrahedraVolumeMarkerBook[tetrahedraVolumeMarker[i]] = 0;
         }
-        uint attributeBookCnt = 0;
-        for (uint i=0;i<attributeBook.size();i++)
+        uint tetrahedraVolumeMarkerBookCnt = 0;
+        for (uint i=0;i<tetrahedraVolumeMarkerBook.size();i++)
         {
-            if (attributeBook[i] == 0)
+            if (tetrahedraVolumeMarkerBook[i] == 0)
             {
-                attributeBook[i] = RConstants::eod;
-            }
-            else
-            {
-                attributeBook[i] = attributeBookCnt++;
+                tetrahedraVolumeMarkerBook[i] = tetrahedraVolumeMarkerBookCnt++;
             }
         }
+        for (uint i=0;i<tetrahedraVolumeMarkerBook.size();i++)
+        {
+            if (tetrahedraVolumeMarkerBook[i] == RConstants::eod)
+            {
+                tetrahedraVolumeMarkerBook[i] = tetrahedraVolumeMarkerBookCnt++;
+            }
+        }
         for (int i=0;i<this->numberoftetrahedra;i++)
         {
-            tetrahedraAttributes[i] = attributeBook[tetrahedraAttributes[i]];
+            tetrahedraVolumeMarker[i] = tetrahedraVolumeMarkerBook[tetrahedraVolumeMarker[i]];
         }
 
         // Resize number of volumes
-        model.setNVolumes(attributeBookCnt);
+        model.setNVolumes(tetrahedraVolumeMarkerBookCnt);
     }
     else
     {
@@ -496,8 +526,7 @@ void RTetGen::exportMesh(RModel &model, bool keepResults) const
         element.setNodeId(3,this->tetrahedronlist[4*i+3] - this->firstnumber);
 
         model.setElement(nElements,element,false);
-        uint volumeMarker = tetrahedraAttributes[i] != RConstants::eod ? tetrahedraAttributes[i] : 0;
-        model.getVolume(volumeMarker).add(nElements);
+        model.getVolume(tetrahedraVolumeMarker[i]).add(nElements);
         for (unsigned int j=0;j<4;j++)
         {
             if (this->neighborlist[4*i+j] >= this->firstnumber)

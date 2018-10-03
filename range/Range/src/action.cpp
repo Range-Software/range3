@@ -1654,8 +1654,14 @@ void Action::onSolverStart(void)
     // First perform checks whether setup is correct.
     for (int i=0;i<modelIDs.size();i++)
     {
-        SolverStartDialog solverStartDialog(modelIDs[i],this->mainWindow);
-        solverStartDialog.exec();
+        Model &rModel = Session::getInstance().getModel(modelIDs[i]);
+        QString modelFileName = ModelIO::getModelSaveName(MainSettings::getInstance(),this->mainWindow,rModel);
+        if (!modelFileName.isEmpty())
+        {
+            rModel.setFileName(modelFileName);
+            SolverStartDialog solverStartDialog(modelIDs[i],this->mainWindow);
+            solverStartDialog.exec();
+        }
     }
 }
 

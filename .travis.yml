@@ -1,7 +1,7 @@
 sudo: required
 env:
   matrix:
-  - OS_TYPE=fedora OS_VERSION=28 OMP_NUM_THREADS=4
+  - OS_TYPE=centos OS_VERSION=7 OMP_NUM_THREADS=4
 
 services:
   - docker
@@ -11,8 +11,7 @@ before_install:
   - echo 'DOCKER_OPTS="-H tcp://127.0.0.1:2375 -H unix:///var/run/docker.sock -s devicemapper"' | sudo tee /etc/default/docker > /dev/null
   - sudo service docker restart
   - sleep 5
-  - sudo docker pull fedora:${OS_VERSION}
-
+  - sudo docker pull ${OS_TYPE}:${OS_VERSION}
 
 script:
-  - ./scripts/docker_fedora.sh
+  - ./scripts/docker_centos.sh
