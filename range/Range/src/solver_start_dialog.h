@@ -29,8 +29,6 @@ class SolverStartDialog : public QDialog
         QStringList errors;
         //! Restart solver.
         QCheckBox *restartSolverCheck;
-        //! Model file name.
-        QString modelFileName;
         //! Pointer to solvr task object.
         SolverTask *pSolverTask;
 

@@ -5971,7 +5971,8 @@ RRVector RModel::generateMeshSizeFunction(RVariableType variableType, double min
         RVariable newVariable(rVariable);
         newVariable.setApplyType(R_VARIABLE_APPLY_NODE);
         newVariable.resize(rVariable.getNVectors(),this->getNNodes());
-        for (uint j=0;j<rVariable.getNVectors();j++)
+#pragma omp parallel for default(shared)
+        for (int64_t j=0;j<int64_t(rVariable.getNVectors());j++)
         {
             RRVector elementValues = rVariable.getValues(j);
             RRVector nodeValues(this->getNNodes());
@@ -5983,7 +5984,8 @@ RRVector RModel::generateMeshSizeFunction(RVariableType variableType, double min
                 newVariable.setValue(j,k,nodeValues[k]);
             }
         }
-        for (uint i=0;i<newVariable.getNValues();i++)
+#pragma omp parallel for default(shared)
+        for (int64_t i=0;i<int64_t(newVariable.getNValues());i++)
         {
             nodeValues[i] = newVariable.getValue(i);
         }
@@ -5991,7 +5993,8 @@ RRVector RModel::generateMeshSizeFunction(RVariableType variableType, double min
 
     RRVector nodeWeights(this->getNNodes(),0.0);
 
-    for (uint i=0;i<this->getNElements();i++)
+#pragma omp parallel for default(shared)
+    for (int64_t i=0;i<int64_t(this->getNElements());i++)
     {
         const RElement &rElement = this->getElement(i);
         for (uint j=0;j<rElement.size();j++)
@@ -6001,8 +6004,11 @@ RRVector RModel::generateMeshSizeFunction(RVariableType variableType, double min
             {
                 uint nodeId2 = rElement.getNodeId(k);
                 double nodeWeight = std::abs(nodeValues[nodeId1] - nodeValues[nodeId2]);
-                nodeWeights[nodeId1] = std::max(nodeWeights[nodeId1],nodeWeight);
-                nodeWeights[nodeId2] = std::max(nodeWeights[nodeId2],nodeWeight);
+#pragma omp critical
+                {
+                    nodeWeights[nodeId1] = std::max(nodeWeights[nodeId1],nodeWeight);
+                    nodeWeights[nodeId2] = std::max(nodeWeights[nodeId2],nodeWeight);
+                }
             }
         }
     }
@@ -6017,6 +6023,7 @@ RRVector RModel::generateMeshSizeFunction(RVariableType variableType, double min
 
     RRVector meshSizes(this->getNNodes(),0.0);
 
+#pragma omp parallel for default(shared)
     for (uint i=0;i<this->getNNodes();i++)
     {
         meshSizes[i] = ((1.0 - (std::min(nodeWeights[i],maxWeight) - minWeight) / scaleWeight) * scaleValue) + minValue;

@@ -302,7 +302,7 @@ void RTetGen::exportMesh(RModel &model, bool keepResults) const
     // Interpolate element results.
     std::vector<RVariable> variables;
 
-    if (keepResults)
+    if (keepResults && model.getNVariables() > 0)
     {
         RLogger::info("Interpolating results\n");
         RLogger::indent();

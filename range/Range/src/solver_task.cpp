@@ -28,8 +28,6 @@ SolverTask::SolverTask(const ApplicationSettings *applicationSettings, uint mode
 
     Model &rModel = Session::getInstance().getModel(this->modelID);
 
-    std::vector<RProblemType> problemTypes(RProblem::getTypes(rModel.getProblemTaskTree().getProblemTypeMask()));
-
     QFileInfo modelFileInfo(rModel.getFileName());
 
     this->modelFileName = modelFileInfo.absoluteFilePath();

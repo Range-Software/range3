@@ -212,8 +212,8 @@ void MeshGeneratorDialog::updateMeshInput(void)
     this->meshInput.setQualityMesh(this->qualityMeshGroupBox->isChecked());
     this->meshInput.setUseSizeFunction(this->qualityMeshGroupBox->isChecked() && this->meshSizeFunctionGroupBox->isChecked());
     this->meshInput.setVolumeConstraint(this->volumeConstraintEdit->getValue());
-    this->meshInput.setReconstruct(this->reconstructCheck->isChecked() && this->reconstructCheck->isEnabled());
-    this->meshInput.setKeepResults(this->keepResultsCheck->isChecked() && this->keepResultsCheck->isEnabled());
+    this->meshInput.setReconstruct(this->reconstructCheck->isChecked());
+    this->meshInput.setKeepResults(this->keepResultsCheck->isChecked());
 
     if (this->meshSizeFunctionMaxValueEdit->getValue() > this->meshSizeFunctionMaxValueEdit->getMaximum())
     {
