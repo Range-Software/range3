@@ -72,10 +72,10 @@ RModel::RModel (const RModelMsh &modelMsh)
 {
     RNode node;
     RElement element;
-    RIVector pointBook(modelMsh.pointsAll.getNRows());
-    RIVector lineBook(modelMsh.linesAll.getNRows());
-    RIVector faceBook(modelMsh.facesAll.getNRows());
-    RIVector bodyBook(modelMsh.bodiesAll.getNRows());
+    RUVector pointBook(modelMsh.pointsAll.getNRows());
+    RUVector lineBook(modelMsh.linesAll.getNRows());
+    RUVector faceBook(modelMsh.facesAll.getNRows());
+    RUVector bodyBook(modelMsh.bodiesAll.getNRows());
 
     this->_init ();
 
@@ -6024,7 +6024,7 @@ RRVector RModel::generateMeshSizeFunction(RVariableType variableType, double min
     RRVector meshSizes(this->getNNodes(),0.0);
 
 #pragma omp parallel for default(shared)
-    for (uint i=0;i<this->getNNodes();i++)
+    for (int64_t i=0;i<int64_t(this->getNNodes());i++)
     {
         meshSizes[i] = ((1.0 - (std::min(nodeWeights[i],maxWeight) - minWeight) / scaleWeight) * scaleValue) + minValue;
     }
