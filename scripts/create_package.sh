@@ -143,7 +143,7 @@ then
     _DEBUG_LOG_FNAME="${logDir}/op-${myName}-${timeStamp}.log"
 fi
 
-version="$($buildDir/Range/Range$versionSuffix --version | sed -n -e '/VERSION/ s/.*\= *//p')${versionSuffix}"
+version="$($buildDir/RangeSolver/RangeSolver$versionSuffix --version | sed -n -e '/VERSION/ s/.*\= *//p')${versionSuffix}"
 # Argument parsing section - End ------------------------------------------
 
 # Set-up section - Begin --------------------------------------------------
