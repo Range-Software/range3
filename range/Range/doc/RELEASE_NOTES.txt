@@ -1,4 +1,11 @@
 ------------------------------------------------------------------
+Version 3.0.3
+
+* Adaptive mesh generator
+  - Specify mesh density/size function based on calculated results
+* Improved CFD solver precision
+
+------------------------------------------------------------------
 Version 3.0.2
 
 * Improved CFD solver performance

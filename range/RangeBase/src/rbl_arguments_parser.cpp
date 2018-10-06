@@ -114,7 +114,7 @@ void RArgumentsParser::printHelp(void) const
 
 void RArgumentsParser::printVersion(void) const
 {
-    RLogger::info("%s\n",RVendor::version.toString().toUtf8().constData());
+    RLogger::info("VERSION=%s\n",RVendor::version.toString().toUtf8().constData());
 }
 
 void RArgumentsParser::printHeader(const QString &applicationName)

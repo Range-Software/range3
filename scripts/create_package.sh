@@ -19,17 +19,6 @@ timeStamp=$(date +%H%M%S)
 moduleDir=$(dirname $myPath)
 sourceDir="${moduleDir}/range"
 
-# build source
-buildDir="${moduleDir}/build-Release"
-buildBin="${buildDir}/Range/Range ${buildDir}/RangeSolver/RangeSolver"
-buildMan="${sourceDir}/Range/man/*"
-buildDoc="${sourceDir}/Range/doc/*"
-buildHlp="${sourceDir}/Range/help/*"
-buildDat="${sourceDir}/Range/data/*"
-buildMat="${sourceDir}/Range/materials/*"
-buildLnk="${sourceDir}/Range/desktop/*"
-buildPix="${sourceDir}/Range/pixmaps/range-logo-128.png"
-
 # paths for a binaries, documents, pixmaps and other data
 path_bin='bin'
 path_man='man'
@@ -53,7 +42,6 @@ group='Application/Engineering'
 desc='Range Software Package.\nSoftware for engineering simulations.\nFinite Element Analysis.'
 
 installToDir=$HOME/bin
-version="3.0.2"
 distro=
 createRpm=false
 debug=false
@@ -74,7 +62,6 @@ function print_help
     echo "  --install-to=[DIRECTORY]       Install created package to 'DIRECTORY' (default='$installToDir')"
     echo ""
     echo "  --rpm                          Create RPM"
-    echo "  --version=[VERSION]            Version string"
     echo "  --distro=[STRING]              Distribution string"
     echo ""
     echo "  --debug                        Create debug package"
@@ -89,9 +76,6 @@ do
     case $1 in
         --install-to=*)
             installToDir=$( echo $1 | awk 'BEGIN{ FS="=" } { print $2 }' )
-            ;;
-        --version=*)
-            version=$( echo $1 | awk 'BEGIN{ FS="=" } { print $2 }' )
             ;;
         --distro=*)
             distro=$( echo $1 | awk 'BEGIN{ FS="=" } { print $2 }' )
@@ -118,23 +102,32 @@ do
     shift
 done
 
-logDir="${buildDir}/log"
+# build source
+buildType="Release"
+versionSuffix=
 
-if [ -z "$version" ]
+if [ $debug = true ]
 then
-    echo_e "Missing --version parameter."
-    exit 1
+    buildType="Debug"
+    versionSuffix="_debug"
 fi
+
+buildDir="${moduleDir}/build-${buildType}"
+buildBin="${buildDir}/Range/Range${versionSuffix} ${buildDir}/RangeSolver/RangeSolver${versionSuffix}"
+buildMan="${sourceDir}/Range/man/*"
+buildDoc="${sourceDir}/Range/doc/*"
+buildHlp="${sourceDir}/Range/help/*"
+buildDat="${sourceDir}/Range/data/*"
+buildMat="${sourceDir}/Range/materials/*"
+buildLnk="${sourceDir}/Range/desktop/*"
+buildPix="${sourceDir}/Range/pixmaps/range-logo-128.png"
+
+logDir="${buildDir}/log"
 
 if [ ! -d "$buildDir" ]
 then
     echo_e "Missing build directory '${buildDir}'"
     exit 1
-fi
-
-if [ $debug = true ]
-then
-    version+="_debug"
 fi
 
 touch_dir $logDir
@@ -149,6 +142,8 @@ if [ $selfDebug = true ]
 then
     _DEBUG_LOG_FNAME="${logDir}/op-${myName}-${timeStamp}.log"
 fi
+
+version="$($buildDir/Range/Range$versionSuffix --version | sed -n -e '/VERSION/ s/.*\= *//p')${versionSuffix}"
 # Argument parsing section - End ------------------------------------------
 
 # Set-up section - Begin --------------------------------------------------

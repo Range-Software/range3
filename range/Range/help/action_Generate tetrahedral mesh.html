@@ -9,6 +9,23 @@
 </p>
 <p>To generate multiple volume meshes to represent composite material model a separation surface must be included.</p>
 <p>In some cases there might be a need for overriding default settings and specify TetGen parameters directly.</p>
+<h2>GUI</h2>
+<p><center><img src="image-Generate_mesh_dialog.png"/><center></p>
+<ul>
+<li><b>Check surface integrity</b> - useful when generating a 3D mesh from surface model. It can detect surface mesh errors and potential problems.</li>
+<li><b>Reconstruct mesh (reuse current nodes)</b> - keep current nodes and only add new ones if needed.</li>
+<li><b>Keep computed results</b> - all computed results will be mapped/interpolated to new nodes and elements.</li>
+<li><b>Quality mesh</b> - generate 3D mesh to conform with quality criteria.
+    <ul>
+        <li><b>Maximum element volume</b> - maximum volume of each generated element. No element should have higher volume then specified.</li>
+        <li><b>Generate mesh size function</b> - should be used to refine mesh in places where differences in results are found.
+        </li>
+    </ul>
+</li>
+<li><b>TetGen parameters</b> - parameters passed to TetGen mesh generator.</li>
+</ul>
+Following picture shows difference on mesh resolution when adaptive meshing is used.
+<p><center><img src="image-Adaptive_mesh-example.png"/><center></p>
 <h2>Parameters syntax</h2>
 <p><i>pYrq_Aa_miO_S_T_XMwcdzfenvgkJBNEFICQVh</i></p>
 <p>Underscores indicate that numbers may optionally follow certain switches. Do not leave any space between a switch and its numeric parameter.</p>
