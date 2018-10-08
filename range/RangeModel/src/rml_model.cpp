@@ -6744,6 +6744,7 @@ void RModel::convertNodeToElementVector(const RRVector &nodeValues,
     for (uint i=0;i<this->getNPoints();i++)
     {
         const RPoint &rPoint = this->getPoint(i);
+#pragma omp parallel for default(shared)
         for (uint j=0;j<rPoint.size();j++)
         {
             if (rPoint.getVolume() <= 0.0)
@@ -6764,6 +6765,7 @@ void RModel::convertNodeToElementVector(const RRVector &nodeValues,
     for (uint i=0;i<this->getNLines();i++)
     {
         const RLine &rLine = this->getLine(i);
+#pragma omp parallel for default(shared)
         for (uint j=0;j<rLine.size();j++)
         {
             if (rLine.getCrossArea() <= 0.0)
@@ -6784,6 +6786,7 @@ void RModel::convertNodeToElementVector(const RRVector &nodeValues,
     for (uint i=0;i<this->getNSurfaces();i++)
     {
         const RSurface &rSurface = this->getSurface(i);
+#pragma omp parallel for default(shared)
         for (uint j=0;j<rSurface.size();j++)
         {
             if (rSurface.getThickness() <= 0.0)
@@ -6804,7 +6807,8 @@ void RModel::convertNodeToElementVector(const RRVector &nodeValues,
     for (uint i=0;i<this->getNVolumes();i++)
     {
         const RVolume &rVolume = this->getVolume(i);
-        for (uint j=0;j<rVolume.size();j++)
+#pragma omp parallel for default(shared)
+        for (int64_t j=0;j<int64_t(rVolume.size());j++)
         {
             uint elementID = rVolume.get(j);
             elementValues[elementID] = 0.0;

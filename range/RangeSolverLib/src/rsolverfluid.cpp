@@ -13,6 +13,8 @@
 #include "rsolverfluid.h"
 #include "rmatrixsolver.h"
 
+static const double inv6 = 1.0 / 6.0;
+
 class FluidMatrixContainer
 {
     public:
@@ -178,6 +180,7 @@ void RSolverFluid::_init(const RSolverFluid *pSolver)
         this->nodeVelocityOld = pSolver->nodeVelocityOld;
         this->nodeAcceleration = pSolver->nodeAcceleration;
         this->streamVelocity = pSolver->streamVelocity;
+        this->invStreamVelocity = pSolver->invStreamVelocity;
         this->elementDensity = pSolver->elementDensity;
         this->elementViscosity = pSolver->elementViscosity;
         this->avgRo = pSolver->avgRo;
@@ -185,11 +188,25 @@ void RSolverFluid::_init(const RSolverFluid *pSolver)
         this->cvgV = pSolver->cvgV;
         this->cvgP = pSolver->cvgP;
     }
+    else
+    {
+        this->nodeAcceleration.x.resize(this->pModel->getNNodes(),0.0);
+        this->nodeAcceleration.y.resize(this->pModel->getNNodes(),0.0);
+        this->nodeAcceleration.z.resize(this->pModel->getNNodes(),0.0);
+        this->nodeVelocity.x.resize(this->pModel->getNNodes(),0.0);
+        this->nodeVelocity.y.resize(this->pModel->getNNodes(),0.0);
+        this->nodeVelocity.z.resize(this->pModel->getNNodes(),0.0);
+        this->nodeVelocityOld.x.resize(this->pModel->getNNodes(),0.0);
+        this->nodeVelocityOld.y.resize(this->pModel->getNNodes(),0.0);
+        this->nodeVelocityOld.z.resize(this->pModel->getNNodes(),0.0);
+        this->nodePressure.resize(this->pModel->getNNodes(),0.0);
+    }
 }
 
 RSolverFluid::RSolverFluid(RModel *pModel, const QString &modelFileName, const QString &convergenceFileName, RSolverSharedData &sharedData)
     : RSolverGeneric(pModel,modelFileName,convergenceFileName,sharedData)
     , streamVelocity(1.0)
+    , invStreamVelocity(1.0)
     , cvgV(0.0)
     , cvgP(0.0)
 {
@@ -304,6 +321,7 @@ void RSolverFluid::prepare(void)
     {
         this->computeFreePressureNodeHeight();
         this->streamVelocity = RSolverFluid::computeStreamVelocity(*this->pModel,this->nodeVelocity,false);
+        this->invStreamVelocity = 1.0 / this->streamVelocity;
     }
 
     RRVector elementFreePressure;
@@ -1173,6 +1191,7 @@ void RSolverFluid::computeElementGeneral(unsigned int elementID, RRMatrix &Ae, R
     uint nInp = RElement::getNIntegrationPoints(element.getType());
 
     double ro = this->elementDensity[elementID];
+    double invro = 1.0 / ro;
     double u = this->elementViscosity[elementID];
 
     Ae.fill(0.0);
@@ -1227,6 +1246,7 @@ void RSolverFluid::computeElementGeneral(unsigned int elementID, RRMatrix &Ae, R
     RRVector &be2 = matrixCotainer.be2;
 
     double mVh = this->streamVelocity;
+    double invmVh = this->invStreamVelocity;
     double alpha = this->pModel->getTimeSolver().getTimeMarchApproximationCoefficient();
     double dt = this->pModel->getTimeSolver().getCurrentTimeStepSize();
     double alphaDt = alpha * dt;
@@ -1258,6 +1278,7 @@ void RSolverFluid::computeElementGeneral(unsigned int elementID, RRMatrix &Ae, R
     double p = this->elementPressure[elementID];
     // element level velocity magnitude
     double mvh = veo.length();
+    double invmvh = 1.0 / mvh;
     // element level velocity direction
     RR3Vector s(veo);
     s.normalize();
@@ -1307,7 +1328,7 @@ void RSolverFluid::computeElementGeneral(unsigned int elementID, RRMatrix &Ae, R
             h = 2.0/h;
         }
         // Reynolds numbers
-        double roD2u = ro / (2.0*u);
+        double roD2u = 0.5 * ro / u;
         double Re = roD2u * mvh * h;
         double Ren = roD2u * mVh * hn;
 
@@ -1317,11 +1338,11 @@ void RSolverFluid::computeElementGeneral(unsigned int elementID, RRMatrix &Ae, R
         {
             if (Re > 0.0 && Re <= 3.0)
             {
-                Tsupg = h * Re / (6.0 * mvh);
+                Tsupg = h * Re *invmvh * inv6;
             }
             else
             {
-                Tsupg = h / (2.0 * mvh);
+                Tsupg = h * invmvh * 0.5;
             }
         }
 
@@ -1331,16 +1352,16 @@ void RSolverFluid::computeElementGeneral(unsigned int elementID, RRMatrix &Ae, R
         {
             if (Ren > 0.0 && Ren <= 3.0)
             {
-                Tpspg = hn * Ren / (6.0 * mVh);
+                Tpspg = hn * Ren * invmVh * inv6;
             }
             else
             {
-                Tpspg = hn / (2.0 * mVh);
+                Tpspg = hn * invmVh * 0.5;
             }
         }
 
         // LSIC stabilization parameter
-        double Tlsic = mvh*h/2.0;
+        double Tlsic = mvh*h * 0.5;
 
         double value = 0.0;
         for (uint m=0;m<nen;m++)
@@ -1474,7 +1495,7 @@ void RSolverFluid::computeElementGeneral(unsigned int elementID, RRMatrix &Ae, R
                 ype[m][3*n+1] = value * (B[m][0]*vey[0] + B[m][1]*vey[1] + B[m][2]*vey[2]);
                 ype[m][3*n+2] = value * (B[m][0]*vez[0] + B[m][1]*vez[1] + B[m][2]*vez[2]);
                 // 0 matrix
-                the[m][n] = Tpspg * ((B[m][0]*B[n][0] + B[m][1]*B[n][1] + B[m][2]*B[n][2]) / ro);
+                the[m][n] = Tpspg * ((B[m][0]*B[n][0] + B[m][1]*B[n][1] + B[m][2]*B[n][2]) * invro);
                 // ep matrix
                 value = Tlsic * ro;
                 epe[3*m+0][3*n+0] = B[m][0] * B[n][0] * value;
@@ -1538,7 +1559,7 @@ void RSolverFluid::computeElementGeneral(unsigned int elementID, RRMatrix &Ae, R
                              + B[m][1] * (ve[0]*vex[1] + ve[1]*vey[1] + ve[2]*vez[1])
                              + B[m][2] * (ve[0]*vex[2] + ve[1]*vey[2] + ve[2]*vez[2]));
             // 0 vector
-            thv[m] = Tpspg * ((B[m][0]*px + B[m][1]*py + B[m][2]*pz) / ro);
+            thv[m] = Tpspg * ((B[m][0]*px + B[m][1]*py + B[m][2]*pz) * invro);
             // e vector
             value = Tlsic * ro * (vex[0] + vey[1] + vez[2]);
             ev[3*m+0] = value * B[m][0];
@@ -1677,6 +1698,7 @@ void RSolverFluid::computeElementConstantDerivative(unsigned int elementID, RRMa
     uint nen = element.size();
 
     double ro = this->elementDensity[elementID];
+    double invro = 1.0 / ro;
     double u = this->elementViscosity[elementID];
 
     Ae.fill(0.0);
@@ -1731,6 +1753,7 @@ void RSolverFluid::computeElementConstantDerivative(unsigned int elementID, RRMa
     RRVector &be2 = matrixCotainer.be2;
 
     double mVh = this->streamVelocity;
+    double invmVh = this->invStreamVelocity;
     double alpha = this->pModel->getTimeSolver().getTimeMarchApproximationCoefficient();
     double dt = this->pModel->getTimeSolver().getCurrentTimeStepSize();
     double alphaDt = alpha * dt;
@@ -1763,6 +1786,7 @@ void RSolverFluid::computeElementConstantDerivative(unsigned int elementID, RRMa
     double p = this->elementPressure[elementID];
     // element level velocity magnitude
     double mvh = veo.length();
+    double invmvh = 1.0 / mvh;
     // element level velocity direction
     RR3Vector s(veo);
     s.normalize();
@@ -1808,7 +1832,7 @@ void RSolverFluid::computeElementConstantDerivative(unsigned int elementID, RRMa
         h = 2.0/h;
     }
     // Reynolds numbers
-    double roD2u = ro / (2.0*u);
+    double roD2u = 0.5 * ro / u;
     double Re = roD2u * mvh * h;
     double Ren = roD2u * mVh * hn;
 
@@ -1818,11 +1842,11 @@ void RSolverFluid::computeElementConstantDerivative(unsigned int elementID, RRMa
     {
         if (Re > 0.0 && Re <= 3.0)
         {
-            Tsupg = h * Re / (6.0 * mvh);
+            Tsupg = h * Re * invmvh * inv6;
         }
         else
         {
-            Tsupg = h / (2.0 * mvh);
+            Tsupg = h * invmvh * 0.5;
         }
     }
 
@@ -1832,16 +1856,16 @@ void RSolverFluid::computeElementConstantDerivative(unsigned int elementID, RRMa
     {
         if (Ren > 0.0 && Ren <= 3.0)
         {
-            Tpspg = hn * Ren / (6.0 * mVh);
+            Tpspg = hn * Ren * invmVh * inv6;
         }
         else
         {
-            Tpspg = hn / (2.0 * mVh);
+            Tpspg = hn * invmVh * 0.5;
         }
     }
 
     // LSIC stabilization parameter
-    double Tlsic = mvh*h/2.0;
+    double Tlsic = mvh*h * 0.5;
 
     double value = 0.0;
     for (uint m=0;m<nen;m++)
@@ -1975,7 +1999,7 @@ void RSolverFluid::computeElementConstantDerivative(unsigned int elementID, RRMa
             ype[m][3*n+1] = value * (B[m][0]*vey[0] + B[m][1]*vey[1] + B[m][2]*vey[2]);
             ype[m][3*n+2] = value * (B[m][0]*vez[0] + B[m][1]*vez[1] + B[m][2]*vez[2]);
             // 0 matrix
-            the[m][n] = Tpspg * ((B[m][0]*B[n][0] + B[m][1]*B[n][1] + B[m][2]*B[n][2]) / ro) * wt;
+            the[m][n] = Tpspg * ((B[m][0]*B[n][0] + B[m][1]*B[n][1] + B[m][2]*B[n][2]) * invro) * wt;
             // ep matrix
             value = Tlsic * ro * wt;
             epe[3*m+0][3*n+0] = B[m][0] * B[n][0] * value;
@@ -2043,7 +2067,7 @@ void RSolverFluid::computeElementConstantDerivative(unsigned int elementID, RRMa
                          + B[m][1] * (ve[0]*vex[1] + ve[1]*vey[1] + ve[2]*vez[1])
                          + B[m][2] * (ve[0]*vex[2] + ve[1]*vey[2] + ve[2]*vez[2])) * wt;
         // 0 vector
-        thv[m] = Tpspg * ((B[m][0]*px + B[m][1]*py + B[m][2]*pz) / ro) * wt;
+        thv[m] = Tpspg * ((B[m][0]*px + B[m][1]*py + B[m][2]*pz) * invro) * wt;
         // e vector
         value = Tlsic * ro * (vex[0] + vey[1] + vez[2]) * wt;
         ev[3*m+0] = value * B[m][0];
