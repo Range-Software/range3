@@ -919,14 +919,9 @@ void RSolverFluid::findInputVectors(void)
 
             for (uint k=0;k<pElementGroup->size();k++)
             {
-                if (wallSet)
-                {
-                    elementWall[pElementGroup->get(k)] = true;
-                }
-                if (frictionlessWallSet)
-                {
-                    elementFrictionlessWall[pElementGroup->get(k)] = true;
-                }
+                elementWall[pElementGroup->get(k)] = wallSet;
+                elementFrictionlessWall[pElementGroup->get(k)] = frictionlessWallSet;
+
                 if (velocitySet)
                 {
                     this->elementVelocity.x[pElementGroup->get(k)] = velocity[0];
@@ -956,9 +951,9 @@ void RSolverFluid::findInputVectors(void)
 
     for (uint i=0;i<this->pModel->getNElements();i++)
     {
+        const RElement &rElement = this->pModel->getElement(i);
         if (elementWall[i])
         {
-            const RElement &rElement = this->pModel->getElement(i);
             for (uint j=0;j<rElement.size();j++)
             {
                 this->nodeVelocity.x[rElement.getNodeId(j)] = 0.0;
@@ -968,10 +963,43 @@ void RSolverFluid::findInputVectors(void)
         }
         if (elementFrictionlessWall[i])
         {
-            const RElement &rElement = this->pModel->getElement(i);
+            RR3Vector elementNormal;
+            rElement.findNormal(this->pModel->getNodes(),elementNormal[0],elementNormal[1],elementNormal[2]);
+
+            bool hasX = false;
+            bool hasY = false;
+            bool hasZ = false;
+
+            if (std::fabs(elementNormal[0]) > std::fabs(elementNormal[1]) && std::fabs(elementNormal[0]) > std::fabs(elementNormal[2]))
+            {
+                hasX = true;
+            }
+            else
+            {
+                if (std::fabs(elementNormal[1]) > std::fabs(elementNormal[0]) && std::fabs(elementNormal[1]) > std::fabs(elementNormal[2]))
+                {
+                    hasY = true;
+                }
+                else
+                {
+                    hasZ = true;
+                }
+            }
+
             for (uint j=0;j<rElement.size();j++)
             {
-                this->nodeVelocity.x[rElement.getNodeId(j)] = 0.0;
+                if (hasX)
+                {
+                    this->nodeVelocity.x[rElement.getNodeId(j)] = 0.0;
+                }
+                if (hasY)
+                {
+                    this->nodeVelocity.y[rElement.getNodeId(j)] = 0.0;
+                }
+                if (hasZ)
+                {
+                    this->nodeVelocity.z[rElement.getNodeId(j)] = 0.0;
+                }
             }
         }
     }
@@ -1000,6 +1028,7 @@ void RSolverFluid::generateNodeBook(void)
         bool hasVelocityX = false;
         bool hasVelocityY = false;
         bool hasVelocityZ = false;
+        bool hasFriction = false;
         bool hasPressure = false;
         for (uint j=0;j<pElementGroup->getNBoundaryConditions();j++)
         {
@@ -1016,7 +1045,7 @@ void RSolverFluid::generateNodeBook(void)
                 }
                 if (bc.getType() == R_BOUNDARY_CONDITION_WALL_FRICTIONLESS)
                 {
-                    hasVelocityX = true;
+                    hasFriction = true;
                 }
                 if (bc.getType() == R_BOUNDARY_CONDITION_PRESSURE_EXPLICIT)
                 {
@@ -1024,26 +1053,52 @@ void RSolverFluid::generateNodeBook(void)
                 }
             }
         }
-        if (!hasVelocityX && !hasVelocityY && !hasVelocityZ && !hasPressure)
+        if (!hasVelocityX && !hasVelocityY && !hasVelocityZ && !hasFriction && !hasPressure)
         {
             continue;
         }
-        for (uint j=0;j<pElementGroup->size();j++)
+        for (int64_t j=0;j<pElementGroup->size();j++)
         {
             uint elementID = pElementGroup->get(j);
-            const RElement &element = this->pModel->getElement(elementID);
-            for (uint k=0;k<element.size();k++)
+            const RElement &rElement = this->pModel->getElement(elementID);
+
+            bool elementHasVelocityX = hasVelocityX;
+            bool elementHasVelocityY = hasVelocityY;
+            bool elementHasVelocityZ = hasVelocityZ;
+
+            if (hasFriction)
             {
-                uint nodeId = element.getNodeId(k);
-                if (hasVelocityX)
+                RR3Vector elementNormal;
+                rElement.findNormal(this->pModel->getNodes(),elementNormal[0],elementNormal[1],elementNormal[2]);
+
+                if (std::fabs(elementNormal[0]) > std::fabs(elementNormal[1]) && std::fabs(elementNormal[0]) > std::fabs(elementNormal[2]))
+                {
+                    elementHasVelocityX = true;
+                }
+                else
+                {
+                    if (std::fabs(elementNormal[1]) > std::fabs(elementNormal[0]) && std::fabs(elementNormal[1]) > std::fabs(elementNormal[2]))
+                    {
+                        elementHasVelocityY = true;
+                    }
+                    else
+                    {
+                        elementHasVelocityZ = true;
+                    }
+                }
+            }
+            for (uint k=0;k<rElement.size();k++)
+            {
+                uint nodeId = rElement.getNodeId(k);
+                if (elementHasVelocityX)
                 {
                     this->nodeBook.disable(4*nodeId+0,true);
                 }
-                if (hasVelocityY)
+                if (elementHasVelocityY)
                 {
                     this->nodeBook.disable(4*nodeId+1,true);
                 }
-                if (hasVelocityZ)
+                if (elementHasVelocityZ)
                 {
                     this->nodeBook.disable(4*nodeId+2,true);
                 }

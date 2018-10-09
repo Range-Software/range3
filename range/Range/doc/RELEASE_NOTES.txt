@@ -1,4 +1,12 @@
 ------------------------------------------------------------------
+Version 3.0.4
+
+Bug fixes:
+
+* Frictionless boundary does not provide correct results
+* Crash on start of CFD solver
+
+------------------------------------------------------------------
 Version 3.0.3
 
 * Adaptive mesh generator
