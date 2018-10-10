@@ -168,13 +168,21 @@ void CentralTabWidget::setTabTitle(CentralTabWidget::Type tabType, RMessageType 
 
 void CentralTabWidget::onInfoPrinted(const QString &message)
 {
+    QScrollBar *sb = this->applicationOutputBrowser->verticalScrollBar();
+    int scrollBarValue = sb->value();
+    bool scrollBarAtMax = ((sb->maximum() - scrollBarValue) <= 10);
+
     this->applicationOutputBrowser->moveCursor(QTextCursor::End);
     this->applicationOutputBrowser->setTextBackgroundColor(QApplication::palette().base().color());
     this->applicationOutputBrowser->setTextColor(QApplication::palette().text().color());
     this->applicationOutputBrowser->insertPlainText(message);
     this->applicationOutputBrowser->moveCursor(QTextCursor::End);
-    QScrollBar *sb = this->applicationOutputBrowser->verticalScrollBar();
-    sb->setValue(sb->maximum());
+    if (scrollBarAtMax)
+    {
+        scrollBarValue = sb->maximum();
+    }
+    sb->setValue(scrollBarValue);
+
     this->setTabTitle(CentralTabWidget::ApplicationOutput,R_MESSAGE_INFO);
 }
 
@@ -219,13 +227,20 @@ void CentralTabWidget::onErrorPrinted(const QString &message)
 
 void CentralTabWidget::onProcessReadyStandardOutput(const QString &message)
 {
+    QScrollBar *sb = this->processOutputBrowser->verticalScrollBar();
+    int scrollBarValue = sb->value();
+    bool scrollBarAtMax = ((sb->maximum() - scrollBarValue) <= 10);
+
     this->processOutputBrowser->moveCursor(QTextCursor::End);
     this->processOutputBrowser->setTextBackgroundColor(QApplication::palette().base().color());
     this->processOutputBrowser->setTextColor(QApplication::palette().text().color());
     this->processOutputBrowser->insertPlainText(message);
     this->processOutputBrowser->moveCursor(QTextCursor::End);
-    QScrollBar *sb = this->processOutputBrowser->verticalScrollBar();
-    sb->setValue(sb->maximum());
+    if (scrollBarAtMax)
+    {
+        scrollBarValue = sb->maximum();
+    }
+    sb->setValue(scrollBarValue);
 
     QVector<uint> runningIDs = SolverManager::getInstance().getRunningIDs();
     static uint lastRunningID = 0;

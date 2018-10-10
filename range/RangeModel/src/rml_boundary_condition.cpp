@@ -55,7 +55,7 @@ const RBoundaryConditionDesc boundaryConditionDesc [] =
     { "bc-velocity", "Velocity", false, false, false, false, true, false, false, R_PROBLEM_ACOUSTICS },
     { "bc-velocity_potential", "Velocity potential", false, true, true, true, true, false, false, R_PROBLEM_ACOUSTICS },
     { "bc-wall", "Wall", false, true, true, true, true, false, false, R_PROBLEM_FLUID },
-    { "bc-wall_frictionless", "Wall (frictionless)", false, true, true, true, true, false, true, R_PROBLEM_FLUID },
+    { "bc-wall_frictionless", "Wall (frictionless)", false, true, true, true, true, false, false, R_PROBLEM_FLUID },
     { "bc-wave_displacement", "Wave displacement", false, true, true, true, true, true, false, R_PROBLEM_WAVE },
     { "bc-weight", "Weight", false, false, true, true, true, false, false, R_PROBLEM_STRESS | R_PROBLEM_STRESS_MODAL },
     { "bc-custom", "Custom", false, false, false, false, false, false, false, R_PROBLEM_NONE }

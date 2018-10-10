@@ -13,6 +13,8 @@
 #include "rsolverfluid.h"
 #include "rmatrixsolver.h"
 
+static const double inv6 = 1.0 / 6.0;
+
 class FluidMatrixContainer
 {
     public:
@@ -178,6 +180,7 @@ void RSolverFluid::_init(const RSolverFluid *pSolver)
         this->nodeVelocityOld = pSolver->nodeVelocityOld;
         this->nodeAcceleration = pSolver->nodeAcceleration;
         this->streamVelocity = pSolver->streamVelocity;
+        this->invStreamVelocity = pSolver->invStreamVelocity;
         this->elementDensity = pSolver->elementDensity;
         this->elementViscosity = pSolver->elementViscosity;
         this->avgRo = pSolver->avgRo;
@@ -185,11 +188,25 @@ void RSolverFluid::_init(const RSolverFluid *pSolver)
         this->cvgV = pSolver->cvgV;
         this->cvgP = pSolver->cvgP;
     }
+    else
+    {
+        this->nodeAcceleration.x.resize(this->pModel->getNNodes(),0.0);
+        this->nodeAcceleration.y.resize(this->pModel->getNNodes(),0.0);
+        this->nodeAcceleration.z.resize(this->pModel->getNNodes(),0.0);
+        this->nodeVelocity.x.resize(this->pModel->getNNodes(),0.0);
+        this->nodeVelocity.y.resize(this->pModel->getNNodes(),0.0);
+        this->nodeVelocity.z.resize(this->pModel->getNNodes(),0.0);
+        this->nodeVelocityOld.x.resize(this->pModel->getNNodes(),0.0);
+        this->nodeVelocityOld.y.resize(this->pModel->getNNodes(),0.0);
+        this->nodeVelocityOld.z.resize(this->pModel->getNNodes(),0.0);
+        this->nodePressure.resize(this->pModel->getNNodes(),0.0);
+    }
 }
 
 RSolverFluid::RSolverFluid(RModel *pModel, const QString &modelFileName, const QString &convergenceFileName, RSolverSharedData &sharedData)
     : RSolverGeneric(pModel,modelFileName,convergenceFileName,sharedData)
     , streamVelocity(1.0)
+    , invStreamVelocity(1.0)
     , cvgV(0.0)
     , cvgP(0.0)
 {
@@ -304,6 +321,7 @@ void RSolverFluid::prepare(void)
     {
         this->computeFreePressureNodeHeight();
         this->streamVelocity = RSolverFluid::computeStreamVelocity(*this->pModel,this->nodeVelocity,false);
+        this->invStreamVelocity = 1.0 / this->streamVelocity;
     }
 
     RRVector elementFreePressure;
@@ -568,7 +586,7 @@ void RSolverFluid::store(void)
 
         double umin = 0.0;
         double umax = 0.0;
-        for (uint i=0;i<this->nodeVelocity.x.size();i++)
+        for (uint i=0;i<this->pModel->getNNodes();i++)
         {
             double u = RR3Vector(this->nodeVelocity.x[i],
                                  this->nodeVelocity.y[i],
@@ -580,7 +598,7 @@ void RSolverFluid::store(void)
             else
             {
                 umin = std::min(umin,u);
-                umax = std::min(umax,u);
+                umax = std::max(umax,u);
             }
         }
 
@@ -617,7 +635,7 @@ void RSolverFluid::store(void)
 //            else
 //            {
 //                amin = std::min(amin,u);
-//                amax = std::min(amax,u);
+//                amax = std::max(amax,u);
 //            }
 //        }
 
@@ -901,14 +919,9 @@ void RSolverFluid::findInputVectors(void)
 
             for (uint k=0;k<pElementGroup->size();k++)
             {
-                if (wallSet)
-                {
-                    elementWall[pElementGroup->get(k)] = true;
-                }
-                if (frictionlessWallSet)
-                {
-                    elementFrictionlessWall[pElementGroup->get(k)] = true;
-                }
+                elementWall[pElementGroup->get(k)] = wallSet;
+                elementFrictionlessWall[pElementGroup->get(k)] = frictionlessWallSet;
+
                 if (velocitySet)
                 {
                     this->elementVelocity.x[pElementGroup->get(k)] = velocity[0];
@@ -938,9 +951,9 @@ void RSolverFluid::findInputVectors(void)
 
     for (uint i=0;i<this->pModel->getNElements();i++)
     {
+        const RElement &rElement = this->pModel->getElement(i);
         if (elementWall[i])
         {
-            const RElement &rElement = this->pModel->getElement(i);
             for (uint j=0;j<rElement.size();j++)
             {
                 this->nodeVelocity.x[rElement.getNodeId(j)] = 0.0;
@@ -950,10 +963,43 @@ void RSolverFluid::findInputVectors(void)
         }
         if (elementFrictionlessWall[i])
         {
-            const RElement &rElement = this->pModel->getElement(i);
+            RR3Vector elementNormal;
+            rElement.findNormal(this->pModel->getNodes(),elementNormal[0],elementNormal[1],elementNormal[2]);
+
+            bool hasX = false;
+            bool hasY = false;
+            bool hasZ = false;
+
+            if (std::fabs(elementNormal[0]) > std::fabs(elementNormal[1]) && std::fabs(elementNormal[0]) > std::fabs(elementNormal[2]))
+            {
+                hasX = true;
+            }
+            else
+            {
+                if (std::fabs(elementNormal[1]) > std::fabs(elementNormal[0]) && std::fabs(elementNormal[1]) > std::fabs(elementNormal[2]))
+                {
+                    hasY = true;
+                }
+                else
+                {
+                    hasZ = true;
+                }
+            }
+
             for (uint j=0;j<rElement.size();j++)
             {
-                this->nodeVelocity.x[rElement.getNodeId(j)] = 0.0;
+                if (hasX)
+                {
+                    this->nodeVelocity.x[rElement.getNodeId(j)] = 0.0;
+                }
+                if (hasY)
+                {
+                    this->nodeVelocity.y[rElement.getNodeId(j)] = 0.0;
+                }
+                if (hasZ)
+                {
+                    this->nodeVelocity.z[rElement.getNodeId(j)] = 0.0;
+                }
             }
         }
     }
@@ -982,6 +1028,7 @@ void RSolverFluid::generateNodeBook(void)
         bool hasVelocityX = false;
         bool hasVelocityY = false;
         bool hasVelocityZ = false;
+        bool hasFriction = false;
         bool hasPressure = false;
         for (uint j=0;j<pElementGroup->getNBoundaryConditions();j++)
         {
@@ -998,7 +1045,7 @@ void RSolverFluid::generateNodeBook(void)
                 }
                 if (bc.getType() == R_BOUNDARY_CONDITION_WALL_FRICTIONLESS)
                 {
-                    hasVelocityX = true;
+                    hasFriction = true;
                 }
                 if (bc.getType() == R_BOUNDARY_CONDITION_PRESSURE_EXPLICIT)
                 {
@@ -1006,26 +1053,52 @@ void RSolverFluid::generateNodeBook(void)
                 }
             }
         }
-        if (!hasVelocityX && !hasVelocityY && !hasVelocityZ && !hasPressure)
+        if (!hasVelocityX && !hasVelocityY && !hasVelocityZ && !hasFriction && !hasPressure)
         {
             continue;
         }
-        for (uint j=0;j<pElementGroup->size();j++)
+        for (int64_t j=0;j<pElementGroup->size();j++)
         {
             uint elementID = pElementGroup->get(j);
-            const RElement &element = this->pModel->getElement(elementID);
-            for (uint k=0;k<element.size();k++)
+            const RElement &rElement = this->pModel->getElement(elementID);
+
+            bool elementHasVelocityX = hasVelocityX;
+            bool elementHasVelocityY = hasVelocityY;
+            bool elementHasVelocityZ = hasVelocityZ;
+
+            if (hasFriction)
             {
-                uint nodeId = element.getNodeId(k);
-                if (hasVelocityX)
+                RR3Vector elementNormal;
+                rElement.findNormal(this->pModel->getNodes(),elementNormal[0],elementNormal[1],elementNormal[2]);
+
+                if (std::fabs(elementNormal[0]) > std::fabs(elementNormal[1]) && std::fabs(elementNormal[0]) > std::fabs(elementNormal[2]))
+                {
+                    elementHasVelocityX = true;
+                }
+                else
+                {
+                    if (std::fabs(elementNormal[1]) > std::fabs(elementNormal[0]) && std::fabs(elementNormal[1]) > std::fabs(elementNormal[2]))
+                    {
+                        elementHasVelocityY = true;
+                    }
+                    else
+                    {
+                        elementHasVelocityZ = true;
+                    }
+                }
+            }
+            for (uint k=0;k<rElement.size();k++)
+            {
+                uint nodeId = rElement.getNodeId(k);
+                if (elementHasVelocityX)
                 {
                     this->nodeBook.disable(4*nodeId+0,true);
                 }
-                if (hasVelocityY)
+                if (elementHasVelocityY)
                 {
                     this->nodeBook.disable(4*nodeId+1,true);
                 }
-                if (hasVelocityZ)
+                if (elementHasVelocityZ)
                 {
                     this->nodeBook.disable(4*nodeId+2,true);
                 }
@@ -1173,6 +1246,7 @@ void RSolverFluid::computeElementGeneral(unsigned int elementID, RRMatrix &Ae, R
     uint nInp = RElement::getNIntegrationPoints(element.getType());
 
     double ro = this->elementDensity[elementID];
+    double invro = 1.0 / ro;
     double u = this->elementViscosity[elementID];
 
     Ae.fill(0.0);
@@ -1227,6 +1301,7 @@ void RSolverFluid::computeElementGeneral(unsigned int elementID, RRMatrix &Ae, R
     RRVector &be2 = matrixCotainer.be2;
 
     double mVh = this->streamVelocity;
+    double invmVh = this->invStreamVelocity;
     double alpha = this->pModel->getTimeSolver().getTimeMarchApproximationCoefficient();
     double dt = this->pModel->getTimeSolver().getCurrentTimeStepSize();
     double alphaDt = alpha * dt;
@@ -1258,6 +1333,7 @@ void RSolverFluid::computeElementGeneral(unsigned int elementID, RRMatrix &Ae, R
     double p = this->elementPressure[elementID];
     // element level velocity magnitude
     double mvh = veo.length();
+    double invmvh = 1.0 / mvh;
     // element level velocity direction
     RR3Vector s(veo);
     s.normalize();
@@ -1307,7 +1383,7 @@ void RSolverFluid::computeElementGeneral(unsigned int elementID, RRMatrix &Ae, R
             h = 2.0/h;
         }
         // Reynolds numbers
-        double roD2u = ro / (2.0*u);
+        double roD2u = 0.5 * ro / u;
         double Re = roD2u * mvh * h;
         double Ren = roD2u * mVh * hn;
 
@@ -1317,11 +1393,11 @@ void RSolverFluid::computeElementGeneral(unsigned int elementID, RRMatrix &Ae, R
         {
             if (Re > 0.0 && Re <= 3.0)
             {
-                Tsupg = h * Re / (6.0 * mvh);
+                Tsupg = h * Re *invmvh * inv6;
             }
             else
             {
-                Tsupg = h / (2.0 * mvh);
+                Tsupg = h * invmvh * 0.5;
             }
         }
 
@@ -1331,16 +1407,16 @@ void RSolverFluid::computeElementGeneral(unsigned int elementID, RRMatrix &Ae, R
         {
             if (Ren > 0.0 && Ren <= 3.0)
             {
-                Tpspg = hn * Ren / (6.0 * mVh);
+                Tpspg = hn * Ren * invmVh * inv6;
             }
             else
             {
-                Tpspg = hn / (2.0 * mVh);
+                Tpspg = hn * invmVh * 0.5;
             }
         }
 
         // LSIC stabilization parameter
-        double Tlsic = mvh*h/2.0;
+        double Tlsic = mvh*h * 0.5;
 
         double value = 0.0;
         for (uint m=0;m<nen;m++)
@@ -1474,7 +1550,7 @@ void RSolverFluid::computeElementGeneral(unsigned int elementID, RRMatrix &Ae, R
                 ype[m][3*n+1] = value * (B[m][0]*vey[0] + B[m][1]*vey[1] + B[m][2]*vey[2]);
                 ype[m][3*n+2] = value * (B[m][0]*vez[0] + B[m][1]*vez[1] + B[m][2]*vez[2]);
                 // 0 matrix
-                the[m][n] = Tpspg * ((B[m][0]*B[n][0] + B[m][1]*B[n][1] + B[m][2]*B[n][2]) / ro);
+                the[m][n] = Tpspg * ((B[m][0]*B[n][0] + B[m][1]*B[n][1] + B[m][2]*B[n][2]) * invro);
                 // ep matrix
                 value = Tlsic * ro;
                 epe[3*m+0][3*n+0] = B[m][0] * B[n][0] * value;
@@ -1538,7 +1614,7 @@ void RSolverFluid::computeElementGeneral(unsigned int elementID, RRMatrix &Ae, R
                              + B[m][1] * (ve[0]*vex[1] + ve[1]*vey[1] + ve[2]*vez[1])
                              + B[m][2] * (ve[0]*vex[2] + ve[1]*vey[2] + ve[2]*vez[2]));
             // 0 vector
-            thv[m] = Tpspg * ((B[m][0]*px + B[m][1]*py + B[m][2]*pz) / ro);
+            thv[m] = Tpspg * ((B[m][0]*px + B[m][1]*py + B[m][2]*pz) * invro);
             // e vector
             value = Tlsic * ro * (vex[0] + vey[1] + vez[2]);
             ev[3*m+0] = value * B[m][0];
@@ -1677,6 +1753,7 @@ void RSolverFluid::computeElementConstantDerivative(unsigned int elementID, RRMa
     uint nen = element.size();
 
     double ro = this->elementDensity[elementID];
+    double invro = 1.0 / ro;
     double u = this->elementViscosity[elementID];
 
     Ae.fill(0.0);
@@ -1731,6 +1808,7 @@ void RSolverFluid::computeElementConstantDerivative(unsigned int elementID, RRMa
     RRVector &be2 = matrixCotainer.be2;
 
     double mVh = this->streamVelocity;
+    double invmVh = this->invStreamVelocity;
     double alpha = this->pModel->getTimeSolver().getTimeMarchApproximationCoefficient();
     double dt = this->pModel->getTimeSolver().getCurrentTimeStepSize();
     double alphaDt = alpha * dt;
@@ -1763,6 +1841,7 @@ void RSolverFluid::computeElementConstantDerivative(unsigned int elementID, RRMa
     double p = this->elementPressure[elementID];
     // element level velocity magnitude
     double mvh = veo.length();
+    double invmvh = 1.0 / mvh;
     // element level velocity direction
     RR3Vector s(veo);
     s.normalize();
@@ -1808,7 +1887,7 @@ void RSolverFluid::computeElementConstantDerivative(unsigned int elementID, RRMa
         h = 2.0/h;
     }
     // Reynolds numbers
-    double roD2u = ro / (2.0*u);
+    double roD2u = 0.5 * ro / u;
     double Re = roD2u * mvh * h;
     double Ren = roD2u * mVh * hn;
 
@@ -1818,11 +1897,11 @@ void RSolverFluid::computeElementConstantDerivative(unsigned int elementID, RRMa
     {
         if (Re > 0.0 && Re <= 3.0)
         {
-            Tsupg = h * Re / (6.0 * mvh);
+            Tsupg = h * Re * invmvh * inv6;
         }
         else
         {
-            Tsupg = h / (2.0 * mvh);
+            Tsupg = h * invmvh * 0.5;
         }
     }
 
@@ -1832,16 +1911,16 @@ void RSolverFluid::computeElementConstantDerivative(unsigned int elementID, RRMa
     {
         if (Ren > 0.0 && Ren <= 3.0)
         {
-            Tpspg = hn * Ren / (6.0 * mVh);
+            Tpspg = hn * Ren * invmVh * inv6;
         }
         else
         {
-            Tpspg = hn / (2.0 * mVh);
+            Tpspg = hn * invmVh * 0.5;
         }
     }
 
     // LSIC stabilization parameter
-    double Tlsic = mvh*h/2.0;
+    double Tlsic = mvh*h * 0.5;
 
     double value = 0.0;
     for (uint m=0;m<nen;m++)
@@ -1975,7 +2054,7 @@ void RSolverFluid::computeElementConstantDerivative(unsigned int elementID, RRMa
             ype[m][3*n+1] = value * (B[m][0]*vey[0] + B[m][1]*vey[1] + B[m][2]*vey[2]);
             ype[m][3*n+2] = value * (B[m][0]*vez[0] + B[m][1]*vez[1] + B[m][2]*vez[2]);
             // 0 matrix
-            the[m][n] = Tpspg * ((B[m][0]*B[n][0] + B[m][1]*B[n][1] + B[m][2]*B[n][2]) / ro) * wt;
+            the[m][n] = Tpspg * ((B[m][0]*B[n][0] + B[m][1]*B[n][1] + B[m][2]*B[n][2]) * invro) * wt;
             // ep matrix
             value = Tlsic * ro * wt;
             epe[3*m+0][3*n+0] = B[m][0] * B[n][0] * value;
@@ -2043,7 +2122,7 @@ void RSolverFluid::computeElementConstantDerivative(unsigned int elementID, RRMa
                          + B[m][1] * (ve[0]*vex[1] + ve[1]*vey[1] + ve[2]*vez[1])
                          + B[m][2] * (ve[0]*vex[2] + ve[1]*vey[2] + ve[2]*vez[2])) * wt;
         // 0 vector
-        thv[m] = Tpspg * ((B[m][0]*px + B[m][1]*py + B[m][2]*pz) / ro) * wt;
+        thv[m] = Tpspg * ((B[m][0]*px + B[m][1]*py + B[m][2]*pz) * invro) * wt;
         // e vector
         value = Tlsic * ro * (vex[0] + vey[1] + vez[2]) * wt;
         ev[3*m+0] = value * B[m][0];

@@ -44,6 +44,7 @@ class RSolverFluid : public RSolverGeneric
 
         //! Stream velocity.
         double streamVelocity;
+        double invStreamVelocity;
 
         //! Element density.
         RRVector elementDensity;

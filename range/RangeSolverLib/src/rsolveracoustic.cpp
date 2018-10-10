@@ -958,7 +958,7 @@ void RSolverAcoustic::store(void)
             else
             {
                 umin = std::min(umin,u);
-                umax = std::min(umax,u);
+                umax = std::max(umax,u);
             }
         }
 
