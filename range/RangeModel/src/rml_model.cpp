@@ -6745,7 +6745,7 @@ void RModel::convertNodeToElementVector(const RRVector &nodeValues,
     {
         const RPoint &rPoint = this->getPoint(i);
 #pragma omp parallel for default(shared)
-        for (uint j=0;j<rPoint.size();j++)
+        for (int64_t j=0;j<int64_t(rPoint.size());j++)
         {
             if (rPoint.getVolume() <= 0.0)
             {
@@ -6766,7 +6766,7 @@ void RModel::convertNodeToElementVector(const RRVector &nodeValues,
     {
         const RLine &rLine = this->getLine(i);
 #pragma omp parallel for default(shared)
-        for (uint j=0;j<rLine.size();j++)
+        for (int64_t j=0;j<(rLine.size());j++)
         {
             if (rLine.getCrossArea() <= 0.0)
             {
@@ -6787,7 +6787,7 @@ void RModel::convertNodeToElementVector(const RRVector &nodeValues,
     {
         const RSurface &rSurface = this->getSurface(i);
 #pragma omp parallel for default(shared)
-        for (uint j=0;j<rSurface.size();j++)
+        for (int64_t j=0;j<(rSurface.size());j++)
         {
             if (rSurface.getThickness() <= 0.0)
             {
