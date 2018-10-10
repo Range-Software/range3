@@ -24,6 +24,7 @@ NewModelDialog::NewModelDialog(QWidget *parent) :
     QIcon okIcon(":/icons/file/pixmaps/range-ok.svg");
 
     this->setWindowTitle(tr("Create a new model"));
+    this->resize(300,-1);
 
     QGridLayout *mainLayout = new QGridLayout;
     this->setLayout (mainLayout);
@@ -42,9 +43,12 @@ NewModelDialog::NewModelDialog(QWidget *parent) :
     this->editDesc->setPlaceholderText(tr("New model description"));
     mainLayout->addWidget(this->editDesc, 1, 1, 1, 1);
 
+    QSpacerItem *spacer = new QSpacerItem(-1,-1,QSizePolicy::Expanding,QSizePolicy::Expanding);
+    mainLayout->addItem(spacer, 2, 0, 1, 2);
+
     QHBoxLayout *buttonsLayout = new QHBoxLayout;
     buttonsLayout->addStretch(1);
-    mainLayout->addLayout(buttonsLayout, 2, 0, 1, 2);
+    mainLayout->addLayout(buttonsLayout, 3, 0, 1, 2);
 
     QPushButton *cancelButton = new QPushButton(cancelIcon, tr("Cancel"));
     buttonsLayout->addWidget(cancelButton);

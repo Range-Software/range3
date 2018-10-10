@@ -170,7 +170,10 @@ void ActionList::processAvailability(void)
     }
     else
     {
-        this->getAction(ACTION_SOLVER_START)->setEnabled(true);
+        if (Session::getInstance().getNModels() > 0)
+        {
+            this->getAction(ACTION_SOLVER_START)->setEnabled(true);
+        }
     }
 }
 

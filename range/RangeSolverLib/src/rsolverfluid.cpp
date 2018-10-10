@@ -586,7 +586,7 @@ void RSolverFluid::store(void)
 
         double umin = 0.0;
         double umax = 0.0;
-        for (uint i=0;i<this->nodeVelocity.x.size();i++)
+        for (uint i=0;i<this->pModel->getNNodes();i++)
         {
             double u = RR3Vector(this->nodeVelocity.x[i],
                                  this->nodeVelocity.y[i],
@@ -598,7 +598,7 @@ void RSolverFluid::store(void)
             else
             {
                 umin = std::min(umin,u);
-                umax = std::min(umax,u);
+                umax = std::max(umax,u);
             }
         }
 
@@ -635,7 +635,7 @@ void RSolverFluid::store(void)
 //            else
 //            {
 //                amin = std::min(amin,u);
-//                amax = std::min(amax,u);
+//                amax = std::max(amax,u);
 //            }
 //        }
 

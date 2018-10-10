@@ -1,6 +1,8 @@
 ------------------------------------------------------------------
 Version 3.0.4
 
+* Small GUI improvements
+
 Bug fixes:
 
 * Frictionless boundary does not provide correct results

@@ -1494,7 +1494,7 @@ void RSolverStress::store(void)
             else
             {
                 umin = std::min(umin,u);
-                umax = std::min(umax,u);
+                umax = std::max(umax,u);
             }
         }
 
@@ -1588,7 +1588,7 @@ void RSolverStress::store(void)
             else
             {
                 fmin = std::min(fmin,f);
-                fmax = std::min(fmax,f);
+                fmax = std::max(fmax,f);
             }
         }
 
