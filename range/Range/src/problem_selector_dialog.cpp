@@ -19,7 +19,6 @@ ProblemSelectorDialog::ProblemSelectorDialog(QWidget *parent) :
     QDialog(parent)
 {
     this->setWindowTitle(QString("Problem type selector"));
-    this->resize(600,300);
 
     QIcon cancelIcon(":/icons/file/pixmaps/range-cancel.svg");
     QIcon okIcon(":/icons/file/pixmaps/range-ok.svg");
@@ -33,6 +32,8 @@ ProblemSelectorDialog::ProblemSelectorDialog(QWidget *parent) :
     mainLayout->addWidget(messageLabel, mainLayoutRow++, 0);
 
     this->problemTree = new ProblemSelectorTree(this);
+    this->problemTree->setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents);
+    this->problemTree->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::MinimumExpanding);
     mainLayout->addWidget(this->problemTree, mainLayoutRow++, 0);
 
     QObject::connect(this->problemTree,&ProblemSelectorTree::changed,this,&ProblemSelectorDialog::onProblemTreeChanged);

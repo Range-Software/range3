@@ -10,6 +10,7 @@
 
 #include "problem_tree.h"
 #include "session.h"
+#include "mesh_setup_widget.h"
 #include "modal_setup_widget.h"
 #include "radiation_setup_widget.h"
 #include "time_solver_setup_widget.h"
@@ -99,6 +100,15 @@ void ProblemTree::populate(void)
         this->setItemWidget(itemRadiationSetup,PROBLEM_TREE_COLUMN_1,radiationSetupWidget);
         QObject::connect(radiationSetupWidget,&RadiationSetupWidget::changed,this,&ProblemTree::onRadiationSetupChanged);
     }
+
+    if (rModel.getProblemTaskTree().getProblemTypeMask() & R_PROBLEM_MESH)
+    {
+        QTreeWidgetItem *meshSetup = new QTreeWidgetItem(this);
+        MeshSetupWidget *meshSetupWidget = new MeshSetupWidget(rModel.getProblemSetup().getMeshSetup(),
+                                                               RProblem::getVariableTypes(rModel.getProblemTaskTree().getProblemTypeMask()));
+        this->setItemWidget(meshSetup,PROBLEM_TREE_COLUMN_1,meshSetupWidget);
+        QObject::connect(meshSetupWidget,&MeshSetupWidget::changed,this,&ProblemTree::onMeshSetupChanged);
+    }
 }
 
 void ProblemTree::onModelChanged(uint)
@@ -145,6 +155,17 @@ void ProblemTree::onRadiationSetupChanged(const RRadiationSetup &radiationSetup)
     for (int i=0;i<modelIDs.size();i++)
     {
         Session::getInstance().getModel(modelIDs[i]).getProblemSetup().setRadiationSetup(radiationSetup);
+        Session::getInstance().setProblemChanged(modelIDs[i]);
+    }
+}
+
+void ProblemTree::onMeshSetupChanged(const RMeshSetup &meshSetup)
+{
+    QList<uint> modelIDs = Session::getInstance().getSelectedModelIDs();
+
+    for (int i=0;i<modelIDs.size();i++)
+    {
+        Session::getInstance().getModel(modelIDs[i]).getProblemSetup().setMeshSetup(meshSetup);
         Session::getInstance().setProblemChanged(modelIDs[i]);
     }
 }

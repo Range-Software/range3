@@ -125,6 +125,14 @@
 
 #include "tetgen.h"            // Defines the symbol REAL (float or double).
 
+static tetgenPrintfFunc c_printf = printf;
+
+void tetgen_predicates_set_print_func (tetgenPrintfFunc print_func) {
+    if (print_func) {
+        c_printf = print_func;
+    }
+}
+
 #ifdef USE_CGAL_PREDICATES
   #include <CGAL/Exact_predicates_inexact_constructions_kernel.h>
   typedef CGAL::Exact_predicates_inexact_constructions_kernel cgalEpick;
@@ -422,12 +430,12 @@ int test_float(int verbose)
   float x;
   int pass = 1;
 
-  //(void)printf("float:\n");
+  //(void)c_printf("float:\n");
 
   if (verbose) {
-    (void)printf("  sizeof(float) = %2u\n", (unsigned int)sizeof(float));
+    (void)c_printf("  sizeof(float) = %2u\n", (unsigned int)sizeof(float));
 #ifdef CPU86  // <float.h>
-    (void)printf("  FLT_MANT_DIG = %2d\n", FLT_MANT_DIG);
+    (void)c_printf("  FLT_MANT_DIG = %2d\n", FLT_MANT_DIG);
 #endif
   }
 
@@ -435,13 +443,13 @@ int test_float(int verbose)
   while (fstore((float)1.0 + x/(float)2.0) != (float)1.0)
     x /= (float)2.0;
   if (verbose)
-    (void)printf("  machine epsilon = %13.5e  ", x);
+    (void)c_printf("  machine epsilon = %13.5e  ", x);
 
   if (x == (float)fppow2(-23)) {
     if (verbose)
-      (void)printf("[IEEE 754 32-bit macheps]\n");
+      (void)c_printf("[IEEE 754 32-bit macheps]\n");
   } else {
-    (void)printf("[not IEEE 754 conformant] !!\n");
+    (void)c_printf("[not IEEE 754 conformant] !!\n");
     pass = 0;
   }
 
@@ -449,16 +457,16 @@ int test_float(int verbose)
   while (fstore(x / (float)2.0) != (float)0.0)
     x /= (float)2.0;
   if (verbose)
-    (void)printf("  smallest positive number =  %13.5e  ", x);
+    (void)c_printf("  smallest positive number =  %13.5e  ", x);
 
   if (x == (float)fppow2(-149)) {
     if (verbose)
-      (void)printf("[smallest 32-bit subnormal]\n");
+      (void)c_printf("[smallest 32-bit subnormal]\n");
   } else if (x == (float)fppow2(-126)) {
     if (verbose)
-      (void)printf("[smallest 32-bit normal]\n");
+      (void)c_printf("[smallest 32-bit normal]\n");
   } else {
-	(void)printf("[not IEEE 754 conformant] !!\n");
+    (void)c_printf("[not IEEE 754 conformant] !!\n");
     pass = 0;
   }
 
@@ -477,11 +485,11 @@ int test_double(int verbose)
   double x;
   int pass = 1;
 
-  // (void)printf("double:\n");
+  // (void)c_printf("double:\n");
   if (verbose) {
-    (void)printf("  sizeof(double) = %2u\n", (unsigned int)sizeof(double));
+    (void)c_printf("  sizeof(double) = %2u\n", (unsigned int)sizeof(double));
 #ifdef CPU86  // <float.h>
-    (void)printf("  DBL_MANT_DIG = %2d\n", DBL_MANT_DIG);
+    (void)c_printf("  DBL_MANT_DIG = %2d\n", DBL_MANT_DIG);
 #endif
   }
 
@@ -489,13 +497,13 @@ int test_double(int verbose)
   while (dstore(1.0 + x/2.0) != 1.0)
     x /= 2.0;
   if (verbose) 
-    (void)printf("  machine epsilon = %13.5le ", x);
+    (void)c_printf("  machine epsilon = %13.5le ", x);
 
   if (x == (double)fppow2(-52)) {
     if (verbose)
-      (void)printf("[IEEE 754 64-bit macheps]\n");
+      (void)c_printf("[IEEE 754 64-bit macheps]\n");
   } else {
-    (void)printf("[not IEEE 754 conformant] !!\n");
+    (void)c_printf("[not IEEE 754 conformant] !!\n");
     pass = 0;
   }
 
@@ -503,16 +511,16 @@ int test_double(int verbose)
   while (dstore(x / 2.0) != 0.0)
     x /= 2.0;
   //if (verbose)
-  //  (void)printf("  smallest positive number = %13.5le ", x);
+  //  (void)c_printf("  smallest positive number = %13.5le ", x);
 
   if (x == (double)fppow2(-1074)) {
     //if (verbose)
-    //  (void)printf("[smallest 64-bit subnormal]\n");
+    //  (void)c_printf("[smallest 64-bit subnormal]\n");
   } else if (x == (double)fppow2(-1022)) {
     //if (verbose)
-    //  (void)printf("[smallest 64-bit normal]\n");
+    //  (void)c_printf("[smallest 64-bit normal]\n");
   } else {
-    (void)printf("[not IEEE 754 conformant] !!\n");
+    (void)c_printf("[not IEEE 754 conformant] !!\n");
     pass = 0;
   }
 
@@ -569,14 +577,14 @@ void exactinit(int verbose, int noexact, int nofilter, REAL maxx, REAL maxy,
 #endif /* LINUX */
 
   if (verbose) {
-    printf("  Initializing robust predicates.\n");
+    c_printf("  Initializing robust predicates.\n");
   }
 
 #ifdef USE_CGAL_PREDICATES
   if (cgal_pred_obj.Has_static_filters) {
-    printf("  Use static filter.\n");
+    c_printf("  Use static filter.\n");
   } else {
-    printf("  No static filter.\n");
+    c_printf("  No static filter.\n");
   }
 #endif // USE_CGAL_PREDICATES
 
@@ -629,10 +637,6 @@ void exactinit(int verbose, int noexact, int nofilter, REAL maxx, REAL maxy,
   // Added by H. Si, 2012-08-23.
 
   // Sort maxx < maxy < maxz. Re-use 'half' for swapping.
-  assert(maxx > 0);
-  assert(maxy > 0);
-  assert(maxz > 0);
-
   if (maxx > maxz) {
     half = maxx; maxx = maxz; maxz = half;
   }

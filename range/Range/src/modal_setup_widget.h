@@ -22,7 +22,7 @@ class ModalSetupWidget : public QWidget
 
     protected:
 
-        //! Radiation setup.
+        //! Modal setup.
         RModalSetup modalSetup;
         //! Number of iterations spin box.
         QSpinBox *spinNIterations;
@@ -36,7 +36,7 @@ class ModalSetupWidget : public QWidget
 
     signals:
 
-        //! Radiation setup has changed.
+        //! Modal setup has changed.
         void changed(const RModalSetup &modalSetup);
 
     private slots:

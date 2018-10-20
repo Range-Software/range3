@@ -27,6 +27,11 @@ class Application : public QCoreApplication
 
         //! Application has started.
         void started(void);
+
+    protected slots:
+
+        //! Catch started signal.
+        void onStarted(void);
         
 };
 

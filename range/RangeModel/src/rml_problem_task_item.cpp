@@ -209,6 +209,11 @@ RProblemTaskItem RProblemTaskItem::generateDefaultTree(RProblemTypeMask problemT
         root.addChild(RProblemTaskItem(R_PROBLEM_WAVE));
         nTypes ++;
     }
+    if (problemTypeMask & R_PROBLEM_MESH)
+    {
+        root.addChild(RProblemTaskItem(R_PROBLEM_MESH));
+        nTypes ++;
+    }
 
     root.setNIterations(nTypes > 1 && isNonlinear ? nNonlinearIterations : 1);
 

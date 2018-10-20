@@ -44,6 +44,10 @@ ProblemSelectorTree::ProblemSelectorTree(QWidget *parent)
         itemModel->setData(PROBLEM_TREE_COLUMN_NAME,Qt::CheckStateRole,QVariant(Qt::Unchecked));
         itemModel->setData(PROBLEM_TREE_COLUMN_NAME,Qt::UserRole,QVariant(prbList[i]));
         itemModel->setText(PROBLEM_TREE_COLUMN_DESC, RProblem::getDesc(prbList[i]));
+
+        QFont font = itemModel->font(PROBLEM_TREE_COLUMN_NAME);
+        font.setBold(true);
+        itemModel->setFont(PROBLEM_TREE_COLUMN_NAME,font);
     }
     for (int i=0;i<PROBLEM_TREE_N_COLUMNS;i++)
     {

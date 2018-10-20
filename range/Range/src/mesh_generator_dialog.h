@@ -56,15 +56,12 @@ class MeshGeneratorDialog : public QDialog
     public:
 
         //! Constructor.
-        explicit MeshGeneratorDialog(uint modelID, QWidget *parent = 0);
+        explicit MeshGeneratorDialog(uint modelID, QWidget *parent = nullptr);
 
         //! Overloaded exec function.
         int exec(void);
 
     private:
-
-        //! Generate mesh input.
-        QString generateTetGenInputParams(void) const;
 
         //! Update mesh generator input.
         void updateMeshInput(void);

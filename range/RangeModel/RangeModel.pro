@@ -12,9 +12,9 @@ TEMPLATE = lib
 
 DEFINES += RANGEMODEL_LIBRARY
 
-DEFINES += "FILE_MAJOR_VERSION=0"
-DEFINES += "FILE_MINOR_VERSION=3"
-DEFINES += "FILE_RELEASE_VERSION=4"
+DEFINES += "FILE_MAJOR_VERSION=1"
+DEFINES += "FILE_MINOR_VERSION=0"
+DEFINES += "FILE_RELEASE_VERSION=0"
 
 INCLUDEPATH += include
 
@@ -48,6 +48,7 @@ SOURCES += \
     src/rml_matrix_solver_conf.cpp \
     src/rml_mesh_generator.cpp \
     src/rml_mesh_input.cpp \
+    src/rml_mesh_setup.cpp \
     src/rml_modal_setup.cpp \
     src/rml_model.cpp \
     src/rml_model_data.cpp \
@@ -117,6 +118,7 @@ HEADERS += \
     include/rml_matrix_solver_conf.h \
     include/rml_mesh_generator.h \
     include/rml_mesh_input.h \
+    include/rml_mesh_setup.h \
     include/rml_modal_setup.h \
     include/rml_model.h \
     include/rml_model_data.h \

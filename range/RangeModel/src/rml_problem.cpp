@@ -134,6 +134,15 @@ const RProblemDesc problemDesc [] =
         R_PROBLEM_ACOUSTICS | R_PROBLEM_STRESS_MODAL
     },
     {
+        R_PROBLEM_MESH,
+        "prb-mesh",
+        "Mesh reconstruction",
+        "Reconstruct mesh based on provided criteria.",
+        false,
+        R_PROBLEM_NONE,
+        R_PROBLEM_NONE
+    },
+    {
         R_PROBLEM_NONE,
         "prb-none",
         "",
@@ -355,9 +364,14 @@ bool RProblem::getTimeSolverEnabled(RProblemTypeMask typeMask)
 {
     unsigned int i = 0;
 
+    if (typeMask == R_PROBLEM_MESH)
+    {
+        return false;
+    }
+
     while (problemDesc[i].type != R_PROBLEM_NONE)
     {
-        if (problemDesc[i].type & typeMask)
+        if (problemDesc[i].type & typeMask && problemDesc[i].type != R_PROBLEM_MESH)
         {
             if (!problemDesc[i].timeSolverEnabled)
             {

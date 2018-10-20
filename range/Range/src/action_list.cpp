@@ -151,6 +151,7 @@ void ActionList::processAvailability(void)
         this->getAction(ACTION_PROBLEM_SOLVER_SETUP)->setEnabled(true);
         this->getAction(ACTION_PROBLEM_DEFINE_MONITORING_POINTS)->setEnabled(true);
         this->getAction(ACTION_PROBLEM_RESET)->setEnabled(true);
+        this->getAction(ACTION_SOLVER_START)->setEnabled(true);
         this->getAction(ACTION_REPORT_MODEL_STATISTICS)->setEnabled(true);
         this->getAction(ACTION_REPORT_SOLVER_LOG)->setEnabled(true);
         this->getAction(ACTION_REPORT_CONVERGENCE_GRAPH)->setEnabled(true);
@@ -167,13 +168,6 @@ void ActionList::processAvailability(void)
     {
         this->getAction(ACTION_SOLVER_STOP)->setEnabled(true);
         this->getAction(ACTION_SOLVER_KILL)->setEnabled(true);
-    }
-    else
-    {
-        if (Session::getInstance().getNModels() > 0)
-        {
-            this->getAction(ACTION_SOLVER_START)->setEnabled(true);
-        }
     }
 }
 

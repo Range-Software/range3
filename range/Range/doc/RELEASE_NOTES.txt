@@ -1,4 +1,11 @@
 ------------------------------------------------------------------
+Version 3.1.0
+
+* Added mesh reconstruction solver
+  - Enables to automatically refine mesh based on computed results
+* Small GUI improvements
+
+------------------------------------------------------------------
 Version 3.0.4
 
 * Small GUI improvements

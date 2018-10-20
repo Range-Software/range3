@@ -12,7 +12,7 @@
 
 #include "application.h"
 
-int main (int argc, char *argv[])
+int main(int argc, char *argv[])
 {
     RArgumentsParser::printHeader("GUI");
 
@@ -21,7 +21,7 @@ int main (int argc, char *argv[])
     int exitValue = 0;
     if ((exitValue = Application(argc, argv).exec()) != 0)
     {
-        RLogger::info ("Application has terminated with error code (%d).\n", exitValue);
+        RLogger::info("Application has terminated with error code (%d).\n", exitValue);
     }
 
     RArgumentsParser::printFooter();

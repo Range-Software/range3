@@ -11,6 +11,7 @@
 #ifndef __RML_PROBLEM_SETUP_H__
 #define __RML_PROBLEM_SETUP_H__
 
+#include "rml_mesh_setup.h"
 #include "rml_modal_setup.h"
 #include "rml_radiation_setup.h"
 
@@ -25,6 +26,8 @@ class RProblemSetup
         RRadiationSetup radiationSetup;
         //! Modal setup.
         RModalSetup modalSetup;
+        //! Mesh setup.
+        RMeshSetup meshSetup;
 
     private:
 
@@ -60,14 +63,23 @@ class RProblemSetup
         //! Set radiation setup.
         void setRadiationSetup(const RRadiationSetup &radiationSetup);
 
-        //! Get const reference to radiation setup.
+        //! Get const reference to modal setup.
         const RModalSetup &getModalSetup(void) const;
 
-        //! Get reference to radiation setup.
+        //! Get reference to modal setup.
         RModalSetup &getModalSetup(void);
 
-        //! Set radiation setup.
+        //! Set modal setup.
         void setModalSetup(const RModalSetup &modalSetup);
+
+        //! Get const reference to mesh setup.
+        const RMeshSetup &getMeshSetup(void) const;
+
+        //! Get reference to mesh setup.
+        RMeshSetup &getMeshSetup(void);
+
+        //! Set mesh setup.
+        void setMeshSetup(const RMeshSetup &meshSetup);
 
         //! Allow RFileIO to access private members.
         friend class RFileIO;

@@ -309,6 +309,15 @@ void Model::initializeMeshInput(void)
     double dz = zmax - zmin;
 
     this->meshInput.setVolumeConstraint(dx*dy*dz/1000.0);
+
+    RMeshSetup &rMeshSetup = this->getProblemSetup().getMeshSetup();
+
+    if (rMeshSetup.getMinEdgeLength() == 0.0 || rMeshSetup.getMaxEdgeLength() == 0.0)
+    {
+        double initEdgeLenght = std::cbrt(12.0 * this->meshInput.getVolumeConstraint() / std::sqrt(2.0));
+        rMeshSetup.setMinEdgeLength(initEdgeLenght*0.1);
+        rMeshSetup.setMaxEdgeLength(initEdgeLenght);
+    }
 }
 
 const RViewFactorMatrix &Model::getViewFactorMatrix(void) const
@@ -2658,12 +2667,12 @@ bool Model::findPickedNode(const RR3Vector &position, const RR3Vector &direction
 bool Model::findPickedHoleElement(const RR3Vector &position, const RR3Vector &direction, double tolerance, PickItem &pickItem)
 {
     bool found = false;
-    double minDistance;
+    double minDistance = 0.0;
 
-    for (int i=0;i<this->holeElements.size();i++)
+    for (uint i=0;i<uint(this->holeElements.size());i++)
     {
         double distance;
-        if (this->holeElements[i].findPickDistance(this->getNodes(),position,direction,tolerance,distance))
+        if (this->holeElements[int(i)].findPickDistance(this->getNodes(),position,direction,tolerance,distance))
         {
             if (!found || distance < minDistance)
             {
@@ -2674,6 +2683,26 @@ bool Model::findPickedHoleElement(const RR3Vector &position, const RR3Vector &di
         }
     }
     return found;
+}
+
+void Model::update(const RModel &rModel)
+{
+    RModel::update(rModel);
+
+    int consolidateActionMask = Model::ConsolidateEdgeElements | Model::ConsolidateHoleElements;
+    if (this->getNVolumes() == 0)
+    {
+        consolidateActionMask |= Model::ConsolidateSliverElements | Model::ConsolidateIntersectedElements;
+    }
+    this->consolidate(consolidateActionMask);
+    // Fix missing color scales in variable data.
+    for (uint i=0;i<this->getNVariables();i++)
+    {
+        if (this->getVariable(i).getVariableData().getValueRangeName().isEmpty())
+        {
+            this->getVariable(i).getVariableData().setValueRangeName(ColorScale::getDefaultColorScale());
+        }
+    }
 }
 
 void Model::read(const QString &fileName)
@@ -2967,7 +2996,7 @@ QList<QString> Model::getDocumentFiles(void) const
 
 uint Model::getUndoStackSize(void) const
 {
-    return this->undoStack.size();
+    return uint(this->undoStack.size());
 }
 
 void Model::undo(uint revision)
@@ -2991,7 +3020,7 @@ QString Model::getUndoActionMessage() const
 
 uint Model::getRedoStackSize(void) const
 {
-    return this->redoStack.size();
+    return uint(this->redoStack.size());
 }
 
 void Model::redo(uint revision)
@@ -3035,11 +3064,11 @@ void Model::updateHistoryStackSize(uint maxDepth)
 {
     if (this->undoStack.size() > int(maxDepth))
     {
-        this->undoStack.resize(maxDepth);
+        this->undoStack.resize(int(maxDepth));
     }
     if (this->redoStack.size() > int(maxDepth))
     {
-        this->redoStack.resize(maxDepth);
+        this->redoStack.resize(int(maxDepth));
     }
 }
 
@@ -3121,7 +3150,7 @@ QSet<uint> Model::findEdgeNodeIDs(const QList<SessionEntityID> &entityIDs) const
             nn++;
         }
     }
-    nodeIDs.reserve(nn);
+    nodeIDs.reserve(int(nn));
     for (uint i=0;i<this->getNNodes();i++)
     {
         if (nodeIsOnEdge[i] == 2 || nodeIsInGroup[i] == R_ENTITY_GROUP_POINT || nodeIsInGroup[i] == R_ENTITY_GROUP_LINE)

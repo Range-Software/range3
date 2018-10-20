@@ -50,6 +50,9 @@ class ProblemTree : public QTreeWidget
         //! Radiation setup has changed.
         void onRadiationSetupChanged(const RRadiationSetup &radiationSetup);
 
+        //! Mesh setup has changed.
+        void onMeshSetupChanged(const RMeshSetup &meshSetup);
+
 };
 
 #endif // __PROBLEM_TREE_H__

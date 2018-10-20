@@ -148,6 +148,10 @@ void SolverSetupChecker::checkBoundaryConditions(QStringList &warnings, QStringL
 
     for (uint i=0;i<problemTypes.size();i++)
     {
+        if (problemTypes[i] == R_PROBLEM_MESH)
+        {
+            continue;
+        }
         hasExplicit = hasImplicit = false;
 
         std::vector<RBoundaryConditionType> conditionTypes = RBoundaryCondition::getTypes(problemTypes[i]);

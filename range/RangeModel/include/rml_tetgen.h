@@ -18,11 +18,6 @@
 class RTetGen : public tetgenio
 {
 
-    private:
-
-        //! Point marker offset.
-        static const int pointMarkerOffset;
-
     public:
 
         //! Constructor.

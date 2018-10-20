@@ -105,6 +105,12 @@ class RSolverGeneric
         //! Run solver.
         void run(bool firstRun, uint taskIteration);
 
+        //! Get mesh changed.
+        bool getMeshChanged() const;
+
+        //! Set mesh changed.
+        void setMeshChanged(bool meshChanged);
+
         //! Check if solver has converged.
         virtual bool hasConverged(void) const = 0;
 
