@@ -36,6 +36,7 @@ SOURCES += \
     src/rsolvergeneric.cpp \
     src/rsolverheat.cpp \
     src/rsolvermagnetostatics.cpp \
+    src/rsolvermesh.cpp \
     src/rsolverradiativeheat.cpp \
     src/rsolvershareddata.cpp \
     src/rsolverstress.cpp \
@@ -64,6 +65,7 @@ HEADERS += \
     include/rsolverheat.h \
     include/rsolverlib.h \
     include/rsolvermagnetostatics.h \
+    include/rsolvermesh.h \
     include/rsolverradiativeheat.h \
     include/rsolvershareddata.h \
     include/rsolverstress.h \

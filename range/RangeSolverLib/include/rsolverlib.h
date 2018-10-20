@@ -30,6 +30,7 @@
 #include "rsolverfluidheat.h"
 #include "rsolverheat.h"
 #include "rsolvermagnetostatics.h"
+#include "rsolvermesh.h"
 #include "rsolverradiativeheat.h"
 #include "rsolvershareddata.h"
 #include "rsolverstress.h"

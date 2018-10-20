@@ -16,6 +16,7 @@
 #include "rsolverfluid.h"
 #include "rsolverfluidheat.h"
 #include "rsolverheat.h"
+#include "rsolvermesh.h"
 #include "rsolverradiativeheat.h"
 #include "rsolverstress.h"
 #include "rsolverwave.h"
@@ -96,6 +97,10 @@ void RSolver::_init(const RSolver *pSolver)
             {
                 // NOT WORKING
                 this->solvers[problemTypes[i]] = new RSolverWave(this->pModel,this->modelFileName,problemConvergenceFileName,this->sharedData);
+            }
+            else if (problemTypes[i] == R_PROBLEM_MESH)
+            {
+                this->solvers[problemTypes[i]] = new RSolverMesh(this->pModel,this->modelFileName,problemConvergenceFileName,this->sharedData);
             }
         }
 
@@ -232,6 +237,16 @@ bool RSolver::runProblemTask(const RProblemTaskItem &problemTaskItem, uint taskI
 
             this->solvers[problemType]->run(firstRun,taskIteration);
             converged = this->solvers[problemTaskItem.getProblemType()]->hasConverged();
+            if (this->solvers[problemTaskItem.getProblemType()]->getMeshChanged())
+            {
+                RProblemTypeMask problemTypeMask = this->pModel->getProblemTaskTree().getProblemTypeMask();
+                std::vector<RProblemType> problemTypes = RProblem::getTypes(problemTypeMask);
+                for (uint i=0;i<problemTypes.size();i++)
+                {
+                    this->solvers[problemTypes[i]]->setMeshChanged(true);
+                }
+            }
+
             RLogger::unindent();
 
             this->solversExecutionCount[problemType]++;

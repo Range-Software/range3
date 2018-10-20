@@ -4034,6 +4034,10 @@ void RFileIO::readAscii(RFile &inFile, RProblemSetup &problemSetup)
     RFileIO::readAscii(inFile,problemSetup.restart);
     RFileIO::readAscii(inFile,problemSetup.radiationSetup);
     RFileIO::readAscii(inFile,problemSetup.modalSetup);
+    if (inFile.getVersion() > RVersion(0,3,4))
+    {
+        RFileIO::readAscii(inFile,problemSetup.meshSetup);
+    }
 }
 
 void RFileIO::readBinary(RFile &inFile, RProblemSetup &problemSetup)
@@ -4041,6 +4045,10 @@ void RFileIO::readBinary(RFile &inFile, RProblemSetup &problemSetup)
     RFileIO::readBinary(inFile,problemSetup.restart);
     RFileIO::readBinary(inFile,problemSetup.radiationSetup);
     RFileIO::readBinary(inFile,problemSetup.modalSetup);
+    if (inFile.getVersion() > RVersion(0,3,4))
+    {
+        RFileIO::readBinary(inFile,problemSetup.meshSetup);
+    }
 }
 
 void RFileIO::writeAscii(RSaveFile &outFile, const RProblemSetup &problemSetup, bool addNewLine)
@@ -4056,6 +4064,11 @@ void RFileIO::writeAscii(RSaveFile &outFile, const RProblemSetup &problemSetup, 
         RFileIO::writeAscii(outFile,' ',false);
     }
     RFileIO::writeAscii(outFile,problemSetup.modalSetup,addNewLine);
+    if (!addNewLine)
+    {
+        RFileIO::writeAscii(outFile,' ',false);
+    }
+    RFileIO::writeAscii(outFile,problemSetup.meshSetup,addNewLine);
 }
 
 void RFileIO::writeBinary(RSaveFile &outFile, const RProblemSetup &problemSetup)
@@ -4063,6 +4076,7 @@ void RFileIO::writeBinary(RSaveFile &outFile, const RProblemSetup &problemSetup)
     RFileIO::writeBinary(outFile,problemSetup.restart);
     RFileIO::writeBinary(outFile,problemSetup.radiationSetup);
     RFileIO::writeBinary(outFile,problemSetup.modalSetup);
+    RFileIO::writeBinary(outFile,problemSetup.meshSetup);
 }
 
 
@@ -4211,6 +4225,77 @@ void RFileIO::writeBinary(RSaveFile &outFile, const RModalSetup &modalSetup)
     RFileIO::writeBinary(outFile,modalSetup.convergenceValue);
     RFileIO::writeBinary(outFile,modalSetup.mode);
     RFileIO::writeBinary(outFile,modalSetup.frequency);
+}
+
+
+/*********************************************************************
+ *  RMeshSetup                                                       *
+ *********************************************************************/
+
+void RFileIO::readAscii(RFile &inFile, RMeshSetup &meshSetup)
+{
+    meshSetup.variables.clear();
+
+    uint nVariables = 0;
+    RFileIO::readAscii(inFile,nVariables);
+    for (uint i=0;i<nVariables;i++)
+    {
+        RVariableType variableType;
+        RFileIO::readAscii(inFile,variableType);
+        meshSetup.variables.insert(variableType);
+    }
+    RFileIO::readAscii(inFile,meshSetup.minEdgeLength);
+    RFileIO::readAscii(inFile,meshSetup.maxEdgeLength);
+}
+
+void RFileIO::readBinary(RFile &inFile, RMeshSetup &meshSetup)
+{
+    meshSetup.variables.clear();
+
+    int nVariables = 0;
+    RFileIO::readBinary(inFile,nVariables);
+    for (int i=0;i<nVariables;i++)
+    {
+        RVariableType variableType;
+        RFileIO::readBinary(inFile,variableType);
+        meshSetup.variables.insert(variableType);
+    }
+    RFileIO::readBinary(inFile,meshSetup.minEdgeLength);
+    RFileIO::readBinary(inFile,meshSetup.maxEdgeLength);
+}
+
+void RFileIO::writeAscii(RSaveFile &outFile, const RMeshSetup &meshSetup, bool addNewLine)
+{
+    RFileIO::writeAscii(outFile,meshSetup.variables.size(),addNewLine);
+    if (!addNewLine)
+    {
+        RFileIO::writeAscii(outFile,' ',false);
+    }
+    foreach (RVariableType variableType, meshSetup.variables)
+    {
+        RFileIO::writeAscii(outFile,variableType,addNewLine);
+        if (!addNewLine)
+        {
+            RFileIO::writeAscii(outFile,' ',false);
+        }
+    }
+    RFileIO::writeAscii(outFile,meshSetup.minEdgeLength,addNewLine);
+    if (!addNewLine)
+    {
+        RFileIO::writeAscii(outFile,' ',false);
+    }
+    RFileIO::writeAscii(outFile,meshSetup.maxEdgeLength,addNewLine);
+}
+
+void RFileIO::writeBinary(RSaveFile &outFile, const RMeshSetup &meshSetup)
+{
+    RFileIO::writeBinary(outFile,meshSetup.variables.size());
+    foreach (RVariableType variableType, meshSetup.variables)
+    {
+        RFileIO::writeBinary(outFile,variableType);
+    }
+    RFileIO::writeBinary(outFile,meshSetup.minEdgeLength);
+    RFileIO::writeBinary(outFile,meshSetup.maxEdgeLength);
 }
 
 

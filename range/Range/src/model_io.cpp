@@ -114,7 +114,7 @@ void ModelIO::update(Model &rModel, const QString &fileName)
 
     try
     {
-        Model tmpModel;
+        RModel tmpModel;
 
         tmpModel.read(fileName);
 

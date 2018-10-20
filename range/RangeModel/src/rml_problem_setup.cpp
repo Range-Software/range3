@@ -17,6 +17,7 @@ void RProblemSetup::_init(const RProblemSetup *pProblemSetup)
         this->restart = pProblemSetup->restart;
         this->radiationSetup = pProblemSetup->radiationSetup;
         this->modalSetup = pProblemSetup->modalSetup;
+        this->meshSetup = pProblemSetup->meshSetup;
     }
 }
 
@@ -80,4 +81,19 @@ RModalSetup &RProblemSetup::getModalSetup(void)
 void RProblemSetup::setModalSetup(const RModalSetup &modalSetup)
 {
     this->modalSetup = modalSetup;
+}
+
+const RMeshSetup &RProblemSetup::getMeshSetup() const
+{
+    return this->meshSetup;
+}
+
+RMeshSetup &RProblemSetup::getMeshSetup()
+{
+    return this->meshSetup;
+}
+
+void RProblemSetup::setMeshSetup(const RMeshSetup &meshSetup)
+{
+    this->meshSetup = meshSetup;
 }

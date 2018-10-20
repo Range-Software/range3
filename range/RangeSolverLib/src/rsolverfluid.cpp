@@ -239,6 +239,20 @@ bool RSolverFluid::hasConverged(void) const
 
 void RSolverFluid::updateScales(void)
 {
+    this->nodeVelocity.x.resize(this->pModel->getNNodes(),0.0);
+    this->nodeVelocity.y.resize(this->pModel->getNNodes(),0.0);
+    this->nodeVelocity.z.resize(this->pModel->getNNodes(),0.0);
+    this->elementVelocity.x.resize(this->pModel->getNElements(),0.0);
+    this->elementVelocity.y.resize(this->pModel->getNElements(),0.0);
+    this->elementVelocity.z.resize(this->pModel->getNElements(),0.0);
+    this->nodeAcceleration.x.resize(this->pModel->getNNodes(),0.0);
+    this->nodeAcceleration.y.resize(this->pModel->getNNodes(),0.0);
+    this->nodeAcceleration.z.resize(this->pModel->getNNodes(),0.0);
+    this->nodeVelocityOld.x.resize(this->pModel->getNNodes(),0.0);
+    this->nodeVelocityOld.y.resize(this->pModel->getNNodes(),0.0);
+    this->nodeVelocityOld.z.resize(this->pModel->getNNodes(),0.0);
+    this->elementPressure.resize(this->pModel->getNElements(),0.0);
+
     if (this->taskIteration > 0)
     {
         return;
@@ -297,10 +311,9 @@ void RSolverFluid::prepare(void)
     this->buildStopWatch.reset();
     this->assemblyStopWatch.reset();
 
-    if (this->taskIteration == 0)
+    if (this->taskIteration == 0 || this->meshChanged)
     {
         this->generateNodeBook();
-
         this->generateMaterialVecor(R_MATERIAL_PROPERTY_DENSITY,this->elementDensity);
         this->generateMaterialVecor(R_MATERIAL_PROPERTY_DYNAMIC_VISCOSITY,this->elementViscosity);
 
@@ -714,6 +727,12 @@ void RSolverFluid::findInputVectors(void)
     this->elementVelocity.x.resize(this->pModel->getNElements(),0.0);
     this->elementVelocity.y.resize(this->pModel->getNElements(),0.0);
     this->elementVelocity.z.resize(this->pModel->getNElements(),0.0);
+    this->nodeAcceleration.x.resize(this->pModel->getNNodes(),0.0);
+    this->nodeAcceleration.y.resize(this->pModel->getNNodes(),0.0);
+    this->nodeAcceleration.z.resize(this->pModel->getNNodes(),0.0);
+    this->nodeVelocityOld.x.resize(this->pModel->getNNodes(),0.0);
+    this->nodeVelocityOld.y.resize(this->pModel->getNNodes(),0.0);
+    this->nodeVelocityOld.z.resize(this->pModel->getNNodes(),0.0);
     this->elementPressure.resize(this->pModel->getNElements(),0.0);
 
     // Apply initial conditions

@@ -50,10 +50,7 @@ RSolverGeneric::RSolverGeneric(RModel *pModel, const QString &modelFileName, con
     , computableElements(this->pModel->getNElements(),false)
 {
     this->elementTemperature = this->pSharedData->findData("element-temperature");
-    if (this->elementTemperature.size() != this->pModel->getNElements())
-    {
-        this->elementTemperature.resize(this->pModel->getNElements(),RVariable::getInitValue(R_VARIABLE_TEMPERATURE));
-    }
+    this->elementTemperature.resize(this->pModel->getNElements(),RVariable::getInitValue(R_VARIABLE_TEMPERATURE));
     this->localRotations.resize(this->pModel->getNNodes());
     this->_init();
 }
@@ -78,6 +75,8 @@ void RSolverGeneric::run(bool firstRun, uint taskIteration)
 {
     this->firstRun = firstRun;
     this->taskIteration = taskIteration;
+
+    this->elementTemperature.resize(this->pModel->getNElements(),RVariable::getInitValue(R_VARIABLE_TEMPERATURE));
 
     if (this->taskIteration == 0)
     {
@@ -136,13 +135,16 @@ void RSolverGeneric::run(bool firstRun, uint taskIteration)
     }
     else
     {
-        if (this->problemType != R_PROBLEM_STRESS && this->problemType != R_PROBLEM_STRESS_MODAL)
+        if (this->problemType != R_PROBLEM_STRESS && this->problemType != R_PROBLEM_STRESS_MODAL && this->problemType != R_PROBLEM_MESH)
         {
             this->applyDisplacement();
         }
 
         this->updateScales();
-        this->scales.downscale(*this->pModel);
+        if (this->problemType != R_PROBLEM_MESH)
+        {
+            this->scales.downscale(*this->pModel);
+        }
 
         this->recoverSharedData();
         this->recover();
@@ -152,7 +154,10 @@ void RSolverGeneric::run(bool firstRun, uint taskIteration)
         this->store();
         this->storeSharedData();
 
-        this->scales.upscale(*this->pModel);
+        if (this->problemType != R_PROBLEM_MESH)
+        {
+            this->scales.upscale(*this->pModel);
+        }
 
         if (this->problemType != R_PROBLEM_STRESS && this->problemType != R_PROBLEM_STRESS_MODAL)
         {
@@ -163,7 +168,17 @@ void RSolverGeneric::run(bool firstRun, uint taskIteration)
         this->statistics();
     }
 
-    this->meshChanged = false;
+    this->meshChanged = (this->problemType == R_PROBLEM_MESH);
+}
+
+bool RSolverGeneric::getMeshChanged() const
+{
+    return this->meshChanged;
+}
+
+void RSolverGeneric::setMeshChanged(bool meshChanged)
+{
+    this->meshChanged = meshChanged;
 }
 
 void RSolverGeneric::updateOldRecords(const RTimeSolver &rTimeSolver, const QString &modelFileName)
@@ -331,6 +346,7 @@ void RSolverGeneric::updateLocalRotations(void)
             }
         }
     }
+    this->localRotations.resize(this->pModel->getNNodes());
     for (uint i=0;i<nodeNormals.size();i++)
     {
         if (nodeNormalsBook[i])

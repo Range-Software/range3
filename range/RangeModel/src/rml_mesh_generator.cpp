@@ -19,63 +19,116 @@
 
 void RMeshGenerator::generate(const RMeshInput &meshInput, RModel &model)
 {
-    RTetGen tetgenIn;
-    RTetGen tetgenOut;
-
     if (model.getNSurfaces() == 0 && model.getNVolumes() == 0)
     {
         throw RError(R_ERROR_INVALID_INPUT,R_ERROR_REF, "Model contains no surface nor volume elements.");
     }
 
-    // Convert Range model to TetGen mesh.
+    QStringList parameters;
+    RModel modelTmp, *pInModel = nullptr, *pOutModel = nullptr;
+
+    if (meshInput.getUseTetGenInputParams())
+    {
+        parameters.append(meshInput.getTetGenInputParams());
+    }
+    else
+    {
+        parameters.append(model.generateMeshTetGenInputParams(meshInput));
+        if (meshInput.getUseSizeFunction())
+        {
+            RMeshInput tmpMeshInput(meshInput);
+            tmpMeshInput.setUseSizeFunction(false);
+            parameters.append(model.generateMeshTetGenInputParams(tmpMeshInput));
+            modelTmp = model;
+        }
+    }
+
     try
     {
-        RLogger::info("Converting Range model to TetGen mesh.\n");
+
+        RLogger::info("Mesh generation loop.\n");
         RLogger::indent();
-        tetgenIn.importModel(model,
-                             meshInput.getReconstruct() && model.getNVolumes() > 0,
-                             meshInput.getUseSizeFunction() ? meshInput.getSizeFunctionValues() : RRVector());
-        RLogger::unindent();
-        RLogger::info("Successfully converted Range model to TetGen mesh.\n");
-    }
-    catch (const RError &error)
-    {
-        RLogger::unindent();
-        throw RError(R_ERROR_APPLICATION,R_ERROR_REF,"Failed to export mesh to TetGen format: %s", error.getMessage().toUtf8().constData());
-    }
+        for (int i=0;i<parameters.size();i++)
+        {
+            RLogger::info("Step %d of %d.\n",i+1,parameters.size());
+            if (i==0)
+            {
+                pInModel = &model;
+            }
+            else
+            {
+                pInModel = &modelTmp;
+            }
+            if (i+1 == parameters.size() || parameters.size() == 1)
+            {
+                pOutModel = &model;
+            }
+            else
+            {
+                pOutModel = &modelTmp;
+            }
+            bool keepResults = meshInput.getKeepResults();
+            if (i+1 < parameters.size() && parameters.size() > 1)
+            {
+                keepResults = false;
+            }
 
-    QString parameters(meshInput.getTetGenInputParams());
+            RTetGen tetgenIn;
+            RTetGen tetgenOut;
 
-    char *args = new char[parameters.size() + 1];
-    snprintf(args,parameters.size() + 1,"%s",parameters.toUtf8().constData());
+            // Convert Range model to TetGen mesh.
+            try
+            {
+                RLogger::info("Converting Range model to TetGen mesh.\n");
+                RLogger::indent();
+                tetgenIn.importModel(*pInModel,
+                                     meshInput.getReconstruct() && pInModel->getNVolumes() > 0,
+                                     meshInput.getUseSizeFunction() && i == 0 ? meshInput.getSizeFunctionValues() : RRVector());
+                RLogger::unindent();
+                RLogger::info("Successfully converted Range model to TetGen mesh.\n");
+            }
+            catch (const RError &error)
+            {
+                RLogger::unindent();
+                throw RError(R_ERROR_APPLICATION,R_ERROR_REF,"Failed to export mesh to TetGen format: %s", error.getMessage().toUtf8().constData());
+            }
+            char *args = new char[uint(parameters.at(i).size()) + 1];
+            snprintf(args,uint(parameters.at(i).size()) + 1,"%s",parameters.at(i).toUtf8().constData());
 
-    // Generate 3D mesh.
-    try
-    {
-        RLogger::info("Generating volume mesh with parameters \"%s\".\n", args);
-        RLogger::indent();
-        tetgen_set_print_func(RLogger::info);
-        tetrahedralize(args,&tetgenIn,&tetgenOut);
-        RLogger::unindent();
-        RLogger::info("Mesh generation has finished successfully.\n");
-    }
-    catch (int errorCode)
-    {
-        RLogger::unindent();
-        delete [] args;
-        throw RError(R_ERROR_APPLICATION,R_ERROR_REF,"Mesh generation failed with error code \"%d\"", errorCode);
-    }
+            // Generate 3D mesh.
+            try
+            {
+                RLogger::info("Generating volume mesh with parameters \"%s\".\n", args);
+                RLogger::indent();
+                tetgen_set_print_func(RLogger::info);
+                tetrahedralize(args,&tetgenIn,&tetgenOut);
+                RLogger::unindent();
+                RLogger::info("Mesh generation has finished successfully.\n");
+            }
+            catch (int errorCode)
+            {
+                RLogger::unindent();
+                delete [] args;
+                throw RError(R_ERROR_APPLICATION,R_ERROR_REF,"Mesh generation failed with error code \"%d\"", errorCode);
+            }
 
-    delete [] args;
+            delete [] args;
 
-    // Convert TetGen mesh to Range model.
-    try
-    {
-        RLogger::info("Converting TetGen mesh to Range model.\n");
-        RLogger::indent();
-        tetgenOut.exportMesh(model,meshInput.getKeepResults());
-        RLogger::unindent();
-        RLogger::info("Successfully converted TetGen mesh to Range model.\n");
+            // Convert TetGen mesh to Range model.
+            try
+            {
+                RLogger::info("Converting TetGen mesh to Range model.\n");
+                RLogger::indent();
+                tetgenOut.exportMesh(*pOutModel,keepResults);
+                RLogger::unindent();
+                RLogger::info("Successfully converted TetGen mesh to Range model.\n");
+            }
+            catch (const RError &error)
+            {
+                RLogger::unindent();
+                throw RError(R_ERROR_APPLICATION,R_ERROR_REF,"Failed to import mesh from TetGen format: %s", error.getMessage().toUtf8().constData());
+            }
+        }
     }
     catch (const RError &error)
     {

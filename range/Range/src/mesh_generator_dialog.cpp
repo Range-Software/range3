@@ -116,7 +116,7 @@ MeshGeneratorDialog::MeshGeneratorDialog(uint modelID, QWidget *parent) :
     QVBoxLayout *tetgenParamsLayout = new QVBoxLayout;
     this->tetgenParamsGroupBox->setLayout(tetgenParamsLayout);
 
-    this->tetgenParamsEdit = new QLineEdit(this->generateTetGenInputParams());
+    this->tetgenParamsEdit = new QLineEdit(Session::getInstance().getModel(this->modelID).generateMeshTetGenInputParams(this->meshInput));
     tetgenParamsLayout->addWidget(this->tetgenParamsEdit);
 
     QHBoxLayout *buttonsLayout = new QHBoxLayout;
@@ -157,10 +157,14 @@ int MeshGeneratorDialog::exec(void)
             double meshSizeFunctionMinValue = this->meshSizeFunctionMinValueEdit->getValue();
             double meshSizeFunctionMaxValue = this->meshSizeFunctionMaxValueEdit->getValue();
 
-            RRVector meshSizeFunction = Session::getInstance().getModel(this->modelID).generateMeshSizeFunction(meshSizeFunctionVariableType,
-                                                                                                                meshSizeFunctionMinValue,
-                                                                                                                meshSizeFunctionMaxValue,
-                                                                                                                0.5);
+            Model &rModel = Session::getInstance().getModel(this->modelID);
+
+            QSet<RVariableType> variableList;
+            variableList.insert(meshSizeFunctionVariableType);
+            RRVector meshSizeFunction = rModel.generateMeshSizeFunction(variableList,
+                                                                        meshSizeFunctionMinValue,
+                                                                        meshSizeFunctionMaxValue,
+                                                                        0.5);
             this->meshInput.setSizeFunctionValues(meshSizeFunction);
         }
 
@@ -170,40 +174,6 @@ int MeshGeneratorDialog::exec(void)
         JobManager::getInstance().submit(meshGenerator);
     }
     return retVal;
-}
-
-QString MeshGeneratorDialog::generateTetGenInputParams(void) const
-{
-    QString parameters;
-
-    parameters += "npA";
-    if (this->meshInput.getVerbose())
-    {
-        parameters += "V";
-    }
-    if (this->meshInput.getOutputEdges())
-    {
-        parameters += "e";
-    }
-    if (this->meshInput.getReconstruct() && Session::getInstance().getModel(this->modelID).getNVolumes() > 0)
-    {
-        parameters += "r";
-    }
-    if (this->meshInput.getUseSizeFunction())
-    {
-        parameters += "m";
-    }
-    if (this->meshInput.getQualityMesh())
-    {
-        parameters += "q" + QString::number(this->meshInput.getRadiusEdgeRatio())
-                   + "a" + QString::number(this->meshInput.getVolumeConstraint())
-                   + "T" + QString::number(this->meshInput.getTolerance());
-    }
-    else
-    {
-        parameters += "Y";
-    }
-    return parameters;
 }
 
 void MeshGeneratorDialog::updateMeshInput(void)
@@ -233,7 +203,7 @@ void MeshGeneratorDialog::updateMeshInput(void)
     {
         // Update TetGen parameters line edit.
         bool oldState = this->tetgenParamsEdit->blockSignals(true);
-        this->tetgenParamsEdit->setText(this->generateTetGenInputParams());
+        this->tetgenParamsEdit->setText(Session::getInstance().getModel(this->modelID).generateMeshTetGenInputParams(this->meshInput));
         this->tetgenParamsEdit->blockSignals(oldState);
     }
     this->meshInput.setTetGenInputParams(this->tetgenParamsEdit->text());

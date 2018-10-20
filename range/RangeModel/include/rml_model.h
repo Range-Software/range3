@@ -27,6 +27,7 @@
 #include "rml_surface.h"
 #include "rml_volume.h"
 #include "rml_results.h"
+#include "rml_mesh_input.h"
 #include "rml_model_data.h"
 #include "rml_model_msh.h"
 #include "rml_model_stl.h"
@@ -388,6 +389,8 @@ class RModel : public RProblem, public RResults
 
         //! Return list of entity group IDs for given entity type.
         std::vector<uint> getEntityGroupIDs ( REntityGroupType entityType ) const;
+
+        QMap<REntityGroupType,RUVector> getEntityIDMap() const;
 
         //! Convert entity group ID to entity type and entity ID.
         bool getEntityID ( uint      groupID,
@@ -895,7 +898,10 @@ class RModel : public RProblem, public RResults
         uint tetrahedralizeSurface(const std::vector<uint> surfaceIDs);
 
         //! Generate vector of mesh size values for each node.
-        RRVector generateMeshSizeFunction(RVariableType variableType, double minValue, double maxValue, double trimValueRatio) const;
+        RRVector generateMeshSizeFunction(const QSet<RVariableType> variableTypes, double minValue, double maxValue, double trimValueRatio) const;
+
+        //! Generate input parameters for TetGen mesh generator.
+        QString generateMeshTetGenInputParams(const RMeshInput &meshInput) const;
 
         //! Generate patch surface.
         void generatePatchSurface(const std::vector<RPatchInput> &patchInput, RPatchBook &book) const;
@@ -1002,7 +1008,10 @@ class RModel : public RProblem, public RResults
         void addEntityGroupIdReference(uint entityGroupId);
 
         //! Remove all references to group ID.
-        void removeEntityGroupIdReferences(uint entityGroupId);
+        void removeEntityGroupIdReference(uint entityGroupId);
+
+        //! Update all references based on differences in ID maps.
+        void updateEntityGroupIdReferences(const QMap<REntityGroupType,RUVector> oldMap);
 
         //! Generate element neighbor distance vector.
         //! Stop criteria are:

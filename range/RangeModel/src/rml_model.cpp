@@ -50,6 +50,8 @@ void RModel::_init (const RModel *pModel)
         this->streamLines = pModel->streamLines;
         this->cuts = pModel->cuts;
         this->isos = pModel->isos;
+        this->surfaceNeigs = pModel->surfaceNeigs;
+        this->volumeNeigs = pModel->volumeNeigs;
         this->modelData = pModel->modelData;
     }
 } /* RModel::_init */
@@ -265,6 +267,10 @@ RModel & RModel::operator = (const RModel &model)
 
 void RModel::update(const RModel &rModel)
 {
+    QMap<REntityGroupType,RUVector> oldEIDMap = this->getEntityIDMap();
+//    QMap<REntityGroupType,RUVector> newEIDMap = rModel.getEntityIDMap();
+
+
     uint nUpdatePoints = std::min(this->getNPoints(),rModel.getNPoints());
     std::vector<REntityGroupData> updatePointGroupData;
     for (uint i=0;i<nUpdatePoints;i++)
@@ -399,6 +405,7 @@ void RModel::update(const RModel &rModel)
     this->getTimeSolver().setInputTimeStepSize(timeSolver.getInputTimeStepSize());
     this->getTimeSolver().setTimes(timeSolver.getTimes());
 
+    this->updateEntityGroupIdReferences(oldEIDMap);
 } /* RModel::update */
 
 
@@ -2623,6 +2630,90 @@ std::vector<uint> RModel::getEntityGroupIDs(REntityGroupType entityType) const
 } /* RModel::getEntityGroupIDs */
 
 
+QMap<REntityGroupType,RUVector> RModel::getEntityIDMap() const
+{
+    QMap<REntityGroupType,RUVector> entityIDMap;
+
+    RUVector envIDs;
+
+    uint grpID = 0;
+
+    // Points
+    envIDs.resize(this->getNPoints());
+    for (uint i=0;i<envIDs.size();i++)
+    {
+        envIDs[i] = grpID++;
+    }
+    entityIDMap[R_ENTITY_GROUP_POINT] = envIDs;
+
+    // Lines
+    envIDs.resize(this->getNLines());
+    for (uint i=0;i<envIDs.size();i++)
+    {
+        envIDs[i] = grpID++;
+    }
+    entityIDMap[R_ENTITY_GROUP_LINE] = envIDs;
+
+    // Surfaces
+    envIDs.resize(this->getNSurfaces());
+    for (uint i=0;i<envIDs.size();i++)
+    {
+        envIDs[i] = grpID++;
+    }
+    entityIDMap[R_ENTITY_GROUP_SURFACE] = envIDs;
+
+    // Volumes
+    envIDs.resize(this->getNVolumes());
+    for (uint i=0;i<envIDs.size();i++)
+    {
+        envIDs[i] = grpID++;
+    }
+    entityIDMap[R_ENTITY_GROUP_VOLUME] = envIDs;
+
+    // Vector fields
+    envIDs.resize(this->getNVectorFields());
+    for (uint i=0;i<envIDs.size();i++)
+    {
+        envIDs[i] = grpID++;
+    }
+    entityIDMap[R_ENTITY_GROUP_VECTOR_FIELD] = envIDs;
+
+    // Scalar fields
+    envIDs.resize(this->getNScalarFields());
+    for (uint i=0;i<envIDs.size();i++)
+    {
+        envIDs[i] = grpID++;
+    }
+    entityIDMap[R_ENTITY_GROUP_SCALAR_FIELD] = envIDs;
+
+    // Stream lines
+    envIDs.resize(this->getNStreamLines());
+    for (uint i=0;i<envIDs.size();i++)
+    {
+        envIDs[i] = grpID++;
+    }
+    entityIDMap[R_ENTITY_GROUP_STREAM_LINE] = envIDs;
+
+    // Cuts
+    envIDs.resize(this->getNCuts());
+    for (uint i=0;i<envIDs.size();i++)
+    {
+        envIDs[i] = grpID++;
+    }
+    entityIDMap[R_ENTITY_GROUP_CUT] = envIDs;
+
+    // ISOs
+    envIDs.resize(this->getNIsos());
+    for (uint i=0;i<envIDs.size();i++)
+    {
+        envIDs[i] = grpID++;
+    }
+    entityIDMap[R_ENTITY_GROUP_ISO] = envIDs;
+
+    return entityIDMap;
+} /* RModel::getEntityIDMap */
+
+
 bool RModel::getEntityID(uint groupID, REntityGroupType &entityType, uint &entityID) const
 {
     uint ceid = 0;
@@ -2988,7 +3079,16 @@ uint RModel::getNPoints (void) const
 
 void RModel::setNPoints (uint npoints)
 {
+    uint oldSize=uint(this->points.size());
     this->points.resize(npoints);
+    for (uint i=oldSize;i<npoints;i++)
+    {
+        this->addEntityGroupIdReference(this->getEntityGroupID(R_ENTITY_GROUP_POINT,oldSize));
+    }
+    for (uint i=npoints;i<oldSize;i++)
+    {
+        this->removeEntityGroupIdReference(this->getEntityGroupID(R_ENTITY_GROUP_POINT,npoints));
+    }
 } /* RModel::setNPoints */
 
 
@@ -3037,7 +3137,7 @@ void RModel::setPoint (uint  position,
 
 void RModel::removePoint (uint position)
 {
-    this->removeEntityGroupIdReferences(this->getEntityGroupID(R_ENTITY_GROUP_POINT,position));
+    this->removeEntityGroupIdReference(this->getEntityGroupID(R_ENTITY_GROUP_POINT,position));
 
     std::vector<RPoint>::iterator iter;
 
@@ -3063,7 +3163,16 @@ uint RModel::getNLines (void) const
 
 void RModel::setNLines (uint nlines)
 {
+    uint oldSize=uint(this->lines.size());
     this->lines.resize(nlines);
+    for (uint i=oldSize;i<nlines;i++)
+    {
+        this->addEntityGroupIdReference(this->getEntityGroupID(R_ENTITY_GROUP_LINE,oldSize));
+    }
+    for (uint i=nlines;i<oldSize;i++)
+    {
+        this->removeEntityGroupIdReference(this->getEntityGroupID(R_ENTITY_GROUP_LINE,nlines));
+    }
 } /* RModel::setNLines */
 
 
@@ -3112,7 +3221,7 @@ void RModel::setLine (uint  position,
 
 void RModel::removeLine (uint position)
 {
-    this->removeEntityGroupIdReferences(this->getEntityGroupID(R_ENTITY_GROUP_LINE,position));
+    this->removeEntityGroupIdReference(this->getEntityGroupID(R_ENTITY_GROUP_LINE,position));
 
     std::vector<RLine>::iterator iter;
 
@@ -3138,7 +3247,16 @@ uint RModel::getNSurfaces (void) const
 
 void RModel::setNSurfaces (uint nsurfaces)
 {
+    uint oldSize=uint(this->surfaces.size());
     this->surfaces.resize(nsurfaces);
+    for (uint i=oldSize;i<nsurfaces;i++)
+    {
+        this->addEntityGroupIdReference(this->getEntityGroupID(R_ENTITY_GROUP_SURFACE,oldSize));
+    }
+    for (uint i=nsurfaces;i<oldSize;i++)
+    {
+        this->removeEntityGroupIdReference(this->getEntityGroupID(R_ENTITY_GROUP_SURFACE,nsurfaces));
+    }
 } /* RModel::setNSurfaces */
 
 
@@ -3187,7 +3305,7 @@ void RModel::setSurface (uint    position,
 
 void RModel::removeSurface (uint position)
 {
-    this->removeEntityGroupIdReferences(this->getEntityGroupID(R_ENTITY_GROUP_SURFACE,position));
+    this->removeEntityGroupIdReference(this->getEntityGroupID(R_ENTITY_GROUP_SURFACE,position));
 
     std::vector<RSurface>::iterator iter;
 
@@ -3325,7 +3443,16 @@ uint RModel::getNVolumes (void) const
 
 void RModel::setNVolumes (uint nvolumes)
 {
+    uint oldSize=uint(this->volumes.size());
     this->volumes.resize(nvolumes);
+    for (uint i=oldSize;i<nvolumes;i++)
+    {
+        this->addEntityGroupIdReference(this->getEntityGroupID(R_ENTITY_GROUP_VOLUME,oldSize));
+    }
+    for (uint i=nvolumes;i<oldSize;i++)
+    {
+        this->removeEntityGroupIdReference(this->getEntityGroupID(R_ENTITY_GROUP_VOLUME,nvolumes));
+    }
 } /* RModel::setNVolumes */
 
 
@@ -3374,7 +3501,7 @@ void RModel::setVolume (uint   position,
 
 void RModel::removeVolume (uint position)
 {
-    this->removeEntityGroupIdReferences(this->getEntityGroupID(R_ENTITY_GROUP_VOLUME,position));
+    this->removeEntityGroupIdReference(this->getEntityGroupID(R_ENTITY_GROUP_VOLUME,position));
 
     std::vector<RVolume>::iterator iter;
 
@@ -3400,7 +3527,16 @@ uint RModel::getNVectorFields(void) const
 
 void RModel::setNVectorFields(uint nVectorFields)
 {
+    uint oldSize=uint(this->vectorFields.size());
     this->vectorFields.resize(nVectorFields);
+    for (uint i=oldSize;i<nVectorFields;i++)
+    {
+        this->addEntityGroupIdReference(this->getEntityGroupID(R_ENTITY_GROUP_VECTOR_FIELD,oldSize));
+    }
+    for (uint i=nVectorFields;i<oldSize;i++)
+    {
+        this->removeEntityGroupIdReference(this->getEntityGroupID(R_ENTITY_GROUP_VECTOR_FIELD,nVectorFields));
+    }
 } /* RModel::setNVectorFields */
 
 
@@ -3451,7 +3587,7 @@ void RModel::setVectorField(uint position, const RVectorField &vectorField)
 
 void RModel::removeVectorField(uint position)
 {
-    this->removeEntityGroupIdReferences(this->getEntityGroupID(R_ENTITY_GROUP_VECTOR_FIELD,position));
+    this->removeEntityGroupIdReference(this->getEntityGroupID(R_ENTITY_GROUP_VECTOR_FIELD,position));
 
     std::vector<RVectorField>::iterator iter;
 
@@ -3477,7 +3613,16 @@ uint RModel::getNScalarFields(void) const
 
 void RModel::setNScalarFields(uint nScalarFields)
 {
+    uint oldSize=uint(this->scalarFields.size());
     this->scalarFields.resize(nScalarFields);
+    for (uint i=oldSize;i<nScalarFields;i++)
+    {
+        this->addEntityGroupIdReference(this->getEntityGroupID(R_ENTITY_GROUP_SCALAR_FIELD,oldSize));
+    }
+    for (uint i=nScalarFields;i<oldSize;i++)
+    {
+        this->removeEntityGroupIdReference(this->getEntityGroupID(R_ENTITY_GROUP_SCALAR_FIELD,nScalarFields));
+    }
 } /* RModel::setNScalarFields */
 
 
@@ -3528,7 +3673,7 @@ void RModel::setScalarField(uint position, const RScalarField &scalarField)
 
 void RModel::removeScalarField(uint position)
 {
-    this->removeEntityGroupIdReferences(this->getEntityGroupID(R_ENTITY_GROUP_SCALAR_FIELD,position));
+    this->removeEntityGroupIdReference(this->getEntityGroupID(R_ENTITY_GROUP_SCALAR_FIELD,position));
 
     std::vector<RScalarField>::iterator iter;
 
@@ -3554,7 +3699,16 @@ uint RModel::getNStreamLines(void) const
 
 void RModel::setNStreamLines(uint nStreamLines)
 {
+    uint oldSize=uint(this->streamLines.size());
     this->streamLines.resize(nStreamLines);
+    for (uint i=oldSize;i<nStreamLines;i++)
+    {
+        this->addEntityGroupIdReference(this->getEntityGroupID(R_ENTITY_GROUP_STREAM_LINE,oldSize));
+    }
+    for (uint i=nStreamLines;i<oldSize;i++)
+    {
+        this->removeEntityGroupIdReference(this->getEntityGroupID(R_ENTITY_GROUP_STREAM_LINE,nStreamLines));
+    }
 } /* RModel::setNStreamLines */
 
 
@@ -3602,7 +3756,7 @@ void RModel::setStreamLine(uint position, const RStreamLine &streamLine)
 
 void RModel::removeStreamLine(uint position)
 {
-    this->removeEntityGroupIdReferences(this->getEntityGroupID(R_ENTITY_GROUP_STREAM_LINE,position));
+    this->removeEntityGroupIdReference(this->getEntityGroupID(R_ENTITY_GROUP_STREAM_LINE,position));
 
     std::vector<RStreamLine>::iterator iter;
 
@@ -3628,7 +3782,16 @@ uint RModel::getNCuts(void) const
 
 void RModel::setNCuts(uint nCuts)
 {
+    uint oldSize=uint(this->cuts.size());
     this->cuts.resize(nCuts);
+    for (uint i=oldSize;i<nCuts;i++)
+    {
+        this->addEntityGroupIdReference(this->getEntityGroupID(R_ENTITY_GROUP_CUT,oldSize));
+    }
+    for (uint i=nCuts;i<oldSize;i++)
+    {
+        this->removeEntityGroupIdReference(this->getEntityGroupID(R_ENTITY_GROUP_CUT,nCuts));
+    }
 } /* RModel::setNCuts */
 
 
@@ -3677,7 +3840,7 @@ void RModel::setCut(uint position, const RCut &cut)
 
 void RModel::removeCut(uint position)
 {
-    this->removeEntityGroupIdReferences(this->getEntityGroupID(R_ENTITY_GROUP_CUT,position));
+    this->removeEntityGroupIdReference(this->getEntityGroupID(R_ENTITY_GROUP_CUT,position));
 
     std::vector<RCut>::iterator iter;
 
@@ -3703,7 +3866,16 @@ uint RModel::getNIsos(void) const
 
 void RModel::setNIsos(uint nIsos)
 {
+    uint oldSize=uint(this->isos.size());
     this->isos.resize(nIsos);
+    for (uint i=oldSize;i<nIsos;i++)
+    {
+        this->addEntityGroupIdReference(this->getEntityGroupID(R_ENTITY_GROUP_ISO,oldSize));
+    }
+    for (uint i=nIsos;i<oldSize;i++)
+    {
+        this->removeEntityGroupIdReference(this->getEntityGroupID(R_ENTITY_GROUP_ISO,nIsos));
+    }
 } /* RModel::setNIsos */
 
 
@@ -3751,7 +3923,7 @@ void RModel::setIso(uint position, const RIso &iso)
 
 void RModel::removeIso(uint position)
 {
-    this->removeEntityGroupIdReferences(this->getEntityGroupID(R_ENTITY_GROUP_ISO,position));
+    this->removeEntityGroupIdReference(this->getEntityGroupID(R_ENTITY_GROUP_ISO,position));
 
     std::vector<RIso>::iterator iter;
 
@@ -5942,72 +6114,94 @@ uint RModel::tetrahedralizeSurface(const std::vector<uint> surfaceIDs)
 } /* RModel::tetrahedralizeSurface */
 
 
-RRVector RModel::generateMeshSizeFunction(RVariableType variableType, double minValue, double maxValue, double trimValueRatio) const
+RRVector RModel::generateMeshSizeFunction(const QSet<RVariableType> variableTypes, double minValue, double maxValue, double trimValueRatio) const
 {
-    uint variablePosition = this->findVariable(variableType);
-
-    if (variablePosition == RConstants::eod)
+    if (variableTypes.size() == 0)
     {
         return RRVector();
-    }
-
-    RRVector nodeValues(this->getNNodes());
-
-    const RVariable &rVariable = this->getVariable(variablePosition);
-    if (rVariable.getType() != variableType)
-    {
-        return RRVector();
-
-    }
-    if (rVariable.getApplyType() == R_VARIABLE_APPLY_NODE)
-    {
-        for (uint i=0;i<rVariable.getNValues();i++)
-        {
-            nodeValues[i] = rVariable.getValue(i);
-        }
-    }
-    else
-    {
-        RVariable newVariable(rVariable);
-        newVariable.setApplyType(R_VARIABLE_APPLY_NODE);
-        newVariable.resize(rVariable.getNVectors(),this->getNNodes());
-#pragma omp parallel for default(shared)
-        for (int64_t j=0;j<int64_t(rVariable.getNVectors());j++)
-        {
-            RRVector elementValues = rVariable.getValues(j);
-            RRVector nodeValues(this->getNNodes());
-            RBVector explicitFlags;
-            explicitFlags.resize(this->getNElements(),false);
-            this->convertElementToNodeVector(elementValues,explicitFlags,nodeValues);
-            for (uint k=0;k<this->getNNodes();k++)
-            {
-                newVariable.setValue(j,k,nodeValues[k]);
-            }
-        }
-#pragma omp parallel for default(shared)
-        for (int64_t i=0;i<int64_t(newVariable.getNValues());i++)
-        {
-            nodeValues[i] = newVariable.getValue(i);
-        }
     }
 
     RRVector nodeWeights(this->getNNodes(),0.0);
 
-#pragma omp parallel for default(shared)
-    for (int64_t i=0;i<int64_t(this->getNElements());i++)
+    foreach (RVariableType variableType, variableTypes)
     {
-        const RElement &rElement = this->getElement(i);
-        for (uint j=0;j<rElement.size();j++)
+        uint variablePosition = this->findVariable(variableType);
+
+        if (variablePosition == RConstants::eod)
         {
-            uint nodeId1 = rElement.getNodeId(j);
-            for (uint k=j+1;k<rElement.size();k++)
+            continue;
+        }
+        const RVariable &rVariable = this->getVariable(variablePosition);
+        if (rVariable.getType() != variableType)
+        {
+            continue;
+
+        }
+
+        RRVector nodeValues(this->getNNodes());
+
+        if (rVariable.getApplyType() == R_VARIABLE_APPLY_NODE)
+        {
+            double minValue = rVariable.getMinValue();
+            double maxValue = rVariable.getMaxValue();
+            double magValue = maxValue - minValue;
+            if (magValue == 0.0)
             {
-                uint nodeId2 = rElement.getNodeId(k);
-                double nodeWeight = std::abs(nodeValues[nodeId1] - nodeValues[nodeId2]);
-#pragma omp critical
+                continue;
+            }
+            for (uint i=0;i<rVariable.getNValues();i++)
+            {
+                nodeValues[i] = (rVariable.getValue(i) - minValue) / magValue;
+            }
+        }
+        else
+        {
+            RVariable newVariable(rVariable);
+            newVariable.setApplyType(R_VARIABLE_APPLY_NODE);
+            newVariable.resize(rVariable.getNVectors(),this->getNNodes());
+#pragma omp parallel for default(shared)
+            for (int64_t j=0;j<int64_t(rVariable.getNVectors());j++)
+            {
+                RRVector elementValues = rVariable.getValues(uint(j));
+                RRVector lNodeValues(this->getNNodes());
+                RBVector explicitFlags;
+                explicitFlags.resize(this->getNElements(),false);
+                this->convertElementToNodeVector(elementValues,explicitFlags,lNodeValues);
+                for (uint k=0;k<this->getNNodes();k++)
                 {
-                    nodeWeights[nodeId1] = std::max(nodeWeights[nodeId1],nodeWeight);
-                    nodeWeights[nodeId2] = std::max(nodeWeights[nodeId2],nodeWeight);
+                    newVariable.setValue(uint(j),k,lNodeValues[k]);
+                }
+            }
+            double minValue = newVariable.getMinValue();
+            double maxValue = newVariable.getMaxValue();
+            double magValue = maxValue - minValue;
+            if (magValue == 0.0)
+            {
+                continue;
+            }
+#pragma omp parallel for default(shared)
+            for (int64_t i=0;i<int64_t(newVariable.getNValues());i++)
+            {
+                nodeValues[uint(i)] = (newVariable.getValue(uint(i)) - minValue) / magValue;
+            }
+        }
+
+#pragma omp parallel for default(shared)
+        for (int64_t i=0;i<int64_t(this->getNElements());i++)
+        {
+            const RElement &rElement = this->getElement(uint(i));
+            for (uint j=0;j<rElement.size();j++)
+            {
+                uint nodeId1 = rElement.getNodeId(j);
+                for (uint k=j+1;k<rElement.size();k++)
+                {
+                    uint nodeId2 = rElement.getNodeId(k);
+                    double nodeWeight = std::abs(nodeValues[nodeId1] - nodeValues[nodeId2]);
+#pragma omp critical
+                    {
+                        nodeWeights[nodeId1] = std::max(nodeWeights[nodeId1],nodeWeight);
+                        nodeWeights[nodeId2] = std::max(nodeWeights[nodeId2],nodeWeight);
+                    }
                 }
             }
         }
@@ -6026,11 +6220,46 @@ RRVector RModel::generateMeshSizeFunction(RVariableType variableType, double min
 #pragma omp parallel for default(shared)
     for (int64_t i=0;i<int64_t(this->getNNodes());i++)
     {
-        meshSizes[i] = ((1.0 - (std::min(nodeWeights[i],maxWeight) - minWeight) / scaleWeight) * scaleValue) + minValue;
+        meshSizes[uint(i)] = ((1.0 - (std::min(nodeWeights[uint(i)],maxWeight) - minWeight) / scaleWeight) * scaleValue) + minValue;
     }
 
     return meshSizes;
 } /* RModel::generateMeshSizeFunction */
+
+
+QString RModel::generateMeshTetGenInputParams(const RMeshInput &meshInput) const
+{
+    QString parameters;
+
+    parameters += "npA";
+    if (meshInput.getVerbose())
+    {
+        parameters += "V";
+    }
+    if (meshInput.getOutputEdges())
+    {
+        parameters += "e";
+    }
+    if (meshInput.getReconstruct() && this->getNVolumes() > 0)
+    {
+        parameters += "r";
+    }
+    if (meshInput.getUseSizeFunction())
+    {
+        parameters += "m";
+    }
+    if (meshInput.getQualityMesh())
+    {
+        parameters += "q" + QString::number(meshInput.getRadiusEdgeRatio())
+                   + "a" + QString::number(meshInput.getVolumeConstraint())
+                   + "T" + QString::number(meshInput.getTolerance());
+    }
+    else
+    {
+        parameters += "Y";
+    }
+    return parameters;
+} /* RModel::generateMeshTetGenInputParams */
 
 
 void RModel::generatePatchSurface(const std::vector<RPatchInput> &patchInput, RPatchBook &book) const
@@ -7812,7 +8041,7 @@ void RModel::addEntityGroupIdReference(uint entityGroupId)
 } /* RModel::addEntityGroupIdReference */
 
 
-void RModel::removeEntityGroupIdReferences(uint entityGroupId)
+void RModel::removeEntityGroupIdReference(uint entityGroupId)
 {
     for (uint i=0;i<this->getNVectorFields();i++)
     {
@@ -7829,6 +8058,46 @@ void RModel::removeEntityGroupIdReferences(uint entityGroupId)
     for (uint i=0;i<this->getNIsos();i++)
     {
         this->getIso(i).removeElementGroupID(entityGroupId,true);
+    }
+}
+
+void RModel::updateEntityGroupIdReferences(const QMap<REntityGroupType, RUVector> oldMap)
+{
+    QMap<REntityGroupType,RUVector> newMap = this->getEntityIDMap();
+
+    QList<uint> addGroupIDs;
+    QList<uint> removeGroupIDs;
+
+    QMap<REntityGroupType,RUVector>::const_iterator iter = newMap.constBegin();
+    while (iter != newMap.constEnd())
+    {
+        uint oldSize = uint(oldMap[iter.key()].size());
+        uint newSize = uint(iter.value().size());
+
+        for (uint i=oldSize;i<newSize;i++)
+        {
+            addGroupIDs.append(iter.value().at(i));
+        }
+
+        for (uint i=newSize;i<oldSize;i++)
+        {
+            removeGroupIDs.append(oldMap[iter.key()].at(i));
+        }
+
+        ++iter;
+    }
+
+    qSort(addGroupIDs);
+    qSort(removeGroupIDs);
+    std::reverse(removeGroupIDs.begin(),removeGroupIDs.end());
+
+    foreach (uint gid, addGroupIDs)
+    {
+        this->addEntityGroupIdReference(gid);
+    }
+    foreach (uint gid, removeGroupIDs)
+    {
+        this->removeEntityGroupIdReference(gid);
     }
 } /* RModel::removeEntityGroupIdReferences */
 

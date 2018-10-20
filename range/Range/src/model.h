@@ -438,6 +438,9 @@ class Model : public RModel
         //! Find intersected edge by pick ray.
         bool findPickedHoleElement(const RR3Vector &position, const RR3Vector &direction, double tolerance, PickItem &pickItem);
 
+        //! Update model.
+        void update(const RModel &rModel);
+
         //! Read model from the file.
         void read (const QString &fileName);
 

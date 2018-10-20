@@ -169,11 +169,6 @@ void RHemiCube::calculateViewFactors(const RModel &model, RViewFactorMatrix &rVi
     #pragma omp parallel for default(shared)
     for (int64_t eyePatchID=0;eyePatchID<int64_t(rPatchBook.getNPatches());eyePatchID++)
     {
-        #pragma omp critical
-        {
-            RProgressPrint(nPatchesProcessed++,rPatchBook.getNPatches());
-        }
-
         RViewFactorRow &rViewFactorRow = rViewFactorMatrix.getRow(eyePatchID);
         rViewFactorRow.getViewFactors().clear();
 
@@ -248,7 +243,11 @@ void RHemiCube::calculateViewFactors(const RModel &model, RViewFactorMatrix &rVi
             vfRowSum += viewFactors.getValue(i);
         }
 
-        RLogger::info("Patch %u: row sum = %g\n",eyePatchID+1,vfRowSum);
+#pragma omp critical
+        {
+            RProgressPrint(++nPatchesProcessed,rPatchBook.getNPatches());
+            RLogger::info("[%9u of %-9u] Patch %9u: row sum = %g\n",nPatchesProcessed,rPatchBook.getNPatches(),eyePatchID+1,vfRowSum);
+        }
     }
     RProgressFinalize("Done");
     RLogger::unindent();

@@ -28,6 +28,7 @@
 #include "rml_line.h"
 #include "rml_material_property.h"
 #include "rml_material.h"
+#include "rml_mesh_setup.h"
 #include "rml_modal_setup.h"
 #include "rml_model_data.h"
 #include "rml_monitoring_point.h"
@@ -804,6 +805,17 @@ class RFileIO
         static void writeAscii(RSaveFile &outFile, const RModalSetup &modalSetup, bool addNewLine = true);
         //! Write RModalSetup.
         static void writeBinary(RSaveFile &outFile, const RModalSetup &modalSetup);
+
+        // RMeshSetup
+
+        //! Read RMeshSetup.
+        static void readAscii(RFile &inFile, RMeshSetup &meshSetup);
+        //! Read RMeshSetup.
+        static void readBinary(RFile &inFile, RMeshSetup &meshSetup);
+        //! Write RMeshSetup.
+        static void writeAscii(RSaveFile &outFile, const RMeshSetup &meshSetup, bool addNewLine = true);
+        //! Write RMeshSetup.
+        static void writeBinary(RSaveFile &outFile, const RMeshSetup &meshSetup);
 
         // RBook
 

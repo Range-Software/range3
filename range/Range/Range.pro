@@ -148,6 +148,7 @@ SOURCES += \
     src/merge_near_nodes_dialog.cpp \
     src/mesh_generator.cpp \
     src/mesh_generator_dialog.cpp \
+    src/mesh_setup_widget.cpp \
     src/modal_setup_widget.cpp \
     src/model.cpp \
     src/model_action.cpp \
@@ -350,6 +351,7 @@ HEADERS += \
     src/merge_near_nodes_dialog.h \
     src/mesh_generator.h \
     src/mesh_generator_dialog.h \
+    src/mesh_setup_widget.h \
     src/modal_setup_widget.h \
     src/model.h \
     src/model_action.h \
