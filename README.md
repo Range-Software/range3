@@ -17,7 +17,7 @@ $ ./scripts/build.sh --clean && ./scripts/create_package.sh --install-to=$HOME/b
 ```
 ## Running the software
 ```
-$ $HOME/bin/range-3.0.2/bin/Range
+$ $HOME/bin/range-3.1.0/bin/Range
 ```
 
 ## Download
