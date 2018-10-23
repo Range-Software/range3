@@ -82,19 +82,19 @@ void RSolverHeat::recover(void)
                           this->pModel->getNElements(),
                           0,
                           this->elementHeat,
-                          RVariable::getInitValue(R_VARIABLE_HEAT));
+                          0.0);
     this->recoverVariable(R_VARIABLE_HEAT_RADIATION,
                           R_VARIABLE_APPLY_ELEMENT,
                           this->pModel->getNElements(),
                           0,
                           this->elementRadiativeHeat,
-                          RVariable::getInitValue(R_VARIABLE_HEAT_RADIATION));
+                          0.0);
     this->recoverVariable(R_VARIABLE_JOULE_HEAT,
                           R_VARIABLE_APPLY_ELEMENT,
                           this->pModel->getNElements(),
                           0,
                           this->elementJouleHeat,
-                          RVariable::getInitValue(R_VARIABLE_JOULE_HEAT));
+                          0.0);
 }
 
 void RSolverHeat::prepare(void)

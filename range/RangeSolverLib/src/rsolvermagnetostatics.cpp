@@ -61,9 +61,9 @@ void RSolverMagnetostatics::recover(void)
     RRVector elementCurrentDensityY(this->pModel->getNElements(),0.0);
     RRVector elementCurrentDensityZ(this->pModel->getNElements(),0.0);
 
-    this->recoverVariable(R_VARIABLE_CURRENT_DENSITY,R_VARIABLE_APPLY_ELEMENT,this->pModel->getNElements(),0,elementCurrentDensityX,RVariable::getInitValue(R_VARIABLE_CURRENT_DENSITY));
-    this->recoverVariable(R_VARIABLE_CURRENT_DENSITY,R_VARIABLE_APPLY_ELEMENT,this->pModel->getNElements(),1,elementCurrentDensityY,RVariable::getInitValue(R_VARIABLE_CURRENT_DENSITY));
-    this->recoverVariable(R_VARIABLE_CURRENT_DENSITY,R_VARIABLE_APPLY_ELEMENT,this->pModel->getNElements(),2,elementCurrentDensityZ,RVariable::getInitValue(R_VARIABLE_CURRENT_DENSITY));
+    this->recoverVariable(R_VARIABLE_CURRENT_DENSITY,R_VARIABLE_APPLY_ELEMENT,this->pModel->getNElements(),0,elementCurrentDensityX,0.0);
+    this->recoverVariable(R_VARIABLE_CURRENT_DENSITY,R_VARIABLE_APPLY_ELEMENT,this->pModel->getNElements(),1,elementCurrentDensityY,0.0);
+    this->recoverVariable(R_VARIABLE_CURRENT_DENSITY,R_VARIABLE_APPLY_ELEMENT,this->pModel->getNElements(),2,elementCurrentDensityZ,0.0);
 
     this->pModel->convertElementToNodeVector(elementCurrentDensityX,RBVector(this->pModel->getNElements(),true),this->nodeCurrentDensity.x,false);
     this->pModel->convertElementToNodeVector(elementCurrentDensityY,RBVector(this->pModel->getNElements(),true),this->nodeCurrentDensity.y,false);

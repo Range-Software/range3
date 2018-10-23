@@ -68,7 +68,7 @@ void RSolverElectrostatics::recover(void)
                           this->pModel->getNNodes(),
                           0,
                           this->nodeElectricPotential,
-                          RVariable::getInitValue(R_VARIABLE_ELECTRIC_POTENTIAL));
+                          0.0);
 //    this->syncShared("node-electric_potential",this->nodeElectricPotential);
 }
 

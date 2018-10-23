@@ -113,19 +113,19 @@ void RSolverAcoustic::recover(void)
                           this->pModel->getNNodes(),
                           0,
                           this->nodeVelocityPotential,
-                          RVariable::getInitValue(R_VARIABLE_POTENTIAL));
+                          0.0);
     this->recoverVariable(R_VARIABLE_POTENTIAL_VELOCITY,
                           R_VARIABLE_APPLY_NODE,
                           this->pModel->getNNodes(),
                           0,
                           this->nodeVelocityPotentialVelocity,
-                          RVariable::getInitValue(R_VARIABLE_POTENTIAL_VELOCITY));
+                          0.0);
     this->recoverVariable(R_VARIABLE_POTENTIAL_ACCELERATION,
                           R_VARIABLE_APPLY_NODE,
                           this->pModel->getNNodes(),
                           0,
                           this->nodeVelocityPotentialAcceleration,
-                          RVariable::getInitValue(R_VARIABLE_POTENTIAL_ACCELERATION));
+                          0.0);
 }
 
 void RSolverAcoustic::prepare(void)

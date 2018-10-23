@@ -4142,6 +4142,8 @@ RRVector RModel::getInterpolatedResultsValues(RVariableType variableType, const 
         return RRVector();
     }
 
+    RRVector volumes;
+
     // Find element containing given position.
     uint elementPos = RConstants::eod;
     for (uint i=0;i<this->getNElements();i++)
@@ -4149,7 +4151,7 @@ RRVector RModel::getInterpolatedResultsValues(RVariableType variableType, const 
         const RElement &rElement = this->getElement(i);
         if (RElementGroup::getGroupType(rElement.getType()) & entityGroup)
         {
-            if (rElement.isInside(this->getNodes(),rNode))
+            if (rElement.isInside(this->getNodes(),rNode,volumes))
             {
                 elementPos = i;
                 break;
@@ -4180,13 +4182,13 @@ RRVector RModel::getInterpolatedResultsValues(RVariableType variableType, const 
             {
                 nodeValues[j] = rVariable.getValue(i,rElement.getNodeId(j));
             }
-            resultsValues[i] = rElement.interpolate(this->getNodes(),rNode,nodeValues);
+            resultsValues[i] = rElement.interpolate(this->getNodes(),rNode,nodeValues,volumes);
         }
         return resultsValues;
     }
 
     return RRVector();
-} /* RModel::getInterpolatedNodeResultsValues */
+} /* RModel::getInterpolatedResultsValues */
 
 
 /*************************************************************

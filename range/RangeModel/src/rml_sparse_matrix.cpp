@@ -55,6 +55,14 @@ unsigned int RSparseMatrix::getNColumns(unsigned int rowIndex) const
     return (unsigned int)this->data[rowIndex].size();
 }
 
+void RSparseMatrix::reserveNColumns(unsigned int nColumns)
+{
+    for (uint i=0;i<this->data.size();i++)
+    {
+        this->data[i].reserve(nColumns);
+    }
+}
+
 double RSparseMatrix::getValue(unsigned int rowIndex, unsigned int columnPosition) const
 {
     return this->data[rowIndex].getValue(columnPosition);

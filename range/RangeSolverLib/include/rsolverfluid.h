@@ -71,7 +71,6 @@ class RSolverFluid : public RSolverGeneric
         //! Stop-watches
         RStopWatch recoveryStopWatch;
         RStopWatch buildStopWatch;
-        RStopWatch assemblyStopWatch;
         RStopWatch solverStopWatch;
         RStopWatch updateStopWatch;
 
