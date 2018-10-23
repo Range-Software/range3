@@ -5,6 +5,10 @@ Version 3.1.0
   - Enables to automatically refine mesh based on computed results
 * Small GUI improvements
 
+Bug fixes:
+
+* Incorrect input array initialization resulting in additional heat
+
 ------------------------------------------------------------------
 Version 3.0.4
 

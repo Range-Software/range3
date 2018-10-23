@@ -178,23 +178,23 @@ void RSolverFluidHeat::recover(void)
                           this->pModel->getNElements(),
                           0,
                           this->elementHeat,
-                          RVariable::getInitValue(R_VARIABLE_HEAT));
+                          0.0);
     this->recoverVariable(R_VARIABLE_HEAT_RADIATION,
                           R_VARIABLE_APPLY_ELEMENT,
                           this->pModel->getNElements(),
                           0,
                           this->elementRadiativeHeat,
-                          RVariable::getInitValue(R_VARIABLE_HEAT_RADIATION));
+                          0.0);
     this->recoverVariable(R_VARIABLE_JOULE_HEAT,
                           R_VARIABLE_APPLY_ELEMENT,
                           this->pModel->getNElements(),
                           0,
                           this->elementJouleHeat,
-                          RVariable::getInitValue(R_VARIABLE_JOULE_HEAT));
+                          0.0);
 
-    this->recoverVariable(R_VARIABLE_VELOCITY,R_VARIABLE_APPLY_NODE,this->pModel->getNNodes(),0,this->nodeVelocity.x,RVariable::getInitValue(R_VARIABLE_VELOCITY));
-    this->recoverVariable(R_VARIABLE_VELOCITY,R_VARIABLE_APPLY_NODE,this->pModel->getNNodes(),1,this->nodeVelocity.y,RVariable::getInitValue(R_VARIABLE_VELOCITY));
-    this->recoverVariable(R_VARIABLE_VELOCITY,R_VARIABLE_APPLY_NODE,this->pModel->getNNodes(),2,this->nodeVelocity.z,RVariable::getInitValue(R_VARIABLE_VELOCITY));
+    this->recoverVariable(R_VARIABLE_VELOCITY,R_VARIABLE_APPLY_NODE,this->pModel->getNNodes(),0,this->nodeVelocity.x,0.0);
+    this->recoverVariable(R_VARIABLE_VELOCITY,R_VARIABLE_APPLY_NODE,this->pModel->getNNodes(),1,this->nodeVelocity.y,0.0);
+    this->recoverVariable(R_VARIABLE_VELOCITY,R_VARIABLE_APPLY_NODE,this->pModel->getNNodes(),2,this->nodeVelocity.z,0.0);
     this->recoveryStopWatch.pause();
 }
 

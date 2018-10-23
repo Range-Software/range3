@@ -53,6 +53,9 @@ class RSparseMatrix
         //! Return number of columns for given row index.
         unsigned int getNColumns(unsigned int rowIndex) const;
 
+        //! Set number of rows.
+        void reserveNColumns(unsigned int nColumns);
+
         //! Return value at given row index and column position.
         double getValue(unsigned int rowIndex, unsigned int columnPosition) const;
 

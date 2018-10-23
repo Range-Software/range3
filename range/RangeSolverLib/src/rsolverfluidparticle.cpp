@@ -137,16 +137,16 @@ void RSolverFluidParticle::recover(void)
                           this->pModel->getNNodes(),
                           0,
                           this->nodeConcentration,
-                          RVariable::getInitValue(R_VARIABLE_PARTICLE_CONCENTRATION));
+                          0.0);
     this->recoverVariable(R_VARIABLE_PARTICLE_RATE,
                           R_VARIABLE_APPLY_ELEMENT,
                           this->pModel->getNNodes(),
                           0,
                           this->elementRate,
-                          RVariable::getInitValue(R_VARIABLE_PARTICLE_RATE));
-    this->recoverVariable(R_VARIABLE_VELOCITY,R_VARIABLE_APPLY_NODE,this->pModel->getNNodes(),0,this->nodeVelocity.x,RVariable::getInitValue(R_VARIABLE_VELOCITY));
-    this->recoverVariable(R_VARIABLE_VELOCITY,R_VARIABLE_APPLY_NODE,this->pModel->getNNodes(),1,this->nodeVelocity.y,RVariable::getInitValue(R_VARIABLE_VELOCITY));
-    this->recoverVariable(R_VARIABLE_VELOCITY,R_VARIABLE_APPLY_NODE,this->pModel->getNNodes(),2,this->nodeVelocity.z,RVariable::getInitValue(R_VARIABLE_VELOCITY));
+                          0.0);
+    this->recoverVariable(R_VARIABLE_VELOCITY,R_VARIABLE_APPLY_NODE,this->pModel->getNNodes(),0,this->nodeVelocity.x,0.0);
+    this->recoverVariable(R_VARIABLE_VELOCITY,R_VARIABLE_APPLY_NODE,this->pModel->getNNodes(),1,this->nodeVelocity.y,0.0);
+    this->recoverVariable(R_VARIABLE_VELOCITY,R_VARIABLE_APPLY_NODE,this->pModel->getNNodes(),2,this->nodeVelocity.z,0.0);
     this->recoveryStopWatch.pause();
 }
 

@@ -200,13 +200,25 @@ class RElement
 
         //! Check if given node is inside the element.
         bool isInside( const std::vector <RNode> &nodes,
-                       const RNode &node ) const;
+                       const RNode &node) const;
+
+        //! Check if given node is inside the element.
+        bool isInside( const std::vector <RNode> &nodes,
+                       const RNode &node,
+                       RRVector &volumes) const;
 
         //! Return interpolated value.
         //! Node values is a vector which size is equal to number of nodes in element.
         double interpolate( const std::vector <RNode> &nodes,
                             const RNode &interpolatedNode,
                             const RRVector &nodeValues ) const;
+
+        //! Return interpolated value.
+        //! Node values is a vector which size is equal to number of nodes in element.
+        double interpolate( const std::vector <RNode> &nodes,
+                            const RNode &interpolatedNode,
+                            const RRVector &nodeValues,
+                            const RRVector &volumes ) const;
 
         //! Find rotation matrix which provides rotation from local to global coordinates.
         //! Return local (rotated) element coordinates.

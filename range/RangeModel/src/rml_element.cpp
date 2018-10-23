@@ -962,10 +962,18 @@ RInterpolatedElement RElement::createInterpolatedElement(double value, const std
 
 bool RElement::isInside(const std::vector<RNode> &nodes, const RNode &node) const
 {
+    RRVector volumes;
+    return this->isInside(nodes,node,volumes);
+} /* RElement::isInside */
+
+
+bool RElement::isInside(const std::vector<RNode> &nodes, const RNode &node, RRVector &volumes) const
+{
     switch (this->getType())
     {
         case R_ELEMENT_POINT:
         {
+            volumes.resize(0);
             return (std::abs(nodes[this->getNodeId(0)].getDistance(node)) < RConstants::eps);
         }
         case R_ELEMENT_TRUSS1:
@@ -976,9 +984,10 @@ bool RElement::isInside(const std::vector<RNode> &nodes, const RNode &node) cons
             }
             const RNode &n1 = nodes[this->getNodeId(0)];
             const RNode &n2 = nodes[this->getNodeId(1)];
-            double b1 = n1.getDistance(node);
-            double b2 = n2.getDistance(node);
-            double bt = b1 + b2;
+            volumes.resize(2);
+            volumes[0] = n1.getDistance(node);
+            volumes[1] = n2.getDistance(node);
+            double bt = volumes[0] + volumes[1];
 
             return (std::abs(n1.getDistance(n2) - bt) < RConstants::eps);
         }
@@ -992,10 +1001,11 @@ bool RElement::isInside(const std::vector<RNode> &nodes, const RNode &node) cons
             const RNode &n2 = nodes[this->getNodeId(1)];
             const RNode &n3 = nodes[this->getNodeId(2)];
 
-            double b1 = RTriangle::findArea(node,n1,n2);
-            double b2 = RTriangle::findArea(node,n2,n3);
-            double b3 = RTriangle::findArea(node,n3,n1);
-            double bt = b1 + b2 + b3;
+            volumes.resize(3);
+            volumes[0] = RTriangle::findArea(node,n2,n3);
+            volumes[1] = RTriangle::findArea(node,n3,n1);
+            volumes[2] = RTriangle::findArea(node,n1,n2);
+            double bt = volumes[0] + volumes[1] + volumes[2];
 
             double area = 0.0;
 
@@ -1024,26 +1034,31 @@ bool RElement::isInside(const std::vector<RNode> &nodes, const RNode &node) cons
             const RNode &n3 = nodes[this->getNodeId(2)];
             const RNode &n4 = nodes[this->getNodeId(3)];
 
-            double b1 = RTetrahedron::findVolume(node,n2,n3,n4);
+            double b1 = RTetrahedron::findVolume(node,n2,n4,n3);
             if (!R_SIGNS_EQUAL(b1,volume) && b1 != 0.0)
             {
                 return false;
             }
-            double b2 = RTetrahedron::findVolume(n1,node,n3,n4);
+            double b2 = RTetrahedron::findVolume(node,n1,n3,n4);
             if (!R_SIGNS_EQUAL(b2,volume) && b2 != 0.0)
             {
                 return false;
             }
-            double b3 = RTetrahedron::findVolume(n1,n2,node,n4);
+            double b3 = RTetrahedron::findVolume(node,n1,n4,n2);
             if (!R_SIGNS_EQUAL(b3,volume) && b3 != 0.0)
             {
                 return false;
             }
-            double b4 = RTetrahedron::findVolume(n1,n2,n3,node);
+            double b4 = RTetrahedron::findVolume(node,n1,n2,n3);
             if (!R_SIGNS_EQUAL(b4,volume) && b4 != 0.0)
             {
                 return false;
             }
+            volumes.resize(4);
+            volumes[0] = b1;
+            volumes[1] = b2;
+            volumes[2] = b3;
+            volumes[3] = b4;
             double bt = b1 + b2 + b3 + b4;
 
             return (std::abs(volume - bt) < RConstants::eps);
@@ -1058,9 +1073,17 @@ bool RElement::isInside(const std::vector<RNode> &nodes, const RNode &node) cons
 } /* RElement::isInside */
 
 
+double RElement::interpolate(const std::vector<RNode> &nodes, const RNode &interpolatedNode, const RRVector &nodeValues) const
+{
+    RRVector volumes;
+    return this->interpolate(nodes,interpolatedNode,nodeValues,volumes);
+} /* RElement::interpolate */
+
+
 double RElement::interpolate(const std::vector<RNode> &nodes,
                              const RNode &interpolatedNode,
-                             const RRVector &nodeValues) const
+                             const RRVector &nodeValues,
+                             const RRVector &volumes) const
 {
     RRVector ratios;
 
@@ -1076,8 +1099,8 @@ double RElement::interpolate(const std::vector<RNode> &nodes,
             ratios.resize(2,1.0);
             const RNode &n1 = nodes[this->getNodeId(0)];
             const RNode &n2 = nodes[this->getNodeId(1)];
-            double b1 = n1.getDistance(interpolatedNode);
-            double b2 = n2.getDistance(interpolatedNode);
+            double b1 = volumes.size() == 2 ? volumes[0] : n1.getDistance(interpolatedNode);
+            double b2 = volumes.size() == 2 ? volumes[1] : n2.getDistance(interpolatedNode);
             double bt = b1 + b2;
             if (bt != 0.0)
             {
@@ -1093,9 +1116,13 @@ double RElement::interpolate(const std::vector<RNode> &nodes,
             const RNode &n2 = nodes[this->getNodeId(1)];
             const RNode &n3 = nodes[this->getNodeId(2)];
 
-            double b1 = RTriangle::findArea(interpolatedNode,n2,n3);
-            double b2 = RTriangle::findArea(interpolatedNode,n3,n1);
-            double b3 = RTriangle::findArea(interpolatedNode,n1,n2);
+//            double b1 = RTriangle::findArea(interpolatedNode,n2,n3);
+//            double b2 = RTriangle::findArea(interpolatedNode,n3,n1);
+//            double b3 = RTriangle::findArea(interpolatedNode,n1,n2);
+
+            double b1 = volumes.size() == 3 ? volumes[0] : RTriangle::findArea(interpolatedNode,n2,n3);
+            double b2 = volumes.size() == 3 ? volumes[1] : RTriangle::findArea(interpolatedNode,n3,n1);
+            double b3 = volumes.size() == 3 ? volumes[2] : RTriangle::findArea(interpolatedNode,n1,n2);
             double bt = b1 + b2 + b3;
             if (bt != 0.0)
             {
@@ -1113,10 +1140,10 @@ double RElement::interpolate(const std::vector<RNode> &nodes,
             const RNode &n3 = nodes[this->getNodeId(2)];
             const RNode &n4 = nodes[this->getNodeId(3)];
 
-            double b1 = RTetrahedron::findVolume(interpolatedNode,n2,n4,n3);
-            double b2 = RTetrahedron::findVolume(interpolatedNode,n1,n3,n4);
-            double b3 = RTetrahedron::findVolume(interpolatedNode,n1,n4,n2);
-            double b4 = RTetrahedron::findVolume(interpolatedNode,n1,n2,n3);
+            double b1 = volumes.size() == 4 ? volumes[0] : RTetrahedron::findVolume(interpolatedNode,n2,n4,n3);
+            double b2 = volumes.size() == 4 ? volumes[1] : RTetrahedron::findVolume(interpolatedNode,n1,n3,n4);
+            double b3 = volumes.size() == 4 ? volumes[2] : RTetrahedron::findVolume(interpolatedNode,n1,n4,n2);
+            double b4 = volumes.size() == 4 ? volumes[3] : RTetrahedron::findVolume(interpolatedNode,n1,n2,n3);
             double bt = b1 + b2 + b3 + b4;
             if (bt != 0.0)
             {

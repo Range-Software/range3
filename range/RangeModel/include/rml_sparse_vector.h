@@ -161,6 +161,12 @@ class RSparseVector
             return values;
         }
 
+        //! Reserve vector size.
+        void reserve(unsigned int nElements)
+        {
+            this->data.reserve(nElements);
+        }
+
         //! Clear vector.
         void clear(void)
         {

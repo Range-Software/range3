@@ -292,13 +292,13 @@ void RSolverFluid::recover(void)
     this->recoveryStopWatch.reset();
     this->recoveryStopWatch.resume();
 
-    this->recoverVariable(R_VARIABLE_VELOCITY,R_VARIABLE_APPLY_NODE,this->pModel->getNNodes(),0,this->nodeVelocity.x,RVariable::getInitValue(R_VARIABLE_VELOCITY));
-    this->recoverVariable(R_VARIABLE_VELOCITY,R_VARIABLE_APPLY_NODE,this->pModel->getNNodes(),1,this->nodeVelocity.y,RVariable::getInitValue(R_VARIABLE_VELOCITY));
-    this->recoverVariable(R_VARIABLE_VELOCITY,R_VARIABLE_APPLY_NODE,this->pModel->getNNodes(),2,this->nodeVelocity.z,RVariable::getInitValue(R_VARIABLE_VELOCITY));
+    this->recoverVariable(R_VARIABLE_VELOCITY,R_VARIABLE_APPLY_NODE,this->pModel->getNNodes(),0,this->nodeVelocity.x,0.0);
+    this->recoverVariable(R_VARIABLE_VELOCITY,R_VARIABLE_APPLY_NODE,this->pModel->getNNodes(),1,this->nodeVelocity.y,0.0);
+    this->recoverVariable(R_VARIABLE_VELOCITY,R_VARIABLE_APPLY_NODE,this->pModel->getNNodes(),2,this->nodeVelocity.z,0.0);
 //    this->recoverVariable(R_VARIABLE_ACCELERATION,R_VARIABLE_APPLY_NODE,this->pModel->getNNodes(),0,this->nodeAcceleration.x);
 //    this->recoverVariable(R_VARIABLE_ACCELERATION,R_VARIABLE_APPLY_NODE,this->pModel->getNNodes(),1,this->nodeAcceleration.y);
 //    this->recoverVariable(R_VARIABLE_ACCELERATION,R_VARIABLE_APPLY_NODE,this->pModel->getNNodes(),2,this->nodeAcceleration.z);
-    this->recoverVariable(R_VARIABLE_PRESSURE,R_VARIABLE_APPLY_NODE,this->pModel->getNNodes(),0,this->nodePressure,RVariable::getInitValue(R_VARIABLE_PRESSURE));
+    this->recoverVariable(R_VARIABLE_PRESSURE,R_VARIABLE_APPLY_NODE,this->pModel->getNNodes(),0,this->nodePressure,0.0);
 
     this->recoveryStopWatch.pause();
 }
@@ -309,7 +309,6 @@ void RSolverFluid::prepare(void)
     RLogger::indent();
 
     this->buildStopWatch.reset();
-    this->assemblyStopWatch.reset();
 
     if (this->taskIteration == 0 || this->meshChanged)
     {
@@ -346,6 +345,7 @@ void RSolverFluid::prepare(void)
 
     this->A.clear();
     this->A.setNRows(this->nodeBook.getNEnabled());
+    this->A.reserveNColumns(100);
     this->b.fill(0.0);
     this->x.fill(0.0);
 
@@ -436,13 +436,8 @@ void RSolverFluid::prepare(void)
                 }
                 this->computeElement(elementID,Ae,be,matrixManager);
             }
-            #pragma omp critical
-            {
-                this->assemblyStopWatch.resume();
-                this->applyLocalRotations(elementID,Ae);
-                this->assemblyMatrix(elementID,Ae,be);
-                this->assemblyStopWatch.pause();
-            }
+            this->applyLocalRotations(elementID,Ae);
+            this->assemblyMatrix(elementID,Ae,be);
         }
         catch (const RError &rError)
         {
@@ -712,7 +707,6 @@ void RSolverFluid::statistics(void)
     RLogger::info("Convergence:   %-13g\n",residual);
 
     RLogger::info("Build time:        %9u [ms]\n",this->buildStopWatch.getMiliSeconds());
-    RLogger::info(" -> Assembly time: %9u [ms]\n",this->assemblyStopWatch.getMiliSeconds());
     RLogger::info("Solver time:       %9u [ms]\n",this->solverStopWatch.getMiliSeconds());
     RLogger::info("Update time:       %9u [ms]\n",this->updateStopWatch.getMiliSeconds());
 
@@ -2385,17 +2379,20 @@ void RSolverFluid::assemblyMatrix(uint elementID, const RRMatrix &Ae, const RRVe
 
             if (this->nodeBook.getValue(dims*rElement.getNodeId(m)+i,mp))
             {
+#pragma omp atomic
                 this->b[mp] += fe[dims*m+i];
-
-                for (uint n=0;n<rElement.size();n++)
+#pragma omp critical
                 {
-                    for (uint j=0;j<dims;j++)
+                    for (uint n=0;n<rElement.size();n++)
                     {
-                        uint np = 0;
-
-                        if (this->nodeBook.getValue(dims*rElement.getNodeId(n)+j,np))
+                        for (uint j=0;j<dims;j++)
                         {
-                            this->A.addValue(mp,np,Ae[dims*m+i][dims*n+j]);
+                            uint np = 0;
+
+                            if (this->nodeBook.getValue(dims*rElement.getNodeId(n)+j,np))
+                            {
+                                this->A.addValue(mp,np,Ae[dims*m+i][dims*n+j]);
+                            }
                         }
                     }
                 }
@@ -2512,10 +2509,8 @@ double RSolverFluid::computeStreamVelocity(const RModel &rModel, const RSolverCa
             {
                 vm_local += std::sqrt(std::pow(nodeVelocity.x[i],2) + std::pow(nodeVelocity.y[i],2) + std::pow(nodeVelocity.z[i],2));
             }
-#pragma omp critical
-            {
-                vm += vm_local;
-            }
+#pragma omp atomic
+            vm += vm_local;
         }
         if (rModel.getNNodes())
         {
