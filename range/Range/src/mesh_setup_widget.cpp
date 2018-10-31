@@ -90,8 +90,8 @@ void MeshSetupWidget::onVariableListItemChanged(QListWidgetItem *item)
     }
     else
     {
-        QSet<RVariableType>::const_iterator iter = this->meshSetup.getVariables().find(variableType);
-        if (iter != this->meshSetup.getVariables().constEnd())
+        QSet<RVariableType>::iterator iter = this->meshSetup.getVariables().find(variableType);
+        if (iter != this->meshSetup.getVariables().end())
         {
             this->meshSetup.getVariables().erase(iter);
         }
