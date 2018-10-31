@@ -50,8 +50,14 @@ class ApplicationSettings : public QObject
 
     public:
 
+        //! Windows-dark style constant.
+        static const QString WindowsDark;
+
         //! Fusion-dark style constant.
         static const QString FusionDark;
+
+        //! Fusion-range style constant.
+        static const QString FusionRange;
 
         //! Fusion style constant.
         static const QString Fusion;

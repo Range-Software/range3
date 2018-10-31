@@ -56,31 +56,82 @@ Application::Application(int &argc, char **argv) :
 
 void Application::applyStyle(const QString &styleName)
 {
-    if (styleName == ApplicationSettings::FusionDark)
+    if (styleName == ApplicationSettings::FusionRange)
     {
-        QPalette palette;
-    //    palette.setColor(QPalette::Window, QColor(53,53,53));
-        palette.setColor(QPalette::Window, QColor(83,83,83));
-        palette.setColor(QPalette::WindowText, Qt::white);
-        palette.setColor(QPalette::Base, QColor(15,15,15));
-        palette.setColor(QPalette::AlternateBase, QColor(53,53,53));
-        palette.setColor(QPalette::ToolTipBase, Qt::white);
-        palette.setColor(QPalette::ToolTipText, Qt::black);
-        palette.setColor(QPalette::Text, Qt::white);
-        palette.setColor(QPalette::Button, QColor(53,53,53));
-        palette.setColor(QPalette::ButtonText, Qt::white);
-        palette.setColor(QPalette::BrightText, Qt::red);
-        palette.setColor(QPalette::Link, Qt::lightGray);
+        QApplication::setStyle(QStyleFactory::create("Fusion"));
 
-        palette.setColor(QPalette::Highlight, Qt::lightGray);
-        palette.setColor(QPalette::HighlightedText, Qt::black);
+        QPalette palette;
+
+        palette.setColor(QPalette::Highlight, QColor(150,0,0));
+
+        QApplication::setPalette(palette);
+    }
+    else if (styleName == ApplicationSettings::FusionDark)
+    {
+        QApplication::setStyle(QStyleFactory::create("Fusion"));
+
+        QPalette palette;
+        palette.setColor(QPalette::Window, QColor(61,67,69));
+        palette.setColor(QPalette::WindowText, QColor(238,251,247));
+        palette.setColor(QPalette::Base, QColor(35,39,41));
+        palette.setColor(QPalette::AlternateBase, QColor(50,56,59));
+        palette.setColor(QPalette::ToolTipBase, Qt::black);
+        palette.setColor(QPalette::ToolTipText, QColor(238,251,247));
+        palette.setColor(QPalette::Text, QColor(238,251,247));
+        palette.setColor(QPalette::Button, QColor(35,39,41));
+        palette.setColor(QPalette::ButtonText, QColor(238,251,247));
+        palette.setColor(QPalette::BrightText, Qt::white);
+
+        palette.setColor(QPalette::Light, QColor(73,73,73));
+        palette.setColor(QPalette::Midlight, QColor(63,63,63));
+        palette.setColor(QPalette::Dark, QColor(33,33,33));
+        palette.setColor(QPalette::Mid, QColor(43,43,43));
+        palette.setColor(QPalette::Shadow, QColor(0,0,0));
+
+        palette.setColor(QPalette::Highlight, Qt::black);
+        palette.setColor(QPalette::HighlightedText, QColor(238,251,247));
+
+
+        palette.setColor(QPalette::Link, Qt::lightGray);
+        palette.setColor(QPalette::LinkVisited, Qt::gray);
 
         palette.setColor(QPalette::Disabled, QPalette::Text, Qt::darkGray);
         palette.setColor(QPalette::Disabled, QPalette::ButtonText, Qt::darkGray);
 
         QApplication::setPalette(palette);
+    }
+    else if (styleName == ApplicationSettings::WindowsDark)
+    {
+        QApplication::setStyle(QStyleFactory::create("Windows"));
 
-        QApplication::setStyle(QStyleFactory::create("Fusion"));
+        QPalette palette;
+        palette.setColor(QPalette::Window, QColor(51,57,59));
+        palette.setColor(QPalette::WindowText, QColor(238,251,247));
+        palette.setColor(QPalette::Base, QColor(35,39,41));
+        palette.setColor(QPalette::AlternateBase, QColor(50,56,59));
+        palette.setColor(QPalette::ToolTipBase, Qt::black);
+        palette.setColor(QPalette::ToolTipText, QColor(238,251,247));
+        palette.setColor(QPalette::Text, QColor(238,251,247));
+        palette.setColor(QPalette::Button, QColor(35,39,41));
+        palette.setColor(QPalette::ButtonText, QColor(238,251,247));
+        palette.setColor(QPalette::BrightText, Qt::white);
+
+        palette.setColor(QPalette::Light, QColor(73,73,73));
+        palette.setColor(QPalette::Midlight, QColor(63,63,63));
+        palette.setColor(QPalette::Dark, QColor(33,33,33));
+        palette.setColor(QPalette::Mid, QColor(43,43,43));
+        palette.setColor(QPalette::Shadow, QColor(0,0,0));
+
+        palette.setColor(QPalette::Highlight, Qt::black);
+        palette.setColor(QPalette::HighlightedText, QColor(238,251,247));
+
+        palette.setColor(QPalette::Link, Qt::lightGray);
+        palette.setColor(QPalette::LinkVisited, Qt::gray);
+
+        palette.setColor(QPalette::Disabled, QPalette::Text, Qt::darkGray);
+        palette.setColor(QPalette::Disabled, QPalette::ButtonText, Qt::darkGray);
+
+        QApplication::setPalette(palette);
     }
     else
     {
