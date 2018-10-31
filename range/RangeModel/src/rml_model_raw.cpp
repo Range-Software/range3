@@ -410,9 +410,7 @@ void RModelRaw::read(const QString &fileName,
     RNode node1;
     RNode node2;
     RNode node3;
-    double x1, y1, z1;
-    double x2, y2, z2;
-    double x3, y3, z3;
+    RNode node4;
 
     RProgressInitialize("Reading RAW file", true);
 
@@ -432,17 +430,45 @@ void RModelRaw::read(const QString &fileName,
 
     while (!in.atEnd())
     {
-        in >> x1 >> y1 >> z1 >> x2 >> y2 >> z2 >> x3 >> y3 >> z3;
+        QString line = in.readLine();
+
+        QRegExp rx("[,; ]");// match a comma or semicolon or a space
+        QStringList list = line.split(rx, QString::SkipEmptyParts);
+
+        if (list.size() == 3)
+        {
+            node1.set(list.at(0).toDouble(),list.at(1).toDouble(),list.at(2).toDouble());
+            this->addPoint(node1,true,tolerance);
+        }
+        else if (list.size() == 6)
+        {
+            node1.set(list.at(0).toDouble(),list.at(1).toDouble(),list.at(2).toDouble());
+            node2.set(list.at(3).toDouble(),list.at(4).toDouble(),list.at(5).toDouble());
+            this->addSegment(node1,node2,true,tolerance);
+        }
+        else if (list.size() == 9)
+        {
+            node1.set(list.at(0).toDouble(),list.at(1).toDouble(),list.at(2).toDouble());
+            node2.set(list.at(3).toDouble(),list.at(4).toDouble(),list.at(5).toDouble());
+            node3.set(list.at(6).toDouble(),list.at(7).toDouble(),list.at(8).toDouble());
+            this->addTriangle(node1,node2,node3,true,tolerance);
+        }
+        else if (list.size() == 12)
+        {
+            node1.set(list.at(0).toDouble(),list.at(1).toDouble(),list.at(2).toDouble());
+            node2.set(list.at(3).toDouble(),list.at(4).toDouble(),list.at(5).toDouble());
+            node3.set(list.at(6).toDouble(),list.at(7).toDouble(),list.at(8).toDouble());
+            node4.set(list.at(9).toDouble(),list.at(10).toDouble(),list.at(11).toDouble());
+            this->addQuadrilateral(node1,node2,node3,node4,true,tolerance);
+        }
+        else
+        {
+            RLogger::warning("Unknown RAW element (# of coordinates = %d).\n",list.size());
+        }
+
         if (in.status() != QTextStream::Ok && !in.atEnd())
         {
             throw RError(R_ERROR_READ_FILE,R_ERROR_REF,"Failed to read the file \'%s\'.",fileName.toUtf8().constData());
-        }
-        if (in.status() == QTextStream::Ok)
-        {
-            node1.set(x1,y1,z1);
-            node2.set(x2,y2,z2);
-            node3.set(x3,y3,z3);
-            this->addTriangle(node1,node2,node3,true,tolerance);
         }
     }
 
@@ -471,25 +497,27 @@ void RModelRaw::write(const QString &fileName) const
 
     for (unsigned int i=0;i<this->getNElements();i++)
     {
-        if (this->getElement(i).getType() != R_ELEMENT_TRI1)
+        if (this->getElement(i).getType() == R_ELEMENT_POINT ||
+            this->getElement(i).getType() == R_ELEMENT_TRUSS1 ||
+            this->getElement(i).getType() == R_ELEMENT_TRI1 ||
+            this->getElement(i).getType() == R_ELEMENT_QUAD1)
         {
-            continue;
-        }
-        for (unsigned int j=0;j<this->getElement(i).size();j++)
-        {
-            int nId = this->getElement(i).getNodeId(j);
-            out << this->getNode(nId).getX() << " "
-                << this->getNode(nId).getY() << " "
-                << this->getNode(nId).getZ() << " ";
+            for (unsigned int j=0;j<this->getElement(i).size();j++)
+            {
+                int nId = this->getElement(i).getNodeId(j);
+                out << this->getNode(nId).getX() << " "
+                    << this->getNode(nId).getY() << " "
+                    << this->getNode(nId).getZ() << " ";
+                if (out.status() != QTextStream::Ok)
+                {
+                    throw RError(R_ERROR_WRITE_FILE,R_ERROR_REF,"Failed to write to file \'%s\'.",fileName.toUtf8().constData());
+                }
+            }
+            out << "\n";
             if (out.status() != QTextStream::Ok)
             {
                 throw RError(R_ERROR_WRITE_FILE,R_ERROR_REF,"Failed to write to file \'%s\'.",fileName.toUtf8().constData());
             }
-        }
-        out << "\n";
-        if (out.status() != QTextStream::Ok)
-        {
-            throw RError(R_ERROR_WRITE_FILE,R_ERROR_REF,"Failed to write to file \'%s\'.",fileName.toUtf8().constData());
         }
     }
 

@@ -756,25 +756,35 @@ void RModel::exportTo (RModelRaw &modelRaw) const
     for (uint i=0;i<this->getNElements();i++)
     {
         const RElement &rElement = this->getElement(i);
-        if (rElement.getType() == R_ELEMENT_TRI1 ||
-            rElement.getType() == R_ELEMENT_TRI2)
+        if (rElement.getType() == R_ELEMENT_POINT)
+        {
+            modelRaw.addPoint(this->getNode(rElement.getNodeId(0)),false);
+        }
+        else if (rElement.getType() == R_ELEMENT_BEAM1 ||
+                 rElement.getType() == R_ELEMENT_BEAM2 ||
+                 rElement.getType() == R_ELEMENT_TRUSS1 ||
+                 rElement.getType() == R_ELEMENT_TRUSS2)
+        {
+            modelRaw.addSegment(this->getNode(rElement.getNodeId(0)),
+                                this->getNode(rElement.getNodeId(1)),
+                                false);
+        }
+        else if (rElement.getType() == R_ELEMENT_TRI1 ||
+                 rElement.getType() == R_ELEMENT_TRI2)
         {
             modelRaw.addTriangle(this->getNode(rElement.getNodeId(0)),
                                  this->getNode(rElement.getNodeId(1)),
                                  this->getNode(rElement.getNodeId(2)),
                                  false);
         }
-        if (rElement.getType() == R_ELEMENT_QUAD1 ||
-            rElement.getType() == R_ELEMENT_QUAD2)
+        else if (rElement.getType() == R_ELEMENT_QUAD1 ||
+                 rElement.getType() == R_ELEMENT_QUAD2)
         {
-            modelRaw.addTriangle(this->getNode(rElement.getNodeId(0)),
-                                 this->getNode(rElement.getNodeId(1)),
-                                 this->getNode(rElement.getNodeId(2)),
-                                 false);
-            modelRaw.addTriangle(this->getNode(rElement.getNodeId(0)),
-                                 this->getNode(rElement.getNodeId(2)),
-                                 this->getNode(rElement.getNodeId(3)),
-                                 false);
+            modelRaw.addQuadrilateral(this->getNode(rElement.getNodeId(0)),
+                                      this->getNode(rElement.getNodeId(1)),
+                                      this->getNode(rElement.getNodeId(2)),
+                                      this->getNode(rElement.getNodeId(3)),
+                                      false);
         }
     }
 } /* RModel::exportTo */
