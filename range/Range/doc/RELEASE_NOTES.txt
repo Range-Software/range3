@@ -1,4 +1,13 @@
 ------------------------------------------------------------------
+Version 3.1.1
+
+* Enhanced RAW model
+ - Supports Point, Line, Triangle and Quadrilateral elements
+* Added new GUI styles
+ - Fusion-Range
+ - Windows-Dark
+
+------------------------------------------------------------------
 Version 3.1.0
 
 * Added mesh reconstruction solver

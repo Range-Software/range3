@@ -17,7 +17,9 @@
 #include "application_settings.h"
 #include "main_settings.h"
 
-const QString ApplicationSettings::FusionDark = "Fusion-dark";
+const QString ApplicationSettings::WindowsDark = "Windows-Dark";
+const QString ApplicationSettings::FusionDark = "Fusion-Dark";
+const QString ApplicationSettings::FusionRange = "Fusion-Range";
 const QString ApplicationSettings::Fusion = "Fusion";
 
 ApplicationSettings::ApplicationSettings(QObject *parent)
@@ -178,6 +180,8 @@ QStringList ApplicationSettings::getStyles(void)
 {
     QStringList styles = QStyleFactory::keys();
     styles.append(ApplicationSettings::FusionDark);
+    styles.append(ApplicationSettings::FusionRange);
+    styles.append(ApplicationSettings::WindowsDark);
     styles.sort();
     return styles;
 }
@@ -211,11 +215,11 @@ uint ApplicationSettings::getDefaultNHistoryRecords(void)
 QString ApplicationSettings::getDefaultStyle(void)
 {
     QStringList styles = QStyleFactory::keys();
-    if (styles.contains(ApplicationSettings::Fusion))
+    if (styles.contains(ApplicationSettings::FusionRange))
     {
-        return ApplicationSettings::Fusion;
+        return ApplicationSettings::FusionRange;
     }
-    return ApplicationSettings::FusionDark;
+    return ApplicationSettings::Fusion;
 }
 
 bool ApplicationSettings::getDefaultSendUsageInfo(void)
@@ -247,17 +251,23 @@ QColor ApplicationSettings::getDefaultBackgroundColor(const QString &style)
 {
     if (style == ApplicationSettings::Fusion)
     {
-        return QColor("#224466");
-//        return QColor::fromCmykF(0.39, 0.39, 0.0, 0.0).dark();
+        return QColor(34,68,102);
+    }
+    else if (style == ApplicationSettings::FusionRange)
+    {
+        return QColor(48,0,0);
     }
     else if (style == ApplicationSettings::FusionDark)
     {
-        return QColor("#353535");
+        return QColor(53,53,53);
+    }
+    else if (style == ApplicationSettings::WindowsDark)
+    {
+        return QColor(53,53,53);
     }
     else
     {
-        return QColor("#224466");
-//        return QColor::fromCmykF(0.39, 0.39, 0.0, 0.0).dark();
+        return QColor(34,68,102);
     }
 }
 
