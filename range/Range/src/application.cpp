@@ -58,19 +58,19 @@ void Application::applyStyle(const QString &styleName)
 {
     if (styleName == ApplicationSettings::FusionRange)
     {
-        QApplication::setStyle(QStyleFactory::create("Fusion"));
-
-        QPalette palette;
+        QStyle *style = QStyleFactory::create("Fusion");
+        QPalette palette(style->standardPalette());
 
         palette.setColor(QPalette::Highlight, QColor(150,0,0));
 
         QApplication::setPalette(palette);
+        QApplication::setStyle(style);
     }
     else if (styleName == ApplicationSettings::FusionDark)
     {
-        QApplication::setStyle(QStyleFactory::create("Fusion"));
+        QStyle *style = QStyleFactory::create("Fusion");
+        QPalette palette(style->standardPalette());
 
-        QPalette palette;
         palette.setColor(QPalette::Window, QColor(61,67,69));
         palette.setColor(QPalette::WindowText, QColor(238,251,247));
         palette.setColor(QPalette::Base, QColor(35,39,41));
@@ -99,12 +99,13 @@ void Application::applyStyle(const QString &styleName)
         palette.setColor(QPalette::Disabled, QPalette::ButtonText, Qt::darkGray);
 
         QApplication::setPalette(palette);
+        QApplication::setStyle(style);
     }
     else if (styleName == ApplicationSettings::WindowsDark)
     {
-        QApplication::setStyle(QStyleFactory::create("Windows"));
+        QStyle *style = QStyleFactory::create("Windows");
+        QPalette palette(style->standardPalette());
 
-        QPalette palette;
         palette.setColor(QPalette::Window, QColor(51,57,59));
         palette.setColor(QPalette::WindowText, QColor(238,251,247));
         palette.setColor(QPalette::Base, QColor(35,39,41));
@@ -132,6 +133,7 @@ void Application::applyStyle(const QString &styleName)
         palette.setColor(QPalette::Disabled, QPalette::ButtonText, Qt::darkGray);
 
         QApplication::setPalette(palette);
+        QApplication::setStyle(style);
     }
     else
     {
