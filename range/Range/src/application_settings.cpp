@@ -214,12 +214,7 @@ uint ApplicationSettings::getDefaultNHistoryRecords(void)
 
 QString ApplicationSettings::getDefaultStyle(void)
 {
-    QStringList styles = QStyleFactory::keys();
-    if (styles.contains(ApplicationSettings::FusionRange))
-    {
-        return ApplicationSettings::FusionRange;
-    }
-    return ApplicationSettings::Fusion;
+    return ApplicationSettings::FusionRange;
 }
 
 bool ApplicationSettings::getDefaultSendUsageInfo(void)
