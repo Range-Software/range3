@@ -428,42 +428,83 @@ void RModelRaw::read(const QString &fileName,
 
     QTextStream in(&file);
 
+    uint lineNumber = 0;
+
     while (!in.atEnd())
     {
         QString line = in.readLine();
+        lineNumber++;
 
-        QRegExp rx("[,; ]");// match a comma or semicolon or a space
-        QStringList list = line.split(rx, QString::SkipEmptyParts);
+        int hashPos = line.indexOf('#');
+        if (hashPos >= 0)
+        {
+            line.remove(hashPos,line.size());
+        }
 
-        if (list.size() == 3)
+        if (!line.isEmpty())
         {
-            node1.set(list.at(0).toDouble(),list.at(1).toDouble(),list.at(2).toDouble());
-            this->addPoint(node1,true,tolerance);
-        }
-        else if (list.size() == 6)
-        {
-            node1.set(list.at(0).toDouble(),list.at(1).toDouble(),list.at(2).toDouble());
-            node2.set(list.at(3).toDouble(),list.at(4).toDouble(),list.at(5).toDouble());
-            this->addSegment(node1,node2,true,tolerance);
-        }
-        else if (list.size() == 9)
-        {
-            node1.set(list.at(0).toDouble(),list.at(1).toDouble(),list.at(2).toDouble());
-            node2.set(list.at(3).toDouble(),list.at(4).toDouble(),list.at(5).toDouble());
-            node3.set(list.at(6).toDouble(),list.at(7).toDouble(),list.at(8).toDouble());
-            this->addTriangle(node1,node2,node3,true,tolerance);
-        }
-        else if (list.size() == 12)
-        {
-            node1.set(list.at(0).toDouble(),list.at(1).toDouble(),list.at(2).toDouble());
-            node2.set(list.at(3).toDouble(),list.at(4).toDouble(),list.at(5).toDouble());
-            node3.set(list.at(6).toDouble(),list.at(7).toDouble(),list.at(8).toDouble());
-            node4.set(list.at(9).toDouble(),list.at(10).toDouble(),list.at(11).toDouble());
-            this->addQuadrilateral(node1,node2,node3,node4,true,tolerance);
-        }
-        else
-        {
-            RLogger::warning("Unknown RAW element (# of coordinates = %d).\n",list.size());
+            QRegExp rx("[,; ]");// match a comma or semicolon or a space
+            QStringList list = line.split(rx, QString::SkipEmptyParts);
+
+            RRVector coordinates(list.size(),0.0);
+
+            QString invalidRecordMessage;
+
+            if (list.size() % 3 != 0)
+            {
+                invalidRecordMessage = "Invalid number of coordinates = " + QString::number(list.size());
+            }
+            else
+            {
+                for (int i=0;i<list.size();i++)
+                {
+                    bool isDouble = true;
+                    coordinates[i] = list[i].toDouble(&isDouble);
+                    if (!isDouble)
+                    {
+                        invalidRecordMessage = "Record can contain only numbers";
+                        break;
+                    }
+                }
+            }
+
+            if (invalidRecordMessage.isEmpty())
+            {
+                if (coordinates.size() == 3)
+                {
+                    node1.set(coordinates[0],coordinates[1],coordinates[2]);
+                    this->addPoint(node1,true,tolerance);
+                }
+                else if (coordinates.size() == 6)
+                {
+                    node1.set(coordinates[0],coordinates[1],coordinates[2]);
+                    node2.set(coordinates[3],coordinates[4],coordinates[5]);
+                    this->addSegment(node1,node2,true,tolerance);
+                }
+                else if (coordinates.size() == 9)
+                {
+                    node1.set(coordinates[0],coordinates[1],coordinates[2]);
+                    node2.set(coordinates[3],coordinates[4],coordinates[5]);
+                    node3.set(coordinates[6],coordinates[7],coordinates[8]);
+                    this->addTriangle(node1,node2,node3,true,tolerance);
+                }
+                else if (coordinates.size() == 12)
+                {
+                    node1.set(coordinates[0],coordinates[1],coordinates[2]);
+                    node2.set(coordinates[3],coordinates[4],coordinates[5]);
+                    node3.set(coordinates[6],coordinates[7],coordinates[8]);
+                    node4.set(coordinates[9],coordinates[10],coordinates[11]);
+                    this->addQuadrilateral(node1,node2,node3,node4,true,tolerance);
+                }
+                else
+                {
+                    invalidRecordMessage = "Invalid number of nodes = " + QString::number(coordinates.size() / 3);
+                }
+            }
+            if (!invalidRecordMessage.isEmpty())
+            {
+                RLogger::warning("Invalid RAW element record @ line %u (%s). %s.\n", lineNumber, line.toUtf8().constData(), invalidRecordMessage.toUtf8().constData());
+            }
         }
 
         if (in.status() != QTextStream::Ok && !in.atEnd())
