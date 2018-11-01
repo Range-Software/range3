@@ -138,7 +138,9 @@ void Application::applyStyle(const QString &styleName)
     else
     {
         QStyle *style = QStyleFactory::create(styleName);
-        QApplication::setPalette(style->standardPalette());
+        QPalette palette(style->standardPalette());
+
+        QApplication::setPalette(palette);
         QApplication::setStyle(style);
     }
 }
