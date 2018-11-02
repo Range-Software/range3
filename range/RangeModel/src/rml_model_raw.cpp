@@ -407,11 +407,6 @@ void RModelRaw::clear (void)
 void RModelRaw::read(const QString &fileName,
                      double         tolerance)
 {
-    RNode node1;
-    RNode node2;
-    RNode node3;
-    RNode node4;
-
     RProgressInitialize("Reading RAW file", true);
 
     if (fileName.isEmpty())
@@ -428,11 +423,81 @@ void RModelRaw::read(const QString &fileName,
 
     QTextStream in(&file);
 
+    try
+    {
+        this->readTextStream(in,tolerance);
+    }
+    catch (const RError &rError)
+    {
+        throw RError(R_ERROR_READ_FILE,R_ERROR_REF,"Failed to read the file \'%s\'. %s",fileName.toUtf8().constData(),rError.getMessage().toUtf8().constData());
+    }
+
+    file.close ();
+
+    RProgressFinalize("Done");
+} /* RModelRaw::read */
+
+void RModelRaw::write(const QString &fileName) const
+{
+    RProgressInitialize("Writing RAW file", true);
+
+    if (fileName.isEmpty())
+    {
+        throw RError(R_ERROR_INVALID_FILE_NAME,R_ERROR_REF,"No file name was provided.");
+    }
+
+    QFile file(fileName);
+
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
+    {
+        throw RError(R_ERROR_OPEN_FILE,R_ERROR_REF,"Failed to open the file \'%s\'.",fileName.toUtf8().constData());
+    }
+
+    QTextStream out(&file);
+
+    for (unsigned int i=0;i<this->getNElements();i++)
+    {
+        if (this->getElement(i).getType() == R_ELEMENT_POINT ||
+            this->getElement(i).getType() == R_ELEMENT_TRUSS1 ||
+            this->getElement(i).getType() == R_ELEMENT_TRI1 ||
+            this->getElement(i).getType() == R_ELEMENT_QUAD1)
+        {
+            for (unsigned int j=0;j<this->getElement(i).size();j++)
+            {
+                int nId = this->getElement(i).getNodeId(j);
+                out << this->getNode(nId).getX() << " "
+                    << this->getNode(nId).getY() << " "
+                    << this->getNode(nId).getZ() << " ";
+                if (out.status() != QTextStream::Ok)
+                {
+                    throw RError(R_ERROR_WRITE_FILE,R_ERROR_REF,"Failed to write to file \'%s\'.",fileName.toUtf8().constData());
+                }
+            }
+            out << "\n";
+            if (out.status() != QTextStream::Ok)
+            {
+                throw RError(R_ERROR_WRITE_FILE,R_ERROR_REF,"Failed to write to file \'%s\'.",fileName.toUtf8().constData());
+            }
+        }
+    }
+
+    file.close ();
+
+    RProgressFinalize("Done");
+} /* RModelRaw::write */
+
+void RModelRaw::readTextStream(QTextStream &textSTream, double tolerance)
+{
+    RNode node1;
+    RNode node2;
+    RNode node3;
+    RNode node4;
+
     uint lineNumber = 0;
 
-    while (!in.atEnd())
+    while (!textSTream.atEnd())
     {
-        QString line = in.readLine();
+        QString line = textSTream.readLine();
         lineNumber++;
 
         int hashPos = line.indexOf('#');
@@ -507,65 +572,12 @@ void RModelRaw::read(const QString &fileName,
             }
         }
 
-        if (in.status() != QTextStream::Ok && !in.atEnd())
+        if (textSTream.status() != QTextStream::Ok && !textSTream.atEnd())
         {
-            throw RError(R_ERROR_READ_FILE,R_ERROR_REF,"Failed to read the file \'%s\'.",fileName.toUtf8().constData());
+            throw RError(R_ERROR_INVALID_INPUT,R_ERROR_REF,"Failed to read the text stream.");
         }
     }
-
-    file.close ();
-
-    RProgressFinalize("Done");
-} /* RModelRaw::read */
-
-void RModelRaw::write(const QString &fileName) const
-{
-    RProgressInitialize("Writing RAW file", true);
-
-    if (fileName.isEmpty())
-    {
-        throw RError(R_ERROR_INVALID_FILE_NAME,R_ERROR_REF,"No file name was provided.");
-    }
-
-    QFile file(fileName);
-
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
-    {
-        throw RError(R_ERROR_OPEN_FILE,R_ERROR_REF,"Failed to open the file \'%s\'.",fileName.toUtf8().constData());
-    }
-
-    QTextStream out(&file);
-
-    for (unsigned int i=0;i<this->getNElements();i++)
-    {
-        if (this->getElement(i).getType() == R_ELEMENT_POINT ||
-            this->getElement(i).getType() == R_ELEMENT_TRUSS1 ||
-            this->getElement(i).getType() == R_ELEMENT_TRI1 ||
-            this->getElement(i).getType() == R_ELEMENT_QUAD1)
-        {
-            for (unsigned int j=0;j<this->getElement(i).size();j++)
-            {
-                int nId = this->getElement(i).getNodeId(j);
-                out << this->getNode(nId).getX() << " "
-                    << this->getNode(nId).getY() << " "
-                    << this->getNode(nId).getZ() << " ";
-                if (out.status() != QTextStream::Ok)
-                {
-                    throw RError(R_ERROR_WRITE_FILE,R_ERROR_REF,"Failed to write to file \'%s\'.",fileName.toUtf8().constData());
-                }
-            }
-            out << "\n";
-            if (out.status() != QTextStream::Ok)
-            {
-                throw RError(R_ERROR_WRITE_FILE,R_ERROR_REF,"Failed to write to file \'%s\'.",fileName.toUtf8().constData());
-            }
-        }
-    }
-
-    file.close ();
-
-    RProgressFinalize("Done");
-} /* RModelRaw::write */
+} /* RModelRaw::readTextStream */
 
 bool RModelRaw::getNormal(unsigned int elementID, double &nx, double &ny, double &nz) const
 {

@@ -137,6 +137,7 @@ void ActionDefinition::generateActionDescList(QList<ActionDefinitionItem> &actio
     actionDesc.push_back(ActionDefinitionItem(ACTION_GEOMETRY_DRAW_HEXAHEDRON, ACTION_GROUP_GEOMETRY, "Draw hexahedron", "", "", "", &Action::onGeometryDrawHexahedron));
     actionDesc.push_back(ActionDefinitionItem(ACTION_GEOMETRY_DRAW_CYLINDER, ACTION_GROUP_GEOMETRY, "Draw cylinder", "", "", "", &Action::onGeometryDrawCylinder));
     actionDesc.push_back(ActionDefinitionItem(ACTION_GEOMETRY_DRAW_SPHERE, ACTION_GROUP_GEOMETRY, "Draw sphere", "", "", "", &Action::onGeometryDrawSphere));
+    actionDesc.push_back(ActionDefinitionItem(ACTION_GEOMETRY_DRAW_RAW, ACTION_GROUP_GEOMETRY, "Draw RAW object", "", "", "", &Action::onGeometryDrawRaw));
     actionDesc.push_back(ActionDefinitionItem(ACTION_GEOMETRY_CREATE_ELEMENT, ACTION_GROUP_GEOMETRY, "Create element", "", "Ctrl+Alt+E", "", &Action::onGeometryCreateElement));
     actionDesc.push_back(ActionDefinitionItem(ACTION_GEOMETRY_FIND_SLIVER_ELEMENTS, ACTION_GROUP_GEOMETRY, "Find sliver elements", "", "", "", &Action::onGeometryFindSliverElements));
     actionDesc.push_back(ActionDefinitionItem(ACTION_GEOMETRY_FIX_SLIVER_ELEMENTS, ACTION_GROUP_GEOMETRY, "Fix sliver elements", "", "", "", &Action::onGeometryFixSliverElements));

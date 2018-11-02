@@ -18,7 +18,7 @@ DrawEngine::DrawEngine(QObject *parent) :
 {
 }
 
-void DrawEngine::start(void)
+void DrawEngine::start()
 {
     if (this->isRunning)
     {
@@ -26,7 +26,7 @@ void DrawEngine::start(void)
     }
 }
 
-void DrawEngine::stop(void)
+void DrawEngine::stop()
 {
     if (!this->isRunning)
     {
@@ -65,7 +65,7 @@ void DrawEngine::removeObject(uint position)
     emit this->objectRemoved(position);
 }
 
-uint DrawEngine::getNObjects(void) const
+uint DrawEngine::getNObjects() const
 {
     return uint(this->objects.size());
 }

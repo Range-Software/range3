@@ -11,6 +11,8 @@
 #ifndef __RML_MODEL_RAW_H__
 #define __RML_MODEL_RAW_H__
 
+#include <QTextStream>
+
 #include <string>
 #include <vector>
 
@@ -115,6 +117,9 @@ class RModelRaw
 
         //! Write surface mesh to file.
         void write ( const QString &fileName ) const;
+
+        //! Read from text stream.
+        void readTextStream(QTextStream &textSTream, double tolerance);
 
     protected:
 

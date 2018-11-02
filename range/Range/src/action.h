@@ -37,291 +37,294 @@ class Action : public QAction
     protected slots:
 
         //! Set action enabled.
-        void enable(void);
+        void enable();
 
         //! Set action disabled.
-        void disable(void);
+        void disable();
 
     public slots:
 
         //! New session.
-        void onSessionNew(void);
+        void onSessionNew();
 
         //! Open session.
-        void onSessionOpen(void);
+        void onSessionOpen();
 
         //! Save session.
-        void onSessionSave(void);
+        void onSessionSave();
 
         //! Save session as.
-        void onSessionSaveAs(void);
+        void onSessionSaveAs();
 
         //! Close session.
-        void onSessionClose(void);
+        void onSessionClose();
 
         //! New model.
-        void onModelNew(void);
+        void onModelNew();
 
         //! Open model.
-        void onModelOpen(void);
+        void onModelOpen();
 
         //! Save model.
-        void onModelSave(void);
+        void onModelSave();
 
         //! Save model as.
-        void onModelSaveAs(void);
+        void onModelSaveAs();
 
         //! Export MSH model.
-        void onModelExportMsh(void);
+        void onModelExportMsh();
 
         //! Export RAW model.
-        void onModelExportRaw(void);
+        void onModelExportRaw();
 
         //! Export STL model (ascii).
-        void onModelExportStlAscii(void);
+        void onModelExportStlAscii();
 
         //! Export STL model (binary).
-        void onModelExportStlBinary(void);
+        void onModelExportStlBinary();
 
         //! Close model.
-        void onModelClose(void);
+        void onModelClose();
 
         //! Reload results.
-        void onModelReloadResults(void);
+        void onModelReloadResults();
 
         //! Rename model.
-        void onModelRename(void);
+        void onModelRename();
 
         //! Drop results.
-        void onModelDropResults(void);
+        void onModelDropResults();
 
         //! New material.
-        void onMaterialNew(void);
+        void onMaterialNew();
 
         //! Import material.
-        void onMaterialImport(void);
+        void onMaterialImport();
 
         //! Delete material.
-        void onMaterialDelete(void);
+        void onMaterialDelete();
 
         //! Geometry undo.
-        void onGeometryUndo(void);
+        void onGeometryUndo();
 
         //! Geometry redo.
-        void onGeometryRedo(void);
+        void onGeometryRedo();
 
         //! Drav point.
-        void onGeometryDrawPoint(void);
+        void onGeometryDrawPoint();
 
         //! Drav line.
-        void onGeometryDrawLine(void);
+        void onGeometryDrawLine();
 
         //! Drav triangle.
-        void onGeometryDrawTriangle(void);
+        void onGeometryDrawTriangle();
 
         //! Drav quadrilateral.
-        void onGeometryDrawQuadrilateral(void);
+        void onGeometryDrawQuadrilateral();
 
         //! Drav circle.
-        void onGeometryDrawCircle(void);
+        void onGeometryDrawCircle();
 
         //! Drav ellipse.
-        void onGeometryDrawEllipse(void);
+        void onGeometryDrawEllipse();
 
         //! Drav tetrahedron.
-        void onGeometryDrawTetrahedron(void);
+        void onGeometryDrawTetrahedron();
 
         //! Drav hexahedron.
-        void onGeometryDrawHexahedron(void);
+        void onGeometryDrawHexahedron();
 
         //! Drav cylinder.
-        void onGeometryDrawCylinder(void);
+        void onGeometryDrawCylinder();
 
         //! Drav sphere.
-        void onGeometryDrawSphere(void);
+        void onGeometryDrawSphere();
+
+        //! Drav RAW object.
+        void onGeometryDrawRaw();
 
         //! Create element.
-        void onGeometryCreateElement(void);
+        void onGeometryCreateElement();
 
         //! Find sliver elements.
-        void onGeometryFindSliverElements(void);
+        void onGeometryFindSliverElements();
 
         //! Fix sliver elements.
-        void onGeometryFixSliverElements(void);
+        void onGeometryFixSliverElements();
 
         //! Find intersected elements.
-        void onGeometryFindIntersectedElements(void);
+        void onGeometryFindIntersectedElements();
 
         //! Break intersected elements.
-        void onGeometryBreakIntersectedElements(void);
+        void onGeometryBreakIntersectedElements();
 
         //! Create union.
-        void onGeometryBoolUnion(void);
+        void onGeometryBoolUnion();
 
         //! Create difference.
-        void onGeometryBoolDifference(void);
+        void onGeometryBoolDifference();
 
         //! Create intersection.
-        void onGeometryBoolIntersection(void);
+        void onGeometryBoolIntersection();
 
         //! Merge near nodes.
-        void onGeometryMergeNearNodes(void);
+        void onGeometryMergeNearNodes();
 
         //! Move node.
-        void onGeometryMoveNode(void);
+        void onGeometryMoveNode();
 
         //! Remove node.
-        void onGeometryRemoveNode(void);
+        void onGeometryRemoveNode();
 
         //! Remove node and close hole.
-        void onGeometryRemoveNodeAndCloseHole(void);
+        void onGeometryRemoveNodeAndCloseHole();
 
         //! Remove element.
-        void onGeometryRemoveElement(void);
+        void onGeometryRemoveElement();
 
         //! Generate line from edges.
-        void onGeometryLineGenerateFromEdges(void);
+        void onGeometryLineGenerateFromEdges();
 
         //! Mark surfaces.
-        void onGeometrySurfaceMark(void);
+        void onGeometrySurfaceMark();
 
         //! Swap surface element normal.
-        void onGeometrySurfaceSwapElementNormal(void);
+        void onGeometrySurfaceSwapElementNormal();
 
         //! Swap surface normals.
-        void onGeometrySurfaceSwapNormals(void);
+        void onGeometrySurfaceSwapNormals();
 
         //! Synchronize surface normals.
-        void onGeometrySurfaceSyncNormals(void);
+        void onGeometrySurfaceSyncNormals();
 
         //! Close hole in surface.
-        void onGeometrySurfaceCloseHole(void);
+        void onGeometrySurfaceCloseHole();
 
         //! Coarsen surface elements.
-        void onGeometrySurfaceCoarsen(void);
+        void onGeometrySurfaceCoarsen();
 
         //! Create vector field.
-        void onGeometryVectorFieldCreate(void);
+        void onGeometryVectorFieldCreate();
 
         //! Edit vector field.
-        void onGeometryVectorFieldEdit(void);
+        void onGeometryVectorFieldEdit();
 
         //! Create scalar field.
-        void onGeometryScalarFieldCreate(void);
+        void onGeometryScalarFieldCreate();
 
         //! Edit scalar field.
-        void onGeometryScalarFieldEdit(void);
+        void onGeometryScalarFieldEdit();
 
         //! Create stream line.
-        void onGeometryStreamLineCreate(void);
+        void onGeometryStreamLineCreate();
 
         //! Edit stream line.
-        void onGeometryStreamLineEdit(void);
+        void onGeometryStreamLineEdit();
 
         //! Create cut.
-        void onGeometryCutCreate(void);
+        void onGeometryCutCreate();
 
         //! Edit cut.
-        void onGeometryCutEdit(void);
+        void onGeometryCutEdit();
 
         //! Create iso.
-        void onGeometryIsoCreate(void);
+        void onGeometryIsoCreate();
 
         //! Edit iso.
-        void onGeometryIsoEdit(void);
+        void onGeometryIsoEdit();
 
         //! Merge entities.
-        void onGeometryEntityMerge(void);
+        void onGeometryEntityMerge();
 
         //! Remove entity.
-        void onGeometryEntityRemove(void);
+        void onGeometryEntityRemove();
 
         //! Generate mesh.
-        void onGeometryGenerateTetrahedra (void);
+        void onGeometryGenerateTetrahedra ();
 
         //! Transform geometry.
-        void onGeometryTransform(void);
+        void onGeometryTransform();
 
         //! Export sliver elements.
-        void onGeometryDevExportSliverElements(void);
+        void onGeometryDevExportSliverElements();
 
         //! Export intersected elements.
-        void onGeometryDevExportIntersectedElements(void);
+        void onGeometryDevExportIntersectedElements();
 
         //! Purge unused nodes.
-        void onGeometryDevPurgeUnusedNodes(void);
+        void onGeometryDevPurgeUnusedNodes();
 
         //! Purge unused elements.
-        void onGeometryDevPurgeUnusedElements(void);
+        void onGeometryDevPurgeUnusedElements();
 
         //! Check if point is inside/behind surface.
-        void onGeometryDevPointInsideSurface(void);
+        void onGeometryDevPointInsideSurface();
 
         //! Tetrahedralize surface.
-        void onGeometryDevTetrahedralizeeSurface(void);
+        void onGeometryDevTetrahedralizeeSurface();
 
         //! Consolidate.
-        void onGeometryDevConsolidate(void);
+        void onGeometryDevConsolidate();
 
         //! Problem(s) task flow.
-        void onProblemTaskFlow(void);
+        void onProblemTaskFlow();
 
         //! Setup problem matrix solver solver.
-        void onProblemSolverSetup(void);
+        void onProblemSolverSetup();
 
         //! Define monitoring points.
-        void onProblemDefineMonitoringPoints(void);
+        void onProblemDefineMonitoringPoints();
 
         //! Reset problem.
-        void onProblemReset(void);
+        void onProblemReset();
 
         //! Start solver.
-        void onSolverStart(void);
+        void onSolverStart();
 
         //! Stop solver.
-        void onSolverStop(void);
+        void onSolverStop();
 
         //! Kill solver.
-        void onSolverKill(void);
+        void onSolverKill();
 
         //! Produce model statistics.
-        void onReportModelStatistics(void);
+        void onReportModelStatistics();
 
         //! Show solver log file.
-        void onReportSolverLog(void);
+        void onReportSolverLog();
 
         //! Convergence graph.
-        void onReportConvergenceGraph(void);
+        void onReportConvergenceGraph();
 
         //! Monitoring point graph.
-        void onReportMonitoringPointGraph(void);
+        void onReportMonitoringPointGraph();
 
         //! Create report.
-        void onReportCreateReport(void);
+        void onReportCreateReport();
 
         //! Help center.
-        void onHelp(void);
+        void onHelp();
 
         //! Quit program.
-        void onQuit(void);
+        void onQuit();
 
         //! Application settings.
-        void onApplicationSettings(void);
+        void onApplicationSettings();
 
         //! Check for update.
-        void onUpdate(void);
+        void onUpdate();
 
         //! About.
-        void onAbout(void);
+        void onAbout();
 
         //! About Qt.
-        void onAboutQt(void);
+        void onAboutQt();
 
         //! License.
-        void onLicense(void);
+        void onLicense();
 
         //! Release notes.
-        void onReleaseNotes(void);
+        void onReleaseNotes();
 
 };
 

@@ -293,6 +293,7 @@ void MainWindow::createMenus(void)
     menuGeometryDraw->addAction(this->actionList->getAction(ACTION_GEOMETRY_DRAW_HEXAHEDRON));
     menuGeometryDraw->addAction(this->actionList->getAction(ACTION_GEOMETRY_DRAW_CYLINDER));
     menuGeometryDraw->addAction(this->actionList->getAction(ACTION_GEOMETRY_DRAW_SPHERE));
+    menuGeometryDraw->addAction(this->actionList->getAction(ACTION_GEOMETRY_DRAW_RAW));
     menuGeometry->addAction(menuGeometryDraw->menuAction());
     QMenu *menuGeometryPoint = new QMenu(menuGeometry);
     menuGeometryPoint->setTitle(QApplication::translate("MainWindow", "Point"));

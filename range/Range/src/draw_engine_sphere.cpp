@@ -111,7 +111,7 @@ RModelRaw DrawEngineSphere::generate(const RR3Vector &center, double radius, uin
     return modelRaw;
 }
 
-RModelRaw DrawEngineSphere::generate(void) const
+RModelRaw DrawEngineSphere::generate() const
 {
     RR3Vector c = this->inputParameters.at(0).toVector();
     double r = this->inputParameters.at(1).toDouble();

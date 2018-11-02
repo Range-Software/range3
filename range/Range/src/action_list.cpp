@@ -106,6 +106,7 @@ void ActionList::processAvailability(void)
         this->getAction(ACTION_GEOMETRY_DRAW_HEXAHEDRON)->setEnabled(true);
         this->getAction(ACTION_GEOMETRY_DRAW_CYLINDER)->setEnabled(true);
         this->getAction(ACTION_GEOMETRY_DRAW_SPHERE)->setEnabled(true);
+        this->getAction(ACTION_GEOMETRY_DRAW_RAW)->setEnabled(true);
         this->getAction(ACTION_GEOMETRY_CREATE_ELEMENT)->setEnabled(true);
         this->getAction(ACTION_GEOMETRY_FIND_SLIVER_ELEMENTS)->setEnabled(true);
         this->getAction(ACTION_GEOMETRY_FIX_SLIVER_ELEMENTS)->setEnabled(true);
@@ -217,6 +218,7 @@ void ActionList::setDisabled(bool allActions)
     this->getAction(ACTION_GEOMETRY_DRAW_HEXAHEDRON)->setEnabled(enabled);
     this->getAction(ACTION_GEOMETRY_DRAW_CYLINDER)->setEnabled(enabled);
     this->getAction(ACTION_GEOMETRY_DRAW_SPHERE)->setEnabled(enabled);
+    this->getAction(ACTION_GEOMETRY_DRAW_RAW)->setEnabled(enabled);
     this->getAction(ACTION_GEOMETRY_CREATE_ELEMENT)->setEnabled(enabled);
     this->getAction(ACTION_GEOMETRY_FIND_SLIVER_ELEMENTS)->setEnabled(enabled);
     this->getAction(ACTION_GEOMETRY_FIX_SLIVER_ELEMENTS)->setEnabled(enabled);

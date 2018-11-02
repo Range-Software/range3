@@ -83,6 +83,16 @@ DrawEngineInput::DrawEngineInput(const RR3Vector &v, const QString &name, const 
     this->_init();
 }
 
+DrawEngineInput::DrawEngineInput(const QString &text, const QString &name, const QString &desc, const QString &units)
+    : type(DrawEngineInput::Text)
+    , name(name)
+    , desc(desc)
+    , units(units)
+{
+    this->value.text = text;
+    this->_init();
+}
+
 DrawEngineInput::DrawEngineInput(const DrawEngineInput &drawEngineInput)
 {
     this->_init(&drawEngineInput);
@@ -151,6 +161,17 @@ bool DrawEngineInput::setValue(const RR3Vector &v)
     return true;
 }
 
+bool DrawEngineInput::setValue(const QString &text)
+{
+    if (!this->isValid(text))
+    {
+        return false;
+    }
+    this->type = DrawEngineInput::Text;
+    this->value.text = text;
+    return true;
+}
+
 bool DrawEngineInput::toBool(bool *isOk) const
 {
     if (isOk)
@@ -216,22 +237,35 @@ RR3Vector DrawEngineInput::toVector(bool *isOk) const
     return RR3Vector();
 }
 
-DrawEngineInput::Type DrawEngineInput::getType(void) const
+QString DrawEngineInput::toText(bool *isOk) const
+{
+    if (isOk)
+    {
+        (*isOk) = this->type == DrawEngineInput::Text;
+    }
+    if (this->type == DrawEngineInput::Text)
+    {
+        return this->value.text;
+    }
+    return QString();
+}
+
+DrawEngineInput::Type DrawEngineInput::getType() const
 {
     return this->type;
 }
 
-const QString &DrawEngineInput::getName(void) const
+const QString &DrawEngineInput::getName() const
 {
     return this->name;
 }
 
-const QString &DrawEngineInput::getDescription(void) const
+const QString &DrawEngineInput::getDescription() const
 {
     return this->desc;
 }
 
-const QString &DrawEngineInput::getUnits(void) const
+const QString &DrawEngineInput::getUnits() const
 {
     return this->units;
 }
@@ -279,4 +313,13 @@ bool DrawEngineInput::isValid(const RR3Vector &value) const
         return false;
     }
     return (value.size() == 3);
+}
+
+bool DrawEngineInput::isValid(const QString &value) const
+{
+    if (this->type != DrawEngineInput::Text)
+    {
+        return false;
+    }
+    return !value.isEmpty();
 }
