@@ -14,9 +14,11 @@
 #include <QPushButton>
 #include <QCheckBox>
 #include <QStackedLayout>
+#include <QTextEdit>
 
 #include "draw_input_tree.h"
 #include "position_widget.h"
+#include "text_edit_widget.h"
 
 class DrawInputWidget : public QWidget
 {
@@ -29,6 +31,8 @@ class DrawInputWidget : public QWidget
         QStackedLayout *stackedLayout;
         //! Position widget.
         PositionWidget *positionWidget;
+        //! Position widget.
+        TextEditWidget *textWidget;
         //! Layout widget.
         QWidget *layoutWidget;
         //! Draw input tree.
@@ -54,7 +58,16 @@ class DrawInputWidget : public QWidget
         void onPositionWidgetChanged(const RR3Vector &position);
 
         //! Position widget has closed.
-        void onPositionWidgetClosed(void);
+        void onPositionWidgetClosed();
+
+        //! Catch text request signal.
+        void onTextRequest(const QString &text);
+
+        //! text widget has changed.
+        void onTextWidgetChanged(const QString &text);
+
+        //! text widget has closed.
+        void onTextWidgetClosed();
 
         //! Catch tree selection changed signal.
         void onSelectionChanged(const QList<uint> &objectIDs);
@@ -63,10 +76,10 @@ class DrawInputWidget : public QWidget
         void onInputParameterChanged(uint objectID, uint);
 
         //! Remove button was clicked.
-        void onRemoveClicked(void);
+        void onRemoveClicked();
 
         //! OK button was clicked.
-        void onOkClicked(void);
+        void onOkClicked();
 
 };
 

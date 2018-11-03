@@ -3,6 +3,7 @@ Version 3.1.1
 
 * Enhanced RAW model
  - Supports Point, Line, Triangle and Quadrilateral elements
+* Draw object from RAW model input
 * Added new GUI styles
  - Fusion-Range
  - Windows-Dark

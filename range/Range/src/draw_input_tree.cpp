@@ -78,7 +78,7 @@ DrawInputTree::DrawInputTree(QWidget *parent) :
 //                     &DrawInputTree::onPickListChanged);
 }
 
-QList<uint> DrawInputTree::getSelectedObjectIDs(void) const
+QList<uint> DrawInputTree::getSelectedObjectIDs() const
 {
     QList<QTreeWidgetItem*> selectedItems = this->selectedItems();
     QSet<uint> objectIDs;
@@ -94,16 +94,24 @@ void DrawInputTree::setRequestedItemVectorValue(const RR3Vector &v)
 {
     if (this->requestedItem)
     {
-        this->setItemVectorValue(this->requestedItem,v);
+        DrawInputTree::setItemVectorValue(this->requestedItem,v);
     }
 }
 
-void DrawInputTree::releaseRequestedItem(void)
+void DrawInputTree::setRequestedItemTextValue(const QString &text)
+{
+    if (this->requestedItem)
+    {
+        DrawInputTree::setItemTextValue(this->requestedItem,text);
+    }
+}
+
+void DrawInputTree::releaseRequestedItem()
 {
     this->requestedItem = 0;
 }
 
-void DrawInputTree::populate(void)
+void DrawInputTree::populate()
 {
     this->blockSignals(true);
 
@@ -126,7 +134,7 @@ void DrawInputTree::populate(void)
         {
             QTreeWidgetItem *childItem = new QTreeWidgetItem(item);
             childItem->setText(DRAW_INPUT_TREE_COLUMN_1,object->getInputParamater(j).getName());
-            childItem->setData(DRAW_INPUT_TREE_COLUMN_2,Qt::UserRole,QVariant(object->getInputParamater(j).getType()));
+            childItem->setData(DRAW_INPUT_TREE_COLUMN_1,Qt::UserRole,QVariant(object->getInputParamater(j).getType()));
             childItem->setText(DRAW_INPUT_TREE_COLUMN_3,object->getInputParamater(j).getUnits());
             childItem->setText(DRAW_INPUT_TREE_COLUMN_4,object->getInputParamater(j).getDescription());
 
@@ -143,23 +151,40 @@ void DrawInputTree::populate(void)
             switch (object->getInputParamater(j).getType())
             {
                 case DrawEngineInput::Bool:
+                {
                     childItem->setFlags(childItem->flags() | Qt::ItemIsUserCheckable);
                     childItem->setCheckState(DRAW_INPUT_TREE_COLUMN_2,object->getInputParamater(j).toBool()?Qt::Checked:Qt::Unchecked);
                     break;
+                }
                 case DrawEngineInput::Int:
+                {
                     childItem->setText(DRAW_INPUT_TREE_COLUMN_2,QString::number(object->getInputParamater(j).toInt()));
                     break;
+                }
                 case DrawEngineInput::Uint:
+                {
                     childItem->setText(DRAW_INPUT_TREE_COLUMN_2,QString::number(object->getInputParamater(j).toUint()));
                     break;
+                }
                 case DrawEngineInput::Double:
+                {
                     childItem->setText(DRAW_INPUT_TREE_COLUMN_2,QString::number(object->getInputParamater(j).toDouble()));
                     break;
+                }
                 case DrawEngineInput::Vector:
+                {
                     DrawInputTree::setItemVectorValue(childItem,object->getInputParamater(j).toVector());
                     break;
-                default:
+                }
+                case DrawEngineInput::Text:
+                {
+                    DrawInputTree::setItemTextValue(childItem,object->getInputParamater(j).toText());
                     break;
+                }
+                default:
+                {
+                    break;
+                }
             }
         }
     }
@@ -218,7 +243,25 @@ RR3Vector DrawInputTree::stringToVector(const QString &vectorStr)
     return v;
 }
 
-void DrawInputTree::onDrawObjectAdded(void)
+void DrawInputTree::setItemTextValue(QTreeWidgetItem *item, const QString &text)
+{
+    int nLines = 0;
+    if (!text.isEmpty())
+    {
+        nLines++;
+    }
+    nLines += text.count(QLatin1Char('\n'));
+
+    item->setText(DRAW_INPUT_TREE_COLUMN_2,"content (" + QString::number(nLines) + " lines)");
+    item->setData(DRAW_INPUT_TREE_COLUMN_2,Qt::UserRole,QVariant(text));
+}
+
+QString DrawInputTree::getItemTextValue(QTreeWidgetItem *item)
+{
+    return item->data(DRAW_INPUT_TREE_COLUMN_2,Qt::UserRole).toString();
+}
+
+void DrawInputTree::onDrawObjectAdded()
 {
     this->populate();
 }
@@ -228,7 +271,7 @@ void DrawInputTree::onDrawObjectRemoved(uint position)
     this->takeTopLevelItem(position);
 }
 
-void DrawInputTree::onDrawObjectsRemoved(void)
+void DrawInputTree::onDrawObjectsRemoved()
 {
     this->populate();
 }
@@ -237,10 +280,15 @@ void DrawInputTree::onItemDoubleClicked(QTreeWidgetItem *item, int column)
 {
     if (column == DRAW_INPUT_TREE_COLUMN_2)
     {
-        if (item->data(DRAW_INPUT_TREE_COLUMN_2,Qt::UserRole).toInt() == DrawEngineInput::Vector)
+        if (item->data(DRAW_INPUT_TREE_COLUMN_1,Qt::UserRole).toInt() == DrawEngineInput::Vector)
         {
             this->requestedItem = item;
             emit this->positionRequest(DrawInputTree::getItemVectorValue(item));
+        }
+        else if (item->data(DRAW_INPUT_TREE_COLUMN_1,Qt::UserRole).toInt() == DrawEngineInput::Text)
+        {
+            this->requestedItem = item;
+            emit this->textRequest(DrawInputTree::getItemTextValue(item));
         }
         else
         {
@@ -272,7 +320,7 @@ void DrawInputTree::onItemChanged(QTreeWidgetItem *item, int column)
     bool valueChanged = false;
 
     this->blockSignals(true);
-    switch (item->data(DRAW_INPUT_TREE_COLUMN_2,Qt::UserRole).toInt())
+    switch (item->data(DRAW_INPUT_TREE_COLUMN_1,Qt::UserRole).toInt())
     {
         case DrawEngineInput::Bool:
         {
@@ -282,7 +330,7 @@ void DrawInputTree::onItemChanged(QTreeWidgetItem *item, int column)
         }
         case DrawEngineInput::Int:
         {
-            int value = item->text(DRAW_INPUT_TREE_COLUMN_2).toInt();
+            int value = valueStr.toInt();
             if (!(valueChanged = object->getInputParamater(parameterID).setValue(value)))
             {
                 value = object->getInputParamater(parameterID).toInt();
@@ -292,7 +340,7 @@ void DrawInputTree::onItemChanged(QTreeWidgetItem *item, int column)
         }
         case DrawEngineInput::Uint:
         {
-            uint value = item->text(DRAW_INPUT_TREE_COLUMN_2).toUInt();
+            uint value = valueStr.toUInt();
             if (!(valueChanged = object->getInputParamater(parameterID).setValue(value)))
             {
                 value = object->getInputParamater(parameterID).toUint();
@@ -302,7 +350,7 @@ void DrawInputTree::onItemChanged(QTreeWidgetItem *item, int column)
         }
         case DrawEngineInput::Double:
         {
-            double value = item->text(DRAW_INPUT_TREE_COLUMN_2).toDouble();
+            double value = valueStr.toDouble();
             if (!(valueChanged = object->getInputParamater(parameterID).setValue(value)))
             {
                 value = object->getInputParamater(parameterID).toDouble();
@@ -320,8 +368,20 @@ void DrawInputTree::onItemChanged(QTreeWidgetItem *item, int column)
             DrawInputTree::setItemVectorValue(item,v);
             break;
         }
-        default:
+        case DrawEngineInput::Text:
+        {
+            QString valueStr = item->data(DRAW_INPUT_TREE_COLUMN_2,Qt::UserRole).toString();
+            if (!(valueChanged = object->getInputParamater(parameterID).setValue(valueStr)))
+            {
+                valueStr = object->getInputParamater(parameterID).toText();
+            }
+            DrawInputTree::setItemTextValue(item,valueStr);
             break;
+        }
+        default:
+        {
+            break;
+        }
     }
 
     if (valueChanged)
@@ -335,7 +395,7 @@ void DrawInputTree::onItemChanged(QTreeWidgetItem *item, int column)
     emit this->inputParameterChanged(objectID,parameterID);
 }
 
-void DrawInputTree::onItemSelectionChanged(void)
+void DrawInputTree::onItemSelectionChanged()
 {
     emit this->selectionChanged(this->getSelectedObjectIDs());
 }

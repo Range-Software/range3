@@ -36,6 +36,19 @@ DrawInputWidget::DrawInputWidget(QWidget *parent) :
                      this,
                      &DrawInputWidget::onPositionWidgetClosed);
 
+    this->textWidget = new TextEditWidget;
+    this->textWidget->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Minimum);
+    this->stackedLayout->addWidget(this->textWidget);
+
+    QObject::connect(this->textWidget,
+                     &TextEditWidget::changed,
+                     this,
+                     &DrawInputWidget::onTextWidgetChanged);
+    QObject::connect(this->textWidget,
+                     &TextEditWidget::closed,
+                     this,
+                     &DrawInputWidget::onPositionWidgetClosed);
+
     this->layoutWidget = new QWidget;
     this->stackedLayout->addWidget(this->layoutWidget);
     this->stackedLayout->setCurrentWidget(this->layoutWidget);
@@ -54,6 +67,10 @@ DrawInputWidget::DrawInputWidget(QWidget *parent) :
                      &DrawInputTree::positionRequest,
                      this,
                      &DrawInputWidget::onPositionRequest);
+    QObject::connect(this->tree,
+                     &DrawInputTree::textRequest,
+                     this,
+                     &DrawInputWidget::onTextRequest);
     QObject::connect(this->tree,
                      &DrawInputTree::inputParameterChanged,
                      this,
@@ -95,7 +112,23 @@ void DrawInputWidget::onPositionWidgetChanged(const RR3Vector &position)
     this->tree->setRequestedItemVectorValue(position);
 }
 
-void DrawInputWidget::onPositionWidgetClosed(void)
+void DrawInputWidget::onPositionWidgetClosed()
+{
+    this->stackedLayout->setCurrentWidget(this->layoutWidget);
+}
+
+void DrawInputWidget::onTextRequest(const QString &text)
+{
+    this->stackedLayout->setCurrentWidget(this->textWidget);
+    this->textWidget->setText(text);
+}
+
+void DrawInputWidget::onTextWidgetChanged(const QString &text)
+{
+    this->tree->setRequestedItemTextValue(text);
+}
+
+void DrawInputWidget::onTextWidgetClosed()
 {
     this->stackedLayout->setCurrentWidget(this->layoutWidget);
 }
@@ -110,7 +143,7 @@ void DrawInputWidget::onInputParameterChanged(uint objectID, uint)
     Session::getInstance().getDrawEngine()->getObject(objectID)->updateModel();
 }
 
-void DrawInputWidget::onRemoveClicked(void)
+void DrawInputWidget::onRemoveClicked()
 {
     QList<uint> objectIDs = this->tree->getSelectedObjectIDs();
 
@@ -120,7 +153,7 @@ void DrawInputWidget::onRemoveClicked(void)
     }
 }
 
-void DrawInputWidget::onOkClicked(void)
+void DrawInputWidget::onOkClicked()
 {
     QList<uint> modelIDs = Session::getInstance().getSelectedModelIDs();
 

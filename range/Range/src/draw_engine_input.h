@@ -15,13 +15,14 @@
 
 #include <rblib.h>
 
-typedef union _DrawEngineInputDataType
+typedef struct _DrawEngineInputDataType
 {
     bool b;
     int i;
     uint u;
     double d;
     double v[3];
+    QString text;
 } DrawEngineInputDataType;
 
 class DrawEngineInput
@@ -35,7 +36,8 @@ class DrawEngineInput
             Int,
             Uint,
             Double,
-            Vector
+            Vector,
+            Text
         };
 
     protected:
@@ -75,6 +77,9 @@ class DrawEngineInput
         //! Constructor.
         DrawEngineInput(const RR3Vector &v, const QString &name = QString(), const QString &desc = QString(), const QString &units = QString());
 
+        //! Constructor.
+        DrawEngineInput(const QString &text, const QString &name = QString(), const QString &desc = QString(), const QString &units = QString());
+
         //! Copy constructor.
         DrawEngineInput(const DrawEngineInput &drawEngineInput);
 
@@ -82,24 +87,28 @@ class DrawEngineInput
         DrawEngineInput & operator =(const DrawEngineInput &drawEngineInput);
 
         //! Assign bool value.
-        //! Return true if value has the same type and valid.
+        //! Return true if value has the same type and is valid.
         bool setValue(bool b);
 
         //! Assign int value.
-        //! Return true if value has the same type and valid.
+        //! Return true if value has the same type and is valid.
         bool setValue(int i);
 
         //! Assign uint value.
-        //! Return true if value has the same type and valid.
+        //! Return true if value has the same type and is valid.
         bool setValue(uint u);
 
         //! Assign double value.
-        //! Return true if value has the same type and valid.
+        //! Return true if value has the same type and is valid.
         bool setValue(double d);
 
         //! Assign vector value.
-        //! Return true if value has the same type and valid.
+        //! Return true if value has the same type and is valid.
         bool setValue(const RR3Vector &v);
+
+        //! Assign text value.
+        //! Return true if value has the same type and valid.
+        bool setValue(const QString &text);
 
         //! Return boolean.
         bool toBool(bool *isOk = 0) const;
@@ -116,17 +125,20 @@ class DrawEngineInput
         //! Return vector.
         RR3Vector toVector(bool *isOk = 0) const;
 
+        //! Return text.
+        QString toText(bool *isOk = 0) const;
+
         //! Return input parameter type.
-        Type getType(void) const;
+        Type getType() const;
 
         //! Return const reference to parameter name.
-        const QString &getName(void) const;
+        const QString &getName() const;
 
         //! Return const reference to parameter description.
-        const QString &getDescription(void) const;
+        const QString &getDescription() const;
 
         //! Return const reference to parameter units.
-        const QString &getUnits(void) const;
+        const QString &getUnits() const;
 
     protected:
 
@@ -144,6 +156,9 @@ class DrawEngineInput
 
         //! Validate current value.
         bool isValid(const RR3Vector &value) const;
+
+        //! Validate current value.
+        bool isValid(const QString &value) const;
 
 };
 

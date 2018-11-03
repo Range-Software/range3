@@ -25,6 +25,7 @@
 #include "draw_engine_sphere.h"
 #include "draw_engine_tetrahedron.h"
 #include "draw_engine_hexahedron.h"
+#include "draw_engine_raw.h"
 
 class DrawEngine : public QObject
 {
@@ -44,10 +45,10 @@ class DrawEngine : public QObject
         explicit DrawEngine(QObject *parent = 0);
 
         //! Start engine.
-        void start(void);
+        void start();
 
         //! Stop engine.
-        void stop(void);
+        void stop();
 
         //! Process all objects.
         void processObjects(const QList<uint> &modelIDs, bool mergeNearNodes, double tolerance = 0.0, bool findNearest = false);
@@ -59,7 +60,7 @@ class DrawEngine : public QObject
         void removeObject(uint position);
 
         //! Return number of objects.
-        uint getNObjects(void) const;
+        uint getNObjects() const;
 
         //! Return const pointer to object at given position.
         const DrawEngineObject *getObject(uint position) const;
@@ -73,13 +74,13 @@ class DrawEngine : public QObject
     signals:
 
         //! Object was added signal.
-        void objectAdded(void);
+        void objectAdded();
 
         //! Object at given position was removed signal.
         void objectRemoved(uint position);
 
         //! All object were removed signal.
-        void objectsRemoved(void);
+        void objectsRemoved();
 
         //! Object at given position has changed.
         void objectChanged(uint position);

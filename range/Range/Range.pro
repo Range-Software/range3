@@ -59,6 +59,7 @@ SOURCES += \
     src/draw_engine_point.cpp \
     src/draw_engine_quadrilateral.cpp \
     src/draw_engine_sphere.cpp \
+    src/draw_engine_raw.cpp \
     src/draw_engine_tetrahedron.cpp \
     src/draw_engine_triangle.cpp \
     src/draw_input_tree.cpp \
@@ -206,6 +207,7 @@ SOURCES += \
     src/sub_window_manager.cpp \
     src/text_browser.cpp \
     src/text_browser_dialog.cpp \
+    src/text_edit_widget.cpp \
     src/time_solver_setup_widget.cpp \
     src/update_dialog.cpp \
     src/usage_info.cpp \
@@ -263,6 +265,7 @@ HEADERS += \
     src/draw_engine_point.h \
     src/draw_engine_quadrilateral.h \
     src/draw_engine_sphere.h \
+    src/draw_engine_raw.h \
     src/draw_engine_tetrahedron.h \
     src/draw_engine_triangle.h \
     src/draw_input_tree.h \
@@ -409,6 +412,7 @@ HEADERS += \
     src/sub_window_manager.h \
     src/text_browser.h \
     src/text_browser_dialog.h \
+    src/text_edit_widget.h \
     src/time_solver_setup_widget.h \
     src/update_dialog.h \
     src/usage_info.h \

@@ -110,17 +110,17 @@ Action::Action(ActionType type, MainWindow *mainWindow, QObject *parent) :
     }
 }
 
-void Action::enable(void)
+void Action::enable()
 {
     this->setEnabled(true);
 }
 
-void Action::disable(void)
+void Action::disable()
 {
     this->setDisabled(true);
 }
 
-void Action::onSessionNew(void)
+void Action::onSessionNew()
 {
     int response = QMessageBox::question(this->mainWindow,
                                          tr("Close session"),
@@ -134,7 +134,7 @@ void Action::onSessionNew(void)
     }
 }
 
-void Action::onSessionOpen(void)
+void Action::onSessionOpen()
 {
     QString fileExtension = Session::getDefaultFileExtension();
     QString dialogDesc = "Range model files (*." + fileExtension + ");;Any files (*)";
@@ -157,7 +157,7 @@ void Action::onSessionOpen(void)
     }
 }
 
-void Action::onSessionSave(void)
+void Action::onSessionSave()
 {
     QDir dataDir(MainSettings::getInstance().getDataDir());
     QString dialogDesc = "Range session files (*.ras);;Any files (*)";
@@ -179,7 +179,7 @@ void Action::onSessionSave(void)
     Session::getInstance().write(fileName,true);
 }
 
-void Action::onSessionSaveAs(void)
+void Action::onSessionSaveAs()
 {
     QDir sessionDir(MainSettings::getInstance().getSessionDir());
     QString dialogDesc = "Range session files (*.ras);;Any files (*)";
@@ -201,7 +201,7 @@ void Action::onSessionSaveAs(void)
     Session::getInstance().write(fileName,true);
 }
 
-void Action::onSessionClose(void)
+void Action::onSessionClose()
 {
     int response = QMessageBox::question(this->mainWindow,
                                          tr("Close session"),
@@ -214,12 +214,12 @@ void Action::onSessionClose(void)
     }
 }
 
-void Action::onModelNew(void)
+void Action::onModelNew()
 {
     NewModelDialog(this->mainWindow).exec();
 }
 
-void Action::onModelOpen(void)
+void Action::onModelOpen()
 {
     QString binaryExtension = RModel::getDefaultFileExtension(true);
     QString asciiExtension = RModel::getDefaultFileExtension(false);
@@ -261,7 +261,7 @@ void Action::onModelOpen(void)
     JobManager::getInstance().submit(new ModelIO(modelIOType, fileName));
 }
 
-void Action::onModelSave(void)
+void Action::onModelSave()
 {
     QList<uint> selectedModelIDs = Session::getInstance().getSelectedModelIDs();
 
@@ -280,7 +280,7 @@ void Action::onModelSave(void)
     }
 }
 
-void Action::onModelSaveAs(void)
+void Action::onModelSaveAs()
 {
     QList<uint> selectedModelIDs = Session::getInstance().getSelectedModelIDs();
 
@@ -299,7 +299,7 @@ void Action::onModelSaveAs(void)
     }
 }
 
-void Action::onModelExportMsh(void)
+void Action::onModelExportMsh()
 {
     QDir dataDir(MainSettings::getInstance().getDataDir());
     QList<uint> selectedModelIDs = Session::getInstance().getSelectedModelIDs();
@@ -320,7 +320,7 @@ void Action::onModelExportMsh(void)
     }
 }
 
-void Action::onModelExportRaw(void)
+void Action::onModelExportRaw()
 {
     QDir dataDir(MainSettings::getInstance().getDataDir());
     QList<uint> selectedModelIDs = Session::getInstance().getSelectedModelIDs();
@@ -341,7 +341,7 @@ void Action::onModelExportRaw(void)
     }
 }
 
-void Action::onModelExportStlAscii(void)
+void Action::onModelExportStlAscii()
 {
     QDir dataDir(MainSettings::getInstance().getDataDir());
     QList<uint> selectedModelIDs = Session::getInstance().getSelectedModelIDs();
@@ -362,7 +362,7 @@ void Action::onModelExportStlAscii(void)
     }
 }
 
-void Action::onModelExportStlBinary(void)
+void Action::onModelExportStlBinary()
 {
     QDir dataDir(MainSettings::getInstance().getDataDir());
     QList<uint> selectedModelIDs = Session::getInstance().getSelectedModelIDs();
@@ -383,7 +383,7 @@ void Action::onModelExportStlBinary(void)
     }
 }
 
-void Action::onModelClose(void)
+void Action::onModelClose()
 {
     int response = QMessageBox::question(this->mainWindow,
                                          tr("Close model?"),
@@ -400,7 +400,7 @@ void Action::onModelClose(void)
     }
 }
 
-void Action::onModelReloadResults(void)
+void Action::onModelReloadResults()
 {
     QList<uint> modelIDs = Session::getInstance().getSelectedModelIDs();
     for (int i=0;i<modelIDs.size();i++)
@@ -410,7 +410,7 @@ void Action::onModelReloadResults(void)
     }
 }
 
-void Action::onModelRename(void)
+void Action::onModelRename()
 {
     QList<uint> modelIDs = Session::getInstance().getSelectedModelIDs();
     for (int i=0;i<modelIDs.size();i++)
@@ -419,13 +419,13 @@ void Action::onModelRename(void)
     }
 }
 
-void Action::onModelDropResults(void)
+void Action::onModelDropResults()
 {
     DropResultsDialog dropResultsDialog(this->mainWindow);
     dropResultsDialog.exec();
 }
 
-void Action::onMaterialNew(void)
+void Action::onMaterialNew()
 {
     QString materialNameBase = tr("New material");
     QString materialName = materialNameBase;
@@ -440,7 +440,7 @@ void Action::onMaterialNew(void)
     MaterialList::getInstance().addMaterial(material,true);
 }
 
-void Action::onMaterialImport(void)
+void Action::onMaterialImport()
 {
     QString fileName = QFileDialog::getOpenFileName(this->mainWindow,
                                                     tr("Select material file"),
@@ -480,7 +480,7 @@ void Action::onMaterialImport(void)
     MaterialList::getInstance().addMaterial(material,isNew);
 }
 
-void Action::onMaterialDelete(void)
+void Action::onMaterialDelete()
 {
     if (MaterialList::getInstance().getSelectedMaterialName().length() == 0)
     {
@@ -502,7 +502,7 @@ void Action::onMaterialDelete(void)
     }
 }
 
-void Action::onGeometryUndo(void)
+void Action::onGeometryUndo()
 {
     QList<uint> selectedModelIDs = Session::getInstance().getSelectedModelIDs();
     for (int i=0;i<selectedModelIDs.size();i++)
@@ -517,7 +517,7 @@ void Action::onGeometryUndo(void)
     }
 }
 
-void Action::onGeometryRedo(void)
+void Action::onGeometryRedo()
 {
     QList<uint> selectedModelIDs = Session::getInstance().getSelectedModelIDs();
     for (int i=0;i<selectedModelIDs.size();i++)
@@ -532,57 +532,62 @@ void Action::onGeometryRedo(void)
     }
 }
 
-void Action::onGeometryDrawPoint(void)
+void Action::onGeometryDrawPoint()
 {
     Session::getInstance().getDrawEngine()->addObject(new DrawEnginePoint);
 }
 
-void Action::onGeometryDrawLine(void)
+void Action::onGeometryDrawLine()
 {
     Session::getInstance().getDrawEngine()->addObject(new DrawEngineLine);
 }
 
-void Action::onGeometryDrawTriangle(void)
+void Action::onGeometryDrawTriangle()
 {
     Session::getInstance().getDrawEngine()->addObject(new DrawEngineTriangle);
 }
 
-void Action::onGeometryDrawQuadrilateral(void)
+void Action::onGeometryDrawQuadrilateral()
 {
     Session::getInstance().getDrawEngine()->addObject(new DrawEngineQuadrilateral);
 }
 
-void Action::onGeometryDrawCircle(void)
+void Action::onGeometryDrawCircle()
 {
     Session::getInstance().getDrawEngine()->addObject(new DrawEngineCircle);
 }
 
-void Action::onGeometryDrawEllipse(void)
+void Action::onGeometryDrawEllipse()
 {
     Session::getInstance().getDrawEngine()->addObject(new DrawEngineEllipse);
 }
 
-void Action::onGeometryDrawTetrahedron(void)
+void Action::onGeometryDrawTetrahedron()
 {
     Session::getInstance().getDrawEngine()->addObject(new DrawEngineTetrahedron);
 }
 
-void Action::onGeometryDrawHexahedron(void)
+void Action::onGeometryDrawHexahedron()
 {
     Session::getInstance().getDrawEngine()->addObject(new DrawEngineHexahedron);
 }
 
-void Action::onGeometryDrawCylinder(void)
+void Action::onGeometryDrawCylinder()
 {
     Session::getInstance().getDrawEngine()->addObject(new DrawEngineCylinder);
 }
 
-void Action::onGeometryDrawSphere(void)
+void Action::onGeometryDrawSphere()
 {
     Session::getInstance().getDrawEngine()->addObject(new DrawEngineSphere);
 }
 
-void Action::onGeometryCreateElement(void)
+void Action::onGeometryDrawRaw()
+{
+    Session::getInstance().getDrawEngine()->addObject(new DrawEngineRaw);
+}
+
+void Action::onGeometryCreateElement()
 {
     PickList &pickList = Session::getInstance().getPickList();
 
@@ -693,7 +698,7 @@ void Action::onGeometryCreateElement(void)
     }
 }
 
-void Action::onGeometryFindSliverElements(void)
+void Action::onGeometryFindSliverElements()
 {
     QList<uint> modelIDs = Session::getInstance().getSelectedModelIDs();
 
@@ -704,7 +709,7 @@ void Action::onGeometryFindSliverElements(void)
     }
 }
 
-void Action::onGeometryFixSliverElements(void)
+void Action::onGeometryFixSliverElements()
 {
     QList<uint> modelIDs = Session::getInstance().getSelectedModelIDs();
 
@@ -715,7 +720,7 @@ void Action::onGeometryFixSliverElements(void)
     }
 }
 
-void Action::onGeometryFindIntersectedElements(void)
+void Action::onGeometryFindIntersectedElements()
 {
     QList<uint> modelIDs = Session::getInstance().getSelectedModelIDs();
 
@@ -731,7 +736,7 @@ void Action::onGeometryFindIntersectedElements(void)
     }
 }
 
-void Action::onGeometryBreakIntersectedElements(void)
+void Action::onGeometryBreakIntersectedElements()
 {
     QList<uint> modelIDs = Session::getInstance().getSelectedModelIDs();
 
@@ -757,7 +762,7 @@ void Action::onGeometryBreakIntersectedElements(void)
     }
 }
 
-void Action::onGeometryBoolUnion(void)
+void Action::onGeometryBoolUnion()
 {
     QList<SessionEntityID> selectedEntityIDs = Session::getInstance().getSelectedEntityIDs();
     QList<uint> selectedModelIDs = Session::getInstance().getSelectedModelIDs();
@@ -800,7 +805,7 @@ void Action::onGeometryBoolUnion(void)
     }
 }
 
-void Action::onGeometryBoolDifference(void)
+void Action::onGeometryBoolDifference()
 {
     QList<SessionEntityID> selectedEntityIDs = Session::getInstance().getSelectedEntityIDs();
     QList<uint> selectedModelIDs = Session::getInstance().getSelectedModelIDs();
@@ -843,7 +848,7 @@ void Action::onGeometryBoolDifference(void)
     }
 }
 
-void Action::onGeometryBoolIntersection(void)
+void Action::onGeometryBoolIntersection()
 {
     QList<SessionEntityID> selectedEntityIDs = Session::getInstance().getSelectedEntityIDs();
     QList<uint> selectedModelIDs = Session::getInstance().getSelectedModelIDs();
@@ -886,7 +891,7 @@ void Action::onGeometryBoolIntersection(void)
     }
 }
 
-void Action::onGeometryMergeNearNodes(void)
+void Action::onGeometryMergeNearNodes()
 {
     QList<uint> selectedModelIDs = Session::getInstance().getSelectedModelIDs();
 
@@ -897,7 +902,7 @@ void Action::onGeometryMergeNearNodes(void)
     }
 }
 
-void Action::onGeometryMoveNode(void)
+void Action::onGeometryMoveNode()
 {
     PickList &pickList = Session::getInstance().getPickList();
 
@@ -939,7 +944,7 @@ void Action::onGeometryMoveNode(void)
     }
 }
 
-void Action::onGeometryRemoveNode(void)
+void Action::onGeometryRemoveNode()
 {
     PickList &pickList = Session::getInstance().getPickList();
 
@@ -991,7 +996,7 @@ void Action::onGeometryRemoveNode(void)
     }
 }
 
-void Action::onGeometryRemoveNodeAndCloseHole(void)
+void Action::onGeometryRemoveNodeAndCloseHole()
 {
     PickList &pickList = Session::getInstance().getPickList();
 
@@ -1043,7 +1048,7 @@ void Action::onGeometryRemoveNodeAndCloseHole(void)
     }
 }
 
-void Action::onGeometryRemoveElement(void)
+void Action::onGeometryRemoveElement()
 {
     PickList &pickList = Session::getInstance().getPickList();
 
@@ -1094,7 +1099,7 @@ void Action::onGeometryRemoveElement(void)
     }
 }
 
-void Action::onGeometryLineGenerateFromEdges(void)
+void Action::onGeometryLineGenerateFromEdges()
 {
     QList<uint> modelIDs = Session::getInstance().getSelectedModelIDs();
 
@@ -1110,13 +1115,13 @@ void Action::onGeometryLineGenerateFromEdges(void)
     }
 }
 
-void Action::onGeometrySurfaceMark(void)
+void Action::onGeometrySurfaceMark()
 {
     MarkEntityDialog markEntityDialog(R_ENTITY_GROUP_SURFACE,this->mainWindow);
     markEntityDialog.exec();
 }
 
-void Action::onGeometrySurfaceSwapElementNormal(void)
+void Action::onGeometrySurfaceSwapElementNormal()
 {
     PickList &pickList = Session::getInstance().getPickList();
 
@@ -1157,7 +1162,7 @@ void Action::onGeometrySurfaceSwapElementNormal(void)
     }
 }
 
-void Action::onGeometrySurfaceSwapNormals(void)
+void Action::onGeometrySurfaceSwapNormals()
 {
     QList<SessionEntityID> selectedEntityIDs = Session::getInstance().getSelectedEntityIDs();
     QList<uint> selectedModelIDs = Session::getInstance().getSelectedModelIDs();
@@ -1184,7 +1189,7 @@ void Action::onGeometrySurfaceSwapNormals(void)
     }
 }
 
-void Action::onGeometrySurfaceSyncNormals(void)
+void Action::onGeometrySurfaceSyncNormals()
 {
     QList<uint> selectedModelIDs = Session::getInstance().getSelectedModelIDs();
 
@@ -1200,7 +1205,7 @@ void Action::onGeometrySurfaceSyncNormals(void)
     }
 }
 
-void Action::onGeometrySurfaceCloseHole(void)
+void Action::onGeometrySurfaceCloseHole()
 {
     PickList &pickList = Session::getInstance().getPickList();
 
@@ -1243,7 +1248,7 @@ void Action::onGeometrySurfaceCloseHole(void)
     }
 }
 
-void Action::onGeometrySurfaceCoarsen(void)
+void Action::onGeometrySurfaceCoarsen()
 {
     QList<SessionEntityID> selectedEntityIDs = Session::getInstance().getSelectedEntityIDs();
     QList<uint> selectedModelIDs = Session::getInstance().getSelectedModelIDs();
@@ -1265,7 +1270,7 @@ void Action::onGeometrySurfaceCoarsen(void)
     }
 }
 
-void Action::onGeometryVectorFieldCreate(void)
+void Action::onGeometryVectorFieldCreate()
 {
     QList<uint> modelIDs = Session::getInstance().getSelectedModelIDs();
 
@@ -1276,7 +1281,7 @@ void Action::onGeometryVectorFieldCreate(void)
     }
 }
 
-void Action::onGeometryVectorFieldEdit(void)
+void Action::onGeometryVectorFieldEdit()
 {
     QList<SessionEntityID> entityIDs = Session::getInstance().getSelectedEntityIDs();
 
@@ -1291,7 +1296,7 @@ void Action::onGeometryVectorFieldEdit(void)
     }
 }
 
-void Action::onGeometryScalarFieldCreate(void)
+void Action::onGeometryScalarFieldCreate()
 {
     QList<uint> modelIDs = Session::getInstance().getSelectedModelIDs();
 
@@ -1302,7 +1307,7 @@ void Action::onGeometryScalarFieldCreate(void)
     }
 }
 
-void Action::onGeometryScalarFieldEdit(void)
+void Action::onGeometryScalarFieldEdit()
 {
     QList<SessionEntityID> entityIDs = Session::getInstance().getSelectedEntityIDs();
 
@@ -1317,7 +1322,7 @@ void Action::onGeometryScalarFieldEdit(void)
     }
 }
 
-void Action::onGeometryStreamLineCreate(void)
+void Action::onGeometryStreamLineCreate()
 {
     QList<uint> modelIDs = Session::getInstance().getSelectedModelIDs();
 
@@ -1328,7 +1333,7 @@ void Action::onGeometryStreamLineCreate(void)
     }
 }
 
-void Action::onGeometryStreamLineEdit(void)
+void Action::onGeometryStreamLineEdit()
 {
     QList<SessionEntityID> entityIDs = Session::getInstance().getSelectedEntityIDs();
 
@@ -1343,7 +1348,7 @@ void Action::onGeometryStreamLineEdit(void)
     }
 }
 
-void Action::onGeometryCutCreate(void)
+void Action::onGeometryCutCreate()
 {
     QList<uint> modelIDs = Session::getInstance().getSelectedModelIDs();
 
@@ -1354,7 +1359,7 @@ void Action::onGeometryCutCreate(void)
     }
 }
 
-void Action::onGeometryCutEdit(void)
+void Action::onGeometryCutEdit()
 {
     QList<SessionEntityID> entityIDs = Session::getInstance().getSelectedEntityIDs();
 
@@ -1369,7 +1374,7 @@ void Action::onGeometryCutEdit(void)
     }
 }
 
-void Action::onGeometryIsoCreate(void)
+void Action::onGeometryIsoCreate()
 {
     QList<uint> modelIDs = Session::getInstance().getSelectedModelIDs();
 
@@ -1380,7 +1385,7 @@ void Action::onGeometryIsoCreate(void)
     }
 }
 
-void Action::onGeometryIsoEdit(void)
+void Action::onGeometryIsoEdit()
 {
     QList<SessionEntityID> entityIDs = Session::getInstance().getSelectedEntityIDs();
 
@@ -1395,19 +1400,19 @@ void Action::onGeometryIsoEdit(void)
     }
 }
 
-void Action::onGeometryEntityMerge(void)
+void Action::onGeometryEntityMerge()
 {
     MergeEntityDialog mergeEntityDialog(R_ENTITY_GROUP_ELEMENT,this->mainWindow);
     mergeEntityDialog.exec();
 }
 
-void Action::onGeometryEntityRemove(void)
+void Action::onGeometryEntityRemove()
 {
     RemoveEntityDialog removeEntityDialog(R_ENTITY_GROUP_ALL,this->mainWindow);
     removeEntityDialog.exec();
 }
 
-void Action::onGeometryGenerateTetrahedra(void)
+void Action::onGeometryGenerateTetrahedra()
 {
     QList<uint> modelIDs = Session::getInstance().getSelectedModelIDs();
 
@@ -1418,12 +1423,12 @@ void Action::onGeometryGenerateTetrahedra(void)
     }
 }
 
-void Action::onGeometryTransform(void)
+void Action::onGeometryTransform()
 {
     MainWindow::getInstance()->showTransformGeometryWidget();
 }
 
-void Action::onGeometryDevExportSliverElements(void)
+void Action::onGeometryDevExportSliverElements()
 {
     QList<uint> modelIDs = Session::getInstance().getSelectedModelIDs();
 
@@ -1439,7 +1444,7 @@ void Action::onGeometryDevExportSliverElements(void)
     }
 }
 
-void Action::onGeometryDevExportIntersectedElements(void)
+void Action::onGeometryDevExportIntersectedElements()
 {
     QList<uint> modelIDs = Session::getInstance().getSelectedModelIDs();
 
@@ -1455,7 +1460,7 @@ void Action::onGeometryDevExportIntersectedElements(void)
     }
 }
 
-void Action::onGeometryDevPurgeUnusedNodes(void)
+void Action::onGeometryDevPurgeUnusedNodes()
 {
     QList<uint> selectedModelIDs = Session::getInstance().getSelectedModelIDs();
 
@@ -1471,7 +1476,7 @@ void Action::onGeometryDevPurgeUnusedNodes(void)
     }
 }
 
-void Action::onGeometryDevPurgeUnusedElements(void)
+void Action::onGeometryDevPurgeUnusedElements()
 {
     QList<uint> selectedModelIDs = Session::getInstance().getSelectedModelIDs();
 
@@ -1487,7 +1492,7 @@ void Action::onGeometryDevPurgeUnusedElements(void)
     }
 }
 
-void Action::onGeometryDevPointInsideSurface(void)
+void Action::onGeometryDevPointInsideSurface()
 {
     QList<SessionEntityID> selectedEntityIDs = Session::getInstance().getSelectedEntityIDs();
     QList<uint> selectedModelIDs = Session::getInstance().getSelectedModelIDs();
@@ -1528,7 +1533,7 @@ void Action::onGeometryDevPointInsideSurface(void)
     }
 }
 
-void Action::onGeometryDevTetrahedralizeeSurface(void)
+void Action::onGeometryDevTetrahedralizeeSurface()
 {
     QList<SessionEntityID> selectedEntityIDs = Session::getInstance().getSelectedEntityIDs();
     QList<uint> selectedModelIDs = Session::getInstance().getSelectedModelIDs();
@@ -1574,7 +1579,7 @@ void Action::onGeometryDevTetrahedralizeeSurface(void)
     }
 }
 
-void Action::onGeometryDevConsolidate(void)
+void Action::onGeometryDevConsolidate()
 {
     QList<uint> selectedModelIDs = Session::getInstance().getSelectedModelIDs();
 
@@ -1590,7 +1595,7 @@ void Action::onGeometryDevConsolidate(void)
     }
 }
 
-void Action::onProblemTaskFlow(void)
+void Action::onProblemTaskFlow()
 {
     QList<uint> modelIDs = Session::getInstance().getSelectedModelIDs();
 
@@ -1601,7 +1606,7 @@ void Action::onProblemTaskFlow(void)
     }
 }
 
-void Action::onProblemSolverSetup(void)
+void Action::onProblemSolverSetup()
 {
     QList<uint> modelIDs = Session::getInstance().getSelectedModelIDs();
 
@@ -1612,7 +1617,7 @@ void Action::onProblemSolverSetup(void)
     }
 }
 
-void Action::onProblemDefineMonitoringPoints(void)
+void Action::onProblemDefineMonitoringPoints()
 {
     QList<uint> modelIDs = Session::getInstance().getSelectedModelIDs();
 
@@ -1623,7 +1628,7 @@ void Action::onProblemDefineMonitoringPoints(void)
     }
 }
 
-void Action::onProblemReset(void)
+void Action::onProblemReset()
 {
     if (QMessageBox::question(this->mainWindow,
                                tr("Reset problem setup"),
@@ -1647,7 +1652,7 @@ void Action::onProblemReset(void)
     }
 }
 
-void Action::onSolverStart(void)
+void Action::onSolverStart()
 {
     QList<uint> modelIDs = Session::getInstance().getSelectedModelIDs();
 
@@ -1665,7 +1670,7 @@ void Action::onSolverStart(void)
     }
 }
 
-void Action::onSolverStop(void)
+void Action::onSolverStop()
 {
     if (QMessageBox::question(this->mainWindow,
                                tr("Stop solver"),
@@ -1686,7 +1691,7 @@ void Action::onSolverStop(void)
     }
 }
 
-void Action::onSolverKill(void)
+void Action::onSolverKill()
 {
     if (QMessageBox::question(this->mainWindow,
                                tr("Kill solver"),
@@ -1707,7 +1712,7 @@ void Action::onSolverKill(void)
     }
 }
 
-void Action::onReportModelStatistics(void)
+void Action::onReportModelStatistics()
 {
     QList<uint> modelIDs = Session::getInstance().getSelectedModelIDs();
 
@@ -1718,7 +1723,7 @@ void Action::onReportModelStatistics(void)
     }
 }
 
-void Action::onReportSolverLog(void)
+void Action::onReportSolverLog()
 {
     QList<uint> modelIDs = Session::getInstance().getSelectedModelIDs();
 
@@ -1737,7 +1742,7 @@ void Action::onReportSolverLog(void)
     }
 }
 
-void Action::onReportConvergenceGraph(void)
+void Action::onReportConvergenceGraph()
 {
     QList<uint> modelIDs = Session::getInstance().getSelectedModelIDs();
 
@@ -1779,7 +1784,7 @@ void Action::onReportConvergenceGraph(void)
     }
 }
 
-void Action::onReportMonitoringPointGraph(void)
+void Action::onReportMonitoringPointGraph()
 {
     QList<uint> modelIDs = Session::getInstance().getSelectedModelIDs();
 
@@ -1798,7 +1803,7 @@ void Action::onReportMonitoringPointGraph(void)
     }
 }
 
-void Action::onReportCreateReport(void)
+void Action::onReportCreateReport()
 {
     QList<uint> modelIDs = Session::getInstance().getSelectedModelIDs();
 
@@ -1809,26 +1814,26 @@ void Action::onReportCreateReport(void)
     }
 }
 
-void Action::onHelp(void)
+void Action::onHelp()
 {
     HelpCenterDialog *pHelpCenterDialog = new HelpCenterDialog(this->mainWindow);
     pHelpCenterDialog->setModal(false);
     pHelpCenterDialog->show();
 }
 
-void Action::onQuit(void)
+void Action::onQuit()
 {
     this->mainWindow->close();
 }
 
-void Action::onApplicationSettings(void)
+void Action::onApplicationSettings()
 {
     ApplicationSettingsDialog applicationSettingsDialog(MainSettings::getInstance().getApplicationSettings(),
                                                         this->mainWindow);
     applicationSettingsDialog.exec();
 }
 
-void Action::onUpdate(void)
+void Action::onUpdate()
 {
     UpdateDialog updateDialog(RRASession::getInstance().getAvailableSoftwareVersion(),
                               RRASession::getInstance().getAvailableSoftwareLink(),
@@ -1836,7 +1841,7 @@ void Action::onUpdate(void)
     updateDialog.exec();
 }
 
-void Action::onAbout(void)
+void Action::onAbout()
 {
     QString title = tr("About");
     QString body = QString("<h1>") + RVendor::name + QString(" ") + QString::number(RVendor::version.getMajor()) + QString("</h1>")
@@ -1850,14 +1855,14 @@ void Action::onAbout(void)
     QMessageBox::about(this->mainWindow,title,body);
 }
 
-void Action::onAboutQt(void)
+void Action::onAboutQt()
 {
     QString title = tr("About Qt");
 
     QMessageBox::aboutQt(this->mainWindow,title);
 }
 
-void Action::onLicense(void)
+void Action::onLicense()
 {
     QString licenseFileName(MainSettings::getInstance().findLicenseFileName());
 
@@ -1886,7 +1891,7 @@ void Action::onLicense(void)
     }
 }
 
-void Action::onReleaseNotes(void)
+void Action::onReleaseNotes()
 {
     QString releaseNotesFileName(MainSettings::getInstance().findReleaseNotesFileName());
 
