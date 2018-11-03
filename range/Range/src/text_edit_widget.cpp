@@ -25,6 +25,10 @@ TextEditWidget::TextEditWidget(QWidget *parent)
     this->textEdit = new QTextEdit;
     layout->addWidget(this->textEdit);
 
+    QFont font("Monospace");
+    font.setStyleHint(QFont::TypeWriter);
+    this->textEdit->setFont(font);
+
     QObject::connect(this->textEdit,&QTextEdit::textChanged,this,&TextEditWidget::onTextEditChanged);
 
     QHBoxLayout *buttonsLayout = new QHBoxLayout;

@@ -15,7 +15,7 @@ DrawEngineRaw::DrawEngineRaw(QObject *parent) :
 {
     this->name = tr("Geometry");
 
-    this->inputParameters.append(DrawEngineInput(QString("1 2 3"),tr("RAW model"),tr("RAW model file content."),"ASCII"));
+    this->inputParameters.append(DrawEngineInput(QString(""),tr("RAW model"),tr("RAW model file content."),"ASCII"));
 
     this->updateModel();
 }
