@@ -15,7 +15,23 @@ DrawEngineRaw::DrawEngineRaw(QObject *parent) :
 {
     this->name = tr("Geometry");
 
-    this->inputParameters.append(DrawEngineInput(QString(""),tr("RAW model"),tr("RAW model file content."),"ASCII"));
+    QString rawContent("# RAW model file content\n"
+                       "# Comments start with hash sign '#'\n"
+                       "# Comments and empty lines are ignored\n"
+                       "# \n"
+                       "# Point element\n"
+                       "# 0.0 0.0 0.0\n"
+                       "# \n"
+                       "# Line element\n"
+                       "# 0.0 0.0 0.0  1.0 0.0 0.0\n"
+                       "# \n"
+                       "# Triangle element\n"
+                       "# 0.0 0.0 0.0  1.0 0.0 0.0  1.0 0.0 0.0\n"
+                       "# \n"
+                       "# Quadrilateral element\n"
+                       "# 0.0 0.0 0.0  1.0 0.0 0.0  1.0 1.0 0.0  0.0 1.0 0.0\n");
+
+    this->inputParameters.append(DrawEngineInput(rawContent,tr("RAW model"),tr("RAW model file content."),"ASCII"));
 
     this->updateModel();
 }
