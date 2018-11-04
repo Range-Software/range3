@@ -22,14 +22,14 @@ TextEditWidget::TextEditWidget(QWidget *parent)
     QVBoxLayout *layout = new QVBoxLayout;
     this->setLayout(layout);
 
-    this->textEdit = new QTextEdit;
+    this->textEdit = new QPlainTextEdit;
     layout->addWidget(this->textEdit);
 
     QFont font("Monospace");
     font.setStyleHint(QFont::TypeWriter);
     this->textEdit->setFont(font);
 
-    QObject::connect(this->textEdit,&QTextEdit::textChanged,this,&TextEditWidget::onTextEditChanged);
+    QObject::connect(this->textEdit,&QPlainTextEdit::textChanged,this,&TextEditWidget::onTextEditChanged);
 
     QHBoxLayout *buttonsLayout = new QHBoxLayout;
     buttonsLayout->addStretch(1);
@@ -49,7 +49,7 @@ TextEditWidget::TextEditWidget(QWidget *parent)
 
 void TextEditWidget::setText(const QString &text)
 {
-    this->textEdit->setText(text);
+    this->textEdit->setPlainText(text);
 }
 
 void TextEditWidget::onTextEditChanged()

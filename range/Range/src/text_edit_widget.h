@@ -11,7 +11,7 @@
 #ifndef TEXT_EDIT_WIDGET_H
 #define TEXT_EDIT_WIDGET_H
 
-#include <QTextEdit>
+#include <QPlainTextEdit>
 #include <QPushButton>
 
 class TextEditWidget : public QWidget
@@ -22,7 +22,7 @@ class TextEditWidget : public QWidget
     protected:
 
         //! Text edit.
-        QTextEdit *textEdit;
+        QPlainTextEdit *textEdit;
         //! Cancel button.
         QPushButton *cancelButton;
         //! OK button.
