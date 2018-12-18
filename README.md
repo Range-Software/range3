@@ -13,11 +13,11 @@ $ sudo ./scripts/prereqs.sh
 ```
 ## Build & Install
 ```
-$ ./scripts/build.sh --clean && ./scripts/create_package.sh --install-to=$HOME/bin
+$ ./scripts/build.sh --clean && ./scripts/create_package.sh
 ```
 ## Running the software
 ```
-$ $HOME/bin/range-3.1.1/bin/Range
+$ $HOME/bin/range-3.2.0/bin/Range
 ```
 
 ## Download
