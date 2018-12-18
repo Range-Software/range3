@@ -87,6 +87,7 @@ ModelTree::ModelTree(ActionList *actionList,
     this->setColumnCount(MODEL_TREE_N_COLUMNS);
 
     QTreeWidgetItem* headerItem = new QTreeWidgetItem();
+    headerItem->setIcon(MODEL_TREE_COLUMN_NAME,QIcon(":/icons/mime/pixmaps/range-model.svg"));
     headerItem->setText(MODEL_TREE_COLUMN_NAME,QString("Name"));
     headerItem->setText(MODEL_TREE_COLUMN_NUMBER,QString("#"));
     headerItem->setText(MODEL_TREE_COLUMN_TYPE,QString("type"));

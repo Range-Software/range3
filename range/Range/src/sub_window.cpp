@@ -98,7 +98,7 @@ void SubWindow::createSubWindow(void)
     QAction *actionPreferences = new QAction(this);
     actionPreferences->setText("Display preferences.");
     actionPreferences->setShortcut(QString("Ctrl+P"));
-    actionPreferences->setIcon(QIcon(":/icons/file/pixmaps/range-preferences.svg"));
+    actionPreferences->setIcon(QIcon(":/icons/application/pixmaps/range-display_preferences.svg"));
     toolBar->addAction(actionPreferences);
     QObject::connect(actionPreferences,&QAction::triggered,this,&SubWindow::onPreferences);
 

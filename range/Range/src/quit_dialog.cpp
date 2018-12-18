@@ -19,7 +19,7 @@
 QuitDialog::QuitDialog (QWidget *parent) : QDialog(parent)
 {
     QIcon cancelIcon(":/icons/file/pixmaps/range-cancel.svg");
-    QIcon quitIcon(":/icons/file/pixmaps/range-quit.svg");
+    QIcon quitIcon(":/icons/file/pixmaps/range-shutdown.svg");
 
     QPushButton *cancelButton = new QPushButton(cancelIcon, tr("Cancel"));
     connect (cancelButton, SIGNAL(clicked()), this, SLOT(reject()));
