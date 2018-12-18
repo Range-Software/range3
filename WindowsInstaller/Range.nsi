@@ -154,10 +154,7 @@ SectionGroup "Range Software" SecRange
     SectionEnd
     Section "Model Files" SecModelFiles
         SetOutPath "$INSTDIR\data"
-        File ..\range\Range\data\*.stl
-        File ..\range\Range\data\*.rbm
-        File ..\range\Range\data\*.tmsh
-        File ..\range\Range\data\*.bmsh
+        File ..\range\Range\data\*
     SectionEnd
     Section "Material Files" SecMaterialFiles
         SetOutPath "$INSTDIR\materials"
