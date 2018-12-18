@@ -21,7 +21,7 @@
 FirstRunDialog::FirstRunDialog(QWidget *parent)
     : QDialog(parent)
 {
-    QIcon preferencesIcon(":/icons/file/pixmaps/range-preferences.svg");
+    QIcon preferencesIcon(":/icons/file/pixmaps/range-application_settings.svg");
     QIcon startIcon(":/icons/file/pixmaps/range-startup.svg");
     QIcon rangeIcon(":/icons/logos/pixmaps/range-logo-128.png");
 
