@@ -8,8 +8,8 @@
  *  DESCRIPTION: Utility functions                                   *
  *********************************************************************/
 
-#ifndef __RBL_MACROS_H__
-#define __RBL_MACROS_H__
+#ifndef RBL_MACROS_H
+#define RBL_MACROS_H
 
 #include <QString>
 
@@ -28,8 +28,8 @@ namespace RVendor
     static const QString author("Tomáš Šoltys");
     static const QString email("tomas.soltys@range-software.com");
     static const QString www("http://www.range-software.com");
-    static const RVersion version(3,2,0,RVersion::Release);
-    static const short year = 2018;
+    static const RVersion version(3,2,1,RVersion::Release);
+    static const short year = 2019;
 }
 
 namespace RConstants
@@ -91,10 +91,10 @@ namespace RUtil
 
     inline double frexp10(double arg, int *exp)
     {
-        *exp = (arg == 0) ? 0 : (int)(1 + std::log10(std::fabs(arg) ) );
+        *exp = (arg == 0.0) ? 0 : static_cast<int>(1 + std::log10(std::fabs(arg)));
         return arg * pow(10 , -(*exp));
     }
 
 } // RUtil
 
-#endif /* __RBL_MACROS_H__ */
+#endif /* RBL_MACROS_H */
