@@ -8,8 +8,8 @@
  *  DESCRIPTION: Draw engine sphere class declaration                *
  *********************************************************************/
 
-#ifndef __DRAW_ENGINE_SPHERE_H__
-#define __DRAW_ENGINE_SPHERE_H__
+#ifndef DRAW_ENGINE_SPHERE_H
+#define DRAW_ENGINE_SPHERE_H
 
 #include "draw_engine_object.h"
 
@@ -21,7 +21,7 @@ class DrawEngineSphere : public DrawEngineObject
     public:
 
         //! Constructor.
-        explicit DrawEngineSphere(QObject *parent = 0);
+        explicit DrawEngineSphere(QObject *parent = nullptr);
 
         //! Generate sphere.
         static RModelRaw generate(const RR3Vector &center, double radius, uint nIter);
@@ -33,4 +33,4 @@ class DrawEngineSphere : public DrawEngineObject
 
 };
 
-#endif // __DRAW_ENGINE_SPHERE_H__
+#endif // DRAW_ENGINE_SPHERE_H

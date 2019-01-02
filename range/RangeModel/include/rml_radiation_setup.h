@@ -8,8 +8,8 @@
  *  DESCRIPTION: Radiation setup class declaration                   *
  *********************************************************************/
 
-#ifndef __RML_RADIATION_SETUP_H__
-#define __RML_RADIATION_SETUP_H__
+#ifndef RML_RADIATION_SETUP_H
+#define RML_RADIATION_SETUP_H
 
 #include <QString>
 
@@ -71,4 +71,4 @@ class RRadiationSetup
         friend class RFileIO;
 };
 
-#endif // __RML_RADIATION_SETUP_H__
+#endif // RML_RADIATION_SETUP_H

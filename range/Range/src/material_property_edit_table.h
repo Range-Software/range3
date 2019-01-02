@@ -8,8 +8,8 @@
  *  DESCRIPTION: Material property edit table class declaration      *
  *********************************************************************/
 
-#ifndef __MATERIAL_PROPERTY_EDIT_TABLE_H__
-#define __MATERIAL_PROPERTY_EDIT_TABLE_H__
+#ifndef MATERIAL_PROPERTY_EDIT_TABLE_H
+#define MATERIAL_PROPERTY_EDIT_TABLE_H
 
 #include <QTableWidget>
 
@@ -25,7 +25,7 @@ class MaterialPropertyEditTable : public ValueTable
 
         //! Constructor.
         explicit MaterialPropertyEditTable(RMaterialProperty &property,
-                                           QWidget *parent = 0);
+                                           QWidget *parent = nullptr);
 
     protected:
 
@@ -34,4 +34,4 @@ class MaterialPropertyEditTable : public ValueTable
         
 };
 
-#endif /* __MATERIAL_PROPERTY_EDIT_TABLE_H__ */
+#endif /* MATERIAL_PROPERTY_EDIT_TABLE_H */

@@ -8,8 +8,8 @@
  *  DESCRIPTION: Range solver shared data class declaration          *
  *********************************************************************/
 
-#ifndef __RSOLVERSHAREDDATA_H__
-#define __RSOLVERSHAREDDATA_H__
+#ifndef RSOLVERSHAREDDATA_H
+#define RSOLVERSHAREDDATA_H
 
 #include <QMap>
 
@@ -58,4 +58,4 @@ class RSolverSharedData
 
 };
 
-#endif // __RSOLVERSHAREDDATA_H__
+#endif // RSOLVERSHAREDDATA_H

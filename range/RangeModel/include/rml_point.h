@@ -8,8 +8,8 @@
  *  DESCRIPTION: Point class definition                              *
  *********************************************************************/
 
-#ifndef __RML_POINT_H__
-#define __RML_POINT_H__
+#ifndef RML_POINT_H
+#define RML_POINT_H
 
 #include <vector>
 
@@ -60,4 +60,4 @@ class RPoint : public RElementGroup
 
 };
 
-#endif /* __RML_POINT_H__ */
+#endif /* RML_POINT_H */

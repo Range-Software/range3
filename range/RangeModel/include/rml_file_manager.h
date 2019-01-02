@@ -8,8 +8,8 @@
  *  DESCRIPTION: File manager class declarations                     *
  *********************************************************************/
 
-#ifndef __RML_FILE_MANAGER_H__
-#define __RML_FILE_MANAGER_H__
+#ifndef RML_FILE_MANAGER_H
+#define RML_FILE_MANAGER_H
 
 #include <QString>
 
@@ -82,4 +82,4 @@ class RFileManager
 
 };
 
-#endif /* __RML_FILE_MANAGER_H__ */
+#endif /* RML_FILE_MANAGER_H */

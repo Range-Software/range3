@@ -8,8 +8,8 @@
  *  DESCRIPTION: Log browser dialog class declaration                *
  *********************************************************************/
 
-#ifndef __LOG_BROWSER_DIALOG_H__
-#define __LOG_BROWSER_DIALOG_H__
+#ifndef LOG_BROWSER_DIALOG_H
+#define LOG_BROWSER_DIALOG_H
 
 #include <QDialog>
 
@@ -28,7 +28,7 @@ class LogBrowserDialog : public QDialog
     public:
 
         //! Constructor.
-        explicit LogBrowserDialog(const QString &logFileName, QWidget *parent = 0);
+        explicit LogBrowserDialog(const QString &logFileName, QWidget *parent = nullptr);
 
         //! Execute dialog.
         int exec(void);
@@ -42,4 +42,4 @@ class LogBrowserDialog : public QDialog
 
 };
 
-#endif // __LOG_BROWSER_DIALOG_H__
+#endif // LOG_BROWSER_DIALOG_H

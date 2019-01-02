@@ -8,8 +8,8 @@
  *  DESCRIPTION: Monitoring point manager class declaration          *
  *********************************************************************/
 
-#ifndef __RML_MONITORING_POINT_MANAGER_H__
-#define __RML_MONITORING_POINT_MANAGER_H__
+#ifndef RML_MONITORING_POINT_MANAGER_H
+#define RML_MONITORING_POINT_MANAGER_H
 
 #include <vector>
 
@@ -45,4 +45,4 @@ class RMonitoringPointManager : public std::vector<RMonitoringPoint>
 
 };
 
-#endif // __RML_MONITORING_POINT_MANAGER_H__
+#endif // RML_MONITORING_POINT_MANAGER_H

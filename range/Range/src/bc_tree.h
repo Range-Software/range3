@@ -8,8 +8,8 @@
  *  DESCRIPTION: Boundary condition tree class declaration           *
  *********************************************************************/
 
-#ifndef __BC_TREE_H__
-#define __BC_TREE_H__
+#ifndef BC_TREE_H
+#define BC_TREE_H
 
 #include <QTreeWidget>
 
@@ -27,7 +27,7 @@ class BCTree : public QTreeWidget
     public:
 
         //! Constructor.
-        explicit BCTree(QWidget *parent = 0);
+        explicit BCTree(QWidget *parent = nullptr);
 
     protected:
 
@@ -54,4 +54,4 @@ class BCTree : public QTreeWidget
 
 };
 
-#endif /* __BC_TREE_H__ */
+#endif /* BC_TREE_H */

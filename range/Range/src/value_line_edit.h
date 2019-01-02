@@ -8,8 +8,8 @@
  *  DESCRIPTION: Value line edit class declaration                   *
  *********************************************************************/
 
-#ifndef __VALUE_LINE_EDIT_H__
-#define __VALUE_LINE_EDIT_H__
+#ifndef VALUE_LINE_EDIT_H
+#define VALUE_LINE_EDIT_H
 
 #include <QLineEdit>
 #include <QDoubleValidator>
@@ -27,13 +27,13 @@ class ValueLineEdit : public QLineEdit
     public:
 
         //! Constructor.
-        explicit ValueLineEdit(QWidget *parent = 0);
+        explicit ValueLineEdit(QWidget *parent = nullptr);
 
         //! Constructor.
-        explicit ValueLineEdit(double min, double max, QWidget *parent = 0);
+        explicit ValueLineEdit(double min, double max, QWidget *parent = nullptr);
 
         //! Constructor.
-        explicit ValueLineEdit(int min, int max, QWidget *parent = 0);
+        explicit ValueLineEdit(int min, int max, QWidget *parent = nullptr);
 
         //! Set double validator.
         void setDoubleValidator(void);
@@ -91,4 +91,4 @@ class ValueLineEdit : public QLineEdit
         void onTimeout(void);
 };
 
-#endif /* __VALUE_LINE_EDIT_H__ */
+#endif /* VALUE_LINE_EDIT_H */

@@ -8,8 +8,8 @@
  *  DESCRIPTION: Polygon class declaration                           *
  *********************************************************************/
 
-#ifndef __RML_POLYGON_H__
-#define __RML_POLYGON_H__
+#ifndef RML_POLYGON_H
+#define RML_POLYGON_H
 
 #include <list>
 
@@ -89,4 +89,4 @@ class RPolygon
 
 };
 
-#endif // __RML_POLYGON_H__
+#endif // RML_POLYGON_H

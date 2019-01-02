@@ -8,8 +8,8 @@
  *  DESCRIPTION: OpenGL list class declaration                       *
  *********************************************************************/
 
-#ifndef __GL_LIST_H__
-#define __GL_LIST_H__
+#ifndef GL_LIST_H
+#define GL_LIST_H
 
 #include <vector>
 
@@ -82,4 +82,4 @@ class GLList
 
 };
 
-#endif /* __GL_LIST_H__ */
+#endif /* GL_LIST_H */

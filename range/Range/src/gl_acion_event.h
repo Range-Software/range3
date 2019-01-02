@@ -8,8 +8,8 @@
  *  DESCRIPTION: OpenGL acion event class declaration                *
  *********************************************************************/
 
-#ifndef __GL_ACTION_EVENT_H__
-#define __GL_ACTION_EVENT_H__
+#ifndef GL_ACTION_EVENT_H
+#define GL_ACTION_EVENT_H
 
 #include <QObject>
 #include <QKeyEvent>
@@ -48,7 +48,7 @@ class GLActionEvent : public QObject
     public:
 
         //! Constructor.
-        GLActionEvent(QObject *parent = 0);
+        GLActionEvent(QObject *parent = nullptr);
 
         //! Return action event type.
         GLActionEventType getType(void) const;
@@ -102,4 +102,4 @@ class GLActionEvent : public QObject
 
 };
 
-#endif /* __GL_ACTION_EVENT_H__ */
+#endif /* GL_ACTION_EVENT_H */

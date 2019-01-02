@@ -8,8 +8,8 @@
  *  DESCRIPTION: Radiation setup widget class declaration            *
  *********************************************************************/
 
-#ifndef __RADIATION_SETUP_WIDGET_H__
-#define __RADIATION_SETUP_WIDGET_H__
+#ifndef RADIATION_SETUP_WIDGET_H
+#define RADIATION_SETUP_WIDGET_H
 
 #include <QWidget>
 
@@ -33,7 +33,7 @@ class RadiationSetupWidget : public QWidget
     public:
 
         //! Constructor.
-        explicit RadiationSetupWidget(const RRadiationSetup &radiationSetup, const QString &defaultViewFactorFileName, QWidget *parent = 0);
+        explicit RadiationSetupWidget(const RRadiationSetup &radiationSetup, const QString &defaultViewFactorFileName, QWidget *parent = nullptr);
 
     signals:
 
@@ -62,4 +62,4 @@ class RadiationSetupWidget : public QWidget
 
 };
 
-#endif // __RADIATION_SETUP_WIDGET_H__
+#endif // RADIATION_SETUP_WIDGET_H

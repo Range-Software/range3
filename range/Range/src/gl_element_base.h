@@ -8,8 +8,8 @@
  *  DESCRIPTION: OpenGL element base class declaration               *
  *********************************************************************/
 
-#ifndef __GL_ELEMENT_BASE_H__
-#define __GL_ELEMENT_BASE_H__
+#ifndef GL_ELEMENT_BASE_H
+#define GL_ELEMENT_BASE_H
 
 #include "gl_object.h"
 #include "model.h"
@@ -113,4 +113,4 @@ class GLElementBase : public GLObject
 
 };
 
-#endif /* __GL_ELEMENT_BASE_H__ */
+#endif /* GL_ELEMENT_BASE_H */

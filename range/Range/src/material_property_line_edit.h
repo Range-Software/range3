@@ -8,8 +8,8 @@
  *  DESCRIPTION: Material property line edit class declaration       *
  *********************************************************************/
 
-#ifndef __MATERIAL_PROPERTY_LINE_EDIT_H__
-#define __MATERIAL_PROPERTY_LINE_EDIT_H__
+#ifndef MATERIAL_PROPERTY_LINE_EDIT_H
+#define MATERIAL_PROPERTY_LINE_EDIT_H
 
 #include <rmlib.h>
 
@@ -28,7 +28,7 @@ class MaterialPropertyLineEdit : public ValueLineEdit
 
         //! Constructor.
         explicit MaterialPropertyLineEdit(RMaterialPropertyType type,
-                                          QWidget *parent = 0);
+                                          QWidget *parent = nullptr);
 
     signals:
 
@@ -42,4 +42,4 @@ class MaterialPropertyLineEdit : public ValueLineEdit
         
 };
 
-#endif /* __MATERIAL_PROPERTY_LINE_EDIT_H__ */
+#endif /* MATERIAL_PROPERTY_LINE_EDIT_H */

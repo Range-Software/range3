@@ -8,8 +8,8 @@
  *  DESCRIPTION: OpenGL simplex segment class declaration            *
  *********************************************************************/
 
-#ifndef __GL_SIMPLEX_SEGMENT_H__
-#define __GL_SIMPLEX_SEGMENT_H__
+#ifndef GL_SIMPLEX_SEGMENT_H
+#define GL_SIMPLEX_SEGMENT_H
 
 #include "gl_simplex.h"
 
@@ -68,4 +68,4 @@ class GLSimplexSegment : public GLSimplex
 
 };
 
-#endif // __GL_SIMPLEX_SEGMENT_H__
+#endif // GL_SIMPLEX_SEGMENT_H

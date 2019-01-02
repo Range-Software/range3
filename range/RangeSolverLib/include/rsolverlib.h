@@ -8,8 +8,8 @@
  *  DESCRIPTION: RSolverLib - Range solver library                   *
  *********************************************************************/
 
-#ifndef __RSOLVERLIB_H__
-#define __RSOLVERLIB_H__
+#ifndef RSOLVERLIB_H
+#define RSOLVERLIB_H
 
 #include "rconvection.h"
 #include "reigenvaluesolver.h"
@@ -36,4 +36,4 @@
 #include "rsolverstress.h"
 #include "rsolverwave.h"
 
-#endif // __RSOLVERLIB_H__
+#endif // RSOLVERLIB_H

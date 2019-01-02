@@ -8,8 +8,8 @@
  *  DESCRIPTION: Convergence graph widget class declaration          *
  *********************************************************************/
 
-#ifndef __CONVERGENCE_GRAPH_WIDGET_H__
-#define __CONVERGENCE_GRAPH_WIDGET_H__
+#ifndef CONVERGENCE_GRAPH_WIDGET_H
+#define CONVERGENCE_GRAPH_WIDGET_H
 
 #include <QWidget>
 #include <QComboBox>
@@ -30,7 +30,7 @@ class ConvergenceGraphWidget : public QWidget
     public:
 
         //! Constructor.
-        explicit ConvergenceGraphWidget(const QString &convergenceFileName, QWidget *parent = 0);
+        explicit ConvergenceGraphWidget(const QString &convergenceFileName, QWidget *parent = nullptr);
 
     signals:
 
@@ -43,4 +43,4 @@ class ConvergenceGraphWidget : public QWidget
 
 };
 
-#endif // __CONVERGENCE_GRAPH_WIDGET_H__
+#endif // CONVERGENCE_GRAPH_WIDGET_H

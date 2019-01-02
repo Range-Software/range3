@@ -8,8 +8,8 @@
  *  DESCRIPTION: Geometry rotate widget class declaration            *
  *********************************************************************/
 
-#ifndef __GEOMETRY_ROTATE_WIDGET_H__
-#define __GEOMETRY_ROTATE_WIDGET_H__
+#ifndef GEOMETRY_ROTATE_WIDGET_H
+#define GEOMETRY_ROTATE_WIDGET_H
 
 #include <QWidget>
 
@@ -37,7 +37,7 @@ class GeometryRotateWidget : public QWidget
     public:
 
         //! Constructor.
-        explicit GeometryRotateWidget(const RR3Vector &center = RR3Vector(), const RR3Vector &rotation = RR3Vector(), QWidget *parent = 0);
+        explicit GeometryRotateWidget(const RR3Vector &center = RR3Vector(), const RR3Vector &rotation = RR3Vector(), QWidget *parent = nullptr);
 
         //! Destructor.
         ~GeometryRotateWidget();
@@ -60,4 +60,4 @@ class GeometryRotateWidget : public QWidget
 
 };
 
-#endif // __GEOMETRY_ROTATE_WIDGET_H__
+#endif // GEOMETRY_ROTATE_WIDGET_H

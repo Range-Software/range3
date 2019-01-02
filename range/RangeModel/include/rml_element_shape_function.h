@@ -8,8 +8,8 @@
  *  DESCRIPTION: Element shape function class declaration            *
  *********************************************************************/
 
-#ifndef __RML_ELEMENT_SHAPE_FUNCTION_H__
-#define __RML_ELEMENT_SHAPE_FUNCTION_H__
+#ifndef RML_ELEMENT_SHAPE_FUNCTION_H
+#define RML_ELEMENT_SHAPE_FUNCTION_H
 
 #include <vector>
 
@@ -60,4 +60,4 @@ class RElementShapeFunction
 
 };
 
-#endif // __RML_ELEMENT_SHAPE_FUNCTION_H__
+#endif // RML_ELEMENT_SHAPE_FUNCTION_H

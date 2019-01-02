@@ -8,8 +8,8 @@
  *  DESCRIPTION: Acoustic solver class declaration                   *
  *********************************************************************/
 
-#ifndef __RSOLVERACOUSTIC_H__
-#define __RSOLVERACOUSTIC_H__
+#ifndef RSOLVERACOUSTIC_H
+#define RSOLVERACOUSTIC_H
 
 #include "rsolvergeneric.h"
 
@@ -108,4 +108,4 @@ class RSolverAcoustic : public RSolverGeneric
 
 };
 
-#endif // __RSOLVERACOUSTIC_H__
+#endif // RSOLVERACOUSTIC_H

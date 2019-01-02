@@ -8,8 +8,8 @@
  *  DESCRIPTION: Draw engine cylinder class declaration              *
  *********************************************************************/
 
-#ifndef __DRAW_ENGINE_CYLINDER_H__
-#define __DRAW_ENGINE_CYLINDER_H__
+#ifndef DRAW_ENGINE_CYLINDER_H
+#define DRAW_ENGINE_CYLINDER_H
 
 #include "draw_engine_object.h"
 
@@ -21,7 +21,7 @@ class DrawEngineCylinder : public DrawEngineObject
     public:
 
         //! Constructor.
-        explicit DrawEngineCylinder(QObject *parent = 0);
+        explicit DrawEngineCylinder(QObject *parent = nullptr);
 
     protected:
 
@@ -30,4 +30,4 @@ class DrawEngineCylinder : public DrawEngineObject
 
 };
 
-#endif // __DRAW_ENGINE_CYLINDER_H__
+#endif // DRAW_ENGINE_CYLINDER_H

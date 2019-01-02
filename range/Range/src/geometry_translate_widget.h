@@ -8,8 +8,8 @@
  *  DESCRIPTION: Geometry translate widget class declaration         *
  *********************************************************************/
 
-#ifndef __GEOMETRY_TRANSLATE_WIDGET_H__
-#define __GEOMETRY_TRANSLATE_WIDGET_H__
+#ifndef GEOMETRY_TRANSLATE_WIDGET_H
+#define GEOMETRY_TRANSLATE_WIDGET_H
 
 #include <QWidget>
 
@@ -35,7 +35,7 @@ class GeometryTranslateWidget : public QWidget
     public:
 
         //! Constructor.
-        explicit GeometryTranslateWidget(const RR3Vector &translation = RR3Vector(), QWidget *parent = 0);
+        explicit GeometryTranslateWidget(const RR3Vector &translation = RR3Vector(), QWidget *parent = nullptr);
 
     signals:
 
@@ -58,4 +58,4 @@ class GeometryTranslateWidget : public QWidget
 
 };
 
-#endif // __GEOMETRY_TRANSLATE_WIDGET_H__
+#endif // GEOMETRY_TRANSLATE_WIDGET_H

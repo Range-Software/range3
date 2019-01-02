@@ -8,8 +8,8 @@
  *  DESCRIPTION: Material property edit dialog class declaration     *
  *********************************************************************/
 
-#ifndef __MATERIAL_PROPERTY_EDIT_DIALOG_H__
-#define __MATERIAL_PROPERTY_EDIT_DIALOG_H__
+#ifndef MATERIAL_PROPERTY_EDIT_DIALOG_H
+#define MATERIAL_PROPERTY_EDIT_DIALOG_H
 
 #include <QDialog>
 #include <QSpinBox>
@@ -37,7 +37,7 @@ class MaterialPropertyEditDialog : public QDialog
 
         //! Constructor.
         explicit MaterialPropertyEditDialog(RMaterialProperty &property,
-                                            QWidget *parent = 0);
+                                            QWidget *parent = nullptr);
 
         //! Execute dialog.
         int exec(void);
@@ -52,4 +52,4 @@ class MaterialPropertyEditDialog : public QDialog
         
 };
 
-#endif /* __MATERIAL_PROPERTY_EDIT_DIALOG_H__ */
+#endif /* MATERIAL_PROPERTY_EDIT_DIALOG_H */

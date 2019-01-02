@@ -8,8 +8,8 @@
  *  DESCRIPTION: Color scale class declaration                       *
  *********************************************************************/
 
-#ifndef __COLOR_SCALE_H__
-#define __COLOR_SCALE_H__
+#ifndef COLOR_SCALE_H
+#define COLOR_SCALE_H
 
 #include <QObject>
 #include <QList>
@@ -27,7 +27,7 @@ class ColorScale : public QObject
     public:
 
         //! Constructor.
-        explicit ColorScale(const QString &scaleName = QString(), QObject *parent = 0);
+        explicit ColorScale(const QString &scaleName = QString(), QObject *parent = nullptr);
 
         //! Get color scale name.
         const QString & getName(void) const;
@@ -53,4 +53,4 @@ class ColorScale : public QObject
         
 };
 
-#endif // __COLOR_SCALE_H__
+#endif // COLOR_SCALE_H

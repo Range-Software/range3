@@ -8,8 +8,8 @@
  *  DESCRIPTION: Eigen value solver class declaration                *
  *********************************************************************/
 
-#ifndef __REIGENVALUESOLVER_H__
-#define __REIGENVALUESOLVER_H__
+#ifndef REIGENVALUESOLVER_H
+#define REIGENVALUESOLVER_H
 
 #include <rmlib.h>
 
@@ -69,4 +69,4 @@ class REigenValueSolver
 
 };
 
-#endif // __REIGENVALUESOLVER_H__
+#endif // REIGENVALUESOLVER_H

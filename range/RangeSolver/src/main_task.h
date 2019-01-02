@@ -8,8 +8,8 @@
  *  DESCRIPTION: Main task class declaration                         *
  *********************************************************************/
 
-#ifndef __MAIN_TASK_H__
-#define __MAIN_TASK_H__
+#ifndef MAIN_TASK_H
+#define MAIN_TASK_H
 
 #include <QObject>
 #include <QThread>
@@ -22,7 +22,7 @@ class MainTask : public QObject
     public:
 
         //! Constructor.
-        explicit MainTask(QObject *parent = 0);
+        explicit MainTask(QObject *parent = nullptr);
         
     protected slots:
 
@@ -31,4 +31,4 @@ class MainTask : public QObject
         
 };
 
-#endif // __MAIN_TASK_H__
+#endif // MAIN_TASK_H

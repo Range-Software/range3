@@ -8,8 +8,8 @@
  *  DESCRIPTION: Model records tree class declaration                *
  *********************************************************************/
 
-#ifndef __MODEL_RECORDS_TREE_H__
-#define __MODEL_RECORDS_TREE_H__
+#ifndef MODEL_RECORDS_TREE_H
+#define MODEL_RECORDS_TREE_H
 
 #include <QTreeWidget>
 
@@ -34,7 +34,7 @@ class ModelRecordsTree : public QTreeWidget
     public:
 
         //! Constructor.
-        explicit ModelRecordsTree(QWidget *parent = 0);
+        explicit ModelRecordsTree(QWidget *parent = nullptr);
 
         //! Return true if marked record is first.
         bool isFirst(void);
@@ -83,4 +83,4 @@ class ModelRecordsTree : public QTreeWidget
         
 };
 
-#endif // __MODEL_RECORDS_TREE_H__
+#endif // MODEL_RECORDS_TREE_H

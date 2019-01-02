@@ -8,8 +8,8 @@
  *  DESCRIPTION: Iteration info value class declaration              *
  *********************************************************************/
 
-#ifndef __RITERATIONINFOVALUE_H__
-#define __RITERATIONINFOVALUE_H__
+#ifndef RITERATIONINFOVALUE_H
+#define RITERATIONINFOVALUE_H
 
 #include <QString>
 
@@ -53,4 +53,4 @@ class RIterationInfoValue
 
 };
 
-#endif // __RITERATIONINFOVALUE_H__
+#endif // RITERATIONINFOVALUE_H

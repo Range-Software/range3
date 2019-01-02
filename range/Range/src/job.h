@@ -8,8 +8,8 @@
  *  DESCRIPTION: Job class declaration                               *
  *********************************************************************/
 
-#ifndef __JOB_H__
-#define __JOB_H__
+#ifndef JOB_H
+#define JOB_H
 
 #include <QObject>
 
@@ -36,7 +36,7 @@ class Job : public QObject
     public:
 
         //! Constructor.
-        explicit Job(QObject *parent = 0);
+        explicit Job(QObject *parent = nullptr);
 
         //! Return job ID.
         uint getID(void);
@@ -83,4 +83,4 @@ class Job : public QObject
         virtual void run(void);
 };
 
-#endif /* __JOB_H__ */
+#endif /* JOB_H */

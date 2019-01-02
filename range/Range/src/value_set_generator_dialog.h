@@ -8,8 +8,8 @@
  *  DESCRIPTION: Value set generator dialog class declaration        *
  *********************************************************************/
 
-#ifndef __VALUE_SET_GENERATOR_DIALOG_H__
-#define __VALUE_SET_GENERATOR_DIALOG_H__
+#ifndef VALUE_SET_GENERATOR_DIALOG_H
+#define VALUE_SET_GENERATOR_DIALOG_H
 
 #include <QDialog>
 #include <QPushButton>
@@ -48,7 +48,7 @@ class ValueSetGeneratorDialog : public QDialog
     public:
 
         //! Constructor.
-        explicit ValueSetGeneratorDialog(RValueTable &valueTable, QWidget *parent = 0);
+        explicit ValueSetGeneratorDialog(RValueTable &valueTable, QWidget *parent = nullptr);
 
         //! Execute dialog.
         int exec(void);
@@ -60,4 +60,4 @@ class ValueSetGeneratorDialog : public QDialog
 
 };
 
-#endif // __VALUE_SET_GENERATOR_DIALOG_H__
+#endif // VALUE_SET_GENERATOR_DIALOG_H

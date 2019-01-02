@@ -8,8 +8,8 @@
  *  DESCRIPTION: Graph widget class declaration                      *
  *********************************************************************/
 
-#ifndef __GRAPH_WIDGET_H__
-#define __GRAPH_WIDGET_H__
+#ifndef GRAPH_WIDGET_H
+#define GRAPH_WIDGET_H
 
 #include <QWidget>
 
@@ -52,7 +52,7 @@ class GraphWidget : public QWidget
     public:
 
         //! Constructor.
-        explicit GraphWidget(GraphObject *graphObject, bool editLimits = false, QWidget *parent = 0);
+        explicit GraphWidget(GraphObject *graphObject, bool editLimits = false, QWidget *parent = nullptr);
 
         //! Set show pointer.
         void setShowPointer(bool showPointer, bool snapPointerX, bool snapPointerY);
@@ -153,4 +153,4 @@ class GraphWidget : public QWidget
         
 };
 
-#endif // __GRAPH_WIDGET_H__
+#endif // GRAPH_WIDGET_H

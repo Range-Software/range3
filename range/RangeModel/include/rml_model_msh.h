@@ -8,8 +8,8 @@
  *  DESCRIPTION: MSH (old range) model class declaration             *
  *********************************************************************/
 
-#ifndef __RML_MODEL_MSH_H__
-#define __RML_MODEL_MSH_H__
+#ifndef RML_MODEL_MSH_H
+#define RML_MODEL_MSH_H
 
 #include <string>
 #include <vector>
@@ -81,4 +81,4 @@ class RModelMsh
         void write ( const QString &fileName ) const;
 };
 
-#endif /* __RML_MODEL_MSH_H__ */
+#endif /* RML_MODEL_MSH_H */

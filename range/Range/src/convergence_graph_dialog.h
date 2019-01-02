@@ -8,8 +8,8 @@
  *  DESCRIPTION: Convergence graph dialog class declaration          *
  *********************************************************************/
 
-#ifndef __CONVERGENCE_GRAPH_DIALOG_H__
-#define __CONVERGENCE_GRAPH_DIALOG_H__
+#ifndef CONVERGENCE_GRAPH_DIALOG_H
+#define CONVERGENCE_GRAPH_DIALOG_H
 
 #include <QDialog>
 
@@ -21,7 +21,7 @@ class ConvergenceGraphDialog : public QDialog
     public:
 
         //! Constructor.
-        explicit ConvergenceGraphDialog(const QStringList &convergenceFileNames, QWidget *parent = 0);
+        explicit ConvergenceGraphDialog(const QStringList &convergenceFileNames, QWidget *parent = nullptr);
 
     private:
 
@@ -30,4 +30,4 @@ class ConvergenceGraphDialog : public QDialog
 
 };
 
-#endif // __CONVERGENCE_GRAPH_DIALOG_H__
+#endif // CONVERGENCE_GRAPH_DIALOG_H

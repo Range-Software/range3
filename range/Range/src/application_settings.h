@@ -8,8 +8,8 @@
  *  DESCRIPTION: Application class class declaration                 *
  *********************************************************************/
 
-#ifndef __APPLICATION_SETTINGS_H__
-#define __APPLICATION_SETTINGS_H__
+#ifndef APPLICATION_SETTINGS_H
+#define APPLICATION_SETTINGS_H
 
 #include <QObject>
 #include <QString>
@@ -65,7 +65,7 @@ class ApplicationSettings : public QObject
     public:
 
         //! Constructor.
-        explicit ApplicationSettings(QObject *parent = 0);
+        explicit ApplicationSettings(QObject *parent = nullptr);
 
         //! Return const pointer to action definition.
         const ActionDefinition *getActionDefinition(void) const;
@@ -190,4 +190,4 @@ class ApplicationSettings : public QObject
 
 };
 
-#endif // __APPLICATION_SETTINGS_H__
+#endif // APPLICATION_SETTINGS_H

@@ -8,8 +8,8 @@
  *  DESCRIPTION: Progress class declaration                          *
  *********************************************************************/
 
-#ifndef __RBL_PROGRESS_H__
-#define __RBL_PROGRESS_H__
+#ifndef RBL_PROGRESS_H
+#define RBL_PROGRESS_H
 
 #include <QString>
 
@@ -118,4 +118,4 @@ void RProgressPrint ( unsigned int step,
 
 void RProgressPrintToLog ( bool printToLog );
 
-#endif /* __RBL_PROGRESS_H__ */
+#endif /* RBL_PROGRESS_H */

@@ -8,8 +8,8 @@
  *  DESCRIPTION: Distance vector class declaration                   *
  *********************************************************************/
 
-#ifndef __RBL_DISTANCE_VECTOR_H__
-#define __RBL_DISTANCE_VECTOR_H__
+#ifndef RBL_DISTANCE_VECTOR_H
+#define RBL_DISTANCE_VECTOR_H
 
 #include <vector>
 #include <set>
@@ -139,4 +139,4 @@ class RDistanceVector : public std::vector<T>
 
 };
 
-#endif // __RBL_DISTANCE_VECTOR_H__
+#endif // RBL_DISTANCE_VECTOR_H

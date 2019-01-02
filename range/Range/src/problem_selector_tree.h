@@ -8,8 +8,8 @@
  *  DESCRIPTION: Problem selector tree class declaration             *
  *********************************************************************/
 
-#ifndef __PROBLEM_SELECTOR_TREE_H__
-#define __PROBLEM_SELECTOR_TREE_H__
+#ifndef PROBLEM_SELECTOR_TREE_H
+#define PROBLEM_SELECTOR_TREE_H
 
 #include <rmlib.h>
 
@@ -28,7 +28,7 @@ class ProblemSelectorTree : public QTreeWidget
     public:
 
         //! Constructor.
-        explicit ProblemSelectorTree(QWidget *parent = 0);
+        explicit ProblemSelectorTree(QWidget *parent = nullptr);
 
         //! Return problem mask for model id.
         RProblemTypeMask findProblemTypeMask(void);
@@ -56,4 +56,4 @@ class ProblemSelectorTree : public QTreeWidget
 
 };
 
-#endif // __PROBLEM_SELECTOR_TREE_H__
+#endif // PROBLEM_SELECTOR_TREE_H

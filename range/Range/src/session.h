@@ -8,8 +8,8 @@
  *  DESCRIPTION: Session class declaration                           *
  *********************************************************************/
 
-#ifndef __SESSION_H__
-#define __SESSION_H__
+#ifndef SESSION_H
+#define SESSION_H
 
 #include <QObject>
 #include <QList>
@@ -381,4 +381,4 @@ class Session : public QObject
 
 };
 
-#endif /* __SESSION_H__ */
+#endif /* SESSION_H */

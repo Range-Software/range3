@@ -8,8 +8,8 @@
  *  DESCRIPTION: Draw engine point class declaration                 *
  *********************************************************************/
 
-#ifndef __DRAW_ENGINE_POINT_H__
-#define __DRAW_ENGINE_POINT_H__
+#ifndef DRAW_ENGINE_POINT_H
+#define DRAW_ENGINE_POINT_H
 
 #include "draw_engine_object.h"
 
@@ -21,7 +21,7 @@ class DrawEnginePoint : public DrawEngineObject
     public:
 
         //! Constructor.
-        explicit DrawEnginePoint(QObject *parent = 0);
+        explicit DrawEnginePoint(QObject *parent = nullptr);
 
     protected:
 
@@ -30,4 +30,4 @@ class DrawEnginePoint : public DrawEngineObject
 
 };
 
-#endif // __DRAW_ENGINE_POINT_H__
+#endif // DRAW_ENGINE_POINT_H

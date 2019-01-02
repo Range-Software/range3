@@ -8,8 +8,8 @@
  *  DESCRIPTION: Element shape derivation class declaration          *
  *********************************************************************/
 
-#ifndef __RML_ELEMENT_SHAPE_DERIVATION_H__
-#define __RML_ELEMENT_SHAPE_DERIVATION_H__
+#ifndef RML_ELEMENT_SHAPE_DERIVATION_H
+#define RML_ELEMENT_SHAPE_DERIVATION_H
 
 #include <vector>
 
@@ -58,4 +58,4 @@ class RElementShapeDerivation
 
 };
 
-#endif // __RML_ELEMENT_SHAPE_DERIVATION_H__
+#endif // RML_ELEMENT_SHAPE_DERIVATION_H

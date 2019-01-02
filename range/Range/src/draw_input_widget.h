@@ -8,8 +8,8 @@
  *  DESCRIPTION: Draw input widget class declaration                 *
  *********************************************************************/
 
-#ifndef __DRAW_INPUT_WIDGET_H__
-#define __DRAW_INPUT_WIDGET_H__
+#ifndef DRAW_INPUT_WIDGET_H
+#define DRAW_INPUT_WIDGET_H
 
 #include <QPushButton>
 #include <QCheckBox>
@@ -47,7 +47,7 @@ class DrawInputWidget : public QWidget
     public:
 
         //! Constructor.
-        explicit DrawInputWidget(QWidget *parent = 0);
+        explicit DrawInputWidget(QWidget *parent = nullptr);
 
     protected slots:
 
@@ -83,4 +83,4 @@ class DrawInputWidget : public QWidget
 
 };
 
-#endif // __DRAW_INPUT_WIDGET_H__
+#endif // DRAW_INPUT_WIDGET_H

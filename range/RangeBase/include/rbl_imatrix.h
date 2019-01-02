@@ -8,8 +8,8 @@
  *  DESCRIPTION: Integer matrix class declaration                    *
  *********************************************************************/
 
-#ifndef __RBL_IMATRIX_H__
-#define __RBL_IMATRIX_H__
+#ifndef RBL_IMATRIX_H
+#define RBL_IMATRIX_H
 
 #include <vector>
 
@@ -82,4 +82,4 @@ class RIMatrix
 
 };
 
-#endif /* __RBL_IMATRIX_H__ */
+#endif /* RBL_IMATRIX_H */

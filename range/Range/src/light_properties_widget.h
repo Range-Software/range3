@@ -8,8 +8,8 @@
  *  DESCRIPTION: Light properties widget class declaration           *
  *********************************************************************/
 
-#ifndef __LIGHT_PROPERTIES_WIDGET_H__
-#define __LIGHT_PROPERTIES_WIDGET_H__
+#ifndef LIGHT_PROPERTIES_WIDGET_H
+#define LIGHT_PROPERTIES_WIDGET_H
 
 #include <QGroupBox>
 
@@ -30,7 +30,7 @@ class LightPropertiesWidget : public QGroupBox
     public:
 
         //! Constructor.
-        explicit LightPropertiesWidget(const QString &title, const RGLLight &glLight, QWidget *parent = 0);
+        explicit LightPropertiesWidget(const QString &title, const RGLLight &glLight, QWidget *parent = nullptr);
 
         //! Return const reference to OpenGL light.
         const RGLLight &getLight(void) const;
@@ -77,4 +77,4 @@ class LightPropertiesWidget : public QGroupBox
         
 };
 
-#endif // __LIGHT_PROPERTIES_WIDGET_H__
+#endif // LIGHT_PROPERTIES_WIDGET_H

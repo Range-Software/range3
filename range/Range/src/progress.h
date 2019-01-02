@@ -8,8 +8,8 @@
  *  DESCRIPTION: Progress functions                                  *
  *********************************************************************/
 
-#ifndef __PROGRESS_H__
-#define __PROGRESS_H__
+#ifndef PROGRESS_H
+#define PROGRESS_H
 
 #include <QObject>
 
@@ -56,4 +56,4 @@ class Progress : public QObject
         void progressFinalize(const QString &message);
 };
 
-#endif /* __PROGRESS_H__ */
+#endif /* PROGRESS_H */

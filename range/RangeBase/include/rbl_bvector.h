@@ -8,8 +8,8 @@
  *  DESCRIPTION: Bool vector class declaration                       *
  *********************************************************************/
 
-#ifndef __RBL_BVECTOR_H__
-#define __RBL_BVECTOR_H__
+#ifndef RBL_BVECTOR_H
+#define RBL_BVECTOR_H
 
 #include <vector>
 
@@ -55,4 +55,4 @@ class RBVector : public std::vector<bool>
         void print ( bool oneLine = false, bool newLine = false ) const;
 };
 
-#endif /* __RBL_BVECTOR_H__ */
+#endif /* RBL_BVECTOR_H */

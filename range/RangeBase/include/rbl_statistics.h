@@ -8,8 +8,8 @@
  *  DESCRIPTION: Statistics class declaration                        *
  *********************************************************************/
 
-#ifndef __RBL_STATISTICS_H__
-#define __RBL_STATISTICS_H__
+#ifndef RBL_STATISTICS_H
+#define RBL_STATISTICS_H
 
 #include "rbl_rvector.h"
 #include "rbl_rmatrix.h"
@@ -146,4 +146,4 @@ class RStatistics
 
 };
 
-#endif // __RBL_STATISTICS_H__
+#endif // RBL_STATISTICS_H

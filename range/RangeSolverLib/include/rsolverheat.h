@@ -8,8 +8,8 @@
  *  DESCRIPTION: Heat-transfer solver class declaration              *
  *********************************************************************/
 
-#ifndef __RSOLVERHEAT_H__
-#define __RSOLVERHEAT_H__
+#ifndef RSOLVERHEAT_H
+#define RSOLVERHEAT_H
 
 #include <rblib.h>
 
@@ -99,4 +99,4 @@ class RSolverHeat : public RSolverGeneric
 
 };
 
-#endif // __RSOLVERHEAT_H__
+#endif // RSOLVERHEAT_H

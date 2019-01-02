@@ -8,8 +8,8 @@
  *  DESCRIPTION: Stop-watch declaration                              *
  *********************************************************************/
 
-#ifndef __RBL_STOP_WATCH_H__
-#define __RBL_STOP_WATCH_H__
+#ifndef RBL_STOP_WATCH_H
+#define RBL_STOP_WATCH_H
 
 #include <QtGlobal>
 
@@ -62,4 +62,4 @@ class RStopWatch
 
 };
 
-#endif // __RBL_STOP_WATCH_H__
+#endif // RBL_STOP_WATCH_H

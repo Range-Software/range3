@@ -8,8 +8,8 @@
  *  DESCRIPTION: Action definition item class declaration            *
  *********************************************************************/
 
-#ifndef __ACTION_DEFINITION_ITEM_H__
-#define __ACTION_DEFINITION_ITEM_H__
+#ifndef ACTION_DEFINITION_ITEM_H
+#define ACTION_DEFINITION_ITEM_H
 
 #include <QString>
 
@@ -208,4 +208,4 @@ class ActionDefinitionItem
 
 };
 
-#endif // __ACTION_DEFINITION_ITEM_H__
+#endif // ACTION_DEFINITION_ITEM_H

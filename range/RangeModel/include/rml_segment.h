@@ -8,8 +8,8 @@
  *  DESCRIPTION: Segment class declaration                           *
  *********************************************************************/
 
-#ifndef __RML_SEGMENT_H__
-#define __RML_SEGMENT_H__
+#ifndef RML_SEGMENT_H
+#define RML_SEGMENT_H
 
 #include <rblib.h>
 
@@ -160,4 +160,4 @@ class RSegment
 
 };
 
-#endif /* __RML_SEGMENT_H__ */
+#endif /* RML_SEGMENT_H */

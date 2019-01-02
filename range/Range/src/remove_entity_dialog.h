@@ -8,8 +8,8 @@
  *  DESCRIPTION: Remove entity dialog class declaration              *
  *********************************************************************/
 
-#ifndef __REMOVE_ENTITY_DIALOG_H__
-#define __REMOVE_ENTITY_DIALOG_H__
+#ifndef REMOVE_ENTITY_DIALOG_H
+#define REMOVE_ENTITY_DIALOG_H
 
 #include <QDialog>
 
@@ -30,7 +30,7 @@ class RemoveEntityDialog : public QDialog
     public:
 
         //! Constructor.
-        explicit RemoveEntityDialog(REntityGroupTypeMask entityTypeMask, QWidget *parent = 0);
+        explicit RemoveEntityDialog(REntityGroupTypeMask entityTypeMask, QWidget *parent = nullptr);
 
         //! Execute dialog.
         int exec(void);
@@ -42,4 +42,4 @@ class RemoveEntityDialog : public QDialog
         
 };
 
-#endif // __REMOVE_ENTITY_DIALOG_H__
+#endif // REMOVE_ENTITY_DIALOG_H

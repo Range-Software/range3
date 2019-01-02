@@ -8,8 +8,8 @@
  *  DESCRIPTION: Interpolated node class declaration                 *
  *********************************************************************/
 
-#ifndef __RML_INTERPOLATED_NODE_H__
-#define __RML_INTERPOLATED_NODE_H__
+#ifndef RML_INTERPOLATED_NODE_H
+#define RML_INTERPOLATED_NODE_H
 
 #include <vector>
 #include <rblib.h>
@@ -69,4 +69,4 @@ class RInterpolatedNode : public RNode
 
 };
 
-#endif /* __RML_INTERPOLATED_NODE_H__ */
+#endif /* RML_INTERPOLATED_NODE_H */

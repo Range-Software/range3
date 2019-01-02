@@ -8,8 +8,8 @@
  *  DESCRIPTION: File header class declarations                      *
  *********************************************************************/
 
-#ifndef __RML_FILE_HEADER_H__
-#define __RML_FILE_HEADER_H__
+#ifndef RML_FILE_HEADER_H
+#define RML_FILE_HEADER_H
 
 #include <rblib.h>
 
@@ -82,4 +82,4 @@ class RFileHeader
 
 };
 
-#endif /* __RML_FILE_HEADER_H__ */
+#endif /* RML_FILE_HEADER_H */

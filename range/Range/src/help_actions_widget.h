@@ -8,8 +8,8 @@
  *  DESCRIPTION: Help actions widget class declaration               *
  *********************************************************************/
 
-#ifndef __HELP_ACTIONS_WIDGET_H__
-#define __HELP_ACTIONS_WIDGET_H__
+#ifndef HELP_ACTIONS_WIDGET_H
+#define HELP_ACTIONS_WIDGET_H
 
 #include "action_definition.h"
 #include "document_widget.h"
@@ -26,4 +26,4 @@ class HelpActionsWidget : public DocumentWidget
 
 };
 
-#endif // __HELP_ACTIONS_WIDGET_H__
+#endif // HELP_ACTIONS_WIDGET_H

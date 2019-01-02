@@ -8,8 +8,8 @@
  *  DESCRIPTION: Cut class declaration                               *
  *********************************************************************/
 
-#ifndef __RML_CUT_H__
-#define __RML_CUT_H__
+#ifndef RML_CUT_H
+#define RML_CUT_H
 
 #include <rblib.h>
 
@@ -78,4 +78,4 @@ class RCut : public RInterpolatedEntity
 
 };
 
-#endif /* __RML_CUT_H__ */
+#endif /* RML_CUT_H */

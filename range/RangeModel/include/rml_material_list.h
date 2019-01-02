@@ -8,8 +8,8 @@
  *  DESCRIPTION: Material list class declaration                     *
  *********************************************************************/
 
-#ifndef __RMATERIAL_LIST_H__
-#define __RMATERIAL_LIST_H__
+#ifndef RMATERIAL_LIST_H
+#define RMATERIAL_LIST_H
 
 #include <QString>
 
@@ -108,4 +108,4 @@ class RMaterialList
 
 };
 
-#endif /* __RMATERIAL_LIST_H__ */
+#endif /* RMATERIAL_LIST_H */

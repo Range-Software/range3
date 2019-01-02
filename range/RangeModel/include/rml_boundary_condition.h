@@ -8,8 +8,8 @@
  *  DESCRIPTION: Boundary condition class declaration                *
  *********************************************************************/
 
-#ifndef __RML_BOUNDARY_CONDITION_H__
-#define __RML_BOUNDARY_CONDITION_H__
+#ifndef RML_BOUNDARY_CONDITION_H
+#define RML_BOUNDARY_CONDITION_H
 
 #include "rml_condition.h"
 
@@ -203,4 +203,4 @@ class RBoundaryCondition : public RCondition
 void operator ++(RBoundaryConditionType &type, int increment);
 
 
-#endif /* __RML_BOUNDARY_CONDITION_H__ */
+#endif /* RML_BOUNDARY_CONDITION_H */

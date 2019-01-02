@@ -8,8 +8,8 @@
  *  DESCRIPTION: Merge entity dialog class declaration               *
  *********************************************************************/
 
-#ifndef __MERGE_ENTITY_DIALOG_H__
-#define __MERGE_ENTITY_DIALOG_H__
+#ifndef MERGE_ENTITY_DIALOG_H
+#define MERGE_ENTITY_DIALOG_H
 
 #include <QDialog>
 
@@ -30,7 +30,7 @@ class MergeEntityDialog : public QDialog
     public:
 
         //! Constructor.
-        explicit MergeEntityDialog(REntityGroupTypeMask entityTypeMask, QWidget *parent = 0);
+        explicit MergeEntityDialog(REntityGroupTypeMask entityTypeMask, QWidget *parent = nullptr);
 
         //! Execute dialog.
         int exec(void);
@@ -45,4 +45,4 @@ class MergeEntityDialog : public QDialog
         
 };
 
-#endif // __MERGE_ENTITY_DIALOG_H__
+#endif // MERGE_ENTITY_DIALOG_H

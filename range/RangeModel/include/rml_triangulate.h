@@ -8,8 +8,8 @@
  *  DESCRIPTION: Triangulate functions                               *
  *********************************************************************/
 
-#ifndef __RML_TRIANGULATE_H__
-#define __RML_TRIANGULATE_H__
+#ifndef RML_TRIANGULATE_H
+#define RML_TRIANGULATE_H
 
 #include <vector>
 
@@ -18,4 +18,4 @@
 
 std::vector<RElement> RTriangulateNodes(const std::vector<RNode> &nodes, bool removeZeroSized, double zeroSize = RConstants::eps);
 
-#endif /* __RML_TRIANGULATE_H__ */
+#endif /* RML_TRIANGULATE_H */

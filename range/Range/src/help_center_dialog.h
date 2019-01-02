@@ -8,8 +8,8 @@
  *  DESCRIPTION: Help center dialog class declaration                *
  *********************************************************************/
 
-#ifndef __HELP_CENTER_DIALOG_H__
-#define __HELP_CENTER_DIALOG_H__
+#ifndef HELP_CENTER_DIALOG_H
+#define HELP_CENTER_DIALOG_H
 
 #include <QDialog>
 
@@ -21,8 +21,8 @@ class HelpCenterDialog : public QDialog
     public:
 
         //! Constructor.
-        explicit HelpCenterDialog(QWidget *parent = 0);
+        explicit HelpCenterDialog(QWidget *parent = nullptr);
 
 };
 
-#endif // __HELP_CENTER_DIALOG_H__
+#endif // HELP_CENTER_DIALOG_H

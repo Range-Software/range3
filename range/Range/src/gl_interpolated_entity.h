@@ -8,8 +8,8 @@
  *  DESCRIPTION: OpenGL interpolated entity class declaration        *
  *********************************************************************/
 
-#ifndef __GL_INTERPOLATED_ENTITY_H__
-#define __GL_INTERPOLATED_ENTITY_H__
+#ifndef GL_INTERPOLATED_ENTITY_H
+#define GL_INTERPOLATED_ENTITY_H
 
 #include <rmlib.h>
 
@@ -58,4 +58,4 @@ class GLInterpolatedEntity : public GLEntity, public RInterpolatedEntity
 
 };
 
-#endif // __GL_INTERPOLATED_ENTITY_H__
+#endif // GL_INTERPOLATED_ENTITY_H

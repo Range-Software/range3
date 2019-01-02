@@ -8,8 +8,8 @@
  *  DESCRIPTION: Solver task class declaration                       *
  *********************************************************************/
 
-#ifndef __SOLVER_TASK_H__
-#define __SOLVER_TASK_H__
+#ifndef SOLVER_TASK_H
+#define SOLVER_TASK_H
 
 #include "application_settings.h"
 #include "job.h"
@@ -47,7 +47,7 @@ class SolverTask : public Job
     public:
 
         //! Constructor.
-        explicit SolverTask(const ApplicationSettings *applicationSettings, uint modelID, QObject *parent = 0);
+        explicit SolverTask(const ApplicationSettings *applicationSettings, uint modelID, QObject *parent = nullptr);
 
         //! Return model ID.
         uint getModelID(void) const;

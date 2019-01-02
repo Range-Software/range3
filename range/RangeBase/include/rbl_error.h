@@ -8,8 +8,8 @@
  *  DESCRIPTION: Error class declaration                             *
  *********************************************************************/
 
-#ifndef __RBL_ERROR_H__
-#define __RBL_ERROR_H__
+#ifndef RBL_ERROR_H
+#define RBL_ERROR_H
 
 #include <QString>
 #include <cstdarg>
@@ -103,4 +103,4 @@ class RError
 
 const QString & RErrorTypeGetMessage ( RErrorType type );
 
-#endif /* __RBL_ERROR_H__ */
+#endif /* RBL_ERROR_H */

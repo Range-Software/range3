@@ -8,8 +8,8 @@
  *  DESCRIPTION: OpenGL cut plane class declaration                  *
  *********************************************************************/
 
-#ifndef __GL_CUT_PLANE_H__
-#define __GL_CUT_PLANE_H__
+#ifndef GL_CUT_PLANE_H
+#define GL_CUT_PLANE_H
 
 #include <rblib.h>
 
@@ -72,4 +72,4 @@ class GLCutPlane : public GLObject, public RPlane
 
 };
 
-#endif // __GL_CUT_PLANE_H__
+#endif // GL_CUT_PLANE_H

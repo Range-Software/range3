@@ -8,8 +8,8 @@
  *  DESCRIPTION: Convection coefficient calculator class declaration *
  *********************************************************************/
 
-#ifndef __RCONVECTION_H__
-#define __RCONVECTION_H__
+#ifndef RCONVECTION_H
+#define RCONVECTION_H
 
 #include <rmlib.h>
 
@@ -163,4 +163,4 @@ class RConvection
 
 };
 
-#endif // __RCONVECTION_H__
+#endif // RCONVECTION_H

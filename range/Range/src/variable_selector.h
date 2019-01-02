@@ -8,8 +8,8 @@
  *  DESCRIPTION: Variable selector class declaration                 *
  *********************************************************************/
 
-#ifndef __VARIABLE_SELECTOR_H__
-#define __VARIABLE_SELECTOR_H__
+#ifndef VARIABLE_SELECTOR_H
+#define VARIABLE_SELECTOR_H
 
 #include <QComboBox>
 
@@ -23,7 +23,7 @@ class VariableSelector : public QComboBox
     public:
 
         //! Constructor.
-        explicit VariableSelector(const std::vector<RVariableType> &variableTypes,QWidget *parent = 0);
+        explicit VariableSelector(const std::vector<RVariableType> &variableTypes,QWidget *parent = nullptr);
 
         //! Return current variable type.
         RVariableType getCurrentVariableType(void) const;
@@ -48,4 +48,4 @@ class VariableSelector : public QComboBox
 
 };
 
-#endif // __VARIABLE_SELECTOR_H__
+#endif // VARIABLE_SELECTOR_H

@@ -8,8 +8,8 @@
  *  DESCRIPTION: Model action class declaration                      *
  *********************************************************************/
 
-#ifndef __MODEL_ACTION_H__
-#define __MODEL_ACTION_H__
+#ifndef MODEL_ACTION_H
+#define MODEL_ACTION_H
 
 #include <QVector>
 
@@ -30,7 +30,7 @@ class ModelAction : public Job
     public:
 
         //! Constructor.
-        explicit ModelAction(QObject *parent = 0);
+        explicit ModelAction(QObject *parent = nullptr);
 
         //! Add new action.
         void addAction(const ModelActionInput &modelActionInput);
@@ -144,4 +144,4 @@ class ModelAction : public Job
         
 };
 
-#endif // __MODEL_ACTION_H__
+#endif // MODEL_ACTION_H

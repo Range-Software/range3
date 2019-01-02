@@ -8,8 +8,8 @@
  *  DESCRIPTION: Material tree class declaration                     *
  *********************************************************************/
 
-#ifndef __MATERIAL_TREE_H__
-#define __MATERIAL_TREE_H__
+#ifndef MATERIAL_TREE_H
+#define MATERIAL_TREE_H
 
 #include <QTreeWidget>
 #include <QAction>
@@ -33,7 +33,7 @@ class MaterialTree : public QTreeWidget
     public:
 
         //! Constructor.
-        explicit MaterialTree(QWidget *parent = 0);
+        explicit MaterialTree(QWidget *parent = nullptr);
 
     protected:
 
@@ -64,4 +64,4 @@ class MaterialTree : public QTreeWidget
         
 };
 
-#endif // __MATERIAL_TREE_H__
+#endif // MATERIAL_TREE_H

@@ -8,8 +8,8 @@
  *  DESCRIPTION: Results variable selector class declaration         *
  *********************************************************************/
 
-#ifndef __RESULTS_VARIABLE_SELECTOR_H__
-#define __RESULTS_VARIABLE_SELECTOR_H__
+#ifndef RESULTS_VARIABLE_SELECTOR_H
+#define RESULTS_VARIABLE_SELECTOR_H
 
 #include <rmlib.h>
 
@@ -25,7 +25,7 @@ class ResultsVariableSelector : public VariableSelector
     public:
 
         //! Constructor.
-        explicit ResultsVariableSelector(QWidget *parent = 0);
+        explicit ResultsVariableSelector(QWidget *parent = nullptr);
 
     protected:
 
@@ -39,4 +39,4 @@ class ResultsVariableSelector : public VariableSelector
         
 };
 
-#endif // __RESULTS_VARIABLE_SELECTOR_H__
+#endif // RESULTS_VARIABLE_SELECTOR_H

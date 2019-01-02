@@ -8,8 +8,8 @@
  *  DESCRIPTION: First run dialog class declaration                  *
  *********************************************************************/
 
-#ifndef __FIRST_RUN_DIALOG_H__
-#define __FIRST_RUN_DIALOG_H__
+#ifndef FIRST_RUN_DIALOG_H
+#define FIRST_RUN_DIALOG_H
 
 #include <QDialog>
 
@@ -19,7 +19,7 @@ class FirstRunDialog : public QDialog
     public:
 
         //! Constructor.
-        explicit FirstRunDialog(QWidget *parent = 0);
+        explicit FirstRunDialog(QWidget *parent = nullptr);
 
     private slots:
 
@@ -28,4 +28,4 @@ class FirstRunDialog : public QDialog
 
 };
 
-#endif // __FIRST_RUN_DIALOG_H__
+#endif // FIRST_RUN_DIALOG_H

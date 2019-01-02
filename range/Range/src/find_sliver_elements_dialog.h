@@ -8,8 +8,8 @@
  *  DESCRIPTION: Find sliver elements dialog class declaration       *
  *********************************************************************/
 
-#ifndef __FIND_SLIVER_ELEMENTS_DIALOG_H__
-#define __FIND_SLIVER_ELEMENTS_DIALOG_H__
+#ifndef FIND_SLIVER_ELEMENTS_DIALOG_H
+#define FIND_SLIVER_ELEMENTS_DIALOG_H
 
 #include <QDialog>
 
@@ -30,11 +30,11 @@ class FindSliverElementsDialog : public QDialog
         public:
 
             //! Constructor.
-            explicit FindSliverElementsDialog(uint modelID,QWidget *parent = 0);
+            explicit FindSliverElementsDialog(uint modelID,QWidget *parent = nullptr);
 
             //! Overloaded exec function.
             int exec(void);
 
 };
 
-#endif // __FIND_SLIVER_ELEMENTS_DIALOG_H__
+#endif // FIND_SLIVER_ELEMENTS_DIALOG_H

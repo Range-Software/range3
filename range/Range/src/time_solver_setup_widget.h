@@ -8,8 +8,8 @@
  *  DESCRIPTION: Time-solver setup widget class declaration          *
  *********************************************************************/
 
-#ifndef __TIME_SOLVER_SETUP_WIDGET_H__
-#define __TIME_SOLVER_SETUP_WIDGET_H__
+#ifndef TIME_SOLVER_SETUP_WIDGET_H
+#define TIME_SOLVER_SETUP_WIDGET_H
 
 #include <QWidget>
 
@@ -32,7 +32,7 @@ class TimeSolverSetupWidget : public QWidget
     public:
 
         //! Constructor.
-        explicit TimeSolverSetupWidget(const RTimeSolver &timeSolver, QWidget *parent = 0);
+        explicit TimeSolverSetupWidget(const RTimeSolver &timeSolver, QWidget *parent = nullptr);
 
     protected:
 
@@ -60,4 +60,4 @@ class TimeSolverSetupWidget : public QWidget
         
 };
 
-#endif /* __TIME_SOLVER_SETUP_WIDGET_H__ */
+#endif /* TIME_SOLVER_SETUP_WIDGET_H */

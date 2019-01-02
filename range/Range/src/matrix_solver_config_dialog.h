@@ -8,8 +8,8 @@
  *  DESCRIPTION: Matrix solver config. dialog class declaration      *
  *********************************************************************/
 
-#ifndef __MATRIX_SOLVER_CONFIG_DIALOG_H__
-#define __MATRIX_SOLVER_CONFIG_DIALOG_H__
+#ifndef MATRIX_SOLVER_CONFIG_DIALOG_H
+#define MATRIX_SOLVER_CONFIG_DIALOG_H
 
 #include <QDialog>
 #include <QSpinBox>
@@ -48,7 +48,7 @@ class MatrixSolverConfigDialog : public QDialog
     public:
 
         //! Constructor.
-        explicit MatrixSolverConfigDialog(uint modelID,QWidget *parent = 0);
+        explicit MatrixSolverConfigDialog(uint modelID,QWidget *parent = nullptr);
 
         //! Execute dialog.
         int exec(void);
@@ -59,4 +59,4 @@ class MatrixSolverConfigDialog : public QDialog
         
 };
 
-#endif // __MATRIX_SOLVER_CONFIG_DIALOG_H__
+#endif // MATRIX_SOLVER_CONFIG_DIALOG_H

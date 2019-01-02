@@ -9,8 +9,8 @@
  *               declaration                                         *
  *********************************************************************/
 
-#ifndef __POINT_INSIDE_SURFACE_DIALOG_H__
-#define __POINT_INSIDE_SURFACE_DIALOG_H__
+#ifndef POINT_INSIDE_SURFACE_DIALOG_H
+#define POINT_INSIDE_SURFACE_DIALOG_H
 
 #include <QDialog>
 
@@ -34,11 +34,11 @@ class PointInsideSurfaceDialog : public QDialog
     public:
 
         //! Constructor.
-        explicit PointInsideSurfaceDialog(uint modelID, const QList<SessionEntityID> &entityIDs, QWidget *parent = 0);
+        explicit PointInsideSurfaceDialog(uint modelID, const QList<SessionEntityID> &entityIDs, QWidget *parent = nullptr);
 
         //! Execute dialog.
         int exec(void);
 
 };
 
-#endif // __POINT_INSIDE_SURFACE_DIALOG_H__
+#endif // POINT_INSIDE_SURFACE_DIALOG_H

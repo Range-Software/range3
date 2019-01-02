@@ -8,8 +8,8 @@
  *  DESCRIPTION: Command processor class declaration                 *
  *********************************************************************/
 
-#ifndef __COMMAND_PROCESSOR_H__
-#define __COMMAND_PROCESSOR_H__
+#ifndef COMMAND_PROCESSOR_H
+#define COMMAND_PROCESSOR_H
 
 #include <QObject>
 #include <QCoreApplication>
@@ -51,4 +51,4 @@ class CommandProcessor : public QObject
         
 };
 
-#endif // __COMMAND_PROCESSOR_H__
+#endif // COMMAND_PROCESSOR_H

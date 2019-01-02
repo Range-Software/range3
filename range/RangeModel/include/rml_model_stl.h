@@ -8,8 +8,8 @@
  *  DESCRIPTION: STL model class declaration                         *
  *********************************************************************/
 
-#ifndef __RML_MODEL_STL_H__
-#define __RML_MODEL_STL_H__
+#ifndef RML_MODEL_STL_H
+#define RML_MODEL_STL_H
 
 #include <QString>
 
@@ -90,4 +90,4 @@ class RModelStl : public RModelRaw
 
 };
 
-#endif /* __RML_MODEL_STL_H__ */
+#endif /* RML_MODEL_STL_H */

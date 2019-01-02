@@ -8,8 +8,8 @@
  *  DESCRIPTION: Bool operation - union dialog class declaration     *
  *********************************************************************/
 
-#ifndef __BOOL_UNION_DIALOG_H__
-#define __BOOL_UNION_DIALOG_H__
+#ifndef BOOL_UNION_DIALOG_H
+#define BOOL_UNION_DIALOG_H
 
 #include <QDialog>
 
@@ -30,11 +30,11 @@ class BoolUnionDialog : public QDialog
     public:
 
         //! Constructor.
-        explicit BoolUnionDialog(uint modelID, const QList<SessionEntityID> &entityIDs, QWidget *parent = 0);
+        explicit BoolUnionDialog(uint modelID, const QList<SessionEntityID> &entityIDs, QWidget *parent = nullptr);
 
         //! Execute dialog.
         int exec(void);
 
 };
 
-#endif // __BOOL_UNION_DIALOG_H__
+#endif // BOOL_UNION_DIALOG_H

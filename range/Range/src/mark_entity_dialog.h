@@ -8,8 +8,8 @@
  *  DESCRIPTION: Mark entity dialog class declaration                *
  *********************************************************************/
 
-#ifndef __MARK_ENTITY_DIALOG_H__
-#define __MARK_ENTITY_DIALOG_H__
+#ifndef MARK_ENTITY_DIALOG_H
+#define MARK_ENTITY_DIALOG_H
 
 #include <QDialog>
 #include <QRadioButton>
@@ -40,7 +40,7 @@ class MarkEntityDialog : public QDialog
     public:
 
         //! Constructor.
-        explicit MarkEntityDialog(REntityGroupType entityType, QWidget *parent = 0);
+        explicit MarkEntityDialog(REntityGroupType entityType, QWidget *parent = nullptr);
 
         //! Execute dialog.
         int exec(void);
@@ -55,4 +55,4 @@ class MarkEntityDialog : public QDialog
 
 };
 
-#endif // __MARK_ENTITY_DIALOG_H__
+#endif // MARK_ENTITY_DIALOG_H

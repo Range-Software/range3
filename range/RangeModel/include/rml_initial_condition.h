@@ -8,8 +8,8 @@
  *  DESCRIPTION: Initial condition class declaration                 *
  *********************************************************************/
 
-#ifndef __RML_INITIAL_CONDITION_H__
-#define __RML_INITIAL_CONDITION_H__
+#ifndef RML_INITIAL_CONDITION_H
+#define RML_INITIAL_CONDITION_H
 
 #include "rml_condition.h"
 #include "rml_problem.h"
@@ -112,4 +112,4 @@ class RInitialCondition : public RCondition
 //! ++ operator
 void operator ++(RInitialConditionType &type, int increment);
 
-#endif /* __RML_INITIAL_CONDITION_H__ */
+#endif /* RML_INITIAL_CONDITION_H */

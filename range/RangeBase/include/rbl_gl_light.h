@@ -8,8 +8,8 @@
  *  DESCRIPTION: OpenGL light class declaration                      *
  *********************************************************************/
 
-#ifndef __RBL_GL_LIGHT_H__
-#define __RBL_GL_LIGHT_H__
+#ifndef RBL_GL_LIGHT_H
+#define RBL_GL_LIGHT_H
 
 #include <QColor>
 
@@ -104,4 +104,4 @@ class RGLLight
 
 };
 
-#endif /* __RBL_GL_LIGHT_H__ */
+#endif /* RBL_GL_LIGHT_H */

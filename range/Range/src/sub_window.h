@@ -8,8 +8,8 @@
  *  DESCRIPTION: Sub window class declaration                        *
  *********************************************************************/
 
-#ifndef __SUB_WINDOW_H__
-#define __SUB_WINDOW_H__
+#ifndef SUB_WINDOW_H
+#define SUB_WINDOW_H
 
 #include <QMdiSubWindow>
 
@@ -35,7 +35,7 @@ class SubWindow : public QMdiSubWindow
     public:
 
         //! Constructor.
-        explicit SubWindow(uint modelID, QWidget *parent = 0);
+        explicit SubWindow(uint modelID, QWidget *parent = nullptr);
 
         //! Return model ID.
         uint getModelID(void) const;
@@ -90,4 +90,4 @@ class SubWindow : public QMdiSubWindow
 
 };
 
-#endif /* __SUB_WINDOW_H__ */
+#endif /* SUB_WINDOW_H */

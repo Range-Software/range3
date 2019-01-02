@@ -8,8 +8,8 @@
  *  DESCRIPTION: RMLib - Range Model Library                         *
  *********************************************************************/
 
-#ifndef __RMLIB_H__
-#define __RMLIB_H__
+#ifndef RMLIB_H
+#define RMLIB_H
 
 #include "rml_boundary_condition.h"
 #include "rml_condition.h"
@@ -78,4 +78,4 @@
 #include "rml_view_factor_row.h"
 #include "rml_volume.h"
 
-#endif /* __RMLIB_H__ */
+#endif /* RMLIB_H */

@@ -8,8 +8,8 @@
  *  DESCRIPTION: Color combo box class declaration                   *
  *********************************************************************/
 
-#ifndef __COLOR_COMBO_BOX_H__
-#define __COLOR_COMBO_BOX_H__
+#ifndef COLOR_COMBO_BOX_H
+#define COLOR_COMBO_BOX_H
 
 #include <QComboBox>
 #include <QTreeWidgetItem>
@@ -32,7 +32,7 @@ class ColorComboBox : public QComboBox
     public:
 
         //! Constructor.
-        explicit ColorComboBox(QWidget *parent = 0);
+        explicit ColorComboBox(QWidget *parent = nullptr);
 
         //! Return currently selected color.
         QColor getColor(void);
@@ -84,4 +84,4 @@ class ColorComboBox : public QComboBox
 
 };
 
-#endif /* __COLOR_COMBO_BOX_H__ */
+#endif /* COLOR_COMBO_BOX_H */

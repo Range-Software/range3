@@ -8,8 +8,8 @@
  *  DESCRIPTION: Draw engine class declaration                       *
  *********************************************************************/
 
-#ifndef __DRAW_ENGINE_H__
-#define __DRAW_ENGINE_H__
+#ifndef DRAW_ENGINE_H
+#define DRAW_ENGINE_H
 
 #include <QObject>
 #include <QList>
@@ -42,7 +42,7 @@ class DrawEngine : public QObject
     public:
 
         //! Constructor.
-        explicit DrawEngine(QObject *parent = 0);
+        explicit DrawEngine(QObject *parent = nullptr);
 
         //! Start engine.
         void start();
@@ -87,4 +87,4 @@ class DrawEngine : public QObject
 
 };
 
-#endif // __DRAW_ENGINE_H__
+#endif // DRAW_ENGINE_H

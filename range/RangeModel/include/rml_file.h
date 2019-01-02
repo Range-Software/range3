@@ -8,8 +8,8 @@
  *  DESCRIPTION: File class declaration                              *
  *********************************************************************/
 
-#ifndef __RML_FILE_H__
-#define __RML_FILE_H__
+#ifndef RML_FILE_H
+#define RML_FILE_H
 
 #include <QFile>
 #include <QTextStream>
@@ -79,4 +79,4 @@ class RFile : public QFile
 
 };
 
-#endif // __RML_FILE_H__
+#endif // RML_FILE_H

@@ -8,8 +8,8 @@
  *  DESCRIPTION: Monitoring point graph dialog class declaration     *
  *********************************************************************/
 
-#ifndef __MONITORING_POINT_GRAPH_DIALOG_H__
-#define __MONITORING_POINT_GRAPH_DIALOG_H__
+#ifndef MONITORING_POINT_GRAPH_DIALOG_H
+#define MONITORING_POINT_GRAPH_DIALOG_H
 
 #include <QDialog>
 #include <QMap>
@@ -35,7 +35,7 @@ class MonitoringPointGraphDialog : public QDialog
     public:
 
         //! Constructor.
-        explicit MonitoringPointGraphDialog(const QString &monitoringFileName, QWidget *parent = 0);
+        explicit MonitoringPointGraphDialog(const QString &monitoringFileName, QWidget *parent = nullptr);
 
         //! Execute dialog.
         int exec(void);
@@ -61,4 +61,4 @@ class MonitoringPointGraphDialog : public QDialog
 
 };
 
-#endif // __MONITORING_POINT_GRAPH_DIALOG_H__
+#endif // MONITORING_POINT_GRAPH_DIALOG_H

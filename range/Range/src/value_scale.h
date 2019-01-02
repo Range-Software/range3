@@ -8,8 +8,8 @@
  *  DESCRIPTION: Value scale widget class declaration                *
  *********************************************************************/
 
-#ifndef __VALUE_SCALE_H__
-#define __VALUE_SCALE_H__
+#ifndef VALUE_SCALE_H
+#define VALUE_SCALE_H
 
 #include <QWidget>
 #include <QSlider>
@@ -55,7 +55,7 @@ class ValueScale : public QWidget
     public:
 
         //! Constructor.
-        explicit ValueScale(const QString &title, QWidget *parent = 0);
+        explicit ValueScale(const QString &title, QWidget *parent = nullptr);
 
         //! Return scale;
         double getValue(void) const;
@@ -87,4 +87,4 @@ class ValueScale : public QWidget
 
 };
 
-#endif // __VALUE_SCALE_H__
+#endif // VALUE_SCALE_H

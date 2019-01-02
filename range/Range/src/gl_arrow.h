@@ -8,8 +8,8 @@
  *  DESCRIPTION: OpenGL arrow class declaration                      *
  *********************************************************************/
 
-#ifndef __GL_ARROW_H__
-#define __GL_ARROW_H__
+#ifndef GL_ARROW_H
+#define GL_ARROW_H
 
 #include <rblib.h>
 
@@ -76,4 +76,4 @@ class GLArrow : public GLObject
 
 };
 
-#endif // __GL_ARROW_H__
+#endif // GL_ARROW_H

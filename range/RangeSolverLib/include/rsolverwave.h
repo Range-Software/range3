@@ -8,8 +8,8 @@
  *  DESCRIPTION: Wave solver class declaration                       *
  *********************************************************************/
 
-#ifndef __RSOLVERWAVE_H__
-#define __RSOLVERWAVE_H__
+#ifndef RSOLVERWAVE_H
+#define RSOLVERWAVE_H
 
 #include "rsolvergeneric.h"
 
@@ -72,4 +72,4 @@ class RSolverWave : public RSolverGeneric
 
 };
 
-#endif // __RSOLVERWAVE_H__
+#endif // RSOLVERWAVE_H

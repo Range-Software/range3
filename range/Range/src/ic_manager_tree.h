@@ -8,8 +8,8 @@
  *  DESCRIPTION: Initial condition manager tree class declaration    *
  *********************************************************************/
 
-#ifndef __IC_MANAGER_TREE_H__
-#define __IC_MANAGER_TREE_H__
+#ifndef IC_MANAGER_TREE_H
+#define IC_MANAGER_TREE_H
 
 #include <QTreeWidget>
 
@@ -33,7 +33,7 @@ class ICManagerTree : public QTreeWidget
     public:
 
         //! Constructor.
-        explicit ICManagerTree(QObject *parent = 0);
+        explicit ICManagerTree(QObject *parent = nullptr);
 
     protected:
 
@@ -67,4 +67,4 @@ class ICManagerTree : public QTreeWidget
 
 };
 
-#endif /* __IC_MANAGER_TREE_H__ */
+#endif /* IC_MANAGER_TREE_H */

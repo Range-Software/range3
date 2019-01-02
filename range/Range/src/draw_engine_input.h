@@ -8,8 +8,8 @@
  *  DESCRIPTION: Draw engine input class declaration                 *
  *********************************************************************/
 
-#ifndef __DRAW_ENGINE_INPUT_H__
-#define __DRAW_ENGINE_INPUT_H__
+#ifndef DRAW_ENGINE_INPUT_H
+#define DRAW_ENGINE_INPUT_H
 
 #include <cfloat>
 
@@ -162,4 +162,4 @@ class DrawEngineInput
 
 };
 
-#endif // __DRAW_ENGINE_INPUT_H__
+#endif // DRAW_ENGINE_INPUT_H

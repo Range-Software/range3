@@ -8,8 +8,8 @@
  *  DESCRIPTION: View-factor hemi cube class declaration             *
  *********************************************************************/
 
-#ifndef __RHEMICUBE_H__
-#define __RHEMICUBE_H__
+#ifndef RHEMICUBE_H
+#define RHEMICUBE_H
 
 #include <vector>
 
@@ -68,4 +68,4 @@ class RHemiCube
 
 };
 
-#endif // __RHEMICUBE_H__
+#endif // RHEMICUBE_H

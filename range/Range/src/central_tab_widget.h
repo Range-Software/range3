@@ -8,8 +8,8 @@
  *  DESCRIPTION: Main window's central tab widget class declaration  *
  *********************************************************************/
 
-#ifndef __CENTRAL_TAB_WIDGET_H__
-#define __CENTRAL_TAB_WIDGET_H__
+#ifndef CENTRAL_TAB_WIDGET_H
+#define CENTRAL_TAB_WIDGET_H
 
 #include <QTabWidget>
 #include <QMdiArea>
@@ -66,7 +66,7 @@ class CentralTabWidget : public QTabWidget
     public:
 
         //! Constructor.
-        explicit CentralTabWidget(QWidget *parent = 0);
+        explicit CentralTabWidget(QWidget *parent = nullptr);
 
         //! return MDI Area.
         QMdiArea *getMdiArea(void);
@@ -104,4 +104,4 @@ class CentralTabWidget : public QTabWidget
 
 };
 
-#endif // __CENTRAL_TAB_WIDGET_H__
+#endif // CENTRAL_TAB_WIDGET_H

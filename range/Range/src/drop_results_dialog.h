@@ -8,8 +8,8 @@
  *  DESCRIPTION: Drop results dialog class declaration               *
  *********************************************************************/
 
-#ifndef __DROP_RESULTS_DIALOG_H__
-#define __DROP_RESULTS_DIALOG_H__
+#ifndef DROP_RESULTS_DIALOG_H
+#define DROP_RESULTS_DIALOG_H
 
 #include <QDialog>
 #include <QCheckBox>
@@ -27,7 +27,7 @@ class DropResultsDialog : public QDialog
     public:
 
         //! Constructor.
-        explicit DropResultsDialog(QWidget *parent = 0);
+        explicit DropResultsDialog(QWidget *parent = nullptr);
 
         //! Execute dialog.
         int exec(void);
@@ -38,4 +38,4 @@ class DropResultsDialog : public QDialog
         
 };
 
-#endif // __DROP_RESULTS_DIALOG_H__
+#endif // DROP_RESULTS_DIALOG_H

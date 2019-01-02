@@ -8,8 +8,8 @@
  *  DESCRIPTION: Arguments parser class declaration                  *
  *********************************************************************/
 
-#ifndef __RBL_ARGUMENTS_PARSER_H__
-#define __RBL_ARGUMENTS_PARSER_H__
+#ifndef RBL_ARGUMENTS_PARSER_H
+#define RBL_ARGUMENTS_PARSER_H
 
 #include <QString>
 #include <QMap>
@@ -89,4 +89,4 @@ class RArgumentsParser
 
 };
 
-#endif // __RBL_ARGUMENTS_PARSER_H__
+#endif // RBL_ARGUMENTS_PARSER_H

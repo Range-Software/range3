@@ -8,8 +8,8 @@
  *  DESCRIPTION: Draw engine circle class declaration                *
  *********************************************************************/
 
-#ifndef __DRAW_ENGINE_CIRCLE_H__
-#define __DRAW_ENGINE_CIRCLE_H__
+#ifndef DRAW_ENGINE_CIRCLE_H
+#define DRAW_ENGINE_CIRCLE_H
 
 #include "draw_engine_object.h"
 
@@ -21,7 +21,7 @@ class DrawEngineCircle : public DrawEngineObject
     public:
 
         //! Constructor.
-        explicit DrawEngineCircle(QObject *parent = 0);
+        explicit DrawEngineCircle(QObject *parent = nullptr);
 
     protected:
 
@@ -30,4 +30,4 @@ class DrawEngineCircle : public DrawEngineObject
 
 };
 
-#endif // __DRAW_ENGINE_CIRCLE_H__
+#endif // DRAW_ENGINE_CIRCLE_H

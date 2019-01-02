@@ -8,8 +8,8 @@
  *  DESCRIPTION: OpenGL entity class declaration                     *
  *********************************************************************/
 
-#ifndef __GL_ENTITY_H__
-#define __GL_ENTITY_H__
+#ifndef GL_ENTITY_H
+#define GL_ENTITY_H
 
 #include "gl_object.h"
 #include "gl_texture.h"

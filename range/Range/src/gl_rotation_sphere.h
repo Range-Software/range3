@@ -8,8 +8,8 @@
  *  DESCRIPTION: OpenGL rotation sphere class declaration            *
  *********************************************************************/
 
-#ifndef __GL_ROTATION_SPHERE_H__
-#define __GL_ROTATION_SPHERE_H__
+#ifndef GL_ROTATION_SPHERE_H
+#define GL_ROTATION_SPHERE_H
 
 #include "gl_object.h"
 
@@ -66,4 +66,4 @@ class GLRotationSphere : public GLObject
 
 };
 
-#endif // __GL_ROTATION_SPHERE_H__
+#endif // GL_ROTATION_SPHERE_H

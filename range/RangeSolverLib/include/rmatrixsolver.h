@@ -8,8 +8,8 @@
  *  DESCRIPTION: Matrix solver class declaration                     *
  *********************************************************************/
 
-#ifndef __RMATRIXSOLVER_H__
-#define __RMATRIXSOLVER_H__
+#ifndef RMATRIXSOLVER_H
+#define RMATRIXSOLVER_H
 
 #include <rmlib.h>
 
@@ -61,4 +61,4 @@ class RMatrixSolver
 
 };
 
-#endif // __RMATRIXSOLVER_H__
+#endif // RMATRIXSOLVER_H

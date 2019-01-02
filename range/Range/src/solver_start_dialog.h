@@ -8,8 +8,8 @@
  *  DESCRIPTION: Solver start dialog class declaration               *
  *********************************************************************/
 
-#ifndef __SOLVER_START_DIALOG_H__
-#define __SOLVER_START_DIALOG_H__
+#ifndef SOLVER_START_DIALOG_H
+#define SOLVER_START_DIALOG_H
 
 #include <QDialog>
 #include <QCheckBox>
@@ -35,11 +35,11 @@ class SolverStartDialog : public QDialog
     public:
 
         //! Constructor.
-        explicit SolverStartDialog(uint modelID, QWidget *parent = 0);
+        explicit SolverStartDialog(uint modelID, QWidget *parent = nullptr);
 
         //! Execute dialog.
         int exec(void);
 
 };
 
-#endif // __SOLVER_START_DIALOG_H__
+#endif // SOLVER_START_DIALOG_H

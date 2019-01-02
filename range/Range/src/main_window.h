@@ -8,8 +8,8 @@
  *  DESCRIPTION: Main window class declaration                       *
  *********************************************************************/
 
-#ifndef __MAIN_WINDOW_H__
-#define __MAIN_WINDOW_H__
+#ifndef MAIN_WINDOW_H
+#define MAIN_WINDOW_H
 
 #include <QDockWidget>
 #include <QToolBar>
@@ -69,7 +69,7 @@ class MainWindow : public QMainWindow
     private:
 
         //! Constructor.
-        explicit MainWindow (QWidget *parent = 0);
+        explicit MainWindow (QWidget *parent = nullptr);
 
     public:
 
@@ -249,4 +249,4 @@ class MainWindow : public QMainWindow
 
 };
 
-#endif /* __MAIN_WINDOW_H__ */
+#endif /* MAIN_WINDOW_H */

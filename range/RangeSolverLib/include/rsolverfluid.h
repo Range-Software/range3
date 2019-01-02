@@ -8,8 +8,8 @@
  *  DESCRIPTION: Fluid solver class declaration                      *
  *********************************************************************/
 
-#ifndef __RSOLVERFLUID_H__
-#define __RSOLVERFLUID_H__
+#ifndef RSOLVERFLUID_H
+#define RSOLVERFLUID_H
 
 #include "rmatrixmanager.h"
 #include "rsolvergeneric.h"
@@ -171,4 +171,4 @@ class RSolverFluid : public RSolverGeneric
 
 };
 
-#endif // __RSOLVERFLUID_H__
+#endif // RSOLVERFLUID_H

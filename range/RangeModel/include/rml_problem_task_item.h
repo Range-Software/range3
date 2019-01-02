@@ -8,8 +8,8 @@
  *  DESCRIPTION: Problem task item class declaration                 *
  *********************************************************************/
 
-#ifndef __RML_PROBLEM_TASK_ITEM_H__
-#define __RML_PROBLEM_TASK_ITEM_H__
+#ifndef RML_PROBLEM_TASK_ITEM_H
+#define RML_PROBLEM_TASK_ITEM_H
 
 #include <vector>
 
@@ -92,4 +92,4 @@ class RProblemTaskItem
 
 };
 
-#endif // __RML_PROBLEM_TASK_ITEM_H__
+#endif // RML_PROBLEM_TASK_ITEM_H

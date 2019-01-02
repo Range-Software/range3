@@ -8,8 +8,8 @@
  *  DESCRIPTION: Draw engine line class declaration                  *
  *********************************************************************/
 
-#ifndef __DRAW_ENGINE_LINE_H__
-#define __DRAW_ENGINE_LINE_H__
+#ifndef DRAW_ENGINE_LINE_H
+#define DRAW_ENGINE_LINE_H
 
 #include "draw_engine_object.h"
 
@@ -21,7 +21,7 @@ class DrawEngineLine : public DrawEngineObject
     public:
 
         //! Constructor.
-        explicit DrawEngineLine(QObject *parent = 0);
+        explicit DrawEngineLine(QObject *parent = nullptr);
 
     protected:
 
@@ -30,4 +30,4 @@ class DrawEngineLine : public DrawEngineObject
 
 };
 
-#endif // __DRAW_ENGINE_LINE_H__
+#endif // DRAW_ENGINE_LINE_H

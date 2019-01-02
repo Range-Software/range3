@@ -8,8 +8,8 @@
  *  DESCRIPTION: Time-Solver class declaration                       *
  *********************************************************************/
 
-#ifndef __RML_TIME_SOLVER_H__
-#define __RML_TIME_SOLVER_H__
+#ifndef RML_TIME_SOLVER_H
+#define RML_TIME_SOLVER_H
 
 #include <vector>
 #include <QString>
@@ -198,4 +198,4 @@ class RTimeSolver
 
 };
 
-#endif /* __RML_TIME_SOLVER_H__ */
+#endif /* RML_TIME_SOLVER_H */

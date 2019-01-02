@@ -8,8 +8,8 @@
  *  DESCRIPTION: Interpolated entity class declaration               *
  *********************************************************************/
 
-#ifndef __RML_INTERPOLATED_ENTITY_H__
-#define __RML_INTERPOLATED_ENTITY_H__
+#ifndef RML_INTERPOLATED_ENTITY_H
+#define RML_INTERPOLATED_ENTITY_H
 
 #include <vector>
 
@@ -40,4 +40,4 @@ class RInterpolatedEntity : public REntityGroup, public std::vector<RInterpolate
 
 };
 
-#endif /* __RML_INTERPOLATED_ENTITY_H__ */
+#endif /* RML_INTERPOLATED_ENTITY_H */

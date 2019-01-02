@@ -8,8 +8,8 @@
  *  DESCRIPTION: RMeshGenerator class declaration                    *
  *********************************************************************/
 
-#ifndef __RML_MESH_GENERATOR_H__
-#define __RML_MESH_GENERATOR_H__
+#ifndef RML_MESH_GENERATOR_H
+#define RML_MESH_GENERATOR_H
 
 #include "rml_mesh_input.h"
 #include "rml_model.h"
@@ -37,4 +37,4 @@ class RMeshGenerator
 
 };
 
-#endif // __RML_MESH_GENERATOR_H__
+#endif // RML_MESH_GENERATOR_H

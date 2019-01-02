@@ -8,8 +8,8 @@
  *  DESCRIPTION: Usage info class declaration                        *
  *********************************************************************/
 
-#ifndef __USAGE_INFO_H__
-#define __USAGE_INFO_H__
+#ifndef USAGE_INFO_H
+#define USAGE_INFO_H
 
 #include <QString>
 
@@ -30,4 +30,4 @@ class UsageInfo
         QString getReport(void) const;
 };
 
-#endif // __USAGE_INFO_H__
+#endif // USAGE_INFO_H

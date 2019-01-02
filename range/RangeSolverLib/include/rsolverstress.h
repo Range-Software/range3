@@ -8,8 +8,8 @@
  *  DESCRIPTION: Stress-strain solver class declaration              *
  *********************************************************************/
 
-#ifndef __RSOLVERSTRESS_H__
-#define __RSOLVERSTRESS_H__
+#ifndef RSOLVERSTRESS_H
+#define RSOLVERSTRESS_H
 
 #include <rblib.h>
 
@@ -117,4 +117,4 @@ class RSolverStress : public RSolverGeneric
 
 };
 
-#endif // __RSOLVERSTRESS_H__
+#endif // RSOLVERSTRESS_H

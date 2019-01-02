@@ -8,8 +8,8 @@
  *  DESCRIPTION: Scalar field dialog class declaration               *
  *********************************************************************/
 
-#ifndef __SCALAR_FIELD_DIALOG_H__
-#define __SCALAR_FIELD_DIALOG_H__
+#ifndef SCALAR_FIELD_DIALOG_H
+#define SCALAR_FIELD_DIALOG_H
 
 #include <QDialog>
 #include <QSpinBox>
@@ -48,10 +48,10 @@ class ScalarFieldDialog : public QDialog
     public:
 
         //! Constructor.
-        explicit ScalarFieldDialog(uint modelID, QWidget *parent = 0);
+        explicit ScalarFieldDialog(uint modelID, QWidget *parent = nullptr);
 
         //! Constructor.
-        explicit ScalarFieldDialog(uint modelID, uint entityID, QWidget *parent = 0);
+        explicit ScalarFieldDialog(uint modelID, uint entityID, QWidget *parent = nullptr);
 
         //! Execute dialog.
         int exec(void);
@@ -74,4 +74,4 @@ class ScalarFieldDialog : public QDialog
 
 };
 
-#endif // __SCALAR_FIELD_DIALOG_H__
+#endif // SCALAR_FIELD_DIALOG_H

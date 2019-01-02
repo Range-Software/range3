@@ -8,8 +8,8 @@
  *  DESCRIPTION: Model class declaration                             *
  *********************************************************************/
 
-#ifndef __RML_MODEL_H__
-#define __RML_MODEL_H__
+#ifndef RML_MODEL_H
+#define RML_MODEL_H
 
 #include <vector>
 
@@ -1030,4 +1030,4 @@ class RModel : public RProblem, public RResults
 
 };
 
-#endif /* __RML_MODEL_H__ */
+#endif /* RML_MODEL_H */

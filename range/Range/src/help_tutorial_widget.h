@@ -8,8 +8,8 @@
  *  DESCRIPTION: Help tutorial widget class declaration              *
  *********************************************************************/
 
-#ifndef __HELP_TUTORIAL_WIDGET_H__
-#define __HELP_TUTORIAL_WIDGET_H__
+#ifndef HELP_TUTORIAL_WIDGET_H
+#define HELP_TUTORIAL_WIDGET_H
 
 #include "document_widget.h"
 
@@ -25,4 +25,4 @@ class HelpTutorialWidget : public DocumentWidget
 
 };
 
-#endif // __HELP_TUTORIAL_WIDGET_H__
+#endif // HELP_TUTORIAL_WIDGET_H

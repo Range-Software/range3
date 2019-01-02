@@ -8,8 +8,8 @@
  *  DESCRIPTION: Problem type declaration                            *
  *********************************************************************/
 
-#ifndef __RML_PROBLEM_TYPE_H__
-#define __RML_PROBLEM_TYPE_H__
+#ifndef RML_PROBLEM_TYPE_H
+#define RML_PROBLEM_TYPE_H
 
 #define R_PROBLEM_TYPE_IS_VALID(_type) \
 ( \
@@ -82,4 +82,4 @@ typedef int RProblemTypeMask;
         R_PROBLEM_MESH \
     )
 
-#endif // __RML_PROBLEM_TYPE_H__
+#endif // RML_PROBLEM_TYPE_H

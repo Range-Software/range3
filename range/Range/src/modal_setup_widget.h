@@ -8,8 +8,8 @@
  *  DESCRIPTION: Modal setup widget class declaration                *
  *********************************************************************/
 
-#ifndef __MODAL_SETUP_WIDGET_H__
-#define __MODAL_SETUP_WIDGET_H__
+#ifndef MODAL_SETUP_WIDGET_H
+#define MODAL_SETUP_WIDGET_H
 
 #include <QWidget>
 #include <QSpinBox>
@@ -32,7 +32,7 @@ class ModalSetupWidget : public QWidget
     public:
 
         //! Constructor.
-        explicit ModalSetupWidget(const RModalSetup &modalSetup, QWidget *parent = 0);
+        explicit ModalSetupWidget(const RModalSetup &modalSetup, QWidget *parent = nullptr);
 
     signals:
 
@@ -51,4 +51,4 @@ class ModalSetupWidget : public QWidget
 
 };
 
-#endif // __MODAL_SETUP_WIDGET_H__
+#endif // MODAL_SETUP_WIDGET_H

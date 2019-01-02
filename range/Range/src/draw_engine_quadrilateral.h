@@ -8,8 +8,8 @@
  *  DESCRIPTION: Draw engine quadrilateral class declaration         *
  *********************************************************************/
 
-#ifndef __DRAW_ENGINE_QUADRILATERAL_H__
-#define __DRAW_ENGINE_QUADRILATERAL_H__
+#ifndef DRAW_ENGINE_QUADRILATERAL_H
+#define DRAW_ENGINE_QUADRILATERAL_H
 
 #include "draw_engine_object.h"
 
@@ -21,7 +21,7 @@ class DrawEngineQuadrilateral : public DrawEngineObject
     public:
 
         //! Constructor.
-        explicit DrawEngineQuadrilateral(QObject *parent = 0);
+        explicit DrawEngineQuadrilateral(QObject *parent = nullptr);
 
     protected:
 
@@ -30,4 +30,4 @@ class DrawEngineQuadrilateral : public DrawEngineObject
 
 };
 
-#endif // __DRAW_ENGINE_QUADRILATERAL_H__
+#endif // DRAW_ENGINE_QUADRILATERAL_H

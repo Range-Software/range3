@@ -8,8 +8,8 @@
  *  DESCRIPTION: OpenGL simplex polygon class declaration            *
  *********************************************************************/
 
-#ifndef __GL_SIMPLEX_POLYGON_H__
-#define __GL_SIMPLEX_POLYGON_H__
+#ifndef GL_SIMPLEX_POLYGON_H
+#define GL_SIMPLEX_POLYGON_H
 
 #include "gl_simplex.h"
 
@@ -70,4 +70,4 @@ class GLSimplexPolygon : public GLSimplex
 
 };
 
-#endif // __GL_SIMPLEX_POLYGON_H__
+#endif // GL_SIMPLEX_POLYGON_H

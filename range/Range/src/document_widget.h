@@ -8,8 +8,8 @@
  *  DESCRIPTION: Document widget class declaration                   *
  *********************************************************************/
 
-#ifndef __DOCUMENT_WIDGET_H__
-#define __DOCUMENT_WIDGET_H__
+#ifndef DOCUMENT_WIDGET_H
+#define DOCUMENT_WIDGET_H
 
 #include <QWidget>
 #include <QListWidget>
@@ -52,4 +52,4 @@ class DocumentWidget : public QWidget
 
 };
 
-#endif // __DOCUMENT_WIDGET_H__
+#endif // DOCUMENT_WIDGET_H

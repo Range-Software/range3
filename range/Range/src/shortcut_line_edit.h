@@ -8,8 +8,8 @@
  *  DESCRIPTION: Shortcut line edit class declaration                *
  *********************************************************************/
 
-#ifndef __SHORTCUT_LINE_EDIT_H__
-#define __SHORTCUT_LINE_EDIT_H__
+#ifndef SHORTCUT_LINE_EDIT_H
+#define SHORTCUT_LINE_EDIT_H
 
 #include <QLineEdit>
 
@@ -21,7 +21,7 @@ class ShortcutLineEdit : public QLineEdit
     public:
 
         //! Constructor.
-        explicit ShortcutLineEdit(QWidget *parent = 0);
+        explicit ShortcutLineEdit(QWidget *parent = nullptr);
 
     protected:
 
@@ -40,4 +40,4 @@ class ShortcutLineEdit : public QLineEdit
 
 };
 
-#endif // __SHORTCUT_LINE_EDIT_H__
+#endif // SHORTCUT_LINE_EDIT_H

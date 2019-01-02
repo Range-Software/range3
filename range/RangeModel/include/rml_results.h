@@ -8,8 +8,8 @@
  *  DESCRIPTION: Results class declaration                           *
  *********************************************************************/
 
-#ifndef __RML_RESULTS_H__
-#define __RML_RESULTS_H__
+#ifndef RML_RESULTS_H
+#define RML_RESULTS_H
 
 #include <string>
 #include <vector>
@@ -126,4 +126,4 @@ class RResults
 
 };
 
-#endif /* __RML_RESULTS_H__ */
+#endif /* RML_RESULTS_H */

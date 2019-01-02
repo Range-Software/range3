@@ -8,8 +8,8 @@
  *  DESCRIPTION: Model class declaration - derived from RModel       *
  *********************************************************************/
 
-#ifndef __MODEL_H__
-#define __MODEL_H__
+#ifndef MODEL_H
+#define MODEL_H
 
 #include <QtCore>
 #include <QColor>
@@ -532,4 +532,4 @@ class Model : public RModel
 
 };
 
-#endif /* __MODEL_H__ */
+#endif /* MODEL_H */

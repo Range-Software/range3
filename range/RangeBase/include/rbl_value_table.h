@@ -8,8 +8,8 @@
  *  DESCRIPTION: Value table class declaration                       *
  *********************************************************************/
 
-#ifndef __RBL_VALUE_TABLE_H__
-#define __RBL_VALUE_TABLE_H__
+#ifndef RBL_VALUE_TABLE_H
+#define RBL_VALUE_TABLE_H
 
 #include <QString>
 #include <map>
@@ -118,4 +118,4 @@ class RValueTable
 
 };
 
-#endif /* __RBL_VALUE_TABLE_H__ */
+#endif /* RBL_VALUE_TABLE_H */

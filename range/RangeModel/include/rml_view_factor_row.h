@@ -8,8 +8,8 @@
  *  DESCRIPTION: View-Factor row class declaration                   *
  *********************************************************************/
 
-#ifndef __RML_VIEW_FACTOR_ROW_H__
-#define __RML_VIEW_FACTOR_ROW_H__
+#ifndef RML_VIEW_FACTOR_ROW_H
+#define RML_VIEW_FACTOR_ROW_H
 
 #include <rblib.h>
 
@@ -53,4 +53,4 @@ class RViewFactorRow
 
 };
 
-#endif // __RML_VIEW_FACTOR_ROW_H__
+#endif // RML_VIEW_FACTOR_ROW_H

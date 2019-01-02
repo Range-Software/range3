@@ -8,8 +8,8 @@
  *  DESCRIPTION: Variable value edit class declaration               *
  *********************************************************************/
 
-#ifndef __VARIABLE_VALUE_EDIT_H__
-#define __VARIABLE_VALUE_EDIT_H__
+#ifndef VARIABLE_VALUE_EDIT_H
+#define VARIABLE_VALUE_EDIT_H
 
 #include <QCheckBox>
 
@@ -34,7 +34,7 @@ class VariableValueEdit : public QWidget
 
         //! Constructor.
         explicit VariableValueEdit(RVariableType variableType,
-                                   QWidget *parent = 0);
+                                   QWidget *parent = nullptr);
 
         //! Set new value.
         void setValue(double value);
@@ -53,4 +53,4 @@ class VariableValueEdit : public QWidget
         void onStateChaged(int state);
 };
 
-#endif /* __VARIABLE_VALUE_EDIT_H__ */
+#endif /* VARIABLE_VALUE_EDIT_H */

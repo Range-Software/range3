@@ -8,8 +8,8 @@
  *  DESCRIPTION: Model data class declaration                        *
  *********************************************************************/
 
-#ifndef __RML_MODEL_DATA_H__
-#define __RML_MODEL_DATA_H__
+#ifndef RML_MODEL_DATA_H
+#define RML_MODEL_DATA_H
 
 class RModelData
 {
@@ -48,4 +48,4 @@ class RModelData
         friend class RFileIO;
 };
 
-#endif /* __RML_MODEL_DATA_H__ */
+#endif /* RML_MODEL_DATA_H */

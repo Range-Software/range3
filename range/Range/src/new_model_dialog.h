@@ -8,8 +8,8 @@
  *  DESCRIPTION: New model dialog class declaration                  *
  *********************************************************************/
 
-#ifndef __NEW_MODEL_DIALOG_H__
-#define __NEW_MODEL_DIALOG_H__
+#ifndef NEW_MODEL_DIALOG_H
+#define NEW_MODEL_DIALOG_H
 
 #include <QDialog>
 #include <QLineEdit>
@@ -28,7 +28,7 @@ class NewModelDialog : public QDialog
     public:
 
         //! Constructor.
-        explicit NewModelDialog(QWidget *parent = 0);
+        explicit NewModelDialog(QWidget *parent = nullptr);
 
         //! Execute dialog.
         int exec(void);
@@ -43,4 +43,4 @@ class NewModelDialog : public QDialog
         
 };
 
-#endif /* __NEW_MODEL_DIALOG_H__ */
+#endif /* NEW_MODEL_DIALOG_H */

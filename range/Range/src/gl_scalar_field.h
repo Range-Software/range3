@@ -8,8 +8,8 @@
  *  DESCRIPTION: OpenGL scalar field class declaration        *
  *********************************************************************/
 
-#ifndef __GL_SCALAR_FIELD_H__
-#define __GL_SCALAR_FIELD_H__
+#ifndef GL_SCALAR_FIELD_H
+#define GL_SCALAR_FIELD_H
 
 #include <rmlib.h>
 
@@ -75,4 +75,4 @@ class GLScalarField : public GLObject, public RScalarField
 
 };
 
-#endif // __GL_SCALAR_FIELD_H__
+#endif // GL_SCALAR_FIELD_H

@@ -8,8 +8,8 @@
  *  DESCRIPTION: Entity display properties tree class declaration    *
  *********************************************************************/
 
-#ifndef __MODEL_ENTITY_DISPLAY_PROPERTIES_TREE_H__
-#define __MODEL_ENTITY_DISPLAY_PROPERTIES_TREE_H__
+#ifndef MODEL_ENTITY_DISPLAY_PROPERTIES_TREE_H
+#define MODEL_ENTITY_DISPLAY_PROPERTIES_TREE_H
 
 #include <QTreeWidget>
 
@@ -21,7 +21,7 @@ class ModelEntityDisplayPropertiesTree : public QTreeWidget
     public:
 
         //! Constructor.
-        explicit ModelEntityDisplayPropertiesTree(QWidget *parent = 0);
+        explicit ModelEntityDisplayPropertiesTree(QWidget *parent = nullptr);
 
     protected:
 
@@ -47,4 +47,4 @@ class ModelEntityDisplayPropertiesTree : public QTreeWidget
 
 };
 
-#endif /* __MODEL_ENTITY_DISPLAY_PROPERTIES_TREE_H__ */
+#endif /* MODEL_ENTITY_DISPLAY_PROPERTIES_TREE_H */

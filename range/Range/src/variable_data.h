@@ -9,8 +9,8 @@
  *               Used as data object in RVariable                    *
  *********************************************************************/
 
-#ifndef __VARIABLE_DATA_H__
-#define __VARIABLE_DATA_H__
+#ifndef VARIABLE_DATA_H
+#define VARIABLE_DATA_H
 
 #include <rblib.h>
 #include <rmlib.h>
@@ -50,4 +50,4 @@ class VariableData
 
 };
 
-#endif /* __VARIABLE_DATA_H__ */
+#endif /* VARIABLE_DATA_H */

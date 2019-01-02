@@ -8,8 +8,8 @@
  *  DESCRIPTION: Range solver class declaration                      *
  *********************************************************************/
 
-#ifndef __RSOLVER_H__
-#define __RSOLVER_H__
+#ifndef RSOLVER_H
+#define RSOLVER_H
 
 #include <rmlib.h>
 
@@ -67,4 +67,4 @@ class RSolver
 
 };
 
-#endif // __RSOLVER_H__
+#endif // RSOLVER_H

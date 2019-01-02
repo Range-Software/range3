@@ -8,8 +8,8 @@
  *  DESCRIPTION: Job manager class declaration                       *
  *********************************************************************/
 
-#ifndef __JOB_MANAGER_H__
-#define __JOB_MANAGER_H__
+#ifndef JOB_MANAGER_H
+#define JOB_MANAGER_H
 
 #include <QObject>
 #include <QQueue>
@@ -36,7 +36,7 @@ class JobManager : public QObject
     public:
 
         //! Constructor.
-        explicit JobManager(QObject *parent = 0);
+        explicit JobManager(QObject *parent = nullptr);
 
         //! Return static instance of the manager.
         static JobManager & getInstance(void);
@@ -96,4 +96,4 @@ class JobManager : public QObject
 
 };
 
-#endif /* __JOB_MANAGER_H__ */
+#endif /* JOB_MANAGER_H */

@@ -8,8 +8,8 @@
  *  DESCRIPTION: Condition class declaration                         *
  *********************************************************************/
 
-#ifndef __RML_CONDITION_H__
-#define __RML_CONDITION_H__
+#ifndef RML_CONDITION_H
+#define RML_CONDITION_H
 
 #include <string>
 #include <vector>
@@ -137,4 +137,4 @@ class RCondition
 
 };
 
-#endif /* __RML_CONDITION_H__ */
+#endif /* RML_CONDITION_H */

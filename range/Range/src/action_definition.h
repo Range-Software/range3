@@ -8,8 +8,8 @@
  *  DESCRIPTION: Action definition class declaration                 *
  *********************************************************************/
 
-#ifndef __ACTION_DEFINITION_H__
-#define __ACTION_DEFINITION_H__
+#ifndef ACTION_DEFINITION_H
+#define ACTION_DEFINITION_H
 
 #include <QString>
 #include <QList>
@@ -31,7 +31,7 @@ class ActionDefinition : public QObject
     public:
 
         //! Constructor.
-        explicit ActionDefinition(QObject *parent = 0);
+        explicit ActionDefinition(QObject *parent = nullptr);
 
         //! Find short-cut.
         //! If no shortcut was found ACTION_NONE is returned.

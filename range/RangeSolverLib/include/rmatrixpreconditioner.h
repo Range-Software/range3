@@ -8,8 +8,8 @@
  *  DESCRIPTION: Matrix preconditioner class declaration             *
  *********************************************************************/
 
-#ifndef __RMATRIXPRECONDITIONER_H__
-#define __RMATRIXPRECONDITIONER_H__
+#ifndef RMATRIXPRECONDITIONER_H
+#define RMATRIXPRECONDITIONER_H
 
 #include <rblib.h>
 #include <rmlib.h>
@@ -73,4 +73,4 @@ class RMatrixPreconditioner
 
 };
 
-#endif // __RMATRIXPRECONDITIONER_H__
+#endif // RMATRIXPRECONDITIONER_H

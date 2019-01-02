@@ -8,8 +8,8 @@
  *  DESCRIPTION: Message class declaration                           *
  *********************************************************************/
 
-#ifndef __RBL_MESSAGE_H__
-#define __RBL_MESSAGE_H__
+#ifndef RBL_MESSAGE_H
+#define RBL_MESSAGE_H
 
 #include <QString>
 
@@ -122,4 +122,4 @@ class RMessage : public QString
 
 };
 
-#endif /* __RBL_MESSAGE_H__ */
+#endif /* RBL_MESSAGE_H */

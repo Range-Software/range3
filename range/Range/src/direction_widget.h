@@ -8,8 +8,8 @@
  *  DESCRIPTION: Direction widget class declaration                  *
  *********************************************************************/
 
-#ifndef __DIRECTION_WIDGET_H__
-#define __DIRECTION_WIDGET_H__
+#ifndef DIRECTION_WIDGET_H
+#define DIRECTION_WIDGET_H
 
 #include <QGroupBox>
 #include <QSlider>
@@ -48,7 +48,7 @@ class DirectionWidget : public QGroupBox
     public:
 
         //! Constructor.
-        explicit DirectionWidget(const QString &title, const RR3Vector &direction, QWidget *parent = 0);
+        explicit DirectionWidget(const QString &title, const RR3Vector &direction, QWidget *parent = nullptr);
 
         //! Show buttons.
         void showButtons(void);
@@ -106,4 +106,4 @@ class DirectionWidget : public QGroupBox
         
 };
 
-#endif // __DIRECTION_WIDGET_H__
+#endif // DIRECTION_WIDGET_H

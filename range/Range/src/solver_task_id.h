@@ -8,8 +8,8 @@
  *  DESCRIPTION: Solver task ID class declaration                    *
  *********************************************************************/
 
-#ifndef __SOLVER_TASK_ID_H__
-#define __SOLVER_TASK_ID_H__
+#ifndef SOLVER_TASK_ID_H
+#define SOLVER_TASK_ID_H
 
 #include <QString>
 
@@ -64,4 +64,4 @@ class SolverTaskID
 
 };
 
-#endif // __SOLVER_TASK_ID_H__
+#endif // SOLVER_TASK_ID_H

@@ -8,8 +8,8 @@
  *  DESCRIPTION: Problem tree class declaration                      *
  *********************************************************************/
 
-#ifndef __PROBLEM_TREE_H__
-#define __PROBLEM_TREE_H__
+#ifndef PROBLEM_TREE_H
+#define PROBLEM_TREE_H
 
 #include <QTreeWidget>
 
@@ -25,7 +25,7 @@ class ProblemTree : public QTreeWidget
     public:
 
         //! Constructor.
-        explicit ProblemTree(QWidget *parent = 0);
+        explicit ProblemTree(QWidget *parent = nullptr);
 
     protected slots:
 
@@ -55,4 +55,4 @@ class ProblemTree : public QTreeWidget
 
 };
 
-#endif // __PROBLEM_TREE_H__
+#endif // PROBLEM_TREE_H

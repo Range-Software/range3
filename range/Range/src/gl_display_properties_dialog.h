@@ -8,8 +8,8 @@
  *  DESCRIPTION: OpenGL display properties dialog class declaration  *
  *********************************************************************/
 
-#ifndef __GL_DISPLAY_PROPERTIES_DIALOG_H__
-#define __GL_DISPLAY_PROPERTIES_DIALOG_H__
+#ifndef GL_DISPLAY_PROPERTIES_DIALOG_H
+#define GL_DISPLAY_PROPERTIES_DIALOG_H
 
 #include <QDialog>
 #include <QTreeWidget>
@@ -37,7 +37,7 @@ class GLDisplayPropertiesDialog : public QDialog
     public:
 
         //! Constructor
-        explicit GLDisplayPropertiesDialog(GLWidget *pGlWidget, QWidget *parent = 0);
+        explicit GLDisplayPropertiesDialog(GLWidget *pGlWidget, QWidget *parent = nullptr);
 
         //! Execute dialog.
         int exec(void);
@@ -78,4 +78,4 @@ class GLDisplayPropertiesDialog : public QDialog
 
 };
 
-#endif /* __GL_DISPLAY_PROPERTIES_DIALOG_H__ */
+#endif /* GL_DISPLAY_PROPERTIES_DIALOG_H */

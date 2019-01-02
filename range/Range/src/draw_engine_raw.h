@@ -21,7 +21,7 @@ class DrawEngineRaw : public DrawEngineObject
         public:
 
             //! Constructor.
-            explicit DrawEngineRaw(QObject *parent = 0);
+            explicit DrawEngineRaw(QObject *parent = nullptr);
 
             //! Generate sphere.
             static RModelRaw generate(const QString &rawModelContent);

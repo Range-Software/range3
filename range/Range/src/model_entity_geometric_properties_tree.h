@@ -8,8 +8,8 @@
  *  DESCRIPTION: Entity geometric properties tree class declaration  *
  *********************************************************************/
 
-#ifndef __MODEL_ENTITY_GEOMETRIC_PROPERTIES_TREE_H__
-#define __MODEL_ENTITY_GEOMETRIC_PROPERTIES_TREE_H__
+#ifndef MODEL_ENTITY_GEOMETRIC_PROPERTIES_TREE_H
+#define MODEL_ENTITY_GEOMETRIC_PROPERTIES_TREE_H
 
 #include <QTreeWidget>
 
@@ -21,7 +21,7 @@ class ModelEntityGeometricPropertiesTree : public QTreeWidget
     public:
 
         //! Constructor.
-        explicit ModelEntityGeometricPropertiesTree(QWidget *parent = 0);
+        explicit ModelEntityGeometricPropertiesTree(QWidget *parent = nullptr);
 
     protected:
 
@@ -41,4 +41,4 @@ class ModelEntityGeometricPropertiesTree : public QTreeWidget
         
 };
 
-#endif // __MODEL_ENTITY_GEOMETRIC_PROPERTIES_TREE_H__
+#endif // MODEL_ENTITY_GEOMETRIC_PROPERTIES_TREE_H

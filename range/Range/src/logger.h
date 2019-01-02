@@ -8,8 +8,8 @@
  *  DESCRIPTION: Logger functions                                    *
  *********************************************************************/
 
-#ifndef __LOGGER_H__
-#define __LOGGER_H__
+#ifndef LOGGER_H
+#define LOGGER_H
 
 #include <cstdarg>
 #include <QObject>
@@ -58,4 +58,4 @@ class Logger : public QObject
         void errorPrinted(const QString &message);
 };
 
-#endif /* __LOGGER_H__ */
+#endif /* LOGGER_H */

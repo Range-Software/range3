@@ -8,8 +8,8 @@
  *  DESCRIPTION: Action list class declaration                       *
  *********************************************************************/
 
-#ifndef __ACTION_LIST_H__
-#define __ACTION_LIST_H__
+#ifndef ACTION_LIST_H
+#define ACTION_LIST_H
 
 #include <QObject>
 
@@ -27,7 +27,7 @@ class ActionList : public QObject
     public:
 
         //! Constructor.
-        explicit ActionList(QObject *parent = 0);
+        explicit ActionList(QObject *parent = nullptr);
 
         //! Return number of actions.
         uint getNActions() const;
@@ -61,4 +61,4 @@ class ActionList : public QObject
 
 };
 
-#endif /* __ACTION_LIST_H__ */
+#endif /* ACTION_LIST_H */

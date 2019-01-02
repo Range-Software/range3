@@ -8,8 +8,8 @@
  *  DESCRIPTION: Vector field class declaration                      *
  *********************************************************************/
 
-#ifndef __RML_VECTOR_FIELD_H__
-#define __RML_VECTOR_FIELD_H__
+#ifndef RML_VECTOR_FIELD_H
+#define RML_VECTOR_FIELD_H
 
 #include <vector>
 
@@ -86,4 +86,4 @@ class RVectorField : public REntityGroup
 
 };
 
-#endif /* __RML_VECTOR_FIELD_H__ */
+#endif /* RML_VECTOR_FIELD_H */

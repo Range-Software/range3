@@ -8,8 +8,8 @@
  *  DESCRIPTION: OpenGL object class declaration                     *
  *********************************************************************/
 
-#ifndef __GL_OBJECT_H__
-#define __GL_OBJECT_H__
+#ifndef GL_OBJECT_H
+#define GL_OBJECT_H
 
 #include "gl_widget.h"
 #include "model.h"
@@ -108,4 +108,4 @@ class GLObject
 
 };
 
-#endif /* __GL_OBJECT_H__ */
+#endif /* GL_OBJECT_H */

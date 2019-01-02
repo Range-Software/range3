@@ -8,8 +8,8 @@
  *  DESCRIPTION: Solver input class declaration                      *
  *********************************************************************/
 
-#ifndef __SOLVER_INPUT_H__
-#define __SOLVER_INPUT_H__
+#ifndef SOLVER_INPUT_H
+#define SOLVER_INPUT_H
 
 #include <QString>
 
@@ -66,4 +66,4 @@ class SolverInput
 
 };
 
-#endif // __SOLVER_INPUT_H__
+#endif // SOLVER_INPUT_H

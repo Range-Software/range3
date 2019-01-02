@@ -8,8 +8,8 @@
  *  DESCRIPTION: Material property add dialog class declaration      *
  *********************************************************************/
 
-#ifndef __MATERIAL_PROPERTY_ADD_DIALOG_H__
-#define __MATERIAL_PROPERTY_ADD_DIALOG_H__
+#ifndef MATERIAL_PROPERTY_ADD_DIALOG_H
+#define MATERIAL_PROPERTY_ADD_DIALOG_H
 
 #include <QDialog>
 #include <QListWidget>
@@ -32,7 +32,7 @@ class MaterialPropertyAddDialog : public QDialog
 
         //! Constructor.
         explicit MaterialPropertyAddDialog(RMaterial &material,
-                                           QWidget   *parent = 0);
+                                           QWidget   *parent = nullptr);
 
         //! Overloaded exec function.
         int exec(void);
@@ -44,4 +44,4 @@ class MaterialPropertyAddDialog : public QDialog
         
 };
 
-#endif /* __MATERIAL_PROPERTY_ADD_DIALOG_H__ */
+#endif /* MATERIAL_PROPERTY_ADD_DIALOG_H */

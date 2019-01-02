@@ -8,8 +8,8 @@
  *  DESCRIPTION: Monitoring points class declaration                 *
  *********************************************************************/
 
-#ifndef __MONITORING_POINTS_DIALOG_H__
-#define __MONITORING_POINTS_DIALOG_H__
+#ifndef MONITORING_POINTS_DIALOG_H
+#define MONITORING_POINTS_DIALOG_H
 
 #include <QDialog>
 #include <QTableWidget>
@@ -35,7 +35,7 @@ class MonitoringPointsDialog : public QDialog
     public:
 
         //! Construct.
-        explicit MonitoringPointsDialog(uint modelID, QWidget *parent = 0);
+        explicit MonitoringPointsDialog(uint modelID, QWidget *parent = nullptr);
 
         //! Execute dialog.
         int exec(void);
@@ -67,4 +67,4 @@ class MonitoringPointsDialog : public QDialog
 
 };
 
-#endif // __MONITORING_POINTS_DIALOG_H__
+#endif // MONITORING_POINTS_DIALOG_H

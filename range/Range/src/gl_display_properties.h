@@ -8,8 +8,8 @@
  *  DESCRIPTION: OpenGL display properties class declaration         *
  *********************************************************************/
 
-#ifndef __GL_DISPLAY_PROPERTIES_H__
-#define __GL_DISPLAY_PROPERTIES_H__
+#ifndef GL_DISPLAY_PROPERTIES_H
+#define GL_DISPLAY_PROPERTIES_H
 
 #include <rmlib.h>
 
@@ -54,4 +54,4 @@ class GLDisplayProperties : public RGLDisplayProperties
 
 };
 
-#endif // __GL_DISPLAY_PROPERTIES_H__
+#endif // GL_DISPLAY_PROPERTIES_H

@@ -8,8 +8,8 @@
  *  DESCRIPTION: RMeshInput class declaration                        *
  *********************************************************************/
 
-#ifndef __RML_MESH_INPUT_H__
-#define __RML_MESH_INPUT_H__
+#ifndef RML_MESH_INPUT_H
+#define RML_MESH_INPUT_H
 
 #include <QString>
 
@@ -155,4 +155,4 @@ class RMeshInput
 
 };
 
-#endif // __RML_MESH_INPUT_H__
+#endif // RML_MESH_INPUT_H

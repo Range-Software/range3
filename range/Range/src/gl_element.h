@@ -8,8 +8,8 @@
  *  DESCRIPTION: OpenGL element class declaration                    *
  *********************************************************************/
 
-#ifndef __GL_ELEMENT_H__
-#define __GL_ELEMENT_H__
+#ifndef GL_ELEMENT_H
+#define GL_ELEMENT_H
 
 #include <rmlib.h>
 
@@ -78,4 +78,4 @@ class GLElement : public GLElementBase, public RElement
 
 };
 
-#endif /* __GL_ELEMENT_H__ */
+#endif /* GL_ELEMENT_H */

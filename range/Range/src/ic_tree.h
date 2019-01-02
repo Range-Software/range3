@@ -8,8 +8,8 @@
  *  DESCRIPTION: Initial condition tree class declaration            *
  *********************************************************************/
 
-#ifndef __IC_TREE_H__
-#define __IC_TREE_H__
+#ifndef IC_TREE_H
+#define IC_TREE_H
 
 #include <QTreeWidget>
 
@@ -27,7 +27,7 @@ class ICTree : public QTreeWidget
     public:
 
         //! Constructor.
-        explicit ICTree(QWidget *parent = 0);
+        explicit ICTree(QWidget *parent = nullptr);
 
     protected:
 
@@ -51,4 +51,4 @@ class ICTree : public QTreeWidget
 
 };
 
-#endif /* __IC_TREE_H__ */
+#endif /* IC_TREE_H */

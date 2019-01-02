@@ -8,8 +8,8 @@
  *  DESCRIPTION: OpenGL axis class declaration                       *
  *********************************************************************/
 
-#ifndef __GL_AXIS_H__
-#define __GL_AXIS_H__
+#ifndef GL_AXIS_H
+#define GL_AXIS_H
 
 #include "gl_object.h"
 
@@ -88,4 +88,4 @@ class GLAxis : public GLObject
         void draw(void);
 };
 
-#endif /* __GL_AXIS_H__ */
+#endif /* GL_AXIS_H */

@@ -8,8 +8,8 @@
  *  DESCRIPTION: Argument option class declaration                   *
  *********************************************************************/
 
-#ifndef __RBL_ARGUMENT_OPTION_H__
-#define __RBL_ARGUMENT_OPTION_H__
+#ifndef RBL_ARGUMENT_OPTION_H
+#define RBL_ARGUMENT_OPTION_H
 
 #include <QString>
 #include <QVariant>
@@ -122,4 +122,4 @@ class RArgumentOption
 
 };
 
-#endif // __RBL_ARGUMENT_OPTION_H__
+#endif // RBL_ARGUMENT_OPTION_H

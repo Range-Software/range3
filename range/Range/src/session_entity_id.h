@@ -8,8 +8,8 @@
  *  DESCRIPTION: Session Entity ID class declaration                 *
  *********************************************************************/
 
-#ifndef __SESSION_ENTITY_ID_H__
-#define __SESSION_ENTITY_ID_H__
+#ifndef SESSION_ENTITY_ID_H
+#define SESSION_ENTITY_ID_H
 
 #include <QtGlobal>
 
@@ -80,4 +80,4 @@ class SessionEntityID
 
 };
 
-#endif /* __SESSION_ENTITY_ID_H__ */
+#endif /* SESSION_ENTITY_ID_H */

@@ -8,8 +8,8 @@
  *  DESCRIPTION: Pick value class declaration                        *
  *********************************************************************/
 
-#ifndef __PICK_VALUE_H__
-#define __PICK_VALUE_H__
+#ifndef PICK_VALUE_H
+#define PICK_VALUE_H
 
 #include <rblib.h>
 
@@ -59,4 +59,4 @@ class PickValue
 
 };
 
-#endif // __PICK_VALUE_H__
+#endif // PICK_VALUE_H

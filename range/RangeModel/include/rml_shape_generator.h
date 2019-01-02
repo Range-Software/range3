@@ -8,8 +8,8 @@
  *  DESCRIPTION: Shape generator class declaration                   *
  *********************************************************************/
 
-#ifndef __RML_SHAPE_GENERATOR_H__
-#define __RML_SHAPE_GENERATOR_H__
+#ifndef RML_SHAPE_GENERATOR_H
+#define RML_SHAPE_GENERATOR_H
 
 #include "rml_model_raw.h"
 
@@ -40,4 +40,4 @@ class RShapeGenerator
 
 };
 
-#endif /* __RML_SHAPE_GENERATOR_H__ */
+#endif /* RML_SHAPE_GENERATOR_H */

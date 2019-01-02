@@ -8,8 +8,8 @@
  *  DESCRIPTION: Patch input class declaration                       *
  *********************************************************************/
 
-#ifndef __RML_PATCH_INPUT_H__
-#define __RML_PATCH_INPUT_H__
+#ifndef RML_PATCH_INPUT_H
+#define RML_PATCH_INPUT_H
 
 class RPatchInput
 {
@@ -87,4 +87,4 @@ class RPatchInput
 
 };
 
-#endif // __RML_PATCH_INPUT_H__
+#endif // RML_PATCH_INPUT_H

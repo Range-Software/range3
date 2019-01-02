@@ -8,8 +8,8 @@
  *  DESCRIPTION: Environment condition manager tree class declaration*
  *********************************************************************/
 
-#ifndef __EC_MANAGER_TREE_H__
-#define __EC_MANAGER_TREE_H__
+#ifndef EC_MANAGER_TREE_H
+#define EC_MANAGER_TREE_H
 
 #include <QTreeWidget>
 
@@ -33,7 +33,7 @@ class ECManagerTree : public QTreeWidget
     public:
 
         //! Constructor.
-        explicit ECManagerTree(QObject *parent = 0);
+        explicit ECManagerTree(QObject *parent = nullptr);
 
     protected:
 
@@ -67,4 +67,4 @@ class ECManagerTree : public QTreeWidget
 
 };
 
-#endif /* __EC_MANAGER_TREE_H__ */
+#endif /* EC_MANAGER_TREE_H */

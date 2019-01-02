@@ -8,8 +8,8 @@
  *  DESCRIPTION: Real vector[3] class declaration                    *
  *********************************************************************/
 
-#ifndef __RBL_R3VECTOR_H__
-#define __RBL_R3VECTOR_H__
+#ifndef RBL_R3VECTOR_H
+#define RBL_R3VECTOR_H
 
 #include "rbl_rvector.h"
 #include "rbl_rmatrix.h"
@@ -57,4 +57,4 @@ class RR3Vector : public RRVector
 
 };
 
-#endif // __RBL_R3VECTOR_H__
+#endif // RBL_R3VECTOR_H

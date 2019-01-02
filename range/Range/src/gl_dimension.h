@@ -8,8 +8,8 @@
  *  DESCRIPTION: OpenGL dimension class declaration                  *
  *********************************************************************/
 
-#ifndef __GL_DIMENSION_H__
-#define __GL_DIMENSION_H__
+#ifndef GL_DIMENSION_H
+#define GL_DIMENSION_H
 
 #include "gl_object.h"
 
@@ -72,4 +72,4 @@ class GLDimension : public GLObject
 
 };
 
-#endif // __GL_DIMENSION_H__
+#endif // GL_DIMENSION_H

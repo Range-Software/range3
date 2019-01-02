@@ -8,8 +8,8 @@
  *  DESCRIPTION: RAW model class declaration                         *
  *********************************************************************/
 
-#ifndef __RML_MODEL_RAW_H__
-#define __RML_MODEL_RAW_H__
+#ifndef RML_MODEL_RAW_H
+#define RML_MODEL_RAW_H
 
 #include <QTextStream>
 
@@ -131,4 +131,4 @@ class RModelRaw
                          double       &nz) const;
 };
 
-#endif /* __RML_MODEL_RAW_H__ */
+#endif /* RML_MODEL_RAW_H */

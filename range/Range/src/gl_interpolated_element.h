@@ -8,8 +8,8 @@
  *  DESCRIPTION: OpenGL interpolated element class declaration       *
  *********************************************************************/
 
-#ifndef __GL_INTERPOLATED_ELEMENT_H__
-#define __GL_INTERPOLATED_ELEMENT_H__
+#ifndef GL_INTERPOLATED_ELEMENT_H
+#define GL_INTERPOLATED_ELEMENT_H
 
 #include <rmlib.h>
 
@@ -52,4 +52,4 @@ class GLInterpolatedElement : public GLElementBase, public RInterpolatedElement
 
 };
 
-#endif // __GL_INTERPOLATED_ELEMENT_H__
+#endif // GL_INTERPOLATED_ELEMENT_H

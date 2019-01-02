@@ -8,8 +8,8 @@
  *  DESCRIPTION: Node class declaration                              *
  *********************************************************************/
 
-#ifndef __RML_NODE_H__
-#define __RML_NODE_H__
+#ifndef RML_NODE_H
+#define RML_NODE_H
 
 #include <rblib.h>
 
@@ -144,4 +144,4 @@ class RNode
 
 };
 
-#endif /* __RML_NODE_H__ */
+#endif /* RML_NODE_H */

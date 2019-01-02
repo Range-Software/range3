@@ -8,8 +8,8 @@
  *  DESCRIPTION: Geometry transform input class declaration          *
  *********************************************************************/
 
-#ifndef __GEOMETRY_TRANSFORM_INPUT_H__
-#define __GEOMETRY_TRANSFORM_INPUT_H__
+#ifndef GEOMETRY_TRANSFORM_INPUT_H
+#define GEOMETRY_TRANSFORM_INPUT_H
 
 #include <rblib.h>
 
@@ -154,4 +154,4 @@ class GeometryTransformInput
 
 };
 
-#endif // __GEOMETRY_TRANSFORM_INPUT_H__
+#endif // GEOMETRY_TRANSFORM_INPUT_H

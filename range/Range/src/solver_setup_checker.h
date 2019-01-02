@@ -8,8 +8,8 @@
  *  DESCRIPTION: Solver setup checker class declaration              *
  *********************************************************************/
 
-#ifndef __SOLVER_SETUP_CHECKER_H__
-#define __SOLVER_SETUP_CHECKER_H__
+#ifndef SOLVER_SETUP_CHECKER_H
+#define SOLVER_SETUP_CHECKER_H
 
 #include <rmlib.h>
 
@@ -56,4 +56,4 @@ class SolverSetupChecker
 
 };
 
-#endif // __SOLVER_SETUP_CHECKER_H__
+#endif // SOLVER_SETUP_CHECKER_H

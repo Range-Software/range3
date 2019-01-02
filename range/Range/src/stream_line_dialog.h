@@ -8,8 +8,8 @@
  *  DESCRIPTION: Stream line dialog class declaration                *
  *********************************************************************/
 
-#ifndef __STREAM_LINE_DIALOG_H__
-#define __STREAM_LINE_DIALOG_H__
+#ifndef STREAM_LINE_DIALOG_H
+#define STREAM_LINE_DIALOG_H
 
 #include <QDialog>
 #include <QListWidget>
@@ -39,10 +39,10 @@ class StreamLineDialog : public QDialog
     public:
 
         //! Constructor.
-        explicit StreamLineDialog(uint modelID, QWidget *parent = 0);
+        explicit StreamLineDialog(uint modelID, QWidget *parent = nullptr);
 
         //! Constructor.
-        explicit StreamLineDialog(uint modelID, uint entityID, QWidget *parent = 0);
+        explicit StreamLineDialog(uint modelID, uint entityID, QWidget *parent = nullptr);
 
         //! Execute dialog.
         int exec(void);
@@ -65,4 +65,4 @@ class StreamLineDialog : public QDialog
         
 };
 
-#endif // __STREAM_LINE_DIALOG_H__
+#endif // STREAM_LINE_DIALOG_H

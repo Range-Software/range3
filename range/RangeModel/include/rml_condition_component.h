@@ -8,8 +8,8 @@
  *  DESCRIPTION: Condition component class declaration               *
  *********************************************************************/
 
-#ifndef __RML_CONDITION_COMPONENT_H__
-#define __RML_CONDITION_COMPONENT_H__
+#ifndef RML_CONDITION_COMPONENT_H
+#define RML_CONDITION_COMPONENT_H
 
 #include <string>
 #include <map>
@@ -103,4 +103,4 @@ class RConditionComponent : public RValueTable
 
 };
 
-#endif /* __RML_CONDITION_COMPONENT_H__ */
+#endif /* RML_CONDITION_COMPONENT_H */

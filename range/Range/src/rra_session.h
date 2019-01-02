@@ -8,8 +8,8 @@
  *  DESCRIPTION: Remote Range API session class declaration          *
  *********************************************************************/
 
-#ifndef __RRA_SESSION_H__
-#define __RRA_SESSION_H__
+#ifndef RRA_SESSION_H
+#define RRA_SESSION_H
 
 #include <QString>
 #include <QObject>
@@ -51,7 +51,7 @@ class RRASession : public QObject
 
     private:
 
-        explicit RRASession(QObject *parent = 0);
+        explicit RRASession(QObject *parent = nullptr);
 
         static RRARequestInput::Type getNextType(RRARequestInput::Type type);
 
@@ -108,4 +108,4 @@ class RRASession : public QObject
 
 };
 
-#endif // __RRA_SESSION_H__
+#endif // RRA_SESSION_H

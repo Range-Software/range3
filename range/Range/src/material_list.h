@@ -8,8 +8,8 @@
  *  DESCRIPTION: Material list (database) declaration                *
  *********************************************************************/
 
-#ifndef __MATERIAL_LIST_H__
-#define __MATERIAL_LIST_H__
+#ifndef MATERIAL_LIST_H
+#define MATERIAL_LIST_H
 
 #include <QObject>
 
@@ -91,4 +91,4 @@ class MaterialList : public QObject, public RMaterialList
     
 };
 
-#endif /* __MATERIAL_LIST_H__ */
+#endif /* MATERIAL_LIST_H */

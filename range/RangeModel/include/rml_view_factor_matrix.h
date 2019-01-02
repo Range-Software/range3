@@ -8,8 +8,8 @@
  *  DESCRIPTION: View-Factor matrix class declaration                *
  *********************************************************************/
 
-#ifndef __RML_VIEW_FACTOR_MATRIX_H__
-#define __RML_VIEW_FACTOR_MATRIX_H__
+#ifndef RML_VIEW_FACTOR_MATRIX_H
+#define RML_VIEW_FACTOR_MATRIX_H
 
 #include <vector>
 
@@ -117,4 +117,4 @@ class RViewFactorMatrix
 
 };
 
-#endif // __RML_VIEW_FACTOR_MATRIX_H__
+#endif // RML_VIEW_FACTOR_MATRIX_H

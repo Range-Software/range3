@@ -8,8 +8,8 @@
  *  DESCRIPTION: Report dialog class declaration                     *
  *********************************************************************/
 
-#ifndef __REPORT_DIALOG_H__
-#define __REPORT_DIALOG_H__
+#ifndef REPORT_DIALOG_H
+#define REPORT_DIALOG_H
 
 #include <QDialog>
 #include <QGroupBox>
@@ -48,11 +48,11 @@ class ReportDialog : public QDialog
     public:
 
         //! Constructor.
-        explicit ReportDialog(uint modelID, QWidget *parent = 0);
+        explicit ReportDialog(uint modelID, QWidget *parent = nullptr);
 
         //! Execute dialog.
         int exec(void);
         
 };
 
-#endif // __REPORT_DIALOG_H__
+#endif // REPORT_DIALOG_H

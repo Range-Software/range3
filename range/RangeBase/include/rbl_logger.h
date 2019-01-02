@@ -8,8 +8,8 @@
  *  DESCRIPTION: Logger class declaration                            *
  *********************************************************************/
 
-#ifndef __RBL_LOGGER_H__
-#define __RBL_LOGGER_H__
+#ifndef RBL_LOGGER_H
+#define RBL_LOGGER_H
 
 #include <QString>
 #include <QTime>
@@ -194,4 +194,4 @@ class RLogger
 
 };
 
-#endif /* __RBL_LOGGER_H__ */
+#endif /* RBL_LOGGER_H */

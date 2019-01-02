@@ -8,8 +8,8 @@
  *  DESCRIPTION: Quit dialog class declaration                       *
  *********************************************************************/
 
-#ifndef __QUIT_DIALOG_H__
-#define __QUIT_DIALOG_H__
+#ifndef QUIT_DIALOG_H
+#define QUIT_DIALOG_H
 
 #include <QDialog>
 
@@ -21,8 +21,8 @@ class QuitDialog : public QDialog
     public:
 
         //! Constructor.
-        explicit QuitDialog (QWidget *parent = 0);
+        explicit QuitDialog (QWidget *parent = nullptr);
 
 };
 
-#endif /* __QUIT_DIALOG_H__ */
+#endif /* QUIT_DIALOG_H */

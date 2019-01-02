@@ -8,8 +8,8 @@
  *  DESCRIPTION: Model action input class declaration                *
  *********************************************************************/
 
-#ifndef __MODEL_ACTION_INPUT_H__
-#define __MODEL_ACTION_INPUT_H__
+#ifndef MODEL_ACTION_INPUT_H
+#define MODEL_ACTION_INPUT_H
 
 #include <rmlib.h>
 
@@ -266,4 +266,4 @@ class ModelActionInput
 
 };
 
-#endif // __MODEL_ACTION_INPUT_H__
+#endif // MODEL_ACTION_INPUT_H

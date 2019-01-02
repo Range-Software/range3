@@ -8,8 +8,8 @@
  *  DESCRIPTION: OpenGL Model list class declaration                 *
  *********************************************************************/
 
-#ifndef __GL_MODEL_LIST_H__
-#define __GL_MODEL_LIST_H__
+#ifndef GL_MODEL_LIST_H
+#define GL_MODEL_LIST_H
 
 #include <QList>
 #include <QVector>
@@ -192,4 +192,4 @@ class GLModelList
 
 };
 
-#endif /* __GL_MODEL_LIST_H__ */
+#endif /* GL_MODEL_LIST_H */

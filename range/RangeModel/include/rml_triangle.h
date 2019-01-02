@@ -9,8 +9,8 @@
  *********************************************************************/
 
 
-#ifndef __RML_TRIANGLE_H__
-#define __RML_TRIANGLE_H__
+#ifndef RML_TRIANGLE_H
+#define RML_TRIANGLE_H
 
 #include <rblib.h>
 

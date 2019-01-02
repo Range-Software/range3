@@ -8,8 +8,8 @@
  *  DESCRIPTION: Electrostatics solver class declaration             *
  *********************************************************************/
 
-#ifndef __RSOLVERELECTROSTATICS_H__
-#define __RSOLVERELECTROSTATICS_H__
+#ifndef RSOLVERELECTROSTATICS_H
+#define RSOLVERELECTROSTATICS_H
 
 #include "rsolvergeneric.h"
 
@@ -85,4 +85,4 @@ class RSolverElectrostatics : public RSolverGeneric
 
 };
 
-#endif // __RSOLVERELECTROSTATICS_H__
+#endif // RSOLVERELECTROSTATICS_H

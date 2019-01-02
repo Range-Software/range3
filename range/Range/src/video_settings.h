@@ -8,8 +8,8 @@
  *  DESCRIPTION: Video settings class declaration                    *
  *********************************************************************/
 
-#ifndef __VIDEO_SETTINGS_H__
-#define __VIDEO_SETTINGS_H__
+#ifndef VIDEO_SETTINGS_H
+#define VIDEO_SETTINGS_H
 
 #include <QString>
 
@@ -81,4 +81,4 @@ class VideoSettings
         void setFormat(const QString &value);
 };
 
-#endif // __VIDEO_SETTINGS_H__
+#endif // VIDEO_SETTINGS_H

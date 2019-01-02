@@ -8,8 +8,8 @@
  *  DESCRIPTION: Line class definition                               *
  *********************************************************************/
 
-#ifndef __RML_LINE_H__
-#define __RML_LINE_H__
+#ifndef RML_LINE_H
+#define RML_LINE_H
 
 #include <vector>
 
@@ -63,4 +63,4 @@ class RLine : public RElementGroup
 
 };
 
-#endif /* __RML_LINE_H__ */
+#endif /* RML_LINE_H */

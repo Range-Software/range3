@@ -8,8 +8,8 @@
  *  DESCRIPTION: View-factor hemi cube pixel class declaration       *
  *********************************************************************/
 
-#ifndef __RHEMICUBEPIXEL_H__
-#define __RHEMICUBEPIXEL_H__
+#ifndef RHEMICUBEPIXEL_H
+#define RHEMICUBEPIXEL_H
 
 #include <rblib.h>
 
@@ -75,4 +75,4 @@ class RHemiCubePixel
 
 };
 
-#endif // __RHEMICUBEPIXEL_H__
+#endif // RHEMICUBEPIXEL_H

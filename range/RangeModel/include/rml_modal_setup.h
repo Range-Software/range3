@@ -8,8 +8,8 @@
  *  DESCRIPTION: Modal setup class declaration                       *
  *********************************************************************/
 
-#ifndef __RML_MODAL_SETUP_H__
-#define __RML_MODAL_SETUP_H__
+#ifndef RML_MODAL_SETUP_H
+#define RML_MODAL_SETUP_H
 
 #include <QString>
 
@@ -115,4 +115,4 @@ class RModalSetup
 
 };
 
-#endif // __RML_MODAL_SETUP_H__
+#endif // RML_MODAL_SETUP_H

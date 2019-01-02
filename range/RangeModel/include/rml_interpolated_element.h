@@ -8,8 +8,8 @@
  *  DESCRIPTION: Interpolated element class declaration              *
  *********************************************************************/
 
-#ifndef __RML_INTERPOLATED_ELEMENT_H__
-#define __RML_INTERPOLATED_ELEMENT_H__
+#ifndef RML_INTERPOLATED_ELEMENT_H
+#define RML_INTERPOLATED_ELEMENT_H
 
 #include <vector>
 
@@ -76,4 +76,4 @@ class RInterpolatedElement : public std::vector<RInterpolatedNode>
 
 };
 
-#endif /* __RML_INTERPOLATED_ELEMENT_H__ */
+#endif /* RML_INTERPOLATED_ELEMENT_H */

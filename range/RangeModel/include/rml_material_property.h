@@ -8,8 +8,8 @@
  *  DESCRIPTION: Material property class declaration                 *
  *********************************************************************/
 
-#ifndef __RML_MATERIAL_PROPERTY_H__
-#define __RML_MATERIAL_PROPERTY_H__
+#ifndef RML_MATERIAL_PROPERTY_H
+#define RML_MATERIAL_PROPERTY_H
 
 #include <string>
 #include <map>
@@ -150,4 +150,4 @@ class RMaterialProperty : public RValueTable
 //! ++ operator
 void operator ++(RMaterialPropertyType &type, int increment);
 
-#endif /* __RML_MATERIAL_PROPERTY_H__ */
+#endif /* RML_MATERIAL_PROPERTY_H */

@@ -8,8 +8,8 @@
  *  DESCRIPTION: Text browser class declaration                      *
  *********************************************************************/
 
-#ifndef __TEXT_BROWSER_H__
-#define __TEXT_BROWSER_H__
+#ifndef TEXT_BROWSER_H
+#define TEXT_BROWSER_H
 
 #include <QTextBrowser>
 #include <QPushButton>
@@ -29,7 +29,7 @@ class TextBrowser : public QTextBrowser
     public:
 
         //! Constructor.
-        explicit TextBrowser(bool hasClearButton, QWidget *parent = 0);
+        explicit TextBrowser(bool hasClearButton, QWidget *parent = nullptr);
 
     protected:
 
@@ -38,4 +38,4 @@ class TextBrowser : public QTextBrowser
         
 };
 
-#endif // __TEXT_BROWSER_H__
+#endif // TEXT_BROWSER_H

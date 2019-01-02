@@ -8,8 +8,8 @@
  *  DESCRIPTION: Document tree class declaration                     *
  *********************************************************************/
 
-#ifndef __DOCUMENT_TREE_H__
-#define __DOCUMENT_TREE_H__
+#ifndef DOCUMENT_TREE_H
+#define DOCUMENT_TREE_H
 
 #include <QTreeWidget>
 
@@ -21,7 +21,7 @@ class DocumentTree : public QTreeWidget
     public:
 
         //! Constructor.
-        explicit DocumentTree(QWidget *parent = 0);
+        explicit DocumentTree(QWidget *parent = nullptr);
 
     private:
 
@@ -50,4 +50,4 @@ class DocumentTree : public QTreeWidget
 
 };
 
-#endif // __DOCUMENT_TREE_H__
+#endif // DOCUMENT_TREE_H

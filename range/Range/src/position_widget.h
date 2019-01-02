@@ -8,8 +8,8 @@
  *  DESCRIPTION: Position widget class declaration                   *
  *********************************************************************/
 
-#ifndef __POSITION_WIDGET_H__
-#define __POSITION_WIDGET_H__
+#ifndef POSITION_WIDGET_H
+#define POSITION_WIDGET_H
 
 #include <QGroupBox>
 #include <QSlider>
@@ -53,7 +53,7 @@ class PositionWidget : public QGroupBox
     public:
 
         //! Constructor.
-        explicit PositionWidget(const QString &title, const RR3Vector &position, bool horizontalLayout = false, QWidget *parent = 0);
+        explicit PositionWidget(const QString &title, const RR3Vector &position, bool horizontalLayout = false, QWidget *parent = nullptr);
 
         //! Show sliders.
         void showSliders(void);
@@ -138,4 +138,4 @@ class PositionWidget : public QGroupBox
         
 };
 
-#endif // __POSITION_WIDGET_H__
+#endif // POSITION_WIDGET_H

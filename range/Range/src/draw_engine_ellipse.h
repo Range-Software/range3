@@ -8,8 +8,8 @@
  *  DESCRIPTION: Draw engine ellipse class declaration               *
  *********************************************************************/
 
-#ifndef __DRAW_ENGINE_ELLIPSE_H__
-#define __DRAW_ENGINE_ELLIPSE_H__
+#ifndef DRAW_ENGINE_ELLIPSE_H
+#define DRAW_ENGINE_ELLIPSE_H
 
 #include "draw_engine_object.h"
 
@@ -21,7 +21,7 @@ class DrawEngineEllipse : public DrawEngineObject
     public:
 
         //! Constructor.
-        explicit DrawEngineEllipse(QObject *parent = 0);
+        explicit DrawEngineEllipse(QObject *parent = nullptr);
 
     protected:
 
@@ -30,4 +30,4 @@ class DrawEngineEllipse : public DrawEngineObject
 
 };
 
-#endif // __DRAW_ENGINE_ELLIPSE_H__
+#endif // DRAW_ENGINE_ELLIPSE_H

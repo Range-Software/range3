@@ -8,8 +8,8 @@
  *  DESCRIPTION: Mesh generator dialog class declaration             *
  *********************************************************************/
 
-#ifndef __MESH_GENERATOR_DIALOG_H__
-#define __MESH_GENERATOR_DIALOG_H__
+#ifndef MESH_GENERATOR_DIALOG_H
+#define MESH_GENERATOR_DIALOG_H
 
 #include <QDialog>
 #include <QCheckBox>
@@ -94,4 +94,4 @@ class MeshGeneratorDialog : public QDialog
     
 };
 
-#endif // __MESH_GENERATOR_DIALOG_H__
+#endif // MESH_GENERATOR_DIALOG_H

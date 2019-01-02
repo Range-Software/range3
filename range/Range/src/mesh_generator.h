@@ -8,8 +8,8 @@
  *  DESCRIPTION: Mesh generator class declaration                    *
  *********************************************************************/
 
-#ifndef __MESH_GENERATOR_H__
-#define __MESH_GENERATOR_H__
+#ifndef MESH_GENERATOR_H
+#define MESH_GENERATOR_H
 
 
 #include <QObject>
@@ -28,7 +28,7 @@ class MeshGenerator : public Job
     public:
 
         //! Constructor.
-        explicit MeshGenerator(uint modelID, QObject *parent = 0);
+        explicit MeshGenerator(uint modelID, QObject *parent = nullptr);
 
     protected:
 
