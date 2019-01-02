@@ -33,7 +33,7 @@ class RCut : public RInterpolatedEntity
     private:
 
         //! Internal initialization function.
-        void _init ( const RCut *pCut = 0 );
+        void _init ( const RCut *pCut = nullptr );
 
     public:
 

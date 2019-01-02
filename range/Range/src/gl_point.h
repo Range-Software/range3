@@ -34,7 +34,7 @@ class GLPoint : public GLObject
     private:
 
         //! Internal initialization function.
-        void _init ( const GLPoint *pGlPoint = 0 );
+        void _init ( const GLPoint *pGlPoint = nullptr );
 
     public:
 

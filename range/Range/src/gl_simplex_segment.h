@@ -24,7 +24,7 @@ class GLSimplexSegment : public GLSimplex
     private:
 
         //! Internal initialization function.
-        void _init(const GLSimplexSegment *pGlSegment = 0 );
+        void _init(const GLSimplexSegment *pGlSegment = nullptr );
 
     public:
 

@@ -27,7 +27,7 @@ class RIMatrix
     private:
 
         //! Internal initialization function.
-        void _init ( const RIMatrix *pMatrix = 0 );
+        void _init ( const RIMatrix *pMatrix = nullptr );
 
     public:
 

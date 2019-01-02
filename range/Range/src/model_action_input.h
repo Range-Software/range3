@@ -98,7 +98,7 @@ class ModelActionInput
     private:
 
         //! Internal initialization function.
-        void _init(const ModelActionInput *pModelActionInput = 0);
+        void _init(const ModelActionInput *pModelActionInput = nullptr);
 
     public:
 

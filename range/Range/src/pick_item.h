@@ -33,7 +33,7 @@ class PickItem
     private:
 
         //! Internal initialization function.
-        void _init ( const PickItem *pPickItem = 0 );
+        void _init ( const PickItem *pPickItem = nullptr );
 
     protected:
 

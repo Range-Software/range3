@@ -19,7 +19,7 @@ class RNode
 
     private:
 
-        void _init ( const RNode *pNode = 0 );
+        void _init ( const RNode *pNode = nullptr );
 
     protected:
 

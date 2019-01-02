@@ -34,7 +34,7 @@ class SolverTaskID
     private:
 
         //! Internal initialization function.
-        void _init ( const SolverTaskID *pSolverTaskID = 0 );
+        void _init ( const SolverTaskID *pSolverTaskID = nullptr );
 
     public:
 

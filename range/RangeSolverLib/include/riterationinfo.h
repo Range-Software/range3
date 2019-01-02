@@ -43,7 +43,7 @@ class RIterationInfo
     private:
 
         //! Internal initialization function.
-        void _init(const RIterationInfo *pIterationInfo = 0);
+        void _init(const RIterationInfo *pIterationInfo = nullptr);
 
     public:
 

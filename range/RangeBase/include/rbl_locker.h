@@ -23,7 +23,7 @@ class RLocker
     private:
 
         //! Internal initialization function.
-        void _init ( const RLocker *pLocker = 0 );
+        void _init ( const RLocker *pLocker = nullptr );
 
     protected:
 

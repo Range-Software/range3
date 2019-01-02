@@ -19,7 +19,7 @@ class RShapeGenerator
     private:
 
         //! Internal initialization function.
-        void _init ( const RShapeGenerator *pShapeGenerator = 0 );
+        void _init ( const RShapeGenerator *pShapeGenerator = nullptr );
 
     public:
 

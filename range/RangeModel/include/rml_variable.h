@@ -174,7 +174,7 @@ class RVariable
     private:
 
         //! Internal initialization function
-        void _init ( const RVariable *variable = 0 );
+        void _init ( const RVariable *variable = nullptr );
 
     protected:
 

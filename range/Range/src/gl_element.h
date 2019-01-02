@@ -31,7 +31,7 @@ class GLElement : public GLElementBase, public RElement
     private:
 
         //! Internal initialization function.
-        void _init(const GLElement *pGlElement = 0);
+        void _init(const GLElement *pGlElement = nullptr);
 
     public:
 

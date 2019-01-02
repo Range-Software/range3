@@ -34,7 +34,7 @@ class SolverInput
     private:
 
         //! Internal initialization function.
-        void _init(const SolverInput *pSolverInput = 0);
+        void _init(const SolverInput *pSolverInput = nullptr);
 
     public:
 

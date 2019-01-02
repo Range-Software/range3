@@ -27,7 +27,7 @@ class GLTextRenderer
     private:
 
         //! Internal initialization function.
-        void _init(const GLTextRenderer *pGlTextRenderer = 0);
+        void _init(const GLTextRenderer *pGlTextRenderer = nullptr);
 
     public:
 

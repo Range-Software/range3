@@ -26,7 +26,7 @@ class RPatch
     private:
 
         //! Internal initialization function.
-        void _init(const RPatch *pPatch = 0);
+        void _init(const RPatch *pPatch = nullptr);
 
     public:
 

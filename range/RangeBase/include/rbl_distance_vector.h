@@ -22,7 +22,7 @@ class RDistanceVector : public std::vector<T>
     private:
 
         //! Internal initialization function.
-        void _init(const RDistanceVector *pDistanceVector = 0)
+        void _init(const RDistanceVector *pDistanceVector = nullptr)
         {
             if (pDistanceVector)
             {

@@ -28,7 +28,7 @@ class RSegment
     private:
 
         //! Internal initialization function.
-        void _init ( const RSegment *pSegment = 0 );
+        void _init ( const RSegment *pSegment = nullptr );
 
     public:
 

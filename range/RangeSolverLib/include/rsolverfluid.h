@@ -77,7 +77,7 @@ class RSolverFluid : public RSolverGeneric
     private:
 
         //! Internal initialization function.
-        void _init(const RSolverFluid *pSolver = 0);
+        void _init(const RSolverFluid *pSolver = nullptr);
 
     public:
 

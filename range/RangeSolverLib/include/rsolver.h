@@ -37,7 +37,7 @@ class RSolver
     private:
 
         //! Internal initialization function.
-        void _init(const RSolver *pSolver = 0);
+        void _init(const RSolver *pSolver = nullptr);
 
     public:
 

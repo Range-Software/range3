@@ -37,7 +37,7 @@ class RSolverRadiativeHeat : public RSolverGeneric
     private:
 
         //! Internal initialization function.
-        void _init(const RSolverRadiativeHeat *pRadiativeHeatSolver = 0);
+        void _init(const RSolverRadiativeHeat *pRadiativeHeatSolver = nullptr);
 
     public:
 

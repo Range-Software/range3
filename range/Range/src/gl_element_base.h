@@ -54,7 +54,7 @@ class GLElementBase : public GLObject
     private:
 
         //! Internal initialization function.
-        void _init(const GLElementBase *pGlElement = 0);
+        void _init(const GLElementBase *pGlElement = nullptr);
 
     public:
 

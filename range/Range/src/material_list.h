@@ -46,7 +46,7 @@ class MaterialList : public QObject, public RMaterialList
         //! Delete material with given name.
         //! Returns number of removed materials.
         unsigned int remove(const QString &materialName,
-                            unsigned int      *id = 0);
+                            unsigned int      *id = nullptr);
 
         //! Rename material with given name to new name.
         bool rename(const QString &materialOldName,

@@ -28,7 +28,7 @@ class RLocalRotation
     private:
 
         //! Internal initialization function.
-        void _init(const RLocalRotation *pLocalRotation = 0);
+        void _init(const RLocalRotation *pLocalRotation = nullptr);
 
     public:
 

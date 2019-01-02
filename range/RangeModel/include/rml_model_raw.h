@@ -26,7 +26,7 @@ class RModelRaw
     private:
 
         //! Internal initialization function.
-        void _init ( const RModelRaw *pModelRaw = 0 );
+        void _init ( const RModelRaw *pModelRaw = nullptr );
 
     protected:
 

@@ -56,7 +56,7 @@ class RModel : public RProblem, public RResults
     private:
 
         //! Internal initialization function.
-        void _init ( const RModel *pModel = 0 );
+        void _init ( const RModel *pModel = nullptr );
 
         //! Add element to element group.
         void addElementToGroup ( uint elementID,

@@ -88,7 +88,7 @@ class RElement
     private:
 
         //! Internal initialization function.
-        void _init ( const RElement *element = 0 );
+        void _init ( const RElement *element = nullptr );
 
     protected:
 

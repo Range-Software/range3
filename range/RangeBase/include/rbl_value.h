@@ -23,7 +23,7 @@ class RValue
     private:
 
         //! Internal initialization function.
-        void _init ( const RValue *pValue = 0 );
+        void _init ( const RValue *pValue = nullptr );
 
     protected:
 

@@ -45,7 +45,7 @@ class RMessage : public QString
     private:
 
         //! Internal initialization function.
-        void _init ( const RMessage *pMessage = 0 );
+        void _init ( const RMessage *pMessage = nullptr );
 
     protected:
 

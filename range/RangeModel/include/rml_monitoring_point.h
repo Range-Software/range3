@@ -32,7 +32,7 @@ class RMonitoringPoint
     private:
 
         //! Internal initialization function.
-        void _init(const RMonitoringPoint *pMonitoringPoint = 0);
+        void _init(const RMonitoringPoint *pMonitoringPoint = nullptr);
 
     public:
 

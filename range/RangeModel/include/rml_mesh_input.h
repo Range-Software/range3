@@ -53,7 +53,7 @@ class RMeshInput
     private:
 
         //! Internal initialization function.
-        void _init ( const RMeshInput *pMeshInput = 0 );
+        void _init ( const RMeshInput *pMeshInput = nullptr );
 
     public:
 

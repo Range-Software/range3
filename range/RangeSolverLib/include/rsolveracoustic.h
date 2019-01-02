@@ -41,7 +41,7 @@ class RSolverAcoustic : public RSolverGeneric
     private:
 
         //! Internal initialization function.
-        void _init(const RSolverAcoustic *pAcousticSolver = 0);
+        void _init(const RSolverAcoustic *pAcousticSolver = nullptr);
 
     public:
 

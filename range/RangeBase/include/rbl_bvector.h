@@ -20,7 +20,7 @@ class RBVector : public std::vector<bool>
     private:
 
         //! Internal initialization function.
-        void _init ( const RBVector *pArray = 0 );
+        void _init ( const RBVector *pArray = nullptr );
 
     public:
 

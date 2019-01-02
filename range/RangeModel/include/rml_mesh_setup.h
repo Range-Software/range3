@@ -30,7 +30,7 @@ class RMeshSetup
     private:
 
         //! Internal initialization function.
-        void _init(const RMeshSetup *pMeshSetup = 0);
+        void _init(const RMeshSetup *pMeshSetup = nullptr);
 
     public:
 

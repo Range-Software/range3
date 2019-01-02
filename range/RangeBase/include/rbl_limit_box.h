@@ -28,7 +28,7 @@ class RLimitBox
     private:
 
         //! Internal initialization function.
-        void _init(const RLimitBox *pBox = 0);
+        void _init(const RLimitBox *pBox = nullptr);
 
     public:
 

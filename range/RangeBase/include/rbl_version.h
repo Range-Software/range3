@@ -46,7 +46,7 @@ class RVersion
     private:
 
         //! Internal initialization function.
-        void _init ( const RVersion *pVersion = 0 );
+        void _init ( const RVersion *pVersion = nullptr );
 
     public:
 

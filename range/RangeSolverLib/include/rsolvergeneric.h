@@ -86,7 +86,7 @@ class RSolverGeneric
     private:
 
         //! Internal initialization function.
-        void _init(const RSolverGeneric *pGenericSolver = 0);
+        void _init(const RSolverGeneric *pGenericSolver = nullptr);
 
     public:
 

@@ -36,7 +36,7 @@ class GLModelList
     private:
 
         //! Internal initialization function.
-        void _init (const GLModelList *pGlModelList = 0);
+        void _init (const GLModelList *pGlModelList = nullptr);
 
     public:
 

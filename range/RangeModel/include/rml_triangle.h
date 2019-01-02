@@ -33,7 +33,7 @@ class RTriangle
     private:
 
         //! Internal initialization function.
-        void _init ( const RTriangle *pTriangle = 0 );
+        void _init ( const RTriangle *pTriangle = nullptr );
 
     public:
 

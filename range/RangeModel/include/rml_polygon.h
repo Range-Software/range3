@@ -29,7 +29,7 @@ class RPolygon
     private:
 
         //! Internal initialization function.
-        void _init ( const RPolygon *pPolygon = 0 );
+        void _init ( const RPolygon *pPolygon = nullptr );
 
     public:
 

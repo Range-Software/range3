@@ -22,7 +22,7 @@ class RInterpolatedEntity : public REntityGroup, public std::vector<RInterpolate
     private:
 
         //! Internal initialization function.
-        void _init ( const RInterpolatedEntity *pInterpolatedEntity = 0 );
+        void _init ( const RInterpolatedEntity *pInterpolatedEntity = nullptr );
 
     public:
 

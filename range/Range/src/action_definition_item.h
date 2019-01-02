@@ -166,7 +166,7 @@ class ActionDefinitionItem
     private:
 
         //! Internal initialization function.
-        void _init(const ActionDefinitionItem *pActionDefinitionItem = 0);
+        void _init(const ActionDefinitionItem *pActionDefinitionItem = nullptr);
 
     public:
 

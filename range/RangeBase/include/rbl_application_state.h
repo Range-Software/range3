@@ -31,7 +31,7 @@ class RApplicationState
     private:
 
         //! Internal initialization function.
-        void _init ( const RApplicationState *pApplicationState = 0 );
+        void _init ( const RApplicationState *pApplicationState = nullptr );
 
     public:
 

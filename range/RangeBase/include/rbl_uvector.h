@@ -20,7 +20,7 @@ class RUVector : public std::vector<unsigned int>
     private:
 
         //! Internal initialization function.
-        void _init ( const RUVector *pArray = 0 );
+        void _init ( const RUVector *pArray = nullptr );
 
     public:
 

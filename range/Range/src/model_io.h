@@ -55,7 +55,7 @@ class ModelIO : public Job
 
         explicit ModelIO(ModelIOType    type,
                          const QString &filename,
-                         Model         *pModel = 0,
+                         Model         *pModel = nullptr,
                          QObject       *parent = nullptr);
 
         //! Find new model name.

@@ -30,7 +30,7 @@ class RHemiCubePixel
     private:
 
         //! Internal initialization function.
-        void _init(const RHemiCubePixel *pHemiCubePixel = 0);
+        void _init(const RHemiCubePixel *pHemiCubePixel = nullptr);
 
     public:
 

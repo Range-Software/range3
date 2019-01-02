@@ -24,7 +24,7 @@ class RBook
     private:
 
         //! Internal initialization function.
-        void _init(const RBook *pBook = 0);
+        void _init(const RBook *pBook = nullptr);
 
     public:
 

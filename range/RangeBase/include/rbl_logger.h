@@ -43,7 +43,7 @@ class RLogger
     private:
 
         //! Internal initialization function.
-        void _init ( const RLogger *pLogger = 0 );
+        void _init ( const RLogger *pLogger = nullptr );
 
         //! Print to log file.
         void printToFile ( time_t         pTime,

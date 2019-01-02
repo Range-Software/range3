@@ -38,7 +38,7 @@ class RMatrixPreconditioner
     private:
 
         //! Internal initialization function.
-        void _init(const RMatrixPreconditioner *pMatrixPreconditioner = 0);
+        void _init(const RMatrixPreconditioner *pMatrixPreconditioner = nullptr);
 
     public:
 

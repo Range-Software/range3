@@ -28,7 +28,7 @@ class RLine : public RElementGroup
     private:
 
         //! Internal initialization function.
-        void _init ( const RLine *pLine = 0 );
+        void _init ( const RLine *pLine = nullptr );
 
     protected:
 

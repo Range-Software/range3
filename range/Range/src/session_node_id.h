@@ -23,7 +23,7 @@ class SessionNodeID
     private:
 
         //! Internal initialization function.
-        void _init(const SessionNodeID *pSessionNodeID = 0);
+        void _init(const SessionNodeID *pSessionNodeID = nullptr);
 
     public:
 

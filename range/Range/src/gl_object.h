@@ -43,7 +43,7 @@ class GLObject
     private:
 
         //! Internal initialization function.
-        void _init ( const GLObject *pGlObject = 0 );
+        void _init ( const GLObject *pGlObject = nullptr );
 
     public:
 

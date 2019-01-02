@@ -35,7 +35,7 @@ class REntityGroupData
     private:
 
         //! Internal initialization function.
-        void _init ( const REntityGroupData *pElementGroupData = 0 );
+        void _init ( const REntityGroupData *pElementGroupData = nullptr );
 
     protected:
 

@@ -52,7 +52,7 @@ class GeometryTransformInput
     private:
 
         //! Internal initialization function.
-        void _init(const GeometryTransformInput *pGeometryTransformInput = 0);
+        void _init(const GeometryTransformInput *pGeometryTransformInput = nullptr);
 
     public:
 

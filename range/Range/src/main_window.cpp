@@ -153,7 +153,7 @@ MainWindow *MainWindow::getInstance(void)
 void MainWindow::showTransformGeometryWidget(void)
 {
     QString dockName = QString::fromUtf8("dockTransform");
-    GeometryTransformWidget *transformGeometryWidget = 0;
+    GeometryTransformWidget *transformGeometryWidget = nullptr;
 
     if (!findCustomDockWidget(dockName))
     {

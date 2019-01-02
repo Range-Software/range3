@@ -29,7 +29,7 @@ class RMatrixSolver
     private:
 
         //! Internal initialization function.
-        void _init(const RMatrixSolver *pMatrixSolver = 0);
+        void _init(const RMatrixSolver *pMatrixSolver = nullptr);
 
     public:
 

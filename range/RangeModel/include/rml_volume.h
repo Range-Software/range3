@@ -28,7 +28,7 @@ class RVolume : public RElementGroup
     private:
 
         //! Internal initialization function.
-        void _init ( const RVolume *pVolume = 0 );
+        void _init ( const RVolume *pVolume = nullptr );
 
     public:
 

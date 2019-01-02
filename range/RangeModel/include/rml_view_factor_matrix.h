@@ -32,7 +32,7 @@ class RViewFactorMatrix
     private:
 
         //! Internal initialization function.
-        void _init(const RViewFactorMatrix *pViewFactorMatrix = 0);
+        void _init(const RViewFactorMatrix *pViewFactorMatrix = nullptr);
 
     public:
 

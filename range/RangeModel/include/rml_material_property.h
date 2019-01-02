@@ -51,7 +51,7 @@ class RMaterialProperty : public RValueTable
     private:
 
         //! Internal initialization function.
-        void _init ( const RMaterialProperty *pMaterialProperty = 0 );
+        void _init ( const RMaterialProperty *pMaterialProperty = nullptr );
 
         //! Set table key name.
         void setKeyName ( const QString &name );

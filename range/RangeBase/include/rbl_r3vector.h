@@ -20,7 +20,7 @@ class RR3Vector : public RRVector
     private:
 
         //! Internal initialization function.
-        void _init ( const RR3Vector *pR3Vector = 0 );
+        void _init ( const RR3Vector *pR3Vector = nullptr );
 
     public:
 

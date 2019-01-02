@@ -34,7 +34,7 @@ class RStreamLine : public RInterpolatedEntity
     private:
 
         //! Internal initialization function.
-        void _init ( const RStreamLine *pStreamLine = 0 );
+        void _init ( const RStreamLine *pStreamLine = nullptr );
 
     public:
 

@@ -687,7 +687,7 @@ void ModelTree::removeModel(uint modelID)
 
 QTreeWidgetItem *ModelTree::findModelItem(uint modelID, bool create)
 {
-    QTreeWidgetItem *item = 0;
+    QTreeWidgetItem *item = nullptr;
     for (int i=0;i<this->topLevelItemCount();i++)
     {
         if (this->topLevelItem(i)->data(MODEL_TREE_COLUMN_MID,Qt::DisplayRole).toUInt() == modelID)
@@ -704,7 +704,7 @@ QTreeWidgetItem *ModelTree::findModelItem(uint modelID, bool create)
 
 QTreeWidgetItem *ModelTree::findEntityGroupItem(QTreeWidgetItem *parentItem, int entityGroupType, bool create)
 {
-    QTreeWidgetItem *item = 0;
+    QTreeWidgetItem *item = nullptr;
     for (int i=0;i<parentItem->childCount();i++)
     {
         if (parentItem->child(i)->data(MODEL_TREE_COLUMN_TYPE,Qt::DisplayRole).toInt() == entityGroupType)
@@ -732,7 +732,7 @@ QTreeWidgetItem *ModelTree::findEntityGroupItem(QTreeWidgetItem *parentItem, int
 
 QTreeWidgetItem *ModelTree::findEntityItem(QTreeWidgetItem *parentItem, uint entityID, bool create)
 {
-    QTreeWidgetItem *item = 0;
+    QTreeWidgetItem *item = nullptr;
     for (int i=0;i<parentItem->childCount();i++)
     {
         if (parentItem->child(i)->data(MODEL_TREE_COLUMN_EID,Qt::DisplayRole).toUInt() == entityID)

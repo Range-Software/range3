@@ -41,7 +41,7 @@ class GLArrow : public GLObject
     private:
 
         //! Internal initialization function.
-        void _init ( const GLArrow *pGlArrow = 0 );
+        void _init ( const GLArrow *pGlArrow = nullptr );
 
     public:
 

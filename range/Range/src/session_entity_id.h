@@ -21,7 +21,7 @@ class SessionEntityID
     private:
 
         //! Internal initialization function.
-        void _init ( const SessionEntityID *pSessionEntityID = 0 );
+        void _init ( const SessionEntityID *pSessionEntityID = nullptr );
 
     protected:
         uint              mid;

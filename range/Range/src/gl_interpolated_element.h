@@ -21,7 +21,7 @@ class GLInterpolatedElement : public GLElementBase, public RInterpolatedElement
     private:
 
         //! Internal initialization function.
-        void _init(const GLInterpolatedElement *pGlElement = 0);
+        void _init(const GLInterpolatedElement *pGlElement = nullptr);
 
     public:
 

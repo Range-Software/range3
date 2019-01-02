@@ -23,7 +23,7 @@ class RModelMsh
     private:
 
         //! Internal initialization function.
-        void _init ( const RModelMsh *pModelMsh = 0 );
+        void _init ( const RModelMsh *pModelMsh = nullptr );
 
         //! Read mesh from the ASCII file.
         void readAscii ( const QString &fileName );

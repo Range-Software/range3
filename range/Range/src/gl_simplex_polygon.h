@@ -24,7 +24,7 @@ class GLSimplexPolygon : public GLSimplex
     private:
 
         //! Internal initialization function.
-        void _init(const GLSimplexPolygon *pGlPolygon = 0 );
+        void _init(const GLSimplexPolygon *pGlPolygon = nullptr );
 
     public:
 

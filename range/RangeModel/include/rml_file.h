@@ -45,7 +45,7 @@ class RFile : public QFile
     private:
 
         //! Internal initialization function.
-        void _init(const RFile *pFile = 0);
+        void _init(const RFile *pFile = nullptr);
 
     public:
 

@@ -21,7 +21,7 @@ class RValueTable
     private:
 
         //! Internal initialization function.
-        void _init ( const RValueTable *pValueTable = 0 );
+        void _init ( const RValueTable *pValueTable = nullptr );
 
     protected:
 

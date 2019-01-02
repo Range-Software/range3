@@ -36,7 +36,7 @@ class GLDimension : public GLObject
     private:
 
         //! Internal initialization function.
-        void _init(const GLDimension *pGlDimension = 0);
+        void _init(const GLDimension *pGlDimension = nullptr);
 
     public:
 

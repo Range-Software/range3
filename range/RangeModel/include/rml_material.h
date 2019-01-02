@@ -34,7 +34,7 @@ class RMaterial
     private:
 
         //! Internal initialization function.
-        void _init ( const RMaterial *pMaterial = 0 );
+        void _init ( const RMaterial *pMaterial = nullptr );
 
     protected:
 

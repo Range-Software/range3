@@ -29,7 +29,7 @@ class GLInterpolatedEntity : public GLEntity, public RInterpolatedEntity
     private:
 
         //! Internal initialization function.
-        void _init(const GLInterpolatedEntity *pGlInterpolatedEntity = 0);
+        void _init(const GLInterpolatedEntity *pGlInterpolatedEntity = nullptr);
 
     public:
 

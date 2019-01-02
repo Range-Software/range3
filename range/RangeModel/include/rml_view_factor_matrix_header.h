@@ -30,7 +30,7 @@ class RViewFactorMatrixHeader
     private:
 
         //! Internal initialization function.
-        void _init(const RViewFactorMatrixHeader *pViewFactorMatrixHeader = 0);
+        void _init(const RViewFactorMatrixHeader *pViewFactorMatrixHeader = nullptr);
 
     public:
 

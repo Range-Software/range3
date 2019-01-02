@@ -32,7 +32,7 @@ class RMaterialList
     private:
 
         //! Internal initialization function.
-        void _init ( const RMaterialList *pMaterialList = 0 );
+        void _init ( const RMaterialList *pMaterialList = nullptr );
 
     public:
 
@@ -65,7 +65,7 @@ class RMaterialList
         //! Delete material with given name.
         //! Returns number of removed materials.
         virtual unsigned int remove ( const QString &materialName,
-                                      unsigned int  *id = 0);
+                                      unsigned int  *id = nullptr);
 
         //! Rename material with given name to new name.
         virtual bool rename ( const QString &materialOldName,

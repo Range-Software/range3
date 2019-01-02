@@ -29,7 +29,7 @@ class RElementGroup : public REntityGroup
     private:
 
         //! Internal initialization function.
-        void _init ( const RElementGroup *pElementGroup = 0 );
+        void _init ( const RElementGroup *pElementGroup = nullptr );
 
     protected:
 

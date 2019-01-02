@@ -27,7 +27,7 @@ class RInterpolatedNode : public RNode
     private:
 
         //! Internal initialization function.
-        void _init ( const RInterpolatedNode *pInterpolatedNode = 0 );
+        void _init ( const RInterpolatedNode *pInterpolatedNode = nullptr );
 
     public:
 

@@ -26,7 +26,7 @@ class RSolverMagnetostatics : public RSolverGeneric
     private:
 
         //! Internal initialization function.
-        void _init(const RSolverMagnetostatics *pSolver = 0);
+        void _init(const RSolverMagnetostatics *pSolver = nullptr);
 
     public:
 

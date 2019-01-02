@@ -26,7 +26,7 @@ class RSolverSharedData
     private:
 
         //! Internal initialization function.
-        void _init(const RSolverSharedData *pSolverSharedData = 0);
+        void _init(const RSolverSharedData *pSolverSharedData = nullptr);
 
     public:
 

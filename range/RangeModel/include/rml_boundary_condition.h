@@ -67,7 +67,7 @@ class RBoundaryCondition : public RCondition
     private:
 
         //! Internal initialization function.
-        void _init ( const RBoundaryCondition *pCondition = 0 );
+        void _init ( const RBoundaryCondition *pCondition = nullptr );
 
         //! Set condition type.
         //! Calling thisfunction has no effect on condition

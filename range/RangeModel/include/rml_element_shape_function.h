@@ -30,7 +30,7 @@ class RElementShapeFunction
     private:
 
         //! Internal initialization function.
-        void _init(const RElementShapeFunction *pElementShapeFunction = 0);
+        void _init(const RElementShapeFunction *pElementShapeFunction = nullptr);
 
     public:
 

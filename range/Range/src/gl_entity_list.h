@@ -27,7 +27,7 @@ class GLEntityList : public GLList
     private:
 
         //! Internal initialization function.
-        void _init (const GLEntityList *pGlEntityList = 0);
+        void _init (const GLEntityList *pGlEntityList = nullptr);
 
     public:
 

@@ -34,7 +34,7 @@ class GLScalarField : public GLObject, public RScalarField
     private:
 
         //! Internal initialization function.
-        void _init(const GLScalarField *pGlScalarField = 0);
+        void _init(const GLScalarField *pGlScalarField = nullptr);
 
     public:
 

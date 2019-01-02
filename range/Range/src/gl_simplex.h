@@ -50,7 +50,7 @@ class GLSimplex : public GLObject
     private:
 
         //! Internal initialization function.
-        void _init(const GLSimplex *pGlSimplex = 0 );
+        void _init(const GLSimplex *pGlSimplex = nullptr );
 
     public:
 

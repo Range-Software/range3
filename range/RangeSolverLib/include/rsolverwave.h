@@ -28,7 +28,7 @@ class RSolverWave : public RSolverGeneric
     private:
 
         //! Internal initialization function.
-        void _init(const RSolverWave *pWaveSolver = 0);
+        void _init(const RSolverWave *pWaveSolver = nullptr);
 
     public:
 

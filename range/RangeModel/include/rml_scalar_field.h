@@ -34,7 +34,7 @@ class RScalarField : public RVectorField
     private:
 
         //! Internal initialization function.
-        void _init ( const RScalarField *pScalarField = 0 );
+        void _init ( const RScalarField *pScalarField = nullptr );
 
     public:
 

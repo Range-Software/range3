@@ -34,7 +34,7 @@ class CommandProcessor : public QObject
     public:
 
         //! Constructor.
-        explicit CommandProcessor(const QString &taskServer, const QString &taskID, QCoreApplication *application = 0);
+        explicit CommandProcessor(const QString &taskServer, const QString &taskID, QCoreApplication *application = nullptr);
 
     protected:
 

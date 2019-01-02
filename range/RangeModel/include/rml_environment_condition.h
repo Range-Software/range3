@@ -38,7 +38,7 @@ class REnvironmentCondition : public RCondition
     private:
 
         //! Internal initialization function.
-        void _init ( const REnvironmentCondition *pCondition = 0 );
+        void _init ( const REnvironmentCondition *pCondition = nullptr );
 
         //! Set condition type.
         //! Calling thisfunction has no effect on condition

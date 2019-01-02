@@ -26,7 +26,7 @@ class RIterationInfoValue
     private:
 
         //! Internal initialization function.
-        void _init(const RIterationInfoValue *pIterationInfoValue = 0);
+        void _init(const RIterationInfoValue *pIterationInfoValue = nullptr);
 
     public:
 

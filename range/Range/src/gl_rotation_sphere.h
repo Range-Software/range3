@@ -37,7 +37,7 @@ class GLRotationSphere : public GLObject
     private:
 
         //! Internal initialization function.
-        void _init(const GLRotationSphere *pGlRotationSphere = 0);
+        void _init(const GLRotationSphere *pGlRotationSphere = nullptr);
 
     public:
 

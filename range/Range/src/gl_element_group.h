@@ -38,7 +38,7 @@ class GLElementGroup : public GLEntity, public RElementGroup
     private:
 
         //! Internal initialization function.
-        void _init(const GLElementGroup *pGlElementGroup = 0);
+        void _init(const GLElementGroup *pGlElementGroup = nullptr);
 
     public:
 

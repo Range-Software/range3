@@ -55,7 +55,7 @@ class RSolverStress : public RSolverGeneric
     private:
 
         //! Internal initialization function.
-        void _init(const RSolverStress *pStressSolver = 0);
+        void _init(const RSolverStress *pStressSolver = nullptr);
 
     public:
 

@@ -20,7 +20,7 @@ class VariableData
     private:
 
         //! Internal initialization function.
-        void _init ( const VariableData *pVariableData = 0 );
+        void _init ( const VariableData *pVariableData = nullptr );
 
     protected:
 

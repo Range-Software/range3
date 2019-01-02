@@ -29,7 +29,7 @@ class RTetrahedron
     private:
 
         //! Internal initialization function.
-        void _init ( const RTetrahedron *pTetrahedron = 0 );
+        void _init ( const RTetrahedron *pTetrahedron = nullptr );
 
     public:
 

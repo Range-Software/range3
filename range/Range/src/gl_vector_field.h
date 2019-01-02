@@ -34,7 +34,7 @@ class GLVectorField : public GLObject, public RVectorField
     private:
 
         //! Internal initialization function.
-        void _init(const GLVectorField *pGlVectorField = 0);
+        void _init(const GLVectorField *pGlVectorField = nullptr);
 
     public:
 

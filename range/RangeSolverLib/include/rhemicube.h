@@ -31,7 +31,7 @@ class RHemiCube
     private:
 
         //! Internal initialization function.
-        void _init(const RHemiCube *pHemiCube = 0);
+        void _init(const RHemiCube *pHemiCube = nullptr);
 
     public:
 

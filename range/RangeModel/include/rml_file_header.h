@@ -31,7 +31,7 @@ class RFileHeader
     private:
 
         //! Internal initialization function.
-        void _init ( const RFileHeader *pHeader = 0 );
+        void _init ( const RFileHeader *pHeader = nullptr );
 
     protected:
 

@@ -23,7 +23,7 @@ class RResults
     private:
 
         //! Internal initialization function.
-        void _init ( const RResults *results = 0 );
+        void _init ( const RResults *results = nullptr );
 
     protected:
 

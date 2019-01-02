@@ -80,7 +80,7 @@ void ResultsVariableTree::populate(void)
     {
         Model &model = Session::getInstance().getModel(selectedEntityIDs[i].getMid());
 
-        const REntityGroup *pEntityGroup = 0;
+        const REntityGroup *pEntityGroup = nullptr;
 
         switch (selectedEntityIDs[i].getType())
         {
@@ -404,7 +404,7 @@ void ResultsVariableTree::processApplyAsStates(void)
     {
         Model &model = Session::getInstance().getModel(selectedEntityIDs[i].getMid());
 
-        REntityGroup *pEntityGroup = 0;
+        REntityGroup *pEntityGroup = nullptr;
 
         switch (selectedEntityIDs[i].getType())
         {

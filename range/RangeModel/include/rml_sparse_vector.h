@@ -56,7 +56,7 @@ class RSparseVector
     private:
 
         //! Internal initialization function.
-        void _init(const RSparseVector<T> *pVector = 0)
+        void _init(const RSparseVector<T> *pVector = nullptr)
         {
             if (pVector)
             {

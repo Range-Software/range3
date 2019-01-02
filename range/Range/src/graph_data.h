@@ -49,7 +49,7 @@ class GraphData : public QMap<double,RRVector>
     private:
 
         //! Internal initialization function.
-        void _init(const GraphData *pGraphData = 0);
+        void _init(const GraphData *pGraphData = nullptr);
 
     public:
 

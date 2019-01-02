@@ -69,7 +69,7 @@ class RTimeSolver
     private:
 
         //! Internal initialization function.
-        void _init ( const RTimeSolver *pTimeSolver = 0 );
+        void _init ( const RTimeSolver *pTimeSolver = nullptr );
 
         //! Sort array of times.
         void sort ( void );

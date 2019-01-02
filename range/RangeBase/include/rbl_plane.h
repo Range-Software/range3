@@ -27,7 +27,7 @@ class RPlane
     private:
 
         //! Internal initialization function.
-        void _init ( const RPlane *pPlane = 0 );
+        void _init ( const RPlane *pPlane = nullptr );
 
     public:
 

@@ -36,7 +36,7 @@ class RVectorField : public REntityGroup
     private:
 
         //! Internal initialization function.
-        void _init ( const RVectorField *pVectorField = 0 );
+        void _init ( const RVectorField *pVectorField = nullptr );
 
     public:
 

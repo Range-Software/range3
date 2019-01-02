@@ -82,7 +82,7 @@ class REntityGroup
     private:
 
         //! Internal initialization function.
-        void _init ( const REntityGroup *pEntityGroup = 0 );
+        void _init ( const REntityGroup *pEntityGroup = nullptr );
 
     protected:
 

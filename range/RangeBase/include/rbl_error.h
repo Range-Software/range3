@@ -52,7 +52,7 @@ class RError
     private:
 
         //! Internal initialization function.
-        void _init ( const RError *pError = 0 );
+        void _init ( const RError *pError = nullptr );
 
     protected:
 

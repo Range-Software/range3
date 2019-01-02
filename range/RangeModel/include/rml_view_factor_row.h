@@ -26,7 +26,7 @@ class RViewFactorRow
     private:
 
         //! Internal initialization function.
-        void _init(const RViewFactorRow *pViewFactorRow = 0);
+        void _init(const RViewFactorRow *pViewFactorRow = nullptr);
 
     public:
 

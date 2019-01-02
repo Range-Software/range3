@@ -37,7 +37,7 @@ class GLLine : public GLObject
     private:
 
         //! Internal initialization function.
-        void _init (const GLLine *pGlLine = 0 );
+        void _init (const GLLine *pGlLine = nullptr );
 
     public:
 

@@ -79,7 +79,7 @@ class Model : public RModel
     private:
 
         //! Internal initialization function.
-        void _init(const Model *pModel = 0);
+        void _init(const Model *pModel = nullptr);
 
         //! Return const pointer to element group data.
         const REntityGroupData *getElementGroupData(REntityGroupType elementGroupType,

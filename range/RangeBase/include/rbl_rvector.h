@@ -21,7 +21,7 @@ class RRVector : public std::vector<double>
     private:
 
         //! Internal initialization function.
-        void _init ( const RRVector *pArray = 0 );
+        void _init ( const RRVector *pArray = nullptr );
 
     public:
 

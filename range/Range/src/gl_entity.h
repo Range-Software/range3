@@ -29,7 +29,7 @@ class GLEntity : public GLObject
     private:
 
         //! Internal initialization function.
-        void _init(const GLEntity *pGlEntity = 0);
+        void _init(const GLEntity *pGlEntity = nullptr);
 
     public:
 

@@ -37,7 +37,7 @@ class RScales
     private:
 
         //! Internal initialization function.
-        void _init(const RScales *pScales = 0);
+        void _init(const RScales *pScales = nullptr);
 
     public:
 

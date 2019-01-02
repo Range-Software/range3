@@ -27,7 +27,7 @@ class GLNode : public GLObject, public RNode
     private:
 
         //! Internal initialization function.
-        void _init(const GLNode *pGlNode = 0);
+        void _init(const GLNode *pGlNode = nullptr);
 
     public:
 

@@ -32,7 +32,7 @@ class GLList
     private:
 
         //! Internal initialization function.
-        void _init (const GLList *pGlList = 0);
+        void _init (const GLList *pGlList = nullptr);
 
     public:
 

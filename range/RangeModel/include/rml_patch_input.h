@@ -30,7 +30,7 @@ class RPatchInput
     private:
 
         //! Internal initialization function.
-        void _init(const RPatchInput *pPatchInput = 0);
+        void _init(const RPatchInput *pPatchInput = nullptr);
 
     public:
 

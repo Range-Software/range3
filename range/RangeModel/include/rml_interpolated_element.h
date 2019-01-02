@@ -24,7 +24,7 @@ class RInterpolatedElement : public std::vector<RInterpolatedNode>
     private:
 
         //! Internal initialization function.
-        void _init ( const RInterpolatedElement *pInterpolatedElement = 0 );
+        void _init ( const RInterpolatedElement *pInterpolatedElement = nullptr );
 
     public:
 

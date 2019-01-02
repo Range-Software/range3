@@ -28,7 +28,7 @@ class RRMatrix
     private:
 
         //! Internal initialization function.
-        void _init ( const RRMatrix *pMatrix = 0 );
+        void _init ( const RRMatrix *pMatrix = nullptr );
 
     public:
 

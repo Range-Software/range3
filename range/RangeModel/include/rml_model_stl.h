@@ -32,7 +32,7 @@ class RModelStl : public RModelRaw
         void write ( const QString &fileName ) const;
 
         //! Internal initialization function.
-        void _init ( const RModelStl *pModelStl = 0 );
+        void _init ( const RModelStl *pModelStl = nullptr );
 
         //! Check if file contains binary information.
         bool checkIfBinary ( const QString &fileName ) const;

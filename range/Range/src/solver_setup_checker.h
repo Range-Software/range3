@@ -24,7 +24,7 @@ class SolverSetupChecker
     private:
 
         //! Internal initialization function.
-        void _init(const SolverSetupChecker *pSolverSetupChecker = 0);
+        void _init(const SolverSetupChecker *pSolverSetupChecker = nullptr);
 
     public:
 

@@ -26,7 +26,7 @@ class PickValue
     private:
 
         //! Internal initialization function.
-        void _init(const PickValue *pPickValue = 0);
+        void _init(const PickValue *pPickValue = nullptr);
 
     public:
 

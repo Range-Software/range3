@@ -26,7 +26,7 @@ class RConditionComponent : public RValueTable
 
         //! Internal initialization function.
         void _init
-                 ( const RConditionComponent *pConditionComponent = 0 );
+                 ( const RConditionComponent *pConditionComponent = nullptr );
 
         //! Set table key name.
         void setKeyName ( const QString &name );

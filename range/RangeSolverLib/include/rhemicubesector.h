@@ -53,7 +53,7 @@ class RHemiCubeSector
     private:
 
         //! Internal initialization function.
-        void _init(const RHemiCubeSector *pHemiCubeSector = 0);
+        void _init(const RHemiCubeSector *pHemiCubeSector = nullptr);
 
     public:
 

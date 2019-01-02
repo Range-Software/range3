@@ -17,7 +17,7 @@ class RModelData
     private:
 
         //! Internal initialization function.
-        void _init ( const RModelData *pModelData = 0 );
+        void _init ( const RModelData *pModelData = nullptr );
 
     protected:
 

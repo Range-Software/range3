@@ -40,7 +40,7 @@ class RSolverHeat : public RSolverGeneric
     private:
 
         //! Internal initialization function.
-        void _init(const RSolverHeat *pHeatSolver = 0);
+        void _init(const RSolverHeat *pHeatSolver = nullptr);
 
     public:
 

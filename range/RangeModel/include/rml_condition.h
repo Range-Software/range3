@@ -24,7 +24,7 @@ class RCondition
     private:
 
         //! Internal initialization function.
-        void _init ( const RCondition *pCondition = 0 );
+        void _init ( const RCondition *pCondition = nullptr );
 
     protected:
 

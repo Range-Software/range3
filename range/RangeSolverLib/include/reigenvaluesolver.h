@@ -29,7 +29,7 @@ class REigenValueSolver
     private:
 
         //! Internal initialization function.
-        void _init(const REigenValueSolver *pEigenValueSolver = 0);
+        void _init(const REigenValueSolver *pEigenValueSolver = nullptr);
 
     public:
 

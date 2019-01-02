@@ -38,7 +38,7 @@ class RSolverElectrostatics : public RSolverGeneric
     private:
 
         //! Internal initialization function.
-        void _init(const RSolverElectrostatics *pSolver = 0);
+        void _init(const RSolverElectrostatics *pSolver = nullptr);
 
     public:
 

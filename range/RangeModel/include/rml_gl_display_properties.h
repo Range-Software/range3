@@ -41,7 +41,7 @@ class RGLDisplayProperties
     private:
 
         //! Internal initialization function.
-        void _init(const RGLDisplayProperties *pDisplayProperties = 0);
+        void _init(const RGLDisplayProperties *pDisplayProperties = nullptr);
 
     public:
 

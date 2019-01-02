@@ -37,7 +37,7 @@ class GLCutPlane : public GLObject, public RPlane
     private:
 
         //! Internal initialization function.
-        void _init ( const GLCutPlane *pGlCutPlane = 0 );
+        void _init ( const GLCutPlane *pGlCutPlane = nullptr );
 
     public:
 

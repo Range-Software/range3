@@ -28,7 +28,7 @@ class RProblem
     private:
 
         //! Internal initialization function.
-        void _init ( const RProblem *pProblem = 0 );
+        void _init ( const RProblem *pProblem = nullptr );
 
     protected:
 

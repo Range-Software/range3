@@ -50,7 +50,7 @@ class RProgress
     private:
 
         //! Internal initialization function.
-        void _init ( const RProgress *pProgress = 0 );
+        void _init ( const RProgress *pProgress = nullptr );
 
     public:
 

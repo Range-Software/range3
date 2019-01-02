@@ -28,7 +28,7 @@ class RPoint : public RElementGroup
     private:
 
         //! Internal initialization function.
-        void _init ( const RPoint *pPoint = 0 );
+        void _init ( const RPoint *pPoint = nullptr );
 
     protected:
 

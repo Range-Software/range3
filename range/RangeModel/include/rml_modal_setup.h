@@ -55,7 +55,7 @@ class RModalSetup
     private:
 
         //! Internal initialization function.
-        void _init(const RModalSetup *pModalSetup = 0);
+        void _init(const RModalSetup *pModalSetup = nullptr);
 
     public:
 

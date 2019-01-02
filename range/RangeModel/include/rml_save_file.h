@@ -45,7 +45,7 @@ class RSaveFile : public QSaveFile
     private:
 
         //! Internal initialization function.
-        void _init(const RSaveFile *pFile = 0);
+        void _init(const RSaveFile *pFile = nullptr);
 
     public:
 

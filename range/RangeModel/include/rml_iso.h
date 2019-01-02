@@ -37,7 +37,7 @@ class RIso : public RInterpolatedEntity
     private:
 
         //! Internal initialization function.
-        void _init ( const RIso *pIso = 0 );
+        void _init ( const RIso *pIso = nullptr );
 
     public:
 

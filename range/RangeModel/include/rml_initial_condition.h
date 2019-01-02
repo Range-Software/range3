@@ -43,7 +43,7 @@ class RInitialCondition : public RCondition
     private:
 
         //! Internal initialization function.
-        void _init ( const RInitialCondition *pCondition = 0 );
+        void _init ( const RInitialCondition *pCondition = nullptr );
 
         //! Set condition type.
         //! Calling thisfunction has no effect on condition

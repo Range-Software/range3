@@ -20,7 +20,7 @@ class RIVector : public std::vector<int>
     private:
 
         //! Internal initialization function.
-        void _init ( const RIVector *pArray = 0 );
+        void _init ( const RIVector *pArray = nullptr );
 
     public:
 

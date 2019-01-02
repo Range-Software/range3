@@ -21,7 +21,7 @@ class RValueVector
     private:
 
         //! Internal initialization function.
-        void _init ( const RValueVector *valueVector = 0 );
+        void _init ( const RValueVector *valueVector = nullptr );
 
     protected:
 

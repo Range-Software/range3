@@ -48,7 +48,7 @@ class GLAxis : public GLObject
     private:
 
         //! Internal initialization function.
-        void _init ( const GLAxis *pGlAxis = 0 );
+        void _init ( const GLAxis *pGlAxis = nullptr );
 
     public:
 

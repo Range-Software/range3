@@ -58,7 +58,7 @@ class RConvection
     private:
 
         //! Internal initialization function.
-        void _init(const RConvection *pConvection = 0);
+        void _init(const RConvection *pConvection = nullptr);
 
     public:
 

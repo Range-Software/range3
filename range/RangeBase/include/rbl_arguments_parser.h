@@ -36,7 +36,7 @@ class RArgumentsParser
     private:
 
         //! Internal initialization function.
-        void _init(const RArgumentsParser *pArgumentsParser = 0);
+        void _init(const RArgumentsParser *pArgumentsParser = nullptr);
 
     public:
 

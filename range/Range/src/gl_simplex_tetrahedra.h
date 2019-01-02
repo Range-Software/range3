@@ -21,7 +21,7 @@ class GLSimplexTetrahedra : public GLSimplex
     private:
 
         //! Internal initialization function.
-        void _init(const GLSimplexTetrahedra *pGlTetrahedra = 0 );
+        void _init(const GLSimplexTetrahedra *pGlTetrahedra = nullptr );
 
     public:
 

@@ -38,7 +38,7 @@ class RGLLight
     private:
 
         //! Internal initialization function.
-        void _init (const RGLLight *pGlLight = 0);
+        void _init (const RGLLight *pGlLight = nullptr);
 
     public:
 

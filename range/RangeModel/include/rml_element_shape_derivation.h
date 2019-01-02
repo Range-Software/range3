@@ -29,7 +29,7 @@ class RElementShapeDerivation
     private:
 
         //! Internal initialization function.
-        void _init(const RElementShapeDerivation *pElementShapeDerivation = 0);
+        void _init(const RElementShapeDerivation *pElementShapeDerivation = nullptr);
 
     public:
 

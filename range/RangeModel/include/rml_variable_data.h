@@ -32,7 +32,7 @@ class RVariableData
     private:
 
         //! Internal initialization function
-        void _init(const RVariableData *pVariableData = 0);
+        void _init(const RVariableData *pVariableData = nullptr);
 
     public:
 

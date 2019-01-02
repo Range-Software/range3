@@ -32,7 +32,7 @@ class RProblemTaskItem
     private:
 
         //! Internal initialization function.
-        void _init(const RProblemTaskItem *pSolverTaskItem = 0);
+        void _init(const RProblemTaskItem *pSolverTaskItem = nullptr);
 
     public:
 

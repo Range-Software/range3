@@ -24,7 +24,7 @@ class GLSimplexPoint : public GLSimplex
     private:
 
         //! Internal initialization function.
-        void _init(const GLSimplexPoint *pGlPoint = 0 );
+        void _init(const GLSimplexPoint *pGlPoint = nullptr );
 
     public:
 

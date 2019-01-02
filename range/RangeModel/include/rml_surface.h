@@ -28,7 +28,7 @@ class RSurface : public RElementGroup
     private:
 
         //! Internal initialization function.
-        void _init ( const RSurface *pSurface = 0 );
+        void _init ( const RSurface *pSurface = nullptr );
 
     protected:
 

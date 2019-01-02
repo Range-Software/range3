@@ -26,7 +26,7 @@ class RStopWatch
     private:
 
         //! Internal initialization function.
-        void _init(const RStopWatch *pStopWatch = 0);
+        void _init(const RStopWatch *pStopWatch = nullptr);
 
     public:
 

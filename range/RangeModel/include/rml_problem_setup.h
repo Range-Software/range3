@@ -32,7 +32,7 @@ class RProblemSetup
     private:
 
         //! Internal initialization function.
-        void _init(const RProblemSetup *pProblemSetup = 0);
+        void _init(const RProblemSetup *pProblemSetup = nullptr);
 
     public:
 

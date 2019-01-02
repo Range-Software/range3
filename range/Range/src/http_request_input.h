@@ -46,7 +46,7 @@ class HttpRequestInput
     private:
 
         //! Internal initialization function.
-        void _init(const HttpRequestInput *pHttpRequestInput = 0);
+        void _init(const HttpRequestInput *pHttpRequestInput = nullptr);
 
     public:
 

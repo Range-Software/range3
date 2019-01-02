@@ -34,7 +34,7 @@ class VideoSettings
     private:
 
         //! Internal initialization function.
-        void _init(const VideoSettings *pVideoSettings = 0);
+        void _init(const VideoSettings *pVideoSettings = nullptr);
 
     public:
 

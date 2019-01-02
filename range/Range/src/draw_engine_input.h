@@ -58,7 +58,7 @@ class DrawEngineInput
     private:
 
         //! Internal initialization function.
-        void _init(const DrawEngineInput *pDrawEngineInput = 0);
+        void _init(const DrawEngineInput *pDrawEngineInput = nullptr);
 
     public:
 
@@ -111,22 +111,22 @@ class DrawEngineInput
         bool setValue(const QString &text);
 
         //! Return boolean.
-        bool toBool(bool *isOk = 0) const;
+        bool toBool(bool *isOk = nullptr) const;
 
         //! Return int.
-        int toInt(bool *isOk = 0) const;
+        int toInt(bool *isOk = nullptr) const;
 
         //! Return uint.
-        uint toUint(bool *isOk = 0) const;
+        uint toUint(bool *isOk = nullptr) const;
 
         //! Return double.
-        double toDouble(bool *isOk = 0) const;
+        double toDouble(bool *isOk = nullptr) const;
 
         //! Return vector.
-        RR3Vector toVector(bool *isOk = 0) const;
+        RR3Vector toVector(bool *isOk = nullptr) const;
 
         //! Return text.
-        QString toText(bool *isOk = 0) const;
+        QString toText(bool *isOk = nullptr) const;
 
         //! Return input parameter type.
         Type getType() const;

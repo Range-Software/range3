@@ -40,7 +40,7 @@ class RStatistics
     private:
 
         //! Internal initialization function.
-        void _init(const RStatistics *pStatistics = 0);
+        void _init(const RStatistics *pStatistics = nullptr);
 
     public:
 

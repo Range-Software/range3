@@ -32,7 +32,7 @@ class GLTextRendererItem
     private:
 
         //! Internal initialization function.
-        void _init(const GLTextRendererItem *pGlTextRendererItem = 0);
+        void _init(const GLTextRendererItem *pGlTextRendererItem = nullptr);
 
     public:
 

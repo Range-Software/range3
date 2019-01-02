@@ -21,7 +21,7 @@ class RMonitoringPointManager : public std::vector<RMonitoringPoint>
     private:
 
         //! Internal initialization function.
-        void _init(const RMonitoringPointManager *pMonitoringPointManager = 0);
+        void _init(const RMonitoringPointManager *pMonitoringPointManager = nullptr);
 
     public:
 

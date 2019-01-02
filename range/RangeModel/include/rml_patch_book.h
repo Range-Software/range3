@@ -29,7 +29,7 @@ class RPatchBook
     private:
 
         //! Internal initialization function.
-        void _init(const RPatchBook *pPatchBook = 0);
+        void _init(const RPatchBook *pPatchBook = nullptr);
 
     public:
 

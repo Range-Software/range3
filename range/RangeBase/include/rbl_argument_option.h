@@ -50,7 +50,7 @@ class RArgumentOption
     private:
 
         //! Internal initialization function.
-        void _init(const RArgumentOption *pArgumentOption = 0);
+        void _init(const RArgumentOption *pArgumentOption = nullptr);
 
     public:
 
