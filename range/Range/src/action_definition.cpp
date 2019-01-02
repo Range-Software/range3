@@ -21,7 +21,7 @@ ActionDefinition::ActionDefinition(QObject *parent)
 
 ActionType ActionDefinition::findShortcutActionType(const QString &shortCut) const
 {
-    for (uint i=0;i<uint(ACTION_N_TYPES);i++)
+    for (int i=0;i<int(ACTION_N_TYPES);i++)
     {
         if (this->actionDesc[i].shortCut == shortCut)
         {
@@ -104,7 +104,7 @@ QList<ActionType> ActionDefinition::getActionTypes(ActionGroupTypeMask actionGro
 void ActionDefinition::generateActionDescList(QList<ActionDefinitionItem> &actionDesc)
 {
     actionDesc.clear();
-    actionDesc.push_back(ActionDefinitionItem(ACTION_NONE, ACTION_GROUP_NONE, "", "", "", "", 0 ));
+    actionDesc.push_back(ActionDefinitionItem(ACTION_NONE, ACTION_GROUP_NONE, "", "", "", "", nullptr ));
     actionDesc.push_back(ActionDefinitionItem(ACTION_SESSION_NEW, ACTION_GROUP_SESSION, "New Session", "Create a new session.", "Ctrl+Alt+N", ":/icons/file/pixmaps/range-session_new.svg", &Action::onSessionNew));
     actionDesc.push_back(ActionDefinitionItem(ACTION_SESSION_OPEN, ACTION_GROUP_SESSION, "Open Session", "Open previously saved session.", "Ctrl+Alt+O", ":/icons/file/pixmaps/range-session_open.svg", &Action::onSessionOpen));
     actionDesc.push_back(ActionDefinitionItem(ACTION_SESSION_SAVE, ACTION_GROUP_SESSION, "Save Session", "Save current session.", "Ctrl+Alt+S", ":/icons/file/pixmaps/range-session_save.svg", &Action::onSessionSave));
@@ -199,5 +199,5 @@ void ActionDefinition::generateActionDescList(QList<ActionDefinitionItem> &actio
     actionDesc.push_back(ActionDefinitionItem(ACTION_APPLICATION_RELEASE_NOTES, ACTION_GROUP_APPLICATION, "Release notes", "", "", ":/icons/logos/pixmaps/range-logo-128.png", &Action::onReleaseNotes));
     actionDesc.push_back(ActionDefinitionItem(ACTION_APPLICATION_HELP, ACTION_GROUP_APPLICATION, "Help", "", "Ctrl+H", ":/icons/file/pixmaps/range-help.svg", &Action::onHelp));
     actionDesc.push_back(ActionDefinitionItem(ACTION_APPLICATION_QUIT, ACTION_GROUP_APPLICATION, "Quit", "", "Q", ":/icons/file/pixmaps/range-shutdown.svg", &Action::onQuit));
-    actionDesc.push_back(ActionDefinitionItem(ACTION_SEPARATOR, ACTION_GROUP_NONE, "", "", "", "", 0));
+    actionDesc.push_back(ActionDefinitionItem(ACTION_SEPARATOR, ACTION_GROUP_NONE, "", "", "", "", nullptr));
 }
