@@ -59,7 +59,7 @@ void RMatrixSolver::solve(const RSparseMatrix &A, const RRVector &b, RRVector &x
     double bn = RRVector::norm(b);
     double equationScale = 1.0;
 
-    if (bn != 0.0)
+    if (bn != 0.0 && An != 0.0)
     {
         equationScale = 1.0e9 / std::abs(bn/An);
     }
