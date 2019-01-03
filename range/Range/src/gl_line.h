@@ -8,8 +8,8 @@
  *  DESCRIPTION: OpenGL line class declaration                       *
  *********************************************************************/
 
-#ifndef __GL_LINE_H__
-#define __GL_LINE_H__
+#ifndef GL_LINE_H
+#define GL_LINE_H
 
 #include <rblib.h>
 
@@ -37,7 +37,7 @@ class GLLine : public GLObject
     private:
 
         //! Internal initialization function.
-        void _init (const GLLine *pGlLine = 0 );
+        void _init (const GLLine *pGlLine = nullptr );
 
     public:
 
@@ -66,4 +66,4 @@ class GLLine : public GLObject
 
 };
 
-#endif // __GL_LINE_H__
+#endif // GL_LINE_H

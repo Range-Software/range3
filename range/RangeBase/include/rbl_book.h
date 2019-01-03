@@ -8,8 +8,8 @@
  *  DESCRIPTION: Book class declaration                              *
  *********************************************************************/
 
-#ifndef __RBL_BOOK_H__
-#define __RBL_BOOK_H__
+#ifndef RBL_BOOK_H
+#define RBL_BOOK_H
 
 #include "rbl_uvector.h"
 
@@ -24,7 +24,7 @@ class RBook
     private:
 
         //! Internal initialization function.
-        void _init(const RBook *pBook = 0);
+        void _init(const RBook *pBook = nullptr);
 
     public:
 
@@ -81,4 +81,4 @@ class RBook
 
 };
 
-#endif // __RBL_BOOK_H__
+#endif // RBL_BOOK_H

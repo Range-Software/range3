@@ -8,8 +8,8 @@
  *  DESCRIPTION: Monitoring point class declaration                  *
  *********************************************************************/
 
-#ifndef __RML_MONITORING_POINT_H__
-#define __RML_MONITORING_POINT_H__
+#ifndef RML_MONITORING_POINT_H
+#define RML_MONITORING_POINT_H
 
 #include <rblib.h>
 
@@ -32,7 +32,7 @@ class RMonitoringPoint
     private:
 
         //! Internal initialization function.
-        void _init(const RMonitoringPoint *pMonitoringPoint = 0);
+        void _init(const RMonitoringPoint *pMonitoringPoint = nullptr);
 
     public:
 
@@ -86,4 +86,4 @@ class RMonitoringPoint
 
 };
 
-#endif // __RML_MONITORING_POINT_H__
+#endif // RML_MONITORING_POINT_H

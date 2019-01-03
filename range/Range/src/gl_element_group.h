@@ -8,8 +8,8 @@
  *  DESCRIPTION: OpenGL element group class declaration              *
  *********************************************************************/
 
-#ifndef __GL_ELEMENT_GROUP_H__
-#define __GL_ELEMENT_GROUP_H__
+#ifndef GL_ELEMENT_GROUP_H
+#define GL_ELEMENT_GROUP_H
 
 #include <rmlib.h>
 
@@ -38,7 +38,7 @@ class GLElementGroup : public GLEntity, public RElementGroup
     private:
 
         //! Internal initialization function.
-        void _init(const GLElementGroup *pGlElementGroup = 0);
+        void _init(const GLElementGroup *pGlElementGroup = nullptr);
 
     public:
 
@@ -76,4 +76,4 @@ class GLElementGroup : public GLEntity, public RElementGroup
 
 };
 
-#endif /* __GL_ELEMENT_GROUP_H__ */
+#endif /* GL_ELEMENT_GROUP_H */

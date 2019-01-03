@@ -8,8 +8,8 @@
  *  DESCRIPTION: HTTP request worker class declaration               *
  *********************************************************************/
 
-#ifndef __HTTP_REQUEST_WORKER_H__
-#define __HTTP_REQUEST_WORKER_H__
+#ifndef HTTP_REQUEST_WORKER_H
+#define HTTP_REQUEST_WORKER_H
 
 #include <QObject>
 #include <QString>
@@ -63,4 +63,4 @@ class HttpRequestWorker
 
 };
 
-#endif // __HTTP_REQUEST_WORKER_H__
+#endif // HTTP_REQUEST_WORKER_H

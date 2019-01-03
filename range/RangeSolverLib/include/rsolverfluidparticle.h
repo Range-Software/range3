@@ -8,8 +8,8 @@
  *  DESCRIPTION: Fluid particle dispersion solver class declaration  *
  *********************************************************************/
 
-#ifndef __RSOLVERFLUIDPARTICLE_H__
-#define __RSOLVERFLUIDPARTICLE_H__
+#ifndef RSOLVERFLUIDPARTICLE_H
+#define RSOLVERFLUIDPARTICLE_H
 
 #include "rmatrixmanager.h"
 #include "rsolvergeneric.h"
@@ -59,7 +59,7 @@ class RSolverFluidParticle : public RSolverGeneric
     private:
 
         //! Internal initialization function.
-        void _init(const RSolverFluidParticle *pSolver = 0);
+        void _init(const RSolverFluidParticle *pSolver = nullptr);
 
     public:
 
@@ -124,4 +124,4 @@ class RSolverFluidParticle : public RSolverGeneric
 
 };
 
-#endif // __RSOLVERFLUIDPARTICLE_H__
+#endif // RSOLVERFLUIDPARTICLE_H

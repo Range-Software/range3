@@ -8,8 +8,8 @@
  *  DESCRIPTION: OpenGL simplex point class declaration              *
  *********************************************************************/
 
-#ifndef __GL_SIMPLEX_POINT_H__
-#define __GL_SIMPLEX_POINT_H__
+#ifndef GL_SIMPLEX_POINT_H
+#define GL_SIMPLEX_POINT_H
 
 #include "gl_simplex.h"
 
@@ -24,7 +24,7 @@ class GLSimplexPoint : public GLSimplex
     private:
 
         //! Internal initialization function.
-        void _init(const GLSimplexPoint *pGlPoint = 0 );
+        void _init(const GLSimplexPoint *pGlPoint = nullptr );
 
     public:
 
@@ -66,4 +66,4 @@ class GLSimplexPoint : public GLSimplex
 
 };
 
-#endif // __GL_SIMPLEX_POINT_H__
+#endif // GL_SIMPLEX_POINT_H

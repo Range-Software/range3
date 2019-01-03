@@ -8,8 +8,8 @@
  *  DESCRIPTION: Draw engine hexahedron class declaration            *
  *********************************************************************/
 
-#ifndef __DRAW_ENGINE_HEXAHEDRON_H__
-#define __DRAW_ENGINE_HEXAHEDRON_H__
+#ifndef DRAW_ENGINE_HEXAHEDRON_H
+#define DRAW_ENGINE_HEXAHEDRON_H
 
 #include "draw_engine_object.h"
 
@@ -21,7 +21,7 @@ class DrawEngineHexahedron : public DrawEngineObject
     public:
 
         //! Constructor.
-        explicit DrawEngineHexahedron(QObject *parent = 0);
+        explicit DrawEngineHexahedron(QObject *parent = nullptr);
 
     protected:
 
@@ -30,4 +30,4 @@ class DrawEngineHexahedron : public DrawEngineObject
 
 };
 
-#endif // __DRAW_ENGINE_HEXAHEDRON_H__
+#endif // DRAW_ENGINE_HEXAHEDRON_H

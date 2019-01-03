@@ -8,8 +8,8 @@
  *  DESCRIPTION: Bool operation - difference dialog class declaration*
  *********************************************************************/
 
-#ifndef __BOOL_DIFFERENCE_DIALOG_H__
-#define __BOOL_DIFFERENCE_DIALOG_H__
+#ifndef BOOL_DIFFERENCE_DIALOG_H
+#define BOOL_DIFFERENCE_DIALOG_H
 
 #include <QDialog>
 #include <QListWidget>
@@ -33,11 +33,11 @@ class BoolDifferenceDialog : public QDialog
     public:
 
         //! Constructor.
-        explicit BoolDifferenceDialog(uint modelID, const QList<SessionEntityID> &entityIDs, QWidget *parent = 0);
+        explicit BoolDifferenceDialog(uint modelID, const QList<SessionEntityID> &entityIDs, QWidget *parent = nullptr);
 
         //! Execute dialog.
         int exec(void);
 
 };
 
-#endif // __BOOL_DIFFERENCE_DIALOG_H__
+#endif // BOOL_DIFFERENCE_DIALOG_H

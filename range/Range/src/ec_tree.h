@@ -8,8 +8,8 @@
  *  DESCRIPTION: Environment condition tree class declaration        *
  *********************************************************************/
 
-#ifndef __EC_TREE_H__
-#define __EC_TREE_H__
+#ifndef EC_TREE_H
+#define EC_TREE_H
 
 #include <QTreeWidget>
 
@@ -27,7 +27,7 @@ class ECTree : public QTreeWidget
     public:
 
         //! Constructor.
-        explicit ECTree(QWidget *parent = 0);
+        explicit ECTree(QWidget *parent = nullptr);
 
     protected:
 
@@ -51,4 +51,4 @@ class ECTree : public QTreeWidget
 
 };
 
-#endif /* __EC_TREE_H__ */
+#endif /* EC_TREE_H */

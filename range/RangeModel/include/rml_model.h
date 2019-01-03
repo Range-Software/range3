@@ -8,8 +8,8 @@
  *  DESCRIPTION: Model class declaration                             *
  *********************************************************************/
 
-#ifndef __RML_MODEL_H__
-#define __RML_MODEL_H__
+#ifndef RML_MODEL_H
+#define RML_MODEL_H
 
 #include <vector>
 
@@ -56,7 +56,7 @@ class RModel : public RProblem, public RResults
     private:
 
         //! Internal initialization function.
-        void _init ( const RModel *pModel = 0 );
+        void _init ( const RModel *pModel = nullptr );
 
         //! Add element to element group.
         void addElementToGroup ( uint elementID,
@@ -1030,4 +1030,4 @@ class RModel : public RProblem, public RResults
 
 };
 
-#endif /* __RML_MODEL_H__ */
+#endif /* RML_MODEL_H */

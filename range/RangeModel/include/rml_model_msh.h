@@ -8,8 +8,8 @@
  *  DESCRIPTION: MSH (old range) model class declaration             *
  *********************************************************************/
 
-#ifndef __RML_MODEL_MSH_H__
-#define __RML_MODEL_MSH_H__
+#ifndef RML_MODEL_MSH_H
+#define RML_MODEL_MSH_H
 
 #include <string>
 #include <vector>
@@ -23,7 +23,7 @@ class RModelMsh
     private:
 
         //! Internal initialization function.
-        void _init ( const RModelMsh *pModelMsh = 0 );
+        void _init ( const RModelMsh *pModelMsh = nullptr );
 
         //! Read mesh from the ASCII file.
         void readAscii ( const QString &fileName );
@@ -81,4 +81,4 @@ class RModelMsh
         void write ( const QString &fileName ) const;
 };
 
-#endif /* __RML_MODEL_MSH_H__ */
+#endif /* RML_MODEL_MSH_H */

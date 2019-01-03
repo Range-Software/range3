@@ -8,8 +8,8 @@
  *  DESCRIPTION: Merge near nodes dialog class declaration           *
  *********************************************************************/
 
-#ifndef __MERGE_NEAR_NODES_DIALOG_H__
-#define __MERGE_NEAR_NODES_DIALOG_H__
+#ifndef MERGE_NEAR_NODES_DIALOG_H
+#define MERGE_NEAR_NODES_DIALOG_H
 
 #include <QDialog>
 
@@ -30,11 +30,11 @@ class MergeNearNodesDialog : public QDialog
     public:
 
         //! Constructor.
-        explicit MergeNearNodesDialog(uint modelID,QWidget *parent = 0);
+        explicit MergeNearNodesDialog(uint modelID,QWidget *parent = nullptr);
 
         //! Overloaded exec function.
         int exec(void);
 
 };
 
-#endif // __MERGE_NEAR_NODES_DIALOG_H__
+#endif // MERGE_NEAR_NODES_DIALOG_H

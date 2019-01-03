@@ -10,8 +10,8 @@
  *               functions from the FFmpeg library                   *
  *********************************************************************/
 
-#ifndef __VIDEO_OUTPUT_H__
-#define __VIDEO_OUTPUT_H__
+#ifndef VIDEO_OUTPUT_H
+#define VIDEO_OUTPUT_H
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -96,4 +96,4 @@ class VideoOutput : public QObject
 
 };
 
-#endif // __VIDEO_OUTPUT_H__
+#endif // VIDEO_OUTPUT_H

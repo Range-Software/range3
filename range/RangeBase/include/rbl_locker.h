@@ -8,8 +8,8 @@
  *  DESCRIPTION: Locker class declaration                            *
  *********************************************************************/
 
-#ifndef __RBL_LOCKER_H__
-#define __RBL_LOCKER_H__
+#ifndef RBL_LOCKER_H
+#define RBL_LOCKER_H
 
 #include <QMutex>
 
@@ -23,7 +23,7 @@ class RLocker
     private:
 
         //! Internal initialization function.
-        void _init ( const RLocker *pLocker = 0 );
+        void _init ( const RLocker *pLocker = nullptr );
 
     protected:
 
@@ -66,4 +66,4 @@ class RLocker
 
 };
 
-#endif /* __RBL_LOCKER_H__ */
+#endif /* RBL_LOCKER_H */

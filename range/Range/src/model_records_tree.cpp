@@ -189,7 +189,7 @@ void ModelRecordsTree::markPrevious(void)
     {
         uint modelID = modelIDs[i];
 
-        QTreeWidgetItem *prevItem = 0;
+        QTreeWidgetItem *prevItem = nullptr;
 
         QTreeWidgetItemIterator it(this);
         while (*it)
@@ -224,7 +224,7 @@ void ModelRecordsTree::markNext(void)
 
         bool markItem = false;
 
-        QTreeWidgetItem *prevItem = 0;
+        QTreeWidgetItem *prevItem = nullptr;
 
         QTreeWidgetItemIterator it(this);
         while (*it)
@@ -282,7 +282,7 @@ void ModelRecordsTree::markLast(void)
         uint modelID = modelIDs[i];
         uint itemID1 = 0;
         uint itemID2 = 0;
-        QTreeWidgetItem *lastItem = 0;
+        QTreeWidgetItem *lastItem = nullptr;
 
         QTreeWidgetItemIterator it(this);
         while (*it)

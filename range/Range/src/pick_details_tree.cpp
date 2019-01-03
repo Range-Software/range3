@@ -74,7 +74,7 @@ void PickDetailsTree::populate(void)
         {
             case PICK_ITEM_ELEMENT:
             {
-                QTreeWidgetItem *childItem = 0;
+                QTreeWidgetItem *childItem = nullptr;
 
                 // Type
                 childItem = new QTreeWidgetItem(topItem);
@@ -116,7 +116,7 @@ void PickDetailsTree::populate(void)
                 else
                 {
                     itemText = tr("Interpolated element") + " # " + QString::number(rPickItems[i].getElementPosition());
-                    const RInterpolatedElement *pIElement = 0;
+                    const RInterpolatedElement *pIElement = nullptr;
                     switch (rEntityID.getType())
                     {
                         case R_ENTITY_GROUP_CUT:
@@ -149,7 +149,7 @@ void PickDetailsTree::populate(void)
             }
             case PICK_ITEM_NODE:
             {
-                QTreeWidgetItem *childItem = 0;
+                QTreeWidgetItem *childItem = nullptr;
 
                 if (REntityGroup::typeIsElementGroup(rEntityID.getType()))
                 {

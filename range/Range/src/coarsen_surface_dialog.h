@@ -8,8 +8,8 @@
  *  DESCRIPTION: Coarsen surface dialog class declaration            *
  *********************************************************************/
 
-#ifndef __COARSEN_SURFACE_DIALOG_H__
-#define __COARSEN_SURFACE_DIALOG_H__
+#ifndef COARSEN_SURFACE_DIALOG_H
+#define COARSEN_SURFACE_DIALOG_H
 
 #include <QDialog>
 
@@ -35,7 +35,7 @@ class CoarsenSurfaceDialog : public QDialog
     public:
 
         //! Constructor.
-        explicit CoarsenSurfaceDialog(uint modelID, const QList<SessionEntityID> &entityIDs, QWidget *parent = 0);
+        explicit CoarsenSurfaceDialog(uint modelID, const QList<SessionEntityID> &entityIDs, QWidget *parent = nullptr);
 
         //! Execute dialog.
         int exec(void);
@@ -47,4 +47,4 @@ class CoarsenSurfaceDialog : public QDialog
 
 };
 
-#endif // __COARSEN_SURFACE_DIALOG_H__
+#endif // COARSEN_SURFACE_DIALOG_H

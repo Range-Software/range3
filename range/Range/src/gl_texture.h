@@ -8,8 +8,8 @@
  *  DESCRIPTION: OpenGL texture class declaration                    *
  *********************************************************************/
 
-#ifndef __GL_TEXTURE_H__
-#define __GL_TEXTURE_H__
+#ifndef GL_TEXTURE_H
+#define GL_TEXTURE_H
 
 #include <QOpenGLTexture>
 
@@ -40,4 +40,4 @@ class GLTexture
         void unload(void);
 };
 
-#endif // __GL_TEXTURE_H__
+#endif // GL_TEXTURE_H

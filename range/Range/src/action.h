@@ -8,8 +8,8 @@
  *  DESCRIPTION: Action class declaration                            *
  *********************************************************************/
 
-#ifndef __ACTION_H__
-#define __ACTION_H__
+#ifndef ACTION_H
+#define ACTION_H
 
 #include <QAction>
 
@@ -32,7 +32,7 @@ class Action : public QAction
     public:
 
         //! Constructor.
-        explicit Action(ActionType type, MainWindow *mainWindow, QObject *parent = 0);
+        explicit Action(ActionType type, MainWindow *mainWindow, QObject *parent = nullptr);
 
     protected slots:
 
@@ -328,4 +328,4 @@ class Action : public QAction
 
 };
 
-#endif // __ACTION_H__
+#endif // ACTION_H

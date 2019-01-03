@@ -8,8 +8,8 @@
  *  DESCRIPTION: Model statistics dialog class declaration           *
  *********************************************************************/
 
-#ifndef __MODEL_STATISTICS_DIALOG_H__
-#define __MODEL_STATISTICS_DIALOG_H__
+#ifndef MODEL_STATISTICS_DIALOG_H
+#define MODEL_STATISTICS_DIALOG_H
 
 #include <QDialog>
 #include <QTextBrowser>
@@ -22,7 +22,7 @@ class ModelStatisticsDialog : public QDialog
     public:
 
         //! Constructor.
-        explicit ModelStatisticsDialog(uint modelID, QWidget *parent = 0);
+        explicit ModelStatisticsDialog(uint modelID, QWidget *parent = nullptr);
 
         //! Overloaded exec function.
         int exec(void);
@@ -37,4 +37,4 @@ class ModelStatisticsDialog : public QDialog
 
 };
 
-#endif // __MODEL_STATISTICS_DIALOG_H__
+#endif // MODEL_STATISTICS_DIALOG_H

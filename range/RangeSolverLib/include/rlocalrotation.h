@@ -8,8 +8,8 @@
  *  DESCRIPTION: Local rotation class declaration                    *
  *********************************************************************/
 
-#ifndef __RLOCALROTATION_H__
-#define __RLOCALROTATION_H__
+#ifndef RLOCALROTATION_H
+#define RLOCALROTATION_H
 
 #include <rblib.h>
 
@@ -28,7 +28,7 @@ class RLocalRotation
     private:
 
         //! Internal initialization function.
-        void _init(const RLocalRotation *pLocalRotation = 0);
+        void _init(const RLocalRotation *pLocalRotation = nullptr);
 
     public:
 
@@ -70,4 +70,4 @@ class RLocalRotation
 
 };
 
-#endif // __RLOCALROTATION_H__
+#endif // RLOCALROTATION_H

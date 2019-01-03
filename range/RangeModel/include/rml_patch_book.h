@@ -8,8 +8,8 @@
  *  DESCRIPTION: Patch book class declaration                        *
  *********************************************************************/
 
-#ifndef __RML_PATCH_BOOK_H__
-#define __RML_PATCH_BOOK_H__
+#ifndef RML_PATCH_BOOK_H
+#define RML_PATCH_BOOK_H
 
 #include <vector>
 #include <map>
@@ -29,7 +29,7 @@ class RPatchBook
     private:
 
         //! Internal initialization function.
-        void _init(const RPatchBook *pPatchBook = 0);
+        void _init(const RPatchBook *pPatchBook = nullptr);
 
     public:
 
@@ -69,4 +69,4 @@ class RPatchBook
 
 };
 
-#endif // __RML_PATCH_BOOK_H__
+#endif // RML_PATCH_BOOK_H

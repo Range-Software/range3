@@ -1,4 +1,14 @@
 ------------------------------------------------------------------
+Version 3.2.1
+
+* Display notification incons in output area tabs.
+
+Bug fixes:
+
+* CFD solver terminates with error if no volume elements are generated.
+* Corrections in tutorials.
+
+------------------------------------------------------------------
 Version 3.2.0
 
 * New action icons

@@ -8,8 +8,8 @@
  *  DESCRIPTION: Rename model dialog class declaration               *
  *********************************************************************/
 
-#ifndef __RENAME_MODEL_DIALOG_H__
-#define __RENAME_MODEL_DIALOG_H__
+#ifndef RENAME_MODEL_DIALOG_H
+#define RENAME_MODEL_DIALOG_H
 
 #include <QDialog>
 #include <QLineEdit>
@@ -30,7 +30,7 @@ class RenameModelDialog : public QDialog
     public:
 
         //! Constructor.
-        explicit RenameModelDialog(uint modelId, QWidget *parent = 0);
+        explicit RenameModelDialog(uint modelId, QWidget *parent = nullptr);
 
         //! Execute dialog.
         int exec(void);
@@ -45,4 +45,4 @@ class RenameModelDialog : public QDialog
         
 };
 
-#endif /* __RENAME_MODEL_DIALOG_H__ */
+#endif /* RENAME_MODEL_DIALOG_H */

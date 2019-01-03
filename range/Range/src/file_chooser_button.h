@@ -8,8 +8,8 @@
  *  DESCRIPTION: File chooser button class declaration               *
  *********************************************************************/
 
-#ifndef __FILE_CHOOSER_BUTTON_H__
-#define __FILE_CHOOSER_BUTTON_H__
+#ifndef FILE_CHOOSER_BUTTON_H
+#define FILE_CHOOSER_BUTTON_H
 
 #include <QWidget>
 #include <QLabel>
@@ -43,7 +43,7 @@ class FileChooserButton : public QWidget
         //! Constructor.
         explicit FileChooserButton(const QString &labelText,
                                    Type type,
-                                   QWidget *parent = 0,
+                                   QWidget *parent = nullptr,
                                    const QString &caption = QString(),
                                    const QString &path = QString(),
                                    const QString &filter = QString());
@@ -72,4 +72,4 @@ class FileChooserButton : public QWidget
         
 };
 
-#endif // __FILE_CHOOSER_BUTTON_H__
+#endif // FILE_CHOOSER_BUTTON_H

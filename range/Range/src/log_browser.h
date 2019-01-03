@@ -8,8 +8,8 @@
  *  DESCRIPTION: Log browser class declaration                       *
  *********************************************************************/
 
-#ifndef __LOG_BROWSER_H__
-#define __LOG_BROWSER_H__
+#ifndef LOG_BROWSER_H
+#define LOG_BROWSER_H
 
 #include <QTextBrowser>
 
@@ -28,7 +28,7 @@ class LogBrowser : public QTextBrowser
     public:
 
         //! Constructor.
-        explicit LogBrowser(const QString &logFileName, QWidget *parent = 0);
+        explicit LogBrowser(const QString &logFileName, QWidget *parent = nullptr);
 
         //! Clear log.
         void clearLog(void);
@@ -42,4 +42,4 @@ class LogBrowser : public QTextBrowser
         
 };
 
-#endif // __LOG_BROWSER_H__
+#endif // LOG_BROWSER_H

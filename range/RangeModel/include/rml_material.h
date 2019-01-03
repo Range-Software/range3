@@ -8,8 +8,8 @@
  *  DESCRIPTION: Material class declaration                          *
  *********************************************************************/
 
-#ifndef __RML_MATERIAL_H__
-#define __RML_MATERIAL_H__
+#ifndef RML_MATERIAL_H
+#define RML_MATERIAL_H
 
 #include <string>
 #include <vector>
@@ -34,7 +34,7 @@ class RMaterial
     private:
 
         //! Internal initialization function.
-        void _init ( const RMaterial *pMaterial = 0 );
+        void _init ( const RMaterial *pMaterial = nullptr );
 
     protected:
 
@@ -151,4 +151,4 @@ class RMaterial
 
 };
 
-#endif /* __RML_MATERIAL_H__ */
+#endif /* RML_MATERIAL_H */

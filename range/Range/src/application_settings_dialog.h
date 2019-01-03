@@ -8,8 +8,8 @@
  *  DESCRIPTION: Application settings dialog class declaration       *
  *********************************************************************/
 
-#ifndef __APPLICATION_SETTINGS_DIALOG_H__
-#define __APPLICATION_SETTINGS_DIALOG_H__
+#ifndef APPLICATION_SETTINGS_DIALOG_H
+#define APPLICATION_SETTINGS_DIALOG_H
 
 #include <QDialog>
 #include <QSpinBox>
@@ -57,7 +57,7 @@ class ApplicationSettingsDialog : public QDialog
     public:
 
         //! Constructor.
-        explicit ApplicationSettingsDialog(ApplicationSettings *applicationSettings, QWidget *parent = 0);
+        explicit ApplicationSettingsDialog(ApplicationSettings *applicationSettings, QWidget *parent = nullptr);
 
         //! Execute dialog.
         int exec(void);
@@ -107,4 +107,4 @@ class ApplicationSettingsDialog : public QDialog
         
 };
 
-#endif // __APPLICATION_SETTINGS_DIALOG_H__
+#endif // APPLICATION_SETTINGS_DIALOG_H

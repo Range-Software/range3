@@ -8,8 +8,8 @@
  *  DESCRIPTION: Text browser dialog class declaration               *
  *********************************************************************/
 
-#ifndef __TEXT_BROWSER_DIALOG_H__
-#define __TEXT_BROWSER_DIALOG_H__
+#ifndef TEXT_BROWSER_DIALOG_H
+#define TEXT_BROWSER_DIALOG_H
 
 #include <QDialog>
 
@@ -24,8 +24,8 @@ class TextBrowserDialog : public QDialog
         explicit TextBrowserDialog(const QString &title,
                                    const QString &desc,
                                    const QString &text,
-                                   QWidget *parent = 0);
+                                   QWidget *parent = nullptr);
 
 };
 
-#endif // __TEXT_BROWSER_DIALOG_H__
+#endif // TEXT_BROWSER_DIALOG_H

@@ -8,8 +8,8 @@
  *  DESCRIPTION: Real vector class declaration                       *
  *********************************************************************/
 
-#ifndef __RBL_RVECTOR_H__
-#define __RBL_RVECTOR_H__
+#ifndef RBL_RVECTOR_H
+#define RBL_RVECTOR_H
 
 #include <QString>
 #include <vector>
@@ -21,7 +21,7 @@ class RRVector : public std::vector<double>
     private:
 
         //! Internal initialization function.
-        void _init ( const RRVector *pArray = 0 );
+        void _init ( const RRVector *pArray = nullptr );
 
     public:
 
@@ -111,4 +111,4 @@ class RRVector : public std::vector<double>
 
 };
 
-#endif /* __RBL_RVECTOR_H__ */
+#endif /* RBL_RVECTOR_H */

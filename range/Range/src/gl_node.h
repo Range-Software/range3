@@ -8,8 +8,8 @@
  *  DESCRIPTION: OpenGL node class declaration                       *
  *********************************************************************/
 
-#ifndef __GL_NODE_H__
-#define __GL_NODE_H__
+#ifndef GL_NODE_H
+#define GL_NODE_H
 
 #include <rmlib.h>
 
@@ -27,7 +27,7 @@ class GLNode : public GLObject, public RNode
     private:
 
         //! Internal initialization function.
-        void _init(const GLNode *pGlNode = 0);
+        void _init(const GLNode *pGlNode = nullptr);
 
     public:
 
@@ -56,4 +56,4 @@ class GLNode : public GLObject, public RNode
 
 };
 
-#endif /* __GL_NODE_H__ */
+#endif /* GL_NODE_H */

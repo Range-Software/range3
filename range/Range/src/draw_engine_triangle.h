@@ -8,8 +8,8 @@
  *  DESCRIPTION: Draw engine triangle class declaration              *
  *********************************************************************/
 
-#ifndef __DRAW_ENGINE_TRIANGLE_H__
-#define __DRAW_ENGINE_TRIANGLE_H__
+#ifndef DRAW_ENGINE_TRIANGLE_H
+#define DRAW_ENGINE_TRIANGLE_H
 
 #include "draw_engine_object.h"
 
@@ -21,7 +21,7 @@ class DrawEngineTriangle : public DrawEngineObject
     public:
 
         //! Constructor.
-        explicit DrawEngineTriangle(QObject *parent = 0);
+        explicit DrawEngineTriangle(QObject *parent = nullptr);
 
     protected:
 
@@ -30,4 +30,4 @@ class DrawEngineTriangle : public DrawEngineObject
 
 };
 
-#endif // __DRAW_ENGINE_TRIANGLE_H__
+#endif // DRAW_ENGINE_TRIANGLE_H

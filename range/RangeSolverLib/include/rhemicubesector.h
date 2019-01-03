@@ -8,8 +8,8 @@
  *  DESCRIPTION: View-factor hemi-cube sector class declaration      *
  *********************************************************************/
 
-#ifndef __RHEMICUBESECTOR_H__
-#define __RHEMICUBESECTOR_H__
+#ifndef RHEMICUBESECTOR_H
+#define RHEMICUBESECTOR_H
 
 #include <vector>
 
@@ -53,7 +53,7 @@ class RHemiCubeSector
     private:
 
         //! Internal initialization function.
-        void _init(const RHemiCubeSector *pHemiCubeSector = 0);
+        void _init(const RHemiCubeSector *pHemiCubeSector = nullptr);
 
     public:
 
@@ -110,4 +110,4 @@ class RHemiCubeSector
 
 };
 
-#endif // __RHEMICUBESECTOR_H__
+#endif // RHEMICUBESECTOR_H

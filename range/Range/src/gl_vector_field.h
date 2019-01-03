@@ -8,8 +8,8 @@
  *  DESCRIPTION: OpenGL vector field class declaration               *
  *********************************************************************/
 
-#ifndef __GL_VECTOR_FIELD_H__
-#define __GL_VECTOR_FIELD_H__
+#ifndef GL_VECTOR_FIELD_H
+#define GL_VECTOR_FIELD_H
 
 #include <rmlib.h>
 
@@ -34,7 +34,7 @@ class GLVectorField : public GLObject, public RVectorField
     private:
 
         //! Internal initialization function.
-        void _init(const GLVectorField *pGlVectorField = 0);
+        void _init(const GLVectorField *pGlVectorField = nullptr);
 
     public:
 
@@ -75,4 +75,4 @@ class GLVectorField : public GLObject, public RVectorField
 
 };
 
-#endif // __GL_VECTOR_FIELD_H__
+#endif // GL_VECTOR_FIELD_H

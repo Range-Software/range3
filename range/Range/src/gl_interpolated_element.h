@@ -8,8 +8,8 @@
  *  DESCRIPTION: OpenGL interpolated element class declaration       *
  *********************************************************************/
 
-#ifndef __GL_INTERPOLATED_ELEMENT_H__
-#define __GL_INTERPOLATED_ELEMENT_H__
+#ifndef GL_INTERPOLATED_ELEMENT_H
+#define GL_INTERPOLATED_ELEMENT_H
 
 #include <rmlib.h>
 
@@ -21,7 +21,7 @@ class GLInterpolatedElement : public GLElementBase, public RInterpolatedElement
     private:
 
         //! Internal initialization function.
-        void _init(const GLInterpolatedElement *pGlElement = 0);
+        void _init(const GLInterpolatedElement *pGlElement = nullptr);
 
     public:
 
@@ -52,4 +52,4 @@ class GLInterpolatedElement : public GLElementBase, public RInterpolatedElement
 
 };
 
-#endif // __GL_INTERPOLATED_ELEMENT_H__
+#endif // GL_INTERPOLATED_ELEMENT_H

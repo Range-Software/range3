@@ -8,8 +8,8 @@
  *  DESCRIPTION: Magnetostatics solver class declaration             *
  *********************************************************************/
 
-#ifndef __RSOLVERMAGNETOSTATICS_H__
-#define __RSOLVERMAGNETOSTATICS_H__
+#ifndef RSOLVERMAGNETOSTATICS_H
+#define RSOLVERMAGNETOSTATICS_H
 
 #include "rsolvergeneric.h"
 
@@ -26,7 +26,7 @@ class RSolverMagnetostatics : public RSolverGeneric
     private:
 
         //! Internal initialization function.
-        void _init(const RSolverMagnetostatics *pSolver = 0);
+        void _init(const RSolverMagnetostatics *pSolver = nullptr);
 
     public:
 
@@ -73,4 +73,4 @@ class RSolverMagnetostatics : public RSolverGeneric
 
 };
 
-#endif // __RSOLVERMAGNETOSTATICS_H__
+#endif // RSOLVERMAGNETOSTATICS_H

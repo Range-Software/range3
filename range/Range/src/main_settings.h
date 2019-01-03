@@ -8,8 +8,8 @@
  *  DESCRIPTION: Main settings class declaration                     *
  *********************************************************************/
 
-#ifndef __MAIN_SETTINGS_H__
-#define __MAIN_SETTINGS_H__
+#ifndef MAIN_SETTINGS_H
+#define MAIN_SETTINGS_H
 
 #include <QSettings>
 #include <QString>
@@ -41,7 +41,7 @@ class MainSettings : public QSettings
         //! Constructor.
         explicit MainSettings(const QString &organization,
                               const QString &application = QString(),
-                              QObject       *parent = 0);
+                              QObject       *parent = nullptr);
 
         //! Return pointer to main settings static instance.
         static MainSettings & getInstance(void);
@@ -117,4 +117,4 @@ class MainSettings : public QSettings
 
 };
 
-#endif /* __MAIN_SETTINGS_H__ */
+#endif /* MAIN_SETTINGS_H */

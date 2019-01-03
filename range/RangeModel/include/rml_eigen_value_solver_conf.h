@@ -8,8 +8,8 @@
  *  DESCRIPTION: Eigen value solver class declaration                *
  *********************************************************************/
 
-#ifndef __RML_EIGEN_VALUE_SOLVER_CONF_H__
-#define __RML_EIGEN_VALUE_SOLVER_CONF_H__
+#ifndef RML_EIGEN_VALUE_SOLVER_CONF_H
+#define RML_EIGEN_VALUE_SOLVER_CONF_H
 
 #include <QString>
 
@@ -47,7 +47,7 @@ class REigenValueSolverConf
     private:
 
         //! Internal initialization function.
-        void _init(const REigenValueSolverConf *pEigenValueSolverConf = 0);
+        void _init(const REigenValueSolverConf *pEigenValueSolverConf = nullptr);
 
     public:
 
@@ -107,4 +107,4 @@ class REigenValueSolverConf
 
 };
 
-#endif // __RML_EIGEN_VALUE_SOLVER_CONF_H__
+#endif // RML_EIGEN_VALUE_SOLVER_CONF_H

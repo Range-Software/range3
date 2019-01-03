@@ -8,8 +8,8 @@
  *  DESCRIPTION: Pick value class declaration                        *
  *********************************************************************/
 
-#ifndef __PICK_VALUE_H__
-#define __PICK_VALUE_H__
+#ifndef PICK_VALUE_H
+#define PICK_VALUE_H
 
 #include <rblib.h>
 
@@ -26,7 +26,7 @@ class PickValue
     private:
 
         //! Internal initialization function.
-        void _init(const PickValue *pPickValue = 0);
+        void _init(const PickValue *pPickValue = nullptr);
 
     public:
 
@@ -59,4 +59,4 @@ class PickValue
 
 };
 
-#endif // __PICK_VALUE_H__
+#endif // PICK_VALUE_H

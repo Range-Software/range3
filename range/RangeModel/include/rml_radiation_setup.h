@@ -8,8 +8,8 @@
  *  DESCRIPTION: Radiation setup class declaration                   *
  *********************************************************************/
 
-#ifndef __RML_RADIATION_SETUP_H__
-#define __RML_RADIATION_SETUP_H__
+#ifndef RML_RADIATION_SETUP_H
+#define RML_RADIATION_SETUP_H
 
 #include <QString>
 
@@ -33,7 +33,7 @@ class RRadiationSetup
     private:
 
         //! Internal initialization function.
-        void _init(const RRadiationSetup *pRadiationSetup = 0);
+        void _init(const RRadiationSetup *pRadiationSetup = nullptr);
 
     public:
 
@@ -71,4 +71,4 @@ class RRadiationSetup
         friend class RFileIO;
 };
 
-#endif // __RML_RADIATION_SETUP_H__
+#endif // RML_RADIATION_SETUP_H

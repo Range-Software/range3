@@ -8,8 +8,8 @@
  *  DESCRIPTION: Material updater class declaration                  *
  *********************************************************************/
 
-#ifndef __MATERIAL_UPDATER_H__
-#define __MATERIAL_UPDATER_H__
+#ifndef MATERIAL_UPDATER_H
+#define MATERIAL_UPDATER_H
 
 #include <QString>
 #include <QList>
@@ -30,7 +30,7 @@ class MaterialUpdater : public Job
     public:
 
         //! Constructor.
-        explicit MaterialUpdater(QObject *parent = 0);
+        explicit MaterialUpdater(QObject *parent = nullptr);
 
         //! Add material to be updated.
         void addMaterial(const QString &source);
@@ -42,4 +42,4 @@ class MaterialUpdater : public Job
 
 };
 
-#endif // __MATERIAL_UPDATER_H__
+#endif // MATERIAL_UPDATER_H

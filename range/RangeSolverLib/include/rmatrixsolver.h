@@ -8,8 +8,8 @@
  *  DESCRIPTION: Matrix solver class declaration                     *
  *********************************************************************/
 
-#ifndef __RMATRIXSOLVER_H__
-#define __RMATRIXSOLVER_H__
+#ifndef RMATRIXSOLVER_H
+#define RMATRIXSOLVER_H
 
 #include <rmlib.h>
 
@@ -29,7 +29,7 @@ class RMatrixSolver
     private:
 
         //! Internal initialization function.
-        void _init(const RMatrixSolver *pMatrixSolver = 0);
+        void _init(const RMatrixSolver *pMatrixSolver = nullptr);
 
     public:
 
@@ -61,4 +61,4 @@ class RMatrixSolver
 
 };
 
-#endif // __RMATRIXSOLVER_H__
+#endif // RMATRIXSOLVER_H

@@ -8,8 +8,8 @@
  *  DESCRIPTION: Real matrix class declaration                       *
  *********************************************************************/
 
-#ifndef __RBL_RMATRIX_H__
-#define __RBL_RMATRIX_H__
+#ifndef RBL_RMATRIX_H
+#define RBL_RMATRIX_H
 
 #include <QString>
 #include <vector>
@@ -28,7 +28,7 @@ class RRMatrix
     private:
 
         //! Internal initialization function.
-        void _init ( const RRMatrix *pMatrix = 0 );
+        void _init ( const RRMatrix *pMatrix = nullptr );
 
     public:
 
@@ -153,4 +153,4 @@ class RRMatrix
 
 };
 
-#endif /* __RBL_RMATRIX_H__ */
+#endif /* RBL_RMATRIX_H */

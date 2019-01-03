@@ -8,8 +8,8 @@
  *  DESCRIPTION: Model IO class declaration                          *
  *********************************************************************/
 
-#ifndef __MODEL_IO_H__
-#define __MODEL_IO_H__
+#ifndef MODEL_IO_H
+#define MODEL_IO_H
 
 #include <QObject>
 #include <QString>
@@ -55,8 +55,8 @@ class ModelIO : public Job
 
         explicit ModelIO(ModelIOType    type,
                          const QString &filename,
-                         Model         *pModel = 0,
-                         QObject       *parent = 0);
+                         Model         *pModel = nullptr,
+                         QObject       *parent = nullptr);
 
         //! Find new model name.
         static QString findNewModelName(const QString &fileName);
@@ -97,4 +97,4 @@ class ModelIO : public Job
 
 };
 
-#endif /* __MODEL_IO_H__ */
+#endif /* MODEL_IO_H */

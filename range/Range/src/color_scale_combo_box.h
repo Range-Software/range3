@@ -8,8 +8,8 @@
  *  DESCRIPTION: Color scale combo box class declaration             *
  *********************************************************************/
 
-#ifndef __COLOR_SCALE_COMBO_BOX_H__
-#define __COLOR_SCALE_COMBO_BOX_H__
+#ifndef COLOR_SCALE_COMBO_BOX_H
+#define COLOR_SCALE_COMBO_BOX_H
 
 #include <QComboBox>
 
@@ -26,7 +26,7 @@ class ColorScaleComboBox : public QComboBox
     public:
 
         //! Constructor.
-        explicit ColorScaleComboBox(QWidget *parent = 0);
+        explicit ColorScaleComboBox(QWidget *parent = nullptr);
 
         //! Set color scale by name.
         void setColorScaleName(const QString &colorScaleName);
@@ -38,4 +38,4 @@ class ColorScaleComboBox : public QComboBox
         
 };
 
-#endif // __COLOR_SCALE_COMBO_BOX_H__
+#endif // COLOR_SCALE_COMBO_BOX_H

@@ -8,8 +8,8 @@
  *  DESCRIPTION: Entity group data class declaration                *
  *********************************************************************/
 
-#ifndef __RML_ENTITY_GROUP_DATA_H__
-#define __RML_ENTITY_GROUP_DATA_H__
+#ifndef RML_ENTITY_GROUP_DATA_H
+#define RML_ENTITY_GROUP_DATA_H
 
 #include <map>
 
@@ -35,7 +35,7 @@ class REntityGroupData
     private:
 
         //! Internal initialization function.
-        void _init ( const REntityGroupData *pElementGroupData = 0 );
+        void _init ( const REntityGroupData *pElementGroupData = nullptr );
 
     protected:
 
@@ -180,4 +180,4 @@ class REntityGroupData
 
 };
 
-#endif /* __RML_ENTITY_GROUP_DATA_H__ */
+#endif /* RML_ENTITY_GROUP_DATA_H */

@@ -8,8 +8,8 @@
  *  DESCRIPTION: OpenGL light class declaration                      *
  *********************************************************************/
 
-#ifndef __RBL_GL_LIGHT_H__
-#define __RBL_GL_LIGHT_H__
+#ifndef RBL_GL_LIGHT_H
+#define RBL_GL_LIGHT_H
 
 #include <QColor>
 
@@ -38,7 +38,7 @@ class RGLLight
     private:
 
         //! Internal initialization function.
-        void _init (const RGLLight *pGlLight = 0);
+        void _init (const RGLLight *pGlLight = nullptr);
 
     public:
 
@@ -104,4 +104,4 @@ class RGLLight
 
 };
 
-#endif /* __RBL_GL_LIGHT_H__ */
+#endif /* RBL_GL_LIGHT_H */

@@ -8,8 +8,8 @@
  *  DESCRIPTION: Document generator class declaration                *
  *********************************************************************/
 
-#ifndef __DOCUMENT_GENERATOR_H__
-#define __DOCUMENT_GENERATOR_H__
+#ifndef DOCUMENT_GENERATOR_H
+#define DOCUMENT_GENERATOR_H
 
 #include <QObject>
 #include <QMap>
@@ -69,7 +69,7 @@ class DocumentGenerator : public Job
     public:
 
         //! Constructor.
-        explicit DocumentGenerator(QObject *parent = 0);
+        explicit DocumentGenerator(QObject *parent = nullptr);
 
         //! Set enable header counters.
         void setEnableHeaderCounters(bool enableHeaderCounters);
@@ -150,4 +150,4 @@ class DocumentGenerator : public Job
 
 };
 
-#endif // __DOCUMENT_GENERATOR_H__
+#endif // DOCUMENT_GENERATOR_H

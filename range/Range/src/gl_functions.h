@@ -8,8 +8,8 @@
  *  DESCRIPTION: OpenGL functions declarations                       *
  *********************************************************************/
 
-#ifndef __GL_FUNCTIONS_H__
-#define __GL_FUNCTIONS_H__
+#ifndef GL_FUNCTIONS_H
+#define GL_FUNCTIONS_H
 
 #include <rblib.h>
 
@@ -30,4 +30,4 @@ namespace GLFunctions
 
 }
 
-#endif // __GL_FUNCTIONS_H__
+#endif // GL_FUNCTIONS_H

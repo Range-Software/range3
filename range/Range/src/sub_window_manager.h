@@ -8,8 +8,8 @@
  *  DESCRIPTION: Sub window manager class declaration                *
  *********************************************************************/
 
-#ifndef __SUB_WINDOW_MANAGER_H__
-#define __SUB_WINDOW_MANAGER_H__
+#ifndef SUB_WINDOW_MANAGER_H
+#define SUB_WINDOW_MANAGER_H
 
 #include <QObject>
 #include <QList>
@@ -39,7 +39,7 @@ class SubWindowManager : public QObject
     public:
 
         //! Constructor.
-        explicit SubWindowManager(QMdiArea *mdiArea, QObject *parent = 0);
+        explicit SubWindowManager(QMdiArea *mdiArea, QObject *parent = nullptr);
 
         //! Create new window.
         bool windowCreate(uint modelID);
@@ -77,4 +77,4 @@ class SubWindowManager : public QObject
 
 };
 
-#endif /* __SUB_WINDOW_MANAGER_H__ */
+#endif /* SUB_WINDOW_MANAGER_H */

@@ -8,8 +8,8 @@
  *  DESCRIPTION: Model action input class declaration                *
  *********************************************************************/
 
-#ifndef __MODEL_ACTION_INPUT_H__
-#define __MODEL_ACTION_INPUT_H__
+#ifndef MODEL_ACTION_INPUT_H
+#define MODEL_ACTION_INPUT_H
 
 #include <rmlib.h>
 
@@ -98,7 +98,7 @@ class ModelActionInput
     private:
 
         //! Internal initialization function.
-        void _init(const ModelActionInput *pModelActionInput = 0);
+        void _init(const ModelActionInput *pModelActionInput = nullptr);
 
     public:
 
@@ -266,4 +266,4 @@ class ModelActionInput
 
 };
 
-#endif // __MODEL_ACTION_INPUT_H__
+#endif // MODEL_ACTION_INPUT_H

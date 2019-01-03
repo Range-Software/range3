@@ -8,8 +8,8 @@
  *  DESCRIPTION: Element class declaration                           *
  *********************************************************************/
 
-#ifndef __RML_ELEMENT_H__
-#define __RML_ELEMENT_H__
+#ifndef RML_ELEMENT_H
+#define RML_ELEMENT_H
 
 #include <vector>
 #include <string>
@@ -88,7 +88,7 @@ class RElement
     private:
 
         //! Internal initialization function.
-        void _init ( const RElement *element = 0 );
+        void _init ( const RElement *element = nullptr );
 
     protected:
 
@@ -359,4 +359,4 @@ class RElement
 
 };
 
-#endif /* __RML_ELEMENT_H__ */
+#endif /* RML_ELEMENT_H */

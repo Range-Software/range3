@@ -8,8 +8,8 @@
  *  DESCRIPTION: Model class declaration - derived from RModel       *
  *********************************************************************/
 
-#ifndef __MODEL_H__
-#define __MODEL_H__
+#ifndef MODEL_H
+#define MODEL_H
 
 #include <QtCore>
 #include <QColor>
@@ -79,7 +79,7 @@ class Model : public RModel
     private:
 
         //! Internal initialization function.
-        void _init(const Model *pModel = 0);
+        void _init(const Model *pModel = nullptr);
 
         //! Return const pointer to element group data.
         const REntityGroupData *getElementGroupData(REntityGroupType elementGroupType,
@@ -532,4 +532,4 @@ class Model : public RModel
 
 };
 
-#endif /* __MODEL_H__ */
+#endif /* MODEL_H */

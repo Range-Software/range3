@@ -8,8 +8,8 @@
  *  DESCRIPTION: Model records widget class declaration              *
  *********************************************************************/
 
-#ifndef __MODEL_RECORDS_SELECTOR_H__
-#define __MODEL_RECORDS_SELECTOR_H__
+#ifndef MODEL_RECORDS_SELECTOR_H
+#define MODEL_RECORDS_SELECTOR_H
 
 #include <QWidget>
 #include <QAction>
@@ -42,7 +42,7 @@ class ModelRecordsSelector : public QWidget
     public:
 
         //! Constructor.
-        explicit ModelRecordsSelector(QWidget *parent = 0);
+        explicit ModelRecordsSelector(QWidget *parent = nullptr);
 
     protected:
 
@@ -76,4 +76,4 @@ class ModelRecordsSelector : public QWidget
     
 };
 
-#endif // __MODEL_RECORDS_SELECTOR_H__
+#endif // MODEL_RECORDS_SELECTOR_H

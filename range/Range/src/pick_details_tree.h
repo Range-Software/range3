@@ -8,8 +8,8 @@
  *  DESCRIPTION: Pick details tree class declaration                 *
  *********************************************************************/
 
-#ifndef __PICK_DETAILS_TREE_H__
-#define __PICK_DETAILS_TREE_H__
+#ifndef PICK_DETAILS_TREE_H
+#define PICK_DETAILS_TREE_H
 
 #include <QTreeWidget>
 
@@ -21,7 +21,7 @@ class PickDetailsTree : public QTreeWidget
     public:
 
         //! Constructor.
-        explicit PickDetailsTree(QWidget *parent = 0);
+        explicit PickDetailsTree(QWidget *parent = nullptr);
 
     protected:
 
@@ -41,4 +41,4 @@ class PickDetailsTree : public QTreeWidget
         
 };
 
-#endif // __PICK_DETAILS_TREE_H__
+#endif // PICK_DETAILS_TREE_H

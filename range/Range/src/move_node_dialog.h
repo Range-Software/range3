@@ -9,7 +9,7 @@
  *********************************************************************/
 
 #ifndef __MOVE_NODE_DIALOG_Hv
-#define __MOVE_NODE_DIALOG_H__
+#define MOVE_NODE_DIALOG_H
 
 #include <QDialog>
 #include <QPushButton>
@@ -38,7 +38,7 @@ class MoveNodeDialog : public QDialog
     public:
 
         //! Constructor.
-        explicit MoveNodeDialog(uint modelID, const QList<uint> &nodeIDs, QWidget *parent = 0);
+        explicit MoveNodeDialog(uint modelID, const QList<uint> &nodeIDs, QWidget *parent = nullptr);
 
         //! Execute dialog.
         int exec(void);
@@ -55,4 +55,4 @@ class MoveNodeDialog : public QDialog
 
 };
 
-#endif // __MOVE_NODE_DIALOG_H__
+#endif // MOVE_NODE_DIALOG_H

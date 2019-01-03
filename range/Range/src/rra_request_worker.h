@@ -8,8 +8,8 @@
  *  DESCRIPTION: Remote Range API request worker class declaration   *
  *********************************************************************/
 
-#ifndef __RRA_REQUEST_WORKER_H__
-#define __RRA_REQUEST_WORKER_H__
+#ifndef RRA_REQUEST_WORKER_H
+#define RRA_REQUEST_WORKER_H
 
 #include <QNetworkAccessManager>
 
@@ -31,7 +31,7 @@ class RRARequestWorker : public HttpRequestWorker
     public:
 
         //! Constructor.
-        explicit RRARequestWorker(QNetworkAccessManager *networkAccessManager, QObject *parent = 0);
+        explicit RRARequestWorker(QNetworkAccessManager *networkAccessManager, QObject *parent = nullptr);
 
         //! Request available software.
         void availableSoftware(void);
@@ -76,4 +76,4 @@ class RRARequestWorker : public HttpRequestWorker
 
 };
 
-#endif // __RRA_REQUEST_WORKER_H__
+#endif // RRA_REQUEST_WORKER_H

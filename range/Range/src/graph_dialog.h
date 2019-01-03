@@ -8,8 +8,8 @@
  *  DESCRIPTION: Graph dialog class declaration                      *
  *********************************************************************/
 
-#ifndef __GRAPH_DIALOG_H__
-#define __GRAPH_DIALOG_H__
+#ifndef GRAPH_DIALOG_H
+#define GRAPH_DIALOG_H
 
 #include <QDialog>
 
@@ -29,11 +29,11 @@ class GraphDialog : public QDialog
     public:
 
         //! Constructor.
-        explicit GraphDialog(GraphObject *graphObject, QWidget *parent = 0);
+        explicit GraphDialog(GraphObject *graphObject, QWidget *parent = nullptr);
 
         //! Return pointer to graph widget.
         GraphWidget * getGraphWidget(void);
         
 };
 
-#endif // __GRAPH_DIALOG_H__
+#endif // GRAPH_DIALOG_H

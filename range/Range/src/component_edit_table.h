@@ -8,8 +8,8 @@
  *  DESCRIPTION: Component edit table class declaration              *
  *********************************************************************/
 
-#ifndef __COMPONENT_EDIT_TABLE_H__
-#define __COMPONENT_EDIT_TABLE_H__
+#ifndef COMPONENT_EDIT_TABLE_H
+#define COMPONENT_EDIT_TABLE_H
 
 #include <rmlib.h>
 
@@ -24,7 +24,7 @@ class ComponentEditTable : public ValueTable
     public:
 
         //! Constructor.
-        explicit ComponentEditTable(const RConditionComponent &component, QWidget *parent = 0);
+        explicit ComponentEditTable(const RConditionComponent &component, QWidget *parent = nullptr);
 
     protected:
 
@@ -33,4 +33,4 @@ class ComponentEditTable : public ValueTable
     
 };
 
-#endif /* __COMPONENT_EDIT_TABLE_H__ */
+#endif /* COMPONENT_EDIT_TABLE_H */

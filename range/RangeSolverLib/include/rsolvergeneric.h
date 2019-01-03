@@ -8,8 +8,8 @@
  *  DESCRIPTION: Generic solver class declaration                    *
  *********************************************************************/
 
-#ifndef __RSOLVERGENERIC_H__
-#define __RSOLVERGENERIC_H__
+#ifndef RSOLVERGENERIC_H
+#define RSOLVERGENERIC_H
 
 #include <QString>
 
@@ -86,7 +86,7 @@ class RSolverGeneric
     private:
 
         //! Internal initialization function.
-        void _init(const RSolverGeneric *pGenericSolver = 0);
+        void _init(const RSolverGeneric *pGenericSolver = nullptr);
 
     public:
 
@@ -213,4 +213,4 @@ class RSolverGeneric
 
 };
 
-#endif // __RSOLVERGENERIC_H__
+#endif // RSOLVERGENERIC_H

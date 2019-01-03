@@ -8,8 +8,8 @@
  *  DESCRIPTION: RBLib - Range Base Library                          *
  *********************************************************************/
 
-#ifndef __RBLIB_H__
-#define __RBLIB_H__
+#ifndef RBLIB_H
+#define RBLIB_H
 
 #include "rbl_application_state.h"
 #include "rbl_argument_option.h"
@@ -39,4 +39,4 @@
 #include "rbl_value_vector.h"
 #include "rbl_version.h"
 
-#endif /* __RBLIB_H__ */
+#endif /* RBLIB_H */

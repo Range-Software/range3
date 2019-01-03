@@ -8,8 +8,8 @@
  *  DESCRIPTION: OpenGL simplex tetrahedra class declaration         *
  *********************************************************************/
 
-#ifndef __GL_SIMPLEX_TETRAHEDRA_H__
-#define __GL_SIMPLEX_TETRAHEDRA_H__
+#ifndef GL_SIMPLEX_TETRAHEDRA_H
+#define GL_SIMPLEX_TETRAHEDRA_H
 
 #include <vector>
 
@@ -21,7 +21,7 @@ class GLSimplexTetrahedra : public GLSimplex
     private:
 
         //! Internal initialization function.
-        void _init(const GLSimplexTetrahedra *pGlTetrahedra = 0 );
+        void _init(const GLSimplexTetrahedra *pGlTetrahedra = nullptr );
 
     public:
 
@@ -59,4 +59,4 @@ class GLSimplexTetrahedra : public GLSimplex
 
 };
 
-#endif // __GL_SIMPLEX_TETRAHEDRA_H__
+#endif // GL_SIMPLEX_TETRAHEDRA_H

@@ -8,8 +8,8 @@
  *  DESCRIPTION: OpenGL element class declaration                    *
  *********************************************************************/
 
-#ifndef __GL_ELEMENT_H__
-#define __GL_ELEMENT_H__
+#ifndef GL_ELEMENT_H
+#define GL_ELEMENT_H
 
 #include <rmlib.h>
 
@@ -31,7 +31,7 @@ class GLElement : public GLElementBase, public RElement
     private:
 
         //! Internal initialization function.
-        void _init(const GLElement *pGlElement = 0);
+        void _init(const GLElement *pGlElement = nullptr);
 
     public:
 
@@ -78,4 +78,4 @@ class GLElement : public GLElementBase, public RElement
 
 };
 
-#endif /* __GL_ELEMENT_H__ */
+#endif /* GL_ELEMENT_H */

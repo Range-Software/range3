@@ -8,8 +8,8 @@
  *  DESCRIPTION: Range sparse matrix class declaration               *
  *********************************************************************/
 
-#ifndef __RML_SPARSE_MATRIX_H__
-#define __RML_SPARSE_MATRIX_H__
+#ifndef RML_SPARSE_MATRIX_H
+#define RML_SPARSE_MATRIX_H
 
 #include <vector>
 
@@ -28,7 +28,7 @@ class RSparseMatrix
     private:
 
         //! Internal initialization function.
-        void _init(const RSparseMatrix *pMatrix = 0);
+        void _init(const RSparseMatrix *pMatrix = nullptr);
 
     public:
 
@@ -92,4 +92,4 @@ class RSparseMatrix
 
 };
 
-#endif // __RML_SPARSE_MATRIX_H__
+#endif // RML_SPARSE_MATRIX_H

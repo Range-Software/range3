@@ -8,8 +8,8 @@
  *  DESCRIPTION: Save file class declaration                         *
  *********************************************************************/
 
-#ifndef __RML_SAVE_FILE_H__
-#define __RML_SAVE_FILE_H__
+#ifndef RML_SAVE_FILE_H
+#define RML_SAVE_FILE_H
 
 #include <QSaveFile>
 #include <QTextStream>
@@ -45,7 +45,7 @@ class RSaveFile : public QSaveFile
     private:
 
         //! Internal initialization function.
-        void _init(const RSaveFile *pFile = 0);
+        void _init(const RSaveFile *pFile = nullptr);
 
     public:
 
@@ -79,4 +79,4 @@ class RSaveFile : public QSaveFile
 
 };
 
-#endif // __RML_SAVE_FILE_H__
+#endif // RML_SAVE_FILE_H

@@ -8,8 +8,8 @@
  *  DESCRIPTION: OpenGL display properties class declaration         *
  *********************************************************************/
 
-#ifndef __RML_GL_DISPLAY_PROPERTIES_H__
-#define __RML_GL_DISPLAY_PROPERTIES_H__
+#ifndef RML_GL_DISPLAY_PROPERTIES_H
+#define RML_GL_DISPLAY_PROPERTIES_H
 
 #include <QVector>
 #include <QColor>
@@ -41,7 +41,7 @@ class RGLDisplayProperties
     private:
 
         //! Internal initialization function.
-        void _init(const RGLDisplayProperties *pDisplayProperties = 0);
+        void _init(const RGLDisplayProperties *pDisplayProperties = nullptr);
 
     public:
 
@@ -149,4 +149,4 @@ class RGLDisplayProperties
 
 };
 
-#endif /* __RML_GL_DISPLAY_PROPERTIES_H__ */
+#endif /* RML_GL_DISPLAY_PROPERTIES_H */

@@ -8,8 +8,8 @@
  *  DESCRIPTION: OpenGL entity list class declaration                *
  *********************************************************************/
 
-#ifndef __GL_ENTITY_LIST_H__
-#define __GL_ENTITY_LIST_H__
+#ifndef GL_ENTITY_LIST_H
+#define GL_ENTITY_LIST_H
 
 #include "gl_list.h"
 
@@ -27,7 +27,7 @@ class GLEntityList : public GLList
     private:
 
         //! Internal initialization function.
-        void _init (const GLEntityList *pGlEntityList = 0);
+        void _init (const GLEntityList *pGlEntityList = nullptr);
 
     public:
 
@@ -44,4 +44,4 @@ class GLEntityList : public GLList
         GLList & operator = (const GLEntityList &glEntityList);
 };
 
-#endif /* __GL_ENTITY_LIST_H__ */
+#endif /* GL_ENTITY_LIST_H */

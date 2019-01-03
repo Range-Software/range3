@@ -8,8 +8,8 @@
  *  DESCRIPTION: Vector field dialog class declaration               *
  *********************************************************************/
 
-#ifndef __VECTOR_FIELD_DIALOG_H__
-#define __VECTOR_FIELD_DIALOG_H__
+#ifndef VECTOR_FIELD_DIALOG_H
+#define VECTOR_FIELD_DIALOG_H
 
 #include <QDialog>
 #include <QCheckBox>
@@ -46,10 +46,10 @@ class VectorFieldDialog : public QDialog
     public:
 
         //! Constructor.
-        explicit VectorFieldDialog(uint modelID, QWidget *parent = 0);
+        explicit VectorFieldDialog(uint modelID, QWidget *parent = nullptr);
 
         //! Constructor.
-        explicit VectorFieldDialog(uint modelID, uint entityID, QWidget *parent = 0);
+        explicit VectorFieldDialog(uint modelID, uint entityID, QWidget *parent = nullptr);
 
         //! Execute dialog.
         int exec(void);
@@ -72,4 +72,4 @@ class VectorFieldDialog : public QDialog
         
 };
 
-#endif // __VECTOR_FIELD_DIALOG_H__
+#endif // VECTOR_FIELD_DIALOG_H

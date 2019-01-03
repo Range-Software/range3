@@ -8,8 +8,8 @@
  *  DESCRIPTION: Iteration info class declaration                    *
  *********************************************************************/
 
-#ifndef __RITERATIONINFO_H__
-#define __RITERATIONINFO_H__
+#ifndef RITERATIONINFO_H
+#define RITERATIONINFO_H
 
 #include <vector>
 #include <QString>
@@ -43,7 +43,7 @@ class RIterationInfo
     private:
 
         //! Internal initialization function.
-        void _init(const RIterationInfo *pIterationInfo = 0);
+        void _init(const RIterationInfo *pIterationInfo = nullptr);
 
     public:
 

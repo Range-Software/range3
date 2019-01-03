@@ -8,8 +8,8 @@
  *  DESCRIPTION: Simple model tree class declaration                 *
  *********************************************************************/
 
-#ifndef __MODEL_TREE_SIMPLE_H__
-#define __MODEL_TREE_SIMPLE_H__
+#ifndef MODEL_TREE_SIMPLE_H
+#define MODEL_TREE_SIMPLE_H
 
 #include <QTreeWidget>
 
@@ -25,7 +25,7 @@ class ModelTreeSimple : public QTreeWidget
     public:
 
         //! Constructor.
-        explicit ModelTreeSimple(uint modelID, REntityGroupTypeMask modelEntitiesMask, QWidget *parent = 0);
+        explicit ModelTreeSimple(uint modelID, REntityGroupTypeMask modelEntitiesMask, QWidget *parent = nullptr);
 
         //! Select entity.
         void selectEntity(uint modelID, REntityGroupType entityGroupType, uint entityID);
@@ -47,4 +47,4 @@ class ModelTreeSimple : public QTreeWidget
         
 };
 
-#endif // __MODEL_TREE_SIMPLE_H__
+#endif // MODEL_TREE_SIMPLE_H

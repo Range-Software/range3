@@ -8,8 +8,8 @@
  *  DESCRIPTION: Stream line class declaration                       *
  *********************************************************************/
 
-#ifndef __RML_STREAM_LINE_H__
-#define __RML_STREAM_LINE_H__
+#ifndef RML_STREAM_LINE_H
+#define RML_STREAM_LINE_H
 
 #include <vector>
 
@@ -34,7 +34,7 @@ class RStreamLine : public RInterpolatedEntity
     private:
 
         //! Internal initialization function.
-        void _init ( const RStreamLine *pStreamLine = 0 );
+        void _init ( const RStreamLine *pStreamLine = nullptr );
 
     public:
 
@@ -67,4 +67,4 @@ class RStreamLine : public RInterpolatedEntity
 
 };
 
-#endif /* __RML_STREAM_LINE_H__ */
+#endif /* RML_STREAM_LINE_H */

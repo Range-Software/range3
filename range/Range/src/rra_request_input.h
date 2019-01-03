@@ -8,8 +8,8 @@
  *  DESCRIPTION: Remote Range API request input class declaration    *
  *********************************************************************/
 
-#ifndef __RRA_REQUEST_INPUT_H__
-#define __RRA_REQUEST_INPUT_H__
+#ifndef RRA_REQUEST_INPUT_H
+#define RRA_REQUEST_INPUT_H
 
 #include "http_request_input.h"
 
@@ -58,4 +58,4 @@ class RRARequestInput : public HttpRequestInput
 
 };
 
-#endif // __RRA_REQUEST_INPUT_H__
+#endif // RRA_REQUEST_INPUT_H

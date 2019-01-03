@@ -8,8 +8,8 @@
  *  DESCRIPTION: Problem task tree class declaration                 *
  *********************************************************************/
 
-#ifndef __PROBLEM_TASK_TREE_H__
-#define __PROBLEM_TASK_TREE_H__
+#ifndef PROBLEM_TASK_TREE_H
+#define PROBLEM_TASK_TREE_H
 
 #include <QTreeWidget>
 #include <QPushButton>
@@ -46,7 +46,7 @@ class ProblemTaskTree : public QWidget
     public:
 
         //! Constructor.
-        explicit ProblemTaskTree(const RProblemTaskItem &rTaskTree, QWidget *parent = 0);
+        explicit ProblemTaskTree(const RProblemTaskItem &rTaskTree, QWidget *parent = nullptr);
 
         //! Return problem task tree.
         RProblemTaskItem getProblemTaskTree(void) const;
@@ -98,4 +98,4 @@ class ProblemTaskTree : public QWidget
 
 };
 
-#endif // __PROBLEM_TASK_TREE_H__
+#endif // PROBLEM_TASK_TREE_H

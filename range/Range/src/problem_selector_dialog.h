@@ -8,8 +8,8 @@
  *  DESCRIPTION: Problem selector dialog class declaration           *
  *********************************************************************/
 
-#ifndef __PROBLEM_SELECTOR_DIALOG_H__
-#define __PROBLEM_SELECTOR_DIALOG_H__
+#ifndef PROBLEM_SELECTOR_DIALOG_H
+#define PROBLEM_SELECTOR_DIALOG_H
 
 #include <QDialog>
 
@@ -32,7 +32,7 @@ class ProblemSelectorDialog : public QDialog
     public:
 
         //! Constructor.
-        explicit ProblemSelectorDialog(QWidget *parent = 0);
+        explicit ProblemSelectorDialog(QWidget *parent = nullptr);
 
         //! Execute dialog.
         RProblemTypeMask exec(void);
@@ -44,4 +44,4 @@ class ProblemSelectorDialog : public QDialog
 
 };
 
-#endif /* __PROBLEM_SELECTOR_DIALOG_H__ */
+#endif /* PROBLEM_SELECTOR_DIALOG_H */

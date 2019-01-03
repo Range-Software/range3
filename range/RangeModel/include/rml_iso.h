@@ -8,8 +8,8 @@
  *  DESCRIPTION: ISO class declaration                               *
  *********************************************************************/
 
-#ifndef __RML_ISO_H__
-#define __RML_ISO_H__
+#ifndef RML_ISO_H
+#define RML_ISO_H
 
 #include <string>
 #include <vector>
@@ -37,7 +37,7 @@ class RIso : public RInterpolatedEntity
     private:
 
         //! Internal initialization function.
-        void _init ( const RIso *pIso = 0 );
+        void _init ( const RIso *pIso = nullptr );
 
     public:
 
@@ -85,4 +85,4 @@ class RIso : public RInterpolatedEntity
 
 };
 
-#endif /* __RML_ISO_H__ */
+#endif /* RML_ISO_H */

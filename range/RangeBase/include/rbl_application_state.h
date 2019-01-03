@@ -8,8 +8,8 @@
  *  DESCRIPTION: Application state class declaration                 *
  *********************************************************************/
 
-#ifndef __RBL_APPLICATION_STATE_H__
-#define __RBL_APPLICATION_STATE_H__
+#ifndef RBL_APPLICATION_STATE_H
+#define RBL_APPLICATION_STATE_H
 
 typedef enum _RApplicationStateType
 {
@@ -31,7 +31,7 @@ class RApplicationState
     private:
 
         //! Internal initialization function.
-        void _init ( const RApplicationState *pApplicationState = 0 );
+        void _init ( const RApplicationState *pApplicationState = nullptr );
 
     public:
 
@@ -58,4 +58,4 @@ class RApplicationState
 
 };
 
-#endif // __RBL_APPLICATION_STATE_H__
+#endif // RBL_APPLICATION_STATE_H

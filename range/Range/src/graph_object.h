@@ -8,8 +8,8 @@
  *  DESCRIPTION: Graph object class declaration                      *
  *********************************************************************/
 
-#ifndef __GRAPH_OBJECT_H__
-#define __GRAPH_OBJECT_H__
+#ifndef GRAPH_OBJECT_H
+#define GRAPH_OBJECT_H
 
 #include <QObject>
 #include <QTimer>
@@ -35,7 +35,7 @@ class GraphObject : public QObject
     public:
 
         //! Constructor.
-        explicit GraphObject(QObject *parent = 0);
+        explicit GraphObject(QObject *parent = nullptr);
 
         //! Return const reference to graph data object.
         const GraphData & getData(void) const;
@@ -72,4 +72,4 @@ class GraphObject : public QObject
 
 };
 
-#endif // __GRAPH_OBJECT_H__
+#endif // GRAPH_OBJECT_H

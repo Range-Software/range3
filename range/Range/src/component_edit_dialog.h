@@ -8,8 +8,8 @@
  *  DESCRIPTION: Component edit dialog class declaration             *
  *********************************************************************/
 
-#ifndef __COMPONENT_EDIT_DIALOG_H__
-#define __COMPONENT_EDIT_DIALOG_H__
+#ifndef COMPONENT_EDIT_DIALOG_H
+#define COMPONENT_EDIT_DIALOG_H
 
 #include <QDialog>
 
@@ -32,7 +32,7 @@ class ComponentEditDialog : public QDialog
     public:
 
         //! Constructor.
-        explicit ComponentEditDialog(RConditionComponent &component, QWidget *parent = 0);
+        explicit ComponentEditDialog(RConditionComponent &component, QWidget *parent = nullptr);
 
         //! Execute dialog.
         int exec(void);
@@ -44,4 +44,4 @@ class ComponentEditDialog : public QDialog
         
 };
 
-#endif /* __COMPONENT_VALUE_EDITOR_DIALOG_H__ */
+#endif /* COMPONENT_VALUE_EDITOR_DIALOG_H */

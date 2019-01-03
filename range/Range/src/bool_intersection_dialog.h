@@ -9,8 +9,8 @@
  *               declaration                                         *
  *********************************************************************/
 
-#ifndef __BOOL_INTERSECTION_DIALOG_H__
-#define __BOOL_INTERSECTION_DIALOG_H__
+#ifndef BOOL_INTERSECTION_DIALOG_H
+#define BOOL_INTERSECTION_DIALOG_H
 
 #include <QDialog>
 
@@ -31,7 +31,7 @@ class BoolIntersectionDialog : public QDialog
     public:
 
         //! Constructor.
-        explicit BoolIntersectionDialog(uint modelID, const QList<SessionEntityID> &entityIDs, QWidget *parent = 0);
+        explicit BoolIntersectionDialog(uint modelID, const QList<SessionEntityID> &entityIDs, QWidget *parent = nullptr);
 
         //! Execute dialog.
         int exec(void);
@@ -42,4 +42,4 @@ class BoolIntersectionDialog : public QDialog
 
 };
 
-#endif // __BOOL_INTERSECTION_DIALOG_H__
+#endif // BOOL_INTERSECTION_DIALOG_H

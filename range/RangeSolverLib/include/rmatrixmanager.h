@@ -8,8 +8,8 @@
  *  DESCRIPTION: Matrix manager class declaration                    *
  *********************************************************************/
 
-#ifndef __RMATRIXMANAGER_H__
-#define __RMATRIXMANAGER_H__
+#ifndef RMATRIXMANAGER_H
+#define RMATRIXMANAGER_H
 
 #include <rmlib.h>
 
@@ -42,4 +42,4 @@ class RMatrixManager
 
 };
 
-#endif // __RMATRIXMANAGER_H__
+#endif // RMATRIXMANAGER_H

@@ -9,8 +9,8 @@
  *********************************************************************/
 
 
-#ifndef __RML_TETRAHEDRON_H__
-#define __RML_TETRAHEDRON_H__
+#ifndef RML_TETRAHEDRON_H
+#define RML_TETRAHEDRON_H
 
 #include <rblib.h>
 
@@ -29,7 +29,7 @@ class RTetrahedron
     private:
 
         //! Internal initialization function.
-        void _init ( const RTetrahedron *pTetrahedron = 0 );
+        void _init ( const RTetrahedron *pTetrahedron = nullptr );
 
     public:
 

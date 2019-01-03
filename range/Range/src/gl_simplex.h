@@ -8,8 +8,8 @@
  *  DESCRIPTION: OpenGL simplex class declaration                    *
  *********************************************************************/
 
-#ifndef __GL_SIMPLEX_H__
-#define __GL_SIMPLEX_H__
+#ifndef GL_SIMPLEX_H
+#define GL_SIMPLEX_H
 
 #include <vector>
 
@@ -50,7 +50,7 @@ class GLSimplex : public GLObject
     private:
 
         //! Internal initialization function.
-        void _init(const GLSimplex *pGlSimplex = 0 );
+        void _init(const GLSimplex *pGlSimplex = nullptr );
 
     public:
 
@@ -86,4 +86,4 @@ class GLSimplex : public GLObject
 
 };
 
-#endif // __GL_SIMPLEX_H__
+#endif // GL_SIMPLEX_H

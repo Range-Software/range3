@@ -8,8 +8,8 @@
  *  DESCRIPTION: Iso dialog class declaration                        *
  *********************************************************************/
 
-#ifndef __ISO_DIALOG_H__
-#define __ISO_DIALOG_H__
+#ifndef ISO_DIALOG_H
+#define ISO_DIALOG_H
 
 #include <QDialog>
 
@@ -46,10 +46,10 @@ class IsoDialog : public QDialog
     public:
 
         //! Constructor.
-        explicit IsoDialog(uint modelID, QWidget *parent = 0);
+        explicit IsoDialog(uint modelID, QWidget *parent = nullptr);
 
         //! Constructor.
-        explicit IsoDialog(uint modelID, uint entityID, QWidget *parent = 0);
+        explicit IsoDialog(uint modelID, uint entityID, QWidget *parent = nullptr);
 
         //! Execute dialog.
         int exec(void);
@@ -72,4 +72,4 @@ class IsoDialog : public QDialog
         
 };
 
-#endif // __ISO_DIALOG_H__
+#endif // ISO_DIALOG_H

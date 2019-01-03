@@ -8,8 +8,8 @@
  *  DESCRIPTION: Update dialog class declaration                     *
  *********************************************************************/
 
-#ifndef __UPDATE_DIALOG_H__
-#define __UPDATE_DIALOG_H__
+#ifndef UPDATE_DIALOG_H
+#define UPDATE_DIALOG_H
 
 #include <QDialog>
 
@@ -30,11 +30,11 @@ class UpdateDialog : public QDialog
     public:
 
         //! Constructor.
-        explicit UpdateDialog(const RVersion &softwareVersion, const QString &softwareLink, QWidget *parent = 0);
+        explicit UpdateDialog(const RVersion &softwareVersion, const QString &softwareLink, QWidget *parent = nullptr);
 
         //! Execute dialog.
         int exec(void);
 
 };
 
-#endif // __UPDATE_DIALOG_H__
+#endif // UPDATE_DIALOG_H

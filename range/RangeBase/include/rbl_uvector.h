@@ -8,8 +8,8 @@
  *  DESCRIPTION: Unsigned integer vector class declaration           *
  *********************************************************************/
 
-#ifndef __RBL_UVECTOR_H__
-#define __RBL_UVECTOR_H__
+#ifndef RBL_UVECTOR_H
+#define RBL_UVECTOR_H
 
 #include <vector>
 
@@ -20,7 +20,7 @@ class RUVector : public std::vector<unsigned int>
     private:
 
         //! Internal initialization function.
-        void _init ( const RUVector *pArray = 0 );
+        void _init ( const RUVector *pArray = nullptr );
 
     public:
 
@@ -55,4 +55,4 @@ class RUVector : public std::vector<unsigned int>
         void print ( bool oneLine = false, bool newLine = false ) const;
 };
 
-#endif /* __RBL_UVECTOR_H__ */
+#endif /* RBL_UVECTOR_H */

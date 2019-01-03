@@ -8,8 +8,8 @@
  *  DESCRIPTION: Graph data class declaration                        *
  *********************************************************************/
 
-#ifndef __GRAPH_DATA_H__
-#define __GRAPH_DATA_H__
+#ifndef GRAPH_DATA_H
+#define GRAPH_DATA_H
 
 #include <string>
 
@@ -49,7 +49,7 @@ class GraphData : public QMap<double,RRVector>
     private:
 
         //! Internal initialization function.
-        void _init(const GraphData *pGraphData = 0);
+        void _init(const GraphData *pGraphData = nullptr);
 
     public:
 
@@ -119,4 +119,4 @@ class GraphData : public QMap<double,RRVector>
         
 };
 
-#endif // __GRAPH_DATA_H__
+#endif // GRAPH_DATA_H

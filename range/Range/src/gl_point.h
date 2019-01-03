@@ -8,8 +8,8 @@
  *  DESCRIPTION: OpenGL point class declaration                      *
  *********************************************************************/
 
-#ifndef __GL_POINT_H__
-#define __GL_POINT_H__
+#ifndef GL_POINT_H
+#define GL_POINT_H
 
 #include <rblib.h>
 
@@ -34,7 +34,7 @@ class GLPoint : public GLObject
     private:
 
         //! Internal initialization function.
-        void _init ( const GLPoint *pGlPoint = 0 );
+        void _init ( const GLPoint *pGlPoint = nullptr );
 
     public:
 
@@ -63,4 +63,4 @@ class GLPoint : public GLObject
 
 };
 
-#endif // __GL_POINT_H__
+#endif // GL_POINT_H

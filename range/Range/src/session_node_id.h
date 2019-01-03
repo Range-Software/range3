@@ -8,8 +8,8 @@
  *  DESCRIPTION: Session Node ID class declaration                   *
  *********************************************************************/
 
-#ifndef __SESSION_NODE_ID_H__
-#define __SESSION_NODE_ID_H__
+#ifndef SESSION_NODE_ID_H
+#define SESSION_NODE_ID_H
 
 #include <QtGlobal>
 
@@ -23,7 +23,7 @@ class SessionNodeID
     private:
 
         //! Internal initialization function.
-        void _init(const SessionNodeID *pSessionNodeID = 0);
+        void _init(const SessionNodeID *pSessionNodeID = nullptr);
 
     public:
 
@@ -65,4 +65,4 @@ class SessionNodeID
 
 };
 
-#endif // __SESSION_NODE_ID_H__
+#endif // SESSION_NODE_ID_H

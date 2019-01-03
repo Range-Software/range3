@@ -8,8 +8,8 @@
  *  DESCRIPTION: Convergence graph object class declaration          *
  *********************************************************************/
 
-#ifndef __CONVERGENCE_GRAPH_OBJECT_H__
-#define __CONVERGENCE_GRAPH_OBJECT_H__
+#ifndef CONVERGENCE_GRAPH_OBJECT_H
+#define CONVERGENCE_GRAPH_OBJECT_H
 
 #include "graph_object.h"
 
@@ -28,7 +28,7 @@ class ConvergenceGraphObject : public GraphObject
     public:
 
         //! Constructor.
-        explicit ConvergenceGraphObject(QObject *parent = 0);
+        explicit ConvergenceGraphObject(QObject *parent = nullptr);
 
         //! Return const reference to source file name.
         const QString & getSourceFileName(void) const;
@@ -55,4 +55,4 @@ class ConvergenceGraphObject : public GraphObject
 
 };
 
-#endif // __CONVERGENCE_GRAPH_OBJECT_H__
+#endif // CONVERGENCE_GRAPH_OBJECT_H

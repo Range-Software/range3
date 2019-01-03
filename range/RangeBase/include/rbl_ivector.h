@@ -8,8 +8,8 @@
  *  DESCRIPTION: Integer vector class declaration                    *
  *********************************************************************/
 
-#ifndef __RBL_IVECTOR_H__
-#define __RBL_IVECTOR_H__
+#ifndef RBL_IVECTOR_H
+#define RBL_IVECTOR_H
 
 #include <vector>
 
@@ -20,7 +20,7 @@ class RIVector : public std::vector<int>
     private:
 
         //! Internal initialization function.
-        void _init ( const RIVector *pArray = 0 );
+        void _init ( const RIVector *pArray = nullptr );
 
     public:
 
@@ -55,4 +55,4 @@ class RIVector : public std::vector<int>
         void print ( bool oneLine = false, bool newLine = false ) const;
 };
 
-#endif /* __RBL_IVECTOR_H__ */
+#endif /* RBL_IVECTOR_H */

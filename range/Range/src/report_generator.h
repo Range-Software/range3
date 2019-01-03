@@ -8,8 +8,8 @@
  *  DESCRIPTION: Report generator class declaration                  *
  *********************************************************************/
 
-#ifndef __REPORT_GENERATOR_H__
-#define __REPORT_GENERATOR_H__
+#ifndef REPORT_GENERATOR_H
+#define REPORT_GENERATOR_H
 
 #include <QObject>
 #include <QMap>
@@ -31,7 +31,7 @@ class ReportGenerator : public DocumentGenerator
     public:
 
         //! Constructor.
-        explicit ReportGenerator(uint modelID, QObject *parent = 0);
+        explicit ReportGenerator(uint modelID, QObject *parent = nullptr);
 
     protected:
 
@@ -55,4 +55,4 @@ class ReportGenerator : public DocumentGenerator
 
 };
 
-#endif // __REPORT_GENERATOR_H__
+#endif // REPORT_GENERATOR_H

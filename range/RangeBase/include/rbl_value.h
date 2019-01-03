@@ -8,8 +8,8 @@
  *  DESCRIPTION: Value class declaration                             *
  *********************************************************************/
 
-#ifndef __RBL_VALUE_H__
-#define __RBL_VALUE_H__
+#ifndef RBL_VALUE_H
+#define RBL_VALUE_H
 
 #include <vector>
 #include <typeinfo>
@@ -23,7 +23,7 @@ class RValue
     private:
 
         //! Internal initialization function.
-        void _init ( const RValue *pValue = 0 );
+        void _init ( const RValue *pValue = nullptr );
 
     protected:
 
@@ -236,4 +236,4 @@ bool RValue<T>::checkValue(const T &val) const
     return true;
 } /* RValue<T>::checkValue */
 
-#endif /* __RBL_VALUE_H__ */
+#endif /* RBL_VALUE_H */

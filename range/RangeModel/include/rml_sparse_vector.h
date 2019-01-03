@@ -8,8 +8,8 @@
  *  DESCRIPTION: Range sparse vector class declaration               *
  *********************************************************************/
 
-#ifndef __RML_SPARSE_VECTOR_H__
-#define __RML_SPARSE_VECTOR_H__
+#ifndef RML_SPARSE_VECTOR_H
+#define RML_SPARSE_VECTOR_H
 
 #include <vector>
 
@@ -56,7 +56,7 @@ class RSparseVector
     private:
 
         //! Internal initialization function.
-        void _init(const RSparseVector<T> *pVector = 0)
+        void _init(const RSparseVector<T> *pVector = nullptr)
         {
             if (pVector)
             {
@@ -175,4 +175,4 @@ class RSparseVector
 
 };
 
-#endif // __RML_SPARSE_VECTOR_H__
+#endif // RML_SPARSE_VECTOR_H

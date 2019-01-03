@@ -8,8 +8,8 @@
  *  DESCRIPTION: Range solver shared data class declaration          *
  *********************************************************************/
 
-#ifndef __RSOLVERSHAREDDATA_H__
-#define __RSOLVERSHAREDDATA_H__
+#ifndef RSOLVERSHAREDDATA_H
+#define RSOLVERSHAREDDATA_H
 
 #include <QMap>
 
@@ -26,7 +26,7 @@ class RSolverSharedData
     private:
 
         //! Internal initialization function.
-        void _init(const RSolverSharedData *pSolverSharedData = 0);
+        void _init(const RSolverSharedData *pSolverSharedData = nullptr);
 
     public:
 
@@ -58,4 +58,4 @@ class RSolverSharedData
 
 };
 
-#endif // __RSOLVERSHAREDDATA_H__
+#endif // RSOLVERSHAREDDATA_H

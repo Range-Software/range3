@@ -8,8 +8,8 @@
  *  DESCRIPTION: Draw engine tetrahedron class declaration           *
  *********************************************************************/
 
-#ifndef __DRAW_ENGINE_TRAHEDRON_H__
-#define __DRAW_ENGINE_TRAHEDRON_H__
+#ifndef DRAW_ENGINE_TRAHEDRON_H
+#define DRAW_ENGINE_TRAHEDRON_H
 
 #include "draw_engine_object.h"
 
@@ -21,7 +21,7 @@ class DrawEngineTetrahedron : public DrawEngineObject
     public:
 
         //! Constructor.
-        explicit DrawEngineTetrahedron(QObject *parent = 0);
+        explicit DrawEngineTetrahedron(QObject *parent = nullptr);
 
     protected:
 
@@ -30,4 +30,4 @@ class DrawEngineTetrahedron : public DrawEngineObject
 
 };
 
-#endif // __DRAW_ENGINE_TRAHEDRON_H__
+#endif // DRAW_ENGINE_TRAHEDRON_H

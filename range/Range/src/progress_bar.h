@@ -8,8 +8,8 @@
  *  DESCRIPTION: Progress bar class declaration                      *
  *********************************************************************/
 
-#ifndef __PROGRESS_BAR_H__
-#define __PROGRESS_BAR_H__
+#ifndef PROGRESS_BAR_H
+#define PROGRESS_BAR_H
 
 #include <QProgressBar>
 #include <QTimer>
@@ -31,7 +31,7 @@ class ProgressBar : public QProgressBar
     public:
 
         //! Constructor.
-        explicit ProgressBar(QWidget *parent = 0);
+        explicit ProgressBar(QWidget *parent = nullptr);
 
         //! Start pulsing.
         void startPulse(void);
@@ -60,4 +60,4 @@ class ProgressBar : public QProgressBar
         
 };
 
-#endif // __PROGRESS_BAR_H__
+#endif // PROGRESS_BAR_H

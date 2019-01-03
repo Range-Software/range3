@@ -8,8 +8,8 @@
  *  DESCRIPTION: Solver setup checker class declaration              *
  *********************************************************************/
 
-#ifndef __SOLVER_SETUP_CHECKER_H__
-#define __SOLVER_SETUP_CHECKER_H__
+#ifndef SOLVER_SETUP_CHECKER_H
+#define SOLVER_SETUP_CHECKER_H
 
 #include <rmlib.h>
 
@@ -24,7 +24,7 @@ class SolverSetupChecker
     private:
 
         //! Internal initialization function.
-        void _init(const SolverSetupChecker *pSolverSetupChecker = 0);
+        void _init(const SolverSetupChecker *pSolverSetupChecker = nullptr);
 
     public:
 
@@ -56,4 +56,4 @@ class SolverSetupChecker
 
 };
 
-#endif // __SOLVER_SETUP_CHECKER_H__
+#endif // SOLVER_SETUP_CHECKER_H

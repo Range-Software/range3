@@ -8,8 +8,8 @@
  *  DESCRIPTION: File IO operation functions declarations            *
  *********************************************************************/
 
-#ifndef __RML_FILE_IO_H__
-#define __RML_FILE_IO_H__
+#ifndef RML_FILE_IO_H
+#define RML_FILE_IO_H
 
 #include <rblib.h>
 
@@ -1019,4 +1019,4 @@ class RFileIO
 
 };
 
-#endif /* __RML_FILE_IO_H__ */
+#endif /* RML_FILE_IO_H */

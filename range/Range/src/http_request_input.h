@@ -8,8 +8,8 @@
  *  DESCRIPTION: HTTP request input class declaration                *
  *********************************************************************/
 
-#ifndef __HTTP_REQUEST_INPUT_H__
-#define __HTTP_REQUEST_INPUT_H__
+#ifndef HTTP_REQUEST_INPUT_H
+#define HTTP_REQUEST_INPUT_H
 
 #include <QString>
 #include <QMap>
@@ -46,7 +46,7 @@ class HttpRequestInput
     private:
 
         //! Internal initialization function.
-        void _init(const HttpRequestInput *pHttpRequestInput = 0);
+        void _init(const HttpRequestInput *pHttpRequestInput = nullptr);
 
     public:
 
@@ -95,4 +95,4 @@ class HttpRequestInput
 
 };
 
-#endif // __HTTP_REQUEST_INPUT_H__
+#endif // HTTP_REQUEST_INPUT_H

@@ -8,8 +8,8 @@
  *  DESCRIPTION: Model tree class declaration                        *
  *********************************************************************/
 
-#ifndef __MODEL_TREE_H__
-#define __MODEL_TREE_H__
+#ifndef MODEL_TREE_H
+#define MODEL_TREE_H
 
 #include <QTreeWidget>
 
@@ -29,7 +29,7 @@ class ModelTree : public QTreeWidget
 
     public:
         explicit ModelTree(ActionList *actionList,
-                           QObject    *parent = 0);
+                           QObject    *parent = nullptr);
 
         //! Return list of selected model IDs.
         QList<uint> getSelectedModelIDs(void) const;
@@ -43,7 +43,7 @@ class ModelTree : public QTreeWidget
     protected:
 
         //! Return all items in the tree widget.
-        QList<QTreeWidgetItem*> getAllItems(QTreeWidgetItem *parent = 0) const;
+        QList<QTreeWidgetItem*> getAllItems(QTreeWidgetItem *parent = nullptr) const;
 
         //! List of actions.
         ActionList *actionList;
@@ -118,4 +118,4 @@ class ModelTree : public QTreeWidget
         void onItemDoubleClicked(QTreeWidgetItem *item, int column);
 };
 
-#endif /* __MODEL_TREE_H__ */
+#endif /* MODEL_TREE_H */

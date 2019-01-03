@@ -21,6 +21,8 @@ const QString CentralTabWidget::informationIconFile(":/icons/file/pixmaps/range-
 const QString CentralTabWidget::importantIconFile(":/icons/file/pixmaps/range-important.svg");
 const QString CentralTabWidget::severeIconFile(":/icons/file/pixmaps/range-severe.svg");
 
+const bool useTabIcons = true;
+
 CentralTabWidget::CentralTabWidget(QWidget *parent)
     : QTabWidget(parent)
 {
@@ -144,21 +146,33 @@ void CentralTabWidget::setTabTitle(CentralTabWidget::Type tabType, RMessageType 
     if (!iconFile.isEmpty())
     {
         // TODO: For unknown reason this hangs if text is printed from QDialog::exec()
-//        this->setTabIcon(tabPosition,QIcon(iconFile));
+        if (useTabIcons)
+        {
+            this->setTabIcon(tabPosition,QIcon(iconFile));
+        }
         if (iconFile == CentralTabWidget::informationIconFile)
         {
-            defaultText.prepend("* ");
+            if (!useTabIcons)
+            {
+                defaultText.prepend("* ");
+            }
             tabTextColor = Qt::darkCyan;
         }
         else if (iconFile == CentralTabWidget::importantIconFile)
         {
-            defaultText.prepend("! ");
+            if (!useTabIcons)
+            {
+                defaultText.prepend("! ");
+            }
             tabTextColor = Qt::red;
         }
         else if (iconFile == CentralTabWidget::severeIconFile)
         {
-            defaultText.prepend("!!! ");
-            defaultText.append(" !!!");
+            if (!useTabIcons)
+            {
+                defaultText.prepend("!!! ");
+                defaultText.append(" !!!");
+            }
             tabTextColor = Qt::red;
         }
     }
@@ -276,7 +290,10 @@ void CentralTabWidget::onProcessReadyStandardError(const QString &message)
 
 void CentralTabWidget::onCurrentChanged(int tabPosition)
 {
-//    this->setTabIcon(tabPosition,QIcon());
+    if (useTabIcons)
+    {
+        this->setTabIcon(tabPosition,QIcon());
+    }
     if (tabPosition == this->applicationOutputTabPosition)
     {
         this->setTabTitle(CentralTabWidget::ApplicationOutput);

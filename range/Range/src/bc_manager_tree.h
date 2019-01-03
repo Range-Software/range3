@@ -8,8 +8,8 @@
  *  DESCRIPTION: Boundary condition manager tree class declaration   *
  *********************************************************************/
 
-#ifndef __BC_MANAGER_TREE_H__
-#define __BC_MANAGER_TREE_H__
+#ifndef BC_MANAGER_TREE_H
+#define BC_MANAGER_TREE_H
 
 #include <QTreeWidget>
 
@@ -33,7 +33,7 @@ class BCManagerTree : public QTreeWidget
     public:
 
         //! Constructor.
-        explicit BCManagerTree(QObject *parent = 0);
+        explicit BCManagerTree(QObject *parent = nullptr);
 
     protected:
 
@@ -70,4 +70,4 @@ class BCManagerTree : public QTreeWidget
 
 };
 
-#endif /* __BC_MANAGER_TREE_H__ */
+#endif /* BC_MANAGER_TREE_H */

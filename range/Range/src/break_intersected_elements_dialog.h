@@ -8,8 +8,8 @@
  *  DESCRIPTION: Break intersected elements dialog class declaration *
  *********************************************************************/
 
-#ifndef __BREAK_INTERSECTED_ELEMENTS_DIALOG_H__
-#define __BREAK_INTERSECTED_ELEMENTS_DIALOG_H__
+#ifndef BREAK_INTERSECTED_ELEMENTS_DIALOG_H
+#define BREAK_INTERSECTED_ELEMENTS_DIALOG_H
 
 #include <QDialog>
 #include <QSpinBox>
@@ -29,11 +29,11 @@ class BreakIntersectedElementsDialog : public QDialog
     public:
 
         //! Constructor.
-        explicit BreakIntersectedElementsDialog(uint modelID, QWidget *parent = 0);
+        explicit BreakIntersectedElementsDialog(uint modelID, QWidget *parent = nullptr);
 
         //! Execute dialog.
         int exec(void);
 
 };
 
-#endif // __BREAK_INTERSECTED_ELEMENTS_DIALOG_H__
+#endif // BREAK_INTERSECTED_ELEMENTS_DIALOG_H

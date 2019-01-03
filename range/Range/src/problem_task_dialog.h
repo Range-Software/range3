@@ -8,8 +8,8 @@
  *  DESCRIPTION: Problem task dialog class declaration               *
  *********************************************************************/
 
-#ifndef __PROBLEM_TASK_DIALOG_H__
-#define __PROBLEM_TASK_DIALOG_H__
+#ifndef PROBLEM_TASK_DIALOG_H
+#define PROBLEM_TASK_DIALOG_H
 
 #include <QDialog>
 
@@ -34,7 +34,7 @@ class ProblemTaskDialog : public QDialog
     public:
 
         //! Constructor.
-        explicit ProblemTaskDialog(uint modelID, QWidget *parent = 0);
+        explicit ProblemTaskDialog(uint modelID, QWidget *parent = nullptr);
 
         //! Execute dialog.
         int exec(void);
@@ -52,4 +52,4 @@ class ProblemTaskDialog : public QDialog
 
 };
 
-#endif // __PROBLEM_TASK_DIALOG_H__
+#endif // PROBLEM_TASK_DIALOG_H

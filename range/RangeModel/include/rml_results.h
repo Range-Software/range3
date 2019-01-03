@@ -8,8 +8,8 @@
  *  DESCRIPTION: Results class declaration                           *
  *********************************************************************/
 
-#ifndef __RML_RESULTS_H__
-#define __RML_RESULTS_H__
+#ifndef RML_RESULTS_H
+#define RML_RESULTS_H
 
 #include <string>
 #include <vector>
@@ -23,7 +23,7 @@ class RResults
     private:
 
         //! Internal initialization function.
-        void _init ( const RResults *results = 0 );
+        void _init ( const RResults *results = nullptr );
 
     protected:
 
@@ -126,4 +126,4 @@ class RResults
 
 };
 
-#endif /* __RML_RESULTS_H__ */
+#endif /* RML_RESULTS_H */

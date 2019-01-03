@@ -8,8 +8,8 @@
  *  DESCRIPTION: Limit box class declaration                         *
  *********************************************************************/
 
-#ifndef __RBL_BOX_H__
-#define __RBL_BOX_H__
+#ifndef RBL_BOX_H
+#define RBL_BOX_H
 
 #include "rbl_r3vector.h"
 
@@ -28,7 +28,7 @@ class RLimitBox
     private:
 
         //! Internal initialization function.
-        void _init(const RLimitBox *pBox = 0);
+        void _init(const RLimitBox *pBox = nullptr);
 
     public:
 
@@ -66,4 +66,4 @@ class RLimitBox
 
 };
 
-#endif // __RBL_BOX_H__
+#endif // RBL_BOX_H

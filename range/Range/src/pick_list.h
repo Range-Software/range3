@@ -8,8 +8,8 @@
  *  DESCRIPTION: Pick list class declaration                         *
  *********************************************************************/
 
-#ifndef __PICK_LIST_H__
-#define __PICK_LIST_H__
+#ifndef PICK_LIST_H
+#define PICK_LIST_H
 
 #include <QObject>
 #include <QVector>
@@ -30,7 +30,7 @@ class PickList : public QObject
     public:
 
         //! Constructor.
-        explicit PickList(QObject *parent = 0);
+        explicit PickList(QObject *parent = nullptr);
 
         //! Return multiple selection boolean.
         bool getMultipleSelection(void) const;
@@ -83,4 +83,4 @@ class PickList : public QObject
         
 };
 
-#endif // __PICK_LIST_H__
+#endif // PICK_LIST_H

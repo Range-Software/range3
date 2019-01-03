@@ -8,8 +8,8 @@
  *  DESCRIPTION: Clipping plane widget class declaration             *
  *********************************************************************/
 
-#ifndef __CLIPPING_PLANE_WIDGET_H__
-#define __CLIPPING_PLANE_WIDGET_H__
+#ifndef CLIPPING_PLANE_WIDGET_H
+#define CLIPPING_PLANE_WIDGET_H
 
 #include <QWidget>
 #include <QSlider>
@@ -30,7 +30,7 @@ class ClippingPlaneWidget : public QWidget
     public:
 
         //! Constructor.
-        explicit ClippingPlaneWidget(QWidget *parent = 0);
+        explicit ClippingPlaneWidget(QWidget *parent = nullptr);
 
     signals:
 
@@ -47,4 +47,4 @@ class ClippingPlaneWidget : public QWidget
 
 };
 
-#endif // __CLIPPING_PLANE_WIDGET_H__
+#endif // CLIPPING_PLANE_WIDGET_H

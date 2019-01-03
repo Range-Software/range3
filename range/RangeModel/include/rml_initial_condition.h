@@ -8,8 +8,8 @@
  *  DESCRIPTION: Initial condition class declaration                 *
  *********************************************************************/
 
-#ifndef __RML_INITIAL_CONDITION_H__
-#define __RML_INITIAL_CONDITION_H__
+#ifndef RML_INITIAL_CONDITION_H
+#define RML_INITIAL_CONDITION_H
 
 #include "rml_condition.h"
 #include "rml_problem.h"
@@ -43,7 +43,7 @@ class RInitialCondition : public RCondition
     private:
 
         //! Internal initialization function.
-        void _init ( const RInitialCondition *pCondition = 0 );
+        void _init ( const RInitialCondition *pCondition = nullptr );
 
         //! Set condition type.
         //! Calling thisfunction has no effect on condition
@@ -112,4 +112,4 @@ class RInitialCondition : public RCondition
 //! ++ operator
 void operator ++(RInitialConditionType &type, int increment);
 
-#endif /* __RML_INITIAL_CONDITION_H__ */
+#endif /* RML_INITIAL_CONDITION_H */

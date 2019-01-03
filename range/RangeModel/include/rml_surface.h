@@ -8,8 +8,8 @@
  *  DESCRIPTION: Surface class declaration                           *
  *********************************************************************/
 
-#ifndef __RML_SURFACE_H__
-#define __RML_SURFACE_H__
+#ifndef RML_SURFACE_H
+#define RML_SURFACE_H
 
 #include <vector>
 
@@ -28,7 +28,7 @@ class RSurface : public RElementGroup
     private:
 
         //! Internal initialization function.
-        void _init ( const RSurface *pSurface = 0 );
+        void _init ( const RSurface *pSurface = nullptr );
 
     protected:
 
@@ -79,4 +79,4 @@ class RSurface : public RElementGroup
 
 };
 
-#endif /* __RML_SURFACE_H__ */
+#endif /* RML_SURFACE_H */

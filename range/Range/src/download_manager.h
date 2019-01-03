@@ -8,8 +8,8 @@
  *  DESCRIPTION: Download manager class declaration                  *
  *********************************************************************/
 
-#ifndef __DOWNLOAD_MANAGER_H__
-#define __DOWNLOAD_MANAGER_H__
+#ifndef DOWNLOAD_MANAGER_H
+#define DOWNLOAD_MANAGER_H
 
 #include <QFile>
 #include <QObject>
@@ -37,7 +37,7 @@ class DownloadManager: public QObject
 
     public:
 
-        DownloadManager(QObject *parent = 0);
+        DownloadManager(QObject *parent = nullptr);
 
         uint append(const QUrl &url);
         static QString saveFileNameFromUrl(const QUrl &url);
@@ -59,4 +59,4 @@ class DownloadManager: public QObject
 
 };
 
-#endif // __DOWNLOAD_MANAGER_H__
+#endif // DOWNLOAD_MANAGER_H

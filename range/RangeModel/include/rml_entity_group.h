@@ -8,8 +8,8 @@
  *  DESCRIPTION: Entity group class declaration                      *
  *********************************************************************/
 
-#ifndef __RML_ENTITY_GROUP_H__
-#define __RML_ENTITY_GROUP_H__
+#ifndef RML_ENTITY_GROUP_H
+#define RML_ENTITY_GROUP_H
 
 #include "rml_entity_group_data.h"
 
@@ -82,7 +82,7 @@ class REntityGroup
     private:
 
         //! Internal initialization function.
-        void _init ( const REntityGroup *pEntityGroup = 0 );
+        void _init ( const REntityGroup *pEntityGroup = nullptr );
 
     protected:
 
@@ -149,4 +149,4 @@ class REntityGroup
 
 };
 
-#endif /* __RML_ENTITY_GROUP_H__ */
+#endif /* RML_ENTITY_GROUP_H */

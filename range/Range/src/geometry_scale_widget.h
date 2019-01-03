@@ -8,8 +8,8 @@
  *  DESCRIPTION: Geometry scale widget class declaration             *
  *********************************************************************/
 
-#ifndef __GEOMETRY_SCALE_WIDGET_H__
-#define __GEOMETRY_SCALE_WIDGET_H__
+#ifndef GEOMETRY_SCALE_WIDGET_H
+#define GEOMETRY_SCALE_WIDGET_H
 
 #include <QGroupBox>
 #include <QWidget>
@@ -41,7 +41,7 @@ class GeometryScaleWidget : public QWidget
     public:
 
         //! Constructor.
-        explicit GeometryScaleWidget(const RR3Vector &center = RR3Vector(), const RR3Vector &scale = RR3Vector(1.0,1.0,1.0), QWidget *parent = 0);
+        explicit GeometryScaleWidget(const RR3Vector &center = RR3Vector(), const RR3Vector &scale = RR3Vector(1.0,1.0,1.0), QWidget *parent = nullptr);
 
         //! Destructor.
         ~GeometryScaleWidget();
@@ -73,4 +73,4 @@ class GeometryScaleWidget : public QWidget
 
 };
 
-#endif // __GEOMETRY_SCALE_WIDGET_H__
+#endif // GEOMETRY_SCALE_WIDGET_H

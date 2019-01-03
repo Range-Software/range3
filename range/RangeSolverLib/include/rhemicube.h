@@ -8,8 +8,8 @@
  *  DESCRIPTION: View-factor hemi cube class declaration             *
  *********************************************************************/
 
-#ifndef __RHEMICUBE_H__
-#define __RHEMICUBE_H__
+#ifndef RHEMICUBE_H
+#define RHEMICUBE_H
 
 #include <vector>
 
@@ -31,7 +31,7 @@ class RHemiCube
     private:
 
         //! Internal initialization function.
-        void _init(const RHemiCube *pHemiCube = 0);
+        void _init(const RHemiCube *pHemiCube = nullptr);
 
     public:
 
@@ -68,4 +68,4 @@ class RHemiCube
 
 };
 
-#endif // __RHEMICUBE_H__
+#endif // RHEMICUBE_H

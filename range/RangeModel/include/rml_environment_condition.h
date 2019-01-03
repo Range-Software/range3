@@ -8,8 +8,8 @@
  *  DESCRIPTION: Environment condition class declaration                *
  *********************************************************************/
 
-#ifndef __RML_ENVIRONMENT_CONDITION_H__
-#define __RML_ENVIRONMENT_CONDITION_H__
+#ifndef RML_ENVIRONMENT_CONDITION_H
+#define RML_ENVIRONMENT_CONDITION_H
 
 #include "rml_condition.h"
 #include "rml_problem.h"
@@ -38,7 +38,7 @@ class REnvironmentCondition : public RCondition
     private:
 
         //! Internal initialization function.
-        void _init ( const REnvironmentCondition *pCondition = 0 );
+        void _init ( const REnvironmentCondition *pCondition = nullptr );
 
         //! Set condition type.
         //! Calling thisfunction has no effect on condition
@@ -107,4 +107,4 @@ class REnvironmentCondition : public RCondition
 //! ++ operator
 void operator ++(REnvironmentConditionType &type, int increment);
 
-#endif /* __RML_ENVIRONMENT_CONDITION_H__ */
+#endif /* RML_ENVIRONMENT_CONDITION_H */

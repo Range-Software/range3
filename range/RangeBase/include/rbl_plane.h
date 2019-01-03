@@ -8,8 +8,8 @@
  *  DESCRIPTION: Plane class declaration                             *
  *********************************************************************/
 
-#ifndef __RBL_PLANE_H__
-#define __RBL_PLANE_H__
+#ifndef RBL_PLANE_H
+#define RBL_PLANE_H
 
 #include "rbl_r3vector.h"
 #include "rbl_rmatrix.h"
@@ -27,7 +27,7 @@ class RPlane
     private:
 
         //! Internal initialization function.
-        void _init ( const RPlane *pPlane = 0 );
+        void _init ( const RPlane *pPlane = nullptr );
 
     public:
 
@@ -84,4 +84,4 @@ class RPlane
 
 };
 
-#endif /* __RBL_PLANE_H__ */
+#endif /* RBL_PLANE_H */

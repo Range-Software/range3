@@ -8,8 +8,8 @@
  *  DESCRIPTION: File updater class declaration                      *
  *********************************************************************/
 
-#ifndef __FILE_UPDATER_H__
-#define __FILE_UPDATER_H__
+#ifndef FILE_UPDATER_H
+#define FILE_UPDATER_H
 
 #include <QString>
 #include <QList>
@@ -30,7 +30,7 @@ class FileUpdater : public Job
     public:
 
         //! Constructor.
-        explicit FileUpdater(QObject *parent = 0);
+        explicit FileUpdater(QObject *parent = nullptr);
 
         //! Add file to be updated.
         void addFile(const QString &source, const QString &destination);
@@ -42,4 +42,4 @@ class FileUpdater : public Job
 
 };
 
-#endif // __FILE_UPDATER_H__
+#endif // FILE_UPDATER_H

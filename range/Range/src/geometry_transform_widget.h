@@ -8,8 +8,8 @@
  *  DESCRIPTION: Geometry transform widget class declaration         *
  *********************************************************************/
 
-#ifndef __GEOMETRY_TRANSFORM_WIDGET_H__
-#define __GEOMETRY_TRANSFORM_WIDGET_H__
+#ifndef GEOMETRY_TRANSFORM_WIDGET_H
+#define GEOMETRY_TRANSFORM_WIDGET_H
 
 #include <QWidget>
 #include <QPushButton>
@@ -54,7 +54,7 @@ class GeometryTransformWidget : public QWidget
     public:
 
         //! Constructor.
-        explicit GeometryTransformWidget(QWidget *parent = 0);
+        explicit GeometryTransformWidget(QWidget *parent = nullptr);
 
     private:
 
@@ -118,4 +118,4 @@ class GeometryTransformWidget : public QWidget
 
 };
 
-#endif // __GEOMETRY_TRANSFORM_WIDGET_H__
+#endif // GEOMETRY_TRANSFORM_WIDGET_H

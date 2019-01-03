@@ -8,8 +8,8 @@
  *  DESCRIPTION: ElementGroup class declaration                      *
  *********************************************************************/
 
-#ifndef __RML_ELEMENT_GROUP_H__
-#define __RML_ELEMENT_GROUP_H__
+#ifndef RML_ELEMENT_GROUP_H
+#define RML_ELEMENT_GROUP_H
 
 #include <vector>
 #include <map>
@@ -29,7 +29,7 @@ class RElementGroup : public REntityGroup
     private:
 
         //! Internal initialization function.
-        void _init ( const RElementGroup *pElementGroup = 0 );
+        void _init ( const RElementGroup *pElementGroup = nullptr );
 
     protected:
 
@@ -242,4 +242,4 @@ class RElementGroup : public REntityGroup
 
 };
 
-#endif /* __RML_ELEMENT_GROUP_H__ */
+#endif /* RML_ELEMENT_GROUP_H */

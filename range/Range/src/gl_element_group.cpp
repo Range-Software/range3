@@ -115,7 +115,7 @@ void GLElementGroup::draw(void)
         return;
     }
 
-    GLEntityList *pGlEntityList = 0;
+    GLEntityList *pGlEntityList = nullptr;
 
     switch (this->getEntityID().getType())
     {
@@ -141,7 +141,7 @@ void GLElementGroup::draw(void)
 
         RVariableType scalarVariableType = this->getData().findVariableByDisplayType(R_ENTITY_GROUP_VARIABLE_DISPLAY_SCALAR);
         uint scalarVariablePosition = pModel->findVariable(scalarVariableType);
-        const RVariable *pScalarVariable = 0;
+        const RVariable *pScalarVariable = nullptr;
         if (scalarVariablePosition != RConstants::eod)
         {
             pScalarVariable = &pModel->getVariable(scalarVariablePosition);
@@ -149,7 +149,7 @@ void GLElementGroup::draw(void)
 
         RVariableType displacementVariableType = this->getData().findVariableByDisplayType(R_ENTITY_GROUP_VARIABLE_DISPLAY_DISPLACEMENT);
         uint displacementVarPosition = pModel->findVariable(displacementVariableType);
-        const RVariable *pDisplacementVariable = 0;
+        const RVariable *pDisplacementVariable = nullptr;
         if (displacementVarPosition != RConstants::eod)
         {
             pDisplacementVariable = &pModel->getVariable(displacementVarPosition);

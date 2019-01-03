@@ -9,8 +9,8 @@
  *               Used as data object in RVariable                    *
  *********************************************************************/
 
-#ifndef __VARIABLE_DATA_H__
-#define __VARIABLE_DATA_H__
+#ifndef VARIABLE_DATA_H
+#define VARIABLE_DATA_H
 
 #include <rblib.h>
 #include <rmlib.h>
@@ -20,7 +20,7 @@ class VariableData
     private:
 
         //! Internal initialization function.
-        void _init ( const VariableData *pVariableData = 0 );
+        void _init ( const VariableData *pVariableData = nullptr );
 
     protected:
 
@@ -50,4 +50,4 @@ class VariableData
 
 };
 
-#endif /* __VARIABLE_DATA_H__ */
+#endif /* VARIABLE_DATA_H */

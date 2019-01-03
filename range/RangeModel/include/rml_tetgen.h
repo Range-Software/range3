@@ -8,8 +8,8 @@
  *  DESCRIPTION: RTetGen class declaration                           *
  *********************************************************************/
 
-#ifndef __RTETGEN_H__
-#define __RTETGEN_H__
+#ifndef RTETGEN_H
+#define RTETGEN_H
 
 #include <tetgen.h>
 
@@ -31,4 +31,4 @@ class RTetGen : public tetgenio
 
 };
 
-#endif /* __RTETGEN_H__ */
+#endif /* RTETGEN_H */

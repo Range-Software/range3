@@ -8,8 +8,8 @@
  *  DESCRIPTION: Variable data class declaration                     *
  *********************************************************************/
 
-#ifndef __RML_VARIABLE_DATA_H__
-#define __RML_VARIABLE_DATA_H__
+#ifndef RML_VARIABLE_DATA_H
+#define RML_VARIABLE_DATA_H
 
 #include <QString>
 
@@ -32,7 +32,7 @@ class RVariableData
     private:
 
         //! Internal initialization function
-        void _init(const RVariableData *pVariableData = 0);
+        void _init(const RVariableData *pVariableData = nullptr);
 
     public:
 
@@ -80,4 +80,4 @@ class RVariableData
 
 };
 
-#endif // __RML_VARIABLE_DATA_H__
+#endif // RML_VARIABLE_DATA_H

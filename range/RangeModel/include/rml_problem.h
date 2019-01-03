@@ -8,8 +8,8 @@
  *  DESCRIPTION: Problem class declaration                           *
  *********************************************************************/
 
-#ifndef __RML_PROBLEM_H__
-#define __RML_PROBLEM_H__
+#ifndef RML_PROBLEM_H
+#define RML_PROBLEM_H
 
 #include <QString>
 #include <vector>
@@ -28,7 +28,7 @@ class RProblem
     private:
 
         //! Internal initialization function.
-        void _init ( const RProblem *pProblem = 0 );
+        void _init ( const RProblem *pProblem = nullptr );
 
     protected:
 
@@ -131,4 +131,4 @@ class RProblem
 
 };
 
-#endif /* __RML_PROBLEM_H__ */
+#endif /* RML_PROBLEM_H */

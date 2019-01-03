@@ -8,8 +8,8 @@
  *  DESCRIPTION: Help general and tricks widget class declaration    *
  *********************************************************************/
 
-#ifndef __HELP_GENERAL_WIDGET_H__
-#define __HELP_GENERAL_WIDGET_H__
+#ifndef HELP_GENERAL_WIDGET_H
+#define HELP_GENERAL_WIDGET_H
 
 #include "document_widget.h"
 
@@ -25,4 +25,4 @@ class HelpGeneralWidget : public DocumentWidget
 
 };
 
-#endif // __HELP_GENERAL_WIDGET_H__
+#endif // HELP_GENERAL_WIDGET_H

@@ -8,8 +8,8 @@
  *  DESCRIPTION: Results variable tree class declaration             *
  *********************************************************************/
 
-#ifndef __RESULTS_VARIABLE_TREE_H__
-#define __RESULTS_VARIABLE_TREE_H__
+#ifndef RESULTS_VARIABLE_TREE_H
+#define RESULTS_VARIABLE_TREE_H
 
 #include <QTreeWidget>
 #include <QCheckBox>
@@ -49,7 +49,7 @@ class ResultsVariableTree : public QTreeWidget
     public:
 
         //! Constructor.
-        explicit ResultsVariableTree(QWidget *parent = 0);
+        explicit ResultsVariableTree(QWidget *parent = nullptr);
 
     protected:
 
@@ -115,4 +115,4 @@ class ResultsVariableTree : public QTreeWidget
         
 };
 
-#endif // __RESULTS_VARIABLE_TREE_H__
+#endif // RESULTS_VARIABLE_TREE_H

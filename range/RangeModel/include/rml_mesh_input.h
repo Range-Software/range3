@@ -8,8 +8,8 @@
  *  DESCRIPTION: RMeshInput class declaration                        *
  *********************************************************************/
 
-#ifndef __RML_MESH_INPUT_H__
-#define __RML_MESH_INPUT_H__
+#ifndef RML_MESH_INPUT_H
+#define RML_MESH_INPUT_H
 
 #include <QString>
 
@@ -53,7 +53,7 @@ class RMeshInput
     private:
 
         //! Internal initialization function.
-        void _init ( const RMeshInput *pMeshInput = 0 );
+        void _init ( const RMeshInput *pMeshInput = nullptr );
 
     public:
 
@@ -155,4 +155,4 @@ class RMeshInput
 
 };
 
-#endif // __RML_MESH_INPUT_H__
+#endif // RML_MESH_INPUT_H

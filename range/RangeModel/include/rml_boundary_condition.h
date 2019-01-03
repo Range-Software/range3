@@ -8,8 +8,8 @@
  *  DESCRIPTION: Boundary condition class declaration                *
  *********************************************************************/
 
-#ifndef __RML_BOUNDARY_CONDITION_H__
-#define __RML_BOUNDARY_CONDITION_H__
+#ifndef RML_BOUNDARY_CONDITION_H
+#define RML_BOUNDARY_CONDITION_H
 
 #include "rml_condition.h"
 
@@ -67,7 +67,7 @@ class RBoundaryCondition : public RCondition
     private:
 
         //! Internal initialization function.
-        void _init ( const RBoundaryCondition *pCondition = 0 );
+        void _init ( const RBoundaryCondition *pCondition = nullptr );
 
         //! Set condition type.
         //! Calling thisfunction has no effect on condition
@@ -203,4 +203,4 @@ class RBoundaryCondition : public RCondition
 void operator ++(RBoundaryConditionType &type, int increment);
 
 
-#endif /* __RML_BOUNDARY_CONDITION_H__ */
+#endif /* RML_BOUNDARY_CONDITION_H */

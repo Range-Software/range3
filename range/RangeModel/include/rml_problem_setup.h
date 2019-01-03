@@ -8,8 +8,8 @@
  *  DESCRIPTION: Problem setup class declaration                     *
  *********************************************************************/
 
-#ifndef __RML_PROBLEM_SETUP_H__
-#define __RML_PROBLEM_SETUP_H__
+#ifndef RML_PROBLEM_SETUP_H
+#define RML_PROBLEM_SETUP_H
 
 #include "rml_mesh_setup.h"
 #include "rml_modal_setup.h"
@@ -32,7 +32,7 @@ class RProblemSetup
     private:
 
         //! Internal initialization function.
-        void _init(const RProblemSetup *pProblemSetup = 0);
+        void _init(const RProblemSetup *pProblemSetup = nullptr);
 
     public:
 
@@ -86,4 +86,4 @@ class RProblemSetup
 
 };
 
-#endif // __RML_PROBLEM_SETUP_H__
+#endif // RML_PROBLEM_SETUP_H

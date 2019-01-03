@@ -8,8 +8,8 @@
  *  DESCRIPTION: Locker functions                                    *
  *********************************************************************/
 
-#ifndef __LOCKER_H__
-#define __LOCKER_H__
+#ifndef LOCKER_H
+#define LOCKER_H
 
 #include <QMutex>
 
@@ -36,4 +36,4 @@ class Locker
         QMutex * getMutexPtr(void);
 };
 
-#endif /* __LOCKER_H__ */
+#endif /* LOCKER_H */

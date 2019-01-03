@@ -8,8 +8,8 @@
  *  DESCRIPTION: Material list (database) declaration                *
  *********************************************************************/
 
-#ifndef __MATERIAL_LIST_H__
-#define __MATERIAL_LIST_H__
+#ifndef MATERIAL_LIST_H
+#define MATERIAL_LIST_H
 
 #include <QObject>
 
@@ -46,7 +46,7 @@ class MaterialList : public QObject, public RMaterialList
         //! Delete material with given name.
         //! Returns number of removed materials.
         unsigned int remove(const QString &materialName,
-                            unsigned int      *id = 0);
+                            unsigned int      *id = nullptr);
 
         //! Rename material with given name to new name.
         bool rename(const QString &materialOldName,
@@ -91,4 +91,4 @@ class MaterialList : public QObject, public RMaterialList
     
 };
 
-#endif /* __MATERIAL_LIST_H__ */
+#endif /* MATERIAL_LIST_H */

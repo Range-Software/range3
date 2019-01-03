@@ -8,8 +8,8 @@
  *  DESCRIPTION: Keyboard shortcuts editor class declaration         *
  *********************************************************************/
 
-#ifndef __KEYBOARD_SHORTCUTS_EDIT_H__
-#define __KEYBOARD_SHORTCUTS_EDIT_H__
+#ifndef KEYBOARD_SHORTCUTS_EDIT_H
+#define KEYBOARD_SHORTCUTS_EDIT_H
 
 #include <QTreeWidget>
 #include <QLineEdit>
@@ -34,7 +34,7 @@ class KeyboardShortcutsEdit : public QWidget
     public:
 
         //! Constructor.
-        explicit KeyboardShortcutsEdit(const ActionDefinition *actionDefinition,QWidget *parent = 0);
+        explicit KeyboardShortcutsEdit(const ActionDefinition *actionDefinition,QWidget *parent = nullptr);
 
         //! Reset to default.
         void resetToDefault(void);
@@ -68,4 +68,4 @@ class KeyboardShortcutsEdit : public QWidget
 
 };
 
-#endif // __KEYBOARD_SHORTCUTS_EDIT_H__
+#endif // KEYBOARD_SHORTCUTS_EDIT_H

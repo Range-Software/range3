@@ -8,8 +8,8 @@
  *  DESCRIPTION: Value table class declaration                       *
  *********************************************************************/
 
-#ifndef __VALUE_TABLE_H__
-#define __VALUE_TABLE_H__
+#ifndef VALUE_TABLE_H
+#define VALUE_TABLE_H
 
 #include <QTableWidget>
 #include <QAction>
@@ -39,7 +39,7 @@ class ValueTable : public QTableWidget
     public:
 
         //! Constructor.
-        explicit ValueTable(QWidget *parent = 0);
+        explicit ValueTable(QWidget *parent = nullptr);
 
         //! Set value data type.
         void setDataType(RVariableDataType dataType);
@@ -89,4 +89,4 @@ class ValueTable : public QTableWidget
         
 };
 
-#endif /* __VALUE_TABLE_H__ */
+#endif /* VALUE_TABLE_H */

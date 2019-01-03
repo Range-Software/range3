@@ -8,8 +8,8 @@
  *  DESCRIPTION: Segment class declaration                           *
  *********************************************************************/
 
-#ifndef __RML_SEGMENT_H__
-#define __RML_SEGMENT_H__
+#ifndef RML_SEGMENT_H
+#define RML_SEGMENT_H
 
 #include <rblib.h>
 
@@ -28,7 +28,7 @@ class RSegment
     private:
 
         //! Internal initialization function.
-        void _init ( const RSegment *pSegment = 0 );
+        void _init ( const RSegment *pSegment = nullptr );
 
     public:
 
@@ -160,4 +160,4 @@ class RSegment
 
 };
 
-#endif /* __RML_SEGMENT_H__ */
+#endif /* RML_SEGMENT_H */

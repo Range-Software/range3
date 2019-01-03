@@ -8,8 +8,8 @@
  *  DESCRIPTION: Version class declaration                           *
  *********************************************************************/
 
-#ifndef __RBL_VERSION_H__
-#define __RBL_VERSION_H__
+#ifndef RBL_VERSION_H
+#define RBL_VERSION_H
 
 #include <QString>
 
@@ -46,7 +46,7 @@ class RVersion
     private:
 
         //! Internal initialization function.
-        void _init ( const RVersion *pVersion = 0 );
+        void _init ( const RVersion *pVersion = nullptr );
 
     public:
 
@@ -115,4 +115,4 @@ class RVersion
 
 };
 
-#endif /* __RBL_VERSION_H__ */
+#endif /* RBL_VERSION_H */

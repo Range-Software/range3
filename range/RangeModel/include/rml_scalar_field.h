@@ -8,8 +8,8 @@
  *  DESCRIPTION: Scalar field class declaration                      *
  *********************************************************************/
 
-#ifndef __RML_SCALAR_FIELD_H__
-#define __RML_SCALAR_FIELD_H__
+#ifndef RML_SCALAR_FIELD_H
+#define RML_SCALAR_FIELD_H
 
 #include <vector>
 
@@ -34,7 +34,7 @@ class RScalarField : public RVectorField
     private:
 
         //! Internal initialization function.
-        void _init ( const RScalarField *pScalarField = 0 );
+        void _init ( const RScalarField *pScalarField = nullptr );
 
     public:
 
@@ -64,4 +64,4 @@ class RScalarField : public RVectorField
 
 };
 
-#endif // __RML_SCALAR_FIELD_H__
+#endif // RML_SCALAR_FIELD_H

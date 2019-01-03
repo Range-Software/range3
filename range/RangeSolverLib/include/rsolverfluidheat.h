@@ -8,8 +8,8 @@
  *  DESCRIPTION: Fluid - heat transfer solver class declaration      *
  *********************************************************************/
 
-#ifndef __RSOLVERFLUIDHEAT_H__
-#define __RSOLVERFLUIDHEAT_H__
+#ifndef RSOLVERFLUIDHEAT_H
+#define RSOLVERFLUIDHEAT_H
 
 #include "rmatrixmanager.h"
 #include "rsolvergeneric.h"
@@ -64,7 +64,7 @@ class RSolverFluidHeat : public RSolverGeneric
     private:
 
         //! Internal initialization function.
-        void _init(const RSolverFluidHeat *pSolver = 0);
+        void _init(const RSolverFluidHeat *pSolver = nullptr);
 
     public:
 
@@ -132,4 +132,4 @@ class RSolverFluidHeat : public RSolverGeneric
 
 };
 
-#endif // __RSOLVERFLUIDHEAT_H__
+#endif // RSOLVERFLUIDHEAT_H

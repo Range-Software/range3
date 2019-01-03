@@ -8,8 +8,8 @@
  *  DESCRIPTION: Matrix Solver class declaration                     *
  *********************************************************************/
 
-#ifndef __RML_MATRIX_SOLVER_H__
-#define __RML_MATRIX_SOLVER_H__
+#ifndef RML_MATRIX_SOLVER_H
+#define RML_MATRIX_SOLVER_H
 
 #include <QString>
 
@@ -49,7 +49,7 @@ class RMatrixSolverConf
     private:
 
         //! Internal initialization function.
-        void _init ( const RMatrixSolverConf *pMatrixSolver = 0 );
+        void _init ( const RMatrixSolverConf *pMatrixSolver = nullptr );
 
     public:
 
@@ -111,4 +111,4 @@ class RMatrixSolverConf
         static const QString & getId ( RMatrixSolverType type );
 };
 
-#endif /* __RML_MATRIX_SOLVER_H__ */
+#endif /* RML_MATRIX_SOLVER_H */

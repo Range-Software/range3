@@ -8,8 +8,8 @@
  *  DESCRIPTION: Cut dialog class declaration                        *
  *********************************************************************/
 
-#ifndef __CUT_DIALOG_H__
-#define __CUT_DIALOG_H__
+#ifndef CUT_DIALOG_H
+#define CUT_DIALOG_H
 
 #include <QDialog>
 #include <QDoubleSpinBox>
@@ -37,7 +37,7 @@ class CutDialog : public QDialog
     public:
 
         //! Constructor.
-        explicit CutDialog(uint modelID, uint entityID, QWidget *parent = 0);
+        explicit CutDialog(uint modelID, uint entityID, QWidget *parent = nullptr);
         
     private slots:
 
@@ -58,4 +58,4 @@ class CutDialog : public QDialog
         
 };
 
-#endif // __CUT_DIALOG_H__
+#endif // CUT_DIALOG_H

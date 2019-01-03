@@ -8,8 +8,8 @@
  *  DESCRIPTION: OpenGL text renderer class declaration              *
  *********************************************************************/
 
-#ifndef __GL_TEXT_RENDERER_H__
-#define __GL_TEXT_RENDERER_H__
+#ifndef GL_TEXT_RENDERER_H
+#define GL_TEXT_RENDERER_H
 
 #include <QList>
 #include <QPainter>
@@ -27,7 +27,7 @@ class GLTextRenderer
     private:
 
         //! Internal initialization function.
-        void _init(const GLTextRenderer *pGlTextRenderer = 0);
+        void _init(const GLTextRenderer *pGlTextRenderer = nullptr);
 
     public:
 
@@ -54,4 +54,4 @@ class GLTextRenderer
 
 };
 
-#endif // __GL_TEXT_RENDERER_H__
+#endif // GL_TEXT_RENDERER_H

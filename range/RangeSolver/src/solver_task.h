@@ -8,8 +8,8 @@
  *  DESCRIPTION: Solver task class declaration                       *
  *********************************************************************/
 
-#ifndef __SOLVER_TASK_H__
-#define __SOLVER_TASK_H__
+#ifndef SOLVER_TASK_H
+#define SOLVER_TASK_H
 
 #include <QObject>
 #include <QCoreApplication>
@@ -39,7 +39,7 @@ class SolverTask : public QObject
     public:
 
         //! Constructor.
-        explicit SolverTask(const SolverInput &solverInput, QCoreApplication *app, QObject *parent = 0);
+        explicit SolverTask(const SolverInput &solverInput, QCoreApplication *app, QObject *parent = nullptr);
 
     signals:
 
@@ -53,4 +53,4 @@ class SolverTask : public QObject
 
 };
 
-#endif // __SOLVER_TASK_H__
+#endif // SOLVER_TASK_H

@@ -8,8 +8,8 @@
  *  DESCRIPTION: Solver manager class declaration                    *
  *********************************************************************/
 
-#ifndef __SOLVER_MANAGER_H__
-#define __SOLVER_MANAGER_H__
+#ifndef SOLVER_MANAGER_H
+#define SOLVER_MANAGER_H
 
 #include <QObject>
 #include <QLocalServer>
@@ -40,7 +40,7 @@ class SolverManager : public JobManager
     public:
 
         //! Constructor
-        explicit SolverManager(QObject *parent = 0);
+        explicit SolverManager(QObject *parent = nullptr);
 
         //! Return static instance of the manager.
         static SolverManager & getInstance(void);
@@ -89,4 +89,4 @@ class SolverManager : public JobManager
         
 };
 
-#endif // __SOLVER_MANAGER_H__
+#endif // SOLVER_MANAGER_H

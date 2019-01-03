@@ -8,8 +8,8 @@
  *  DESCRIPTION: Point class definition                              *
  *********************************************************************/
 
-#ifndef __RML_POINT_H__
-#define __RML_POINT_H__
+#ifndef RML_POINT_H
+#define RML_POINT_H
 
 #include <vector>
 
@@ -28,7 +28,7 @@ class RPoint : public RElementGroup
     private:
 
         //! Internal initialization function.
-        void _init ( const RPoint *pPoint = 0 );
+        void _init ( const RPoint *pPoint = nullptr );
 
     protected:
 
@@ -60,4 +60,4 @@ class RPoint : public RElementGroup
 
 };
 
-#endif /* __RML_POINT_H__ */
+#endif /* RML_POINT_H */

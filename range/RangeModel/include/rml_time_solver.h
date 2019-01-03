@@ -8,8 +8,8 @@
  *  DESCRIPTION: Time-Solver class declaration                       *
  *********************************************************************/
 
-#ifndef __RML_TIME_SOLVER_H__
-#define __RML_TIME_SOLVER_H__
+#ifndef RML_TIME_SOLVER_H
+#define RML_TIME_SOLVER_H
 
 #include <vector>
 #include <QString>
@@ -69,7 +69,7 @@ class RTimeSolver
     private:
 
         //! Internal initialization function.
-        void _init ( const RTimeSolver *pTimeSolver = 0 );
+        void _init ( const RTimeSolver *pTimeSolver = nullptr );
 
         //! Sort array of times.
         void sort ( void );
@@ -198,4 +198,4 @@ class RTimeSolver
 
 };
 
-#endif /* __RML_TIME_SOLVER_H__ */
+#endif /* RML_TIME_SOLVER_H */

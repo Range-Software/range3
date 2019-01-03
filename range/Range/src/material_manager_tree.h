@@ -8,8 +8,8 @@
  *  DESCRIPTION: Material manager tree class declaration             *
  *********************************************************************/
 
-#ifndef __MATERIAL_MANAGER_TREE_H__
-#define __MATERIAL_MANAGER_TREE_H__
+#ifndef MATERIAL_MANAGER_TREE_H
+#define MATERIAL_MANAGER_TREE_H
 
 #include <QTreeWidget>
 
@@ -34,7 +34,7 @@ class MaterialManagerTree : public QTreeWidget
 
         //! Constructor.
         explicit MaterialManagerTree(ActionList *actionList,
-                                     QWidget *parent = 0);
+                                     QWidget *parent = nullptr);
 
     protected:
 
@@ -96,4 +96,4 @@ class MaterialManagerTree : public QTreeWidget
     
 };
 
-#endif /* __MATERIAL_MANAGER_TREE_H__ */
+#endif /* MATERIAL_MANAGER_TREE_H */

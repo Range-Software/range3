@@ -2067,7 +2067,7 @@ void Model::glDraw(GLWidget *glWidget, const QVector<PickItem> &pickedItems) con
             }
 
             uint displacementVarPosition = this->findVariable(pEntity->getData().findVariableByDisplayType(R_ENTITY_GROUP_VARIABLE_DISPLAY_DISPLACEMENT));
-            const RVariable *pDisplacementVariable = 0;
+            const RVariable *pDisplacementVariable = nullptr;
             if (displacementVarPosition != RConstants::eod)
             {
                 pDisplacementVariable = &this->getVariable(displacementVarPosition);
@@ -2123,7 +2123,7 @@ void Model::glDraw(GLWidget *glWidget, const QVector<PickItem> &pickedItems) con
                 }
                 else if (REntityGroup::typeIsInterpolatedElementGroup(entityType))
                 {
-                    const RInterpolatedEntity *pIEntity = 0;
+                    const RInterpolatedEntity *pIEntity = nullptr;
 
                     if (entityType == R_ENTITY_GROUP_CUT || entityType == R_ENTITY_GROUP_ISO)
                     {
@@ -2165,7 +2165,7 @@ void Model::glDraw(GLWidget *glWidget, const QVector<PickItem> &pickedItems) con
                 }
                 else if (REntityGroup::typeIsInterpolatedElementGroup(entityType))
                 {
-                    const RInterpolatedElement *pIElement = 0;
+                    const RInterpolatedElement *pIElement = nullptr;
                     switch (entityType)
                     {
                         case R_ENTITY_GROUP_CUT:
@@ -2466,7 +2466,7 @@ bool Model::findPickedElement(const RR3Vector &position, const RR3Vector &direct
             }
 
             uint displacementVarPosition = this->findVariable(pEntity->getData().findVariableByDisplayType(R_ENTITY_GROUP_VARIABLE_DISPLAY_DISPLACEMENT));
-            const RVariable *pDisplacementVariable = 0;
+            const RVariable *pDisplacementVariable = nullptr;
             if (displacementVarPosition != RConstants::eod)
             {
                 pDisplacementVariable = &this->getVariable(displacementVarPosition);
@@ -2573,7 +2573,7 @@ bool Model::findPickedNode(const RR3Vector &position, const RR3Vector &direction
             }
 
             uint displacementVarPosition = this->findVariable(pEntity->getData().findVariableByDisplayType(R_ENTITY_GROUP_VARIABLE_DISPLAY_DISPLACEMENT));
-            const RVariable *pDisplacementVariable = 0;
+            const RVariable *pDisplacementVariable = nullptr;
             if (displacementVarPosition != RConstants::eod)
             {
                 pDisplacementVariable = &this->getVariable(displacementVarPosition);

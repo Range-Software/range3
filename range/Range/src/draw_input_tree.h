@@ -8,8 +8,8 @@
  *  DESCRIPTION: Draw input tree class declaration                   *
  *********************************************************************/
 
-#ifndef __DRAW_INPUT_TREE_H__
-#define __DRAW_INPUT_TREE_H__
+#ifndef DRAW_INPUT_TREE_H
+#define DRAW_INPUT_TREE_H
 
 #include <QTreeWidget>
 
@@ -28,7 +28,7 @@ class DrawInputTree : public QTreeWidget
     public:
 
         //! Constructor.
-        explicit DrawInputTree(QWidget *parent = 0);
+        explicit DrawInputTree(QWidget *parent = nullptr);
 
         //! Return list of selected object IDs.
         QList<uint> getSelectedObjectIDs() const;
@@ -101,4 +101,4 @@ class DrawInputTree : public QTreeWidget
 
 };
 
-#endif // __DRAW_INPUT_TREE_H__
+#endif // DRAW_INPUT_TREE_H

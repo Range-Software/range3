@@ -20,7 +20,7 @@ class SolverProcess : public QProcess
     public:
 
         //! Constructor.
-        explicit SolverProcess(QObject *parent = 0);
+        explicit SolverProcess(QObject *parent = nullptr);
 
     signals:
 

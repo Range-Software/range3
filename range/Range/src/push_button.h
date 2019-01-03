@@ -8,8 +8,8 @@
  *  DESCRIPTION: Custom push button class declaration                *
  *********************************************************************/
 
-#ifndef __PUSH_BUTTON_H__
-#define __PUSH_BUTTON_H__
+#ifndef PUSH_BUTTON_H
+#define PUSH_BUTTON_H
 
 #include <QPushButton>
 
@@ -26,7 +26,7 @@ class PushButton : public QPushButton
     public:
 
         //! Constructor.
-        explicit PushButton(uint id, const QString &text, QWidget *parent = 0);
+        explicit PushButton(uint id, const QString &text, QWidget *parent = nullptr);
         
     signals:
         
@@ -40,4 +40,4 @@ class PushButton : public QPushButton
         
 };
 
-#endif /* __PUSH_BUTTON_H__ */
+#endif /* PUSH_BUTTON_H */

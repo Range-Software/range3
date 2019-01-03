@@ -8,8 +8,8 @@
  *  DESCRIPTION: OpenGL widget class declaration                     *
  *********************************************************************/
 
-#ifndef __GLWIDGET_H__
-#define __GLWIDGET_H__
+#ifndef GLWIDGET_H
+#define GLWIDGET_H
 
 #include <vector>
 
@@ -107,7 +107,7 @@ class GLWidget : public QOpenGLWidget
     public:
 
         //! Constructor.
-        explicit GLWidget(uint modelID, QWidget *parent = 0);
+        explicit GLWidget(uint modelID, QWidget *parent = nullptr);
 
         //! Return assigned modelID.
         uint getModelID(void) const;
@@ -321,4 +321,4 @@ class GLWidget : public QOpenGLWidget
 
 };
 
-#endif /* __GLWIDGET_H__ */
+#endif /* GLWIDGET_H */

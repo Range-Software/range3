@@ -559,7 +559,7 @@ void RModel::exportTo (RModelMsh &modelMsh) const
     uint nbg = this->getNVolumes();
 
     std::vector<uint> elementIDs(ne);
-    const RElement *pElement = 0;
+    const RElement *pElement = nullptr;
     for (uint i=0;i<ne;i++)
     {
         pElement = this->getElementPtr(i);
@@ -895,7 +895,7 @@ void RModel::setProblemTaskTree (const RProblemTaskItem &taskTree)
 
     RProblemTypeMask typeMask = taskTree.getProblemTypeMask();
     RProblemTypeMask conditionTypeMask;
-    RElementGroup *pElementGroup = 0;
+    RElementGroup *pElementGroup = nullptr;
 
     uint ng = 0;
     uint pos = 0;
@@ -1225,7 +1225,7 @@ void RModel::mergeNodes(uint position1, uint position2, bool average, bool allow
 std::vector<uint> RModel::findNearNodePositions(const RNode &node, double tolerance) const
 {
     double dl;
-    const RNode *pNode = 0;
+    const RNode *pNode = nullptr;
     std::vector<uint> nearNodes;
 
     for (uint i=0;i<this->nodes.size();i++)
@@ -1919,7 +1919,7 @@ std::vector<uint> RModel::findElementPositionsByNodeId
 {
     std::vector<uint> elementPositions;
     std::vector<RElement>::iterator iter;
-    const RElement *pElement = 0;
+    const RElement *pElement = nullptr;
 
     R_ERROR_ASSERT (nodeID < this->getNNodes());
 
@@ -4030,7 +4030,7 @@ std::vector<RRVector> RModel::getInterpolatedElementResultsValues(RVariableType 
         return std::vector<RRVector>();
     }
 
-    const RInterpolatedElement *pIElement = 0;
+    const RInterpolatedElement *pIElement = nullptr;
     switch (entityGroupType)
     {
         case R_ENTITY_GROUP_CUT:
@@ -4089,7 +4089,7 @@ RRVector RModel::getInterpolatedNodeResultsValues(RVariableType variableType,
         return RRVector();
     }
 
-    const RInterpolatedElement *pIElement = 0;
+    const RInterpolatedElement *pIElement = nullptr;
     switch (entityGroupType)
     {
         case R_ENTITY_GROUP_CUT:

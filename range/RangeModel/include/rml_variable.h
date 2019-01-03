@@ -8,8 +8,8 @@
  *  DESCRIPTION: Variable class declaration                          *
  *********************************************************************/
 
-#ifndef __RML_VARIABLE_H__
-#define __RML_VARIABLE_H__
+#ifndef RML_VARIABLE_H
+#define RML_VARIABLE_H
 
 #include <string>
 #include <vector>
@@ -174,7 +174,7 @@ class RVariable
     private:
 
         //! Internal initialization function
-        void _init ( const RVariable *variable = 0 );
+        void _init ( const RVariable *variable = nullptr );
 
     protected:
 
@@ -352,4 +352,4 @@ class RVariable
 
 };
 
-#endif /* __RML_VARIABLE_H__ */
+#endif /* RML_VARIABLE_H */

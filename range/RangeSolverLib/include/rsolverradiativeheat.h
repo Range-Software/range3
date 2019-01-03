@@ -8,8 +8,8 @@
  *  DESCRIPTION: Radiative Heat-transfer solver class declaration    *
  *********************************************************************/
 
-#ifndef __RSOLVERRADIATIVEHEAT_H__
-#define __RSOLVERRADIATIVEHEAT_H__
+#ifndef RSOLVERRADIATIVEHEAT_H
+#define RSOLVERRADIATIVEHEAT_H
 
 #include <rblib.h>
 
@@ -37,7 +37,7 @@ class RSolverRadiativeHeat : public RSolverGeneric
     private:
 
         //! Internal initialization function.
-        void _init(const RSolverRadiativeHeat *pRadiativeHeatSolver = 0);
+        void _init(const RSolverRadiativeHeat *pRadiativeHeatSolver = nullptr);
 
     public:
 
@@ -90,4 +90,4 @@ class RSolverRadiativeHeat : public RSolverGeneric
 
 };
 
-#endif // __RSOLVERRADIATIVEHEAT_H__
+#endif // RSOLVERRADIATIVEHEAT_H

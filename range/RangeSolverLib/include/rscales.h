@@ -8,8 +8,8 @@
  *  DESCRIPTION: Scales class declaration                            *
  *********************************************************************/
 
-#ifndef __RSCALES_H__
-#define __RSCALES_H__
+#ifndef RSCALES_H
+#define RSCALES_H
 
 #include <rblib.h>
 #include <rmlib.h>
@@ -37,7 +37,7 @@ class RScales
     private:
 
         //! Internal initialization function.
-        void _init(const RScales *pScales = 0);
+        void _init(const RScales *pScales = nullptr);
 
     public:
 
@@ -117,4 +117,4 @@ class RScales
 
 };
 
-#endif // __RSCALES_H__
+#endif // RSCALES_H

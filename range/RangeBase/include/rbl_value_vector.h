@@ -8,8 +8,8 @@
  *  DESCRIPTION: Value vector class declaration                      *
  *********************************************************************/
 
-#ifndef __RBL_VALUE_VECTOR_H__
-#define __RBL_VALUE_VECTOR_H__
+#ifndef RBL_VALUE_VECTOR_H
+#define RBL_VALUE_VECTOR_H
 
 #include <QString>
 #include "rbl_rvector.h"
@@ -21,7 +21,7 @@ class RValueVector
     private:
 
         //! Internal initialization function.
-        void _init ( const RValueVector *valueVector = 0 );
+        void _init ( const RValueVector *valueVector = nullptr );
 
     protected:
 
@@ -109,4 +109,4 @@ class RValueVector
 
 };
 
-#endif /* __RBL_VALUE_VECTOR_H__ */
+#endif /* RBL_VALUE_VECTOR_H */

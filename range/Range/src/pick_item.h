@@ -8,8 +8,8 @@
  *  DESCRIPTION: Pick item class declaration                         *
  *********************************************************************/
 
-#ifndef __PICK_ITEM_H__
-#define __PICK_ITEM_H__
+#ifndef PICK_ITEM_H
+#define PICK_ITEM_H
 
 #include "session_entity_id.h"
 
@@ -33,7 +33,7 @@ class PickItem
     private:
 
         //! Internal initialization function.
-        void _init ( const PickItem *pPickItem = 0 );
+        void _init ( const PickItem *pPickItem = nullptr );
 
     protected:
 
@@ -92,4 +92,4 @@ class PickItem
 
 };
 
-#endif // __PICK_ITEM_H__
+#endif // PICK_ITEM_H

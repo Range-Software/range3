@@ -8,8 +8,8 @@
  *  DESCRIPTION: Node class declaration                              *
  *********************************************************************/
 
-#ifndef __RML_NODE_H__
-#define __RML_NODE_H__
+#ifndef RML_NODE_H
+#define RML_NODE_H
 
 #include <rblib.h>
 
@@ -19,7 +19,7 @@ class RNode
 
     private:
 
-        void _init ( const RNode *pNode = 0 );
+        void _init ( const RNode *pNode = nullptr );
 
     protected:
 
@@ -144,4 +144,4 @@ class RNode
 
 };
 
-#endif /* __RML_NODE_H__ */
+#endif /* RML_NODE_H */

@@ -117,7 +117,7 @@ void GLScalarField::draw(void)
 
     RVariableType scalarVariableType = this->getData().findVariableByDisplayType(R_ENTITY_GROUP_VARIABLE_DISPLAY_SCALAR);
     uint scalarVariablePosition = rModel.findVariable(scalarVariableType);
-    const RVariable *pScalarVariable = 0;
+    const RVariable *pScalarVariable = nullptr;
     GLTexture texture;
     if (scalarVariablePosition != RConstants::eod)
     {
@@ -127,7 +127,7 @@ void GLScalarField::draw(void)
 
     RVariableType displacementVariableType = this->getData().findVariableByDisplayType(R_ENTITY_GROUP_VARIABLE_DISPLAY_DISPLACEMENT);
     uint displacementVariablePosition = rModel.findVariable(displacementVariableType);
-    const RVariable *pDisplacementVariable = 0;
+    const RVariable *pDisplacementVariable = nullptr;
     if (displacementVariablePosition != RConstants::eod)
     {
         pDisplacementVariable = &rModel.getVariable(displacementVariablePosition);
@@ -316,7 +316,7 @@ std::vector<ScalarFieldItem> GLScalarField::calculateField(const RVariable *pSca
         }
         else
         {
-            const RInterpolatedEntity *pIEntity = 0;
+            const RInterpolatedEntity *pIEntity = nullptr;
             switch (entityType)
             {
                 case R_ENTITY_GROUP_CUT:

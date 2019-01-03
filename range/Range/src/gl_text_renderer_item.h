@@ -8,8 +8,8 @@
  *  DESCRIPTION: OpenGL text renderer item class declaration         *
  *********************************************************************/
 
-#ifndef __GL_TEXT_RENDERER_ITEM_H__
-#define __GL_TEXT_RENDERER_ITEM_H__
+#ifndef GL_TEXT_RENDERER_ITEM_H
+#define GL_TEXT_RENDERER_ITEM_H
 
 #include <QColor>
 #include <QFont>
@@ -32,7 +32,7 @@ class GLTextRendererItem
     private:
 
         //! Internal initialization function.
-        void _init(const GLTextRendererItem *pGlTextRendererItem = 0);
+        void _init(const GLTextRendererItem *pGlTextRendererItem = nullptr);
 
     public:
 
@@ -52,4 +52,4 @@ class GLTextRendererItem
 
 };
 
-#endif // __GL_TEXT_RENDERER_ITEM_H__
+#endif // GL_TEXT_RENDERER_ITEM_H

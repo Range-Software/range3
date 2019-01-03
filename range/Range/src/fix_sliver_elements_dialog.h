@@ -30,7 +30,7 @@ class FixSliverElementsDialog : public QDialog
         public:
 
             //! Constructor.
-            explicit FixSliverElementsDialog(uint modelID,QWidget *parent = 0);
+            explicit FixSliverElementsDialog(uint modelID,QWidget *parent = nullptr);
 
             //! Overloaded exec function.
             int exec(void);
