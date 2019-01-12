@@ -283,7 +283,7 @@ void RSolverFluid::updateScales(void)
     }
 
     this->scales.setMetre(this->findMeshScale());
-    this->scales.setSecond(this->findReScale());
+    this->scales.setSecond(this->findTimeScale());
     this->scales.setKilogram(this->findWeightScale());
 }
 
@@ -2267,6 +2267,14 @@ void RSolverFluid::computeElementConstantDerivative(unsigned int elementID, RRMa
     double detJ = this->shapeDerivations[elementID]->getJacobian(0);
     Ae *= detJ;
     be *= detJ;
+}
+
+double RSolverFluid::findTimeScale() const
+{
+    double v = RSolverFluid::computeStreamVelocity(*this->pModel,this->nodeVelocity,true);
+    double l = 1.0 / this->scales.getMetre();
+
+    return v/l;
 }
 
 double RSolverFluid::findReScale(void) const
