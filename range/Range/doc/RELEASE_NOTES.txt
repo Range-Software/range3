@@ -5,6 +5,7 @@ Version 3.2.1
 
 Bug fixes:
 
+* Fixed incorrect numerical stabilization scale calculation in CFD calculation.
 * CFD solver terminates with error if no volume elements are generated.
 * Corrections in tutorials.
 

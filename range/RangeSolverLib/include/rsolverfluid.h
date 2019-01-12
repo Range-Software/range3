@@ -143,6 +143,9 @@ class RSolverFluid : public RSolverGeneric
         //! Compute tetrahedra element matrix.
         void computeElementConstantDerivative(unsigned int elementID, RRMatrix &Ae, RRVector &be, RMatrixManager<FluidMatrixContainer> &matrixManager);
 
+        //! Find time scale.
+        double findTimeScale(void) const;
+
         //! Find Re scale.
         double findReScale(void) const;
 
