@@ -18,7 +18,7 @@
 
 ;Name and file
 Name "Range Software Package"
-OutFile "range-3.2.1-installer.exe"
+OutFile "range-3.2.2-installer.exe"
 
 ;Icon "range.ico"
 ;UninstallIcon "range.ico"
@@ -90,18 +90,18 @@ FunctionEnd
 Function CheckRedistributableInstalled
     Push $R0
     ClearErrors
-   
+
     ;try to read Version subkey to R0
     ReadRegDword $R0 HKLM "SOFTWARE\Wow6432Node\Microsoft\VisualStudio\14.0\VC\Runtimes\x64" "Installed"
 
     ;was there error or not?
     IfErrors 0 NoErrors
-   
+
     ;error occured, copy "Error" to R0
     StrCpy $R0 "Error"
 
     NoErrors:
-        Exch $R0 
+        Exch $R0
 FunctionEnd
 
 Section "-global"
