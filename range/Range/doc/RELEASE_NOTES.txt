@@ -1,7 +1,11 @@
 ------------------------------------------------------------------
 Version 3.2.2
 
+* Use HTTPS as default when contacting Range server
+
 Bug fixes:
+
+* Corrections in tutorials.
 
 ------------------------------------------------------------------
 Version 3.2.1

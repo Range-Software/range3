@@ -72,7 +72,11 @@ Var StartMenuFolder
 ; Build KIT
 
 !define BUILD_KIT "MSVC2017"
+!define BUILD_KIT_VERSION "5.12.1"
+!define BUILD_KIT_DIR bin-${BUILD_KIT}\${BUILD_KIT_VERSION}
 !define VC_REDIST "VC_redist.x64.exe"
+
+!define BUILD_DIR "..\build-Release-Qt_${BUILD_KIT_VERSION}_${BUILD_KIT}"
 
 ;--------------------------------
 ;Languages
@@ -123,9 +127,9 @@ SectionGroup "Range Software" SecRange
     Section "Executables" SecExeFiles
         SectionIn RO
         SetOutPath "$INSTDIR\bin"
-        File ..\build-Release-${BUILD_KIT}\Range\Range.exe
-        File ..\build-Release-${BUILD_KIT}\RangeSolver\RangeSolver.exe
-        File bin-${BUILD_KIT}\*.dll
+        File ${BUILD_DIR}\Range\Range.exe
+        File ${BUILD_DIR}\RangeSolver\RangeSolver.exe
+        File ${BUILD_KIT_DIR}\*.dll
 		File ..\ffmpeg\ffmpeg-3.4.1-win64\bin\*.dll
 	    ${If} ${VC_REDIST} != ""
             ;Check if we have redistributable installed
@@ -133,14 +137,14 @@ SectionGroup "Range Software" SecRange
             Pop $R0
 
             ${If} $R0 == "Error"
-                File bin-${BUILD_KIT}\${VC_REDIST}
+                File ${BUILD_KIT_DIR}\${VC_REDIST}
                 ExecWait '"$INSTDIR\bin\${VC_REDIST}"  /passive /norestart'
             ${EndIf}
         ${EndIf}
         SetOutPath "$INSTDIR\bin\imageformats"
-        File bin-${BUILD_KIT}\imageformats\*
+        File ${BUILD_KIT_DIR}\imageformats\*
         SetOutPath "$INSTDIR\bin\platforms"
-        File bin-${BUILD_KIT}\platforms\*
+        File ${BUILD_KIT_DIR}\platforms\*
     SectionEnd
     Section "Documentation" SecDocFiles
         SectionIn RO
