@@ -30,6 +30,7 @@ class HttpRequestWorker
         QNetworkReply::NetworkError errorType;
         QString errorStr;
         QNetworkAccessManager *manager;
+        HttpRequestInput *pRequestInput;
 
     public:
 
@@ -60,6 +61,10 @@ class HttpRequestWorker
     private slots:
 
         void onManagerFinished(QNetworkReply *reply);
+
+#ifndef QT_NO_SSL
+        void onSslErrors(QNetworkReply *reply, const QList<QSslError> &errors);
+#endif
 
 };
 

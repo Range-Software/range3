@@ -6,6 +6,7 @@ Version 3.2.2
 Bug fixes:
 
 * Corrections in tutorials.
+* Handle HTTP redirections
 
 ------------------------------------------------------------------
 Version 3.2.1
