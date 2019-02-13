@@ -12,6 +12,8 @@
 #include <QUrl>
 #include <QFileInfo>
 #include <QBuffer>
+#include <QAuthenticator>
+#include <QNetworkProxyFactory>
 
 #include <rblib.h>
 
@@ -23,10 +25,39 @@ HttpRequestWorker::HttpRequestWorker(QNetworkAccessManager *networkAccessManager
 {
     qsrand(QDateTime::currentDateTime().toTime_t());
 
+    QNetworkProxyFactory *pProxyFactory = this->manager->proxyFactory();
+    pProxyFactory->setUseSystemConfiguration(true);
+
+    QObject::connect(this->manager,
+                     &QNetworkAccessManager::authenticationRequired,
+                     this,
+                     &HttpRequestWorker::onManagerAuthenticationRequired);
+
+    QObject::connect(this->manager,
+                     &QNetworkAccessManager::encrypted,
+                     this,
+                     &HttpRequestWorker::onManagerEncrypted);
+
     QObject::connect(this->manager,
                      &QNetworkAccessManager::finished,
                      this,
                      &HttpRequestWorker::onManagerFinished);
+
+    QObject::connect(this->manager,
+                     &QNetworkAccessManager::networkAccessibleChanged,
+                     this,
+                     &HttpRequestWorker::onManagerNetworkAccessibleChanged);
+
+    QObject::connect(this->manager,
+                     &QNetworkAccessManager::preSharedKeyAuthenticationRequired,
+                     this,
+                     &HttpRequestWorker::onManagerPreSharedKeyAuthenticationRequired);
+
+    QObject::connect(this->manager,
+                     &QNetworkAccessManager::proxyAuthenticationRequired,
+                     this,
+                     &HttpRequestWorker::onManagerProxyAuthenticationRequired);
+
 #ifndef QT_NO_SSL
     QObject::connect(this->manager,
                      &QNetworkAccessManager::sslErrors,
@@ -309,6 +340,16 @@ QString HttpRequestWorker::httpAttributeEncode(QString attributeName, QString in
     return QString("%1=\"%2\"; %1*=utf-8''%3").arg(attributeName, result, resultUtf8);
 }
 
+void HttpRequestWorker::onManagerAuthenticationRequired(QNetworkReply *, QAuthenticator *)
+{
+    RLogger::warning("Authentication is required.\n");
+}
+
+void HttpRequestWorker::onManagerEncrypted(QNetworkReply *)
+{
+    RLogger::info("Encrypted connection.\n");
+}
+
 void HttpRequestWorker::onManagerFinished(QNetworkReply *reply)
 {
     if (!reply)
@@ -360,6 +401,41 @@ void HttpRequestWorker::onManagerFinished(QNetworkReply *reply)
     delete this->pRequestInput;
     this->pRequestInput = nullptr;
     emit this->finished();
+}
+
+void HttpRequestWorker::onManagerNetworkAccessibleChanged(QNetworkAccessManager::NetworkAccessibility accessible)
+{
+    RLogger::info("Network eccessibility has changed to .");
+    switch (accessible)
+    {
+        case QNetworkAccessManager::UnknownAccessibility:
+        {
+            RLogger::warning("The network accessibility cannot be determined.\n");
+            break;
+        }
+        case QNetworkAccessManager::NotAccessible:
+        {
+            RLogger::warning("The network is not currently accessible.\n");
+            break;
+        }
+        case QNetworkAccessManager::Accessible:
+        {
+            RLogger::info("The network is accessible.\n");
+            break;
+        }
+    }
+}
+
+void HttpRequestWorker::onManagerPreSharedKeyAuthenticationRequired(QNetworkReply *, QSslPreSharedKeyAuthenticator *)
+{
+#ifdef DEBUG
+    RLogger::info("SSL/TLS handshake negotiates a PSK ciphersuite, and therefore a PSK authentication is then required.\n");
+#endif
+}
+
+void HttpRequestWorker::onManagerProxyAuthenticationRequired(const QNetworkProxy &, QAuthenticator *)
+{
+    RLogger::warning("Proxy authentication is required.\n");
 }
 
 #ifndef QT_NO_SSL
