@@ -61,6 +61,11 @@ QString &HttpRequestInput::getUrlStr(void)
     return this->urlStr;
 }
 
+void HttpRequestInput::setUrlStr(const QString &urlStr)
+{
+    this->urlStr = urlStr;
+}
+
 const QString &HttpRequestInput::getHttpMethod(void) const
 {
     return this->httpMethod;

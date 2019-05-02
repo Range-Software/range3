@@ -12,6 +12,8 @@
 #include <QUrl>
 #include <QFileInfo>
 #include <QBuffer>
+#include <QAuthenticator>
+#include <QNetworkProxyFactory>
 
 #include <rblib.h>
 
@@ -23,7 +25,45 @@ HttpRequestWorker::HttpRequestWorker(QNetworkAccessManager *networkAccessManager
 {
     qsrand(QDateTime::currentDateTime().toTime_t());
 
-    connect(this->manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(onManagerFinished(QNetworkReply*)));
+    QNetworkProxyFactory *pProxyFactory = this->manager->proxyFactory();
+    pProxyFactory->setUseSystemConfiguration(true);
+
+    QObject::connect(this->manager,
+                     &QNetworkAccessManager::authenticationRequired,
+                     this,
+                     &HttpRequestWorker::onManagerAuthenticationRequired);
+
+    QObject::connect(this->manager,
+                     &QNetworkAccessManager::encrypted,
+                     this,
+                     &HttpRequestWorker::onManagerEncrypted);
+
+    QObject::connect(this->manager,
+                     &QNetworkAccessManager::finished,
+                     this,
+                     &HttpRequestWorker::onManagerFinished);
+
+    QObject::connect(this->manager,
+                     &QNetworkAccessManager::networkAccessibleChanged,
+                     this,
+                     &HttpRequestWorker::onManagerNetworkAccessibleChanged);
+
+    QObject::connect(this->manager,
+                     &QNetworkAccessManager::preSharedKeyAuthenticationRequired,
+                     this,
+                     &HttpRequestWorker::onManagerPreSharedKeyAuthenticationRequired);
+
+    QObject::connect(this->manager,
+                     &QNetworkAccessManager::proxyAuthenticationRequired,
+                     this,
+                     &HttpRequestWorker::onManagerProxyAuthenticationRequired);
+
+#ifndef QT_NO_SSL
+    QObject::connect(this->manager,
+                     &QNetworkAccessManager::sslErrors,
+                     this,
+                     &HttpRequestWorker::onSslErrors);
+#endif
 }
 
 const QByteArray &HttpRequestWorker::getResponse(void) const
@@ -43,6 +83,8 @@ const QString &HttpRequestWorker::getError(void) const
 
 void HttpRequestWorker::execute(HttpRequestInput *pInput)
 {
+    this->pRequestInput = pInput;
+
     // reset variables
 
     QByteArray requestContent = "";
@@ -50,18 +92,18 @@ void HttpRequestWorker::execute(HttpRequestInput *pInput)
     this->errorType = QNetworkReply::NoError;
     this->errorStr = "";
 
-    QMap<QString, QString> &rVariables = pInput->getVariableMap();
-    QList<HttpRequestInput::FileElement> &rFileList = pInput->getFileList();
+    QMap<QString, QString> &rVariables = this->pRequestInput->getVariableMap();
+    QList<HttpRequestInput::FileElement> &rFileList = this->pRequestInput->getFileList();
 
     // decide on the variable layout
 
     if (rFileList.length() > 0)
     {
-        pInput->setVariableLayout(HttpRequestInput::MULTIPART);
+        this->pRequestInput->setVariableLayout(HttpRequestInput::MULTIPART);
     }
-    if (pInput->getVariableLayout() == HttpRequestInput::NOT_SET)
+    if (this->pRequestInput->getVariableLayout() == HttpRequestInput::NOT_SET)
     {
-        pInput->setVariableLayout(pInput->getHttpMethod() == "GET" || pInput->getHttpMethod() == "HEAD" ? HttpRequestInput::ADDRESS : HttpRequestInput::URL_ENCODED);
+        this->pRequestInput->setVariableLayout(this->pRequestInput->getHttpMethod() == "GET" || this->pRequestInput->getHttpMethod() == "HEAD" ? HttpRequestInput::ADDRESS : HttpRequestInput::URL_ENCODED);
     }
 
 
@@ -69,7 +111,7 @@ void HttpRequestWorker::execute(HttpRequestInput *pInput)
 
     QString boundary = "";
 
-    if (pInput->getVariableLayout() == HttpRequestInput::ADDRESS || pInput->getVariableLayout() == HttpRequestInput::URL_ENCODED)
+    if (this->pRequestInput->getVariableLayout() == HttpRequestInput::ADDRESS || this->pRequestInput->getVariableLayout() == HttpRequestInput::URL_ENCODED)
     {
         // variable layout is ADDRESS or URL_ENCODED
 
@@ -89,9 +131,9 @@ void HttpRequestWorker::execute(HttpRequestInput *pInput)
                 requestContent.append(QUrl::toPercentEncoding(rVariables.value(key)));
             }
 
-            if (pInput->getVariableLayout() == HttpRequestInput::ADDRESS)
+            if (this->pRequestInput->getVariableLayout() == HttpRequestInput::ADDRESS)
             {
-                pInput->getUrlStr() += "?" + requestContent;
+                this->pRequestInput->getUrlStr() += "?" + requestContent;
                 requestContent = "";
             }
         }
@@ -136,8 +178,8 @@ void HttpRequestWorker::execute(HttpRequestInput *pInput)
 
             // ensure necessary variables are available
             if (
-                fileIterator->localFilename == NULL || fileIterator->localFilename.isEmpty()
-                || fileIterator->variableName == NULL || fileIterator->variableName.isEmpty()
+                fileIterator->localFilename == nullptr || fileIterator->localFilename.isEmpty()
+                || fileIterator->variableName == nullptr || fileIterator->variableName.isEmpty()
                 || !fi.exists() || !fi.isFile() || !fi.isReadable()
             )
             {
@@ -153,7 +195,7 @@ void HttpRequestWorker::execute(HttpRequestInput *pInput)
             }
 
             // ensure filename for the request
-            if (fileIterator->requestFilename == NULL || fileIterator->requestFilename.isEmpty())
+            if (fileIterator->requestFilename == nullptr || fileIterator->requestFilename.isEmpty())
             {
                 fileIterator->requestFilename = fi.fileName();
                 if (fileIterator->requestFilename.isEmpty())
@@ -174,7 +216,7 @@ void HttpRequestWorker::execute(HttpRequestInput *pInput)
             ));
             requestContent.append(new_line);
 
-            if (fileIterator->mimeType != NULL && !fileIterator->mimeType.isEmpty())
+            if (fileIterator->mimeType != nullptr && !fileIterator->mimeType.isEmpty())
             {
                 requestContent.append("Content-Type: ");
                 requestContent.append(fileIterator->mimeType);
@@ -201,43 +243,42 @@ void HttpRequestWorker::execute(HttpRequestInput *pInput)
     }
 
     // prepare connection
-
-    QNetworkRequest request = QNetworkRequest(QUrl(pInput->getUrlStr()));
+    QNetworkRequest request = QNetworkRequest(QUrl(this->pRequestInput->getUrlStr()));
     request.setRawHeader("User-Agent", "Agent name goes here");
 
-    if (pInput->getVariableLayout() == HttpRequestInput::URL_ENCODED)
+    if (this->pRequestInput->getVariableLayout() == HttpRequestInput::URL_ENCODED)
     {
         request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
     }
-    else if (pInput->getVariableLayout() == HttpRequestInput::MULTIPART)
+    else if (this->pRequestInput->getVariableLayout() == HttpRequestInput::MULTIPART)
     {
         request.setHeader(QNetworkRequest::ContentTypeHeader, "multipart/form-data; boundary=" + boundary);
     }
 
-    if (pInput->getHttpMethod() == "GET")
+    if (this->pRequestInput->getHttpMethod() == "GET")
     {
         this->manager->get(request);
     }
-    else if (pInput->getHttpMethod() == "POST")
+    else if (this->pRequestInput->getHttpMethod() == "POST")
     {
         this->manager->post(request, requestContent);
     }
-    else if (pInput->getHttpMethod() == "PUT")
+    else if (this->pRequestInput->getHttpMethod() == "PUT")
     {
         this->manager->put(request, requestContent);
     }
-    else if (pInput->getHttpMethod() == "HEAD")
+    else if (this->pRequestInput->getHttpMethod() == "HEAD")
     {
         this->manager->head(request);
     }
-    else if (pInput->getHttpMethod() == "DELETE")
+    else if (this->pRequestInput->getHttpMethod() == "DELETE")
     {
         this->manager->deleteResource(request);
     }
     else
     {
         QBuffer buff(&requestContent);
-        this->manager->sendCustomRequest(request, pInput->getHttpMethod().toLatin1(), &buff);
+        this->manager->sendCustomRequest(request, this->pRequestInput->getHttpMethod().toLatin1(), &buff);
     }
 }
 
@@ -299,7 +340,106 @@ QString HttpRequestWorker::httpAttributeEncode(QString attributeName, QString in
     return QString("%1=\"%2\"; %1*=utf-8''%3").arg(attributeName, result, resultUtf8);
 }
 
+void HttpRequestWorker::onManagerAuthenticationRequired(QNetworkReply *, QAuthenticator *)
+{
+    RLogger::warning("Authentication is required.\n");
+}
+
+void HttpRequestWorker::onManagerEncrypted(QNetworkReply *)
+{
+    RLogger::info("Encrypted connection.\n");
+}
+
 void HttpRequestWorker::onManagerFinished(QNetworkReply *reply)
+{
+    if (!reply)
+    {
+        // No reply provided
+        RLogger::error("HTTP request without a reply.\n");
+        this->errorType = QNetworkReply::UnknownServerError;
+        delete this->pRequestInput;
+        this->pRequestInput = nullptr;
+        emit this->finished();
+        return;
+    }
+
+    this->errorType = reply->error();
+
+    if (this->errorType)
+    {
+        // Error occured
+        this->errorStr = reply->errorString();
+
+        reply->deleteLater();
+        reply = nullptr;
+        delete this->pRequestInput;
+        this->pRequestInput = nullptr;
+        emit this->finished();
+        return;
+    }
+
+    const QVariant redirectionTarget = reply->attribute(QNetworkRequest::RedirectionTargetAttribute);
+    if (!redirectionTarget.isNull())
+    {
+        // Redirection
+        RLogger::info("HTTP request was redirected to: \'%s\'\n",redirectionTarget.toUrl().toString().toUtf8().constData());
+
+        QUrl url(this->pRequestInput->getUrlStr());
+        this->pRequestInput->setUrlStr(url.resolved(redirectionTarget.toUrl()).toString());
+
+        this->execute(this->pRequestInput);
+
+        reply->deleteLater();
+        reply = nullptr;
+        return;
+    }
+
+    // Success
+    this->response = reply->readAll();
+    reply->deleteLater();
+    reply = nullptr;
+    delete this->pRequestInput;
+    this->pRequestInput = nullptr;
+    emit this->finished();
+}
+
+void HttpRequestWorker::onManagerNetworkAccessibleChanged(QNetworkAccessManager::NetworkAccessibility accessible)
+{
+    RLogger::info("Network eccessibility has changed to .");
+    switch (accessible)
+    {
+        case QNetworkAccessManager::UnknownAccessibility:
+        {
+            RLogger::warning("The network accessibility cannot be determined.\n");
+            break;
+        }
+        case QNetworkAccessManager::NotAccessible:
+        {
+            RLogger::warning("The network is not currently accessible.\n");
+            break;
+        }
+        case QNetworkAccessManager::Accessible:
+        {
+            RLogger::info("The network is accessible.\n");
+            break;
+        }
+    }
+}
+
+void HttpRequestWorker::onManagerPreSharedKeyAuthenticationRequired(QNetworkReply *, QSslPreSharedKeyAuthenticator *)
+{
+#ifdef DEBUG
+    RLogger::info("SSL/TLS handshake negotiates a PSK ciphersuite, and therefore a PSK authentication is then required.\n");
+#endif
+}
+
+void HttpRequestWorker::onManagerProxyAuthenticationRequired(const QNetworkProxy &, QAuthenticator *)
+{
+    RLogger::warning("Proxy authentication is required.\n");
+}
+
+#ifndef QT_NO_SSL
+void HttpRequestWorker::onSslErrors(QNetworkReply *reply, const QList<QSslError> &errors)
 {
     if (!reply)
     {
@@ -308,18 +448,13 @@ void HttpRequestWorker::onManagerFinished(QNetworkReply *reply)
     }
     else
     {
-        this->errorType = reply->error();
-        if (this->errorType == QNetworkReply::NoError)
-        {
-            this->response = reply->readAll();
+        QString errorString;
+        foreach (const QSslError &error, errors) {
+            RLogger::warning("SSL error has occurred: %s\n",error.errorString().toUtf8().constData());
         }
-        else
-        {
-            this->errorStr = reply->errorString();
-        }
-        reply->deleteLater();
-    }
 
-    emit this->finished();
+        reply->ignoreSslErrors();
+    }
 }
+#endif
 

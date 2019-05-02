@@ -225,7 +225,7 @@ void RSolverStress::prepare(void)
             }
             try
             {
-                uint elementID = point.get(j);
+                uint elementID = point.get(uint(j));
 
                 if (!this->computableElements[elementID])
                 {
@@ -243,19 +243,19 @@ void RSolverStress::prepare(void)
                 fe.fill(0.0);
 
                 // Force
-                fe[0] = elementForce.x[elementID];
-                fe[1] = elementForce.y[elementID];
-                fe[2] = elementForce.z[elementID];
+                fe[0] += elementForce.x[elementID];
+                fe[1] += elementForce.y[elementID];
+                fe[2] += elementForce.z[elementID];
                 // Weight
-                fe[0] = elementWeight[elementID] * elementGravity.x[elementID];
-                fe[1] = elementWeight[elementID] * elementGravity.y[elementID];
-                fe[2] = elementWeight[elementID] * elementGravity.z[elementID];
+                fe[0] += elementWeight[elementID] * elementGravity.x[elementID];
+                fe[1] += elementWeight[elementID] * elementGravity.y[elementID];
+                fe[2] += elementWeight[elementID] * elementGravity.z[elementID];
                 // Own weight
-                if (pointVolume)
+                if (pointVolume > 0.0)
                 {
-                    fe[0] = elementGravity.x[elementID] * this->elementDensity[elementID] * pointVolume;
-                    fe[1] = elementGravity.y[elementID] * this->elementDensity[elementID] * pointVolume;
-                    fe[2] = elementGravity.z[elementID] * this->elementDensity[elementID] * pointVolume;
+                    fe[0] += elementGravity.x[elementID] * this->elementDensity[elementID] * pointVolume;
+                    fe[1] += elementGravity.y[elementID] * this->elementDensity[elementID] * pointVolume;
+                    fe[2] += elementGravity.z[elementID] * this->elementDensity[elementID] * pointVolume;
                 }
 
                 // Mass
@@ -303,7 +303,7 @@ void RSolverStress::prepare(void)
             }
             try
             {
-                uint elementID = line.get(j);
+                uint elementID = line.get(uint(j));
 
                 if (!this->computableElements[elementID])
                 {
@@ -317,12 +317,8 @@ void RSolverStress::prepare(void)
                 RRMatrix Ke(element.size()*3,element.size()*3,0.0);
                 RRVector fe(element.size()*3,0.0);
 
-                RRMatrix Be(element.size(),1);
-                RRMatrix BeT(1,element.size());
-                RRMatrix Met(element.size(),element.size());
-                RRMatrix MeRt(element.size()*3,element.size());
-                RRMatrix Ket(element.size(),element.size());
-                RRMatrix KeRt(element.size()*3,element.size());
+                RRMatrix Be(3*element.size(),1);
+                RRMatrix BeT(1,3*element.size());
 
                 double lineLength = 0.0;
                 element.findLength(this->pModel->getNodes(),lineLength);
@@ -337,23 +333,20 @@ void RSolverStress::prepare(void)
                     const RElementShapeFunction &shapeFunc = RElement::getShapeFunction(element.getType(),k);
                     const RRVector &N = shapeFunc.getN();
                     const RRMatrix &dN = shapeFunc.getDN();
-                    RRMatrix J, Rt, RtT;
+                    RRMatrix J, Rt;
                     double detJ = element.findJacobian(this->pModel->getNodes(),k,J,Rt);
-                    RtT.transpose(Rt);
-
-                    if (lineCrossArea)
+                    if (lineCrossArea > 0.0)
                     {
                         Be.fill(0.0);
                         for (uint m=0;m<dN.getNRows();m++)
                         {
-                            Be[m][0] += dN[m][0]*J[0][0];
+                            Be[3*m+0][0] += Rt[3*m+0][0]*dN[m][0]*J[0][0];
+                            Be[3*m+1][0] += Rt[3*m+1][0]*dN[m][0]*J[0][0];
+                            Be[3*m+2][0] += Rt[3*m+2][0]*dN[m][0]*J[0][0];
                         }
                         BeT.transpose(Be);
-
                         Be *= De;
-                        RRMatrix::mlt(Be,BeT,Ket);
-                        RRMatrix::mlt(Rt,Ket,KeRt);
-                        RRMatrix::mlt(KeRt,RtT,Ke);
+                        RRMatrix::mlt(Be,BeT,Ke);
                     }
 
                     for (uint m=0;m<element.size();m++)
@@ -370,7 +363,9 @@ void RSolverStress::prepare(void)
                                                  * detJ
                                                  * shapeFunc.getW()
                                                  * lineCrossArea;
-                                    Met[m][n] += value;
+                                    Me[3*m+0][3*n+0] += std::pow(Rt[0][0],2.0)*value;
+                                    Me[3*m+1][3*n+1] += std::pow(Rt[1][0],2.0)*value;
+                                    Me[3*m+2][3*n+2] += std::pow(Rt[2][0],2.0)*value;
                                 }
                             }
                         }
@@ -386,7 +381,7 @@ void RSolverStress::prepare(void)
                         fe[3*m+1] += (elementWeight[elementID] * elementGravity.y[elementID] / lineLength) * integValue;
                         fe[3*m+2] += (elementWeight[elementID] * elementGravity.z[elementID] / lineLength) * integValue;
                         // Own weight
-                        if (lineCrossArea)
+                        if (lineCrossArea > 0.0)
                         {
                             fe[3*m+0] += elementGravity.x[elementID] * this->elementDensity[elementID] * lineCrossArea * integValue;
                             fe[3*m+1] += elementGravity.y[elementID] * this->elementDensity[elementID] * lineCrossArea * integValue;
@@ -402,13 +397,6 @@ void RSolverStress::prepare(void)
                             fe[3*m+1] += Rt[3*m+1][0]*fet;
                             fe[3*m+2] += Rt[3*m+2][0]*fet;
                         }
-                    }
-
-                    // Mass
-                    if (this->pModel->getTimeSolver().getEnabled() || this->problemType == R_PROBLEM_STRESS_MODAL)
-                    {
-                        RRMatrix::mlt(Rt,Met,MeRt);
-                        RRMatrix::mlt(MeRt,RtT,Me,true);
                     }
                 }
                 #pragma omp critical
@@ -450,7 +438,7 @@ void RSolverStress::prepare(void)
             }
             try
             {
-                uint elementID = surface.get(j);
+                uint elementID = surface.get(uint(j));
 
                 if (!this->computableElements[elementID] && !this->includableElements[elementID])
                 {
@@ -502,7 +490,7 @@ void RSolverStress::prepare(void)
                     double detJ = element.findJacobian(this->pModel->getNodes(),k,J,Rt);
                     RtT.transpose(Rt);
 
-                    if (surfaceThickness)
+                    if (surfaceThickness > 0.0)
                     {
                         B.fill(0.0);
                         for (uint m=0;m<dN.getNRows();m++)
@@ -565,7 +553,7 @@ void RSolverStress::prepare(void)
                         fe[3*m+1] += (elementWeight[elementID] * elementGravity.y[elementID] / surfaceArea) * integValue;
                         fe[3*m+2] += (elementWeight[elementID] * elementGravity.z[elementID] / surfaceArea) * integValue;
                         // Own weight
-                        if (surfaceThickness)
+                        if (surfaceThickness > 0.0)
                         {
                             fe[3*m+0] += elementGravity.x[elementID] * this->elementDensity[elementID] * surfaceThickness * integValue;
                             fe[3*m+1] += elementGravity.y[elementID] * this->elementDensity[elementID] * surfaceThickness * integValue;
@@ -589,7 +577,7 @@ void RSolverStress::prepare(void)
                     }
 
                     // Mass
-                    if (this->pModel->getTimeSolver().getEnabled() || this->problemType == R_PROBLEM_STRESS_MODAL)
+                    if (surfaceThickness > 0.0 && (this->pModel->getTimeSolver().getEnabled() || this->problemType == R_PROBLEM_STRESS_MODAL))
                     {
                         RRMatrix::mlt(Rt,Met,MeRt);
                         RRMatrix::mlt(MeRt,RtT,Me,true);
@@ -637,7 +625,7 @@ void RSolverStress::prepare(void)
             }
             try
             {
-                uint elementID = volume.get(j);
+                uint elementID = volume.get(uint(j));
 
                 if (!this->computableElements[elementID])
                 {
@@ -795,7 +783,7 @@ void RSolverStress::solve(void)
 
 void RSolverStress::solveStressStrain(void)
 {
-    RLogger::info("Solving strass-strain problem.\n");
+    RLogger::info("Solving stress-strain problem.\n");
 
     try
     {
@@ -939,7 +927,7 @@ void RSolverStress::process(void)
             }
             try
             {
-                uint elementID = line.get(j);
+                uint elementID = line.get(uint(j));
 
                 if (!this->computableElements[elementID])
                 {
@@ -956,18 +944,15 @@ void RSolverStress::process(void)
                 RRVector xe(element.size()*3,0.0);
                 double QeN = 0.0;
 
-                RRMatrix Be(element.size(),1);
-                RRMatrix BeT(1,element.size());
-                RRMatrix Met(element.size(),element.size());
-                RRMatrix MeRt(element.size()*3,element.size());
-                RRMatrix Ket(element.size(),element.size());
-                RRMatrix KeRt(element.size()*3,element.size());
+                RRMatrix Be(3*element.size(),1);
+                RRMatrix BeT(1,3*element.size());
 
                 double E = this->elementElasticityModulus[elementID];
                 double De = E * lineCrossArea;
 
                 RRMatrix Rl;
-                element.findRotationMatrix(this->pModel->getNodes(),Rl);
+                RRVector tl;
+                element.findTransformationMatrix(this->pModel->getNodes(),Rl,tl);
                 Rl.invert();
 
                 RRVector lxe(element.size(),0.0);
@@ -1006,13 +991,14 @@ void RSolverStress::process(void)
                     Be.fill(0.0);
                     for (uint m=0;m<dN.getNRows();m++)
                     {
-                        Be[m][0] += dN[m][0]*J[0][0];
+                        Be[3*m+0][0] += Rt[0][0]*dN[m][0]*J[0][0];
+                        Be[3*m+1][0] += Rt[1][0]*dN[m][0]*J[0][0];
+                        Be[3*m+2][0] += Rt[2][0]*dN[m][0]*J[0][0];
                     }
+                    BeT.transpose(Be);
 
                     Be *= De;
-                    RRMatrix::mlt(Be,BeT,Ket);
-                    RRMatrix::mlt(Rt,Ket,KeRt);
-                    RRMatrix::mlt(KeRt,RtT,Ke);
+                    RRMatrix::mlt(Be,BeT,Ke);
                     Ke *= detJ * shapeFunc.getW();
 
                     for (uint m=0;m<element.size();m++)
@@ -1029,17 +1015,12 @@ void RSolverStress::process(void)
                                                  * detJ
                                                  * shapeFunc.getW()
                                                  * lineCrossArea;
-                                    Met[m][n] += value;
+                                    Me[3*m+0][3*n+0] += std::pow(Rt[0][0],2.0)*value;
+                                    Me[3*m+1][3*n+1] += std::pow(Rt[1][0],2.0)*value;
+                                    Me[3*m+2][3*n+2] += std::pow(Rt[2][0],2.0)*value;
                                 }
                             }
                         }
-                    }
-
-                    // Mass
-                    if (this->pModel->getTimeSolver().getEnabled() || this->problemType == R_PROBLEM_STRESS_MODAL)
-                    {
-                        RRMatrix::mlt(Rt,Met,MeRt);
-                        RRMatrix::mlt(MeRt,RtT,Me,true);
                     }
 
                     double integValue = 1.0/double(nInp);
@@ -1047,8 +1028,8 @@ void RSolverStress::process(void)
                     // Element level stress.
                     for (uint m=0;m<element.size();m++)
                     {
-                        QeN += Be[m][0] * lxe[m] * integValue;
-                        QeN -= Be[m][0] * this->elementThermalExpansion[elementID] * dT * lineCrossArea * integValue;
+                        QeN += dN[m][0]*J[0][0] * De * lxe[m] * integValue;
+                        QeN -= dN[m][0]*J[0][0] * De * this->elementThermalExpansion[elementID] * dT * lineCrossArea * integValue;
                     }
                 }
 
@@ -1109,7 +1090,7 @@ void RSolverStress::process(void)
             }
             try
             {
-                uint elementID = surface.get(j);
+                uint elementID = surface.get(uint(j));
 
                 if (!this->computableElements[elementID])
                 {
@@ -1150,7 +1131,8 @@ void RSolverStress::process(void)
                 De *= E/((1+v)*(1-2*v));
 
                 RRMatrix Rl;
-                element.findRotationMatrix(this->pModel->getNodes(),Rl);
+                RRVector tl;
+                element.findTransformationMatrix(this->pModel->getNodes(),Rl,tl);
                 Rl.invert();
 
                 RRVector lxe(element.size()*2);
@@ -1306,7 +1288,7 @@ void RSolverStress::process(void)
             }
             try
             {
-                uint elementID = volume.get(j);
+                uint elementID = volume.get(uint(j));
 
                 if (!this->computableElements[elementID])
                 {

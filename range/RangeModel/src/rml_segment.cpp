@@ -389,6 +389,13 @@ double RSegment::findLength(const RNode &node1, const RNode &node2)
     return node1.getDistance(node2);
 }
 
+void RSegment::print() const
+{
+    RLogger::info("Segment:\n");
+    this->node1.print();
+    this->node2.print();
+}
+
 bool RSegment::findLineLineIntersection(const RR3Vector &n1, const RR3Vector &n2, const RR3Vector &n3, const RR3Vector &n4, RR3Vector &nx, double &u1, double &u2)
 {
     // http://mathforum.org/library/drmath/view/62814.html

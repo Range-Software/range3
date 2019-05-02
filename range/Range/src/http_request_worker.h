@@ -30,6 +30,7 @@ class HttpRequestWorker
         QNetworkReply::NetworkError errorType;
         QString errorStr;
         QNetworkAccessManager *manager;
+        HttpRequestInput *pRequestInput;
 
     public:
 
@@ -59,7 +60,28 @@ class HttpRequestWorker
 
     private slots:
 
+        //! Authentication is required.
+        void onManagerAuthenticationRequired(QNetworkReply *, QAuthenticator *);
+
+        //! Encrypted connection.
+        void onManagerEncrypted(QNetworkReply *);
+
+        //! Finished request.
         void onManagerFinished(QNetworkReply *reply);
+
+        //! Network accessibility has changed.
+        void onManagerNetworkAccessibleChanged(QNetworkAccessManager::NetworkAccessibility accessible);
+
+        //! Pre-shared key authentication is required.
+        void onManagerPreSharedKeyAuthenticationRequired(QNetworkReply *, QSslPreSharedKeyAuthenticator *);
+
+        //! Proxy authentication is required.
+        void onManagerProxyAuthenticationRequired(const QNetworkProxy &, QAuthenticator *);
+
+#ifndef QT_NO_SSL
+        //! Handle SSL errors.
+        void onSslErrors(QNetworkReply *reply, const QList<QSslError> &errors);
+#endif
 
 };
 

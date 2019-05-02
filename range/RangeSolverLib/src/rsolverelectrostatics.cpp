@@ -487,7 +487,8 @@ void RSolverElectrostatics::process(void)
                 }
 
                 RRMatrix R;
-                this->pModel->getElement(elementID).findRotationMatrix(this->pModel->getNodes(),R);
+                RRVector t;
+                this->pModel->getElement(elementID).findTransformationMatrix(this->pModel->getNodes(),R,t);
 
                 electricField[0] += R[0][0]*Ei;
                 electricField[1] += R[1][0]*Ei;
@@ -567,7 +568,8 @@ void RSolverElectrostatics::process(void)
                 }
 
                 RRMatrix R;
-                this->pModel->getElement(elementID).findRotationMatrix(this->pModel->getNodes(),R);
+                RRVector t;
+                this->pModel->getElement(elementID).findTransformationMatrix(this->pModel->getNodes(),R,t);
 
                 electricField[0] += R[0][0]*Ei + R[0][1]*Ej;
                 electricField[1] += R[1][0]*Ei + R[1][1]*Ej;

@@ -711,7 +711,8 @@ void RSolverAcoustic::processAcousticParticleVelocity(void)
                     }
 
                     RRMatrix R;
-                    this->pModel->getElement(elementID).findRotationMatrix(this->pModel->getNodes(),R);
+                    RRVector t;
+                    this->pModel->getElement(elementID).findTransformationMatrix(this->pModel->getNodes(),R,t);
 
                     ve[0] += R[0][0]*vi;
                     ve[1] += R[1][0]*vi;
@@ -798,7 +799,8 @@ void RSolverAcoustic::processAcousticParticleVelocity(void)
                     }
 
                     RRMatrix R;
-                    this->pModel->getElement(elementID).findRotationMatrix(this->pModel->getNodes(),R);
+                    RRVector t;
+                    this->pModel->getElement(elementID).findTransformationMatrix(this->pModel->getNodes(),R,t);
 
                     ve[0] += R[0][0]*vi + R[0][1]*vj;
                     ve[1] += R[1][0]*vi + R[1][1]*vj;

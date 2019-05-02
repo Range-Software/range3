@@ -146,6 +146,9 @@ class RSegment
             return this->node2;
         }
 
+        //! Print segment to standard output.
+        void print() const;
+
     private:
 
         //! Find line/line intersection defined by four nodes.

@@ -68,6 +68,9 @@ class HttpRequestInput
         //! Return reference to url string.
         QString &getUrlStr(void);
 
+        //! Set url string.
+        void setUrlStr(const QString &urlStr);
+
         //! Return const reference to http method string.
         const QString &getHttpMethod(void) const;
 

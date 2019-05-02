@@ -438,6 +438,7 @@ CONFIG(debug, debug|release) {
     TARGET = $$join(TARGET,,,_debug)
     DEFINES += DEBUG
     DEBUG_EXT = "_debug"
+    CONFIG += console
 }
 
 win*-msvc* {

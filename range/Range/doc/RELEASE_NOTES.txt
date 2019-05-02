@@ -1,4 +1,15 @@
 ------------------------------------------------------------------
+Version 3.2.2
+
+* Use HTTPS as default when contacting Range server
+
+Bug fixes:
+
+* Correctly calculate line elements
+* Corrections in tutorials.
+* Handle HTTP redirections
+
+------------------------------------------------------------------
 Version 3.2.1
 
 * Display notification incons in output area tabs.

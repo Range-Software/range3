@@ -229,7 +229,7 @@ bool ApplicationSettings::getDefaultRangeApiAllowed(void)
 
 const QString ApplicationSettings::getDefaultRangeApiServer(void)
 {
-    return QString("http://range-software.com");
+    return RVendor::www;
 }
 
 const QString ApplicationSettings::getDefaultRangeAccount(void)

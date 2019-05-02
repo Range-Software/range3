@@ -23,10 +23,10 @@ static double storeDouble(double value)
 
 float RConstants::findMachineFloatEpsilon(void)
 {
-    double x = 1.0;
-    while (storeFloat(1.0 + x/2.0) != 1.0)
+    float x = 1.0f;
+    while (storeFloat(1.0f + x/2.0f) != 1.0f)
     {
-        x /= 2.0;
+        x /= 2.0f;
     }
     return x;
 }
