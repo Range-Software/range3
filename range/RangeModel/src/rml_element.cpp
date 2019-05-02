@@ -293,7 +293,7 @@ void RElement::setType (RElementType type)
 
 unsigned int RElement::size (void) const
 {
-    return (unsigned int)this->nodeIDs.size();
+    return static_cast<unsigned int>(this->nodeIDs.size());
 } /* RElement::size */
 
 
@@ -832,7 +832,8 @@ RInterpolatedElement RElement::createInterpolatedElement(double value, const std
             const RNode &node1 = nodes[this->getNodeId(0)];
             const RNode &node2 = nodes[this->getNodeId(1)];
 
-            double ratio = (nodeValues[0] != nodeValues[1]) ? (value - nodeValues[0]) / (nodeValues[1] - nodeValues[0]) : 0.0;
+            double dist = nodeValues[1] - nodeValues[0];
+            double ratio = (dist != 0.0) ? (value - nodeValues[0]) / dist : 0.0;
             if (ratio >= 0.0 && ratio <= 1.0)
             {
                 iElement.push_back(RInterpolatedNode(elementID,
@@ -848,9 +849,11 @@ RInterpolatedElement RElement::createInterpolatedElement(double value, const std
             const RNode &node2 = nodes[this->getNodeId(1)];
             const RNode &node3 = nodes[this->getNodeId(2)];
 
+            double dist = 0.0;
             double ratio = 0.0;
 
-            ratio = (nodeValues[0] != nodeValues[1]) ? (value - nodeValues[0]) / (nodeValues[1] - nodeValues[0]) : 0.0;
+            dist = nodeValues[1] - nodeValues[0];
+            ratio = (dist != 0.0) ? (value - nodeValues[0]) / dist : 0.0;
             if (ratio > 0.0 && ratio <= 1.0)
             {
                 iElement.push_back(RInterpolatedNode(elementID,
@@ -859,7 +862,8 @@ RInterpolatedElement RElement::createInterpolatedElement(double value, const std
                                                      ratio * (node2.getZ() - node1.getZ()) + node1.getZ()));
             }
 
-            ratio = (nodeValues[1] != nodeValues[2]) ? (value - nodeValues[1]) / (nodeValues[2] - nodeValues[1]) : 0.0;
+            dist = nodeValues[2] - nodeValues[1];
+            ratio = (dist != 0.0) ? (value - nodeValues[1]) / dist : 0.0;
             if (ratio > 0.0 && ratio <= 1.0)
             {
                 iElement.push_back(RInterpolatedNode(elementID,
@@ -868,7 +872,8 @@ RInterpolatedElement RElement::createInterpolatedElement(double value, const std
                                                      ratio * (node3.getZ() - node2.getZ()) + node2.getZ()));
             }
 
-            ratio = (nodeValues[2] != nodeValues[0]) ? (value - nodeValues[2]) / (nodeValues[0] - nodeValues[2]) : 0.0;
+            dist = nodeValues[0] - nodeValues[2];
+            ratio = (dist != 0.0) ? (value - nodeValues[2]) / dist : 0.0;
             if (ratio > 0.0 && ratio <= 1.0)
             {
                 iElement.push_back(RInterpolatedNode(elementID,
@@ -885,10 +890,12 @@ RInterpolatedElement RElement::createInterpolatedElement(double value, const std
             const RNode &node3 = nodes[this->getNodeId(2)];
             const RNode &node4 = nodes[this->getNodeId(3)];
 
+            double dist = 0.0;
             double ratio = 0.0;
 
             // 1 - 2
-            ratio = (nodeValues[0] != nodeValues[1]) ? (value - nodeValues[0]) / (nodeValues[1] - nodeValues[0]) : 0.0;
+            dist = nodeValues[1] - nodeValues[0];
+            ratio = (dist != 0.0) ? (value - nodeValues[0]) / dist : 0.0;
             if (ratio > 0.0 && ratio <= 1.0)
             {
                 iElement.push_back(RInterpolatedNode(elementID,
@@ -898,7 +905,8 @@ RInterpolatedElement RElement::createInterpolatedElement(double value, const std
             }
 
             // 1 - 3
-            ratio = (nodeValues[0] != nodeValues[2]) ? (value - nodeValues[0]) / (nodeValues[2] - nodeValues[0]) : 0.0;
+            dist = nodeValues[2] - nodeValues[0];
+            ratio = (dist != 0.0) ? (value - nodeValues[0]) / dist : 0.0;
             if (ratio > 0.0 && ratio <= 1.0)
             {
                 iElement.push_back(RInterpolatedNode(elementID,
@@ -908,7 +916,8 @@ RInterpolatedElement RElement::createInterpolatedElement(double value, const std
             }
 
             // 1 - 4
-            ratio = (nodeValues[0] != nodeValues[3]) ? (value - nodeValues[0]) / (nodeValues[3] - nodeValues[0]) : 0.0;
+            dist = nodeValues[3] - nodeValues[0];
+            ratio = (dist != 0.0) ? (value - nodeValues[0]) / dist : 0.0;
             if (ratio > 0.0 && ratio <= 1.0)
             {
                 iElement.push_back(RInterpolatedNode(elementID,
@@ -918,7 +927,8 @@ RInterpolatedElement RElement::createInterpolatedElement(double value, const std
             }
 
             // 2 - 3
-            ratio = (nodeValues[1] != nodeValues[2]) ? (value - nodeValues[1]) / (nodeValues[2] - nodeValues[1]) : 0.0;
+            dist = nodeValues[2] - nodeValues[1];
+            ratio = (dist != 0.0) ? (value - nodeValues[1]) / dist : 0.0;
             if (ratio > 0.0 && ratio <= 1.0)
             {
                 iElement.push_back(RInterpolatedNode(elementID,
@@ -928,7 +938,7 @@ RInterpolatedElement RElement::createInterpolatedElement(double value, const std
             }
 
             // 2 - 4
-            ratio = (nodeValues[1] != nodeValues[3]) ? (value - nodeValues[1]) / (nodeValues[3] - nodeValues[1]) : 0.0;
+            ratio = (dist != 0.0) ? (value - nodeValues[1]) / dist : 0.0;
             if (ratio > 0.0 && ratio <= 1.0)
             {
                 iElement.push_back(RInterpolatedNode(elementID,
@@ -938,7 +948,8 @@ RInterpolatedElement RElement::createInterpolatedElement(double value, const std
             }
 
             // 3 - 4
-            ratio = (nodeValues[2] != nodeValues[3]) ? (value - nodeValues[2]) / (nodeValues[3] - nodeValues[2]) : 0.0;
+            dist = nodeValues[3] - nodeValues[2];
+            ratio = (dist != 0.0) ? (value - nodeValues[2]) / dist : 0.0;
             if (ratio > 0.0 && ratio <= 1.0)
             {
                 iElement.push_back(RInterpolatedNode(elementID,
@@ -1171,10 +1182,12 @@ double RElement::interpolate(const std::vector<RNode> &nodes,
 } /* RElement::interpolate */
 
 
-RRMatrix RElement::findRotationMatrix(const std::vector<RNode> &nodes, RRMatrix &R) const
+RRMatrix RElement::findTransformationMatrix(const std::vector<RNode> &nodes, RRMatrix &R, RRVector &t) const
 {
     RRMatrix lNodes;
     R.setIdentity(3);
+    t.resize(3);
+    t.fill(0.0);
 
     unsigned int nn = this->size();
 
@@ -1191,7 +1204,29 @@ RRMatrix RElement::findRotationMatrix(const std::vector<RNode> &nodes, RRMatrix 
     }
     else if (R_ELEMENT_TYPE_IS_LINE(this->getType()))
     {
+        t[0] = nodes[this->getNodeId(0)].getX();
+        t[1] = nodes[this->getNodeId(0)].getY();
+        t[2] = nodes[this->getNodeId(0)].getZ();
+
         lNodes.resize(nn,1);
+
+        RSegment segment(nodes[this->getNodeId(0)],
+                         nodes[this->getNodeId(1)]);
+        segment.findRotationMatrix(R);
+
+        RRMatrix Ri(R);
+        Ri.invert();
+
+        for (unsigned int i=0;i<nn;i++)
+        {
+            double x = nodes[this->getNodeId(i)].getX();
+            double y = nodes[this->getNodeId(i)].getY();
+            double z = nodes[this->getNodeId(i)].getZ();
+            x -= t[0];
+            y -= t[1];
+            z -= t[2];
+            lNodes[i][0] = Ri[0][0]*x + Ri[0][1]*y + Ri[0][2]*z;
+        }
     }
     else if (R_ELEMENT_TYPE_IS_SURFACE(this->getType()))
     {
@@ -1210,6 +1245,9 @@ RRMatrix RElement::findRotationMatrix(const std::vector<RNode> &nodes, RRMatrix 
             double x = nodes[this->getNodeId(i)].getX();
             double y = nodes[this->getNodeId(i)].getY();
             double z = nodes[this->getNodeId(i)].getZ();
+            x -= t[0];
+            y -= t[1];
+            z -= t[2];
             lNodes[i][0] = Ri[0][0]*x + Ri[0][1]*y + Ri[0][2]*z;
             lNodes[i][1] = Ri[1][0]*x + Ri[1][1]*y + Ri[1][2]*z;
         }
@@ -1228,6 +1266,7 @@ double RElement::findJacobian(const std::vector<RNode> &nodes, unsigned int iPoi
 {
     RRMatrix lNodes;
     RRMatrix R;
+    RRVector t;
 
     const RElementShapeFunction &shapeFunction = RElement::getShapeFunction(this->getType(),iPoint);
     const RRMatrix &dN = shapeFunction.getDN();
@@ -1236,7 +1275,7 @@ double RElement::findJacobian(const std::vector<RNode> &nodes, unsigned int iPoi
     J.fill(0.0);
     lNodes.resize(dN.getNRows(),dN.getNColumns());
 
-    lNodes = this->findRotationMatrix(nodes,R);
+    lNodes = this->findTransformationMatrix(nodes,R,t);
 
     for (unsigned int i=0;i<dN.getNColumns();i++)
     {
@@ -1698,7 +1737,6 @@ bool RElement::nodeIsOnEdge(uint nodePosition, uint edgePosition) const
             return false;
         }
     }
-    return true;
 } /* RElement::nodeIsOnEdge */
 
 
@@ -1706,11 +1744,11 @@ bool RElement::mergeNodes(uint nodeId1, uint nodeId2, bool allowDowngrade)
 {
     bool nodeMerged = false;
 
-    for (int i=this->size()-1;i>=0;i--)
+    for (int i=int(this->size())-1;i>=0;i--)
     {
-        if (this->getNodeId(i) == nodeId2)
+        if (this->getNodeId(uint(i)) == nodeId2)
         {
-            this->setNodeId(i,nodeId1);
+            this->setNodeId(uint(i),nodeId1);
             nodeMerged = true;
         }
     }
@@ -1782,10 +1820,11 @@ void RElement::breakWithNodes(const std::vector<RNode> &nodes, const std::vector
     if (R_ELEMENT_TYPE_IS_SURFACE(this->getType()))
     {
         RRMatrix R;
+        RRVector t;
         RRMatrix rotatedNodes;
         try
         {
-            rotatedNodes = this->findRotationMatrix(nodes,R);
+            rotatedNodes = this->findTransformationMatrix(nodes,R,t);
             R.invert();
         }
         catch (const RError &rError)
@@ -2423,7 +2462,7 @@ double RElement::generateTotalWeightFactor(RElementType type)
 unsigned int RElement::getNIntegrationPoints(RElementType type)
 {
     R_ERROR_ASSERT (R_ELEMENT_TYPE_IS_VALID(type));
-    return (unsigned int)elementDesc[type].shapeFunctions.size();
+    return static_cast<unsigned int>(elementDesc[type].shapeFunctions.size());
 } /* RElement::getNIntegrationPoints */
 
 

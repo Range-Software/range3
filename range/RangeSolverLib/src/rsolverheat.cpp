@@ -576,7 +576,8 @@ void RSolverHeat::process(void)
                 }
 
                 RRMatrix R;
-                this->pModel->getElement(elementID).findRotationMatrix(this->pModel->getNodes(),R);
+                RRVector t;
+                this->pModel->getElement(elementID).findTransformationMatrix(this->pModel->getNodes(),R,t);
 
                 Qx += R[0][0]*Qi;
                 Qy += R[1][0]*Qi;
@@ -649,7 +650,8 @@ void RSolverHeat::process(void)
                 }
 
                 RRMatrix R;
-                this->pModel->getElement(elementID).findRotationMatrix(this->pModel->getNodes(),R);
+                RRVector t;
+                this->pModel->getElement(elementID).findTransformationMatrix(this->pModel->getNodes(),R,t);
 
                 Qx += R[0][0]*Qi + R[0][1]*Qj;
                 Qy += R[1][0]*Qi + R[1][1]*Qj;

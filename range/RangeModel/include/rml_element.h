@@ -220,11 +220,12 @@ class RElement
                             const RRVector &nodeValues,
                             const RRVector &volumes ) const;
 
-        //! Find rotation matrix which provides rotation from local to global coordinates.
+        //! Find transformation matrix which provides rotation and translation from local to global coordinates.
         //! Return local (rotated) element coordinates.
         //! Rotate 2D elements into XY plane and 1D element into X axis.
-        RRMatrix findRotationMatrix( const std::vector <RNode> &nodes,
-                                     RRMatrix &R ) const;
+        RRMatrix findTransformationMatrix( const std::vector <RNode> &nodes,
+                                           RRMatrix &R,
+                                           RRVector &t) const;
 
         //! Calculate jacobian matrix and its determinant.
         //! J - jacobian

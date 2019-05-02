@@ -71,14 +71,14 @@ void RR3Vector::findRotationMatrix(RRMatrix &R) const
     ly[1] = 0.0;
     ly[2] = 0.0;
 
-    if (std::fabs(RRVector::angle(lx,RR3Vector(1.0,0.0,0.0))) < RConstants::pi/10.0)
+    if (std::fabs(RRVector::angle(lx,ly)) < RConstants::pi/10.0)
     {
         ly[0] = 0.0;
         ly[1] = 1.0;
         ly[2] = 0.0;
     }
 
-    RRVector::cross(ly,lx,lz);
+    RRVector::cross(lx,ly,lz);
 
     if (std::fabs(lz.normalize()) < RConstants::eps)
     {
@@ -87,7 +87,7 @@ void RR3Vector::findRotationMatrix(RRMatrix &R) const
         lz[2] = 1.0;
     }
 
-    RRVector::cross(lx,lz,ly);
+    RRVector::cross(lz,lx,ly);
 
     ly.normalize();
 

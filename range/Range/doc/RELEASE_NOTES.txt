@@ -5,6 +5,7 @@ Version 3.2.2
 
 Bug fixes:
 
+* Correctly calculate line elements
 * Corrections in tutorials.
 * Handle HTTP redirections
 
