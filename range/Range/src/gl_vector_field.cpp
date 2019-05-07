@@ -219,13 +219,13 @@ std::vector<VectorFieldItem> GLVectorField::calculateField(const RVariable *pSca
         REntityGroupType entityType;
         uint entityID;
 
-        if (!rModel.getEntityID(this->elementGroupIDs[i],entityType,entityID))
+        if (!rModel.getEntityID(this->elementGroupIDs[uint(i)],entityType,entityID))
         {
             continue;
         }
         if (REntityGroup::typeIsElementGroup(entityType))
         {
-            const RElementGroup *pElementGroup = rModel.getElementGroupPtr(this->elementGroupIDs[i]);
+            const RElementGroup *pElementGroup = rModel.getElementGroupPtr(this->elementGroupIDs[uint(i)]);
             if (!pElementGroup)
             {
                 continue;
@@ -265,6 +265,17 @@ std::vector<VectorFieldItem> GLVectorField::calculateField(const RVariable *pSca
                     if (rVariable.getNVectors() > 2)
                     {
                         v2[2] = rVariable.getValue(2,elementID);
+                    }
+
+                    if (!this->getType3D())
+                    {
+                        RR3Vector normal;
+                        if (rElement.findNormal(rModel.getNodes(),normal[0],normal[1],normal[2]))
+                        {
+                            RR3Vector pv2;
+                            RR3Vector::cross(normal,v2,pv2);
+                            RR3Vector::cross(pv2,normal,v2);
+                        }
                     }
 
                     if (this->getData().getDrawEqualArrowLength())
@@ -331,6 +342,17 @@ std::vector<VectorFieldItem> GLVectorField::calculateField(const RVariable *pSca
                         if (rVariable.getNVectors() > 2)
                         {
                             v2[2] = rVariable.getValue(2,nodeID);
+                        }
+
+                        if (!this->getType3D())
+                        {
+                            RR3Vector normal;
+                            if (rElement.findNormal(rModel.getNodes(),normal[0],normal[1],normal[2]))
+                            {
+                                RR3Vector pv2;
+                                RR3Vector::cross(normal,v2,pv2);
+                                RR3Vector::cross(pv2,normal,v2);
+                            }
                         }
 
                         if (this->getData().getDrawEqualArrowLength())
@@ -409,12 +431,14 @@ std::vector<VectorFieldItem> GLVectorField::calculateField(const RVariable *pSca
                         v2[2] = rVariable.getValue(2,elementID);
                     }
 
-                    if (this->getType3D())
+                    if (!this->getType3D())
                     {
                         RR3Vector normal;
                         if (rIElement.findNormal(normal[0],normal[1],normal[2]))
                         {
-
+                            RR3Vector pv2;
+                            RR3Vector::cross(normal,v2,pv2);
+                            RR3Vector::cross(pv2,normal,v2);
                         }
                     }
 
@@ -489,6 +513,16 @@ std::vector<VectorFieldItem> GLVectorField::calculateField(const RVariable *pSca
                         {
                             validScalarValue = true;
                             scalarValue = rElement.interpolate(rModel.getNodes(),rIElement[k],elementScalarValues);
+                        }
+                        if (!this->getType3D())
+                        {
+                            RR3Vector normal;
+                            if (rIElement.findNormal(normal[0],normal[1],normal[2]))
+                            {
+                                RR3Vector pv2;
+                                RR3Vector::cross(normal,v2,pv2);
+                                RR3Vector::cross(pv2,normal,v2);
+                            }
                         }
 
                         if (this->getData().getDrawEqualArrowLength())
