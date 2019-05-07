@@ -198,7 +198,7 @@ void VectorFieldDialog::createDialog(void)
                      this,
                      &VectorFieldDialog::onVariableTreeSelectionChanged);
 
-    Qt::CheckState type3DCheckState = Qt::Unchecked;
+    Qt::CheckState type3DCheckState = (this->entityID == RConstants::eod) ? Qt::Checked : Qt::Unchecked;
     if (nType3D > 0)
     {
         type3DCheckState = (nType3D == nVariables) ? Qt::Checked : Qt::PartiallyChecked;
