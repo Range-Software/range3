@@ -6,7 +6,7 @@ Version 3.2.2
 Bug fixes:
 
 * Correctly calculate line elements
-* If 3D is disabled for vector field, then vectors should interpolate to underlying entity
+* If 3D is disabled for vector field, then vectors should project to underlying entity. Applies for surface, cut and ISO surface.
 * Corrections in tutorials
 * Handle HTTP redirections
 
