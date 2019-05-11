@@ -21,7 +21,7 @@ const QString CentralTabWidget::informationIconFile(":/icons/file/pixmaps/range-
 const QString CentralTabWidget::importantIconFile(":/icons/file/pixmaps/range-important.svg");
 const QString CentralTabWidget::severeIconFile(":/icons/file/pixmaps/range-severe.svg");
 
-const bool useTabIcons = true;
+const bool useTabIcons = false;
 
 CentralTabWidget::CentralTabWidget(QWidget *parent)
     : QTabWidget(parent)

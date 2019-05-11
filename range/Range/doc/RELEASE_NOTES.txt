@@ -1,14 +1,15 @@
 ------------------------------------------------------------------
 Version 3.2.2
 
-* Use HTTPS as default when contacting Range server
+* GUI: Use HTTPS as default when contacting Range server
 
 Bug fixes:
 
-* Correctly calculate line elements
-* If 3D is disabled for vector field, then vectors should project to underlying entity. Applies for surface, cut and ISO surface.
-* Corrections in tutorials
-* Handle HTTP redirections
+* SOLVER: Correctly calculate line elements
+* GUI: Do not use icons in output browsers tabs which can cause GUI to freeze
+* GUI: If 3D is disabled for vector field, then vectors should project to underlying entity. Applies for surface, cut and ISO surface.
+* GUI: Handle HTTP redirections
+* DOC: Corrections in tutorials
 
 ------------------------------------------------------------------
 Version 3.2.1
