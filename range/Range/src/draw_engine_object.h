@@ -41,10 +41,10 @@ class DrawEngineObject : public QObject
         explicit DrawEngineObject(QObject *parent = nullptr);
 
         //! Return const reference object name.
-        const QString &getName(void) const;
+        const QString &getName() const;
 
         //! Return number of input parameters.
-        uint getNInputParameters(void) const;
+        uint getNInputParameters() const;
 
         //! Return const reference to input parameter at given position.
         const DrawEngineInput &getInputParamater(uint position) const;

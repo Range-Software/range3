@@ -103,7 +103,7 @@ void Model::insertModel(const Model &model, bool mergeNearNodes, double toleranc
     uint neg = this->getNElementGroups();
 
     QVector<uint> nodeBook;
-    nodeBook.resize(model.getNNodes());
+    nodeBook.resize(int(model.getNNodes()));
 
     for (uint i=0;i<model.getNNodes();i++)
     {
@@ -113,17 +113,17 @@ void Model::insertModel(const Model &model, bool mergeNearNodes, double toleranc
             uint nId = this->findNearNode(model.nodes[i],tolerance,findNearest);
             if (nId != RConstants::eod)
             {
-                nodeBook[i]=nId;
+                nodeBook[int(i)]=nId;
             }
             else
             {
-                nodeBook[i]=nn++;
+                nodeBook[int(i)]=nn++;
                 appendNode = true;
             }
         }
         else
         {
-            nodeBook[i]=nn++;
+            nodeBook[int(i)]=nn++;
             appendNode = true;
         }
         if (appendNode)
@@ -138,7 +138,7 @@ void Model::insertModel(const Model &model, bool mergeNearNodes, double toleranc
         // Adjust node IDs.
         for (uint j=0;j<this->elements[ne+i].size();j++)
         {
-            this->elements[ne+i].setNodeId(j,nodeBook[this->elements[ne+i].getNodeId(j)]);
+            this->elements[ne+i].setNodeId(j,nodeBook[int(this->elements[ne+i].getNodeId(j))]);
         }
         this->RResults::addElement();
     }
@@ -273,7 +273,7 @@ void Model::insertModel(const Model &model, bool mergeNearNodes, double toleranc
     this->consolidate(Model::ConsolidateEdgeElements | Model::ConsolidateHoleElements | Model::ConsolidateSliverElements | Model::ConsolidateIntersectedElements);
 }
 
-const QString &Model::getFileName(void) const
+const QString &Model::getFileName() const
 {
     return this->fileName;
 }
@@ -283,12 +283,12 @@ void Model::setFileName(const QString &fileName)
     this->fileName = fileName;
 }
 
-const RMeshInput &Model::getMeshInput(void) const
+const RMeshInput &Model::getMeshInput() const
 {
     return this->meshInput;
 }
 
-RMeshInput &Model::getMeshInput(void)
+RMeshInput &Model::getMeshInput()
 {
     return this->meshInput;
 }
@@ -298,7 +298,7 @@ void Model::setMeshInput(const RMeshInput &meshInput)
     this->meshInput = meshInput;
 }
 
-void Model::initializeMeshInput(void)
+void Model::initializeMeshInput()
 {
     double xmin, xmax, ymin, ymax, zmin, zmax;
 
@@ -320,40 +320,40 @@ void Model::initializeMeshInput(void)
     }
 }
 
-const RViewFactorMatrix &Model::getViewFactorMatrix(void) const
+const RViewFactorMatrix &Model::getViewFactorMatrix() const
 {
     return this->viewFactorMatrix;
 }
 
-RViewFactorMatrix &Model::getViewFactorMatrix(void)
+RViewFactorMatrix &Model::getViewFactorMatrix()
 {
     return this->viewFactorMatrix;
 }
 
-bool Model::canColorByPatch(void) const
+bool Model::canColorByPatch() const
 {
     return ((this->getProblemTaskTree().getProblemTypeMask() & R_PROBLEM_RADIATIVE_HEAT) &&
             (this->getViewFactorMatrix().getPatchBook().getNPatches() > 0));
 }
 
-bool Model::canColorByViewFactor(void) const
+bool Model::canColorByViewFactor() const
 {
     return ((this->getProblemTaskTree().getProblemTypeMask() & R_PROBLEM_RADIATIVE_HEAT) &&
             (this->getViewFactorMatrix().getPatchBook().getNPatches() > 0) &&
             (this->getViewFactorMatrix().size() == this->getViewFactorMatrix().getPatchBook().getNPatches()));
 }
 
-const QList<QColor> &Model::getPatchColors(void) const
+const QList<QColor> &Model::getPatchColors() const
 {
     return this->patchColors;
 }
 
-QList<QColor> &Model::getPatchColors(void)
+QList<QColor> &Model::getPatchColors()
 {
     return this->patchColors;
 }
 
-void Model::generatePatchColors(void)
+void Model::generatePatchColors()
 {
     this->patchColors.clear();
     for (uint i=0;i<this->viewFactorMatrix.getPatchBook().getNPatches();i++)
@@ -404,7 +404,7 @@ const REntityGroupData *Model::getElementGroupData(REntityGroupType elementGroup
         case R_ENTITY_GROUP_ISO:
             return &this->getIso(position).getData();
         default:
-            return 0;
+            return nullptr;
     }
 }
 
@@ -431,7 +431,7 @@ REntityGroupData *Model::getElementGroupData(REntityGroupType elementGroupType, 
         case R_ENTITY_GROUP_ISO:
             return &this->getIso(position).getData();
         default:
-            return 0;
+            return nullptr;
     }
 }
 
@@ -599,14 +599,14 @@ void Model::closeSurfaceHole(QList<uint> edgeIDs)
 
     for (int i=0;i<elementIDs.size();i++)
     {
-        nodeIDs.append(this->holeElements[elementIDs[i]].getNodeId(0));
+        nodeIDs.append(this->holeElements[int(elementIDs[i])].getNodeId(0));
     }
 
     std::vector<RNode> edgeNodes;
-    edgeNodes.resize(nodeIDs.size());
+    edgeNodes.resize(uint(nodeIDs.size()));
     for (uint i=0;i<edgeNodes.size();i++)
     {
-        edgeNodes[i] = this->getNode(nodeIDs[i]);
+        edgeNodes[i] = this->getNode(nodeIDs[int(i)]);
     }
 
     if (edgeNodes.size() > 0)
@@ -617,7 +617,7 @@ void Model::closeSurfaceHole(QList<uint> edgeIDs)
             patchElements[j].swapNodeIds(1,2);
             for (uint k=0;k<patchElements[j].size();k++)
             {
-                patchElements[j].setNodeId(k,nodeIDs[patchElements[j].getNodeId(k)]);
+                patchElements[j].setNodeId(k,nodeIDs[int(patchElements[j].getNodeId(k))]);
             }
             this->addElement(patchElements[j]);
         }
@@ -689,7 +689,7 @@ void Model::transformGeometry(const GeometryTransformInput &geometryTransformInp
 
         if (input.getApplyTo() == GeometryTransformInput::ApplyToAll)
         {
-            nodeIDs.reserve(this->getNNodes());
+            nodeIDs.reserve(int(this->getNNodes()));
             for (uint i=0;i<this->getNNodes();i++)
             {
                 nodeIDs.insert(uint(i));
@@ -785,7 +785,7 @@ uint Model::mergeNearNodes(double tolerance)
     return nMerged;
 }
 
-uint Model::purgeUnusedNodes(void)
+uint Model::purgeUnusedNodes()
 {
     uint nPurged = this->RModel::purgeUnusedNodes();
 
@@ -794,13 +794,22 @@ uint Model::purgeUnusedNodes(void)
     return nPurged;
 }
 
-uint Model::purgeUnusedElements(void)
+uint Model::purgeUnusedElements()
 {
     uint nPurged = this->RModel::purgeUnusedElements();
 
     this->consolidate(Model::ConsolidateEdgeElements | Model::ConsolidateHoleElements | Model::ConsolidateSliverElements | Model::ConsolidateIntersectedElements);
 
     return nPurged;
+}
+
+uint Model::removeDuplicateElements()
+{
+    uint nMerged = this->RModel::removeDuplicateElements();
+
+    this->consolidate(Model::ConsolidateEdgeElements | Model::ConsolidateHoleElements | Model::ConsolidateSliverElements | Model::ConsolidateIntersectedElements);
+
+    return nMerged;
 }
 
 uint Model::fixSliverElements(double edgeRatio)
@@ -825,7 +834,7 @@ uint Model::fixSliverElements(double edgeRatio)
 void Model::updateSliverElements(double edgeRatio)
 {
     this->sliverElements = this->findSliverElements(edgeRatio);
-    uint ni = this->sliverElements.size();
+    int ni = this->sliverElements.size();
     if (ni == 0)
     {
         RLogger::info("No sliver elements were found.\n");
@@ -836,10 +845,10 @@ void Model::updateSliverElements(double edgeRatio)
     }
 }
 
-void Model::updateIntersectedElements(void)
+void Model::updateIntersectedElements()
 {
     this->intersectedElements = this->findIntersectedElements();
-    uint ni = this->intersectedElements.size();
+    int ni = this->intersectedElements.size();
     if (ni == 0)
     {
         RLogger::info("No intersected elements were found.\n");
@@ -868,7 +877,7 @@ uint Model::breakIntersectedElements(uint nIterations)
     return ni;
 }
 
-bool Model::exportSliverElements(void) const
+bool Model::exportSliverElements() const
 {
     if (this->sliverElements.size() == 0)
     {
@@ -923,7 +932,7 @@ bool Model::exportSliverElements(void) const
     return true;
 }
 
-bool Model::exportIntersectedElements(void) const
+bool Model::exportIntersectedElements() const
 {
     if (this->intersectedElements.size() == 0)
     {
@@ -1110,7 +1119,7 @@ bool Model::isSelected(REntityGroupType elementGroupType,
     return true;
 }
 
-bool Model::getSelected(void) const
+bool Model::getSelected() const
 {
     return this->getData().getSelected();
 }
@@ -1409,7 +1418,7 @@ QSet<uint> Model::getElementIDs(const QList<SessionEntityID> &entityIDs) const
 {
     QSet<uint> elementIDs;
 
-    elementIDs.reserve(this->getNElements());
+    elementIDs.reserve(int(this->getNElements()));
     for (int i=0;i<entityIDs.size();i++)
     {
         uint entityGroupId = this->getEntityGroupID(entityIDs[i].getType(),entityIDs[i].getEid(),true);
@@ -1436,7 +1445,7 @@ QSet<uint> Model::getNodeIDs(const QSet<uint> &elementIDs) const
     QSet<uint> nodeIDs;
 
     QVector<bool> nodeBook;
-    nodeBook.resize(this->getNNodes());
+    nodeBook.resize(int(this->getNNodes()));
     nodeBook.fill(false);
 
     foreach (uint elementID, elementIDs)
@@ -1444,7 +1453,7 @@ QSet<uint> Model::getNodeIDs(const QSet<uint> &elementIDs) const
         const RElement &rElement = this->getElement(elementID);
         for (uint i=0;i<rElement.size();i++)
         {
-            nodeBook[rElement.getNodeId(i)] = true;
+            nodeBook[int(rElement.getNodeId(i))] = true;
         }
     }
 
@@ -1457,13 +1466,13 @@ QSet<uint> Model::getNodeIDs(const QSet<uint> &elementIDs) const
         }
     }
 
-    nodeIDs.reserve(nn);
+    nodeIDs.reserve(int(nn));
 
     for (int i=0;i<nodeBook.size();i++)
     {
         if (nodeBook[i])
         {
-            nodeIDs.insert(i);
+            nodeIDs.insert(uint(i));
         }
     }
 
@@ -1471,21 +1480,21 @@ QSet<uint> Model::getNodeIDs(const QSet<uint> &elementIDs) const
 } /* Model::getNodeIDs */
 
 
-uint Model::getNSlivers(void) const
+uint Model::getNSlivers() const
 {
-    return this->sliverElements.size();
+    return uint(this->sliverElements.size());
 } /* Model::getNSlivers */
 
 
-uint Model::getNIntersected(void) const
+uint Model::getNIntersected() const
 {
-    return this->intersectedElements.size();
+    return uint(this->intersectedElements.size());
 } /* Model::getNIntersected */
 
 
-uint Model::getNHoleElements(void) const
+uint Model::getNHoleElements() const
 {
-    return this->holeElements.size();
+    return uint(this->holeElements.size());
 } /* Model::getNHoleEdges */
 
 
@@ -1812,17 +1821,17 @@ void Model::setColor(REntityGroupType elementGroupType, uint position, const QCo
     }
 }
 
-void Model::glDrawLock(void)
+void Model::glDrawLock()
 {
     this->drawLock.lock();
 }
 
-bool Model::glDrawTrylock(void)
+bool Model::glDrawTrylock()
 {
     return this->drawLock.tryLock();
 }
 
-void Model::glDrawUnlock(void)
+void Model::glDrawUnlock()
 {
     this->drawLock.unlock();
 }
@@ -2001,7 +2010,7 @@ void Model::glDraw(GLWidget *glWidget) const
             }
         }
 
-        GL_SAFE_CALL(glDepthFunc(depthFunc));
+        GL_SAFE_CALL(glDepthFunc(GLenum(depthFunc)));
     }
     catch (const RError &error)
     {
@@ -2047,8 +2056,8 @@ void Model::glDraw(GLWidget *glWidget, const QVector<PickItem> &pickedItems) con
             {
                 glWidget->qglColor(QColor(Qt::white));
 
-                const RNode &node1 = this->getNode(this->holeElements[elementPosition].getNodeId(0));
-                const RNode &node2 = this->getNode(this->holeElements[elementPosition].getNodeId(1));
+                const RNode &node1 = this->getNode(this->holeElements[int(elementPosition)].getNodeId(0));
+                const RNode &node2 = this->getNode(this->holeElements[int(elementPosition)].getNodeId(1));
 
                 GLLine line(glWidget,node1.toVector(),node2.toVector(),4.0);
 
@@ -2209,7 +2218,7 @@ void Model::glDraw(GLWidget *glWidget, const QVector<PickItem> &pickedItems) con
         {
             GL_SAFE_CALL(glEnable(GL_LIGHTING));
         }
-        GL_SAFE_CALL(glDepthFunc(depthFunc));
+        GL_SAFE_CALL(glDepthFunc(GLenum(depthFunc)));
         GL_SAFE_CALL(glPointSize(pointSize));
     }
     catch (const RError &error)
@@ -2402,7 +2411,7 @@ QMap<RVariableType, PickValue> Model::getPickedResultsValues(const PickItem &rPi
 
 bool Model::nodeIsOnEdge(uint nodeID) const
 {
-    return (this->edgeNodes[nodeID]);
+    return (this->edgeNodes[int(nodeID)]);
 }
 
 bool Model::elementIsOnEdge(uint elementID) const
@@ -2429,7 +2438,7 @@ bool Model::elementIsOnEdge(uint elementID) const
     unsigned nFoundEdgeNodes = 0;
     for (unsigned int i=0;i<element.size();i++)
     {
-        if (this->edgeNodes[element.getNodeId(i)])
+        if (this->edgeNodes[int(element.getNodeId(i))])
         {
             nFoundEdgeNodes++;
         }
@@ -2480,7 +2489,7 @@ bool Model::findPickedElement(const RR3Vector &position, const RR3Vector &direct
 #pragma omp for
                 for (int64_t j=0;j<int64_t(pElementGroup->size());j++)
                 {
-                    uint elementID = pElementGroup->get(j);
+                    uint elementID = pElementGroup->get(uint(j));
                     const RElement &rElement = this->getElement(elementID);
 
                     if (pDisplacementVariable)
@@ -2502,7 +2511,7 @@ bool Model::findPickedElement(const RR3Vector &position, const RR3Vector &direct
                         if (!found || minDistance > distance)
                         {
                             minDistance = distance;
-                            pickItem = PickItem(SessionEntityID(0,entityType,entityID),elementID,j);
+                            pickItem = PickItem(SessionEntityID(0,entityType,entityID),elementID,uint(j));
                             found = true;
                         }
                     }
@@ -2518,7 +2527,7 @@ bool Model::findPickedElement(const RR3Vector &position, const RR3Vector &direct
 #pragma omp for
                 for (int64_t j=0;j<int64_t(pIEntity->size());j++)
                 {
-                    RInterpolatedElement iElement(pIEntity->at(j));
+                    RInterpolatedElement iElement(pIEntity->at(uint(j)));
 
                     if (pDisplacementVariable)
                     {
@@ -2535,7 +2544,7 @@ bool Model::findPickedElement(const RR3Vector &position, const RR3Vector &direct
                         if (!found || minDistance > distance)
                         {
                             minDistance = distance;
-                            pickItem = PickItem(SessionEntityID(0,entityType,entityID),j,j);
+                            pickItem = PickItem(SessionEntityID(0,entityType,entityID),uint(j),uint(j));
                             found = true;
                         }
                     }
@@ -2587,7 +2596,7 @@ bool Model::findPickedNode(const RR3Vector &position, const RR3Vector &direction
 #pragma omp for
                 for (int64_t j=0;j<int64_t(pElementGroup->size());j++)
                 {
-                    uint elementID = pElementGroup->get(j);
+                    uint elementID = pElementGroup->get(uint(j));
                     const RElement &rElement = this->getElement(elementID);
 
                     if (pDisplacementVariable)
@@ -2615,7 +2624,7 @@ bool Model::findPickedNode(const RR3Vector &position, const RR3Vector &direction
                             if (!found || minDistance > distance)
                             {
                                 minDistance = distance;
-                                pickItem = PickItem(SessionEntityID(0,entityType,entityID),elementID,j,nodeID,k);
+                                pickItem = PickItem(SessionEntityID(0,entityType,entityID),elementID,uint(j),nodeID,k);
                                 found = true;
                             }
                         }
@@ -2632,7 +2641,7 @@ bool Model::findPickedNode(const RR3Vector &position, const RR3Vector &direction
 #pragma omp for
                 for (int64_t j=0;j<int64_t(pIEntity->size());j++)
                 {
-                    RInterpolatedElement iElement(pIEntity->at(j));
+                    RInterpolatedElement iElement(pIEntity->at(uint(j)));
 
                     if (pDisplacementVariable)
                     {
@@ -2652,7 +2661,7 @@ bool Model::findPickedNode(const RR3Vector &position, const RR3Vector &direction
                             if (!found || minDistance > distance)
                             {
                                 minDistance = distance;
-                                pickItem = PickItem(SessionEntityID(0,entityType,entityID),j,j,k,k);
+                                pickItem = PickItem(SessionEntityID(0,entityType,entityID),uint(j),uint(j),k,k);
                                 found = true;
                             }
                         }
@@ -2745,7 +2754,7 @@ void Model::write(const QString &fileName, bool writeLinkFile)
     this->setFileName(RModel::write(fileName,writeLinkFile));
 }
 
-void Model::loadViewFactorMatrix(void)
+void Model::loadViewFactorMatrix()
 {
     this->viewFactorMatrix.clear();
 
@@ -2786,7 +2795,7 @@ void Model::loadViewFactorMatrix(void)
     }
 }
 
-void Model::unloadViewFactorMatrix(void)
+void Model::unloadViewFactorMatrix()
 {
     this->viewFactorMatrix.clear();
 }
@@ -2952,7 +2961,7 @@ QList<QString> Model::getRecordFiles(bool onlyExistingFiles) const
     return recordFiles;
 }
 
-QList<QString> Model::getDocumentFiles(void) const
+QList<QString> Model::getDocumentFiles() const
 {
     QList<QString> documentFiles;
 
@@ -2994,7 +3003,7 @@ QList<QString> Model::getDocumentFiles(void) const
 }
 
 
-uint Model::getUndoStackSize(void) const
+uint Model::getUndoStackSize() const
 {
     return uint(this->undoStack.size());
 }
@@ -3018,7 +3027,7 @@ QString Model::getUndoActionMessage() const
     return QString();
 }
 
-uint Model::getRedoStackSize(void) const
+uint Model::getRedoStackSize() const
 {
     return uint(this->redoStack.size());
 }
@@ -3033,7 +3042,7 @@ void Model::redo(uint revision)
     this->operator =(this->redoStack.pop());
 }
 
-QString Model::getRedoActionMessage(void) const
+QString Model::getRedoActionMessage() const
 {
     if (this->redoStack.size() > 0)
     {
@@ -3072,7 +3081,7 @@ void Model::updateHistoryStackSize(uint maxDepth)
     }
 }
 
-void Model::clearEdgeNodes(void)
+void Model::clearEdgeNodes()
 {
     this->edgeNodes.clear();
 }
@@ -3426,7 +3435,7 @@ QVector<RElement> Model::findEdgeElements(double separationAngle) const
 } /* Model::findEdgeElements */
 
 
-QVector<RElement> Model::findHoleElements(void) const
+QVector<RElement> Model::findHoleElements() const
 {
     RLogger::info("Finding hole elements\n");
     RLogger::indent();

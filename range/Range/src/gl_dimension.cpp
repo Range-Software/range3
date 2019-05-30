@@ -53,11 +53,6 @@ GLDimension::GLDimension(const GLDimension &glDimension)
     this->_init(&glDimension);
 }
 
-GLDimension::~GLDimension()
-{
-
-}
-
 GLDimension &GLDimension::operator=(const GLDimension &glDimension)
 {
     this->_init(&glDimension);

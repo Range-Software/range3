@@ -365,7 +365,7 @@ uint RSegment::isPointAtNode(const RR3Vector &point) const
     return RConstants::eod;
 }
 
-RR3Vector RSegment::findDirection(void) const
+RR3Vector RSegment::findDirection() const
 {
     RR3Vector direction;
     this->findDirection(direction);
@@ -379,7 +379,7 @@ void RSegment::findDirection(RR3Vector &direction) const
     direction[2] = this->node2.getZ() - this->node1.getZ();
 }
 
-double RSegment::findLength(void) const
+double RSegment::findLength() const
 {
     return this->node1.getDistance(this->node2);
 }
@@ -387,6 +387,24 @@ double RSegment::findLength(void) const
 double RSegment::findLength(const RNode &node1, const RNode &node2)
 {
     return node1.getDistance(node2);
+}
+
+void RSegment::findPerpendicularVectors(RR3Vector &d1, RR3Vector &d2, RR3Vector &d3) const
+{
+    d1 = this->findDirection();
+    d1.normalize();
+
+    if (std::abs(d1[0]-1.0) < 0.5)
+    {
+        d3[0]=0.0; d3[1]=1.0; d3[2]=0.0;
+    }
+    else
+    {
+        d3[0]=1.0; d3[1]=0.0; d3[2]=0.0;
+    }
+
+    RR3Vector::cross(d1,d3,d2);
+    RR3Vector::cross(d1,d2,d3);
 }
 
 void RSegment::print() const

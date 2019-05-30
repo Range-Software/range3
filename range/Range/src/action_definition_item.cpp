@@ -55,17 +55,17 @@ ActionDefinitionItem &ActionDefinitionItem::operator =(const ActionDefinitionIte
     return (*this);
 }
 
-ActionType ActionDefinitionItem::getType(void) const
+ActionType ActionDefinitionItem::getType() const
 {
     return this->type;
 }
 
-ActionGroupType ActionDefinitionItem::getGroupType(void) const
+ActionGroupType ActionDefinitionItem::getGroupType() const
 {
     return this->groupType;
 }
 
-const QString &ActionDefinitionItem::getShortcut(void) const
+const QString &ActionDefinitionItem::getShortcut() const
 {
     return this->shortCut;
 }

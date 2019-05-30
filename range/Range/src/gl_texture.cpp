@@ -13,7 +13,7 @@
 #include "gl_texture.h"
 
 GLTexture::GLTexture()
-    : texture(0)
+    : texture(nullptr)
     , loaded(false)
 {
 }

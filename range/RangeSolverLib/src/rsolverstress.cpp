@@ -1605,6 +1605,7 @@ void RSolverStress::generateNodeBook(void)
 
     for (uint i=0;i<this->pModel->getNElementGroups();i++)
     {
+        REntityGroupType entityType = this->pModel->getEntityGroupType(i);
         const RElementGroup *pElementGroup = this->pModel->getElementGroupPtr(i);
         if (!pElementGroup)
         {
@@ -1626,7 +1627,15 @@ void RSolverStress::generateNodeBook(void)
                 }
                 if (bc.getType() == R_BOUNDARY_CONDITION_DISPLACEMENT_ROLLER)
                 {
-                    hasDisplacementX = true;
+                    if (entityType == R_ENTITY_GROUP_LINE)
+                    {
+                        hasDisplacementY = true;
+                        hasDisplacementZ = true;
+                    }
+                    else
+                    {
+                        hasDisplacementX = true;
+                    }
                 }
             }
         }
@@ -1742,6 +1751,7 @@ void RSolverStress::assemblyMatrix(uint elementID, const RRMatrix &Me, const RRM
     }
     this->applyLocalRotations(elementID,Ae);
     this->applyLocalRotations(elementID,Be);
+    this->applyLocalRotations(elementID,be);
 
     // Apply explicit boundary conditions.
     for (uint m=0;m<rElement.size();m++)
@@ -1827,5 +1837,34 @@ void RSolverStress::applyLocalRotations(unsigned int elementID, RRMatrix &Ae)
 
         RRMatrix::mlt(Tt,Ae,Aetmp);
         RRMatrix::mlt(Aetmp,T,Ae);
+    }
+}
+
+void RSolverStress::applyLocalRotations(unsigned int elementID, RRVector &fe)
+{
+    const RElement &rElement = this->pModel->getElement(elementID);
+    RRMatrix T;
+
+    bool first = true;
+
+    for (uint i=0;i<rElement.size();i++)
+    {
+        uint nodeId = rElement.getNodeId(i);
+        if (this->localRotations[nodeId].isActive())
+        {
+            if (first)
+            {
+                T.setIdentity(fe.getNRows());
+                first = false;
+            }
+            T.setBlock(this->localRotations[nodeId].getR(),3*i,3*i);
+        }
+    }
+    if (!first)
+    {
+        RRVector fetmp;
+
+        RRMatrix::mlt(T,fe,fetmp);
+        fe = fetmp;
     }
 }

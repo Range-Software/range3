@@ -21,9 +21,11 @@ class GLDimension : public GLObject
 
         // Environment settings.
 
-    protected:
+    public:
 
         static const double arrowScale;
+
+    protected:
 
         double scale;
         double xMin;
@@ -54,7 +56,7 @@ class GLDimension : public GLObject
         GLDimension(const GLDimension &glDimension);
 
         //! Destructor.
-        ~GLDimension();
+        virtual ~GLDimension() {}
 
         //! Assignment operator.
         GLDimension &operator=(const GLDimension &glDimension);

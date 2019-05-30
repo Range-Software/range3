@@ -99,49 +99,52 @@ class RSegment
         uint isPointAtNode ( const RR3Vector &point ) const;
 
         //! Find direction vector (n2 - n1).
-        RR3Vector findDirection(void) const;
+        RR3Vector findDirection() const;
 
         //! Find direction vector (n2 - n1).
         void findDirection(RR3Vector &direction) const;
 
         //! Calculate segment length.
-        double findLength ( void ) const;
+        double findLength() const;
 
         //! Calculate segment length.
         static double findLength ( const RNode &node1, const RNode &node2 );
 
+        //! Calculate perpendicular vectors where d1 is the normalized direction of the segment.
+        void findPerpendicularVectors(RR3Vector &d1, RR3Vector &d2, RR3Vector &d3) const;
+
         //! Return RNode first node ID.
-        inline uint getNode1ID ( void ) const
+        inline uint getNode1ID() const
         {
             return this->node1ID;
         }
 
         //! Return RNode second node ID.
-        inline uint getNode2ID ( void ) const
+        inline uint getNode2ID() const
         {
             return this->node2ID;
         }
 
         //! Return segment first node.
-        inline const RNode & getNode1 ( void ) const
+        inline const RNode & getNode1() const
         {
             return this->node1;
         }
 
         //! Return segment first node.
-        inline RNode & getNode1 ( void )
+        inline RNode & getNode1()
         {
             return this->node1;
         }
 
         //! Return segment second node.
-        inline const RNode & getNode2 ( void ) const
+        inline const RNode & getNode2() const
         {
             return this->node2;
         }
 
         //! Return segment second node.
-        inline RNode & getNode2 ( void )
+        inline RNode & getNode2()
         {
             return this->node2;
         }

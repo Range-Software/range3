@@ -63,7 +63,7 @@ void GLModelList::clear(void)
 
 uint GLModelList::getNGlPointLists(void) const
 {
-    return (uint)this->glPointList.size();
+    return uint(this->glPointList.size());
 }
 
 void GLModelList::setNGlPointLists(uint nGlEntityLists)
@@ -71,31 +71,31 @@ void GLModelList::setNGlPointLists(uint nGlEntityLists)
     if (this->glPointList.size() != int(nGlEntityLists))
     {
         this->glPointList.clear();
-        this->glPointList.resize(nGlEntityLists);
+        this->glPointList.resize(GLsizei(nGlEntityLists));
     }
 }
 
 const GLEntityList & GLModelList::getGlPointList(uint entityID) const
 {
     R_ERROR_ASSERT(entityID < this->getNGlPointLists());
-    return this->glPointList[entityID];
+    return this->glPointList[int(entityID)];
 }
 
 GLEntityList &GLModelList::getGlPointList(uint entityID)
 {
     R_ERROR_ASSERT(entityID < this->getNGlPointLists());
-    return this->glPointList[entityID];
+    return this->glPointList[int(entityID)];
 }
 
 void GLModelList::setGlPointList(uint entityID, const GLEntityList &glEntityList)
 {
     R_ERROR_ASSERT(entityID < this->getNGlPointLists());
-    this->glPointList[entityID] = glEntityList;
+    this->glPointList[int(entityID)] = glEntityList;
 }
 
 uint GLModelList::getNGlLineLists(void) const
 {
-    return (uint)this->glLineList.size();
+    return uint(this->glLineList.size());
 }
 
 void GLModelList::setNGlLineLists(uint nGlEntityLists)
@@ -103,31 +103,31 @@ void GLModelList::setNGlLineLists(uint nGlEntityLists)
     if (this->glLineList.size() != int(nGlEntityLists))
     {
         this->glLineList.clear();
-        this->glLineList.resize(nGlEntityLists);
+        this->glLineList.resize(GLsizei(nGlEntityLists));
     }
 }
 
 const GLEntityList &GLModelList::getGlLineList(uint entityID) const
 {
     R_ERROR_ASSERT(entityID < this->getNGlLineLists());
-    return this->glLineList[entityID];
+    return this->glLineList[int(entityID)];
 }
 
 GLEntityList &GLModelList::getGlLineList(uint entityID)
 {
     R_ERROR_ASSERT(entityID < this->getNGlLineLists());
-    return this->glLineList[entityID];
+    return this->glLineList[int(entityID)];
 }
 
 void GLModelList::setGlLineList(uint entityID, const GLEntityList &glEntityList)
 {
     R_ERROR_ASSERT(entityID < this->getNGlLineLists());
-    this->glLineList[entityID] = glEntityList;
+    this->glLineList[int(entityID)] = glEntityList;
 }
 
 uint GLModelList::getNGlSurfaceLists(void) const
 {
-    return (uint)this->glSurfaceList.size();
+    return uint(this->glSurfaceList.size());
 }
 
 void GLModelList::setNGlSurfaceLists(uint nGlEntityLists)
@@ -135,31 +135,31 @@ void GLModelList::setNGlSurfaceLists(uint nGlEntityLists)
     if (this->glSurfaceList.size() != int(nGlEntityLists))
     {
         this->glSurfaceList.clear();
-        this->glSurfaceList.resize(nGlEntityLists);
+        this->glSurfaceList.resize(GLsizei(nGlEntityLists));
     }
 }
 
 const GLEntityList &GLModelList::getGlSurfaceList(uint entityID) const
 {
     R_ERROR_ASSERT(entityID < this->getNGlSurfaceLists());
-    return this->glSurfaceList[entityID];
+    return this->glSurfaceList[int(entityID)];
 }
 
 GLEntityList &GLModelList::getGlSurfaceList(uint entityID)
 {
     R_ERROR_ASSERT(entityID < this->getNGlSurfaceLists());
-    return this->glSurfaceList[entityID];
+    return this->glSurfaceList[int(entityID)];
 }
 
 void GLModelList::setGlSurfaceList(uint entityID, const GLEntityList &glEntityList)
 {
     R_ERROR_ASSERT(entityID < this->getNGlSurfaceLists());
-    this->glSurfaceList[entityID] = glEntityList;
+    this->glSurfaceList[int(entityID)] = glEntityList;
 }
 
 uint GLModelList::getNGlVolumeLists(void) const
 {
-    return (uint)this->glVolumeList.size();
+    return uint(this->glVolumeList.size());
 }
 
 void GLModelList::setNGlVolumeLists(uint nGlEntityLists)
@@ -167,31 +167,31 @@ void GLModelList::setNGlVolumeLists(uint nGlEntityLists)
     if (this->glVolumeList.size() != int(nGlEntityLists))
     {
         this->glVolumeList.clear();
-        this->glVolumeList.resize(nGlEntityLists);
+        this->glVolumeList.resize(GLsizei(nGlEntityLists));
     }
 }
 
 const GLEntityList &GLModelList::getGlVolumeList(uint entityID) const
 {
     R_ERROR_ASSERT(entityID < this->getNGlVolumeLists());
-    return this->glVolumeList[entityID];
+    return this->glVolumeList[int(entityID)];
 }
 
 GLEntityList &GLModelList::getGlVolumeList(uint entityID)
 {
     R_ERROR_ASSERT(entityID < this->getNGlVolumeLists());
-    return this->glVolumeList[entityID];
+    return this->glVolumeList[int(entityID)];
 }
 
 void GLModelList::setGlVolumeList(uint entityID, const GLEntityList &glEntityList)
 {
     R_ERROR_ASSERT(entityID < this->getNGlVolumeLists());
-    this->glVolumeList[entityID] = glEntityList;
+    this->glVolumeList[int(entityID)] = glEntityList;
 }
 
 uint GLModelList::getNGlVectorFieldLists(void) const
 {
-    return this->glVectorFieldList.size();
+    return uint(this->glVectorFieldList.size());
 }
 
 void GLModelList::setNGlVectorFieldLists(uint nGlEntityLists)
@@ -199,31 +199,31 @@ void GLModelList::setNGlVectorFieldLists(uint nGlEntityLists)
     if (this->glVectorFieldList.size() != int(nGlEntityLists))
     {
         this->glVectorFieldList.clear();
-        this->glVectorFieldList.resize(nGlEntityLists);
+        this->glVectorFieldList.resize(GLsizei(nGlEntityLists));
     }
 }
 
 const GLEntityList &GLModelList::getGlVectorFieldList(uint entityID) const
 {
     R_ERROR_ASSERT(entityID < this->getNGlVectorFieldLists());
-    return this->glVectorFieldList[entityID];
+    return this->glVectorFieldList[int(entityID)];
 }
 
 GLEntityList &GLModelList::getGlVectorFieldList(uint entityID)
 {
     R_ERROR_ASSERT(entityID < this->getNGlVectorFieldLists());
-    return this->glVectorFieldList[entityID];
+    return this->glVectorFieldList[int(entityID)];
 }
 
 void GLModelList::setGlVectorFieldList(uint entityID, const GLEntityList &glEntityList)
 {
     R_ERROR_ASSERT(entityID < this->getNGlVectorFieldLists());
-    this->glVectorFieldList[entityID] = glEntityList;
+    this->glVectorFieldList[int(entityID)] = glEntityList;
 }
 
 uint GLModelList::getNGlScalarFieldLists(void) const
 {
-    return this->glScalarFieldList.size();
+    return uint(this->glScalarFieldList.size());
 }
 
 void GLModelList::setNGlScalarFieldLists(uint nGlEntityLists)
@@ -231,31 +231,31 @@ void GLModelList::setNGlScalarFieldLists(uint nGlEntityLists)
     if (this->glScalarFieldList.size() != int(nGlEntityLists))
     {
         this->glScalarFieldList.clear();
-        this->glScalarFieldList.resize(nGlEntityLists);
+        this->glScalarFieldList.resize(GLsizei(nGlEntityLists));
     }
 }
 
 const GLEntityList &GLModelList::getGlScalarFieldList(uint entityID) const
 {
     R_ERROR_ASSERT(entityID < this->getNGlScalarFieldLists());
-    return this->glScalarFieldList[entityID];
+    return this->glScalarFieldList[int(entityID)];
 }
 
 GLEntityList &GLModelList::getGlScalarFieldList(uint entityID)
 {
     R_ERROR_ASSERT(entityID < this->getNGlScalarFieldLists());
-    return this->glScalarFieldList[entityID];
+    return this->glScalarFieldList[int(entityID)];
 }
 
 void GLModelList::setGlScalarFieldList(uint entityID, const GLEntityList &glEntityList)
 {
     R_ERROR_ASSERT(entityID < this->getNGlScalarFieldLists());
-    this->glScalarFieldList[entityID] = glEntityList;
+    this->glScalarFieldList[int(entityID)] = glEntityList;
 }
 
 uint GLModelList::getNGlStreamLineLists(void) const
 {
-    return this->glStreamLineList.size();
+    return uint(this->glStreamLineList.size());
 }
 
 void GLModelList::setNGlStreamLineLists(uint nGlEntityLists)
@@ -263,31 +263,31 @@ void GLModelList::setNGlStreamLineLists(uint nGlEntityLists)
     if (this->glStreamLineList.size() != int(nGlEntityLists))
     {
         this->glStreamLineList.clear();
-        this->glStreamLineList.resize(nGlEntityLists);
+        this->glStreamLineList.resize(GLsizei(nGlEntityLists));
     }
 }
 
 const GLEntityList &GLModelList::getGlStreamLineList(uint entityID) const
 {
     R_ERROR_ASSERT(entityID < this->getNGlStreamLineLists());
-    return this->glStreamLineList[entityID];
+    return this->glStreamLineList[int(entityID)];
 }
 
 GLEntityList &GLModelList::getGlStreamLineList(uint entityID)
 {
     R_ERROR_ASSERT(entityID < this->getNGlStreamLineLists());
-    return this->glStreamLineList[entityID];
+    return this->glStreamLineList[int(entityID)];
 }
 
 void GLModelList::setGlStreamLineList(uint entityID, const GLEntityList &glEntityList)
 {
     R_ERROR_ASSERT(entityID < this->getNGlStreamLineLists());
-    this->glStreamLineList[entityID] = glEntityList;
+    this->glStreamLineList[int(entityID)] = glEntityList;
 }
 
 uint GLModelList::getNGlCutLists(void) const
 {
-    return this->glCutList.size();
+    return uint(this->glCutList.size());
 }
 
 void GLModelList::setNGlCutLists(uint nGlEntityLists)
@@ -295,26 +295,26 @@ void GLModelList::setNGlCutLists(uint nGlEntityLists)
     if (this->glCutList.size() != int(nGlEntityLists))
     {
         this->glCutList.clear();
-        this->glCutList.resize(nGlEntityLists);
+        this->glCutList.resize(GLsizei(nGlEntityLists));
     }
 }
 
 const GLEntityList &GLModelList::getGlCutList(uint entityID) const
 {
     R_ERROR_ASSERT(entityID < this->getNGlCutLists());
-    return this->glCutList[entityID];
+    return this->glCutList[int(entityID)];
 }
 
 GLEntityList &GLModelList::getGlCutList(uint entityID)
 {
     R_ERROR_ASSERT(entityID < this->getNGlCutLists());
-    return this->glCutList[entityID];
+    return this->glCutList[int(entityID)];
 }
 
 void GLModelList::setGlCutList(uint entityID, const GLEntityList &glEntityList)
 {
     R_ERROR_ASSERT(entityID < this->getNGlCutLists());
-    this->glCutList[entityID] = glEntityList;
+    this->glCutList[int(entityID)] = glEntityList;
 }
 
 uint GLModelList::getNGlIsoLists(void) const
@@ -327,24 +327,24 @@ void GLModelList::setNGlIsoLists(uint nGlEntityLists)
     if (this->glIsoList.size() != int(nGlEntityLists))
     {
         this->glIsoList.clear();
-        this->glIsoList.resize(nGlEntityLists);
+        this->glIsoList.resize(GLsizei(nGlEntityLists));
     }
 }
 
 const GLEntityList &GLModelList::getGlIsoList(uint entityID) const
 {
     R_ERROR_ASSERT(entityID < this->getNGlIsoLists());
-    return this->glIsoList[entityID];
+    return this->glIsoList[int(entityID)];
 }
 
 GLEntityList &GLModelList::getGlIsoList(uint entityID)
 {
     R_ERROR_ASSERT(entityID < this->getNGlIsoLists());
-    return this->glIsoList[entityID];
+    return this->glIsoList[int(entityID)];
 }
 
 void GLModelList::setGlIsoList(uint entityID, const GLEntityList &glEntityList)
 {
     R_ERROR_ASSERT(entityID < this->getNGlIsoLists());
-    this->glIsoList[entityID] = glEntityList;
+    this->glIsoList[int(entityID)] = glEntityList;
 }

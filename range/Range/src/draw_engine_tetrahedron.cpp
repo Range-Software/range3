@@ -35,7 +35,7 @@ DrawEngineTetrahedron::DrawEngineTetrahedron(QObject *parent)
     this->updateModel();
 }
 
-RModelRaw DrawEngineTetrahedron::generate(void) const
+RModelRaw DrawEngineTetrahedron::generate() const
 {
     RModelRaw modelRaw;
 

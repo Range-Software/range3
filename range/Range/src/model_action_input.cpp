@@ -75,82 +75,82 @@ bool ModelActionInput::operator <(const ModelActionInput &modelActionInput) cons
     return (this->priority < modelActionInput.priority);
 }
 
-uint ModelActionInput::getModelID(void) const
+uint ModelActionInput::getModelID() const
 {
     return this->modelID;
 }
 
-ModelActionType ModelActionInput::getType(void) const
+ModelActionType ModelActionInput::getType() const
 {
     return this->type;
 }
 
-uint ModelActionInput::getNIterations(void) const
+uint ModelActionInput::getNIterations() const
 {
     return this->nIterations;
 }
 
-double ModelActionInput::getSeparationAngle(void) const
+double ModelActionInput::getSeparationAngle() const
 {
     return this->separationAngle;
 }
 
-bool ModelActionInput::getCloseHole(void) const
+bool ModelActionInput::getCloseHole() const
 {
     return this->closeHole;
 }
 
-RElementType ModelActionInput::getElementType(void) const
+RElementType ModelActionInput::getElementType() const
 {
     return this->elementType;
 }
 
-const QList<uint> &ModelActionInput::getNodeIDs(void) const
+const QList<uint> &ModelActionInput::getNodeIDs() const
 {
     return this->nodeIDs;
 }
 
-const QList<uint> &ModelActionInput::getElementIDs(void) const
+const QList<uint> &ModelActionInput::getElementIDs() const
 {
     return this->elementIDs;
 }
 
-const QList<SessionEntityID> &ModelActionInput::getEntityIDs(void) const
+const QList<SessionEntityID> &ModelActionInput::getEntityIDs() const
 {
     return this->entityIDs;
 }
 
-const RR3Vector &ModelActionInput::getPoint(void) const
+const RR3Vector &ModelActionInput::getPoint() const
 {
     return this->point;
 }
 
-double ModelActionInput::getEdgeRatio(void) const
+double ModelActionInput::getEdgeRatio() const
 {
     return this->edgeRatio;
 }
 
-double ModelActionInput::getEdgeLength(void) const
+double ModelActionInput::getEdgeLength() const
 {
     return this->edgeLength;
 }
 
-double ModelActionInput::getElementArea(void) const
+double ModelActionInput::getElementArea() const
 {
     return this->elementArea;
 }
 
-double ModelActionInput::getTolerance(void) const
+double ModelActionInput::getTolerance() const
 {
     return this->tolerance;
 }
 
-const GeometryTransformInput &ModelActionInput::getGeometryTransformInput(void) const
+const GeometryTransformInput &ModelActionInput::getGeometryTransformInput() const
 {
     return this->geometryTransformInput;
 }
 
-RVariableType ModelActionInput::getVariableType(void) const
+RVariableType ModelActionInput::getVariableType() const
 {
     return this->variableType;
 }
@@ -206,14 +206,24 @@ void ModelActionInput::setRemoveNodes(const QList<uint> &nodeIDs, bool closeHole
     this->closeHole = closeHole;
 }
 
-void ModelActionInput::setPurgeUnusedNodes(void)
+void ModelActionInput::setPurgeUnusedNodes()
 {
     this->type = MODEL_ACTION_PURGE_UNUSED_NODES;
 }
 
-void ModelActionInput::setPurgeUnusedElements(void)
+void ModelActionInput::setPurgeUnusedElements()
 {
     this->type = MODEL_ACTION_PURGE_UNUSED_ELEMENTS;
+}
+
+void ModelActionInput::setRemoveDuplicateNodes()
+{
+    this->type = MODEL_ACTION_REMOVE_DUPLICATE_NODES;
+}
+
+void ModelActionInput::setRemoveDuplicateElements()
+{
+    this->type = MODEL_ACTION_REMOVE_DUPLICATE_ELEMENTS;
 }
 
 void ModelActionInput::setRemoveElements(const QList<uint> &elementIDs, bool closeHole)
@@ -241,7 +251,7 @@ void ModelActionInput::setFixSliverElements(double edgeRatio)
     this->edgeRatio = edgeRatio;
 }
 
-void ModelActionInput::setFindIntersectedElements(void)
+void ModelActionInput::setFindIntersectedElements()
 {
     this->type = MODEL_ACTION_FIND_INTERSECTED_ELEMENTS;
 }
@@ -252,12 +262,12 @@ void ModelActionInput::setBreakIntersectedElements(uint nIterations)
     this->nIterations = nIterations;
 }
 
-void ModelActionInput::setExportSliverElements(void)
+void ModelActionInput::setExportSliverElements()
 {
     this->type = MODEL_ACTION_EXPORT_SLIVER_ELEMENTS;
 }
 
-void ModelActionInput::setExportIntersectedElements(void)
+void ModelActionInput::setExportIntersectedElements()
 {
     this->type = MODEL_ACTION_EXPORT_INTERSECTED_ELEMENTS;
 }
@@ -288,12 +298,12 @@ void ModelActionInput::setCheckPointInsideSurface(const RR3Vector &point, const 
     this->entityIDs = entityIDs;
 }
 
-void ModelActionInput::setGeneratePatches(void)
+void ModelActionInput::setGeneratePatches()
 {
     this->type = MODEL_ACTION_GENERATE_PATCHES;
 }
 
-void ModelActionInput::setCalculateViewFactors(void)
+void ModelActionInput::setCalculateViewFactors()
 {
     this->type = MODEL_ACTION_CALCULATE_VIEWFACTORS;
 }
@@ -310,7 +320,7 @@ void ModelActionInput::setSwapSurfaceNormals(const QList<SessionEntityID> &entit
     this->entityIDs = entityIDs;
 }
 
-void ModelActionInput::setSyncSurfaceNormals(void)
+void ModelActionInput::setSyncSurfaceNormals()
 {
     this->type = MODEL_ACTION_SYNC_SURFACE_NORMALS;
 }
@@ -329,7 +339,7 @@ void ModelActionInput::setTetrahedralizeSurface(const QList<SessionEntityID> &en
     this->entityIDs = entityIDs;
 }
 
-void ModelActionInput::setConsolidate(void)
+void ModelActionInput::setConsolidate()
 {
     this->type = MODEL_ACTION_CONSOLIDATE;
 }

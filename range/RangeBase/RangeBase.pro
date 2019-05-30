@@ -33,7 +33,8 @@ SOURCES += \
     src/rbl_value.cpp \
     src/rbl_value_table.cpp \
     src/rbl_value_vector.cpp \
-    src/rbl_version.cpp
+    src/rbl_version.cpp \
+    src/rbl_local_direction.cpp
 
 HEADERS += \
     include/rbl_application_state.h \
@@ -63,7 +64,8 @@ HEADERS += \
     include/rbl_value_table.h \
     include/rbl_value_vector.h \
     include/rbl_version.h \
-    include/rblib.h
+    include/rblib.h \
+    include/rbl_local_direction.h
 
 CONFIG -= debug_and_release
 CONFIG += copy_dir_files

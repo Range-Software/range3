@@ -51,7 +51,7 @@ class SubWindowManager : public QObject
         bool windowExists(uint modelID);
 
         //! Return number of windows.
-        uint getNWindows(void) const;
+        uint getNWindows() const;
 
     public slots:
 

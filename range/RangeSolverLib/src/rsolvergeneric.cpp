@@ -309,25 +309,26 @@ void RSolverGeneric::updateLocalRotations(void)
     RR3Vector normal;
     RRMatrix R;
 
+    // Calculate directions for surface elements
     for (unsigned int i=0;i<this->pModel->getNSurfaces();i++)
     {
         const RSurface &rSurface = this->pModel->getSurface(i);
-        bool hasLocalRotations = false;
+        bool findLocalDirections = false;
         for (unsigned int j=0;j<rSurface.getNBoundaryConditions();j++)
         {
             const RBoundaryCondition &bc = rSurface.getBoundaryCondition(j);
             if (RBoundaryCondition::getProblemTypeMask(bc.getType()) & problemType)
             {
-                if (bc.getHasLocalRotations())
+                if (bc.getHasLocalDirection())
                 {
-                    hasLocalRotations = true;
+                    findLocalDirections = true;
                     break;
                 }
             }
         }
         for (unsigned int j=0;j<rSurface.size();j++)
         {
-            if (hasLocalRotations)
+            if (findLocalDirections)
             {
                 const RElement &rElement = this->pModel->getElement(rSurface.get(j));
 
@@ -346,6 +347,44 @@ void RSolverGeneric::updateLocalRotations(void)
             }
         }
     }
+
+    // Apply directions for point elements
+    for (unsigned int i=0;i<this->pModel->getNPoints();i++)
+    {
+        RR3Vector direction;
+        bool hasLocalDirections = false;
+        const RPoint &rPoint = this->pModel->getPoint(i);
+        for (unsigned int j=0;j<rPoint.getNBoundaryConditions();j++)
+        {
+            const RBoundaryCondition &bc = rPoint.getBoundaryCondition(j);
+            if (RBoundaryCondition::getProblemTypeMask(bc.getType()) & problemType)
+            {
+                if (bc.getHasLocalDirection())
+                {
+                    hasLocalDirections = true;
+                    direction = bc.getLocalDirection();
+                    break;
+                }
+            }
+        }
+        if (hasLocalDirections)
+        {
+            for (uint j=0;j<rPoint.size();j++)
+            {
+                const RElement &rElement = this->pModel->getElement(rPoint.get(j));
+                for (unsigned int k=0;k<rElement.size();k++)
+                {
+                    uint nodeId = rElement.getNodeId(k);
+                    nodeNormals[nodeId][0] = direction[0];
+                    nodeNormals[nodeId][1] = direction[1];
+                    nodeNormals[nodeId][2] = direction[2];
+                    nodeNormalsBook[nodeId] = true;
+                }
+            }
+        }
+    }
+
+    // Convert local directions to rotation matricies
     this->localRotations.resize(this->pModel->getNNodes());
     for (uint i=0;i<nodeNormals.size();i++)
     {
@@ -358,6 +397,49 @@ void RSolverGeneric::updateLocalRotations(void)
         else
         {
             this->localRotations[i].deactivate();
+        }
+    }
+
+    // Apply local rotation for line elements
+    for (unsigned int i=0;i<this->pModel->getNLines();i++)
+    {
+        RR3Vector direction;
+        bool findLocalDirections = false;
+        const RLine &rLine = this->pModel->getLine(i);
+        for (unsigned int j=0;j<rLine.getNBoundaryConditions();j++)
+        {
+            const RBoundaryCondition &bc = rLine.getBoundaryCondition(j);
+            if (RBoundaryCondition::getProblemTypeMask(bc.getType()) & problemType)
+            {
+                if (bc.getHasLocalDirection())
+                {
+                    findLocalDirections = true;
+                    break;
+                }
+            }
+        }
+        if (findLocalDirections)
+        {
+            for (uint j=0;j<rLine.size();j++)
+            {
+                const RElement &rElement = this->pModel->getElement(rLine.get(j));
+
+                RR3Vector d1,d2,d3;
+                RSegment s(this->pModel->getNode(rElement.getNodeId(0)),
+                           this->pModel->getNode(rElement.getNodeId(1)));
+                s.findPerpendicularVectors(d1,d2,d3);
+
+                R.resize(3,3,0.0);
+                R[0][0]=d1[0]; R[0][1]=d1[1]; R[0][2]=d1[2];
+                R[1][0]=d2[0]; R[1][1]=d2[1]; R[1][2]=d2[2];
+                R[2][0]=d3[0]; R[2][1]=d3[1]; R[2][2]=d3[2];
+                R.invert();
+
+                for (uint k=0;k<rElement.size();k++)
+                {
+                    this->localRotations[rElement.getNodeId(k)].activate(R);
+                }
+            }
         }
     }
 }

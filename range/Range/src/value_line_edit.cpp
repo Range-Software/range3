@@ -37,13 +37,13 @@ ValueLineEdit::ValueLineEdit(int min, int max, QWidget *parent)
     QObject::connect(this,&QLineEdit::textChanged,this,&ValueLineEdit::onTextChaged);
 }
 
-void ValueLineEdit::setDoubleValidator(void)
+void ValueLineEdit::setDoubleValidator()
 {
     this->setValidator(new QDoubleValidator(-DBL_MAX,DBL_MAX,1000));
     this->paintBackground();
 }
 
-void ValueLineEdit::setIntValidator(void)
+void ValueLineEdit::setIntValidator()
 {
     this->setValidator(new QIntValidator(INT_MIN, INT_MAX));
     this->paintBackground();
@@ -61,17 +61,17 @@ void ValueLineEdit::setRange(int min, int max)
     this->paintBackground();
 }
 
-double ValueLineEdit::getMinimum(void) const
+double ValueLineEdit::getMinimum() const
 {
     return qobject_cast<const QDoubleValidator *>(this->validator())->bottom();
 }
 
-double ValueLineEdit::getMaximum(void) const
+double ValueLineEdit::getMaximum() const
 {
     return qobject_cast<const QDoubleValidator *>(this->validator())->top();
 }
 
-double ValueLineEdit::getValue(void) const
+double ValueLineEdit::getValue() const
 {
     return this->text().toDouble();
 }
@@ -91,7 +91,7 @@ void ValueLineEdit::setValue(uint value)
     this->setText(QString::number(value));
 }
 
-QValidator::State ValueLineEdit::getValidatorState(void) const
+QValidator::State ValueLineEdit::getValidatorState() const
 {
     QString strContent = this->text();
 
@@ -120,7 +120,7 @@ QValidator::State ValueLineEdit::getValidatorState(void) const
     return QValidator::Acceptable;
 }
 
-void ValueLineEdit::createTimer(void)
+void ValueLineEdit::createTimer()
 {
     this->timer = new QTimer(this);
     QObject::connect(this->timer,
@@ -129,7 +129,7 @@ void ValueLineEdit::createTimer(void)
                      &ValueLineEdit::onTimeout);
 }
 
-void ValueLineEdit::paintBackground(void)
+void ValueLineEdit::paintBackground()
 {
     if (this->timer->isActive())
     {
@@ -138,17 +138,23 @@ void ValueLineEdit::paintBackground(void)
     switch (this->getValidatorState())
     {
         case QValidator::Invalid:
+        {
             this->setStyleSheet("QLineEdit{background: red;}");
             this->timer->start(2000);
             break;
+        }
         case QValidator::Intermediate:
+        {
             this->setStyleSheet("QLineEdit{background: rgb(255, 200, 200);}");
             this->timer->start(2000);
             break;
+        }
         case QValidator::Acceptable:
         default:
+        {
             this->setStyleSheet("");
             break;
+        }
     }
 }
 
@@ -158,7 +164,7 @@ void ValueLineEdit::onTextChaged(QString text)
     emit this->valueChanged(text.toDouble());
 }
 
-void ValueLineEdit::onTimeout(void)
+void ValueLineEdit::onTimeout()
 {
     QString newText = this->text();
     newText.remove(newText.length()-1,1);

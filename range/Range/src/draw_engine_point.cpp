@@ -23,7 +23,7 @@ DrawEnginePoint::DrawEnginePoint(QObject *parent) :
     this->updateModel();
 }
 
-RModelRaw DrawEnginePoint::generate(void) const
+RModelRaw DrawEnginePoint::generate() const
 {
     RModelRaw modelRaw;
 

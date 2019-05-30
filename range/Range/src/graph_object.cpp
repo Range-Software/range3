@@ -55,7 +55,7 @@ void GraphObject::setSourceReadInterval(uint sourceReadInterval)
     this->sourceReadTimer->stop();
     if (this->sourceReadInterval > 0)
     {
-        this->sourceReadTimer->start(this->sourceReadInterval);
+        this->sourceReadTimer->start(int(this->sourceReadInterval));
     }
 }
 

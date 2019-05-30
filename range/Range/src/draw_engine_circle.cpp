@@ -49,7 +49,7 @@ DrawEngineCircle::DrawEngineCircle(QObject *parent) :
     this->updateModel();
 }
 
-RModelRaw DrawEngineCircle::generate(void) const
+RModelRaw DrawEngineCircle::generate() const
 {
     RModelRaw modelRaw;
 

@@ -273,7 +273,7 @@ RRVector GraphData::findValue(double x) const
         }
         if (x1 <= x && x <= x2)
         {
-            if (x1 == x2)
+            if (std::abs(x1-x2) < RConstants::eps)
             {
                 ratio = 0.0;
             }

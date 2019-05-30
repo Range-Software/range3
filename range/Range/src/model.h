@@ -116,58 +116,58 @@ class Model : public RModel
         void insertModel(const Model &model, bool mergeNearNodes, double tolerance = 0.0, bool findNearest = false);
 
         //! Return model filename.
-        const QString & getFileName(void) const;
+        const QString & getFileName() const;
 
         //! Set new model filename.
         void setFileName(const QString &fileName);
 
         //! Return const reference to mesh generator input.
-        const RMeshInput & getMeshInput(void) const;
+        const RMeshInput & getMeshInput() const;
 
         //! Return reference to mesh generator input.
-        RMeshInput & getMeshInput(void);
+        RMeshInput & getMeshInput();
 
         //! Set mesh generator input.
         void setMeshInput(const RMeshInput &meshInput);
 
         //! Update mesh generator inut volume constrain.
-        void initializeMeshInput(void);
+        void initializeMeshInput();
 
         //! Return const reference to view-factor matrix.
-        const RViewFactorMatrix &getViewFactorMatrix(void) const;
+        const RViewFactorMatrix &getViewFactorMatrix() const;
 
         //! Return reference to view-factor matrix.
-        RViewFactorMatrix &getViewFactorMatrix(void);
+        RViewFactorMatrix &getViewFactorMatrix();
 
         //! Return if entity can be colored by patch.
-        bool canColorByPatch(void) const;
+        bool canColorByPatch() const;
 
         //! Return if entity can be colored by view-factor.
-        bool canColorByViewFactor(void) const;
+        bool canColorByViewFactor() const;
 
         //! Return const reference to patch colors.
-        const QList<QColor> &getPatchColors(void) const;
+        const QList<QColor> &getPatchColors() const;
 
         //! Return reference to patch colors.
-        QList<QColor> &getPatchColors(void);
+        QList<QColor> &getPatchColors();
 
         //! Generate patch colors.
-        void generatePatchColors(void);
+        void generatePatchColors();
 
         //! Return last log file name.
-        const QString & getLastLogFileName(void) const;
+        const QString & getLastLogFileName() const;
 
         //! Return last log file name.
         void setLastLogFileName(const QString &lastLogFileName);
 
         //! Return last convergence file name.
-        const QString & getLastConvergenceFileName(void) const;
+        const QString & getLastConvergenceFileName() const;
 
         //! Return last convergence file name.
         void setLastConvergenceFileName(const QString &lastConvergenceFileName);
 
         //! Return last monitoring file name.
-        const QString & getLastMonitoringFileName(void) const;
+        const QString & getLastMonitoringFileName() const;
 
         //! Return last monitoring file name.
         void setLastMoinitoringFileName(const QString &lastMonitoringFileName);
@@ -197,10 +197,13 @@ class Model : public RModel
         uint mergeNearNodes(double tolerance = RConstants::eps);
 
         //! Purge unused nodes.
-        uint purgeUnusedNodes(void);
+        uint purgeUnusedNodes();
 
         //! Purge unused elements.
-        uint purgeUnusedElements(void);
+        uint purgeUnusedElements();
+
+        //! Merge duplicate elements.
+        uint removeDuplicateElements();
 
         //! Fix sliver elements.
         //! Return number of affected elements.
@@ -210,16 +213,16 @@ class Model : public RModel
         void updateSliverElements(double edgeRatio);
 
         //! Update intersected elements list.
-        void updateIntersectedElements(void);
+        void updateIntersectedElements();
 
         //! Break intersected elements list.
         uint breakIntersectedElements(uint nIterations);
 
         //! Export sliver elements list.
-        bool exportSliverElements(void)const;
+        bool exportSliverElements() const;
 
         //! Export intersected elements list.
-        bool exportIntersectedElements(void) const;
+        bool exportIntersectedElements() const;
 
         //! Perform boolean difference operation.
         //! Return true if successful.
@@ -250,7 +253,7 @@ class Model : public RModel
                         bool              selected = true) const;
 
         //! Return true if model is selected.
-        bool getSelected(void) const;
+        bool getSelected() const;
 
         //! Return true if entity is selected.
         bool getSelected(REntityGroupType elementGroupType,
@@ -280,13 +283,13 @@ class Model : public RModel
         QSet<uint> getNodeIDs(const QSet<uint> &elementIDs) const;
 
         //! Return number of sliver elements.
-        uint getNSlivers(void) const;
+        uint getNSlivers() const;
 
         //! Return number of intersected elements.
-        uint getNIntersected(void) const;
+        uint getNIntersected() const;
 
         //! Return number of hole elements.
-        uint getNHoleElements(void) const;
+        uint getNHoleElements() const;
 
         //! Check whether the model visibility is same as
         //! the provided one.
@@ -406,13 +409,13 @@ class Model : public RModel
                       const QColor      &color);
 
         //! Lock model for drawing.
-        void glDrawLock(void);
+        void glDrawLock();
 
         //! Try-lock model for drawing.
-        bool glDrawTrylock(void);
+        bool glDrawTrylock();
 
         //! Unlock model for drawing.
-        void glDrawUnlock(void);
+        void glDrawUnlock();
 
         //! Draw model to OpenGL context.
         void glDraw(GLWidget *glWidget) const;
@@ -448,10 +451,10 @@ class Model : public RModel
         void write (const QString &fileName, bool writeLinkFile = true);
 
         //! Load view-factor matrix.
-        void loadViewFactorMatrix(void);
+        void loadViewFactorMatrix();
 
         //! Unload view-factor matrix.
-        void unloadViewFactorMatrix(void);
+        void unloadViewFactorMatrix();
 
         //! Update (recompute) internal structures.
         void consolidate(int consolidateActionMask);
@@ -478,25 +481,25 @@ class Model : public RModel
         QList<QString> getRecordFiles(bool onlyExistingFiles = false) const;
 
         //! Return list of existing documents.
-        QList<QString> getDocumentFiles(void) const;
+        QList<QString> getDocumentFiles() const;
 
         //! Return size of undo stack.
-        uint getUndoStackSize(void) const;
+        uint getUndoStackSize() const;
 
         //! Perform undo.
         void undo(uint revision);
 
         //! Return undo action message.
-        QString getUndoActionMessage(void) const;
+        QString getUndoActionMessage() const;
 
         //! Return size of redo stack.
-        uint getRedoStackSize(void) const;
+        uint getRedoStackSize() const;
 
         //! Perform redo.
         void redo(uint revision);
 
         //! Return redo action message.
-        QString getRedoActionMessage(void) const;
+        QString getRedoActionMessage() const;
 
         //! Store current version.
         void storeCurentVersion(uint maxDepth, const QString &actionDescription);
@@ -505,7 +508,7 @@ class Model : public RModel
         void updateHistoryStackSize(uint maxDepth);
 
         //! Clear edge nodes.
-        void clearEdgeNodes(void);
+        void clearEdgeNodes();
 
     protected:
 
@@ -526,7 +529,7 @@ class Model : public RModel
         QVector<RElement> findEdgeElements(double separationAngle) const;
 
         //! Find hole elements.
-        QVector<RElement> findHoleElements(void) const;
+        QVector<RElement> findHoleElements() const;
 
         friend class ModelAction;
 

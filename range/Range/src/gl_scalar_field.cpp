@@ -143,9 +143,9 @@ void GLScalarField::draw(void)
 
         for (uint i=0;i<scalarField.size();i++)
         {
-            float pointSize = scalarField[i].scalarRate * (this->maxPointSize - this->minPointSize) + this->minPointSize;
+            float pointSize = float(scalarField[i].scalarRate * (this->maxPointSize - this->minPointSize) + this->minPointSize);
 
-            if (pointSize <= 0.0)
+            if (pointSize <= 0.0f)
             {
                 continue;
             }
@@ -215,13 +215,13 @@ std::vector<ScalarFieldItem> GLScalarField::calculateField(const RVariable *pSca
         REntityGroupType entityType;
         uint entityID;
 
-        if (!rModel.getEntityID(this->elementGroupIDs[i],entityType,entityID))
+        if (!rModel.getEntityID(this->elementGroupIDs[uint(i)],entityType,entityID))
         {
             continue;
         }
         if (REntityGroup::typeIsElementGroup(entityType))
         {
-            const RElementGroup *pElementGroup = rModel.getElementGroupPtr(this->elementGroupIDs[i]);
+            const RElementGroup *pElementGroup = rModel.getElementGroupPtr(this->elementGroupIDs[uint(i)]);
             if (!pElementGroup)
             {
                 continue;

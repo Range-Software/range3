@@ -22,6 +22,7 @@
 #include "rbl_imatrix.h"
 #include "rbl_ivector.h"
 #include "rbl_limit_box.h"
+#include "rbl_local_direction.h"
 #include "rbl_locker.h"
 #include "rbl_logger.h"
 #include "rbl_utils.h"

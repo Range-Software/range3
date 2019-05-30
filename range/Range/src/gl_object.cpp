@@ -11,7 +11,7 @@
 #include "gl_object.h"
 
 GLObject::GLObject(GLWidget *glWidget) :
-    pParentModel(0),
+    pParentModel(nullptr),
     glWidget(glWidget),
     applyEnvSettings(true),
     useGlList(true),

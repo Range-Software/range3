@@ -74,7 +74,7 @@ void GLRotationSphere::finalize(void)
     GL_SAFE_CALL(this->lightingEnabled ? glEnable(GL_LIGHTING) : glDisable(GL_LIGHTING));
     GL_SAFE_CALL(this->cullFaceEnabled ? glEnable(GL_CULL_FACE) : glDisable(GL_CULL_FACE));
     GL_SAFE_CALL(glLineWidth(this->lineWidth));
-    GL_SAFE_CALL(glHint(GL_LINE_SMOOTH_HINT, this->lineSmoothHint));
+    GL_SAFE_CALL(glHint(GL_LINE_SMOOTH_HINT, GLenum(this->lineSmoothHint)));
 }
 
 void GLRotationSphere::draw(void)

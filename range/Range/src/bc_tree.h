@@ -37,6 +37,15 @@ class BCTree : public QTreeWidget
         //! Update selected entities with internal boundary condition.
         void updateSelectedEntities(void) const;
 
+        //! Begin to draw rotation.
+        void drawLocalRotationBegin();
+
+        //! End to draw rotation.
+        void drawLocalRotationEnd();
+
+        //! Calculate position of selected entity.
+        QList<RLocalDirection> findSelectedEntityLocalDirections() const;
+
     signals:
 
     public slots:
@@ -51,6 +60,9 @@ class BCTree : public QTreeWidget
 
         //! Edit values button was clicked.
         void onButtonValueClicked(int id);
+
+        //! Direction changed.
+        void onDirectionChanged(const RR3Vector &direction);
 
 };
 

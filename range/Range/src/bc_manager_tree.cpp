@@ -23,8 +23,8 @@ typedef enum _BoundaryConditionTreeColumn
     BC_TREE_N_COLUMNS
 } BoundaryConditionTreeColumn;
 
-BCManagerTree::BCManagerTree(QObject *parent) :
-    QTreeWidget((QWidget*)parent),
+BCManagerTree::BCManagerTree(QWidget *parent) :
+    QTreeWidget(parent),
     doNotPopulate(false)
 {
     this->setSelectionMode(QAbstractItemView::SingleSelection);

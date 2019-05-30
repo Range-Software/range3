@@ -45,7 +45,7 @@ class GLVectorField : public GLObject, public RVectorField
         GLVectorField(const GLVectorField &glVectorField);
 
         //! Destructor.
-        ~GLVectorField();
+        virtual ~GLVectorField() {}
 
         //! Assignment operator.
         GLVectorField & operator = (const GLVectorField &glVectorField);

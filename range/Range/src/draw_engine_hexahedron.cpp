@@ -29,7 +29,7 @@ DrawEngineHexahedron::DrawEngineHexahedron(QObject *parent) :
     this->updateModel();
 }
 
-RModelRaw DrawEngineHexahedron::generate(void) const
+RModelRaw DrawEngineHexahedron::generate() const
 {
     RModelRaw modelRaw;
 

@@ -19,5 +19,5 @@ PushButton::PushButton(uint id, const QString &text, QWidget *parent) :
 
 void PushButton::onClicked(void)
 {
-    emit this->clicked(this->id);
+    emit this->clicked(int(this->id));
 }

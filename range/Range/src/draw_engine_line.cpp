@@ -27,7 +27,7 @@ DrawEngineLine::DrawEngineLine(QObject *parent) :
     this->updateModel();
 }
 
-RModelRaw DrawEngineLine::generate(void) const
+RModelRaw DrawEngineLine::generate() const
 {
     RModelRaw modelRaw;
 

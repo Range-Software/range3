@@ -2052,10 +2052,10 @@ void RFileIO::readAscii(RFile &inFile, RBoundaryCondition &boundaryCondition)
     RFileIO::readAscii(inFile,boundaryCondition.type);
     RFileIO::readAscii(inFile,boundaryCondition.optional);
     RFileIO::readAscii(inFile,boundaryCondition.isExplicit);
-    RFileIO::readAscii(inFile,boundaryCondition.hasLocalRotations);
-    RFileIO::readAscii(inFile,boundaryCondition.rotations[0]);
-    RFileIO::readAscii(inFile,boundaryCondition.rotations[1]);
-    RFileIO::readAscii(inFile,boundaryCondition.rotations[2]);
+    RFileIO::readAscii(inFile,boundaryCondition.hasLocalDirection);
+    RFileIO::readAscii(inFile,boundaryCondition.direction[0]);
+    RFileIO::readAscii(inFile,boundaryCondition.direction[1]);
+    RFileIO::readAscii(inFile,boundaryCondition.direction[2]);
 }
 
 
@@ -2065,10 +2065,10 @@ void RFileIO::readBinary(RFile &inFile, RBoundaryCondition &boundaryCondition)
     RFileIO::readBinary(inFile,boundaryCondition.type);
     RFileIO::readBinary(inFile,boundaryCondition.optional);
     RFileIO::readBinary(inFile,boundaryCondition.isExplicit);
-    RFileIO::readBinary(inFile,boundaryCondition.hasLocalRotations);
-    RFileIO::readBinary(inFile,boundaryCondition.rotations[0]);
-    RFileIO::readBinary(inFile,boundaryCondition.rotations[1]);
-    RFileIO::readBinary(inFile,boundaryCondition.rotations[2]);
+    RFileIO::readBinary(inFile,boundaryCondition.hasLocalDirection);
+    RFileIO::readBinary(inFile,boundaryCondition.direction[0]);
+    RFileIO::readBinary(inFile,boundaryCondition.direction[1]);
+    RFileIO::readBinary(inFile,boundaryCondition.direction[2]);
 }
 
 
@@ -2094,22 +2094,22 @@ void RFileIO::writeAscii(RSaveFile &outFile, const RBoundaryCondition &boundaryC
     {
         RFileIO::writeAscii(outFile,' ',false);
     }
-    RFileIO::writeAscii(outFile,boundaryCondition.hasLocalRotations,addNewLine);
+    RFileIO::writeAscii(outFile,boundaryCondition.hasLocalDirection,addNewLine);
     if (!addNewLine)
     {
         RFileIO::writeAscii(outFile,' ',false);
     }
-    RFileIO::writeAscii(outFile,boundaryCondition.rotations[0],addNewLine);
+    RFileIO::writeAscii(outFile,boundaryCondition.direction[0],addNewLine);
     if (!addNewLine)
     {
         RFileIO::writeAscii(outFile,' ',false);
     }
-    RFileIO::writeAscii(outFile,boundaryCondition.rotations[1],addNewLine);
+    RFileIO::writeAscii(outFile,boundaryCondition.direction[1],addNewLine);
     if (!addNewLine)
     {
         RFileIO::writeAscii(outFile,' ',false);
     }
-    RFileIO::writeAscii(outFile,boundaryCondition.rotations[2],addNewLine);
+    RFileIO::writeAscii(outFile,boundaryCondition.direction[2],addNewLine);
 }
 
 
@@ -2119,10 +2119,10 @@ void RFileIO::writeBinary(RSaveFile &outFile, const RBoundaryCondition &boundary
     RFileIO::writeBinary(outFile,boundaryCondition.type);
     RFileIO::writeBinary(outFile,boundaryCondition.optional);
     RFileIO::writeBinary(outFile,boundaryCondition.isExplicit);
-    RFileIO::writeBinary(outFile,boundaryCondition.hasLocalRotations);
-    RFileIO::writeBinary(outFile,boundaryCondition.rotations[0]);
-    RFileIO::writeBinary(outFile,boundaryCondition.rotations[1]);
-    RFileIO::writeBinary(outFile,boundaryCondition.rotations[2]);
+    RFileIO::writeBinary(outFile,boundaryCondition.hasLocalDirection);
+    RFileIO::writeBinary(outFile,boundaryCondition.direction[0]);
+    RFileIO::writeBinary(outFile,boundaryCondition.direction[1]);
+    RFileIO::writeBinary(outFile,boundaryCondition.direction[2]);
 }
 
 

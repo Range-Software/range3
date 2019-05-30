@@ -251,7 +251,7 @@ void GLSimplexPolygon::drawNormal(const std::vector<RNode> &nodes1, const std::v
         GLFunctions::end();
     }
 
-    GL_SAFE_CALL(glCullFace(cullMode));
+    GL_SAFE_CALL(glCullFace(GLenum(cullMode)));
     GL_SAFE_CALL(cullState ? glEnable(GL_CULL_FACE) : glDisable(GL_CULL_FACE));
 }
 

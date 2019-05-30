@@ -80,7 +80,7 @@ void RResults::clearResults(void)
 
 unsigned int RResults::getNVariables (void) const
 {
-    return (unsigned int)this->variables.size();
+    return uint(this->variables.size());
 } /* RResults::getNVariables */
 
 
@@ -141,7 +141,7 @@ unsigned int RResults::addVariable(const RVariable &variable)
     if (variablePosition == RConstants::eod)
     {
         this->variables.push_back(variable);
-        variablePosition = (unsigned int)this->variables.size()-1;
+        variablePosition = uint(this->variables.size()-1);
     }
     else
     {

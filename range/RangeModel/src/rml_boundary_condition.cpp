@@ -21,13 +21,13 @@ typedef struct _RBoundaryConditionDesc
     bool             applyOnLine;
     bool             applyOnSurface;
     bool             applyOnVolume;
-    bool             hasLocalRotations;
+    bool             hasLocalDirections;
     RProblemTypeMask problemTypeMask;
 } RBoundaryConditionDesc;
 
 const RBoundaryConditionDesc boundaryConditionDesc [] =
 {
-    /* ID, Name, optional, explicit, point, line, surface, volume, has local rotation */
+    /* ID, Name, optional, explicit, point, line, surface, volume, has local direction */
     { "bc-none", "None", false, false, false, false, false, false, false, R_PROBLEM_NONE },
     { "bc-absorbing_boundary", "Absorbing boundary", false, false, true, true, true, true, false, R_PROBLEM_ACOUSTICS | R_PROBLEM_WAVE},
     { "bc-charge_density", "Charge density", false, false, true, true, true, true, false, R_PROBLEM_ELECTROSTATICS },
@@ -36,7 +36,7 @@ const RBoundaryConditionDesc boundaryConditionDesc [] =
     { "bc-simple_convection", "Simple convection", false, false, false, false, true, false, false, R_PROBLEM_HEAT },
     { "bc-displacement", "Displacement", true, true, true, true, true, true, false, R_PROBLEM_STRESS | R_PROBLEM_STRESS_MODAL },
     { "bc-normal_displacement", "Normal displacement", false, true, false, false, true, false, true, R_PROBLEM_STRESS | R_PROBLEM_STRESS_MODAL },
-    { "bc-roller_displacement", "Roller displacement", false, true, false, false, true, false, true, R_PROBLEM_STRESS | R_PROBLEM_STRESS_MODAL },
+    { "bc-roller_displacement", "Roller displacement", false, true, true, true, true, false, true, R_PROBLEM_STRESS | R_PROBLEM_STRESS_MODAL },
     { "bc-electric_potential", "Electric potential", false, true, true, true, true, true, false, R_PROBLEM_ELECTROSTATICS },
     { "bc-force", "Force", false, false, true, true, true, false, false, R_PROBLEM_STRESS | R_PROBLEM_STRESS_MODAL },
     { "bc-force_ua", "Force (unit area)", false, false, false, false, true, false, false, R_PROBLEM_STRESS | R_PROBLEM_STRESS_MODAL },
@@ -63,9 +63,10 @@ const RBoundaryConditionDesc boundaryConditionDesc [] =
 
 
 RBoundaryCondition::RBoundaryCondition (RBoundaryConditionType type)
+    : direction(0.0,0.0,1.0)
 {
-    this->setType (type);
-    this->_init ();
+    this->setType(type);
+    this->_init();
 } /* RBoundaryCondition::RBoundaryCondition */
 
 
@@ -89,75 +90,66 @@ void RBoundaryCondition::_init (const RBoundaryCondition *pCondition)
         this->type = pCondition->type;
         this->optional = pCondition->optional;
         this->isExplicit = pCondition->isExplicit;
-        this->hasLocalRotations = pCondition->hasLocalRotations;
-        this->rotations[0] = pCondition->rotations[0];
-        this->rotations[1] = pCondition->rotations[1];
-        this->rotations[2] = pCondition->rotations[2];
+        this->hasLocalDirection = pCondition->hasLocalDirection;
+        this->direction = pCondition->direction;
     }
 } /* RBoundaryCondition::_init */
 
 
-RBoundaryConditionType RBoundaryCondition::getType (void) const
+RBoundaryConditionType RBoundaryCondition::getType(void) const
 {
     return this->type;
 } /* RBoundaryCondition::get_type */
 
 
-void RBoundaryCondition::setType (RBoundaryConditionType type)
+void RBoundaryCondition::setType(RBoundaryConditionType type)
 {
     std::vector<RVariableType> componentTypes;
     RConditionComponent component;
 
-    this->setTypeSafe (type);
-    this->clear ();
+    this->setTypeSafe(type);
+    this->clear();
 
     componentTypes = RBoundaryCondition::getDefaultComponents(type);
 
     for (unsigned int i=0;i<componentTypes.size();i++)
     {
-        component.setType (componentTypes[i]);
-        this->addComponent (component);
+        component.setType(componentTypes[i]);
+        this->addComponent(component);
     }
 } /* RBoundaryCondition::set_type */
 
 
-void RBoundaryCondition::setTypeSafe (RBoundaryConditionType type)
+void RBoundaryCondition::setTypeSafe(RBoundaryConditionType type)
 {
     this->type = type;
-    this->name = RBoundaryCondition::getName (type);
-    this->optional = RBoundaryCondition::getOptional (type);
-    this->isExplicit = RBoundaryCondition::getExplicit (type);
-    this->applyOnPoint = RBoundaryCondition::getApplyOnPoint (type);
-    this->applyOnLine = RBoundaryCondition::getApplyOnLine (type);
-    this->applyOnSurface = RBoundaryCondition::getApplyOnSurface (type);
-    this->applyOnVolume = RBoundaryCondition::getApplyOnVolume (type);
-    this->hasLocalRotations = RBoundaryCondition::getHasLocalRotations (type);
-    this->problemTypeMask = RBoundaryCondition::getProblemTypeMask (type);
+    this->name = RBoundaryCondition::getName(type);
+    this->optional = RBoundaryCondition::getOptional(type);
+    this->isExplicit = RBoundaryCondition::getExplicit(type);
+    this->applyOnPoint = RBoundaryCondition::getApplyOnPoint(type);
+    this->applyOnLine = RBoundaryCondition::getApplyOnLine(type);
+    this->applyOnSurface = RBoundaryCondition::getApplyOnSurface(type);
+    this->applyOnVolume = RBoundaryCondition::getApplyOnVolume(type);
+    this->hasLocalDirection = RBoundaryCondition::getHasLocalDirection(type);
+    this->problemTypeMask = RBoundaryCondition::getProblemTypeMask(type);
 } /* RBoundaryCondition::set_type_safe */
 
 
-bool RBoundaryCondition::getHasLocalRotations (void) const
+bool RBoundaryCondition::getHasLocalDirection() const
 {
-    return this->hasLocalRotations;
-} /* RBoundaryCondition::get_has_local_rotations */
+    return this->hasLocalDirection;
+} /* RBoundaryCondition::getHasLocalDirection */
 
-
-double RBoundaryCondition::getLocalRotationX ( void ) const
+const RR3Vector &RBoundaryCondition::getLocalDirection() const
 {
-    return this->rotations[0];
-} /* RBoundaryCondition::get_local_rotation_x */
+    return this->direction;
+} /* RBoundaryCondition::getLocalDirection */
 
 
-double RBoundaryCondition::getLocalRotationY ( void ) const
+void RBoundaryCondition::setLocalDirection(const RR3Vector &direction)
 {
-    return this->rotations[1];
-} /* RBoundaryCondition::get_local_rotation_y */
-
-
-double RBoundaryCondition::getLocalRotationZ ( void ) const
-{
-    return this->rotations[2];
-} /* RBoundaryCondition::get_local_rotation_z */
+    this->direction = direction;
+} /* RBoundaryCondition::setLocalRotations */
 
 
 RBoundaryCondition & RBoundaryCondition::operator =
@@ -239,11 +231,11 @@ bool RBoundaryCondition::getApplyOnVolume (RBoundaryConditionType type)
 } /* RBoundaryCondition::getApplyOnVolume */
 
 
-bool RBoundaryCondition::getHasLocalRotations (RBoundaryConditionType type)
+bool RBoundaryCondition::getHasLocalDirection (RBoundaryConditionType type)
 {
     R_ERROR_ASSERT (R_BOUNDARY_CONDITION_TYPE_IS_VALID (type));
-    return boundaryConditionDesc[type].hasLocalRotations;
-} /* RBoundaryCondition::getHasLocalRotations */
+    return boundaryConditionDesc[type].hasLocalDirections;
+} /* RBoundaryCondition::getHasLocalDirection */
 
 
 RProblemTypeMask RBoundaryCondition::getProblemTypeMask (RBoundaryConditionType type)

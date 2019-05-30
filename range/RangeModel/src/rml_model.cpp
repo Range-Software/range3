@@ -107,7 +107,7 @@ RModel::RModel (const RModelMsh &modelMsh)
     for (uint i=0;i<modelMsh.pointsAll.getNRows();i++)
     {
         pointBook[i] = elNum;
-        element.setNodeId(0,modelMsh.pointsAll[i][0]);
+        element.setNodeId(0,uint(modelMsh.pointsAll[i][0]));
         this->setElement(elNum++,element);
     }
 
@@ -115,8 +115,8 @@ RModel::RModel (const RModelMsh &modelMsh)
     for (uint i=0;i<modelMsh.linesAll.getNRows();i++)
     {
         lineBook[i] = elNum;
-        element.setNodeId(0,modelMsh.linesAll[i][0]);
-        element.setNodeId(1,modelMsh.linesAll[i][1]);
+        element.setNodeId(0,uint(modelMsh.linesAll[i][0]));
+        element.setNodeId(1,uint(modelMsh.linesAll[i][1]));
         this->setElement(elNum++,element);
     }
 
@@ -124,9 +124,9 @@ RModel::RModel (const RModelMsh &modelMsh)
     for (uint i=0;i<modelMsh.facesAll.getNRows();i++)
     {
         faceBook[i] = elNum;
-        element.setNodeId(0,modelMsh.facesAll[i][0]);
-        element.setNodeId(1,modelMsh.facesAll[i][1]);
-        element.setNodeId(2,modelMsh.facesAll[i][2]);
+        element.setNodeId(0,uint(modelMsh.facesAll[i][0]));
+        element.setNodeId(1,uint(modelMsh.facesAll[i][1]));
+        element.setNodeId(2,uint(modelMsh.facesAll[i][2]));
         this->setElement(elNum++,element);
     }
 
@@ -134,10 +134,10 @@ RModel::RModel (const RModelMsh &modelMsh)
     for (uint i=0;i<modelMsh.bodiesAll.getNRows();i++)
     {
         bodyBook[i] = elNum;
-        element.setNodeId(0,modelMsh.bodiesAll[i][0]);
-        element.setNodeId(1,modelMsh.bodiesAll[i][1]);
-        element.setNodeId(2,modelMsh.bodiesAll[i][2]);
-        element.setNodeId(3,modelMsh.bodiesAll[i][3]);
+        element.setNodeId(0,uint(modelMsh.bodiesAll[i][0]));
+        element.setNodeId(1,uint(modelMsh.bodiesAll[i][1]));
+        element.setNodeId(2,uint(modelMsh.bodiesAll[i][2]));
+        element.setNodeId(3,uint(modelMsh.bodiesAll[i][3]));
         this->setElement(elNum++,element);
     }
 
@@ -149,10 +149,10 @@ RModel::RModel (const RModelMsh &modelMsh)
         RPoint point;
         point.setName(modelMsh.pointsNames[i]);
         point.setVolume(modelMsh.pointsVolume[i]);
-        point.resize(modelMsh.points[i][1]);
-        for (uint j=0;j<(uint)modelMsh.points[i][1];j++)
+        point.resize(uint(modelMsh.points[i][1]));
+        for (uint j=0;j<uint(modelMsh.points[i][1]);j++)
         {
-            point.set(j,pointBook[modelMsh.points[i][j+2]]);
+            point.set(j,pointBook[uint(modelMsh.points[i][j+2])]);
         }
         this->setPoint(i,point);
     }
@@ -163,10 +163,10 @@ RModel::RModel (const RModelMsh &modelMsh)
         RLine line;
         line.setName(modelMsh.linesNames[i]);
         line.setCrossArea(modelMsh.linesCarea[i]);
-        line.resize(modelMsh.lines[i][1]);
-        for (uint j=0;j<(uint)modelMsh.lines[i][1];j++)
+        line.resize(uint(modelMsh.lines[i][1]));
+        for (uint j=0;j<uint(modelMsh.lines[i][1]);j++)
         {
-            line.set(j,lineBook[modelMsh.lines[i][j+2]]);
+            line.set(j,lineBook[uint(modelMsh.lines[i][j+2])]);
         }
         this->setLine(i,line);
     }
@@ -177,10 +177,10 @@ RModel::RModel (const RModelMsh &modelMsh)
         RSurface surface;
         surface.setName(modelMsh.facesNames[i]);
         surface.setThickness(modelMsh.facesThickness[i]);
-        surface.resize(modelMsh.faces[i][1]);
-        for (uint j=0;j<(uint)modelMsh.faces[i][1];j++)
+        surface.resize(uint(modelMsh.faces[i][1]));
+        for (uint j=0;j<uint(modelMsh.faces[i][1]);j++)
         {
-            surface.set(j,faceBook[modelMsh.faces[i][j+2]]);
+            surface.set(j,faceBook[uint(modelMsh.faces[i][j+2])]);
         }
         this->setSurface(i,surface);
     }
@@ -190,10 +190,10 @@ RModel::RModel (const RModelMsh &modelMsh)
     {
         RVolume volume;
         volume.setName(modelMsh.bodiesNames[i]);
-        volume.resize(modelMsh.bodies[i][1]);
-        for (uint j=0;j<(uint)modelMsh.bodies[i][1];j++)
+        volume.resize(uint(modelMsh.bodies[i][1]));
+        for (uint j=0;j<uint(modelMsh.bodies[i][1]);j++)
         {
-            volume.set(j,bodyBook[modelMsh.bodies[i][j+2]]);
+            volume.set(j,bodyBook[uint(modelMsh.bodies[i][j+2])]);
         }
         this->setVolume(i,volume);
     }
@@ -666,13 +666,13 @@ void RModel::exportTo (RModelMsh &modelMsh) const
             pElement = this->getElementPtr(elementID);
             if (pElement->getType() == R_ELEMENT_POINT)
             {
-                modelMsh.pointsAll[elementIDs[elementID]][0] = pElement->getNodeId(0);
-                modelMsh.points[i][nlpg+2] = elementIDs[elementID];
+                modelMsh.pointsAll[elementIDs[elementID]][0] = int(pElement->getNodeId(0));
+                modelMsh.points[i][nlpg+2] = int(elementIDs[elementID]);
                 nlpg++;
             }
         }
-        modelMsh.points[i][0] = i+1;
-        modelMsh.points[i][1] = nlpg;
+        modelMsh.points[i][0] = int(i+1);
+        modelMsh.points[i][1] = int(nlpg);
         modelMsh.pointsNames[i] = pPoint->getName();
         modelMsh.pointsVolume[i] = pPoint->getVolume();
     }
@@ -688,14 +688,14 @@ void RModel::exportTo (RModelMsh &modelMsh) const
             if (pElement->getType() == R_ELEMENT_TRUSS1 ||
                 pElement->getType() == R_ELEMENT_TRUSS2)
             {
-                modelMsh.linesAll[elementIDs[elementID]][0] = pElement->getNodeId(0);
-                modelMsh.linesAll[elementIDs[elementID]][1] = pElement->getNodeId(1);
-                modelMsh.lines[i][nlpg+2] = elementIDs[elementID];
+                modelMsh.linesAll[elementIDs[elementID]][0] = int(pElement->getNodeId(0));
+                modelMsh.linesAll[elementIDs[elementID]][1] = int(pElement->getNodeId(1));
+                modelMsh.lines[i][nlpg+2] = int(elementIDs[elementID]);
                 nlpg++;
             }
         }
-        modelMsh.lines[i][0] = i+1;
-        modelMsh.lines[i][1] = nlpg;
+        modelMsh.lines[i][0] = int(i+1);
+        modelMsh.lines[i][1] = int(nlpg);
         modelMsh.linesNames[i] = pLine->getName();
         modelMsh.linesCarea[i] = pLine->getCrossArea();
     }
@@ -711,15 +711,15 @@ void RModel::exportTo (RModelMsh &modelMsh) const
             if (pElement->getType() == R_ELEMENT_TRI1 ||
                 pElement->getType() == R_ELEMENT_TRI2)
             {
-                modelMsh.facesAll[elementIDs[elementID]][0] = pElement->getNodeId(0);
-                modelMsh.facesAll[elementIDs[elementID]][1] = pElement->getNodeId(1);
-                modelMsh.facesAll[elementIDs[elementID]][2] = pElement->getNodeId(2);
-                modelMsh.faces[i][nfpg+2] = elementIDs[elementID];
+                modelMsh.facesAll[elementIDs[elementID]][0] = int(pElement->getNodeId(0));
+                modelMsh.facesAll[elementIDs[elementID]][1] = int(pElement->getNodeId(1));
+                modelMsh.facesAll[elementIDs[elementID]][2] = int(pElement->getNodeId(2));
+                modelMsh.faces[i][nfpg+2] = int(elementIDs[elementID]);
                 nfpg++;
             }
         }
-        modelMsh.faces[i][0] = i+1;
-        modelMsh.faces[i][1] = nfpg;
+        modelMsh.faces[i][0] = int(i+1);
+        modelMsh.faces[i][1] = int(nfpg);
         modelMsh.facesNames[i] = pSurface->getName();
         modelMsh.facesThickness[i] = pSurface->getThickness();
     }
@@ -734,16 +734,16 @@ void RModel::exportTo (RModelMsh &modelMsh) const
             pElement = this->getElementPtr(elementID);
             if (pElement->getType() == R_ELEMENT_TETRA1)
             {
-                modelMsh.bodiesAll[elementIDs[elementID]][0] = pElement->getNodeId(0);
-                modelMsh.bodiesAll[elementIDs[elementID]][1] = pElement->getNodeId(1);
-                modelMsh.bodiesAll[elementIDs[elementID]][2] = pElement->getNodeId(2);
-                modelMsh.bodiesAll[elementIDs[elementID]][3] = pElement->getNodeId(3);
-                modelMsh.bodies[i][nbpg+2] = elementIDs[elementID];
+                modelMsh.bodiesAll[elementIDs[elementID]][0] = int(pElement->getNodeId(0));
+                modelMsh.bodiesAll[elementIDs[elementID]][1] = int(pElement->getNodeId(1));
+                modelMsh.bodiesAll[elementIDs[elementID]][2] = int(pElement->getNodeId(2));
+                modelMsh.bodiesAll[elementIDs[elementID]][3] = int(pElement->getNodeId(3));
+                modelMsh.bodies[i][nbpg+2] = int(elementIDs[elementID]);
                 nbpg++;
             }
         }
-        modelMsh.bodies[i][0] = i+1;
-        modelMsh.bodies[i][1] = nbpg;
+        modelMsh.bodies[i][0] = int(i+1);
+        modelMsh.bodies[i][1] = int(nbpg);
         modelMsh.bodiesNames[i] = pVolume->getName();
     }
 } /* RModel::exportTo */
@@ -823,7 +823,7 @@ void RModel::exportTo (RModelStl &modelStl) const
 } /* RModel::exportTo */
 
 
-QString RModel::getName(void) const
+QString RModel::getName() const
 {
     return this->name;
 } /* RModel::getName */
@@ -835,7 +835,7 @@ void RModel::setName (const QString &name)
 } /* RModel::setName */
 
 
-QString RModel::getDescription(void) const
+QString RModel::getDescription() const
 {
     return this->description;
 } /* RModel::getDescription */
@@ -942,7 +942,7 @@ void RModel::setProblemTaskTree (const RProblemTaskItem &taskTree)
             }
             else
             {
-                pElementGroup = 0;
+                pElementGroup = nullptr;
             }
 
             // Check all boundary conditions
@@ -1007,7 +1007,7 @@ void RModel::removeVariable(uint position)
 }/* RModel::removeVariable */
 
 
-void RModel::removeAllVariables(void)
+void RModel::removeAllVariables()
 {
     this->RResults::removeAllVariables();
     this->clearEntityVariableData();
@@ -1019,7 +1019,7 @@ void RModel::removeAllVariables(void)
  *********************************************************************/
 
 
-uint RModel::getNNodes (void) const
+uint RModel::getNNodes () const
 {
     return uint(this->nodes.size());
 } /* RModel::getNNodes */
@@ -1060,7 +1060,7 @@ RNode & RModel::getNode (uint position)
 } /* RModel::getNode */
 
 
-const std::vector<RNode> &RModel::getNodes(void) const
+const std::vector<RNode> &RModel::getNodes() const
 {
     return this->nodes;
 } /* RModel::getNodes */
@@ -1175,10 +1175,10 @@ void RModel::removeNodes(const QList<uint> &nodeIDs, bool closeHole)
         if (closeHole)
         {
             std::vector<RNode> edgeNodes;
-            edgeNodes.resize(edgeNodeIds.size());
+            edgeNodes.resize(uint(edgeNodeIds.size()));
             for (uint i=0;i<edgeNodes.size();i++)
             {
-                edgeNodes[i] = this->getNode(edgeNodeIds[i]);
+                edgeNodes[i] = this->getNode(edgeNodeIds[int(i)]);
             }
 
             if (edgeNodes.size() > 0)
@@ -1188,7 +1188,7 @@ void RModel::removeNodes(const QList<uint> &nodeIDs, bool closeHole)
                 {
                     for (uint k=0;k<patchEelements[j].size();k++)
                     {
-                        patchEelements[j].setNodeId(k,edgeNodeIds[patchEelements[j].getNodeId(k)]);
+                        patchEelements[j].setNodeId(k,edgeNodeIds[int(patchEelements[j].getNodeId(k))]);
                     }
                     this->addElement(patchEelements[j]);
                 }
@@ -1265,6 +1265,68 @@ uint RModel::mergeNearNodes(double tolerance)
 } /* RModel::mergeNearNodes */
 
 
+uint RModel::removeDuplicateElements()
+{
+    RBVector elementBook(this->getNElements(),false);
+
+#pragma omp parallel for default(shared)
+    for(int64_t i=0;i<this->getNElements();i++)
+    {
+        if (elementBook[uint(i)])
+        {
+            continue;
+        }
+        const RElement &rElement1 = this->getElement(uint(i));
+        for(int64_t j=i+1;j<this->getNElements();j++)
+        {
+            if (elementBook[uint(j)])
+            {
+                continue;
+            }
+            const RElement &rElement2 = this->getElement(uint(j));
+
+            if (rElement1.getType() != rElement2.getType())
+            {
+                continue;
+            }
+
+            bool isEqual = true;
+            for (uint k=0;k<rElement2.size();k++)
+            {
+                if (!rElement1.hasNodeId(rElement2.getNodeId(k)))
+                {
+                    isEqual = false;
+                    break;
+                }
+            }
+            if (isEqual)
+            {
+                elementBook[uint(j)] = true;
+            }
+        }
+    }
+
+    QList<uint> elementsToRemove;
+    elementsToRemove.reserve(int(this->getNElements()));
+
+    for (uint i=0;i<elementBook.size();i++)
+    {
+        if (elementBook[i])
+        {
+            elementsToRemove.append(i);
+        }
+    }
+
+    uint nRemoved = this->getNElements();
+
+    this->removeElements(elementsToRemove,false);
+
+    nRemoved -= this->getNElements();
+
+    return nRemoved;
+} /* RModel::removeDuplicateElements */
+
+
 void RModel::findNodeLimits(double &xmin, double &xmax, double &ymin, double &ymax, double &zmin, double &zmax) const
 {
     xmin = xmax = ymin = ymax = zmin = zmax = 0.0;
@@ -1286,7 +1348,7 @@ void RModel::findNodeLimits(double &xmin, double &xmax, double &ymin, double &ym
 } /* RModel::getNodeLimits */
 
 
-double RModel::findNodeScale(void) const
+double RModel::findNodeScale() const
 {
     double xmin,xmax,ymin,ymax,zmin,zmax;
     this->findNodeLimits(xmin,xmax,ymin,ymax,zmin,zmax);
@@ -1323,7 +1385,7 @@ void RModel::findNodeCenter(double &xc, double &yc, double &zc) const
 } /* RModel::getNodeCenter */
 
 
-RStatistics RModel::findNodeDistanceStatistics(void) const
+RStatistics RModel::findNodeDistanceStatistics() const
 {
     QMap< QPair<uint,uint> , double > distMap;
 
@@ -1349,7 +1411,7 @@ RStatistics RModel::findNodeDistanceStatistics(void) const
     }
 
     RRVector nodeDist;
-    nodeDist.reserve((distMap.size()));
+    nodeDist.reserve(uint(distMap.size()));
 
     foreach (double distance, distMap)
     {
@@ -1373,7 +1435,7 @@ bool RModel::isNodeUsed(uint nodeID) const
 } /* RModel::isNodeUsed */
 
 
-uint RModel::purgeUnusedNodes(void)
+uint RModel::purgeUnusedNodes()
 {
     RLogger::info("Purging unused nodes\n");
     RLogger::indent();
@@ -1525,13 +1587,13 @@ RElement & RModel::getElement (uint position)
 } /* RModel::getElement */
 
 
-const std::vector<RElement> &RModel::getElements(void) const
+const std::vector<RElement> &RModel::getElements() const
 {
     return this->elements;
 } /* RModel::getElements */
 
 
-std::vector<RElement> &RModel::getElements(void)
+std::vector<RElement> &RModel::getElements()
 {
     return this->elements;
 } /* RModel::getElements */
@@ -1699,7 +1761,7 @@ void RModel::removeElement (uint                position,
                 // Remove empty element group
                 if (removedPoints)
                 {
-                    uint gPosition = std::distance(this->points.begin(),(rIter+1).base());
+                    uint gPosition = uint(std::distance(this->points.begin(),(rIter+1).base()));
                     removedPoints->push_back(gPosition);
                 }
                 this->points.erase ((rIter+1).base());
@@ -1733,7 +1795,7 @@ void RModel::removeElement (uint                position,
                 // Remove empty element group
                 if (removedLines)
                 {
-                    uint gPosition = std::distance(this->lines.begin(),(rIter+1).base());
+                    uint gPosition = uint(std::distance(this->lines.begin(),(rIter+1).base()));
                     removedLines->push_back(gPosition);
                 }
                 this->lines.erase((rIter+1).base());
@@ -1767,7 +1829,7 @@ void RModel::removeElement (uint                position,
                 // Remove empty element group
                 if (removedSurfaces)
                 {
-                    uint gPosition = std::distance(this->surfaces.begin(),(rIter+1).base());
+                    uint gPosition = uint(std::distance(this->surfaces.begin(),(rIter+1).base()));
                     removedSurfaces->push_back(gPosition);
                 }
                 this->surfaces.erase((rIter+1).base());
@@ -1801,7 +1863,7 @@ void RModel::removeElement (uint                position,
                 // Remove empty element group
                 if (removedVolumes)
                 {
-                    uint gPosition = std::distance(this->volumes.begin(),(rIter+1).base());
+                    uint gPosition = uint(std::distance(this->volumes.begin(),(rIter+1).base()));
                     removedVolumes->push_back(gPosition);
                 }
                 this->volumes.erase((rIter+1).base());
@@ -1914,11 +1976,9 @@ void RModel::removeElements(const QList<uint> &elementIDs, bool closeHole)
 } /* RModel::removeElements */
 
 
-std::vector<uint> RModel::findElementPositionsByNodeId
-                                         ( uint nodeID ) const
+std::vector<uint> RModel::findElementPositionsByNodeId(uint nodeID) const
 {
     std::vector<uint> elementPositions;
-    std::vector<RElement>::iterator iter;
     const RElement *pElement = nullptr;
 
     R_ERROR_ASSERT (nodeID < this->getNNodes());
@@ -1935,7 +1995,7 @@ std::vector<uint> RModel::findElementPositionsByNodeId
 } /* RModel::findElementPositionsByNodeId */
 
 
-RStatistics RModel::findLineElementSizeStatistics(void) const
+RStatistics RModel::findLineElementSizeStatistics() const
 {
     RRVector elementSizes;
     return RStatistics(elementSizes,100,true);
@@ -1956,7 +2016,7 @@ RStatistics RModel::findVolumeElementSizeStatistics() const
 } /* RModel::findVolumeElementSizeStatistics */
 
 
-uint RModel::purgeUnusedElements(void)
+uint RModel::purgeUnusedElements()
 {
     RLogger::info("Purging unused elements\n");
     RLogger::indent();
@@ -1970,9 +2030,9 @@ uint RModel::purgeUnusedElements(void)
     uint ne = this->getNElements();
 
 #pragma omp parallel for default(shared)
-    for (int i=0;i<int(nElementGroups);i++)
+    for (int64_t i=0;i<int64_t(nElementGroups);i++)
     {
-        const RElementGroup *pElementGroup = this->getElementGroupPtr(i);
+        const RElementGroup *pElementGroup = this->getElementGroupPtr(uint(i));
         for (uint j=0;j<pElementGroup->size();j++)
         {
             elementBook[pElementGroup->get(j)] = 0;
@@ -2010,7 +2070,7 @@ uint RModel::purgeUnusedElements(void)
 #pragma omp parallel for default(shared)
     for (int64_t i=0;i<int64_t(nElementGroups);i++)
     {
-        RElementGroup *pElementGroup = this->getElementGroupPtr(i);
+        RElementGroup *pElementGroup = this->getElementGroupPtr(uint(i));
         for (uint j=0;j<pElementGroup->size();j++)
         {
             pElementGroup->set(j,elementBook[pElementGroup->get(j)]);
@@ -2115,7 +2175,7 @@ const RInterpolatedElement *RModel::getInterpolatedElement(REntityGroupType type
         }
         default:
         {
-            return 0;
+            return nullptr;
         }
     }
 } /* RModel::purgeUnusedElements */
@@ -2139,7 +2199,7 @@ RInterpolatedElement *RModel::getInterpolatedElement(REntityGroupType type, uint
         }
         default:
         {
-            return 0;
+            return nullptr;
         }
     }
 } /* RModel::purgeUnusedElements */
@@ -2187,7 +2247,7 @@ uint RModel::getNEntityElements(REntityGroupType entityType) const
 } /* RModel::getNEntityElements */
 
 
-uint RModel::getNElementGroups(void) const
+uint RModel::getNElementGroups() const
 {
     return this->getNEntityGroups(true);
 } /* RModel::getNElementGroups */
@@ -2281,7 +2341,7 @@ const REntityGroup *RModel::getEntityGroupPtr(uint groupID, bool onlyElements) c
         }
     }
 
-    return 0;
+    return nullptr;
 } /* RModel::getEntityGroupPtr */
 
 
@@ -2346,7 +2406,7 @@ REntityGroup *RModel::getEntityGroupPtr(uint groupID, bool onlyElements)
         }
     }
 
-    return 0;
+    return nullptr;
 } /* RModel::getEntityGroupPtr */
 
 
@@ -2887,7 +2947,7 @@ void RModel::mergeEntities(REntityGroupType entityType, const QList<uint> &entit
         {
             RLogger::info("Merging point entities\n");
             RLogger::indent();
-            for (uint i=entityIDs.size()-1;i>0;i--)
+            for (int i=entityIDs.size()-1;i>0;i--)
             {
                 for (uint j=0;j<this->getPoint(entityIDs[i]).size();j++)
                 {
@@ -2902,7 +2962,7 @@ void RModel::mergeEntities(REntityGroupType entityType, const QList<uint> &entit
         {
             RLogger::info("Merging line entities\n");
             RLogger::indent();
-            for (uint i=entityIDs.size()-1;i>0;i--)
+            for (int i=entityIDs.size()-1;i>0;i--)
             {
                 for (uint j=0;j<this->getLine(entityIDs[i]).size();j++)
                 {
@@ -2917,7 +2977,7 @@ void RModel::mergeEntities(REntityGroupType entityType, const QList<uint> &entit
         {
             RLogger::info("Merging surface entities\n");
             RLogger::indent();
-            for (uint i=entityIDs.size()-1;i>0;i--)
+            for (int i=entityIDs.size()-1;i>0;i--)
             {
                 for (uint j=0;j<this->getSurface(entityIDs[i]).size();j++)
                 {
@@ -2932,7 +2992,7 @@ void RModel::mergeEntities(REntityGroupType entityType, const QList<uint> &entit
         {
             RLogger::info("Merging volume entities\n");
             RLogger::indent();
-            for (uint i=entityIDs.size()-1;i>0;i--)
+            for (int i=entityIDs.size()-1;i>0;i--)
             {
                 for (uint j=0;j<this->getVolume(entityIDs[i]).size();j++)
                 {
@@ -3081,7 +3141,7 @@ void RModel::removeEntities(REntityGroupType entityType, const QList<uint> &enti
  *********************************************************************/
 
 
-uint RModel::getNPoints (void) const
+uint RModel::getNPoints () const
 {
     return uint(this->points.size());
 } /* RModel::getNPoints */
@@ -3165,7 +3225,7 @@ void RModel::removePoint (uint position)
  *********************************************************************/
 
 
-uint RModel::getNLines (void) const
+uint RModel::getNLines () const
 {
     return uint(this->lines.size());
 } /* RModel::getNLines */
@@ -3249,7 +3309,7 @@ void RModel::removeLine (uint position)
  *********************************************************************/
 
 
-uint RModel::getNSurfaces (void) const
+uint RModel::getNSurfaces () const
 {
     return uint(this->surfaces.size());
 } /* RModel::getNSurfaces */
@@ -3378,7 +3438,7 @@ bool RModel::checkIfSurfacesAreClosed(const QList<uint> &surfaceIDs) const
 } /* RModel::checkIfSurfacesAreClosed */
 
 
-void RModel::syncSurfaceNormals(void)
+void RModel::syncSurfaceNormals()
 {
     if (this->getNElements() != this->surfaceNeigs.size())
     {
@@ -3445,7 +3505,7 @@ void RModel::syncSurfaceNormals(void)
  *********************************************************************/
 
 
-uint RModel::getNVolumes (void) const
+uint RModel::getNVolumes () const
 {
     return uint(this->volumes.size());
 } /* RModel::getNVolumes */
@@ -3529,7 +3589,7 @@ void RModel::removeVolume (uint position)
  *********************************************************************/
 
 
-uint RModel::getNVectorFields(void) const
+uint RModel::getNVectorFields() const
 {
     return uint(this->vectorFields.size());
 } /* RModel::getNVectorFields */
@@ -3615,7 +3675,7 @@ void RModel::removeVectorField(uint position)
  *********************************************************************/
 
 
-uint RModel::getNScalarFields(void) const
+uint RModel::getNScalarFields() const
 {
     return uint(this->scalarFields.size());
 } /* RModel::getNScalarFields */
@@ -3701,7 +3761,7 @@ void RModel::removeScalarField(uint position)
  *********************************************************************/
 
 
-uint RModel::getNStreamLines(void) const
+uint RModel::getNStreamLines() const
 {
     return uint(this->streamLines.size());
 } /* RModel::getNStreamLines */
@@ -3784,7 +3844,7 @@ void RModel::removeStreamLine(uint position)
  *********************************************************************/
 
 
-uint RModel::getNCuts(void) const
+uint RModel::getNCuts() const
 {
     return uint(this->cuts.size());
 } /* RModel::getNCuts */
@@ -3868,7 +3928,7 @@ void RModel::removeCut(uint position)
  *********************************************************************/
 
 
-uint RModel::getNIsos(void) const
+uint RModel::getNIsos() const
 {
     return uint(this->isos.size());
 } /* RModel::getNIsos */
@@ -3951,13 +4011,13 @@ const RVariable *RModel::findVariableByDisplayType(REntityGroupVariableDisplayTy
     uint groupID = this->getEntityGroupID(entityType,entityID);
     if (groupID == RConstants::eod)
     {
-        return 0;
+        return nullptr;
     }
 
     const REntityGroup *pEntity = this->getEntityGroupPtr(groupID);
     if (!pEntity)
     {
-        return 0;
+        return nullptr;
     }
 
     RVariableType variableType = pEntity->getData().findVariableByDisplayType(displayTypeMask);
@@ -3965,7 +4025,7 @@ const RVariable *RModel::findVariableByDisplayType(REntityGroupVariableDisplayTy
     uint variablePosition = this->findVariable(variableType);
     if (variablePosition == RConstants::eod)
     {
-        return 0;
+        return nullptr;
     }
 
     return &this->getVariable(variablePosition);
@@ -4355,14 +4415,14 @@ RModelProblemTypeMask RModel::checkMesh(bool printOutput) const
 #pragma omp parallel for default(shared)
     for (int64_t i=0;i<int64_t(this->getNElements());i++)
     {
-        const std::vector<uint> *pNeighbors = this->getNeighborIDs(i);
+        const std::vector<uint> *pNeighbors = this->getNeighborIDs(uint(i));
         if (!pNeighbors)
         {
             continue;
         }
         for (uint j=0;j<pNeighbors->size();j++)
         {
-            if (RElementGroup::getGroupType(this->getElement(i).getType())
+            if (RElementGroup::getGroupType(this->getElement(uint(i)).getType())
                 ==
                 RElementGroup::getGroupType(this->getElement(pNeighbors->at(j)).getType()))
             {
@@ -4376,8 +4436,8 @@ RModelProblemTypeMask RModel::checkMesh(bool printOutput) const
                     RLogger::warning("Two neighboring elements %u and %u have incompatible types %d (%s) / %d (%s)\n",
                                      i,
                                      pNeighbors->at(j),
-                                     int(this->getElement(i).getType()),
-                                     RElement::getName(this->getElement(i).getType()).toUtf8().constData(),
+                                     int(this->getElement(uint(i)).getType()),
+                                     RElement::getName(this->getElement(uint(i)).getType()).toUtf8().constData(),
                                      int(this->getElement(pNeighbors->at(j)).getType()),
                                      RElement::getName(this->getElement(pNeighbors->at(j)).getType()).toUtf8().constData());
                 }
@@ -4389,7 +4449,7 @@ RModelProblemTypeMask RModel::checkMesh(bool printOutput) const
 } /* RModel::checkMesh */
 
 
-QVector<bool> RModel::findEdgeNodes(void) const
+QVector<bool> RModel::findEdgeNodes() const
 {
     RLogger::info("Finding edge nodes\n");
     RLogger::indent();
@@ -4400,11 +4460,11 @@ QVector<bool> RModel::findEdgeNodes(void) const
     QVector<uint> nodeCount;
     QVector<uint> nodeGroup;
 
-    edgeNodes.resize(this->getNNodes());
+    edgeNodes.resize(int(this->getNNodes()));
     edgeNodes.fill(true);
-    nodeCount.resize(this->getNNodes());
+    nodeCount.resize(int(this->getNNodes()));
     nodeCount.fill(0);
-    nodeGroup.resize(this->getNNodes());
+    nodeGroup.resize(int(this->getNNodes()));
     nodeGroup.fill(0);
 
     uint nodeGroupCounter = 1;
@@ -4423,7 +4483,7 @@ QVector<bool> RModel::findEdgeNodes(void) const
             const RElement &element = this->getElement(point.get(j));
             for (uint k=0;k<element.size();k++)
             {
-                uint nodeID = element.getNodeId(k);
+                int nodeID = int(element.getNodeId(k));
                 if (nodeGroup[nodeID] != nodeGroupCounter)
                 {
                     nodeGroup[nodeID] = nodeGroupCounter;
@@ -4443,7 +4503,7 @@ QVector<bool> RModel::findEdgeNodes(void) const
             const RElement &element = this->getElement(line.get(j));
             for (uint k=0;k<element.size();k++)
             {
-                uint nodeID = element.getNodeId(k);
+                int nodeID = int(element.getNodeId(k));
                 if (nodeGroup[nodeID] != nodeGroupCounter)
                 {
                     nodeGroup[nodeID] = nodeGroupCounter;
@@ -4463,7 +4523,7 @@ QVector<bool> RModel::findEdgeNodes(void) const
             const RElement &element = this->getElement(surface.get(j));
             for (uint k=0;k<element.size();k++)
             {
-                uint nodeID = element.getNodeId(k);
+                int nodeID = int(element.getNodeId(k));
                 if (nodeGroup[nodeID] != nodeGroupCounter)
                 {
                     nodeGroup[nodeID] = nodeGroupCounter;
@@ -4483,7 +4543,7 @@ QVector<bool> RModel::findEdgeNodes(void) const
             const RElement &element = this->getElement(volume.get(j));
             for (uint k=0;k<element.size();k++)
             {
-                uint nodeID = element.getNodeId(k);
+                int nodeID = int(element.getNodeId(k));
                 if (nodeGroup[nodeID] != nodeGroupCounter)
                 {
                     nodeGroup[nodeID] = nodeGroupCounter;
@@ -4496,7 +4556,7 @@ QVector<bool> RModel::findEdgeNodes(void) const
 
     for (uint i=0;i<this->getNNodes();i++)
     {
-        edgeNodes[i] = (nodeCount[i] > 1);
+        edgeNodes[int(i)] = (nodeCount[int(i)] > 1);
     }
 
     // Add to edge nodes element nodes which neighbor count is less than expected.
@@ -4513,7 +4573,7 @@ QVector<bool> RModel::findEdgeNodes(void) const
                 {
                     for (uint k=0;k<rElement.size();k++)
                     {
-                        edgeNodes[rElement.getNodeId(k)] = true;
+                        edgeNodes[int(rElement.getNodeId(k))] = true;
                     }
                 }
             }
@@ -4548,7 +4608,7 @@ QVector<bool> RModel::findEdgeNodes(void) const
                     {
                         if (rElement.nodeIsOnEdge(l,k))
                         {
-                            edgeNodes[rElement.getNodeId(l)] = true;
+                            edgeNodes[int(rElement.getNodeId(l))] = true;
                         }
                     }
                 }
@@ -4586,7 +4646,7 @@ QList<uint> RModel::sortLineElements(const QList<RElement> &edges, uint firstID)
         uint n1 = sortedEdges[i].getNodeId(0);
         uint n2 = sortedEdges[i].getNodeId(1);
         LineElementItem item;
-        item.id = i;
+        item.id = uint(i);
         item.n1 = RConstants::eod;
         item.n2 = RConstants::eod;
         for (int j=0;j<sortedEdges.size();j++)
@@ -4601,11 +4661,11 @@ QList<uint> RModel::sortLineElements(const QList<RElement> &edges, uint firstID)
             }
             if (n1 == sortedEdges[j].getNodeId(1))
             {
-                item.n1 = j;
+                item.n1 = uint(j);
             }
             if (n2 == sortedEdges[j].getNodeId(0))
             {
-                item.n2 = j;
+                item.n2 = uint(j);
             }
             if (item.n1 != RConstants::eod && item.n2 != RConstants::eod)
             {
@@ -4627,7 +4687,7 @@ QList<uint> RModel::sortLineElements(const QList<RElement> &edges, uint firstID)
         {
             if (items[i].n1 == RConstants::eod)
             {
-                firstItemID = i;
+                firstItemID = uint(i);
                 break;
             }
         }
@@ -4639,9 +4699,9 @@ QList<uint> RModel::sortLineElements(const QList<RElement> &edges, uint firstID)
 
     while (n != RConstants::eod)
     {
-        elementIDs.append(items[n].id);
-        uint next = items[n].n2;
-        items[n].n2 = RConstants::eod;
+        elementIDs.append(items[int(n)].id);
+        uint next = items[int(n)].n2;
+        items[int(n)].n2 = RConstants::eod;
         n = next;
     }
     if (elementIDs.last() == elementIDs.first())
@@ -4678,14 +4738,14 @@ QList<uint> RModel::findNodeEdgeRing(uint nodeID) const
 
     for (int i=0;i<elementIDs.size();i++)
     {
-        nodeIDs.append(edges[elementIDs[i]].getNodeId(0));
+        nodeIDs.append(edges[int(elementIDs[i])].getNodeId(0));
     }
 
     return nodeIDs;
 } /* RModel::findNodeEdgeRing */
 
 
-double RModel::findMinimumNodeDistance(void) const
+double RModel::findMinimumNodeDistance() const
 {
     double minDistance = 0.0;
     bool first = true;
@@ -4733,9 +4793,9 @@ void RModel::createCut(RCut &rCut) const
 #pragma omp parallel for default(shared)
     for (int64_t i=0;i<int64_t(elementIDs.size());i++)
     {
-        const RElement &element = this->getElement(elementIDs[i]);
+        const RElement &element = this->getElement(elementIDs[uint(i)]);
 
-        RInterpolatedElement iElement = element.createInterpolatedElement(rCut.getPlane(),this->getNodes(),elementIDs[i]);
+        RInterpolatedElement iElement = element.createInterpolatedElement(rCut.getPlane(),this->getNodes(),elementIDs[uint(i)]);
         if (iElement.size() > 0)
         {
 #pragma omp critical
@@ -4777,7 +4837,7 @@ void RModel::createIso(RIso &rIso) const
 #pragma omp parallel for default(shared)
     for (int64_t i=0;i<int64_t(elementIDs.size());i++)
     {
-        const RElement &rElement = this->getElement(elementIDs[i]);
+        const RElement &rElement = this->getElement(elementIDs[uint(i)]);
         std::vector<double> nodeValues;
         nodeValues.resize(rElement.size(),0.0);
         for (uint j=0;j<rElement.size();j++)
@@ -4788,11 +4848,11 @@ void RModel::createIso(RIso &rIso) const
             }
             else if (rVariable.getApplyType() == R_VARIABLE_APPLY_ELEMENT)
             {
-                nodeValues[j] = rVariable.getValue(elementIDs[i]);
+                nodeValues[j] = rVariable.getValue(elementIDs[uint(i)]);
             }
         }
 
-        RInterpolatedElement iElement = rElement.createInterpolatedElement(rIso.getVariableValue(),nodeValues,this->getNodes(),elementIDs[i]);
+        RInterpolatedElement iElement = rElement.createInterpolatedElement(rIso.getVariableValue(),nodeValues,this->getNodes(),elementIDs[uint(i)]);
         if (iElement.size() > 0)
         {
 #pragma omp critical
@@ -4826,7 +4886,7 @@ void RModel::createStreamLine(RStreamLine &rStreamLine) const
 #pragma omp parallel for default(shared)
     for (int64_t i=0;i<int64_t(this->getNElements());i++)
     {
-        const RElement &rElement = this->getElement(i);
+        const RElement &rElement = this->getElement(uint(i));
 
         if (R_ELEMENT_TYPE_IS_POINT(rElement.getType()) && pointElementID == RConstants::eod)
         {
@@ -4834,7 +4894,7 @@ void RModel::createStreamLine(RStreamLine &rStreamLine) const
             {
 #pragma omp critical
                 {
-                    pointElementID = i;
+                    pointElementID = uint(i);
                 }
             }
         }
@@ -4844,7 +4904,7 @@ void RModel::createStreamLine(RStreamLine &rStreamLine) const
             {
 #pragma omp critical
                 {
-                    lineElementID = i;
+                    lineElementID = uint(i);
                 }
             }
         }
@@ -4854,7 +4914,7 @@ void RModel::createStreamLine(RStreamLine &rStreamLine) const
             {
 #pragma omp critical
                 {
-                    surfaceElementID = i;
+                    surfaceElementID = uint(i);
                 }
             }
         }
@@ -4864,7 +4924,7 @@ void RModel::createStreamLine(RStreamLine &rStreamLine) const
             {
 #pragma omp critical
                 {
-                    volumeElementID = i;
+                    volumeElementID = uint(i);
                 }
             }
         }
@@ -4969,7 +5029,7 @@ void RModel::createStreamLine(RStreamLine &rStreamLine) const
 } /* RModel::createStreamLine */
 
 
-void RModel::createDependentEntities(void)
+void RModel::createDependentEntities()
 {
     for (uint i=0;i<this->getNCuts();i++)
     {
@@ -5020,7 +5080,7 @@ const std::vector<uint> *RModel::getNeighborIDs(uint elementID) const
         {
             if (this->surfaceNeigs.size() != this->getNElements())
             {
-                return 0;
+                return nullptr;
             }
             return &this->surfaceNeigs[elementID];
         }
@@ -5028,16 +5088,15 @@ const std::vector<uint> *RModel::getNeighborIDs(uint elementID) const
         {
             if (this->volumeNeigs.size() != this->getNElements())
             {
-                return 0;
+                return nullptr;
             }
             return &this->volumeNeigs[elementID];
         }
         default:
         {
-            return 0;
+            return nullptr;
         }
     }
-    return 0;
 } /* RModel::getNeighborIDs */
 
 
@@ -5055,13 +5114,13 @@ void RModel::setVolumeNeighbors(const std::vector<RUVector> &volumeNeigs)
 } /* RModel::setVolumeNeighbors */
 
 
-void RModel::clearSurfaceNeighbors(void)
+void RModel::clearSurfaceNeighbors()
 {
     this->surfaceNeigs.clear();
 } /* RModel::clearSurfaceNeighbors */
 
 
-void RModel::clearVolumeNeighbors(void)
+void RModel::clearVolumeNeighbors()
 {
     this->volumeNeigs.clear();
 } /* RModel::clearVolumeNeighbors */
@@ -5136,7 +5195,7 @@ uint RModel::fixSliverElements(double edgeRatio)
 } /* RModel::fixSliverElements */
 
 
-uint RModel::fixElementGroupRelations(void)
+uint RModel::fixElementGroupRelations()
 {
     RLogger::info("Moving elements to apropriate groups.\n");
     RLogger::indent();
@@ -5276,7 +5335,7 @@ QList<uint> RModel::findSliverElements(double edgeRatio) const
     RLogger::indent();
 
     QList<uint> elementIDs;
-    elementIDs.reserve(this->getNElements());
+    elementIDs.reserve(int(this->getNElements()));
 
     uint nSlivers = 0;
 
@@ -5324,20 +5383,20 @@ QList<uint> RModel::findSliverElements(double edgeRatio) const
             nSlivers++;
         }
     }
-    elementIDs.reserve(nSlivers);
+    elementIDs.reserve(int(nSlivers));
 
     RLogger::unindent();
 
     return elementIDs;
 } /* RModel::findSliverElements */
 
-QList<uint> RModel::findIntersectedElements(void) const
+QList<uint> RModel::findIntersectedElements() const
 {
     RLogger::info("Finding intersected elements\n");
     RLogger::indent();
 
     QVector<bool> intElements;
-    intElements.resize(this->getNElements());
+    intElements.resize(int(this->getNElements()));
     intElements.fill(false);
 
     RLimitBox limitBox1;
@@ -5354,24 +5413,24 @@ QList<uint> RModel::findIntersectedElements(void) const
             RLimitBox limitBox2;
             bool bothIntersected = false;
 #pragma omp critical
-            bothIntersected = (intElements[i] && intElements[j]);
+            bothIntersected = (intElements[int(i)] && intElements[int(j)]);
             if (bothIntersected)
             {
                 continue;
             }
-            this->getElement(j).findLimitBox(this->getNodes(),limitBox2);
+            this->getElement(uint(j)).findLimitBox(this->getNodes(),limitBox2);
             if (!RLimitBox::areIntersecting(limitBox1,limitBox2))
             {
                 continue;
             }
 
             std::set<RR3Vector> x;
-            if (RElement::findIntersectionPoints(this->getElement(i),this->getElement(j),this->getNodes(),x))
+            if (RElement::findIntersectionPoints(this->getElement(i),this->getElement(uint(j)),this->getNodes(),x))
             {
 #pragma omp critical
                 {
 //                    RLogger::warning("Elements %u and %u are intersecting.\n",i,j);
-                    intElements[i] = intElements[j] = true;
+                    intElements[int(i)] = intElements[int(j)] = true;
                 }
             }
         }
@@ -5388,13 +5447,13 @@ QList<uint> RModel::findIntersectedElements(void) const
     }
 
     QList<uint> elementIDs;
-    elementIDs.reserve(nIntersected);
+    elementIDs.reserve(int(nIntersected));
 
     for (int i=0;i<intElements.size();i++)
     {
         if (intElements[i])
         {
-            elementIDs.append(i);
+            elementIDs.append(uint(i));
         }
     }
 
@@ -5460,20 +5519,20 @@ uint RModel::breakIntersectedElements(uint nIterations, const std::vector<uint> 
 #pragma omp parallel for default(shared)
             for (int64_t j=int64_t(i)+1;j<int64_t(bElementIDs.size());j++)
             {
-                if (this->getElement(bElementIDs[j]).hasDuplicateNodes())
+                if (this->getElement(bElementIDs[uint(j)]).hasDuplicateNodes())
                 {
                     continue;
                 }
 
                 RLimitBox limitBox2;
-                this->getElement(bElementIDs[j]).findLimitBox(this->getNodes(),limitBox2);
+                this->getElement(bElementIDs[uint(j)]).findLimitBox(this->getNodes(),limitBox2);
                 if (!RLimitBox::areIntersecting(limitBox1,limitBox2))
                 {
                     continue;
                 }
 
                 std::set<RR3Vector> x;
-                if (RElement::findIntersectionPoints(this->getElement(bElementIDs[i]),this->getElement(bElementIDs[j]),this->getNodes(),x))
+                if (RElement::findIntersectionPoints(this->getElement(bElementIDs[i]),this->getElement(bElementIDs[uint(j)]),this->getNodes(),x))
                 {
 #pragma omp critical
                     {
@@ -5497,7 +5556,7 @@ uint RModel::breakIntersectedElements(uint nIterations, const std::vector<uint> 
                                 intersectionFound = true;
                             }
                             nodeFound = false;
-                            for (cit=intersectionPoints[j].begin();cit!=intersectionPoints[j].end();++cit)
+                            for (cit=intersectionPoints[uint(j)].begin();cit!=intersectionPoints[uint(j)].end();++cit)
                             {
                                 if (RR3Vector::findDistance(*it,*cit) < tolerance)
                                 {
@@ -5507,7 +5566,7 @@ uint RModel::breakIntersectedElements(uint nIterations, const std::vector<uint> 
                             }
                             if (!nodeFound)
                             {
-                                intersectionPoints[j].insert(*it);
+                                intersectionPoints[uint(j)].insert(*it);
                                 intersectionFound = true;
                             }
                         }
@@ -5767,7 +5826,7 @@ bool RModel::boolDifference(uint nIterations, QList<uint> surfaceEntityIDs, uint
 
         try
         {
-            insideBook = surfacesBkp[i].pointsInside(nodesBkp,elementsBkp,elementCenters,false);
+            insideBook = surfacesBkp[uint(i)].pointsInside(nodesBkp,elementsBkp,elementCenters,false);
         }
         catch (const RError &error)
         {
@@ -5847,7 +5906,7 @@ bool RModel::boolIntersection(uint nIterations, QList<uint> surfaceEntityIDs)
             std::vector<bool> insideBook;
             try
             {
-                insideBook = surfacesBkp[i].pointsInside(nodesBkp,elementsBkp,elementCenters,true);
+                insideBook = surfacesBkp[uint(i)].pointsInside(nodesBkp,elementsBkp,elementCenters,true);
             }
             catch (const RError &error)
             {
@@ -5928,7 +5987,7 @@ bool RModel::boolUnion(uint nIterations, QList<uint> surfaceEntityIDs)
             std::vector<bool> insideBook;
             try
             {
-                insideBook = surfacesBkp[i].pointsInside(nodesBkp,elementsBkp,elementCenters,false);
+                insideBook = surfacesBkp[uint(i)].pointsInside(nodesBkp,elementsBkp,elementCenters,false);
             }
             catch (const RError &error)
             {
@@ -6055,7 +6114,7 @@ uint RModel::coarsenSurfaceElements(const std::vector<uint> surfaceIDs, double e
     }
 
     QList<uint> elementIDs;
-    elementIDs.reserve(nDeleted);
+    elementIDs.reserve(int(nDeleted));
 
     for (uint i=0;i<edBook.size();i++)
     {
@@ -6485,7 +6544,7 @@ void RModel::findPatchArea(const RPatch &rPatch, double area) const
 } /* RModel::findPatchArea */
 
 
-QString RModel::findRecentViewFactorMatrixFile(void) const
+QString RModel::findRecentViewFactorMatrixFile() const
 {
     QString viewFactorMatrixFile = this->getProblemSetup().getRadiationSetup().getViewFactorMatrixFile();
     if (!viewFactorMatrixFile.isEmpty())
@@ -6992,7 +7051,7 @@ void RModel::convertNodeToElementVector(const RRVector &nodeValues,
             {
                 continue;
             }
-            uint elementID = rPoint.get(j);
+            uint elementID = rPoint.get(uint(j));
             elementValues[elementID] = 0.0;
             const RElement &element = this->getElement(elementID);
             for (uint j=0;j<element.size();j++)
@@ -7013,7 +7072,7 @@ void RModel::convertNodeToElementVector(const RRVector &nodeValues,
             {
                 continue;
             }
-            uint elementID = rLine.get(j);
+            uint elementID = rLine.get(uint(j));
             elementValues[elementID] = 0.0;
             const RElement &element = this->getElement(elementID);
             for (uint j=0;j<element.size();j++)
@@ -7034,7 +7093,7 @@ void RModel::convertNodeToElementVector(const RRVector &nodeValues,
             {
                 continue;
             }
-            uint elementID = rSurface.get(j);
+            uint elementID = rSurface.get(uint(j));
             elementValues[elementID] = 0.0;
             const RElement &element = this->getElement(elementID);
             for (uint j=0;j<element.size();j++)
@@ -7051,7 +7110,7 @@ void RModel::convertNodeToElementVector(const RRVector &nodeValues,
 #pragma omp parallel for default(shared)
         for (int64_t j=0;j<int64_t(rVolume.size());j++)
         {
-            uint elementID = rVolume.get(j);
+            uint elementID = rVolume.get(uint(j));
             elementValues[elementID] = 0.0;
             const RElement &element = this->getElement(elementID);
             for (uint j=0;j<element.size();j++)
@@ -7064,7 +7123,7 @@ void RModel::convertNodeToElementVector(const RRVector &nodeValues,
 } /* RModel::convertNodeToElementVector */
 
 
-void RModel::clearBoundaryConditions(void)
+void RModel::clearBoundaryConditions()
 {
     for (uint i=0;i<this->getNPoints();i++)
     {
@@ -7085,7 +7144,7 @@ void RModel::clearBoundaryConditions(void)
 } /* RModel::clearBoundaryConditions */
 
 
-void RModel::clearInitialConditions(void)
+void RModel::clearInitialConditions()
 {
     for (uint i=0;i<this->getNPoints();i++)
     {
@@ -7106,7 +7165,7 @@ void RModel::clearInitialConditions(void)
 } /* RModel::clearInitialConditions */
 
 
-void RModel::clearEnvironmentConditions(void)
+void RModel::clearEnvironmentConditions()
 {
     for (uint i=0;i<this->getNPoints();i++)
     {
@@ -7127,7 +7186,7 @@ void RModel::clearEnvironmentConditions(void)
 } /* RModel::clearEnvironmentConditions */
 
 
-void RModel::clearEntityVariableData(void)
+void RModel::clearEntityVariableData()
 {
     for (uint i=0;i<this->getNEntityGroups();i++)
     {
@@ -7638,19 +7697,19 @@ void RModel::writeAscii(const QString &fileName) const
 
     RFileIO::writeAscii(modelFile,this->RResults::nnodes);
     RFileIO::writeAscii(modelFile,this->RResults::nelements);
-    RFileIO::writeAscii(modelFile,(uint)this->RResults::variables.size());
+    RFileIO::writeAscii(modelFile,uint(this->RResults::variables.size()));
     for (uint i=0;i<this->RResults::variables.size();i++)
     {
         RFileIO::writeAscii(modelFile,this->RResults::variables[i]);
     }
 
     // Writing neighbor information.
-    RFileIO::writeAscii(modelFile,(uint)this->surfaceNeigs.size());
+    RFileIO::writeAscii(modelFile,uint(this->surfaceNeigs.size()));
     for (uint i=0;i<this->surfaceNeigs.size();i++)
     {
         RFileIO::writeAscii(modelFile,this->surfaceNeigs[i]);
     }
-    RFileIO::writeAscii(modelFile,(uint)this->volumeNeigs.size());
+    RFileIO::writeAscii(modelFile,uint(this->volumeNeigs.size()));
     for (uint i=0;i<this->volumeNeigs.size();i++)
     {
         RFileIO::writeAscii(modelFile,this->volumeNeigs[i]);
@@ -7780,19 +7839,19 @@ void RModel::writeBinary(const QString &fileName) const
 
     RFileIO::writeBinary(modelFile,this->RResults::nnodes);
     RFileIO::writeBinary(modelFile,this->RResults::nelements);
-    RFileIO::writeBinary(modelFile,(uint)this->RResults::variables.size());
+    RFileIO::writeBinary(modelFile,uint(this->RResults::variables.size()));
     for (uint i=0;i<this->RResults::variables.size();i++)
     {
         RFileIO::writeBinary(modelFile,this->RResults::variables[i]);
     }
 
     // Writing neighbor information.
-    RFileIO::writeBinary(modelFile,(uint)this->surfaceNeigs.size());
+    RFileIO::writeBinary(modelFile,uint(this->surfaceNeigs.size()));
     for (uint i=0;i<this->surfaceNeigs.size();i++)
     {
         RFileIO::writeBinary(modelFile,this->surfaceNeigs[i]);
     }
-    RFileIO::writeBinary(modelFile,(uint)this->volumeNeigs.size());
+    RFileIO::writeBinary(modelFile,uint(this->volumeNeigs.size()));
     for (uint i=0;i<this->volumeNeigs.size();i++)
     {
         RFileIO::writeBinary(modelFile,this->volumeNeigs[i]);
@@ -7804,7 +7863,7 @@ void RModel::writeBinary(const QString &fileName) const
 } /* RModel::writeBinary */
 
 
-std::vector<RUVector> RModel::findSurfaceNeighbors(void) const
+std::vector<RUVector> RModel::findSurfaceNeighbors() const
 {
     std::vector<RUVector> neigs;
 
@@ -7829,7 +7888,7 @@ std::vector<RUVector> RModel::findSurfaceNeighbors(void) const
 #pragma omp parallel for default(shared)
     for (int64_t i=0;i<int64_t(surfaceElements.size());i++)
     {
-        uint elementID1 = surfaceElements[i];
+        uint elementID1 = surfaceElements[uint(i)];
 #pragma omp critical
         {
             RProgressPrint(++nProcessed,uint(surfaceElements.size()));
@@ -7837,7 +7896,7 @@ std::vector<RUVector> RModel::findSurfaceNeighbors(void) const
         RLimitBox lb1,lb2;
         this->getElement(elementID1).findLimitBox(this->getNodes(),lb1);
 
-        for (uint j=i+1;j<surfaceElements.size();j++)
+        for (uint j=uint(i+1);j<surfaceElements.size();j++)
         {
             uint elementID2 = surfaceElements[j];
             this->getElement(elementID2).findLimitBox(this->getNodes(),lb2);
@@ -7862,7 +7921,7 @@ std::vector<RUVector> RModel::findSurfaceNeighbors(void) const
     return neigs;
 } /* RModel::findSurfaceNeighbors */
 
-std::vector<RUVector> RModel::findVolumeNeighbors(void) const
+std::vector<RUVector> RModel::findVolumeNeighbors() const
 {
     std::vector<RUVector> neigs;
 
@@ -7894,7 +7953,7 @@ std::vector<RUVector> RModel::findVolumeNeighbors(void) const
         {
             RProgressPrint(++nProcessed,uint(volumeElements.size()));
         }
-        uint elementID1 = volumeElements[i];
+        uint elementID1 = volumeElements[uint(i)];
 
         if (neigs[elementID1].size() >= volumeNeighborCount[elementID1])
         {
@@ -7904,7 +7963,7 @@ std::vector<RUVector> RModel::findVolumeNeighbors(void) const
         RLimitBox lb1,lb2;
         this->getElement(elementID1).findLimitBox(this->getNodes(),lb1);
 
-        for (uint j=i+1;j<volumeElements.size();j++)
+        for (uint j=uint(i+1);j<volumeElements.size();j++)
         {
             uint elementID2 = volumeElements[j];
 
@@ -7958,14 +8017,14 @@ void RModel::markSurfaceNeighbors(uint elementID,
     int cpos = 0;
     std::vector<uint> stack;
     stack.resize(this->getNElements());
-    stack[cpos] = elementID;
+    stack[uint(cpos)] = elementID;
     RRVector cNormal(3);
     RRVector nNormal(3);
 
     while (cpos >= 0)
     {
         cposChanged = false;
-        cElementID = stack[cpos];
+        cElementID = stack[uint(cpos)];
         for (uint i=0;i<neighbors[cElementID].size();i++)
         {
             nElementID = neighbors[cElementID][i];
@@ -7991,7 +8050,7 @@ void RModel::markSurfaceNeighbors(uint elementID,
             if (cnAngle <= angle || cnAngle >= (360.0 - angle))
             {
                 marks[nElementID] = marks[cElementID];
-                stack[++cpos] = nElementID;
+                stack[uint(++cpos)] = nElementID;
                 cposChanged = true;
                 break;
             }

@@ -36,10 +36,10 @@ class ValueLineEdit : public QLineEdit
         explicit ValueLineEdit(int min, int max, QWidget *parent = nullptr);
 
         //! Set double validator.
-        void setDoubleValidator(void);
+        void setDoubleValidator();
 
         //! Set int validator.
-        void setIntValidator(void);
+        void setIntValidator();
 
         //! Set range.
         void setRange(double min, double max);
@@ -48,13 +48,13 @@ class ValueLineEdit : public QLineEdit
         void setRange(int min, int max);
 
         //! Return minimum value.
-        double getMinimum(void) const;
+        double getMinimum() const;
 
         //! Return maximum value.
-        double getMaximum(void) const;
+        double getMaximum() const;
 
         //! Return value.
-        double getValue(void) const;
+        double getValue() const;
 
         //! Set new value.
         void setValue(double value);
@@ -66,15 +66,15 @@ class ValueLineEdit : public QLineEdit
         void setValue(uint value);
 
         //! Return validator state.
-        QValidator::State getValidatorState(void) const;
+        QValidator::State getValidatorState() const;
 
     private:
 
         //! Create timer.
-        void createTimer(void);
+        void createTimer();
 
         //! Paint background based on entered value.
-        void paintBackground(void);
+        void paintBackground();
         
     signals:
 
@@ -88,7 +88,7 @@ class ValueLineEdit : public QLineEdit
         void onTextChaged(QString text);
 
         //! Catch timer timeout signal.
-        void onTimeout(void);
+        void onTimeout();
 };
 
 #endif /* VALUE_LINE_EDIT_H */

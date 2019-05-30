@@ -145,6 +145,8 @@ void ActionList::processAvailability(void)
         this->getAction(ACTION_GEOMETRY_DEV_EXPORT_INTERSECTED_ELEMENTS)->setEnabled(true);
         this->getAction(ACTION_GEOMETRY_DEV_PURGE_UNUSED_NODES)->setEnabled(true);
         this->getAction(ACTION_GEOMETRY_DEV_PURGE_UNUSED_ELEMENTS)->setEnabled(true);
+        this->getAction(ACTION_GEOMETRY_DEV_REMOVE_DUPLICATE_NODES)->setEnabled(true);
+        this->getAction(ACTION_GEOMETRY_DEV_REMOVE_DUPLICATE_ELEMENTS)->setEnabled(true);
         this->getAction(ACTION_GEOMETRY_DEV_POINT_INSIDE_SURFACE)->setEnabled(true);
         this->getAction(ACTION_GEOMETRY_DEV_TETRAHEDRALIZE_SURFACE)->setEnabled(true);
         this->getAction(ACTION_GEOMETRY_DEV_CONSOLIDATE)->setEnabled(true);

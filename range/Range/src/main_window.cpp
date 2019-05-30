@@ -175,7 +175,7 @@ void MainWindow::hideTransformGeometryWidget(void)
 void MainWindow::showDrawWidget(void)
 {
     QString dockName = QString::fromUtf8("dockDraw");
-    this->showCustomDockWidget((findCustomDockWidget(dockName) ? 0 : new DrawInputWidget),dockName,tr("Draw object"));
+    this->showCustomDockWidget((findCustomDockWidget(dockName) ? nullptr : new DrawInputWidget),dockName,tr("Draw object"));
 }
 
 void MainWindow::hideDrawWidget(void)
@@ -386,6 +386,8 @@ void MainWindow::createMenus(void)
     menuGeometryDevelopement->addAction(this->actionList->getAction(ACTION_GEOMETRY_DEV_EXPORT_INTERSECTED_ELEMENTS));
     menuGeometryDevelopement->addAction(this->actionList->getAction(ACTION_GEOMETRY_DEV_PURGE_UNUSED_NODES));
     menuGeometryDevelopement->addAction(this->actionList->getAction(ACTION_GEOMETRY_DEV_PURGE_UNUSED_ELEMENTS));
+    menuGeometryDevelopement->addAction(this->actionList->getAction(ACTION_GEOMETRY_DEV_REMOVE_DUPLICATE_NODES));
+    menuGeometryDevelopement->addAction(this->actionList->getAction(ACTION_GEOMETRY_DEV_REMOVE_DUPLICATE_ELEMENTS));
     menuGeometryDevelopement->addAction(this->actionList->getAction(ACTION_GEOMETRY_DEV_POINT_INSIDE_SURFACE));
     menuGeometryDevelopement->addAction(this->actionList->getAction(ACTION_GEOMETRY_DEV_TETRAHEDRALIZE_SURFACE));
     menuGeometryDevelopement->addAction(this->actionList->getAction(ACTION_GEOMETRY_DEV_CONSOLIDATE));
@@ -871,7 +873,7 @@ void MainWindow::writeSettings(void) const
     MainSettings::getInstance().setValue("mainWindow/geometry", this->saveGeometry());
     MainSettings::getInstance().setValue("mainWindow/windowState", this->saveState());
     // Tool bars
-    MainSettings::getInstance().setValue("nToolBars", (uint)this->toolBars.size());
+    MainSettings::getInstance().setValue("nToolBars", uint(this->toolBars.size()));
     for (QList<QToolBar*>::size_type i = 0; i != this->toolBars.size(); i++)
     {
         actionList = this->toolBars[i]->actions();
@@ -926,7 +928,7 @@ void MainWindow::writeSettings(void) const
 
 uint MainWindow::getNToolBars(void) const
 {
-    return this->toolBars.size();
+    return uint(this->toolBars.size());
 }
 
 QList<uint> MainWindow::getSelectedModelIDs(void) const
@@ -960,7 +962,7 @@ QDockWidget *MainWindow::findFirstDockWidget(Qt::DockWidgetArea area)
             return dockWidgets[i];
         }
     }
-    return 0;
+    return nullptr;
 }
 
 void MainWindow::progressBar(ProgressBar *progressBar, double fraction)

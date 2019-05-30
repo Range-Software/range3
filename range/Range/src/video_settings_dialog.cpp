@@ -60,7 +60,7 @@ VideoSettingsDialog::VideoSettingsDialog(VideoSettings *pVideoSettings, QWidget 
     mainLayout->addWidget(fpsLabel, 2, 0, 1, 1);
 
     this->fpsSpin = new QSpinBox;
-    this->fpsSpin->setValue(this->pVideoSettings->getFps());
+    this->fpsSpin->setValue(int(this->pVideoSettings->getFps()));
     this->fpsSpin->setRange(int(VideoSettings::minFps),int(VideoSettings::maxFps));
     mainLayout->addWidget(this->fpsSpin, 2, 1, 1, 1);
 
@@ -68,7 +68,7 @@ VideoSettingsDialog::VideoSettingsDialog(VideoSettings *pVideoSettings, QWidget 
     mainLayout->addWidget(fppLabel, 3, 0, 1, 1);
 
     this->fppSpin = new QSpinBox;
-    this->fppSpin->setValue(this->pVideoSettings->getFpp());
+    this->fppSpin->setValue(int(this->pVideoSettings->getFpp()));
     this->fppSpin->setRange(int(VideoSettings::minFpp),int(VideoSettings::maxFpp));
     mainLayout->addWidget(this->fppSpin, 3, 1, 1, 1);
 
@@ -127,8 +127,8 @@ int VideoSettingsDialog::exec(void)
                 break;
             }
         }
-        this->pVideoSettings->setFps((unsigned int)this->fpsSpin->value());
-        this->pVideoSettings->setFpp((unsigned int)this->fppSpin->value());
+        this->pVideoSettings->setFps(uint(this->fpsSpin->value()));
+        this->pVideoSettings->setFpp(uint(this->fppSpin->value()));
     }
     return retVal;
 }

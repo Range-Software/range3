@@ -31,7 +31,7 @@ DrawEngineTriangle::DrawEngineTriangle(QObject *parent) :
     this->updateModel();
 }
 
-RModelRaw DrawEngineTriangle::generate(void) const
+RModelRaw DrawEngineTriangle::generate() const
 {
     RModelRaw modelRaw;
 

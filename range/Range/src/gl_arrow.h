@@ -52,7 +52,7 @@ class GLArrow : public GLObject
         GLArrow(const GLArrow &glArrow);
 
         //! Destructor.
-        ~GLArrow();
+        virtual ~GLArrow() {}
 
         //! Assignment operator.
         GLArrow & operator = (const GLArrow &glArrow);

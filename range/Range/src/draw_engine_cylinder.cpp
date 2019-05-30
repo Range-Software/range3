@@ -60,7 +60,7 @@ DrawEngineCylinder::DrawEngineCylinder(QObject *parent) :
     this->updateModel();
 }
 
-RModelRaw DrawEngineCylinder::generate(void) const
+RModelRaw DrawEngineCylinder::generate() const
 {
     RModelRaw modelRaw;
 

@@ -26,7 +26,7 @@ class DrawEngineTetrahedron : public DrawEngineObject
     protected:
 
         //! Generate RAW model from input parameters.
-        virtual RModelRaw generate(void) const;
+        virtual RModelRaw generate() const;
 
 };
 

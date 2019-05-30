@@ -12,11 +12,6 @@
 #include "session.h"
 #include "usage_info.h"
 
-UsageInfo::UsageInfo()
-{
-
-}
-
 UsageInfo &UsageInfo::getInstance(void)
 {
     static UsageInfo usageInfo;

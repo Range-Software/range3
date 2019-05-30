@@ -263,11 +263,9 @@ void Action::onModelOpen()
 
 void Action::onModelSave()
 {
-    QList<uint> selectedModelIDs = Session::getInstance().getSelectedModelIDs();
-
-    for (int i=0;i<selectedModelIDs.size();i++)
+    foreach (uint selectedModelID,Session::getInstance().getSelectedModelIDs())
     {
-        Model &rModel = Session::getInstance().getModel(selectedModelIDs[i]);
+        Model &rModel = Session::getInstance().getModel(selectedModelID);
 
         QString fileName = ModelIO::getModelSaveName(MainSettings::getInstance(),this->mainWindow,rModel);
 
@@ -395,7 +393,7 @@ void Action::onModelClose()
     QList<uint> modelIDs = Session::getInstance().getSelectedModelIDs();
     for (int i=0;i<modelIDs.size();i++)
     {
-        RLogger::info("Closing model \'%s\'\n",Session::getInstance().getModel(modelIDs.size()-i-1).getName().toUtf8().constData());
+        RLogger::info("Closing model \'%s\'\n",Session::getInstance().getModel(uint(modelIDs.size()-i-1)).getName().toUtf8().constData());
         Session::getInstance().removeModel(modelIDs[modelIDs.size()-i-1]);
     }
 }
@@ -1218,13 +1216,11 @@ void Action::onGeometrySurfaceCloseHole()
         return;
     }
 
-    QList<uint> modelIDs = pickList.getModelIDs();
-
-    for (int i=0;i<modelIDs.size();i++)
+    foreach (uint modelID,pickList.getModelIDs())
     {
         QList<uint> holeIDs;
 
-        QVector<PickItem> pickItems = pickList.getItems(modelIDs[i]);
+        QVector<PickItem> pickItems = pickList.getItems(modelID);
         for (int j=0;j<pickItems.size();j++)
         {
             if (pickItems[j].getItemType() == PICK_ITEM_HOLE_ELEMENT)
@@ -1238,7 +1234,7 @@ void Action::onGeometrySurfaceCloseHole()
             }
         }
 
-        ModelActionInput modelActionInput(modelIDs[i]);
+        ModelActionInput modelActionInput(modelID);
         modelActionInput.setCloseSurfaceHole(holeIDs);
 
         ModelAction *modelAction = new ModelAction;
@@ -1446,11 +1442,9 @@ void Action::onGeometryDevExportSliverElements()
 
 void Action::onGeometryDevExportIntersectedElements()
 {
-    QList<uint> modelIDs = Session::getInstance().getSelectedModelIDs();
-
-    for (int i=0;i<modelIDs.size();i++)
+    foreach (uint modelID, Session::getInstance().getSelectedModelIDs())
     {
-        ModelActionInput modelActionInput(modelIDs[i]);
+        ModelActionInput modelActionInput(modelID);
         modelActionInput.setExportIntersectedElements();
 
         ModelAction *modelAction = new ModelAction;
@@ -1462,11 +1456,9 @@ void Action::onGeometryDevExportIntersectedElements()
 
 void Action::onGeometryDevPurgeUnusedNodes()
 {
-    QList<uint> selectedModelIDs = Session::getInstance().getSelectedModelIDs();
-
-    for (int i=0;i<selectedModelIDs.size();i++)
+    foreach (uint modelID, Session::getInstance().getSelectedModelIDs())
     {
-        ModelActionInput modelActionInput(selectedModelIDs[i]);
+        ModelActionInput modelActionInput(modelID);
         modelActionInput.setPurgeUnusedNodes();
 
         ModelAction *modelAction = new ModelAction;
@@ -1478,12 +1470,38 @@ void Action::onGeometryDevPurgeUnusedNodes()
 
 void Action::onGeometryDevPurgeUnusedElements()
 {
-    QList<uint> selectedModelIDs = Session::getInstance().getSelectedModelIDs();
-
-    for (int i=0;i<selectedModelIDs.size();i++)
+    foreach (uint modelID, Session::getInstance().getSelectedModelIDs())
     {
-        ModelActionInput modelActionInput(selectedModelIDs[i]);
+        ModelActionInput modelActionInput(modelID);
         modelActionInput.setPurgeUnusedElements();
+
+        ModelAction *modelAction = new ModelAction;
+        modelAction->setAutoDelete(true);
+        modelAction->addAction(modelActionInput);
+        JobManager::getInstance().submit(modelAction);
+    }
+}
+
+void Action::onGeometryDevRemoveDuplicateNodes()
+{
+    foreach (uint modelID, Session::getInstance().getSelectedModelIDs())
+    {
+        ModelActionInput modelActionInput(modelID);
+        modelActionInput.setRemoveDuplicateNodes();
+
+        ModelAction *modelAction = new ModelAction;
+        modelAction->setAutoDelete(true);
+        modelAction->addAction(modelActionInput);
+        JobManager::getInstance().submit(modelAction);
+    }
+}
+
+void Action::onGeometryDevRemoveDuplicateElements()
+{
+    foreach (uint modelID, Session::getInstance().getSelectedModelIDs())
+    {
+        ModelActionInput modelActionInput(modelID);
+        modelActionInput.setRemoveDuplicateElements();
 
         ModelAction *modelAction = new ModelAction;
         modelAction->setAutoDelete(true);
