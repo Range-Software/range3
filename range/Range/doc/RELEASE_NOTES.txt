@@ -2,12 +2,14 @@
 Version 3.2.2
 
 * GUI: Use HTTPS as default when contacting Range server
+* GUI: When selected, display roller boundary condition in 3D area
+* SOLVER: Roller boundary condition can be applied also on points and lines
 
 Bug fixes:
 
 * SOLVER: Correctly calculate line elements
 * GUI: Do not use icons in output browsers tabs which can cause GUI to freeze
-* GUI: If 3D is disabled for vector field, then vectors should project to underlying entity. Applies for surface, cut and ISO surface.
+* GUI: If 3D is disabled for vector field, then vectors should project to underlying entity. Applies for surfaces, cuts and ISO surfaces
 * GUI: Handle HTTP redirections
 * DOC: Corrections in tutorials
 

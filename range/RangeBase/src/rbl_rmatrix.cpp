@@ -828,47 +828,27 @@ RRMatrix RRMatrix::generateRotationMatrix(double xAngle, double yAngle, double z
     RRMatrix Ry(3,3);
     RRMatrix Rz(3,3);
 
+    double cxr = std::cos(xAngle);
+    double sxr = std::sin(xAngle);
+    double cyr = std::cos(yAngle);
+    double syr = std::sin(yAngle);
+    double czr = std::cos(zAngle);
+    double szr = std::sin(zAngle);
+
     // Rx
-
-    Rx[0][0] = 1.0;
-    Rx[0][1] = 0.0;
-    Rx[0][2] = 0.0;
-
-    Rx[1][0] = 0.0;
-    Rx[1][1] = std::cos(xAngle);
-    Rx[1][2] = -std::sin(xAngle);
-
-    Rx[2][0] = 0.0;
-    Rx[2][1] = std::sin(xAngle);
-    Rx[2][2] = std::cos(xAngle);
+    Rx[0][0] =  1.0; Rx[0][1] =  0.0; Rx[0][2] =  0.0;
+    Rx[1][0] =  0.0; Rx[1][1] =  cxr; Rx[1][2] = -sxr;
+    Rx[2][0] =  0.0; Rx[2][1] =  sxr; Rx[2][2] =  cxr;
 
     // Ry
-
-    Ry[0][0] = std::cos(yAngle);
-    Ry[0][1] = 0.0;
-    Ry[0][2] = std::sin(yAngle);
-
-    Ry[1][0] = 0.0;
-    Ry[1][1] = 1.0;
-    Ry[1][2] = 0.0;
-
-    Ry[2][0] = -std::sin(yAngle);
-    Ry[2][1] = 0.0;
-    Ry[2][2] = std::cos(yAngle);
+    Ry[0][0] =  cyr; Ry[0][1] =  0.0; Ry[0][2] =  syr;
+    Ry[1][0] =  0.0; Ry[1][1] =  1.0; Ry[1][2] =  0.0;
+    Ry[2][0] = -syr; Ry[2][1] =  0.0; Ry[2][2] =  cyr;
 
     // Rz
-
-    Rz[0][0] = std::cos(zAngle);
-    Rz[0][1] = -std::sin(zAngle);
-    Rz[0][2] = 0.0;
-
-    Rz[1][0] = std::sin(zAngle);
-    Rz[1][1] = std::cos(zAngle);
-    Rz[1][2] = 0.0;
-
-    Rz[2][0] = 0.0;
-    Rz[2][1] = 0.0;
-    Rz[2][2] = 1.0;
+    Rz[0][0] =  czr; Rz[0][1] = -szr; Rz[0][2] =  0.0;
+    Rz[1][0] =  szr; Rz[1][1] =  czr; Rz[1][2] =  0.0;
+    Rz[2][0] =  0.0; Rz[2][1] =  0.0; Rz[2][2] =  1.0;
 
     RRMatrix Rzy(3,3);
 

@@ -124,7 +124,7 @@ QString GLActionEvent::getKeyMouseCombination(void) const
     {
         _key = 0;
     }
-    QString keyString(QKeySequence(this->keyModifiers+_key).toString(QKeySequence::NativeText));
+    QString keyString(QKeySequence(int(this->keyModifiers)+_key).toString(QKeySequence::NativeText));
     QString mouseButtonString;
 
     if (this->buttons & Qt::LeftButton)
@@ -149,7 +149,7 @@ QString GLActionEvent::findKeyMouseCombination(GLActionEventType type)
     {
         if (glActionCombination.eventType == type)
         {
-            QString keyString(QKeySequence(glActionCombination.keyModifiers + glActionCombination.key).toString(QKeySequence::NativeText));
+            QString keyString(QKeySequence(int(glActionCombination.keyModifiers) + glActionCombination.key).toString(QKeySequence::NativeText));
 
             QString mouseButtonString;
 

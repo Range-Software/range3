@@ -81,6 +81,10 @@ class GLWidget : public QOpenGLWidget
         bool drawRotationOrigin;
         //! Geometry rotation origin.
         RR3Vector rotationOrigin;
+        //! Draw local directions.
+        bool drawLocalDirections;
+        //! Local directions.
+        QList<RLocalDirection> localDirections;
         //! Draw cut plane.
         bool drawCutPlane;
         //! Cut plane.
@@ -297,6 +301,12 @@ class GLWidget : public QOpenGLWidget
 
         //! Geometry rotation origin drawing should end.
         void onEndDrawRotationOrigin(void);
+
+        //! Local directions drawing should begin.
+        void onBeginDrawLocalDirections(const QList<RLocalDirection> &localDirections);
+
+        //! Local directions drawing should end.
+        void onEndDrawLocalDirections(void);
 
         //! Cut plane drawing should begin.
         void onBeginDrawCutPlane(const RPlane &plane);

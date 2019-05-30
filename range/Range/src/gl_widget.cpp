@@ -14,6 +14,7 @@
 
 #include <rmlib.h>
 
+#include "gl_arrow.h"
 #include "gl_axis.h"
 #include "gl_dimension.h"
 #include "gl_cut_plane.h"
@@ -48,6 +49,7 @@ GLWidget::GLWidget(uint modelID, QWidget *parent)
       drawStreamLinePosition(false),
       drawScaleOrigin(false),
       drawRotationOrigin(false),
+      drawLocalDirections(false),
       drawCutPlane(false),
       drawMoveNodes(false),
       useGlVoidModelList(false),
@@ -82,6 +84,8 @@ GLWidget::GLWidget(uint modelID, QWidget *parent)
     QObject::connect(&Session::getInstance(),&Session::endDrawScaleOrigin,this,&GLWidget::onEndDrawScaleOrigin);
     QObject::connect(&Session::getInstance(),&Session::beginDrawRotationOrigin,this,&GLWidget::onBeginDrawRotationOrigin);
     QObject::connect(&Session::getInstance(),&Session::endDrawRotationOrigin,this,&GLWidget::onEndDrawRotationOrigin);
+    QObject::connect(&Session::getInstance(),&Session::beginDrawLocalDirections,this,&GLWidget::onBeginDrawLocalDirections);
+    QObject::connect(&Session::getInstance(),&Session::endDrawLocalDirections,this,&GLWidget::onEndDrawLocalDirections);
     QObject::connect(&Session::getInstance(),&Session::beginDrawCutPlane,this,&GLWidget::onBeginDrawCutPlane);
     QObject::connect(&Session::getInstance(),&Session::endDrawCutPlane,this,&GLWidget::onEndDrawCutPlane);
     QObject::connect(&Session::getInstance(),&Session::beginDrawMoveNodes,this,&GLWidget::onBeginDrawMoveNodes);
@@ -224,7 +228,7 @@ void GLWidget::drawModel(void)
 
     if (this->clippingPlaneEnabled)
     {
-        const GLdouble clippingPlane[4] = { 0.0, 0.0, -1.0, - this->scale  + 2.0 * this->clippingPlaneDistance * this->scale };
+        const GLdouble clippingPlane[4] = { 0.0, 0.0, -1.0, - GLdouble(this->scale)  + 2.0 * this->clippingPlaneDistance * GLdouble(this->scale) };
         GL_SAFE_CALL(glClipPlane(GL_CLIP_PLANE0,clippingPlane));
     }
 
@@ -255,9 +259,9 @@ void GLWidget::drawModel(void)
 
     if (this->displayProperties.getDrawGlobalAxis())
     {
-        // Draw main axis.
+        // Draw main axis
         GLAxis gAxis(this,GL_AXIS_GLOBAL);
-        gAxis.setSize(0.8/this->scale);
+        gAxis.setSize(0.8f/this->scale);
         gAxis.paint();
     }
 
@@ -270,7 +274,7 @@ void GLWidget::drawModel(void)
         RR3Vector p,d;
         this->calculatePickRay(QPoint(int(ceil(double(this->width())/2.0)),int(ceil(double(this->height())/2.0))),0.0,p,d,false);
 
-        GLRotationSphere gRotationSphere(this,RR3Vector(p[0],p[1],p[2]),(0.5/this->scale));
+        GLRotationSphere gRotationSphere(this,RR3Vector(p[0],p[1],p[2]),(0.5/double(this->scale)));
         gRotationSphere.paint();
     }
 
@@ -280,8 +284,8 @@ void GLWidget::drawModel(void)
     GL_SAFE_CALL(glEnable(GL_LINE_SMOOTH));
     GL_SAFE_CALL(glDisable(GL_POLYGON_SMOOTH));
 
-    // Apply model scale.
-    GL_SAFE_CALL(glScaled(this->mscale,this->mscale,this->mscale));
+    // Apply model scale
+    GL_SAFE_CALL(glScaled(GLdouble(this->mscale),GLdouble(this->mscale),GLdouble(this->mscale)));
 
     if (this->clippingPlaneEnabled)
     {
@@ -290,11 +294,11 @@ void GLWidget::drawModel(void)
 
     if (Session::getInstance().getModel(this->getModelID()).glDrawTrylock())
     {
-        // Draw model.
+        // Draw model
         Session::getInstance().getModel(this->getModelID()).glDraw(this);
-        // Draw picked elements.
+        // Draw picked elements
         Session::getInstance().getModel(this->getModelID()).glDraw(this,Session::getInstance().getPickList().getItems(this->getModelID()));
-        // Unlock drawing lock.
+        // Unlock drawing lock
         Session::getInstance().getModel(this->getModelID()).glDrawUnlock();
     }
 
@@ -303,18 +307,33 @@ void GLWidget::drawModel(void)
         GL_SAFE_CALL(glDisable(GL_CLIP_PLANE0));
     }
 
-    // Draw model dimensions.
+    // Draw local directions
+    if (this->drawLocalDirections)
+    {
+        int lineColorValue = qGray(this->getGLDisplayProperties().getBgColor().rgb()) < 96 ? 255 : 0;
+        this->qglColor(QColor(lineColorValue,lineColorValue,lineColorValue,255));
+
+        foreach (const RLocalDirection &localDirection, this->localDirections)
+        {
+            RR3Vector direction(localDirection.getDirection());
+            direction *= 1.0/double(this->scale);
+            GLArrow localRotationArrow(this,localDirection.getPosition(),direction,true,false,GLDimension::arrowScale/double(this->mscale));
+            localRotationArrow.paint();
+        }
+    }
+
+    // Draw model dimensions
     if (this->displayProperties.getShowModelDimensions())
     {
         double xMin=0.0,xMax=0.0,yMin=0.0,yMax=0.0,zMin=0.0,zMax=0.0;
         Session::getInstance().getModel(this->getModelID()).findNodeLimits(xMin,xMax,yMin,yMax,zMin,zMax);
         int lineColorValue = qGray(this->getGLDisplayProperties().getBgColor().rgb()) < 96 ? 255 : 0;
-        this->qglColor(QColor(lineColorValue,lineColorValue,lineColorValue,255));
-        GLDimension gDimension(this,1.0/this->scale,xMin,xMax,yMin,yMax,zMin,zMax);
+        this->qglColor(QColor(lineColorValue,lineColorValue,lineColorValue,100));
+        GLDimension gDimension(this,1.0/double(this->scale),xMin,xMax,yMin,yMax,zMin,zMax);
         gDimension.paint();
     }
 
-    // Draw draw-engine objects.
+    // Draw draw-engine objects
     const DrawEngine *pDrawEngine = Session::getInstance().getDrawEngine();
     for (uint i=0;i<pDrawEngine->getNObjects();i++)
     {
@@ -386,12 +405,13 @@ void GLWidget::drawModel(void)
     if (this->drawCutPlane)
     {
         GLCutPlane glCutPlane(this,this->cutPlane);
-        glCutPlane.setSize(1.2/this->mscale);
+        glCutPlane.setSize(1.2f/this->mscale);
         glCutPlane.paint();
     }
 
     // Restore original scale.
-    GL_SAFE_CALL(glScaled(1.0/this->mscale,1.0/this->mscale,1.0/this->mscale));
+    double invMscale = 1.0/double(this->mscale);
+    GL_SAFE_CALL(glScaled(invMscale,invMscale,invMscale));
 
     if (this->displayProperties.getDrawLocalAxis())
     {
@@ -408,10 +428,10 @@ void GLWidget::drawModel(void)
         GL_SAFE_CALL(glClear(GL_DEPTH_BUFFER_BIT));
         GL_SAFE_CALL(glLoadIdentity());
 
-        if (this->drx != 0.0) {
+        if (this->drx != 0.0f) {
             GL_SAFE_CALL(glRotatef(this->drx, 1.0f, 0.0f, 0.0f));
         }
-        if (this->dry != 0.0) {
+        if (this->dry != 0.0f) {
             GL_SAFE_CALL(glRotatef(this->dry, 0.0f, 1.0f, 0.0f));
         }
 
@@ -486,7 +506,7 @@ void GLWidget::drawValueRange(QPainter &painter,
 
     int rangeWidth = 150;
     int rangeHeight = this->height() - 2*offset;
-    int rangeX = this->width() - (rangeWidth + offset) * rangeCount;
+    int rangeX = this->width() - (rangeWidth + offset) * int(rangeCount);
     int rangeY = offset;
 
     int fontHeight = painter.fontMetrics().height();
@@ -724,7 +744,7 @@ void GLWidget::drawInfoBox(QPainter &painter, bool drawBox)
         messages.append(tr("Action") + ": " + actionMessage.join(" - "));
     }
 
-    messages.append(tr("Zoom") + ": " + QString::number(this->scale));
+    messages.append(tr("Zoom") + ": " + QString::number(double(this->scale)));
 
     if (messages.size() == 0)
     {
@@ -761,30 +781,30 @@ void GLWidget::drawInfoBox(QPainter &painter, bool drawBox)
 
 void GLWidget::applyTransformations(void)
 {
-    if (this->dtx != 0.0 || this->dty != 0.0 || this->dtz != 0.0)
+    if (this->dtx != 0.0f || this->dty != 0.0f || this->dtz != 0.0f)
     {
         glTranslatef(this->dtx, this->dty, this->dtz);
     }
 
-    if (this->drx != 0.0)
+    if (this->drx != 0.0f)
     {
         glRotatef(this->drx, 1.0f, 0.0f, 0.0f);
     }
-    if (this->dry != 0.0)
+    if (this->dry != 0.0f)
     {
         glRotatef(this->dry, 0.0f, 1.0f, 0.0f);
     }
 
-    if (this->dscale != 0.0 && this->dscale != 1.0)
+    if (this->dscale != 0.0f && this->dscale != 1.0f)
     {
-        this->scale *= 1.0+this->dscale;
-        if (this->scale < 1e4)
+        this->scale *= 1.0f+this->dscale;
+        if (this->scale < 1e4f)
         {
-            glScalef(1.0+this->dscale,1.0+this->dscale,1.0+this->dscale);
+            glScalef(1.0f+this->dscale,1.0f+this->dscale,1.0f+this->dscale);
         }
         else
         {
-            this->scale /= 1.0+this->dscale;
+            this->scale /= 1.0f+this->dscale;
         }
     }
 }
@@ -823,7 +843,7 @@ void GLWidget::processActionEvent(void)
 
     PickItem pickItem;
     bool pickFound = false;
-    double pickTolerance = 0.01 / (this->mscale * this->scale);
+    double pickTolerance = 0.01 / double((this->mscale * this->scale));
 
     if (glActionEventType == GL_ACTION_EVENT_PICK_ELEMENT)
     {
@@ -888,8 +908,8 @@ void GLWidget::mouseReleaseEvent(QMouseEvent *mouseEvent)
 
     if (this->actionEvent.getType() == GL_ACTION_EVENT_TRANSLATE)
     {
-        this->dtx =   2 * (this->bpEnd.x() - this->bpStart.x()) / (float)this->width();
-        this->dty = - 2 * (this->bpEnd.y() - this->bpStart.y()) / (float)this->width();
+        this->dtx =   2 * (this->bpEnd.x() - this->bpStart.x()) / float(this->width());
+        this->dty = - 2 * (this->bpEnd.y() - this->bpStart.y()) / float(this->width());
         this->dtz = 0.0;
     }
 
@@ -907,8 +927,8 @@ void GLWidget::mouseMoveEvent(QMouseEvent *mouseEvent)
     if (this->actionEvent.getType() == GL_ACTION_EVENT_TRANSLATE)
     {
         this->showRotationSphere = true;
-        this->dtx =   2 * (this->bpEnd.x() - this->bpStart.x()) / (float)this->width();
-        this->dty = - 2 * (this->bpEnd.y() - this->bpStart.y()) / (float)this->width();
+        this->dtx =   2 * (this->bpEnd.x() - this->bpStart.x()) / float(this->width());
+        this->dty = - 2 * (this->bpEnd.y() - this->bpStart.y()) / float(this->width());
         this->dtz = 0.0;
     }
     else if (this->actionEvent.getType() == GL_ACTION_EVENT_TRANSLATE_Z)
@@ -916,18 +936,18 @@ void GLWidget::mouseMoveEvent(QMouseEvent *mouseEvent)
         this->showRotationSphere = true;
         this->dtx = 0.0;
         this->dty = 0.0;
-        this->dtz = this->scale * 2 * (this->bpEnd.y() - this->bpStart.y()) / (float)this->width();
+        this->dtz = this->scale * 2 * (this->bpEnd.y() - this->bpStart.y()) / float(this->width());
     }
     else if (this->actionEvent.getType() == GL_ACTION_EVENT_ROTATE)
     {
         this->showRotationSphere = true;
-        this->drx = 500 * (this->bpEnd.y() - this->bpStart.y()) / (float)this->width();
-        this->dry = 500 * (this->bpEnd.x() - this->bpStart.x()) / (float)this->width();
+        this->drx = 500 * (this->bpEnd.y() - this->bpStart.y()) / float(this->width());
+        this->dry = 500 * (this->bpEnd.x() - this->bpStart.x()) / float(this->width());
     }
     else if (this->actionEvent.getType() == GL_ACTION_EVENT_ZOOM)
     {
         this->showRotationSphere = true;
-        this->dscale = (this->bpEnd.y() - this->bpStart.y()) / (float)this->width();
+        this->dscale = (this->bpEnd.y() - this->bpStart.y()) / float(this->width());
     }
     this->bpStart = this->bpEnd;
 
@@ -950,26 +970,26 @@ void GLWidget::wheelEvent(QWheelEvent *mouseEvent)
 
     int numDegrees = mouseEvent->delta() / 8;
     int numSteps = numDegrees / 15;
-    float x = (float)mouseEvent->x();
-    float y = (float)mouseEvent->y();
-    float w = (float)this->width();
-    float h = (float)this->height();
+    float x = float(mouseEvent->x());
+    float y = float(mouseEvent->y());
+    float w = float(this->width());
+    float h = float(this->height());
 
     if (this->actionEvent.getType() == GL_ACTION_EVENT_TRANSLATE_Z)
     {
         this->showRotationSphere = true;
         this->dtx = 0.0;
         this->dty = 0.0;
-        this->dtz = this->scale*double(numSteps)/100.0;
+        this->dtz = this->scale*float(numSteps)/100.0f;
     }
     else if (this->actionEvent.getType() == GL_ACTION_EVENT_ZOOM)
     {
-        this->dtx = 2.0*x/w - 1.0;
-        this->dty = 2.0*y/h - 1.0;
-        this->dty = (0.5 - y/h)*2.0*h/w;
-        this->dtx *= numSteps/10.0;
-        this->dty *= numSteps/10.0;
-        this->dscale = -float(numSteps)/10.0;
+        this->dtx = 2.0f*x/w - 1.0f;
+        this->dty = 2.0f*y/h - 1.0f;
+        this->dty = (0.5f - y/h)*2.0f*h/w;
+        this->dtx *= numSteps/10.0f;
+        this->dty *= numSteps/10.0f;
+        this->dscale = -float(numSteps)/10.0f;
     }
 
     this->actionEvent.setScrollPhase(Qt::NoScrollPhase);
@@ -993,8 +1013,8 @@ void GLWidget::keyReleaseEvent(QKeyEvent *keyEvent)
 
 void GLWidget::calculateModelScale(void)
 {
-    this->mscale = Session::getInstance().getModel(this->getModelID()).findNodeScale();
-    if (this->mscale < RConstants::eps)
+    this->mscale = float(Session::getInstance().getModel(this->getModelID()).findNodeScale());
+    if (this->mscale < float(RConstants::eps))
     {
         this->mscale = float(RConstants::eps);
     }
@@ -1013,7 +1033,7 @@ void GLWidget::calculatePickRay(const QPoint &screenPosition, double viewDepth, 
     {
         for (uint j=0;j<4;j++)
         {
-            R[i][j] = this->gMatrix[4*j+i] * (applyModelScale ?this->mscale : 1.0);
+            R[i][j] = this->gMatrix[4*j+i] * (applyModelScale ? double(this->mscale) : 1.0);
         }
     }
     R.invert();
@@ -1051,7 +1071,7 @@ void GLWidget::convertModelToScreen(const RR3Vector &realPosition, QPoint &scree
     {
         for (uint j=0;j<4;j++)
         {
-            R[i][j] = this->gMatrix[4*j+i] * this->mscale;
+            R[i][j] = this->gMatrix[4*j+i] * double(this->mscale);
         }
     }
 
@@ -1060,7 +1080,7 @@ void GLWidget::convertModelToScreen(const RR3Vector &realPosition, QPoint &scree
     v1[0] = realPosition[0];
     v1[1] = realPosition[1];
     v1[2] = realPosition[2];
-    v1[3] = 1.0 / this->mscale;
+    v1[3] = 1.0 / double(this->mscale);
 
     RRMatrix::mlt(R,v1,v2);
 
@@ -1086,7 +1106,7 @@ void GLWidget::convertScreenToModel(const QPoint &screenPosition, RR3Vector &mod
     {
         for (uint j=0;j<4;j++)
         {
-            R[i][j] = this->gMatrix[4*j+i] * this->mscale;
+            R[i][j] = this->gMatrix[4*j+i] * double(this->mscale);
         }
     }
     R.invert();
@@ -1107,7 +1127,7 @@ void GLWidget::convertScreenToModel(const QPoint &screenPosition, RR3Vector &mod
 
 double GLWidget::calculateViewDepth(void) const
 {
-    return 1000.0 * this->scale;
+    return 1000.0 * double(this->scale);
 }
 
 void GLWidget::showLight(const RGLLight &rGlLight)
@@ -1175,28 +1195,28 @@ void GLWidget::showLight(const RGLLight &rGlLight)
     GLfloat lightDr[3];
     GLfloat lightPs[4];
 
-    lightKa[0] = rGlLight.getAmbient().redF();
-    lightKa[1] = rGlLight.getAmbient().greenF();
-    lightKa[2] = rGlLight.getAmbient().blueF();
-    lightKa[3] = rGlLight.getAmbient().alphaF();
+    lightKa[0] = GLfloat(rGlLight.getAmbient().redF());
+    lightKa[1] = GLfloat(rGlLight.getAmbient().greenF());
+    lightKa[2] = GLfloat(rGlLight.getAmbient().blueF());
+    lightKa[3] = GLfloat(rGlLight.getAmbient().alphaF());
 
-    lightKs[0] = rGlLight.getSpecular().redF();
-    lightKs[1] = rGlLight.getSpecular().greenF();
-    lightKs[2] = rGlLight.getSpecular().blueF();
-    lightKs[3] = rGlLight.getSpecular().alphaF();
+    lightKs[0] = GLfloat(rGlLight.getSpecular().redF());
+    lightKs[1] = GLfloat(rGlLight.getSpecular().greenF());
+    lightKs[2] = GLfloat(rGlLight.getSpecular().blueF());
+    lightKs[3] = GLfloat(rGlLight.getSpecular().alphaF());
 
-    lightKd[0] = rGlLight.getDiffuse().redF();
-    lightKd[1] = rGlLight.getDiffuse().greenF();
-    lightKd[2] = rGlLight.getDiffuse().blueF();
-    lightKd[3] = rGlLight.getDiffuse().alphaF();
+    lightKd[0] = GLfloat(rGlLight.getDiffuse().redF());
+    lightKd[1] = GLfloat(rGlLight.getDiffuse().greenF());
+    lightKd[2] = GLfloat(rGlLight.getDiffuse().blueF());
+    lightKd[3] = GLfloat(rGlLight.getDiffuse().alphaF());
 
-    lightDr[0] = rGlLight.getDirection()[0];
-    lightDr[1] = rGlLight.getDirection()[1];
-    lightDr[2] = rGlLight.getDirection()[2];
+    lightDr[0] = GLfloat(rGlLight.getDirection()[0]);
+    lightDr[1] = GLfloat(rGlLight.getDirection()[1]);
+    lightDr[2] = GLfloat(rGlLight.getDirection()[2]);
 
-    lightPs[0] = rGlLight.getPosition()[0];
-    lightPs[1] = rGlLight.getPosition()[1];
-    lightPs[2] = rGlLight.getPosition()[2];
+    lightPs[0] = GLfloat(rGlLight.getPosition()[0]);
+    lightPs[1] = GLfloat(rGlLight.getPosition()[1]);
+    lightPs[2] = GLfloat(rGlLight.getPosition()[2]);
     lightPs[3] = 0.0;
 
     GL_SAFE_CALL(glEnable(lightNumber));
@@ -1256,9 +1276,9 @@ void GLWidget::resetView(float xRotation, float yRotation, float zRotation)
 
     Session::getInstance().getModel(this->getModelID()).findNodeCenter(xPosition,yPosition,zPosition);
 
-    xPosition *= this->mscale;
-    yPosition *= this->mscale;
-    zPosition *= this->mscale;
+    xPosition *= double(this->mscale);
+    yPosition *= double(this->mscale);
+    zPosition *= double(this->mscale);
 
     glLoadIdentity ();
 
@@ -1359,6 +1379,7 @@ void GLWidget::onDisplayPropertiesChanged(uint modelID, REntityGroupType element
             {
                 this->glModelList.getGlIsoList(entityID).setListInvalid(GL_ENTITY_LIST_ITEM_NORMAL);
             }
+            break;
         default:
             break;
     }
@@ -1651,6 +1672,19 @@ void GLWidget::onEndDrawRotationOrigin(void)
     this->update();
 }
 
+void GLWidget::onBeginDrawLocalDirections(const QList<RLocalDirection> &localDirections)
+{
+    this->drawLocalDirections = true;
+    this->localDirections = localDirections;
+    this->update();
+}
+
+void GLWidget::onEndDrawLocalDirections()
+{
+    this->drawLocalDirections = false;
+    this->update();
+}
+
 void GLWidget::onBeginDrawCutPlane(const RPlane &plane)
 {
     this->drawCutPlane = true;
@@ -1798,12 +1832,15 @@ void GLWidget::takeScreenShot(const QString &fileName)
 
 void GLWidget::qglColor(const QColor &color)
 {
-    GL_SAFE_CALL(glColor4f(color.redF(),color.greenF(),color.blueF(),color.alphaF()));
+    GL_SAFE_CALL(glColor4d(color.redF(),color.greenF(),color.blueF(),color.alphaF()));
 }
 
 void GLWidget::qglClearColor(const QColor &clearColor)
 {
-    GL_SAFE_CALL(glClearColor(clearColor.redF(),clearColor.greenF(),clearColor.blueF(),clearColor.alphaF()));
+    GL_SAFE_CALL(glClearColor(GLclampf(clearColor.redF()),
+                              GLclampf(clearColor.greenF()),
+                              GLclampf(clearColor.blueF()),
+                              GLclampf(clearColor.alphaF())));
 }
 
 void GLWidget::renderText(double x, double y, double z, const QString &str, const QFont &font)

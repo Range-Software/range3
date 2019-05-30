@@ -257,6 +257,12 @@ class Action : public QAction
         //! Purge unused elements.
         void onGeometryDevPurgeUnusedElements();
 
+        //! Merge duplicate nodes.
+        void onGeometryDevRemoveDuplicateNodes();
+
+        //! Merge duplicate elements.
+        void onGeometryDevRemoveDuplicateElements();
+
         //! Check if point is inside/behind surface.
         void onGeometryDevPointInsideSurface();
 

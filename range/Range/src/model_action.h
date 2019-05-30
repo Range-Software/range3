@@ -73,6 +73,12 @@ class ModelAction : public Job
         //! Purge unused elements.
         void purgeUnusedElements(const ModelActionInput &modelActionInput);
 
+        //! Merge duplicate nodes.
+        void removeDuplicateNodes(const ModelActionInput &modelActionInput);
+
+        //! Merge duplicate elements.
+        void removeDuplicateElements(const ModelActionInput &modelActionInput);
+
         //! Remove elements.
         void removeElements(const ModelActionInput &modelActionInput);
 

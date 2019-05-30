@@ -51,31 +51,31 @@ class Session : public QObject
     public:
 
         //! Return reference to static instance.
-        static Session & getInstance(void);
+        static Session & getInstance();
 
         //! Return session ID.
-        const QString &getID(void) const;
+        const QString &getID() const;
 
         //! Lock session.
-        void lock(void);
+        void lock();
 
         //! Trylock session.
         bool trylock(int timeout = 0);
 
         //! Unlock session.
-        void unlock(void);
+        void unlock();
 
         //! Return pointer to download manager.
-        DownloadManager *getDownloadManager(void);
+        DownloadManager *getDownloadManager();
 
         //! Return pointer to draw mode engine.
-        DrawEngine *getDrawEngine(void);
+        DrawEngine *getDrawEngine();
 
         //! Return session filename.
-        const QString &getFileName(void) const;
+        const QString &getFileName() const;
 
         //! Return number of models in session.
-        uint getNModels(void) const;
+        uint getNModels() const;
 
         //! Return const reference to model at given position.
         const Model & getModel(uint position) const;
@@ -111,25 +111,25 @@ class Session : public QObject
         void setModelVisible(uint modelID, bool visible);
 
         //! Return list of positions of selected models.
-        QList<uint> getSelectedModelIDs(void) const;
+        QList<uint> getSelectedModelIDs() const;
 
         //! Return list of positions of visible models.
-        QList<uint> getVisibleModelIDs(void) const;
+        QList<uint> getVisibleModelIDs() const;
 
         //! Return true if given model ID is selected.
         bool isModelSelected(uint modelID);
 
         //! Return list of all entity IDs.
-        QList<SessionEntityID> getAllEntityIDs(void) const;
+        QList<SessionEntityID> getAllEntityIDs() const;
 
         //! Return list of all entity IDs for given model ID.
         QList<SessionEntityID> getAllEntityIDs(uint modelID) const;
 
         //! Return list of all selected entity IDs.
-        QList<SessionEntityID> getSelectedEntityIDs(void) const;
+        QList<SessionEntityID> getSelectedEntityIDs() const;
 
         //! Return list of all visible entity IDs.
-        QList<SessionEntityID> getVisibleEntityIDs(void) const;
+        QList<SessionEntityID> getVisibleEntityIDs() const;
 
         //! Filter selected entity IDs
         static QList<SessionEntityID> filterSelectedEntityIDs(const QList<SessionEntityID> selectedEntityIDs,
@@ -185,40 +185,46 @@ class Session : public QObject
         void setVariableDataChanged(const SessionEntityID &entityID, RVariableType variableType);
 
         //! Return const reference to pick list.
-        const PickList & getPickList(void) const;
+        const PickList & getPickList() const;
 
         //! Return reference to pick list.
-        PickList & getPickList(void);
+        PickList & getPickList();
 
         //! Emit signal that stream line position drawing should begin.
         void setBeginDrawStreamLinePosition(const RR3Vector &position);
 
         //! Emit signal that stream line position drawing should end.
-        void setEndDrawStreamLinePosition(void);
+        void setEndDrawStreamLinePosition();
 
         //! Emit signal that geometry scale origin drawing should begin.
         void setBeginDrawScaleOrigin(const RR3Vector &position);
 
         //! Emit signal that geometry scale origin drawing should end.
-        void setEndDrawScaleOrigin(void);
+        void setEndDrawScaleOrigin();
 
         //! Emit signal that geometry rotation origin drawing should begin.
         void setBeginDrawRotationOrigin(const RR3Vector &position);
 
         //! Emit signal that geometry rotation origin drawing should end.
-        void setEndDrawRotationOrigin(void);
+        void setEndDrawRotationOrigin();
+
+        //! Emit signal that local rotation drawing should begin.
+        void setBeginDrawLocalDirections(const QList<RLocalDirection> &localDirections);
+
+        //! Emit signal that local rotation drawing should end.
+        void setEndDrawLocalDirections();
 
         //! Emit signal that cut plane drawing should begin.
         void setBeginDrawCutPlane(const RPlane &plane);
 
         //! Emit signal that cut plane drawing should end.
-        void setEndDrawCutPlane(void);
+        void setEndDrawCutPlane();
 
         //! Emit signal that move nodes drawing should begin.
         void setBeginDrawMoveNodes(const QMap<SessionNodeID, RR3Vector> &nodesToMove);
 
         //! Emit signal that move nodes drawing should end.
-        void setEndDrawMoveNodes(void);
+        void setEndDrawMoveNodes();
 
         //! Take screenshot of given model ID.
         void setTakeScreenShot(uint modelID, const QString &screenShotFileName, bool blocking);
@@ -233,28 +239,28 @@ class Session : public QObject
         void write(const QString &fileName, bool writeModels = false);
 
         //! Clear session content.
-        void clear(void);
+        void clear();
 
         //! Store current model to history.
         void storeCurentModelVersion(uint modelID, const QString &message);
 
         //! Check if undo is available.
-        bool isUndoAvailable(void) const;
+        bool isUndoAvailable() const;
 
         //! Check if redo is available.
-        bool isRedoAvailable(void) const;
+        bool isRedoAvailable() const;
 
         //! Return undo tooltip text.
-        QString getUndoTooltip(void) const;
+        QString getUndoTooltip() const;
 
         //! Return redo tooltip text.
-        QString getRedoTooltip(void) const;
+        QString getRedoTooltip() const;
 
         //! Return default file extension.
-        static QString getDefaultFileExtension(void);
+        static QString getDefaultFileExtension();
 
         //! Return default file name.
-        static QString getDefaultFileName(void);
+        static QString getDefaultFileName();
 
         //! Check if entity exist in selected model.
         static bool selectedModelsHasEntities(REntityGroupTypeMask entityTypeMask = R_ENTITY_GROUP_ELEMENT);
@@ -319,37 +325,43 @@ class Session : public QObject
         void variableDataChanged(const SessionEntityID &entityID, RVariableType variableType);
 
         //! Pick list has changed.
-        void pickListChanged(void);
+        void pickListChanged();
 
         //! Stream line position drawing should begin.
         void beginDrawStreamLinePosition(const RR3Vector &position);
 
         //! Stream line position drawing should end.
-        void endDrawStreamLinePosition(void);
+        void endDrawStreamLinePosition();
 
         //! Geometry scale origin drawing should begin.
         void beginDrawScaleOrigin(const RR3Vector &position);
 
         //! Geometry scale origin drawing should end.
-        void endDrawScaleOrigin(void);
+        void endDrawScaleOrigin();
 
         //! Geometry rotation origin drawing should begin.
         void beginDrawRotationOrigin(const RR3Vector &position);
 
         //! Geometry rotation origin drawing should end.
-        void endDrawRotationOrigin(void);
+        void endDrawRotationOrigin();
+
+        //! Local direction drawing should begin.
+        void beginDrawLocalDirections(const QList<RLocalDirection> &localDiretions);
+
+        //! Local direction drawing should end.
+        void endDrawLocalDirections();
 
         //! Cut plane drawing should begin.
         void beginDrawCutPlane(const RPlane &plane);
 
         //! Cut plane drawing should end.
-        void endDrawCutPlane(void);
+        void endDrawCutPlane();
 
         //! Move nodes drawing should begin.
         void beginDrawMoveNodes(const QMap<SessionNodeID, RR3Vector> &nodesToMove);
 
         //! Move nodes drawing should end.
-        void endDrawMoveNodes(void);
+        void endDrawMoveNodes();
 
         //! Take screenshot of given model ID.
         void takeScreenShot(uint modelID, const QString &screenShotFileName);
@@ -368,7 +380,7 @@ class Session : public QObject
     protected slots:
 
         //! Called when picListChanged signal is emitted.
-        void onPickListChanged(void);
+        void onPickListChanged();
 
         //! Called when modelAdded signal is emitted.
         void onModelAdded(uint modelID);

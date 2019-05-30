@@ -164,7 +164,7 @@ class RModel : public RProblem, public RResults
         void removeVariable(uint position);
 
         //! Remove all variables.
-        void removeAllVariables(void);
+        void removeAllVariables();
 
         /*************************************************************
          * Node interface                                            *
@@ -231,6 +231,9 @@ class RModel : public RProblem, public RResults
         //! Merge near nodes.
         uint mergeNearNodes(double tolerance = RConstants::eps);
 
+        //! Remove duplicate elements.
+        uint removeDuplicateElements();
+
         //! Find node limits.
         void findNodeLimits( double &xmin, double &xmax,
                              double &ymin, double &ymax,
@@ -246,13 +249,13 @@ class RModel : public RProblem, public RResults
         void findNodeCenter( double &xc, double &yc, double &zc ) const;
 
         //! Find node distance statistics.
-        RStatistics findNodeDistanceStatistics(void) const;
+        RStatistics findNodeDistanceStatistics() const;
 
         //! Check if node is used.
         bool isNodeUsed(uint nodeID) const;
 
         //! Purge unused nodes.
-        uint purgeUnusedNodes(void);
+        uint purgeUnusedNodes();
 
         /*************************************************************
          * Element interface                                         *
@@ -320,16 +323,16 @@ class RModel : public RProblem, public RResults
                                         ( uint nodeID ) const;
 
         //! Find line element size statistics.
-        RStatistics findLineElementSizeStatistics(void) const;
+        RStatistics findLineElementSizeStatistics() const;
 
         //! Find surface element size statistics.
-        RStatistics findSurfaceElementSizeStatistics(void) const;
+        RStatistics findSurfaceElementSizeStatistics() const;
 
         //! Find volume element size statistics.
-        RStatistics findVolumeElementSizeStatistics(void) const;
+        RStatistics findVolumeElementSizeStatistics() const;
 
         //! Purge unused elements.
-        uint purgeUnusedElements(void);
+        uint purgeUnusedElements();
 
         /*************************************************************
          * Interpolated element interface                            *
@@ -515,7 +518,7 @@ class RModel : public RProblem, public RResults
         bool checkIfSurfacesAreClosed(const QList<uint> &surfaceIDs) const;
 
         //! Synchronize surface normals.
-        void syncSurfaceNormals(void);
+        void syncSurfaceNormals();
 
         /*************************************************************
          * Volume interface                                          *
@@ -822,7 +825,7 @@ class RModel : public RProblem, public RResults
         QList<uint> findNodeEdgeRing(uint nodeID) const;
 
         //! Return minimum distance between two nodes.
-        double findMinimumNodeDistance(void) const;
+        double findMinimumNodeDistance() const;
 
         //! Create interpolated entity from plane and list of element IDs.
         void createCut( RCut &rCut ) const;
@@ -852,10 +855,10 @@ class RModel : public RProblem, public RResults
         void setVolumeNeighbors(const std::vector<RUVector> &volumeNeigs);
 
         //! Clear surface neighbors book.
-        void clearSurfaceNeighbors(void);
+        void clearSurfaceNeighbors();
 
         //! Clear volume neighbors book.
-        void clearVolumeNeighbors(void);
+        void clearVolumeNeighbors();
 
         //! Fix sliver elements.
         //! Return number of affected elements.
@@ -864,13 +867,13 @@ class RModel : public RProblem, public RResults
         //! Fix element to group relations.
         //! Move elements from inapropriate to apropriate groups.
         //! Return number of affected elements.
-        uint fixElementGroupRelations(void);
+        uint fixElementGroupRelations();
 
         //! Find list of sliver elements.
         QList<uint> findSliverElements(double edgeRatio) const;
 
         //! Find list of intersected elements.
-        QList<uint> findIntersectedElements(void) const;
+        QList<uint> findIntersectedElements() const;
 
         //! Break intersected elements.
         uint breakIntersectedElements(uint nIterations);
@@ -919,7 +922,7 @@ class RModel : public RProblem, public RResults
         void findPatchArea(const RPatch &rPatch, double area) const;
 
         //! Find most recent view factor file.
-        QString findRecentViewFactorMatrixFile(void) const;
+        QString findRecentViewFactorMatrixFile() const;
 
         //! Generate view-factor matrix header from problem data.
         void generateViewFactorMatrixHeader(RViewFactorMatrixHeader &viewFactorMatrixHeader) const;
@@ -944,16 +947,16 @@ class RModel : public RProblem, public RResults
                                         RRVector &elementValues);
 
         //! Clear boundary conditions.
-        void clearBoundaryConditions(void);
+        void clearBoundaryConditions();
 
         //! Clear initial conditions.
-        void clearInitialConditions(void);
+        void clearInitialConditions();
 
         //! Clear environment conditions.
-        void clearEnvironmentConditions(void);
+        void clearEnvironmentConditions();
 
         //! Clear entity variable data.
-        void clearEntityVariableData(void);
+        void clearEntityVariableData();
 
         //! Clear entity variable data from given variable type.
         void clearEntityVariableData(RVariableType variableType);
@@ -989,10 +992,10 @@ class RModel : public RProblem, public RResults
     protected:
 
         //! Find surface neighbors book.
-        std::vector<RUVector> findSurfaceNeighbors(void) const;
+        std::vector<RUVector> findSurfaceNeighbors() const;
 
         //! Find volume neighbors book.
-        std::vector<RUVector> findVolumeNeighbors(void) const;
+        std::vector<RUVector> findVolumeNeighbors() const;
 
         //! Find volume elements neighbor position.
         uint findVolumeNeighborPosition(uint elementID, uint neighborID) const;

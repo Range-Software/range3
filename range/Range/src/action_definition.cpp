@@ -176,6 +176,8 @@ void ActionDefinition::generateActionDescList(QList<ActionDefinitionItem> &actio
     actionDesc.push_back(ActionDefinitionItem(ACTION_GEOMETRY_DEV_EXPORT_INTERSECTED_ELEMENTS, ACTION_GROUP_GEOMETRY, "Export intersected elements", "", "", "", &Action::onGeometryDevExportIntersectedElements));
     actionDesc.push_back(ActionDefinitionItem(ACTION_GEOMETRY_DEV_PURGE_UNUSED_NODES, ACTION_GROUP_GEOMETRY, "Purge unused nodes", "", "", "", &Action::onGeometryDevPurgeUnusedNodes));
     actionDesc.push_back(ActionDefinitionItem(ACTION_GEOMETRY_DEV_PURGE_UNUSED_ELEMENTS, ACTION_GROUP_GEOMETRY, "Purge unused elements", "", "", "", &Action::onGeometryDevPurgeUnusedElements));
+    actionDesc.push_back(ActionDefinitionItem(ACTION_GEOMETRY_DEV_REMOVE_DUPLICATE_NODES, ACTION_GROUP_GEOMETRY, "Remove duplicate nodes", "", "", "", &Action::onGeometryDevRemoveDuplicateNodes));
+    actionDesc.push_back(ActionDefinitionItem(ACTION_GEOMETRY_DEV_REMOVE_DUPLICATE_ELEMENTS, ACTION_GROUP_GEOMETRY, "Remove duplicate elements", "", "", "", &Action::onGeometryDevRemoveDuplicateElements));
     actionDesc.push_back(ActionDefinitionItem(ACTION_GEOMETRY_DEV_POINT_INSIDE_SURFACE, ACTION_GROUP_GEOMETRY, "Check if point is inside surface", "", "", "", &Action::onGeometryDevPointInsideSurface));
     actionDesc.push_back(ActionDefinitionItem(ACTION_GEOMETRY_DEV_TETRAHEDRALIZE_SURFACE, ACTION_GROUP_GEOMETRY, "Tetrahedralize surface", "", "", "", &Action::onGeometryDevTetrahedralizeeSurface));
     actionDesc.push_back(ActionDefinitionItem(ACTION_GEOMETRY_DEV_CONSOLIDATE, ACTION_GROUP_GEOMETRY, "Consolidate geometry", "", "", "", &Action::onGeometryDevConsolidate));

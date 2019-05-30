@@ -27,7 +27,7 @@ GLList::GLList(const GLList &glList)
 
 GLList::~GLList()
 {
-    GL_SAFE_CALL(glDeleteLists(this->getBase(),this->getNLists()));
+    GL_SAFE_CALL(glDeleteLists(this->getBase(),GLsizei(this->getNLists())));
 }
 
 GLList &GLList::operator =(const GLList &glList)
@@ -53,16 +53,16 @@ GLuint GLList::getBase(void) const
 
 GLuint GLList::getNLists(void) const
 {
-    return (GLuint)this->nLists;
+    return GLuint(this->nLists);
 }
 
 void GLList::setNLists(GLuint nLists)
 {
     if (this->getBase() > 0)
     {
-        GL_SAFE_CALL(glDeleteLists(this->getBase(),(GLuint)this->getNLists()));
+        GL_SAFE_CALL(glDeleteLists(this->getBase(),GLsizei(this->getNLists())));
     }
-    GL_SAFE_CALL(this->listBase = glGenLists(nLists));
+    GL_SAFE_CALL(this->listBase = glGenLists(GLsizei(nLists)));
     if (!glIsList(this->listBase))
     {
         RLogger::error("Failed to generate openGL lists\n");

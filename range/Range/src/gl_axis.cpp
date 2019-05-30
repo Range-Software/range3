@@ -94,7 +94,7 @@ void GLAxis::finalize()
     GL_SAFE_CALL(this->lightingEnabled ? glEnable(GL_LIGHTING) : glDisable(GL_LIGHTING));
     GL_SAFE_CALL(this->cullFaceEnabled ? glEnable(GL_CULL_FACE) : glDisable(GL_CULL_FACE));
     GL_SAFE_CALL(glLineWidth(this->lineWidth));
-    GL_SAFE_CALL(glHint(GL_LINE_SMOOTH_HINT, this->lineSmoothHint));
+    GL_SAFE_CALL(glHint(GL_LINE_SMOOTH_HINT, GLenum(this->lineSmoothHint)));
 //    glBlendFunc(GL_SRC_ALPHA, this->bendAlphaFunc);
 }
 
@@ -114,13 +114,13 @@ void GLAxis::draw(void)
         case GL_AXIS_GLOBAL:
         {
             this->getGLWidget()->qglColor(red);
-            this->getGLWidget()->renderText(axisScale,0.0,0.0,QString("X") + postFix);
+            this->getGLWidget()->renderText(double(axisScale),0.0,0.0,QString("X") + postFix);
 
             this->getGLWidget()->qglColor(green);
-            this->getGLWidget()->renderText(0.0,axisScale,0.0,QString("Y") + postFix);
+            this->getGLWidget()->renderText(0.0,double(axisScale),0.0,QString("Y") + postFix);
 
             this->getGLWidget()->qglColor(blue);
-            this->getGLWidget()->renderText(0.0,0.0,axisScale,QString("Z") + postFix);
+            this->getGLWidget()->renderText(0.0,0.0,double(axisScale),QString("Z") + postFix);
 
             GLboolean stipple;
             GL_SAFE_CALL(glGetBooleanv(GL_LINE_STIPPLE,&stipple));
@@ -178,33 +178,33 @@ void GLAxis::draw(void)
 
             GL_SAFE_CALL(glVertex3f(0.0f, 0.0f, 0.0f));
             GL_SAFE_CALL(glVertex3f(axisScale, 0.0f, 0.0f));
-            GL_SAFE_CALL(glVertex3f(0.0f, 1.1*axisScale, 0.7*axisScale));
-            GL_SAFE_CALL(glVertex3f(0.0f, 0.9*axisScale, 0.9*axisScale));
-            GL_SAFE_CALL(glVertex3f(0.0f, 1.1*axisScale, 0.9*axisScale));
-            GL_SAFE_CALL(glVertex3f(0.0f, 0.9*axisScale, 0.7*axisScale));
+            GL_SAFE_CALL(glVertex3f(0.0f, 1.1f*axisScale, 0.7f*axisScale));
+            GL_SAFE_CALL(glVertex3f(0.0f, 0.9f*axisScale, 0.9f*axisScale));
+            GL_SAFE_CALL(glVertex3f(0.0f, 1.1f*axisScale, 0.9f*axisScale));
+            GL_SAFE_CALL(glVertex3f(0.0f, 0.9f*axisScale, 0.7f*axisScale));
 
             // Lable the Y axis.
             this->getGLWidget()->qglColor(green);
 
             GL_SAFE_CALL(glVertex3f(0.0f, 0.0f, 0.0f));
             GL_SAFE_CALL(glVertex3f(0.0f, axisScale, 0.0f));
-            GL_SAFE_CALL(glVertex3f(0.7*axisScale, 0.0f, axisScale));
-            GL_SAFE_CALL(glVertex3f(0.8*axisScale, 0.0f, axisScale));
-            GL_SAFE_CALL(glVertex3f(0.8*axisScale, 0.0f, axisScale));
-            GL_SAFE_CALL(glVertex3f(0.9*axisScale, 0.0f, 1.1*axisScale));
-            GL_SAFE_CALL(glVertex3f(0.8*axisScale, 0.0f, axisScale));
-            GL_SAFE_CALL(glVertex3f(0.9*axisScale, 0.0f, 0.9*axisScale));
+            GL_SAFE_CALL(glVertex3f(0.7f*axisScale, 0.0f, axisScale));
+            GL_SAFE_CALL(glVertex3f(0.8f*axisScale, 0.0f, axisScale));
+            GL_SAFE_CALL(glVertex3f(0.8f*axisScale, 0.0f, axisScale));
+            GL_SAFE_CALL(glVertex3f(0.9f*axisScale, 0.0f, 1.1f*axisScale));
+            GL_SAFE_CALL(glVertex3f(0.8f*axisScale, 0.0f, axisScale));
+            GL_SAFE_CALL(glVertex3f(0.9f*axisScale, 0.0f, 0.9f*axisScale));
 
             // And the Z.
             this->getGLWidget()->qglColor(blue);
             GL_SAFE_CALL(glVertex3f(0.0f, 0.0f, 0.0f));
             GL_SAFE_CALL(glVertex3f(0.0f, 0.0f, axisScale));
-            GL_SAFE_CALL(glVertex3f(0.9*axisScale, 0.9*axisScale, 0.0f));
-            GL_SAFE_CALL(glVertex3f(1.1*axisScale, 0.9*axisScale, 0.0f));
-            GL_SAFE_CALL(glVertex3f(1.1*axisScale, 0.9*axisScale, 0.0f));
-            GL_SAFE_CALL(glVertex3f(0.9*axisScale, 0.7*axisScale, 0.0f));
-            GL_SAFE_CALL(glVertex3f(0.9*axisScale, 0.7*axisScale, 0.0f));
-            GL_SAFE_CALL(glVertex3f(1.1*axisScale, 0.7*axisScale, 0.0f));
+            GL_SAFE_CALL(glVertex3f(0.9f*axisScale, 0.9f*axisScale, 0.0f));
+            GL_SAFE_CALL(glVertex3f(1.1f*axisScale, 0.9f*axisScale, 0.0f));
+            GL_SAFE_CALL(glVertex3f(1.1f*axisScale, 0.9f*axisScale, 0.0f));
+            GL_SAFE_CALL(glVertex3f(0.9f*axisScale, 0.7f*axisScale, 0.0f));
+            GL_SAFE_CALL(glVertex3f(0.9f*axisScale, 0.7f*axisScale, 0.0f));
+            GL_SAFE_CALL(glVertex3f(1.1f*axisScale, 0.7f*axisScale, 0.0f));
 
             GLFunctions::end();
 
@@ -214,29 +214,29 @@ void GLAxis::draw(void)
 
             GL_SAFE_CALL(glNormal3f(1.0f, 0.0f, 0.0f));
             GL_SAFE_CALL(glVertex3f(0.0f, 0.0f, 0.0f));
-            GL_SAFE_CALL(glVertex3f(0.0f, 0.7*axisScale, 0.0f));
-            GL_SAFE_CALL(glVertex3f(0.0f, 0.0f, 0.7*axisScale));
+            GL_SAFE_CALL(glVertex3f(0.0f, 0.7f*axisScale, 0.0f));
+            GL_SAFE_CALL(glVertex3f(0.0f, 0.0f, 0.7f*axisScale));
 
             this->getGLWidget()->qglColor(green);
 
             GL_SAFE_CALL(glNormal3f(0.0f, 1.0f, 0.0f));
-            GL_SAFE_CALL(glVertex3f(0.7*axisScale, 0.0f, 0.0f));
+            GL_SAFE_CALL(glVertex3f(0.7f*axisScale, 0.0f, 0.0f));
             GL_SAFE_CALL(glVertex3f(0.0f, 0.0f, 0.0f));
-            GL_SAFE_CALL(glVertex3f(0.0f, 0.0f, 0.7*axisScale));
+            GL_SAFE_CALL(glVertex3f(0.0f, 0.0f, 0.7f*axisScale));
 
             this->getGLWidget()->qglColor(blue);
 
             GL_SAFE_CALL(glNormal3f(0.0f, 0.0f, 1.0f));
-            GL_SAFE_CALL(glVertex3f(0.7*axisScale, 0.0f, 0.0f));
-            GL_SAFE_CALL(glVertex3f(0.0f, 0.7*axisScale, 0.0f));
+            GL_SAFE_CALL(glVertex3f(0.7f*axisScale, 0.0f, 0.0f));
+            GL_SAFE_CALL(glVertex3f(0.0f, 0.7f*axisScale, 0.0f));
             GL_SAFE_CALL(glVertex3f(0.0f, 0.0f, 0.0f));
 
             GL_SAFE_CALL(glColor4f (0.8f, 0.8f, 0.8f, 0.8f));
 
             GL_SAFE_CALL(glNormal3f(0.49f, 0.49f, 0.49f));
-            GL_SAFE_CALL(glVertex3f(0.7*axisScale, 0.0f, 0.0f));
-            GL_SAFE_CALL(glVertex3f(0.0f, 0.7*axisScale, 0.0f));
-            GL_SAFE_CALL(glVertex3f(0.0f, 0.0f, 0.7*axisScale));
+            GL_SAFE_CALL(glVertex3f(0.7f*axisScale, 0.0f, 0.0f));
+            GL_SAFE_CALL(glVertex3f(0.0f, 0.7f*axisScale, 0.0f));
+            GL_SAFE_CALL(glVertex3f(0.0f, 0.0f, 0.7f*axisScale));
 
             GLFunctions::end();
             break;
@@ -246,13 +246,13 @@ void GLAxis::draw(void)
         default:
         {
             this->getGLWidget()->qglColor(QColor("#ffffff"));
-            this->getGLWidget()->renderText(axisScale,0.0,0.0,QString("X") + postFix);
+            this->getGLWidget()->renderText(double(axisScale),0.0,0.0,QString("X") + postFix);
 
             this->getGLWidget()->qglColor(QColor("#ffffff"));
-            this->getGLWidget()->renderText(0.0,axisScale,0.0,QString("Y") + postFix);
+            this->getGLWidget()->renderText(0.0,double(axisScale),0.0,QString("Y") + postFix);
 
             this->getGLWidget()->qglColor(QColor("#ffffff"));
-            this->getGLWidget()->renderText(0.0,0.0,axisScale,QString("Z") + postFix);
+            this->getGLWidget()->renderText(0.0,0.0,double(axisScale),QString("Z") + postFix);
 
             GLFunctions::begin(GL_LINES);
 

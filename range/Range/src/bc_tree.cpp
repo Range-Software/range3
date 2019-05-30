@@ -15,6 +15,7 @@
 #include "component_edit_dialog.h"
 #include "session.h"
 #include "bc_tree.h"
+#include "direction_widget.h"
 #include "variable_value_edit.h"
 #include "push_button.h"
 #include "main_window.h"
@@ -70,11 +71,31 @@ void BCTree::populate(void)
 
         QTreeWidgetItem *child = new QTreeWidgetItem(item);
         child->setFirstColumnSpanned(true);
-        PushButton *buttonValues = new PushButton(int(component.getType()),QString("Edit time dependent values"));
+        PushButton *buttonValues = new PushButton(uint(component.getType()),QString("Edit time dependent values"));
         this->setItemWidget(child,BC_TREE_PROPERTY_NAME,buttonValues);
 
         QObject::connect(lineEdit,&VariableValueEdit::valueChanged,this,&BCTree::onBcValueChanged);
         QObject::connect(buttonValues,&PushButton::clicked,this,&BCTree::onButtonValueClicked);
+    }
+
+    if (bc.getHasLocalDirection())
+    {
+        if (Session::selectedModelsHasEntitySelected(R_ENTITY_GROUP_POINT))
+        {
+            QTreeWidgetItem *item = new QTreeWidgetItem(this);
+            item->setFirstColumnSpanned(true);
+
+            DirectionWidget *directionWidget = new DirectionWidget(tr("Local direction"),bc.getLocalDirection());
+            directionWidget->hideButtons();
+            this->setItemWidget(item,BC_TREE_PROPERTY_NAME,directionWidget);
+
+            QObject::connect(directionWidget,&DirectionWidget::changed,this,&BCTree::onDirectionChanged);
+        }
+        this->drawLocalRotationBegin();
+    }
+    else
+    {
+        this->drawLocalRotationEnd();
     }
 
     this->resizeColumnToContents(BC_TREE_PROPERTY_NAME);
@@ -110,34 +131,117 @@ void BCTree::updateSelectedEntities(void) const
                                                            entityIDs[i].getEid());
     }
 
-    QList<uint> modelIDs = Session::getInstance().getSelectedModelIDs();
-    for (int i=0;i<modelIDs.size();i++)
+    foreach (uint modelID, Session::getInstance().getSelectedModelIDs())
     {
-        Session::getInstance().setProblemChanged(modelIDs[i]);
+        Session::getInstance().setProblemChanged(modelID);
     }
+}
+
+void BCTree::drawLocalRotationBegin()
+{
+    Session::getInstance().setBeginDrawLocalDirections(this->findSelectedEntityLocalDirections());
+}
+
+void BCTree::drawLocalRotationEnd()
+{
+    Session::getInstance().setEndDrawLocalDirections();
+}
+
+QList<RLocalDirection> BCTree::findSelectedEntityLocalDirections() const
+{
+    QList<RLocalDirection> localDirections;
+
+    foreach (uint modelID, Session::getInstance().getSelectedModelIDs())
+    {
+        QSet<uint> nodeIDs;
+
+        const Model &rModel = Session::getInstance().getModel(modelID);
+        foreach (const SessionEntityID &entityID, rModel.getSelectedEntityIDs(modelID))
+        {
+            switch (entityID.getType())
+            {
+                case R_ENTITY_GROUP_POINT:
+                {
+                    const RPoint &rPoint = rModel.getPoint(entityID.getEid());
+                    for (uint i=0;i<rPoint.size();i++)
+                    {
+                        const RElement &rElement = rModel.getElement(rPoint.get(i));
+                        for (uint j=0;j<rElement.size();j++)
+                        {
+                            nodeIDs.insert(rElement.getNodeId(j));
+                        }
+                    }
+                    break;
+                }
+                case R_ENTITY_GROUP_LINE:
+                {
+                    const RLine &rLine = rModel.getLine(entityID.getEid());
+                    for (uint i=0;i<rLine.size();i++)
+                    {
+                        const RElement &rElement = rModel.getElement(rLine.get(i));
+
+                        RR3Vector center;
+                        RR3Vector d1, d2, d3;
+
+                        rElement.findCenter(rModel.getNodes(),center[0],center[1],center[2]);
+                        RSegment(rModel.getNode(rElement.getNodeId(0)),rModel.getNode(rElement.getNodeId(1))).findPerpendicularVectors(d1,d2,d3);
+
+                        localDirections.append(RLocalDirection(center,d2));
+                        localDirections.append(RLocalDirection(center,d3));
+                    }
+                    break;
+                }
+                case R_ENTITY_GROUP_SURFACE:
+                {
+                    const RSurface &rSurface = rModel.getSurface(entityID.getEid());
+                    for (uint i=0;i<rSurface.size();i++)
+                    {
+                        const RElement &rElement = rModel.getElement(rSurface.get(i));
+
+                        RR3Vector center;
+                        RR3Vector normal;
+                        rElement.findCenter(rModel.getNodes(),center[0],center[1],center[2]);
+                        rElement.findNormal(rModel.getNodes(),normal[0],normal[1],normal[2]);
+
+                        localDirections.append(RLocalDirection(center,normal));
+                    }
+                    break;
+                }
+                default:
+                {
+                    break;
+                }
+            }
+        }
+        foreach (uint nodeID, nodeIDs)
+        {
+            const RNode &rNode = rModel.getNode(nodeID);
+            localDirections.append(RLocalDirection(rNode.toVector(),bc.getLocalDirection()));
+        }
+    }
+
+    return localDirections;
 }
 
 void BCTree::onBcSelected(RBoundaryConditionType bcType, bool applied)
 {
     if (applied)
     {
-        QList<SessionEntityID> entityIDs = Session::getInstance().getSelectedEntityIDs();
-
-        for (int i=0;i<entityIDs.size();i++)
+        foreach (const SessionEntityID entityID,Session::getInstance().getSelectedEntityIDs())
         {
-            switch (entityIDs[i].getType())
+            switch (entityID.getType())
             {
                 case R_ENTITY_GROUP_POINT:
-                    this->bc = Session::getInstance().getModel(entityIDs[i].getMid()).getPoint(entityIDs[i].getEid()).getBoundaryCondition(bcType);
+                    this->bc = Session::getInstance().getModel(entityID.getMid()).getPoint(entityID.getEid()).getBoundaryCondition(bcType);
                     break;
                 case R_ENTITY_GROUP_LINE:
-                    this->bc = Session::getInstance().getModel(entityIDs[i].getMid()).getLine(entityIDs[i].getEid()).getBoundaryCondition(bcType);
+                    this->bc = Session::getInstance().getModel(entityID.getMid()).getLine(entityID.getEid()).getBoundaryCondition(bcType);
                     break;
                 case R_ENTITY_GROUP_SURFACE:
-                    this->bc = Session::getInstance().getModel(entityIDs[i].getMid()).getSurface(entityIDs[i].getEid()).getBoundaryCondition(bcType);
+                    this->bc = Session::getInstance().getModel(entityID.getMid()).getSurface(entityID.getEid()).getBoundaryCondition(bcType);
                     break;
                 case R_ENTITY_GROUP_VOLUME:
-                    this->bc = Session::getInstance().getModel(entityIDs[i].getMid()).getVolume(entityIDs[i].getEid()).getBoundaryCondition(bcType);
+                    this->bc = Session::getInstance().getModel(entityID.getMid()).getVolume(entityID.getEid()).getBoundaryCondition(bcType);
                     break;
                 default:
                     this->bc.setType(bcType);
@@ -150,6 +254,7 @@ void BCTree::onBcSelected(RBoundaryConditionType bcType, bool applied)
     else
     {
         this->bc.setType(R_BOUNDARY_CONDITION_NONE);
+        this->drawLocalRotationEnd();
         this->clear();
     }
 }
@@ -185,9 +290,17 @@ void BCTree::onButtonValueClicked(int id)
             {
                 continue;
             }
-            VariableValueEdit *lineEdit = (VariableValueEdit*)this->itemWidget(this->topLevelItem(i),BC_TREE_PROPERTY_VALUE);
+            VariableValueEdit *lineEdit = dynamic_cast<VariableValueEdit*>(this->itemWidget(this->topLevelItem(i),BC_TREE_PROPERTY_VALUE));
             lineEdit->setValue(this->bc.getComponent(cPosition).getValue(0));
             lineEdit->setEnabled(this->bc.getComponent(cPosition).size() == 1);
         }
     }
+}
+
+void BCTree::onDirectionChanged(const RR3Vector &direction)
+{
+    this->bc.setLocalDirection(direction);
+    this->drawLocalRotationBegin();
+
+    this->updateSelectedEntities();
 }

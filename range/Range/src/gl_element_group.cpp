@@ -224,28 +224,25 @@ void GLElementGroup::draw(void)
 
                 int r,g,b,a;
 
-                if (!colorByPatch)
-                {
-                    this->getData().getColor(r,g,b,a);
-                }
+                this->getData().getColor(r,g,b,a);
 
                 for (uint i=0;i<rPatchBook.getNPatches();i++)
                 {
                     if (colorByPatch)
                     {
-                        r = patchColors[i].red();
-                        g = patchColors[i].green();
-                        b = patchColors[i].blue();
-                        a = patchColors[i].alpha();
+                        r = patchColors[int(i)].red();
+                        g = patchColors[int(i)].green();
+                        b = patchColors[int(i)].blue();
+                        a = patchColors[int(i)].alpha();
                     }
                     double viewFactor = patchViewFactors[i];
                     if (maxViewFactor > RConstants::eps)
                     {
                         viewFactor /= maxViewFactor;
                     }
-                    patchColors[i] = QColor(qRound(r*viewFactor),
-                                            qRound(g*viewFactor),
-                                            qRound(b*viewFactor),a);
+                    patchColors[int(i)] = QColor(qRound(r*viewFactor),
+                                                 qRound(g*viewFactor),
+                                                 qRound(b*viewFactor),a);
                 }
             }
         } // R_PROBLEM_RADIATIVE_HEAT
@@ -298,7 +295,7 @@ void GLElementGroup::draw(void)
                 {
                     continue;
                 }
-                color = patchColors[patchID];
+                color = patchColors[int(patchID)];
             }
             else
             {

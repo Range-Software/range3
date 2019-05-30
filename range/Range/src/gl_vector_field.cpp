@@ -64,10 +64,6 @@ GLVectorField::GLVectorField(const GLVectorField &glVectorField)
     this->_init(&glVectorField);
 }
 
-GLVectorField::~GLVectorField()
-{
-}
-
 GLVectorField &GLVectorField::operator =(const GLVectorField &glVectorField)
 {
     this->GLObject::operator =(glVectorField);

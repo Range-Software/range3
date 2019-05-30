@@ -112,8 +112,11 @@ class RSolverStress : public RSolverGeneric
         //! Assembly matrix
         void assemblyMatrix(unsigned int elementID, const RRMatrix &Me, const RRMatrix &Ke, const RRVector &fe);
 
-        //! Apply local rotations.
+        //! Apply local rotations to matrix.
         void applyLocalRotations(unsigned int elementID, RRMatrix &Ae);
+
+        //! Apply local rotations to vector.
+        void applyLocalRotations(unsigned int elementID, RRVector &fe);
 
 };
 

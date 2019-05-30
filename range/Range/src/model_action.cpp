@@ -82,8 +82,16 @@ void ModelAction::executeAction(const ModelActionInput &modelActionInput)
                 this->purgeUnusedNodes(modelActionInput);
                 break;
             case MODEL_ACTION_PURGE_UNUSED_ELEMENTS:
-                Session::getInstance().storeCurentModelVersion(modelActionInput.getModelID(),tr("Purge unused eleents"));
+                Session::getInstance().storeCurentModelVersion(modelActionInput.getModelID(),tr("Purge unused elements"));
                 this->purgeUnusedElements(modelActionInput);
+                break;
+            case MODEL_ACTION_REMOVE_DUPLICATE_NODES:
+                Session::getInstance().storeCurentModelVersion(modelActionInput.getModelID(),tr("Remove duplicate nodes"));
+                this->removeDuplicateNodes(modelActionInput);
+                break;
+            case MODEL_ACTION_REMOVE_DUPLICATE_ELEMENTS:
+                Session::getInstance().storeCurentModelVersion(modelActionInput.getModelID(),tr("Remove duplicate elements"));
+                this->removeDuplicateElements(modelActionInput);
                 break;
             case MODEL_ACTION_REMOVE_ELEMENTS:
                 Session::getInstance().storeCurentModelVersion(modelActionInput.getModelID(),tr("Remove elements"));
@@ -214,7 +222,7 @@ void ModelAction::mergeNearNodes(const ModelActionInput &modelActionInput)
     RLogger::info("Merging near nodes\n");
     RLogger::indent();
     uint nMerged = rModel.mergeNearNodes(modelActionInput.getTolerance());
-    RLogger::info("Number of merged nodes: %u\n",nMerged);
+    RLogger::info("Number of merged nodes = %u\n",nMerged);
     RLogger::unindent();
 
     Session::getInstance().setModelChanged(modelActionInput.getModelID());
@@ -306,7 +314,7 @@ void ModelAction::createElement(const ModelActionInput &modelActionInput)
     RElement e(elementType);
     for (uint i=0;i<e.size();i++)
     {
-        e.setNodeId(i,nodeIDs[i]);
+        e.setNodeId(i,nodeIDs[int(i)]);
     }
 
     if (elementType == R_ELEMENT_QUAD1)
@@ -370,6 +378,34 @@ void ModelAction::purgeUnusedElements(const ModelActionInput &modelActionInput)
 
     uint nPurged = rModel.purgeUnusedElements();
     RLogger::info("Number of purged elements = %u\n",nPurged);
+
+    RLogger::unindent();
+
+    Session::getInstance().setModelChanged(modelActionInput.getModelID());
+}
+
+void ModelAction::removeDuplicateNodes(const ModelActionInput &modelActionInput)
+{
+    Model &rModel = Session::getInstance().getModel(modelActionInput.getModelID());
+
+    RLogger::info("Removing duplicate nodes\n");
+    RLogger::indent();
+    uint nMerged = rModel.mergeNearNodes(RConstants::eps);
+    RLogger::info("Number of removed nodes = %u\n",nMerged);
+
+    RLogger::unindent();
+
+    Session::getInstance().setModelChanged(modelActionInput.getModelID());
+}
+
+void ModelAction::removeDuplicateElements(const ModelActionInput &modelActionInput)
+{
+    Model &rModel = Session::getInstance().getModel(modelActionInput.getModelID());
+
+    RLogger::info("Removing duplicate elements\n");
+    RLogger::indent();
+    uint nMerged = rModel.removeDuplicateElements();
+    RLogger::info("Number of removed elements = %u\n",nMerged);
 
     RLogger::unindent();
 

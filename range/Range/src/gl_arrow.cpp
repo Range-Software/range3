@@ -40,10 +40,6 @@ GLArrow::GLArrow(const GLArrow &glArrow)
     this->_init(&glArrow);
 }
 
-GLArrow::~GLArrow()
-{
-}
-
 GLArrow &GLArrow::operator =(const GLArrow &glArrow)
 {
     this->GLObject::operator =(glArrow);
@@ -72,14 +68,7 @@ void GLArrow::finalize(void)
 
 void GLArrow::draw(void)
 {
-    if (this->showHead)
-    {
-        this->drawHead();
-    }
-    else
-    {
-        this->drawShaft();
-    }
+    this->showHead ? this->drawHead() : this->drawShaft();
 }
 
 void GLArrow::drawShaft(void) const

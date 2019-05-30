@@ -205,10 +205,10 @@ void GraphWidget::paintPoints(QPainter &painter, uint dataFieldID)
     GraphData::const_iterator iter = this->graphObject->getData().constBegin();
     while (iter != this->graphObject->getData().constEnd())
     {
-        double x = this->getX(iter.key(),this->xMin,this->xMax) - this->pointWidth/2.0;
-        double y = this->getY(iter.value()[dataFieldID],this->yMin,this->yMax) - this->pointWidth/2.0;
-        double pw  = this->pointWidth;
-        double ph = this->pointWidth;
+        int x = int(std::round(this->getX(iter.key(),this->xMin,this->xMax) - this->pointWidth/2.0));
+        int y = int(std::round(this->getY(iter.value()[dataFieldID],this->yMin,this->yMax) - this->pointWidth/2.0));
+        int pw  = int(std::round(this->pointWidth));
+        int ph = int(std::round(this->pointWidth));
 
         rectangles.append(QRect(x,y,pw,ph));
 
@@ -232,15 +232,15 @@ void GraphWidget::paintLines(QPainter &painter, uint dataFieldID)
     GraphData::const_iterator iter = this->graphObject->getData().constBegin();
     while (iter != this->graphObject->getData().constEnd())
     {
-        double x1 = this->getX(iter.key(),this->xMin,this->xMax);
-        double y1 = this->getY(iter.value()[dataFieldID],this->yMin,this->yMax);
+        int x1 = int(std::round(this->getX(iter.key(),this->xMin,this->xMax)));
+        int y1 = int(std::round(this->getY(iter.value()[dataFieldID],this->yMin,this->yMax)));
         ++iter;
         if (iter == this->graphObject->getData().constEnd())
         {
             break;
         }
-        double x2 = this->getX(iter.key(),this->xMin,this->xMax);
-        double y2 = this->getY(iter.value()[dataFieldID],this->yMin,this->yMax);
+        int x2 = int(std::round(this->getX(iter.key(),this->xMin,this->xMax)));
+        int y2 = int(std::round(this->getY(iter.value()[dataFieldID],this->yMin,this->yMax)));
 
         lines.append(QLine(x1,y1,x2,y2));
     }
@@ -250,7 +250,7 @@ void GraphWidget::paintLines(QPainter &painter, uint dataFieldID)
     painter.setBrush(QBrush(Qt::green));
 
     QList<Qt::GlobalColor> colorList = Color::getPaintColors();
-    int colorIndex = dataFieldID;
+    int colorIndex = int(dataFieldID);
     if (colorIndex > colorList.size())
     {
         colorIndex = int(std::floor((std::rand()/RAND_MAX)*double(colorList.size()-1)));
@@ -269,11 +269,11 @@ void GraphWidget::paintBars(QPainter &painter, uint dataFieldID)
 
     GraphData::const_iterator iter = this->graphObject->getData().constBegin();
     while (iter != this->graphObject->getData().constEnd()) {
-        double x = this->getX(iter.key(),this->xMin,this->xMax) - this->barWidth/2.0;
-        double y = this->getY(iter.value()[dataFieldID],this->yMin,this->yMax);
-        double bh = this->getY(0,this->yMin,this->yMax)-y;
+        int x = int(std::round(this->getX(iter.key(),this->xMin,this->xMax) - this->barWidth/2.0));
+        int y = int(std::round(this->getY(iter.value()[dataFieldID],this->yMin,this->yMax)));
+        int bh = int(std::round(this->getY(0,this->yMin,this->yMax)-y));
 
-        rectangles.append(QRect(x,y,this->barWidth,bh));
+        rectangles.append(QRect(x,y,int(std::round(this->barWidth)),bh));
 
         ++iter;
     }
@@ -299,10 +299,10 @@ void GraphWidget::paintTitle(QPainter &painter)
 
     painter.setPen(QPen(Qt::black));
     painter.setFont(textFont);
-    double x = this->getX(0.0,0.0,1.0);
-    double y = this->getY(1.0,0.0,1.0);
-    double w = this->getX(1.0,0.0,1.0) - x;
-    double h = double(2.0*fontSize);
+    int x = int(std::round(this->getX(0.0,0.0,1.0)));
+    int y = int(std::round(this->getY(1.0,0.0,1.0)));
+    int w = int(std::round(this->getX(1.0,0.0,1.0) - x));
+    int h = int(std::round(2.0*fontSize));
 
     painter.drawText(QRect(x, y, w, h), Qt::AlignCenter, this->graphObject->getData().getTitle());
 
@@ -311,24 +311,24 @@ void GraphWidget::paintTitle(QPainter &painter)
 
 void GraphWidget::paintPointer(QPainter &painter, uint dataFieldID)
 {
-    double xmin = this->getX(0.0,0.0,1.0) - this->barWidth;
-    double xmax = this->getX(1.0,0.0,1.0) + this->barWidth;
-    double ymin = this->getY(0.0,0.0,1.0);
-    double ymax = this->getY(1.0,0.0,1.0);
-    double xp = double(this->mousePosition.x());
-    double yp = double(this->mousePosition.y());
+    int xmin = int(std::round(this->getX(0.0,0.0,1.0) - this->barWidth));
+    int xmax = int(std::round(this->getX(1.0,0.0,1.0) + this->barWidth));
+    int ymin = int(std::round(this->getY(0.0,0.0,1.0)));
+    int ymax = int(std::round(this->getY(1.0,0.0,1.0)));
+    int xp = int(std::round(this->mousePosition.x()));
+    int yp = int(std::round(this->mousePosition.y()));
 
     if (this->snapPointerX)
     {
-        xp = this->getX(this->graphObject->getData().roundKey(this->getXValue(xp)),
-                        this->xMin,
-                        this->xMax);
+        xp = int(std::round(this->getX(this->graphObject->getData().roundKey(this->getXValue(xp)),
+                            this->xMin,
+                            this->xMax)));
     }
     if (this->snapPointerY)
     {
-        yp = this->getY(this->graphObject->getData().findValue(this->getXValue(xp))[dataFieldID],
-                        this->yMin,
-                        this->yMax);
+        yp = int(std::round(this->getY(this->graphObject->getData().findValue(this->getXValue(xp))[dataFieldID],
+                            this->yMin,
+                            this->yMax)));
     }
 
     QVector<QLine> lines;
@@ -353,12 +353,12 @@ void GraphWidget::paintPointer(QPainter &painter, uint dataFieldID)
 
 void GraphWidget::paintLimits(QPainter &painter)
 {
-    double xl = this->getX(this->graphObject->getData().getLLimit(),this->xMin,this->xMax);
-    double xu = this->getX(this->graphObject->getData().getULimit(),this->xMin,this->xMax);
-    double xmin = this->getX(0.0,0.0,1.0);
-    double xmax = this->getX(1.0,0.0,1.0);
-    double ymin = this->getY(0.0,0.0,1.0);
-    double ymax = this->getY(1.0,0.0,1.0);
+    int xl = int(std::round(this->getX(this->graphObject->getData().getLLimit(),this->xMin,this->xMax)));
+    int xu = int(std::round(this->getX(this->graphObject->getData().getULimit(),this->xMin,this->xMax)));
+    int xmin = int(std::round(this->getX(0.0,0.0,1.0)));
+    int xmax = int(std::round(this->getX(1.0,0.0,1.0)));
+    int ymin = int(std::round(this->getY(0.0,0.0,1.0)));
+    int ymax = int(std::round(this->getY(1.0,0.0,1.0)));
 
     QVector<QLine> lines;
     lines.append(QLine(xl,ymin,xl,ymax));
@@ -394,9 +394,9 @@ void GraphWidget::paintLimits(QPainter &painter)
 
 void GraphWidget::paintXLine(QPainter &painter, double value)
 {
-    double x = this->getX(value,this->xMin,this->xMax);
-    double ymin = this->getY(0.0,0.0,1.0);
-    double ymax = this->getY(1.0,0.0,1.0);
+    int x = int(std::round(this->getX(value,this->xMin,this->xMax)));
+    int ymin = int(std::round(this->getY(0.0,0.0,1.0)));
+    int ymax = int(std::round(this->getY(1.0,0.0,1.0)));
 
     QVector<QLine> lines;
     lines.append(QLine(x,ymin,x,ymax));
@@ -411,9 +411,9 @@ void GraphWidget::paintXLine(QPainter &painter, double value)
 
 void GraphWidget::paintYLine(QPainter &painter, double value)
 {
-    double y = this->getY(value,this->yMin,this->yMax);
-    double xmin = this->getX(0.0,0.0,1.0);
-    double xmax = this->getX(1.0,0.0,1.0);
+    int y = int(std::round(this->getY(value,this->yMin,this->yMax)));
+    int xmin = int(std::round(this->getX(0.0,0.0,1.0)));
+    int xmax = int(std::round(this->getX(1.0,0.0,1.0)));
 
     QVector<QLine> lines;
     lines.append(QLine(xmin,y,xmax,y));
@@ -437,10 +437,10 @@ void GraphWidget::paintXLabel(QPainter &painter)
 
     painter.setPen(QPen(Qt::black));
     painter.setFont(textFont);
-    double x = this->getX(0.0,0.0,1.0);
-    double y = this->height() - this->labelSpace;
-    double h = double(this->labelSpace);
-    double w = this->getX(1.0,0.0,1.0) - x;
+    int x = int(std::round(this->getX(0.0,0.0,1.0)));
+    int y = int(std::round(this->height() - this->labelSpace));
+    int h = int(std::round(this->labelSpace));
+    int w = int(std::round(this->getX(1.0,0.0,1.0) - x));
 
     painter.drawText(QRect(x, y, w, h), Qt::AlignCenter, this->graphObject->getData().getXLabel());
 
@@ -459,10 +459,10 @@ void GraphWidget::paintYLabel(QPainter &painter)
     painter.setPen(QPen(Qt::black));
     painter.setBrush(QBrush(Qt::red));
     painter.setFont(textFont);
-    double x = -this->getY(0.0,0.0,1.0);
-    double y = 0.0;
-    double w = this->getY(0.0,0.0,1.0) - this->getY(1.0,0.0,1.0);
-    double h = double(this->labelSpace);
+    int x = int(std::round(-this->getY(0.0,0.0,1.0)));
+    int y = 1;
+    int w = int(std::round(this->getY(0.0,0.0,1.0) - this->getY(1.0,0.0,1.0)));
+    int h = int(std::round(this->labelSpace));
     painter.rotate(-90);
     painter.drawText(QRect(x, y, w, h), Qt::AlignCenter, this->graphObject->getData().getYLabel());
 
@@ -480,10 +480,10 @@ void GraphWidget::paintXAxis(QPainter &painter)
 
     painter.setPen(QPen(Qt::black));
     painter.setFont(textFont);
-    double x = this->getX(0.0,0.0,1.0);
-    double y = this->height() - (this->labelSpace + this->xAxisSpace);
-    double h = double(this->xAxisSpace);
-    double w = this->getX(1.0,0.0,1.0) - x;
+    int x = int(std::round(this->getX(0.0,0.0,1.0)));
+    int y = int(std::round(this->height() - (this->labelSpace + this->xAxisSpace)));
+    int h = int(std::round(this->xAxisSpace));
+    int w = int(std::round(this->getX(1.0,0.0,1.0) - x));
 
     painter.drawText(QRect(x, y, w, h), Qt::AlignLeft, QString::number(this->xMin));
     painter.drawText(QRect(x, y, w, h), Qt::AlignRight, QString::number(this->xMax));
@@ -503,10 +503,10 @@ void GraphWidget::paintYAxis(QPainter &painter)
     painter.setPen(QPen(Qt::black));
     painter.setBrush(QBrush(Qt::red));
     painter.setFont(textFont);
-    double x = -this->getY(0.0,0.0,1.0);
-    double y = this->labelSpace;
-    double w = this->getY(0.0,0.0,1.0) - this->getY(1.0,0.0,1.0);
-    double h = double(this->yAxisSpace);
+    int x = int(std::round(-this->getY(0.0,0.0,1.0)));
+    int y = int(std::round(this->labelSpace));
+    int w = int(std::round(this->getY(0.0,0.0,1.0) - this->getY(1.0,0.0,1.0)));
+    int h = int(std::round(this->yAxisSpace));
     painter.rotate(-90);
 
     painter.drawText(QRect(x, y, w, h), Qt::AlignLeft, QString::number(this->graphObject->getData().findYMin()));
@@ -550,13 +550,13 @@ void GraphWidget::paintPosition(QPainter &painter,uint dataFieldID)
     double vw = std::max(fm.width(QString::number(xValue)),
                          fm.width(QString::number(yValue)));
 
-    double x = this->getX(1.0,0.0,1.0) - lw - vw;
-    double y = this->getY(1.0,0.0,1.0);
-    double w = this->getX(1.0,0.0,1.0) - x;
-    double h = double(2.0*2.0*fontSize);
+    int x = int(std::round(this->getX(1.0,0.0,1.0) - lw - vw));
+    int y = int(std::round(this->getY(1.0,0.0,1.0)));
+    int w = int(std::round(this->getX(1.0,0.0,1.0) - x));
+    int h = int(std::round(2.0*2.0*fontSize));
 
     painter.drawText(QRect(x, y, w, h), Qt::AlignLeft, labelText);
-    painter.drawText(QRect(x + lw, y, w - lw, h), Qt::AlignLeft, valueText);
+    painter.drawText(QRect(x + int(std::round(lw)), y, w - int(std::round(lw)), h), Qt::AlignLeft, valueText);
 
     painter.restore();
 }
@@ -593,7 +593,7 @@ double GraphWidget::getDrawingHeight(void) const
 
 double GraphWidget::getX(double xValue, double xMin, double xMax) const
 {
-    if (xMax == xMin)
+    if (std::fabs(xMax-xMin) < RConstants::eps)
     {
         return 0.0;
     }
@@ -610,7 +610,7 @@ double GraphWidget::getX(double xValue, double xMin, double xMax) const
 double GraphWidget::getY(double yValue, double yMin, double yMax) const
 {
     double y = 0.0;
-    if (yMax != yMin)
+    if (std::fabs(yMax-yMin) > RConstants::eps)
     {
         y = this->height() * (1.0 - (yValue - yMin) / (yMax - yMin));
         y = y * (1.0 - (2.0 * this->yMargin + this->labelSpace + this->xAxisSpace) / this->height()) + this->yMargin;

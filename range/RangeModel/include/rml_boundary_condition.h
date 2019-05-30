@@ -94,10 +94,10 @@ class RBoundaryCondition : public RCondition
         bool optional;
         //! Indicates whether the condition is explicit or not.
         bool isExplicit;
-        //! Indicates whether the boundary condition has local rotations.
-        bool hasLocalRotations;
-        //! Rotation angles arround three main axes (X,Y,Z).
-        double rotations[3];
+        //! Indicates whether the boundary condition has local direction.
+        bool hasLocalDirection;
+        //! Local direction.
+        RR3Vector direction;
 
     public:
 
@@ -129,17 +129,14 @@ class RBoundaryCondition : public RCondition
             return this->isExplicit;
         }
 
-        // Return whether the condition has local rotation angles.
-        bool getHasLocalRotations ( void ) const;
+        //! Return whether the condition has local direction.
+        bool getHasLocalDirection() const;
 
-        // Return local rotation angle around X axis.
-        double getLocalRotationX ( void ) const;
+        //! Return reference local direction.
+        const RR3Vector &getLocalDirection() const;
 
-        // Return local rotation angle around Y axis.
-        double getLocalRotationY ( void ) const;
-
-        // Return local rotation angle around Z axis.
-        double getLocalRotationZ ( void ) const;
+        //! Set local direction.
+        void setLocalDirection(const RR3Vector &direction);
 
         //! Assignment operator.
         RBoundaryCondition & operator =
@@ -173,7 +170,7 @@ class RBoundaryCondition : public RCondition
         static bool getApplyOnVolume ( RBoundaryConditionType type );
 
         //! Return information whether the boundary condition can have local rotation or not.
-        static bool getHasLocalRotations ( RBoundaryConditionType type );
+        static bool getHasLocalDirection ( RBoundaryConditionType type );
 
         //! Return problem type mask for given condition type.
         static RProblemTypeMask getProblemTypeMask ( RBoundaryConditionType type );

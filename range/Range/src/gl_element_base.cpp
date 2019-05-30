@@ -38,8 +38,8 @@ GLElementBase::GLElementBase(GLWidget *glWidget, const Model *pModel, uint eleme
     , color(color)
     , pModel(pModel)
     , elementID(elementID)
-    , pScalarVariable(0)
-    , pDisplacementVariable(0)
+    , pScalarVariable(nullptr)
+    , pDisplacementVariable(nullptr)
     , nodePointSize(10.0f)
     , edgeLineWidth(1.0f)
 {
