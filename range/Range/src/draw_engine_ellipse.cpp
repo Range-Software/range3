@@ -54,7 +54,7 @@ DrawEngineEllipse::DrawEngineEllipse(QObject *parent) :
     this->updateModel();
 }
 
-RModelRaw DrawEngineEllipse::generate(void) const
+RModelRaw DrawEngineEllipse::generate() const
 {
     RModelRaw modelRaw;
 

@@ -39,13 +39,13 @@ class TextEditWidget : public QWidget
     private slots:
 
         //! Tesxt edit text has changed.
-        void onTextEditChanged(void);
+        void onTextEditChanged();
 
         //! On cancel button clicked.
-        void onCancelButtonClicked(void);
+        void onCancelButtonClicked();
 
         //! On ok button clicked.
-        void onOkButtonClicked(void);
+        void onOkButtonClicked();
 
     signals:
 

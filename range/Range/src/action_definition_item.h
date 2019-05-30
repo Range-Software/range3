@@ -150,7 +150,7 @@ typedef enum _ActionType
 
 class Action;
 
-typedef void (Action::*PointerToMemberFunction)(void);
+typedef void (Action::*PointerToMemberFunction)();
 
 class ActionDefinitionItem
 {
@@ -179,7 +179,7 @@ class ActionDefinitionItem
                              const QString &desc = QString(),
                              const QString &shortCut = QString(),
                              const QString &icon = QString(),
-                             PointerToMemberFunction slot = 0);
+                             PointerToMemberFunction slot = nullptr);
 
         //! Copy constructor.
         ActionDefinitionItem(const ActionDefinitionItem &actionDefinitionItem);
@@ -191,13 +191,13 @@ class ActionDefinitionItem
         ActionDefinitionItem &operator =(const ActionDefinitionItem &actionDefinitionItem);
 
         //! Return action type.
-        ActionType getType(void) const;
+        ActionType getType() const;
 
         //! Return action group type.
-        ActionGroupType getGroupType(void) const;
+        ActionGroupType getGroupType() const;
 
         //! Return const reference to shortcut.
-        const QString &getShortcut(void) const;
+        const QString &getShortcut() const;
 
         //! Return action group name.
         static QString getGroupName(ActionGroupType groupType);

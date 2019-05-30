@@ -90,11 +90,11 @@ QList<ActionType> ActionDefinition::getActionTypes(ActionGroupTypeMask actionGro
 {
     QList<ActionType> actionTypes;
 
-    for (int i=0;i<this->actionDesc.size();i++)
+    foreach (ActionDefinitionItem item, this->actionDesc)
     {
-        if (this->actionDesc[i].getGroupType() & actionGroupTypeMask)
+        if (item.getGroupType() & actionGroupTypeMask)
         {
-            actionTypes.push_back(this->actionDesc[i].getType());
+            actionTypes.push_back(item.getType());
         }
     }
 

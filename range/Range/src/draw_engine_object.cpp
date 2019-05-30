@@ -19,24 +19,24 @@ DrawEngineObject::DrawEngineObject(QObject *parent) :
     this->color = Color::random(true);
 }
 
-const QString &DrawEngineObject::getName(void) const
+const QString &DrawEngineObject::getName() const
 {
     return this->name;
 }
 
-uint DrawEngineObject::getNInputParameters(void) const
+uint DrawEngineObject::getNInputParameters() const
 {
-    return this->inputParameters.size();
+    return uint(this->inputParameters.size());
 }
 
 const DrawEngineInput &DrawEngineObject::getInputParamater(uint position) const
 {
-    return this->inputParameters[position];
+    return this->inputParameters[int(position)];
 }
 
 DrawEngineInput &DrawEngineObject::getInputParamater(uint position)
 {
-    return this->inputParameters[position];
+    return this->inputParameters[int(position)];
 }
 
 void DrawEngineObject::updateModel(void)

@@ -263,11 +263,9 @@ void Action::onModelOpen()
 
 void Action::onModelSave()
 {
-    QList<uint> selectedModelIDs = Session::getInstance().getSelectedModelIDs();
-
-    for (int i=0;i<selectedModelIDs.size();i++)
+    foreach (uint selectedModelID,Session::getInstance().getSelectedModelIDs())
     {
-        Model &rModel = Session::getInstance().getModel(selectedModelIDs[i]);
+        Model &rModel = Session::getInstance().getModel(selectedModelID);
 
         QString fileName = ModelIO::getModelSaveName(MainSettings::getInstance(),this->mainWindow,rModel);
 
@@ -1218,13 +1216,11 @@ void Action::onGeometrySurfaceCloseHole()
         return;
     }
 
-    QList<uint> modelIDs = pickList.getModelIDs();
-
-    for (int i=0;i<modelIDs.size();i++)
+    foreach (uint modelID,pickList.getModelIDs())
     {
         QList<uint> holeIDs;
 
-        QVector<PickItem> pickItems = pickList.getItems(modelIDs[i]);
+        QVector<PickItem> pickItems = pickList.getItems(modelID);
         for (int j=0;j<pickItems.size();j++)
         {
             if (pickItems[j].getItemType() == PICK_ITEM_HOLE_ELEMENT)
@@ -1238,7 +1234,7 @@ void Action::onGeometrySurfaceCloseHole()
             }
         }
 
-        ModelActionInput modelActionInput(modelIDs[i]);
+        ModelActionInput modelActionInput(modelID);
         modelActionInput.setCloseSurfaceHole(holeIDs);
 
         ModelAction *modelAction = new ModelAction;

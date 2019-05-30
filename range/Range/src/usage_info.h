@@ -19,7 +19,7 @@ class UsageInfo
     private:
 
         //! Constructor.
-        UsageInfo();
+        UsageInfo() = default;
 
     public:
 

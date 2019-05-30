@@ -116,7 +116,7 @@ ValueScale::ValueScale(const QString &title, QWidget *parent)
     this->setValue(1.0);
 }
 
-double ValueScale::getValue(void) const
+double ValueScale::getValue() const
 {
     return this->mantis*std::pow(10.0,this->exponent);
 }
@@ -148,7 +148,7 @@ void ValueScale::onScaleEditChanged(double value)
     emit this->valueChanged(value);
 }
 
-void ValueScale::onExpandButtonClicked(void)
+void ValueScale::onExpandButtonClicked()
 {
     if (this->expandWidget->isHidden())
     {

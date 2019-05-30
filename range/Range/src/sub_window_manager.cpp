@@ -22,10 +22,10 @@ uint SubWindowManager::findWindow(uint modelID)
     {
         if (this->subWindows[i]->getModelID() == modelID)
         {
-            return (uint)i;
+            return uint(i);
         }
     }
-    return (uint)this->subWindows.size();
+    return uint(this->subWindows.size());
 }
 
 bool SubWindowManager::windowCreate(uint modelID)
@@ -39,7 +39,7 @@ bool SubWindowManager::windowCreate(uint modelID)
     subWindow->setAttribute(Qt::WA_DeleteOnClose);
     this->mdiArea->addSubWindow(subWindow,Qt::SubWindow);
 
-    if (this->subWindows.size() == 0)
+    if (this->subWindows.empty())
     {
         subWindow->showMaximized();
     }
@@ -66,11 +66,11 @@ bool SubWindowManager::windowClose(uint modelID)
         return false;
     }
 
-    SubWindow *subWindow = this->subWindows[winPos];
+    SubWindow *subWindow = this->subWindows[int(winPos)];
 //    this->mdiArea->removeSubWindow(subWindow);
     delete subWindow;
 
-    this->subWindows.removeAt(winPos);
+    this->subWindows.removeAt(int(winPos));
 
     emit this->windowClosed(modelID);
 

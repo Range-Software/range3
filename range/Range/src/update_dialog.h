@@ -33,7 +33,7 @@ class UpdateDialog : public QDialog
         explicit UpdateDialog(const RVersion &softwareVersion, const QString &softwareLink, QWidget *parent = nullptr);
 
         //! Execute dialog.
-        int exec(void);
+        int exec(void) override;
 
 };
 

@@ -33,7 +33,7 @@ class BCManagerTree : public QTreeWidget
     public:
 
         //! Constructor.
-        explicit BCManagerTree(QObject *parent = nullptr);
+        explicit BCManagerTree(QWidget *parent = nullptr);
 
     protected:
 

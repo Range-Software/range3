@@ -58,7 +58,7 @@ class ValueScale : public QWidget
         explicit ValueScale(const QString &title, QWidget *parent = nullptr);
 
         //! Return scale;
-        double getValue(void) const;
+        double getValue() const;
 
         //! Set value.
         void setValue(double value);
@@ -74,7 +74,7 @@ class ValueScale : public QWidget
         void onScaleEditChanged(double value);
 
         //! Expand button clicked.
-        void onExpandButtonClicked(void);
+        void onExpandButtonClicked();
 
         //! Mantis slider changed.
         void onMantisSliderChanged(int value);

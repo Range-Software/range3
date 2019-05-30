@@ -34,7 +34,7 @@ class TextBrowser : public QTextBrowser
     protected:
 
         //! Resize event.
-        virtual void resizeEvent(QResizeEvent *event);
+        virtual void resizeEvent(QResizeEvent *event) override;
         
 };
 

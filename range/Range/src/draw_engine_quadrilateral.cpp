@@ -35,7 +35,7 @@ DrawEngineQuadrilateral::DrawEngineQuadrilateral(QObject *parent) :
     this->updateModel();
 }
 
-RModelRaw DrawEngineQuadrilateral::generate(void) const
+RModelRaw DrawEngineQuadrilateral::generate() const
 {
     RModelRaw modelRaw;
 
