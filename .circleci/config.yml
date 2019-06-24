@@ -14,9 +14,9 @@ jobs:
       - run:
           name: Upload
           command: scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -P $UPLOAD_PORT build-Release/packages/rpmbuild/RPMS/$(uname -m)/*.rpm $UPLOAD_USER@$UPLOAD_HOST:.
-  build-fedora28:
+  build-fedora30:
     docker:
-      - image: fedora:28
+      - image: fedora:30
     steps:
       - checkout
       - run:
@@ -81,7 +81,7 @@ workflows:
   build_all:
     jobs:
       - build-centos7
-      - build-fedora28
+      - build-fedora30
       - build-opensuseleap
       - build-debian9
       - build-ubuntu1804
