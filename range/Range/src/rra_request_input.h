@@ -23,7 +23,8 @@ class RRARequestInput : public HttpRequestInput
             AVAILABLE_SOFTWARE = 0,
             LOGIN,
             LOGOUT,
-            SEND_USAGE_INFO
+            SEND_USAGE_INFO,
+            SEND_CRASH_REPORT
         };
 
     protected:
@@ -52,6 +53,9 @@ class RRARequestInput : public HttpRequestInput
 
         //! Send usage info.
         static RRARequestInput *sendUsageInfo(const QString &usageInfo);
+
+        //! Send crash report.
+        static RRARequestInput *sendCrashReport(const QString &crashReport);
 
         //! Return request type.
         Type getType(void) const;

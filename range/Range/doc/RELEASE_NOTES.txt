@@ -1,4 +1,9 @@
 ------------------------------------------------------------------
+Version 3.2.3
+
+* GUI: Detect and report application crash
+
+------------------------------------------------------------------
 Version 3.2.2
 
 * GUI: Use HTTPS as default when contacting Range server
@@ -16,13 +21,13 @@ Bug fixes:
 ------------------------------------------------------------------
 Version 3.2.1
 
-* Display notification incons in output area tabs.
+* Display notification incons in output area tabs
 
 Bug fixes:
 
-* Fixed incorrect numerical stabilization scale calculation in CFD calculation.
-* CFD solver terminates with error if no volume elements are generated.
-* Corrections in tutorials.
+* Fixed incorrect numerical stabilization scale calculation in CFD calculation
+* CFD solver terminates with error if no volume elements are generated
+* Corrections in tutorials
 
 ------------------------------------------------------------------
 Version 3.2.0

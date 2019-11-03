@@ -13,6 +13,7 @@
 
 #include <QApplication>
 #include <QPalette>
+#include <QLockFile>
 
 #include <rblib.h>
 
@@ -20,6 +21,11 @@ class Application : public QApplication
 {
 
     Q_OBJECT
+
+    protected:
+
+        //! Lock file.
+        QLockFile *pLockFile;
 
     public:
 

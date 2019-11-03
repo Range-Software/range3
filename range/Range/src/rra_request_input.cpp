@@ -66,7 +66,20 @@ RRARequestInput *RRARequestInput::sendUsageInfo(const QString &usageInfo)
     pInput->type = SEND_USAGE_INFO;
     pInput->addVariable("pageMode","false");
     pInput->addVariable("action","usage_info");
-    pInput->addVariable("usage_info",usageInfo.toHtmlEscaped());
+//    pInput->addVariable("usage_info",usageInfo.toHtmlEscaped());
+    pInput->addVariable("usage_info",usageInfo);
+
+    return pInput;
+}
+
+RRARequestInput *RRARequestInput::sendCrashReport(const QString &crashReport)
+{
+    RRARequestInput *pInput = new RRARequestInput;
+
+    pInput->type = SEND_CRASH_REPORT;
+    pInput->addVariable("pageMode","false");
+    pInput->addVariable("action","crash_report");
+    pInput->addVariable("crash_report",crashReport);
 
     return pInput;
 }

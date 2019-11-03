@@ -45,6 +45,9 @@ class RRARequestWorker : public HttpRequestWorker
         //! Send usage info.
         void sendUsageInfo(const QString &usageInfo);
 
+        //! Send crash report.
+        void sendCrashReport(const QString &crashReport);
+
     private slots:
 
         //! Handle HTTP Request finished signal.
@@ -73,6 +76,9 @@ class RRARequestWorker : public HttpRequestWorker
 
         //! Usage request is complete.
         void usage(const QString &data, const QString &responseMessage);
+
+        //! Crash report is complete.
+        void crashReport(const QString &data, const QString &responseMessage);
 
 };
 

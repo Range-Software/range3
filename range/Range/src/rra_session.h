@@ -72,6 +72,9 @@ class RRASession : public QObject
         //! Return available software link.
         const QString &getAvailableSoftwareLink(void) const;
 
+        //! Submit crash report.
+        void submitCrashReport(const QString &crashReport);
+
     private slots:
 
         //! Submit next request.

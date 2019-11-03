@@ -25,6 +25,8 @@ class MainSettings : public QSettings
 
     protected:
 
+        //! Log file name without path.
+        static const QString logFileName;
         //! License file name without path.
         static const QString licenseFileName;
         //! Release notes file name without path.
@@ -78,6 +80,9 @@ class MainSettings : public QSettings
 
         //! Return session file name.
         QString getSessionFileName(void) const;
+
+        //! Return log file name.
+        QString getLogFileName(void) const;
 
         //! Return license file name.
         QString findLicenseFileName(void) const;

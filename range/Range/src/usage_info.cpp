@@ -22,9 +22,21 @@ QString UsageInfo::getReport(void) const
 {
     QString report;
 
-    report += "{";
-    report += "  \"account:\" \"" + MainSettings::getInstance().getApplicationSettings()->getRangeAccount() + "\",";
-    report += "  \"session:\" \"" + Session::getInstance().getID() + "\"";
+    report += "{ ";
+    report +=   "\"account:\" \"" + MainSettings::getInstance().getApplicationSettings()->getRangeAccount() + "\", ";
+    report +=   "\"session:\" \"" + Session::getInstance().getID() + "\", ";
+    report +=   "\"version:\" \"" + MainSettings::getInstance().getStoredVersion().toString() + "\", ";
+    report +=   "\"system:\" { ";
+    report +=     "\"buildAbi:\" \"" + QSysInfo::buildAbi() + "\", ";
+    report +=     "\"buildCpuArchitecture:\" \"" + QSysInfo::buildCpuArchitecture() + "\", ";
+    report +=     "\"currentCpuArchitecture:\" \"" + QSysInfo::currentCpuArchitecture() + "\", ";
+    report +=     "\"kernelType:\" \"" + QSysInfo::kernelType() + "\", ";
+    report +=     "\"kernelVersion:\" \"" + QSysInfo::kernelVersion() + "\", ";
+    report +=     "\"machineHostName:\" \"" + QSysInfo::machineHostName() + "\", ";
+    report +=     "\"prettyProductName:\" \"" + QSysInfo::prettyProductName() + "\", ";
+    report +=     "\"productType:\" \"" + QSysInfo::productType() + "\", ";
+    report +=     "\"productVersion:\" \"" + QSysInfo::productVersion() + "\" ";
+    report +=   "}";
     report += "}";
 
     return report;

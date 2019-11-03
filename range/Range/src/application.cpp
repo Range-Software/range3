@@ -13,10 +13,12 @@
 #include <QStyle>
 #include <QPalette>
 #include <QNetworkProxy>
+#include <QMessageBox>
 
 #include <rmlib.h>
 
 #include "application.h"
+#include "crash_report_dialog.h"
 #include "locker.h"
 #include "logger.h"
 #include "progress.h"
@@ -190,16 +192,47 @@ void Application::onStarted(void)
         return;
     }
 
-    // Connect to aoutToQuit signal
+    // Connect to aboutToQuit signal
     QObject::connect(this,&Application::aboutToQuit,this,&Application::onAboutToQuit);
     // Connect to style change signal
     QObject::connect(MainSettings::getInstance().getApplicationSettings(),&ApplicationSettings::styleChanged,this,&Application::onStyleChanged);
+
+    // Rotate log file.
+    QString rotatedLogFile = MainSettings::getInstance().getLogFileName() + "-" + QDateTime::currentDateTime().toString("yyMMdd_HHmmss");
+    if (QFile::exists(MainSettings::getInstance().getLogFileName()))
+    {
+        if (!QFile::rename(MainSettings::getInstance().getLogFileName(),rotatedLogFile))
+        {
+            RLogger::error("Failed to rename the log file \'%s\' to \'%s\'\n",
+                           MainSettings::getInstance().getLogFileName().toUtf8().constData(),
+                           rotatedLogFile.toUtf8().constData());
+        }
+    }
+
+    // Initialize lock file.
+    qint64 lockPid;
+    QString lockHostname;
+    QString lockAppname;
+
+    this->pLockFile = new QLockFile(MainSettings::getInstance().getTmpDir() + QDir::separator() + "range.lck");
+
+    bool previousLockStillValid = this->pLockFile->getLockInfo(&lockPid,&lockHostname,&lockAppname);
+
+    this->pLockFile->setStaleLockTime(0);
+    if (!this->pLockFile->tryLock(0))
+    {
+        QString lockMessage = "Failed to start.\nApplication " + lockAppname + " @ " + lockHostname + " (PID = " + QString::number(lockPid) + ") seems to be already running.\n";
+        QMessageBox::warning(nullptr,tr("Application is already running"), lockMessage);
+
+        this->exit(1);
+        return;
+    }
 
     // Prepare main window
     MainWindow::getInstance()->show();
 
     // Set log file
-    RLogger::getInstance().setFile(MainSettings::getInstance().getLogDir() + QDir::separator() + "range.log");
+    RLogger::getInstance().setFile(MainSettings::getInstance().getLogFileName());
 
     Logger::getInstance().unhalt();
 
@@ -207,8 +240,19 @@ void Application::onStarted(void)
     QNetworkProxyFactory::setUseSystemConfiguration(true);
 
     // Print basic information
-    RLogger::info("Running on: %s\n",QSysInfo::productType().toUtf8().constData());
-    RLogger::info("Machine precision (float):  %14g\n", RConstants::findMachineFloatEpsilon());
+    RLogger::info("System information\n");
+    RLogger::indent();
+    RLogger::info("Build ABI: %s\n",QSysInfo::buildAbi().toUtf8().constData());
+    RLogger::info("Build Cpu Architecture: %s\n",QSysInfo::buildCpuArchitecture().toUtf8().constData());
+    RLogger::info("Current Cpu Architecture: %s\n",QSysInfo::currentCpuArchitecture().toUtf8().constData());
+    RLogger::info("Kernel Type: %s\n",QSysInfo::kernelType().toUtf8().constData());
+    RLogger::info("Kernel Version: %s\n",QSysInfo::kernelVersion().toUtf8().constData());
+    RLogger::info("Machine HostName: %s\n",QSysInfo::machineHostName().toUtf8().constData());
+    RLogger::info("Product Name: %s\n",QSysInfo::prettyProductName().toUtf8().constData());
+    RLogger::info("Product Type: %s\n",QSysInfo::productType().toUtf8().constData());
+    RLogger::info("Product Version: %s\n",QSysInfo::productVersion().toUtf8().constData());
+    RLogger::unindent(false);
+    RLogger::info("Machine precision (float):  %14g\n", double(RConstants::findMachineFloatEpsilon()));
     RLogger::info("Machine precision (double): %14g\n", RConstants::findMachineDoubleEpsilon());
     RLogger::info("Data directory: \'%s\'\n",MainSettings::getInstancePtr()->getDataDir().toUtf8().constData());
     RLogger::info("Document directory: \'%s\'\n",MainSettings::getInstancePtr()->getDocDir().toUtf8().constData());
@@ -313,6 +357,12 @@ void Application::onStarted(void)
             }
         }
     }
+
+    if (previousLockStillValid)
+    {
+        CrashReportDialog crashReportDialog(MainWindow::getInstance(),rotatedLogFile);
+        crashReportDialog.exec();
+    }
 }
 
 void Application::onAboutToQuit(void)
@@ -330,6 +380,9 @@ void Application::onAboutToQuit(void)
     {
         RLogger::error("Failed to write the session file \'%s\'. ERROR: %s\n",sessionFileName.toUtf8().constData(),error.getMessage().toUtf8().constData());
     }
+
+    this->pLockFile->unlock();
+    delete this->pLockFile;
 
     // Stop solver manager server.
     RLogger::info("Stoping solver task server\n");
