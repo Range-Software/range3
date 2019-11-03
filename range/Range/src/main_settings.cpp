@@ -16,6 +16,7 @@
 
 #include "main_settings.h"
 
+const QString MainSettings::logFileName("range.log");
 const QString MainSettings::licenseFileName("LICENSE.txt");
 const QString MainSettings::releaseNotesFileName("RELEASE_NOTES.txt");
 
@@ -89,6 +90,11 @@ QString MainSettings::getSessionDir(void) const
 QString MainSettings::getSessionFileName(void) const
 {
     return this->value("session/fileName").toString();
+}
+
+QString MainSettings::getLogFileName() const
+{
+    return this->getLogDir() + QDir::separator() + MainSettings::logFileName;
 }
 
 QString MainSettings::findLicenseFileName(void) const

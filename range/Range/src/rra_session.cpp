@@ -87,6 +87,11 @@ const QString &RRASession::getAvailableSoftwareLink(void) const
     return this->availableSoftwareLink;
 }
 
+void RRASession::submitCrashReport(const QString &crashReport)
+{
+    this->rraRequestWorker->sendCrashReport(crashReport);
+}
+
 void RRASession::submitNextRequest(void)
 {
     if (!MainSettings::getInstancePtr()->getApplicationSettings()->getRangeApiAllowed())
@@ -122,6 +127,10 @@ void RRASession::submitNextRequest(void)
             {
                 this->rraRequestWorker->sendUsageInfo(UsageInfo::getInstance().getReport());
             }
+            break;
+        }
+        case RRARequestInput::SEND_CRASH_REPORT:
+        {
             break;
         }
     }
@@ -193,9 +202,9 @@ void RRASession::onRraFailed(RRARequestInput::Type type, const QString &errorMes
             requestStr = "usage info";
             break;
         }
-        default:
+        case RRARequestInput::SEND_CRASH_REPORT:
         {
-            requestStr = "unknown";
+            requestStr = "crash report";
             break;
         }
     }

@@ -48,6 +48,13 @@ void RRARequestWorker::sendUsageInfo(const QString &usageInfo)
     this->execute(pInput);
 }
 
+void RRARequestWorker::sendCrashReport(const QString &crashReport)
+{
+    RRARequestInput *pInput = RRARequestInput::sendCrashReport(crashReport);
+    this->requestType = pInput->getType();
+    this->execute(pInput);
+}
+
 void RRARequestWorker::onHttpRequestFinished(void)
 {
     if (this->getErrorType() != QNetworkReply::NoError)
@@ -140,9 +147,9 @@ void RRARequestWorker::onHttpRequestFinished(void)
             emit this->usage(QString(html),responseMessages);
             return;
         }
-        default:
+        case RRARequestInput::SEND_CRASH_REPORT:
         {
-            emit this->failed(this->requestType,tr("Unknown RRA type."));
+            emit this->crashReport(QString(html),responseMessages);
             return;
         }
     }

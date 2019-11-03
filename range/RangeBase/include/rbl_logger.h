@@ -19,10 +19,10 @@
 
 #include "rbl_message.h"
 
-#define R_LOG_LEVEL_NORMAL (RLogLevel)(R_MESSAGE_INFO | R_MESSAGE_NOTICE | R_MESSAGE_ERROR)
-#define R_LOG_LEVEL_DETAIL (RLogLevel)(R_MESSAGE_INFO | R_MESSAGE_NOTICE | R_MESSAGE_ERROR | R_MESSAGE_WARNING)
-#define R_LOG_LEVEL_DEBUG  (RLogLevel)(R_MESSAGE_INFO | R_MESSAGE_NOTICE | R_MESSAGE_ERROR | R_MESSAGE_WARNING | R_MESSAGE_DEBUG)
-#define R_LOG_LEVEL_TRACE  (RLogLevel)(R_MESSAGE_INFO | R_MESSAGE_NOTICE | R_MESSAGE_ERROR | R_MESSAGE_WARNING | R_MESSAGE_DEBUG | R_MESSAGE_TRACE)
+#define R_LOG_LEVEL_NORMAL static_cast<RLogLevel>(R_MESSAGE_INFO | R_MESSAGE_NOTICE | R_MESSAGE_ERROR)
+#define R_LOG_LEVEL_DETAIL static_cast<RLogLevel>(R_MESSAGE_INFO | R_MESSAGE_NOTICE | R_MESSAGE_ERROR | R_MESSAGE_WARNING)
+#define R_LOG_LEVEL_DEBUG  static_cast<RLogLevel>(R_MESSAGE_INFO | R_MESSAGE_NOTICE | R_MESSAGE_ERROR | R_MESSAGE_WARNING | R_MESSAGE_DEBUG)
+#define R_LOG_LEVEL_TRACE  static_cast<RLogLevel>(R_MESSAGE_INFO | R_MESSAGE_NOTICE | R_MESSAGE_ERROR | R_MESSAGE_WARNING | R_MESSAGE_DEBUG | R_MESSAGE_TRACE)
 
 #define R_LOG_LEVEL_IS_VALID(_level) \
 (                                    \
@@ -79,13 +79,13 @@ class RLogger
     public:
 
         //! Constructor
-        RLogger ( RLogLevel logLevel = R_LOG_LEVEL_DETAIL );
+        RLogger(RLogLevel logLevel = R_LOG_LEVEL_DETAIL);
 
         //! Copy constructor.
-        RLogger ( const RLogger &logger );
+        RLogger(const RLogger &logger);
 
         //! Destructor.
-        ~RLogger ();
+        ~RLogger();
 
         //! Assignment operator.
         RLogger & operator = ( const RLogger &logger );

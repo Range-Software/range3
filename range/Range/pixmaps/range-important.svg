@@ -15,7 +15,7 @@
    viewBox="0 0 128 128"
    version="1.1"
    id="SVGRoot"
-   inkscape:version="0.92.3 (2405546, 2018-03-11)"
+   inkscape:version="0.92.4 (5da689c313, 2019-01-14)"
    sodipodi:docname="range-important.svg">
   <sodipodi:namedview
      id="base"
@@ -24,14 +24,14 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="2.8284271"
-     inkscape:cx="35.161045"
-     inkscape:cy="18.068765"
+     inkscape:zoom="7.9999999"
+     inkscape:cx="26.60287"
+     inkscape:cy="63.557765"
      inkscape:document-units="px"
      inkscape:current-layer="layer2"
      showgrid="false"
-     inkscape:window-width="1729"
-     inkscape:window-height="987"
+     inkscape:window-width="2829"
+     inkscape:window-height="1366"
      inkscape:window-x="375"
      inkscape:window-y="69"
      inkscape:window-maximized="0"
@@ -74,14 +74,15 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
   <g
      id="layer1"
      inkscape:groupmode="layer"
-     inkscape:label="Background">
+     inkscape:label="Background"
+     style="display:inline">
     <circle
        style="opacity:1;fill:url(#radialGradient1574);fill-opacity:1;stroke:#000000;stroke-width:7.56059837;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:11.33720303;stroke-opacity:1"
        id="path1374"
@@ -92,18 +93,19 @@
   <g
      inkscape:groupmode="layer"
      id="layer2"
-     inkscape:label="Symbol">
+     inkscape:label="Symbol"
+     style="display:inline">
     <path
-       style="fill:#ffffff;stroke:#ffffff;stroke-width:22.67716599;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="display:inline;fill:#ffffff;stroke:#ffffff;stroke-width:22.67716599;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        d="m 64,24.160356 v 50"
        id="path1377"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc" />
-    <path
-       sodipodi:nodetypes="cc"
-       inkscape:connector-curvature="0"
-       id="path1392"
-       d="m 64,104.16036 v 0"
-       style="fill:#ffffff;stroke:#ffffff;stroke-width:22.67716599;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+    <circle
+       style="display:inline;fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:0;stroke-miterlimit:4;stroke-dasharray:none"
+       id="path4983"
+       cx="64"
+       cy="104"
+       r="11.499999" />
   </g>
 </svg>

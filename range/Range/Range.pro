@@ -42,6 +42,7 @@ SOURCES += \
     src/convergence_graph_dialog.cpp \
     src/convergence_graph_object.cpp \
     src/convergence_graph_widget.cpp \
+    src/crash_report_dialog.cpp \
     src/cut_dialog.cpp \
     src/direction_widget.cpp \
     src/document_generator.cpp \
@@ -248,6 +249,7 @@ HEADERS += \
     src/convergence_graph_dialog.h \
     src/convergence_graph_object.h \
     src/convergence_graph_widget.h \
+    src/crash_report_dialog.h \
     src/cut_dialog.h \
     src/direction_widget.h \
     src/document_generator.h \
