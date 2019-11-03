@@ -28,7 +28,7 @@ namespace RVendor
     static const QString author("Tomáš Šoltys");
     static const QString email("tomas.soltys@range-software.com");
     static const QString www("https://www.range-software.com");
-    static const RVersion version(3,2,2,RVersion::Release);
+    static const RVersion version(3,2,3,RVersion::Release);
     static const short year = 2019;
 }
 
