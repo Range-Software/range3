@@ -18,26 +18,28 @@
 #include "rbl_utils.h"
 
 
-RRVector::RRVector (unsigned int nRows, double value)
+RRVector::RRVector(uint nRows, double value)
 {
     this->resize(nRows,value);
     this->_init();
 } /* RRVector::RRVector */
 
 
-RRVector::RRVector (const RRVector &array) : std::vector<double>(array)
+RRVector::RRVector(const RRVector &array)
+    : std::vector<double>(array)
 {
     this->_init(&array);
 } /* RRVector::RRVector */
 
-RRVector::RRVector(const std::vector<double> &array) : std::vector<double>(array)
+RRVector::RRVector(const std::vector<double> &array)
+    : std::vector<double>(array)
 {
     this->_init();
 } /* RRVector::RRVector (copy) */
 
 
 
-RRVector::RRVector (double x, double y, double z)
+RRVector::RRVector(double x, double y, double z)
 {
     this->resize(3);
     this->operator [](0) = x;
@@ -47,12 +49,12 @@ RRVector::RRVector (double x, double y, double z)
 } /* RRVector::RRVector */
 
 
-RRVector::~RRVector ()
+RRVector::~RRVector()
 {
 } /* RRVector::~RRVector */
 
 
-RRVector & RRVector::operator = (const RRVector &array)
+RRVector & RRVector::operator =(const RRVector &array)
 {
     this->std::vector<double>::operator = (array);
     this->_init(&array);
@@ -80,7 +82,7 @@ void RRVector::_init(const RRVector *pArray)
 } /* RRVector::_init */
 
 
-double & RRVector::operator [] (unsigned int n)
+double & RRVector::operator [](uint n)
 {
     R_ERROR_ASSERT(n<this->getNRows());
 
@@ -88,7 +90,7 @@ double & RRVector::operator [] (unsigned int n)
 } /* RRVector::operator [] */
 
 
-const double & RRVector::operator [] (unsigned int n) const
+const double & RRVector::operator [](uint n) const
 {
     R_ERROR_ASSERT(n<this->getNRows());
 
@@ -98,17 +100,38 @@ const double & RRVector::operator [] (unsigned int n) const
 
 void RRVector::operator *=(double scaleValue)
 {
-    for (unsigned int i=0;i<this->size();i++)
+    for (uint i=0;i<this->size();i++)
     {
         this->at(i) *= scaleValue;
     }
-} /* RRVector::operator * */
+} /* RRVector::operator *= */
+
+bool RRVector::operator ==(const RRVector &array) const
+{
+    if (this->size() != array.size())
+    {
+        return false;
+    }
+    for (uint i=0;i<this->size();i++)
+    {
+        if (!R_D_ARE_SAME(this->at(i),array.at(i)))
+        {
+            return false;
+        }
+    }
+    return true;
+} /* RRVector::operator == */
+
+bool RRVector::operator !=(const RRVector &array) const
+{
+    return ! this->operator==(array);
+} /* RRVector::operator != */
 
 
-double RRVector::length (void) const
+double RRVector::length() const
 {
     double len = 0.0;
-    for (unsigned int i=0;i<this->size();i++)
+    for (uint i=0;i<this->size();i++)
     {
         len += std::pow(this->at(i),2);
     }
@@ -116,12 +139,12 @@ double RRVector::length (void) const
 } /* RRVector::length */
 
 
-double RRVector::normalize (void)
+double RRVector::normalize()
 {
     double len = this->length();
     if (len != 0.0)
     {
-        for (unsigned int i=0;i<this->size();i++)
+        for (uint i=0;i<this->size();i++)
         {
             (*this)[i] /= len;
         }
@@ -132,7 +155,7 @@ double RRVector::normalize (void)
 
 void RRVector::scale(double scale)
 {
-    for (unsigned int i=0;i<this->size();i++)
+    for (uint i=0;i<this->size();i++)
     {
         (*this)[i] *= scale;
     }
@@ -148,7 +171,7 @@ QString RRVector::toString(bool oneLine) const
     ss.setRealNumberNotation(QTextStream::ScientificNotation);
     ss.setRealNumberPrecision(6);
 
-    for (unsigned int i=0;i<this->size();i++)
+    for (uint i=0;i<this->size();i++)
     {
         ss << this->operator [](i);
         if (!oneLine)
@@ -167,7 +190,7 @@ void RRVector::print(bool oneLine, bool newLine) const
     {
         RLogger::info("Vector - real: [%u]\n",this->size());
     }
-    for (unsigned int i=0;i<this->size();i++)
+    for (uint i=0;i<this->size();i++)
     {
         RLogger::info("%15.6e",this->at(i));
         if (!oneLine)
@@ -182,26 +205,12 @@ void RRVector::print(bool oneLine, bool newLine) const
 } /* RRVector::print */
 
 
-void RRVector::cross (const RRVector &v1, const RRVector &v2, RRVector &vp)
-{
-    R_ERROR_ASSERT(v1.size() == v2.size());
-
-    vp.resize(v1.size());
-    if (vp.size() == 3)
-    {
-        vp[0] = v1[1]*v2[2] - v1[2]*v2[1];
-        vp[1] = v1[2]*v2[0] - v1[0]*v2[2];
-        vp[2] = v1[0]*v2[1] - v1[1]*v2[0];
-    }
-} /* RRVector::cross */
-
-
-double RRVector::dot (const RRVector &v1, const RRVector &v2)
+double RRVector::dot(const RRVector &v1, const RRVector &v2)
 {
     R_ERROR_ASSERT(v1.size() == v2.size());
 
     double dotProd = 0.0;
-    for (unsigned int i=0;i<v1.size();i++)
+    for (uint i=0;i<v1.size();i++)
     {
         dotProd += v1[i]*v2[i];
     }
@@ -234,50 +243,8 @@ void RRVector::subtract(const RRVector &v1, const RRVector &v2, RRVector &x)
     }
 } /* RRVector::subtract */
 
-double RRVector::angle (const RRVector &v1, const RRVector &v2)
-{
-    R_ERROR_ASSERT(v1.size() == v2.size());
-
-    double ln = v1.length() * v2.length();
-    if (ln == 0.0)
-    {
-        return 0.0;
-    }
-
-    double dotValue = RRVector::dot(v1,v2)/ln;
-
-    if (dotValue > 1.0)
-    {
-        dotValue = 1.0;
-    }
-    if (dotValue < -1.0)
-    {
-        dotValue = -1.0;
-    }
-
-    return acos(dotValue);
-} /* RRVector::angle */
-
 
 double RRVector::norm(const RRVector &v)
 {
     return v.length();
 } /* RRVector::norm */
-
-
-bool RRVector::areParallel(const RRVector &v1, const RRVector &v2)
-{
-    R_ERROR_ASSERT(v1.size() == v2.size());
-
-    RRVector vx;
-    RRVector::cross(v1,v2,vx);
-
-    for (uint i=0;i<vx.size();i++)
-    {
-        if (std::fabs(vx[i]) > RConstants::eps)
-        {
-            return false;
-        }
-    }
-    return true;
-} /* RRVector::findNParallelDimensions */

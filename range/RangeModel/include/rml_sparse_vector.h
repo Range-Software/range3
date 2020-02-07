@@ -11,7 +11,25 @@
 #ifndef RML_SPARSE_VECTOR_H
 #define RML_SPARSE_VECTOR_H
 
+#include <QtGlobal>
 #include <vector>
+
+/*
+ * Following vector:
+ *
+ * [ 0.0 , 1.0 , 0.0 , 2.0 , 0.0 , 3.0 ]
+ *
+ * will be stored as:
+ *
+ *            | RSparseVectorItem |
+ * +----------++-------+---------++
+ * | Position || Index | Value   ||
+ * +----------++-------+---------++
+ * | 0        || 1     | 1.0     ||
+ * | 1        || 3     | 2.0     ||
+ * | 2        || 5     | 3.0     ||
+ * +----------++-------+---------++
+ */
 
 template <class T>
 class RSparseVectorItem
@@ -20,12 +38,12 @@ class RSparseVectorItem
     public:
 
         //! Value index position.
-        unsigned int index;
+        uint index;
         //! Value.
         T value;
 
         //! Constructor.
-        RSparseVectorItem(unsigned int index, T value)
+        RSparseVectorItem(uint index, T value)
             : index(index)
             , value(value)
         {
@@ -91,31 +109,31 @@ class RSparseVector
         }
 
         //! Return size of the vector.
-        unsigned int size(void) const
+        uint size(void) const
         {
-            return (unsigned int)this->data.size();
+            return uint(this->data.size());
         }
 
         //! Return value at given position.
-        const T &getValue(unsigned int position) const
+        const T &getValue(uint position) const
         {
             return this->data[position].value;
         }
 
         //! Return index at given position.
-        unsigned int getIndex(unsigned int position) const
+        uint getIndex(uint position) const
         {
             return this->data[position].index;
         }
 
         //! Return vector of position indexes.
-        std::vector<unsigned int> getIndexes(void) const
+        std::vector<uint> getIndexes(void) const
         {
-            std::vector<unsigned int> idxList;
+            std::vector<uint> idxList;
 
             idxList.resize(this->data.size());
 
-            for (unsigned int i=0;i<this->data.size();i++)
+            for (uint i=0;i<this->data.size();i++)
             {
                 idxList[i] = this->data[i].index;
             }
@@ -125,7 +143,7 @@ class RSparseVector
 
         //! Add value.
         //! If value with given index already exist value will be added to its current value.
-        void addValue(unsigned int index, T value)
+        void addValue(uint index, T value)
         {
             typename std::vector< RSparseVectorItem<T> >::iterator iter;
             RSparseVectorItem<T> match(index,value);
@@ -143,15 +161,15 @@ class RSparseVector
         }
 
         //! Return real sized vector of values.
-        //! nElements difinex minimum size of the vector.
-        std::vector<T> getValues(unsigned int nElements) const
+        //! nElements difines minimum size of the vector.
+        std::vector<T> getValues(uint nElements) const
         {
             std::vector<T> values;
             values.resize(nElements,0.0);
 
-            for (unsigned int i=0;i<this->data.size();i++)
+            for (uint i=0;i<this->data.size();i++)
             {
-                if (this->data[i].index > nElements)
+                if (this->data[i].index >= nElements)
                 {
                     nElements = this->data[i].index + 1;
                     values.resize(nElements,0.0);
@@ -161,8 +179,17 @@ class RSparseVector
             return values;
         }
 
+        //! Vector add operation.
+        void addVector(const RSparseVector<T> &v)
+        {
+            for (uint i=0;i<v.size();i++)
+            {
+                this->addValue(v.getIndex(i),v.getValue(i));
+            }
+        }
+
         //! Reserve vector size.
-        void reserve(unsigned int nElements)
+        void reserve(uint nElements)
         {
             this->data.reserve(nElements);
         }

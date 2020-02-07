@@ -91,9 +91,9 @@ void RTriangle::findRotationMatrix(RRMatrix &R) const
 {
     R.setIdentity(3);
 
-    RRVector lx(3);
-    RRVector ly(3);
-    RRVector lz(3);
+    RR3Vector lx;
+    RR3Vector ly;
+    RR3Vector lz;
 
     lx[0] = this->node2.getX() - this->node1.getX();
     lx[1] = this->node2.getY() - this->node1.getY();
@@ -103,12 +103,12 @@ void RTriangle::findRotationMatrix(RRMatrix &R) const
     ly[1] = this->node3.getY() - this->node1.getY();
     ly[2] = this->node3.getZ() - this->node1.getZ();
 
-    RRVector::cross(lx,ly,lz);
+    RR3Vector::cross(lx,ly,lz);
 
     lx.normalize();
     lz.normalize();
 
-    RRVector::cross(lz,lx,ly);
+    RR3Vector::cross(lz,lx,ly);
 
     ly.normalize();
 

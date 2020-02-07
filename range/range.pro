@@ -7,6 +7,7 @@ SUBDIRS = \
     RangeSolverLib \
     RangeSolver \
     Range \
+    RangeTests
 
 RangeModel.depends = RangeBase TetGen
 RangeSolverLib.depends = RangeModel

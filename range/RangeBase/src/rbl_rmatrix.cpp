@@ -22,8 +22,8 @@ RRMatrix::RRMatrix ()
 } /* RRMatrix::RRMatrix */
 
 
-RRMatrix::RRMatrix (unsigned int nRows,
-                    unsigned int nColumns,
+RRMatrix::RRMatrix (uint nRows,
+                    uint nColumns,
                     double value)
 {
     this->_init();
@@ -58,17 +58,17 @@ void RRMatrix::_init (const RRMatrix *pMatrix)
 } /* RRMatrix::_init */
 
 
-unsigned int RRMatrix::getNRows (void) const
+uint RRMatrix::getNRows () const
 {
-    return (unsigned int)this->array.size();
+    return (uint)this->array.size();
 } /* RRMatrix::getNRows */
 
 
-unsigned int RRMatrix::getNColumns (void) const
+uint RRMatrix::getNColumns () const
 {
     if (this->getNRows() > 0)
     {
-        return (unsigned int)this->array[0].size();
+        return (uint)this->array[0].size();
     }
     else
     {
@@ -77,21 +77,21 @@ unsigned int RRMatrix::getNColumns (void) const
 } /* RRMatrix::getNColumns */
 
 
-void RRMatrix::resize (unsigned int nRows, unsigned int nColumns, double value)
+void RRMatrix::resize (uint nRows, uint nColumns, double value)
 {
     this->array.resize(nRows);
-    for (unsigned int i=0;i<nRows;i++)
+    for (uint i=0;i<nRows;i++)
     {
         this->array[i].resize(nColumns,value);
     }
 } /* RRMatrix::resize */
 
 
-void RRMatrix::setIdentity(unsigned int nRows)
+void RRMatrix::setIdentity(uint nRows)
 {
     this->resize(nRows,nRows,0);
     this->fill(0.0);
-    for (unsigned int i=0;i<nRows;i++)
+    for (uint i=0;i<nRows;i++)
     {
         this->setValue(i,i,1.0);
     }
@@ -100,14 +100,14 @@ void RRMatrix::setIdentity(unsigned int nRows)
 
 void RRMatrix::fill(double value)
 {
-    for (unsigned int i=0;i<this->getNRows();i++)
+    for (uint i=0;i<this->getNRows();i++)
     {
         this->operator [](i).fill(value);
     }
 } /* RRMatrix::fill */
 
 
-double RRMatrix::getValue(unsigned int row, unsigned int column) const
+double RRMatrix::getValue(uint row, uint column) const
 {
     R_ERROR_ASSERT(row < this->getNRows());
     R_ERROR_ASSERT(column < this->getNColumns());
@@ -116,16 +116,16 @@ double RRMatrix::getValue(unsigned int row, unsigned int column) const
 } /* RRMatrix::getValue */
 
 
-std::vector<RRVector> RRMatrix::getVectors(void) const
+std::vector<RRVector> RRMatrix::getVectors() const
 {
     std::vector<RRVector> v;
 
     v.resize(this->getNRows());
 
-    for (unsigned int i=0;i<this->getNRows();i++)
+    for (uint i=0;i<this->getNRows();i++)
     {
         v[i].resize(this->getNColumns());
-        for (unsigned int j=0;j<v[i].size();j++)
+        for (uint j=0;j<v[i].size();j++)
         {
             v[i][j] = this->getValue(i,j);
         }
@@ -135,7 +135,7 @@ std::vector<RRVector> RRMatrix::getVectors(void) const
 } /* RRMatrix::getVectors */
 
 
-void RRMatrix::setValue(unsigned int row, unsigned int column, double value)
+void RRMatrix::setValue(uint row, uint column, double value)
 {
     R_ERROR_ASSERT(row < this->getNRows());
     R_ERROR_ASSERT(column < this->getNColumns());
@@ -144,13 +144,13 @@ void RRMatrix::setValue(unsigned int row, unsigned int column, double value)
 } /* RRMatrix::setValue */
 
 
-bool RRMatrix::isSquare(void) const
+bool RRMatrix::isSquare() const
 {
     return (this->getNRows() > 0 && this->getNRows() == this->getNColumns());
 } /* RRMatrix::isSquare */
 
 
-void RRMatrix::transpose (void)
+void RRMatrix::transpose ()
 {
     uint nr = this->getNRows();
     uint nc = this->getNColumns();
@@ -173,9 +173,9 @@ void RRMatrix::transpose (void)
         RRMatrix rtmp(*this);
 
         this->resize(nc,nr);
-        for (unsigned int i=0;i<nr;i++)
+        for (uint i=0;i<nr;i++)
         {
-            for (unsigned int j=0;j<nc;j++)
+            for (uint j=0;j<nc;j++)
             {
                 this->setValue(j,i,rtmp.getValue(i,j));
             }
@@ -201,11 +201,11 @@ void RRMatrix::transpose(const RRMatrix &A)
 } /* RRMatrix::transpose */
 
 
-void RRMatrix::invert(void)
+void RRMatrix::invert()
 {
     R_ERROR_ASSERT (this->isSquare());
 
-    unsigned int n = this->getNRows();
+    uint n = this->getNRows();
 
     if (n == 0)
     {
@@ -262,20 +262,20 @@ void RRMatrix::invert(void)
     }
     else
     {
-        std::vector<unsigned int> indxc(n);
-        std::vector<unsigned int> indxr(n);
-        std::vector<unsigned int> ipiv(n,0);;
+        std::vector<uint> indxc(n);
+        std::vector<uint> indxr(n);
+        std::vector<uint> ipiv(n,0);;
 
-        for (unsigned int i=0;i<n;i++)
+        for (uint i=0;i<n;i++)
         {
             double big = 0.0;
-            unsigned int  irow = 0;
-            unsigned int  icol = 0;
-            for (unsigned int j=0;j<n;j++)
+            uint  irow = 0;
+            uint  icol = 0;
+            for (uint j=0;j<n;j++)
             {
                 if (ipiv[j] != 1)
                 {
-                    for (unsigned int k=0;k<n;k++)
+                    for (uint k=0;k<n;k++)
                     {
                         if (ipiv[k] == 0)
                         {
@@ -291,7 +291,7 @@ void RRMatrix::invert(void)
             ++(ipiv[icol]);
             if (irow != icol)
             {
-                for (unsigned int l=0;l<n;l++)
+                for (uint l=0;l<n;l++)
                 {
                     std::swap((*this)[irow][l],(*this)[icol][l]);
                 }
@@ -304,27 +304,27 @@ void RRMatrix::invert(void)
             }
             double pivinv=1.0/(*this)[icol][icol];
             (*this)[icol][icol]=1.0;
-            for (unsigned int l=0;l<n;l++)
+            for (uint l=0;l<n;l++)
             {
                 (*this)[icol][l] *= pivinv;
             }
-            for (unsigned int ll=0;ll<n;ll++)
+            for (uint ll=0;ll<n;ll++)
             {
                 if (ll != icol) {
                     double dum=(*this)[ll][icol];
                     (*this)[ll][icol]=0.0;
-                    for (unsigned int l=0;l<n;l++)
+                    for (uint l=0;l<n;l++)
                     {
                         (*this)[ll][l] -= (*this)[icol][l]*dum;
                     }
                 }
             }
         }
-        for (unsigned int l=n;l>0;l--)
+        for (uint l=n;l>0;l--)
         {
             if (indxr[l-1] != indxc[l-1])
             {
-                for (unsigned int k=0;k<n;k++)
+                for (uint k=0;k<n;k++)
                 {
                     std::swap((*this)[k][indxr[l-1]],(*this)[k][indxc[l-1]]);
                 }
@@ -334,16 +334,16 @@ void RRMatrix::invert(void)
 } /* RRMatrix::invert */
 
 
-void RRMatrix::decomposeToLU(void)
+void RRMatrix::decomposeToLU()
 {
-    unsigned int m = this->getNRows();
+    uint m = this->getNRows();
 
     RRMatrix lu(m,m);
     RRMatrix &A = (*this);
 
-    for (unsigned int j=0;j<m;j++)
+    for (uint j=0;j<m;j++)
     {
-        for (unsigned int i=0;i<m;i++)
+        for (uint i=0;i<m;i++)
         {
             if (i == 0)
             {
@@ -352,7 +352,7 @@ void RRMatrix::decomposeToLU(void)
             else if (i <= j && i != 0)
             {
                 lu[i][j] = 0.0;
-                for (unsigned int k=0;k<i;k++)
+                for (uint k=0;k<i;k++)
                 {
                     lu[i][j] -= lu[i][k] * lu[k][j];
                 }
@@ -375,7 +375,7 @@ void RRMatrix::decomposeToLU(void)
                 }
                 else
                 {
-                    for (unsigned int k=0;k<j;k++)
+                    for (uint k=0;k<j;k++)
                     {
                         tmpValue += lu[i][k] * lu[k][j];
                     }
@@ -394,13 +394,13 @@ void RRMatrix::decomposeToLU(void)
     }
     this->operator =(lu);
 
-//    std::vector<unsigned int> idx(m);
+//    std::vector<uint> idx(m);
 //    std::vector<double> vv(m);
 
-//    for (unsigned int i=0;i<m;i++)
+//    for (uint i=0;i<m;i++)
 //    {
 //        double big = 0.0;
-//        for (unsigned int j=0;j<m;j++)
+//        for (uint j=0;j<m;j++)
 //        {
 //            big = std::max(big,std::abs(this->getValue(i,j)));
 //        }
@@ -418,14 +418,14 @@ void RRMatrix::decomposeToLU(void)
 //        }
 //    }
 
-//    unsigned int iMax;
+//    uint iMax;
 
-//    for (unsigned int j=0;j<m;j++)
+//    for (uint j=0;j<m;j++)
 //    {
-//        for (unsigned int i=0;i<j;i++)
+//        for (uint i=0;i<j;i++)
 //        {
 //            double sum = this->getValue(i,j);
-//            for (unsigned int k=1;k<i;k++)
+//            for (uint k=1;k<i;k++)
 //            {
 //                sum -= this->getValue(i,k)*this->getValue(k,j);
 //            }
@@ -434,12 +434,12 @@ void RRMatrix::decomposeToLU(void)
 
 //        double big = 0.0;
 
-//        for (unsigned int i=j;i<m;i++)
+//        for (uint i=j;i<m;i++)
 //        {
 //            double sum = this->getValue(i,j);
 //            if (j > 0)
 //            {
-//                for (unsigned int k=0;k<(j-1);k++)
+//                for (uint k=0;k<(j-1);k++)
 //                {
 //                    sum -= this->getValue(i,k)*this->getValue(k,j);
 //                }
@@ -455,7 +455,7 @@ void RRMatrix::decomposeToLU(void)
 
 //        if (j != iMax)
 //        {
-//            for (unsigned int k=0;k<m;k++)
+//            for (uint k=0;k<m;k++)
 //            {
 //                double temp = this->getValue(iMax,k);
 //                this->setValue(iMax,k,this->getValue(j,k));
@@ -482,14 +482,14 @@ void RRMatrix::decomposeToLU(void)
 //            {
 //                dum = 1.0 / this->getValue(j,j);
 //            }
-//            for (unsigned int i=j+1;i<m;i++)
+//            for (uint i=j+1;i<m;i++)
 //            {
 //                this->setValue(i,j,this->getValue(i,j) * dum);
 //            }
 //        }
 //    }
 
-//    unsigned int i = 0;
+//    uint i = 0;
 //    while (i < m)
 //    {
 //        if (i != idx[i])
@@ -505,13 +505,13 @@ void RRMatrix::decomposeToLU(void)
 } /* RRMatrix::decomposeToLU */
 
 
-double RRMatrix::getDeterminant(void) const
+double RRMatrix::getDeterminant() const
 {
     R_ERROR_ASSERT (this->isSquare());
 
     double det = 0.0;
 
-    unsigned int n = this->getNRows();
+    uint n = this->getNRows();
 
     if (n == 1)
     {
@@ -524,14 +524,14 @@ double RRMatrix::getDeterminant(void) const
 
     RRMatrix tmp(n-1,n-1);
 
-    for (unsigned int i=0;i<n;i++)
+    for (uint i=0;i<n;i++)
     {
-        unsigned int l = 0;
-        for (unsigned int j=0;j<n;j++)
+        uint l = 0;
+        for (uint j=0;j<n;j++)
         {
             if (i != j)
             {
-                for (unsigned int k=1;k<n;k++)
+                for (uint k=1;k<n;k++)
                 {
                     tmp.setValue(l,k-1,this->getValue(j,k));
                 }
@@ -550,7 +550,7 @@ double RRMatrix::getDeterminant(void) const
 } /* RRMatrix::getDeterminant */
 
 
-RRVector RRMatrix::getSummedRows(void) const
+RRVector RRMatrix::getSummedRows() const
 {
     RRVector b(this->getNRows(),0.0);
 
@@ -563,7 +563,7 @@ RRVector RRMatrix::getSummedRows(void) const
 } /* RRMatrix::getSummedRows */
 
 
-double RRMatrix::getSummedRow(unsigned int row) const
+double RRMatrix::getSummedRow(uint row) const
 {
     R_ERROR_ASSERT (row < this->getNRows());
 
@@ -578,7 +578,7 @@ double RRMatrix::getSummedRow(unsigned int row) const
 } /* RRMatrix::getSummedRow */
 
 
-const RRVector & RRMatrix::operator [] (unsigned int row) const
+const RRVector & RRMatrix::operator [] (uint row) const
 {
     R_ERROR_ASSERT (row < this->getNRows());
 
@@ -586,7 +586,7 @@ const RRVector & RRMatrix::operator [] (unsigned int row) const
 } /* RRMatrix::operator [] */
 
 
-RRVector & RRMatrix::operator [] (unsigned int row)
+RRVector & RRMatrix::operator [] (uint row)
 {
     R_ERROR_ASSERT (row < this->getNRows());
 
@@ -596,11 +596,34 @@ RRVector & RRMatrix::operator [] (unsigned int row)
 
 void RRMatrix::operator *=(double scaleValue)
 {
-    for (unsigned int i=0;i<this->getNRows();i++)
+    for (uint i=0;i<this->getNRows();i++)
     {
         this->operator [](i) *= scaleValue;
     }
 } /* RRMatrix::operator *= */
+
+bool RRMatrix::operator ==(const RRMatrix &array) const
+{
+    if (this->getNRows() != array.getNRows())
+    {
+        return false;
+    }
+
+    for (uint i=0;i<this->getNRows();i++)
+    {
+        if (this->operator[](i) != array.operator[](i))
+        {
+            return false;
+        }
+    }
+
+    return true;
+} /* RRMatrix::operator == */
+
+bool RRMatrix::operator !=(const RRMatrix &array) const
+{
+    return ! this->operator==(array);
+} /* RRMatrix::operator != */
 
 
 RRMatrix RRMatrix::getBlock(uint iBegin, uint iEnd, uint jBegin, uint jEnd) const
@@ -643,11 +666,11 @@ void RRMatrix::setBlock(const RRMatrix &matrix, uint iBegin, uint jBegin)
 } /* RRMatrix::getBlock */
 
 
-QString RRMatrix::toString(void) const
+QString RRMatrix::toString() const
 {
     QString text;
 
-    for (unsigned int i=0;i<this->getNRows();i++)
+    for (uint i=0;i<this->getNRows();i++)
     {
         text += this->operator [](i).toString(true) + "\n";
     }
@@ -656,19 +679,19 @@ QString RRMatrix::toString(void) const
 } /* RRMatrix::toString */
 
 
-void RRMatrix::print(void) const
+void RRMatrix::print() const
 {
     RLogger::info("Matrix - real: [%ux%u]\n",this->getNRows(),this->getNColumns());
-    for (unsigned int i=0;i<this->getNRows();i++)
+    for (uint i=0;i<this->getNRows();i++)
     {
         this->operator [](i).print(true,true);
     }
 } /* RRMatrix::print */
 
 
-void RRMatrix::clear (void)
+void RRMatrix::clear ()
 {
-    for (unsigned int i=0;i<this->getNRows();i++)
+    for (uint i=0;i<this->getNRows();i++)
     {
         this->array[i].clear();
     }
@@ -682,15 +705,15 @@ void RRMatrix::solveLU(const RRMatrix &A, const RRVector &x, RRVector &y)
 
     LU.decomposeToLU();
 
-    unsigned int m = LU.getNRows();
+    uint m = LU.getNRows();
 
     y = x;
 
     // Solve L*b=x (where b=U*y)
-    for (unsigned int i=0;i<m;i++)
+    for (uint i=0;i<m;i++)
     {
         double sum = y[i];
-        for (unsigned int j=0;j<i;j++)
+        for (uint j=0;j<i;j++)
         {
             sum -= LU[i][j]*y[j];
         }
@@ -698,11 +721,11 @@ void RRMatrix::solveLU(const RRMatrix &A, const RRVector &x, RRVector &y)
     }
 
     // Solve U*y=b
-    for (unsigned int i=0;i<m;i++)
+    for (uint i=0;i<m;i++)
     {
-        unsigned int k = m-i-1;
+        uint k = m-i-1;
         double sum = y[k];
-        for (unsigned int j=k+1;j<m;j++)
+        for (uint j=k+1;j<m;j++)
         {
             sum -= LU[k][j]*y[j];
         }
@@ -724,9 +747,9 @@ double RRMatrix::norm(const RRMatrix &M)
 
     v.fill(0.0);
 
-    for (unsigned int i=0;i<M.getNRows();i++)
+    for (uint i=0;i<M.getNRows();i++)
     {
-        for (unsigned int j=0;j<M.getNColumns();j++)
+        for (uint j=0;j<M.getNColumns();j++)
         {
             v[i] += M[i][j];
         }
@@ -742,9 +765,9 @@ double RRMatrix::norm(const RRMatrix &M, const RRVector &b)
 
     v.fill(0.0);
 
-    for (unsigned int i=0;i<M.getNRows();i++)
+    for (uint i=0;i<M.getNRows();i++)
     {
-        for (unsigned int j=0;j<M.getNColumns();j++)
+        for (uint j=0;j<M.getNColumns();j++)
         {
             v[i] += M[i][j]*b[j];
         }
@@ -763,14 +786,14 @@ double RRMatrix::norm(const RRMatrix &M, const RRVector &b)
 
 double RRMatrix::trace(const RRMatrix &M)
 {
-    unsigned int m = M.getNRows();
+    uint m = M.getNRows();
     if (m > M.getNColumns())
     {
         m = M.getNColumns();
     }
 
     double traceValue = 0.0;
-    for (unsigned int i=0;i<m;i++)
+    for (uint i=0;i<m;i++)
     {
         traceValue += M[i][i];
     }

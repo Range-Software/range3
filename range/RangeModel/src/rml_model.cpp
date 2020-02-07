@@ -1640,7 +1640,7 @@ void RModel::addElement (const RElement &element,
                     RR3Vector nn;
                     this->getElement(elementID).findNormal(this->getNodes(),nn[0],nn[1],nn[2]);
 
-                    double angle = RRVector::angle(en,nn);
+                    double angle = RR3Vector::angle(en,nn);
                     if (angle < minNormalAngle)
                     {
                         minNormalAngle = angle;
@@ -8018,8 +8018,8 @@ void RModel::markSurfaceNeighbors(uint elementID,
     std::vector<uint> stack;
     stack.resize(this->getNElements());
     stack[uint(cpos)] = elementID;
-    RRVector cNormal(3);
-    RRVector nNormal(3);
+    RR3Vector cNormal;
+    RR3Vector nNormal;
 
     while (cpos >= 0)
     {
@@ -8045,7 +8045,7 @@ void RModel::markSurfaceNeighbors(uint elementID,
                 continue;
             }
 
-            cnAngle = R_RAD_TO_DEG(RRVector::angle(cNormal,nNormal));
+            cnAngle = R_RAD_TO_DEG(RR3Vector::angle(cNormal,nNormal));
 
             if (cnAngle <= angle || cnAngle >= (360.0 - angle))
             {
@@ -8068,44 +8068,44 @@ void RModel::addEntityGroupIdReference(uint entityGroupId)
     for (uint i=0;i<this->getNVectorFields();i++)
     {
         std::vector<uint> &groupIDs(this->getVectorField(i).getElementGroupIDs());
-        for (uint i=0;i<groupIDs.size();i++)
+        for (uint j=0;j<groupIDs.size();j++)
         {
-            if (groupIDs[i] >= entityGroupId)
+            if (groupIDs[j] >= entityGroupId)
             {
-                groupIDs[i]++;
+                groupIDs[j]++;
             }
         }
     }
     for (uint i=0;i<this->getNScalarFields();i++)
     {
         std::vector<uint> &groupIDs(this->getScalarField(i).getElementGroupIDs());
-        for (uint i=0;i<groupIDs.size();i++)
+        for (uint j=0;j<groupIDs.size();j++)
         {
-            if (groupIDs[i] >= entityGroupId)
+            if (groupIDs[j] >= entityGroupId)
             {
-                groupIDs[i]++;
+                groupIDs[j]++;
             }
         }
     }
     for (uint i=0;i<this->getNCuts();i++)
     {
         std::vector<uint> &groupIDs(this->getCut(i).getElementGroupIDs());
-        for (uint i=0;i<groupIDs.size();i++)
+        for (uint j=0;j<groupIDs.size();j++)
         {
-            if (groupIDs[i] >= entityGroupId)
+            if (groupIDs[j] >= entityGroupId)
             {
-                groupIDs[i]++;
+                groupIDs[j]++;
             }
         }
     }
     for (uint i=0;i<this->getNIsos();i++)
     {
         std::vector<uint> &groupIDs(this->getIso(i).getElementGroupIDs());
-        for (uint i=0;i<groupIDs.size();i++)
+        for (uint j=0;j<groupIDs.size();j++)
         {
-            if (groupIDs[i] >= entityGroupId)
+            if (groupIDs[j] >= entityGroupId)
             {
-                groupIDs[i]++;
+                groupIDs[j]++;
             }
         }
     }
@@ -8203,7 +8203,7 @@ void RModel::generateElementDistanceVector(uint startElementID, uint maximumDist
                         if (distanceVector[neighborIDs->at(i)] > distanceVector[elementID] + 1)
                         {
                             this->getElement(neighborIDs->at(i)).findNormal(this->nodes,n2[0],n2[1],n2[2]);
-                            if (RRVector::angle(n1,n2) < separationAngle)
+                            if (RR3Vector::angle(n1,n2) < separationAngle)
                             {
                                 elementStack.push(elementID);
                                 elementID = neighborIDs->at(i);

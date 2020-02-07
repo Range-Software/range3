@@ -52,6 +52,7 @@ namespace RConstants
 #define R_SAME_SIGN(_v1,_v2) (_v2 > 0.0 ? std::fabs(_v1) : -std::fabs(_v1))
 #define R_IS_IN_CLOSED_INTERVAL(_l1,_l2,_v) (_l1 <= _v && _l2 >= _v)
 #define R_IS_IN_OPEN_INTERVAL(_l1,_l2,_v) (_l1 < _v && _l2 > _v)
+#define R_D_ARE_SAME(_v1,_v2) (std::fabs((_v1)-(_v2)) < RConstants::eps)
 
 namespace RUtil
 {

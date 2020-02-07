@@ -242,7 +242,7 @@ bool RSegment::findSegmentIntersection(const RSegment &segment, std::set<RR3Vect
 
     std::set<RR3Vector> xTemp;
 
-    if (RRVector::areParallel(this->findDirection(),segment.findDirection()))
+    if (RR3Vector::areParallel(this->findDirection(),segment.findDirection()))
     {
         if (this->isPointInside(segment.getNode1().toVector()))
         {

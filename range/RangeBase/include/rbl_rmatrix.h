@@ -28,7 +28,7 @@ class RRMatrix
     private:
 
         //! Internal initialization function.
-        void _init ( const RRMatrix *pMatrix = nullptr );
+        void _init(const RRMatrix *pMatrix = nullptr);
 
     public:
 
@@ -36,82 +36,88 @@ class RRMatrix
         RRMatrix ();
 
         //! Constructor.
-        RRMatrix ( unsigned int nRows,
-                   unsigned int nColumns,
-                   double value = double() );
+        RRMatrix(uint nRows,
+                 uint nColumns,
+                 double value = double());
 
         //! Copy constructor.
-        RRMatrix ( const RRMatrix &matrix );
+        RRMatrix(const RRMatrix &matrix);
 
         //! Destructor.
         ~RRMatrix ();
 
         //! Assignment operator.
-        RRMatrix & operator = ( const RRMatrix &matrix );
+        RRMatrix & operator =(const RRMatrix &matrix);
 
         //! Return number of rows.
-        unsigned int getNRows (void) const;
+        uint getNRows() const;
 
         //! Return number of coluns.
-        unsigned int getNColumns (void) const;
+        uint getNColumns() const;
 
         //! Resize matrix array.
-        void resize ( unsigned int nRows,
-                      unsigned int nColumns,
-                      double       value = double() );
+        void resize(uint nRows,
+                    uint nColumns,
+                    double value = double());
 
         //! Create identity matrix.
         //! This will change current matrix to square identity matrix.
-        void setIdentity ( unsigned int nRows );
+        void setIdentity(uint nRows);
 
         //! Fill matrix with specified value.
-        void fill ( double value );
+        void fill(double value);
 
         //! Return value at given position.
-        double getValue ( unsigned int row,
-                          unsigned int column ) const;
+        double getValue(uint row,
+                        uint column) const;
 
         //! Return vector of RRVectors.
-        std::vector<RRVector> getVectors(void) const;
+        std::vector<RRVector> getVectors() const;
 
         //! Set value at given position.
-        void setValue ( unsigned int row,
-                        unsigned int column,
-                        double       value );
+        void setValue(uint row,
+                      uint column,
+                      double value);
 
         //! Return true if matrix is square.
-        bool isSquare( void ) const;
+        bool isSquare() const;
 
         //! Transpose matrix.
-        void transpose ( void );
+        void transpose();
 
         //! Produce transposed matrix from A.
-        void transpose ( const RRMatrix &A );
+        void transpose(const RRMatrix &A);
 
         //! Invert matrix.
-        void invert ( void );
+        void invert();
 
         //! LU decomposition.
-        void decomposeToLU ( void );
+        void decomposeToLU();
 
         //! Return matrix determinant.
-        double getDeterminant( void ) const;
+        double getDeterminant() const;
 
         //! Return vector containing summed (lumped) rows.
         //! Equals to [A] * {1.0}.
-        RRVector getSummedRows(void) const;
+        RRVector getSummedRows() const;
 
         //! Return sum of given row.
-        double getSummedRow(unsigned int row) const;
+        double getSummedRow(uint row) const;
 
         //! Access operator - return const reference to RRVector.
-        const RRVector & operator [] (unsigned int row) const;
+        const RRVector & operator [](uint row) const;
 
         //! Access operator - return const reference to RRVector.
-        RRVector & operator [] (unsigned int row);
+        RRVector & operator [](uint row);
 
         //! Multiplication / scale operator.
-        void operator *= ( double scaleValue );
+        void operator *=(double scaleValue);
+
+        //! Equals operator.
+        bool operator ==(const RRMatrix &array) const;
+
+        //! Not-equals operator.
+        bool operator !=(const RRMatrix &array) const;
 
         //! Return block defined by i(begin/end) and j(begin/end).
         RRMatrix getBlock(uint iBegin, uint iEnd, uint jBegin, uint jEnd) const;
@@ -120,25 +126,25 @@ class RRMatrix
         void setBlock(const RRMatrix &matrix, uint iBegin, uint jBegin);
 
         //! Print content to string.
-        QString toString ( void ) const;
+        QString toString() const;
 
         //! Print.
-        void print(void) const;
+        void print() const;
 
         //! Clear matrix.
-        void clear (void);
+        void clear();
 
         //! Solve small equation system using LU decomposition.
-        static void solveLU ( const RRMatrix &A, const RRVector &x, RRVector &y );
+        static void solveLU(const RRMatrix &A, const RRVector &x, RRVector &y);
 
         //! Euclidean norm.
-        static double norm ( const RRMatrix &M );
+        static double norm(const RRMatrix &M);
 
         //! Euclidean norm.
-        static double norm ( const RRMatrix &M, const RRVector &b );
+        static double norm(const RRMatrix &M, const RRVector &b);
 
         //! Trace (sum of diagonal elements).
-        static double trace ( const RRMatrix &M );
+        static double trace(const RRMatrix &M);
 
         //! Matrix vector multiplication - y=A*x.
         //! If add is true y won't be cleared.

@@ -40,7 +40,7 @@ RPlane::RPlane(const RR3Vector &node1, const RR3Vector &node2, const RR3Vector &
 {
     RR3Vector v1(node2[0]-node1[0],node2[1]-node1[1],node2[2]-node1[2]);
     RR3Vector v2(node3[0]-node1[0],node3[1]-node1[1],node3[2]-node1[2]);
-    RRVector::cross(v1,v2,this->normal);
+    RR3Vector::cross(v1,v2,this->normal);
     this->position = node1;
 }
 
@@ -90,21 +90,21 @@ void RPlane::findPoints(RR3Vector &point1, RR3Vector &point2, RR3Vector &point3)
 
     RR3Vector g(0.0,0.0,1.0);
 
-    if (std::abs(RRVector::angle(this->normal,g)) < RConstants::pi/6.0)
+    if (std::abs(RR3Vector::angle(this->normal,g)) < RConstants::pi/6.0)
     {
         g = RR3Vector(0.0,1.0,0.0);
     }
-    if (std::abs(RRVector::angle(this->normal,g)) < RConstants::pi/6.0)
+    if (std::abs(RR3Vector::angle(this->normal,g)) < RConstants::pi/6.0)
     {
         g = RR3Vector(1.0,0.0,0.0);
     }
 
     RR3Vector u;
-    RRVector::cross(this->normal,g,u);
+    RR3Vector::cross(this->normal,g,u);
     u.normalize();
 
     RR3Vector v;
-    RRVector::cross(u,this->normal,v);
+    RR3Vector::cross(u,this->normal,v);
     v.normalize();
 
     point3[0] = point1[0] + u[0];
