@@ -18,7 +18,7 @@
 
 ;Name and file
 Name "Range Software Package"
-OutFile "range-3.2.3-installer.exe"
+OutFile "range-3.2.4-installer.exe"
 
 ;Icon "range.ico"
 ;UninstallIcon "range.ico"
@@ -72,7 +72,7 @@ Var StartMenuFolder
 ; Build KIT
 
 !define BUILD_KIT "MSVC2017"
-!define BUILD_KIT_VERSION "5.13.1"
+!define BUILD_KIT_VERSION "5.14.1"
 !define BUILD_KIT_DIR bin-${BUILD_KIT}\${BUILD_KIT_VERSION}
 !define VC_REDIST "VC_redist.x64.exe"
 

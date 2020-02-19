@@ -45,6 +45,11 @@ const RSparseVector<double> &RSparseMatrix::getVector(uint rowIndex) const
     return this->data.at(rowIndex);
 }
 
+RSparseVector<double> &RSparseMatrix::getVector(uint rowIndex)
+{
+    return this->data.at(rowIndex);
+}
+
 void RSparseMatrix::addMatrix(const RSparseMatrix &A)
 {
     R_ERROR_ASSERT(this->getNRows() == A.getNRows());

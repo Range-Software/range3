@@ -62,8 +62,11 @@ class RSparseMatrix
         //! Return vector of position indexes for given row index.
         std::vector<uint> getRowIndexes(uint rowIndex) const;
 
-        //! Return reference to sparse vector at given position.
+        //! Return const reference to sparse vector at given position.
         const RSparseVector<double> & getVector(uint rowIndex) const;
+
+        //! Return reference to sparse vector at given position.
+        RSparseVector<double> & getVector(uint rowIndex);
 
         //! Add value.
         //! If value with given row and column indexes already exist given value will be added to its current value.
