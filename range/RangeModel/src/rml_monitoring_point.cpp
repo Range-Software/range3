@@ -133,8 +133,7 @@ void RMonitoringPoint::writeValueVectorToFile(unsigned int iteration, const RVal
 
     RFile file(this->outputFileName,RFile::ASCII);
 
-    // NOTE: QIODevice::Append is not supported
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
+    if (!file.open(QIODevice::Append | QIODevice::Text))
     {
         throw RError(R_ERROR_OPEN_FILE,R_ERROR_REF,"Failed to open the file \'%s\'.",this->outputFileName.toUtf8().constData());
     }
