@@ -14,6 +14,7 @@
 #include <QPalette>
 #include <QNetworkProxy>
 #include <QMessageBox>
+#include <QGuiApplication>
 
 #include <rmlib.h>
 

@@ -44,6 +44,12 @@ Color::Color(Qt::GlobalColor color) : QColor(color)
 {
 }
 
+Color &Color::operator=(const Color &color)
+{
+    this->QColor::operator=(color);
+    return (*this);
+}
+
 void Color::randomize(bool fromGlobal, bool excludeWhiteAndBlack)
 {
     if (fromGlobal)
@@ -54,14 +60,14 @@ void Color::randomize(bool fromGlobal, bool excludeWhiteAndBlack)
         {
             return;
         }
-        int colorPos = (int)((nColors-1)*(double)qrand()/(double)RAND_MAX);
+        int colorPos = int((nColors-1)*double(qrand())/double(RAND_MAX));
         this->operator = (colorList[colorPos]);
     }
     else
     {
-        this->setRed((int)(51*(double)qrand()/(double)RAND_MAX)*5);
-        this->setGreen((int)(51*(double)qrand()/(double)RAND_MAX)*5);
-        this->setBlue((int)(51*(double)qrand()/(double)RAND_MAX)*5);
+        this->setRed(int(51.0*qrand()/(RAND_MAX*5.0)));
+        this->setGreen(int(51.0*qrand()/(RAND_MAX*5.0)));
+        this->setBlue(int(51.0*qrand()/(RAND_MAX*5.0)));
         this->setAlpha(255);
     }
 }

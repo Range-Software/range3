@@ -1150,7 +1150,7 @@ void RModel::removeNodes(const QList<uint> &nodeIDs, bool closeHole)
 {
     QList<uint> sortedNodeIDs(nodeIDs);
 
-    qSort(sortedNodeIDs.begin(),sortedNodeIDs.end());
+    std::sort(sortedNodeIDs.begin(),sortedNodeIDs.end());
 
     for (int i=sortedNodeIDs.size()-1;i>=0;i--)
     {
@@ -1928,7 +1928,7 @@ void RModel::removeElements(const QList<uint> &elementIDs, bool closeHole)
 {
     QList<uint> sortedElementIDs(elementIDs);
 
-    qSort(sortedElementIDs.begin(),sortedElementIDs.end());
+    std::sort(sortedElementIDs.begin(),sortedElementIDs.end());
 
     for (int i=sortedElementIDs.size()-1;i>=0;i--)
     {
@@ -8158,8 +8158,8 @@ void RModel::updateEntityGroupIdReferences(const QMap<REntityGroupType, RUVector
         ++iter;
     }
 
-    qSort(addGroupIDs);
-    qSort(removeGroupIDs);
+    std::sort(addGroupIDs.begin(),addGroupIDs.end());
+    std::sort(removeGroupIDs.begin(),removeGroupIDs.end());
     std::reverse(removeGroupIDs.begin(),removeGroupIDs.end());
 
     foreach (uint gid, addGroupIDs)

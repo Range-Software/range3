@@ -23,7 +23,7 @@ ModelAction::ModelAction(QObject *parent)
 void ModelAction::addAction(const ModelActionInput &modelActionInput)
 {
     this->actions.append(modelActionInput);
-    qSort(this->actions.begin(),this->actions.end());
+    std::sort(this->actions.begin(),this->actions.end());
 }
 
 void ModelAction::run(void)

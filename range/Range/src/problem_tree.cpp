@@ -62,14 +62,14 @@ void ProblemTree::populate(void)
     {
         QTreeWidgetItem *item = new QTreeWidgetItem(this);
         item->setText(PROBLEM_TREE_COLUMN_1,tr("No model is selected!"));
-        item->setTextColor(PROBLEM_TREE_COLUMN_1,QColor(Qt::red));
+        item->setForeground(PROBLEM_TREE_COLUMN_1,QColor(Qt::red));
         return;
     }
     else if (modelIDs.size() > 1)
     {
         QTreeWidgetItem *item = new QTreeWidgetItem(this);
         item->setText(PROBLEM_TREE_COLUMN_1,tr("Multiple models are selected!"));
-        item->setTextColor(PROBLEM_TREE_COLUMN_1,QColor(Qt::red));
+        item->setForeground(PROBLEM_TREE_COLUMN_1,QColor(Qt::red));
         return;
     }
 

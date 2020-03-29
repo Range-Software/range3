@@ -84,10 +84,6 @@ void DocumentGenerator::run(void)
                     this->exportToPDF(iter.value());
                     break;
                 }
-                default:
-                {
-                    throw RError(R_ERROR_APPLICATION,R_ERROR_REF,"Unsupported file type \'%d\'",int(iter.key()));
-                }
             }
         }
         RLogger::notice("Documents have been generated.");
@@ -208,10 +204,10 @@ void DocumentGenerator::exportToPDF(const QString &fileName) const
     QPainter painter(this->printer);
 
     // Drawing the title
-    painter.resetMatrix();
+    painter.resetTransform();
     painter.translate(0, this->docTitle->pageSize().height()/2.0 - titleRect.height());
     this->docTitle->drawContents(&painter,titleRect);
-    painter.resetMatrix();
+    painter.resetTransform();
     // Drawing the header on the top of the page
     this->docHeader->drawContents(&painter, headerRect);
 
@@ -222,7 +218,7 @@ void DocumentGenerator::exportToPDF(const QString &fileName) const
     while (currentRect.intersects(contentRect))
     {
         // Resetting the painter matrix co ordinate system.
-        painter.resetMatrix();
+        painter.resetTransform();
         // Applying negative translation of painter co-ordinate system by current main content rectangle top y coordinate.
         painter.translate(0, -currentRect.y());
         // Applying positive translation of painter co-ordinate system by header hight.
@@ -230,7 +226,7 @@ void DocumentGenerator::exportToPDF(const QString &fileName) const
         // Drawing the center content for current page.
         this->docBody->drawContents(&painter, currentRect);
         // Resetting the painter matrix co ordinate system.
-        painter.resetMatrix();
+        painter.resetTransform();
         // Drawing the header on the top of the page
         this->docHeader->drawContents(&painter, headerRect);
         // Applying positive translation of painter co-ordinate system to draw the footer
