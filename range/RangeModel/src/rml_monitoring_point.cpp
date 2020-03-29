@@ -131,7 +131,7 @@ void RMonitoringPoint::writeValueVectorToFile(unsigned int iteration, const RVal
         throw RError(R_ERROR_INVALID_FILE_NAME,R_ERROR_REF,"Empty file name was provided");
     }
 
-    RSaveFile file(this->outputFileName,RSaveFile::ASCII);
+    RFile file(this->outputFileName,RFile::ASCII);
 
     // NOTE: QIODevice::Append is not supported
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
@@ -145,8 +145,6 @@ void RMonitoringPoint::writeValueVectorToFile(unsigned int iteration, const RVal
     RFileIO::writeAscii(file,' ',false);
     RFileIO::writeAscii(file,valueVector.getDataVector(),true,false);
     RFileIO::writeNewLineAscii(file);
-
-    file.commit();
 }
 
 void RMonitoringPoint::readRecordFromFile(RFile &in, unsigned int &iteration, RRVector &valueVector)

@@ -1,4 +1,11 @@
 ------------------------------------------------------------------
+Version 3.2.4
+
+Bug fixes:
+
+* SOLVER: New values for monitoring points overwrite instead of append
+
+------------------------------------------------------------------
 Version 3.2.3
 
 * GUI: Detect and report application crash
