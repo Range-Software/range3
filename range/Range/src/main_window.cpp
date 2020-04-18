@@ -63,6 +63,10 @@ MainWindow::MainWindow (QWidget *parent)
 
     this->setDockNestingEnabled(true);
 
+    int toolbarIconSize = MainSettings::getInstance().getApplicationSettings()->getToolbarIconSize();
+    this->setIconSize(QSize(toolbarIconSize,toolbarIconSize));
+    this->setToolButtonStyle(Qt::ToolButtonIconOnly);
+
     this->createMenus();
     this->createToolBars();
     this->createStatusBar();

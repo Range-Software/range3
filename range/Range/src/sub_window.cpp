@@ -43,7 +43,10 @@ void SubWindow::createSubWindow(void)
 //    this->glWidget->setFormat(format);
     gridLayoutSubwindow->addWidget(this->glWidget, 0, 0, 1, 1);
 
+    int toolbarIconSize = MainSettings::getInstance().getApplicationSettings()->getToolbarIconSize();
     QToolBar *toolBar = new QToolBar(QString("Sub window toolbar"));
+    toolBar->setIconSize(QSize(toolbarIconSize,toolbarIconSize));
+
     gridLayoutSubwindow->addWidget(toolBar, 1, 0, 1, 1);
 
     QAction *actionResetO = new QAction(this);
