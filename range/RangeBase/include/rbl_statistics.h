@@ -11,7 +11,7 @@
 #ifndef RBL_STATISTICS_H
 #define RBL_STATISTICS_H
 
-#include "rbl_rvector.h"
+#include "rbl_r3vector.h"
 #include "rbl_rmatrix.h"
 
 //! Statistics class.

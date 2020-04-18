@@ -294,12 +294,17 @@ void GLWidget::drawModel(void)
 
     if (Session::getInstance().getModel(this->getModelID()).glDrawTrylock())
     {
+        RStopWatch modelDrawStopWatch;
+        modelDrawStopWatch.reset();
+
         // Draw model
         Session::getInstance().getModel(this->getModelID()).glDraw(this);
         // Draw picked elements
         Session::getInstance().getModel(this->getModelID()).glDraw(this,Session::getInstance().getPickList().getItems(this->getModelID()));
         // Unlock drawing lock
         Session::getInstance().getModel(this->getModelID()).glDrawUnlock();
+
+        this->modelDrawTime = modelDrawStopWatch.getMiliSeconds();
     }
 
     if (this->clippingPlaneEnabled)
@@ -745,6 +750,7 @@ void GLWidget::drawInfoBox(QPainter &painter, bool drawBox)
     }
 
     messages.append(tr("Zoom") + ": " + QString::number(double(this->scale)));
+    messages.append(tr("Model draw time") + ": " + QString::number(this->modelDrawTime) + " [ms]");
 
     if (messages.size() == 0)
     {
