@@ -81,6 +81,9 @@ class DrawInputWidget : public QWidget
         //! OK button was clicked.
         void onOkClicked();
 
+        //! Cancel button was clicked.
+        void onCancelClicked();
+
 };
 
 #endif // DRAW_INPUT_WIDGET_H

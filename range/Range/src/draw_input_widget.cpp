@@ -82,6 +82,7 @@ DrawInputWidget::DrawInputWidget(QWidget *parent) :
 
     QIcon removeIcon(":/icons/file/pixmaps/range-remove.svg");
     QIcon okIcon(":/icons/file/pixmaps/range-ok.svg");
+    QIcon cancelIcon(":/icons/file/pixmaps/range-cancel.svg");
 
     this->removeButton = new QPushButton(removeIcon,tr("Remove"));
     this->removeButton->setDisabled(true);
@@ -99,6 +100,14 @@ DrawInputWidget::DrawInputWidget(QWidget *parent) :
                      &QPushButton::clicked,
                      this,
                      &DrawInputWidget::onOkClicked);
+
+    QPushButton *cancelButton = new QPushButton(cancelIcon,tr("Cancel"));
+    layout->addWidget(cancelButton,3,0,1,2);
+
+    QObject::connect(cancelButton,
+                     &QPushButton::clicked,
+                     this,
+                     &DrawInputWidget::onCancelClicked);
 }
 
 void DrawInputWidget::onPositionRequest(const RR3Vector &position)
@@ -185,4 +194,13 @@ void DrawInputWidget::onOkClicked()
                                                            this->mergeNodesCheck->checkState() != Qt::Unchecked,
                                                            RConstants::eps,
                                                            true);
+}
+
+void DrawInputWidget::onCancelClicked()
+{
+    uint nObjects = Session::getInstance().getDrawEngine()->getNObjects();
+    do
+    {
+        Session::getInstance().getDrawEngine()->removeObject(--nObjects);
+    } while (nObjects > 0);
 }
