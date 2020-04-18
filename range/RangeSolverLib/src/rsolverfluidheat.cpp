@@ -273,7 +273,7 @@ void RSolverFluidHeat::prepare(void)
             }
             #pragma omp critical
             {
-                this->buildStopWatch.addElapsedTime(localStopWatch.getClock());
+                this->buildStopWatch.addElapsedTime(localStopWatch.getMiliSeconds());
 
                 this->assemblyStopWatch.resume();
                 this->assemblyMatrix(elementID,Ae,be);
