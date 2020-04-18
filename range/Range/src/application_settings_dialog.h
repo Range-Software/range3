@@ -45,6 +45,8 @@ class ApplicationSettingsDialog : public QDialog
         QMap<ActionType,QString> changedShortcut;
         //! Style combo box.
         QComboBox *styleCombo;
+        //! Toolbar icon size spin button.
+        QSpinBox *toolbarIconSizeSpin;
         //! Keyboard shortcuts widget.
         KeyboardShortcutsEdit *keyboardShortcutsEdit;
         //! Send usage info allowed.
@@ -89,6 +91,9 @@ class ApplicationSettingsDialog : public QDialog
 
         //! Style changed.
         void onStyleChanged(int);
+
+        //! Toolbar icon size changed.
+        void onToolbarIconSizeChanged(int);
 
         //! Keyboard shortcut has changed.
         void onKeyboardShortcutChanged(ActionType actionType, const QString &shortcut);

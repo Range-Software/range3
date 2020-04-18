@@ -12,6 +12,7 @@
 #define SUB_WINDOW_H
 
 #include <QMdiSubWindow>
+#include <QToolBar>
 
 #include "gl_widget.h"
 
@@ -31,6 +32,8 @@ class SubWindow : public QMdiSubWindow
         uint modelID;
         //! OpenGL widget.
         GLWidget *glWidget;
+        //! Toolbar.
+        QToolBar *toolBar;
 
     public:
 
@@ -87,6 +90,9 @@ class SubWindow : public QMdiSubWindow
 
         //! Edit preferences.
         void onPreferences(void);
+
+        //! Toolbar icon size has changed.
+        void onToolbarIconSizeChanged(int toolbarIconSize);
 
 };
 

@@ -102,6 +102,9 @@ MainWindow::MainWindow (QWidget *parent)
     // Actions signals
     QObject::connect(MainSettings::getInstance().getApplicationSettings(),&ApplicationSettings::shortcutChanged,this->actionList,&ActionList::changeShortcut);
 
+    // Tooplbar icon size changed signal
+    QObject::connect(MainSettings::getInstance().getApplicationSettings(),&ApplicationSettings::toolbarIconSizeChanged,this,&MainWindow::onToolbarIconSizeChanged);
+
     // Main progress signals
     QObject::connect(&Progress::getInstance(),&Progress::progress,this,&MainWindow::onMainProgress);
     QObject::connect(&Progress::getInstance(),&Progress::progressInitialize,this,&MainWindow::onMainProgressInitialize);
@@ -841,6 +844,7 @@ void MainWindow::readSettings(void)
         pApplicationSettings->setNThreads(MainSettings::getInstance().value("application/nThreads",pApplicationSettings->getNThreads()).toUInt());
         pApplicationSettings->setNHistoryRecords(MainSettings::getInstance().value("application/nHistoryRecords",pApplicationSettings->getNHistoryRecords()).toUInt());
         pApplicationSettings->setStyle(MainSettings::getInstance().value("application/style",pApplicationSettings->getStyle()).toString());
+        pApplicationSettings->setToolbarIconSize(MainSettings::getInstance().value("application/toolbarIconSize",pApplicationSettings->getToolbarIconSize()).toInt());
         pApplicationSettings->setSendUsageInfo(MainSettings::getInstance().value("application/sendUsageInfo",pApplicationSettings->getSendUsageInfo()).toBool());
         pApplicationSettings->setRangeApiAllowed(MainSettings::getInstance().value("application/rangeApiAllowed",pApplicationSettings->getRangeApiAllowed()).toBool());
         pApplicationSettings->setRangeApiServer(MainSettings::getInstance().value("application/rangeApiServer",pApplicationSettings->getRangeApiServer()).toString());
@@ -909,6 +913,7 @@ void MainWindow::writeSettings(void) const
     MainSettings::getInstance().setValue("application/nThreads", MainSettings::getInstance().getApplicationSettings()->getNThreads());
     MainSettings::getInstance().setValue("application/nHistoryRecords", MainSettings::getInstance().getApplicationSettings()->getNHistoryRecords());
     MainSettings::getInstance().setValue("application/style", MainSettings::getInstance().getApplicationSettings()->getStyle());
+    MainSettings::getInstance().setValue("application/toolbarIconSize", MainSettings::getInstance().getApplicationSettings()->getToolbarIconSize());
     MainSettings::getInstance().setValue("application/sendUsageInfo", MainSettings::getInstance().getApplicationSettings()->getSendUsageInfo());
     MainSettings::getInstance().setValue("application/rangeApiAllowed", MainSettings::getInstance().getApplicationSettings()->getRangeApiAllowed());
     MainSettings::getInstance().setValue("application/rangeApiServer", MainSettings::getInstance().getApplicationSettings()->getRangeApiServer());
@@ -1195,4 +1200,9 @@ void MainWindow::onGeometryTransformFinalize(void)
 void MainWindow::onNHistoryRecordsChanged(uint)
 {
     this->actionList->processAvailability();
+}
+
+void MainWindow::onToolbarIconSizeChanged(int toolbarIconSize)
+{
+    this->setIconSize(QSize(toolbarIconSize,toolbarIconSize));
 }

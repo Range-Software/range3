@@ -130,6 +130,7 @@ int ApplicationSettings::getToolbarIconSize() const
 void ApplicationSettings::setToolbarIconSize(int toolbarIconSize)
 {
     this->toolbarIconSize = toolbarIconSize;
+    emit this->toolbarIconSizeChanged(this->toolbarIconSize);
 }
 
 bool ApplicationSettings::getSendUsageInfo() const

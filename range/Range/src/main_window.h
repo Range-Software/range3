@@ -247,6 +247,9 @@ class MainWindow : public QMainWindow
         //! Called when number of history records has changed.
         void onNHistoryRecordsChanged(uint);
 
+        //! Toolbar icon size has changed.
+        void onToolbarIconSizeChanged(int toolbarIconSize);
+
 };
 
 #endif /* MAIN_WINDOW_H */

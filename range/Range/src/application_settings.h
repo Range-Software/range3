@@ -194,6 +194,9 @@ class ApplicationSettings : public QObject
         //! Style has changed.
         void styleChanged(const QString &style);
 
+        //! Toolbar icon size has changed.
+        void toolbarIconSizeChanged(int toolbarIconSize);
+
     protected slots:
 
         //! Action definition signal shortcut changed was emited.
