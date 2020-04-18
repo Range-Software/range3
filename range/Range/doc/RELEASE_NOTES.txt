@@ -1,6 +1,9 @@
 ------------------------------------------------------------------
 Version 3.2.4
 
+* GUI: Configurable toolbar icon size
+* GUI: Display time required to draw model in 3D area
+
 Bug fixes:
 
 * SOLVER: New values for monitoring points overwrite instead of append
