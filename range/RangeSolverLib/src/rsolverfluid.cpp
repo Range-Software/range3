@@ -13,7 +13,7 @@
 #include "rsolverfluid.h"
 #include "rmatrixsolver.h"
 
-#define _OPTIMAL_ASSEMBLY_
+//#define _OPTIMAL_ASSEMBLY_
 
 static const double inv6 = 1.0 / 6.0;
 

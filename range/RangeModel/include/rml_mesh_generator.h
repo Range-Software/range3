@@ -30,7 +30,7 @@ class RMeshGenerator
         static void generate(const RMeshInput &meshInput, RModel &model);
 
         //! Generate volume mesh from triangulated surface.
-        static std::vector<RElement> generate(const std::vector<RNode> &nodes, const std::vector<RElement> &elements);
+        static void generate(const std::vector<RNode> &nodes, const std::vector<RElement> &elements, std::vector<RNode> &steinerNodes, std::vector<RElement> &volumeElements);
 
         //! Tetrahedralize triangulated surface.
         static std::vector<RTetrahedron> generate(const std::vector<RTriangle> &triangles);

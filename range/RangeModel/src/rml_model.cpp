@@ -6164,15 +6164,24 @@ uint RModel::tetrahedralizeSurface(const std::vector<uint> surfaceIDs)
     }
 
     // Generate tetrahedrons.
+    std::vector<RNode> steinerNodes;
     std::vector<RElement> volumeElements;
     try
     {
-        volumeElements = surface.tetrahedralize(this->getNodes(),this->getElements());
+        surface.tetrahedralize(this->getNodes(),this->getElements(),steinerNodes,volumeElements);
     }
     catch (const RError &error)
     {
         RLogger::unindent();
         throw RError(R_ERROR_APPLICATION,R_ERROR_REF,"Failed to tetrahedralize surface. %s", error.getMessage().toUtf8().constData());
+    }
+
+    // Add steiner nodes.
+    uint nNodes = uint(this->nodes.size());
+    this->nodes.resize(this->nodes.size() + steinerNodes.size());
+    for (uint i=0;i<steinerNodes.size();i++)
+    {
+        this->nodes[nNodes + i] = steinerNodes[i];
     }
 
     // Add tetrahedrons to volume.

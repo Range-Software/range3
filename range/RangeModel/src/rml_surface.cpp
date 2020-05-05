@@ -71,16 +71,28 @@ bool RSurface::pointInside(const std::vector<RNode> &nodes, const std::vector<RE
 
 std::vector<bool> RSurface::pointsInside(const std::vector<RNode> &nodes, const std::vector<RElement> &elements, const std::vector<RR3Vector> &points, bool includeSurface) const
 {
-    std::vector<RElement> volumes;
+    std::vector<RNode> steinerNodes;
+    std::vector<RNode> volumeNodes(nodes);
+    std::vector<RElement> volumeElements;
 
     try
     {
-        volumes = this->tetrahedralize(nodes,elements);
+        this->tetrahedralize(nodes,elements,steinerNodes,volumeElements);
     }
     catch (const RError &error)
     {
         throw RError(R_ERROR_APPLICATION,R_ERROR_REF,"Failed to tetrahedralize surface \'%s\'. %s",
                      this->getName().toUtf8().constData(), error.getMessage().toUtf8().constData());
+    }
+
+    if (steinerNodes.size() > 0)
+    {
+        uint nVolumeNodes = uint(volumeNodes.size());
+        volumeNodes.resize(nVolumeNodes + steinerNodes.size());
+        for (uint i=0;i<steinerNodes.size();i++)
+        {
+            volumeNodes[nVolumeNodes+i] = steinerNodes[i];
+        }
     }
 
     std::vector<bool> areInside;
@@ -92,12 +104,12 @@ std::vector<bool> RSurface::pointsInside(const std::vector<RNode> &nodes, const 
         bool isInside = false;
 
 #pragma omp parallel for default(shared)
-        for (int64_t j=0;j<int64_t(volumes.size());j++)
+        for (int64_t j=0;j<int64_t(volumeElements.size());j++)
         {
 #pragma omp flush (isInside)
             if (!isInside)
             {
-                if (volumes[j].isInside(nodes,node))
+                if (volumeElements[j].isInside(volumeNodes,node))
                 {
                     isInside = true;
 #pragma omp flush (isInside)
@@ -125,10 +137,10 @@ std::vector<bool> RSurface::pointsInside(const std::vector<RNode> &nodes, const 
 } /* RSurface::pointsInside */
 
 
-std::vector<RElement> RSurface::tetrahedralize(const std::vector<RNode> &nodes, const std::vector<RElement> &elements) const
+void RSurface::tetrahedralize(const std::vector<RNode> &nodes, const std::vector<RElement> &elements, std::vector<RNode> &steinerNodes, std::vector<RElement> &volumeElements) const
 {
-    std::vector<RNode> sNodes;
-    std::vector<RElement> sElements;
+    std::vector<RNode> surfaceNodes;
+    std::vector<RElement> surfaceElements;
 
     std::vector<uint> nodeBook;
     nodeBook.resize(nodes.size(),RConstants::eod);
@@ -136,25 +148,25 @@ std::vector<RElement> RSurface::tetrahedralize(const std::vector<RNode> &nodes, 
     for (uint i=0;i<this->size();i++)
     {
         const RElement &rElement = elements[this->get(i)];
-        sElements.push_back(rElement);
+        surfaceElements.push_back(rElement);
 
         for (uint j=0;j<rElement.size();j++)
         {
             nodeBook[rElement.getNodeId(j)] = 0;
         }
     }
-    uint nNodes = 0;
+    uint nSurfaceNodes = 0;
     for (uint i=0;i<nodes.size();i++)
     {
         if (nodeBook[i] != RConstants::eod)
         {
-            nodeBook[i] = nNodes++;
-            sNodes.push_back(nodes[i]);
+            nodeBook[i] = nSurfaceNodes++;
+            surfaceNodes.push_back(nodes[i]);
         }
     }
-    for (uint i=0;i<sElements.size();i++)
+    for (uint i=0;i<surfaceElements.size();i++)
     {
-        RElement &rElement = sElements[i];
+        RElement &rElement = surfaceElements[i];
         for (uint j=0;j<rElement.size();j++)
         {
             rElement.setNodeId(j,nodeBook[rElement.getNodeId(j)]);
@@ -162,7 +174,7 @@ std::vector<RElement> RSurface::tetrahedralize(const std::vector<RNode> &nodes, 
     }
 
     std::vector<uint> sNodeBook;
-    sNodeBook.resize(sNodes.size(),RConstants::eod);
+    sNodeBook.resize(surfaceNodes.size(),RConstants::eod);
     for (uint i=0;i<nodeBook.size();i++)
     {
         if (nodeBook[i] != RConstants::eod)
@@ -171,16 +183,26 @@ std::vector<RElement> RSurface::tetrahedralize(const std::vector<RNode> &nodes, 
         }
     }
 
-
-    std::vector<RElement> volumeElements;
-
     try
     {
-        volumeElements = RMeshGenerator::generate(sNodes,sElements);
+        RMeshGenerator::generate(surfaceNodes,surfaceElements,steinerNodes,volumeElements);
     }
     catch (const RError &error)
     {
         throw RError(R_ERROR_APPLICATION,R_ERROR_REF,"Failed to generate volume mesh. %s", error.getMessage().toUtf8().constData());
+    }
+
+    if (steinerNodes.size() > 0)
+    {
+        uint nSurfaceNodes = uint(sNodeBook.size());
+        uint nSteinerNodes = uint(steinerNodes.size());
+
+        sNodeBook.resize(nSurfaceNodes + nSteinerNodes);
+
+        for (uint i=0;i<nSteinerNodes;i++)
+        {
+            sNodeBook[nSurfaceNodes+i] = uint(nodes.size()) + i;
+        }
     }
 
     for (uint i=0;i<volumeElements.size();i++)
@@ -188,11 +210,10 @@ std::vector<RElement> RSurface::tetrahedralize(const std::vector<RNode> &nodes, 
         RElement &rElement = volumeElements[i];
         for (uint j=0;j<rElement.size();j++)
         {
-            rElement.setNodeId(j,sNodeBook[rElement.getNodeId(j)]);
+            uint nodeId = rElement.getNodeId(j);
+            rElement.setNodeId(j,sNodeBook[nodeId]);
         }
     }
-
-    return volumeElements;
 } /* RSurface::tetrahedralize */
 
 

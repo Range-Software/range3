@@ -63,7 +63,7 @@ class RSurface : public RElementGroup
         std::vector<bool> pointsInside(const std::vector<RNode> &nodes, const std::vector<RElement> &elements, const std::vector<RR3Vector> &points, bool includeSurface) const;
 
         //! Tetrahedralize surface.
-        std::vector<RElement> tetrahedralize(const std::vector<RNode> &nodes, const std::vector<RElement> &elements) const;
+        void tetrahedralize(const std::vector<RNode> &nodes, const std::vector<RElement> &elements, std::vector<RNode> &steinerNodes, std::vector<RElement> &volumeElements) const;
 
         //! Find surface area.
         double findArea(const std::vector<RNode> &nodes, const std::vector<RElement> &elements) const;

@@ -8,6 +8,7 @@ Version 3.2.4
 Bug fixes:
 
 * SOLVER: New values for monitoring points overwrite instead of append
+* Boolean operations: Fixed crash when performing boolean operations
 
 ------------------------------------------------------------------
 Version 3.2.3
