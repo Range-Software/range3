@@ -4,11 +4,12 @@ Version 3.2.4
 * GUI: Configurable toolbar icon size
 * GUI: Display time required to draw model in 3D area
 * GUI: Added 'Cancel' push button to drawing widget which removes all object at once
+* GUI: Newly drawn objects are shown transparent
 
 Bug fixes:
 
 * SOLVER: New values for monitoring points overwrite instead of append
-* Boolean operations: Fixed crash when performing boolean operations
+* GUI: Fixed crash when performing boolean operations
 
 ------------------------------------------------------------------
 Version 3.2.3

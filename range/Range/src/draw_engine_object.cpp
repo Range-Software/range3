@@ -17,6 +17,7 @@ DrawEngineObject::DrawEngineObject(QObject *parent) :
     color(QColor(255,255,255,255))
 {
     this->color = Color::random(true);
+    this->color.setAlpha(100);
 }
 
 const QString &DrawEngineObject::getName() const
@@ -39,7 +40,7 @@ DrawEngineInput &DrawEngineObject::getInputParamater(uint position)
     return this->inputParameters[int(position)];
 }
 
-void DrawEngineObject::updateModel(void)
+void DrawEngineObject::updateModel()
 {
     this->model = Model(this->generate(),this->getName(),tr("Model to be drawn"),false);
 
@@ -55,7 +56,12 @@ void DrawEngineObject::updateModel(void)
     }
 }
 
-const Model &DrawEngineObject::getModel(void) const
+Model &DrawEngineObject::getModel()
+{
+    return this->model;
+}
+
+const Model &DrawEngineObject::getModel() const
 {
     return this->model;
 }

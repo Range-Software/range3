@@ -53,10 +53,13 @@ class DrawEngineObject : public QObject
         DrawEngineInput &getInputParamater(uint position);
 
         //! Update model.
-        void updateModel(void);
+        void updateModel();
+
+        //! Return reference to generated model.
+        Model &getModel();
 
         //! Return const reference to generated model.
-        const Model &getModel(void) const;
+        const Model &getModel() const;
 
         //! Draw object to OpenGL.
         void glDraw(GLWidget *glWidget) const;
@@ -64,7 +67,7 @@ class DrawEngineObject : public QObject
     protected:
 
         //! Generate RAW model from input parameters.
-        virtual RModelRaw generate(void) const = 0;
+        virtual RModelRaw generate() const = 0;
 
 };
 
