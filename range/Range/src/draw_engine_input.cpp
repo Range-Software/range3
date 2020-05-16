@@ -83,6 +83,15 @@ DrawEngineInput::DrawEngineInput(const RR3Vector &v, const QString &name, const 
     this->_init();
 }
 
+DrawEngineInput::DrawEngineInput(const RLocalDirection &localDirection, const QString &name, const QString &desc, const QString &units)
+    : type(DrawEngineInput::LocalDirection)
+    , name(name)
+    , desc(desc)
+    , units(units)
+{
+    this->value.localDirection = localDirection;
+}
+
 DrawEngineInput::DrawEngineInput(const QString &text, const QString &name, const QString &desc, const QString &units)
     : type(DrawEngineInput::Text)
     , name(name)
@@ -158,6 +167,17 @@ bool DrawEngineInput::setValue(const RR3Vector &v)
     this->value.v[0] = v[0];
     this->value.v[1] = v[1];
     this->value.v[2] = v[2];
+    return true;
+}
+
+bool DrawEngineInput::setValue(const RLocalDirection &localDirection)
+{
+    if (!this->isValid(localDirection))
+    {
+        return false;
+    }
+    this->type = DrawEngineInput::LocalDirection;
+    this->value.localDirection = localDirection;
     return true;
 }
 
@@ -237,6 +257,19 @@ RR3Vector DrawEngineInput::toVector(bool *isOk) const
     return RR3Vector();
 }
 
+RLocalDirection DrawEngineInput::toLocalDirection(bool *isOk) const
+{
+    if (isOk)
+    {
+        (*isOk) = this->type == DrawEngineInput::LocalDirection;
+    }
+    if (this->type == DrawEngineInput::LocalDirection)
+    {
+        return this->value.localDirection;
+    }
+    return RLocalDirection(RR3Vector(0.0,0.0,0.0),RR3Vector(1.0,0.0,0.0));
+}
+
 QString DrawEngineInput::toText(bool *isOk) const
 {
     if (isOk)
@@ -313,6 +346,15 @@ bool DrawEngineInput::isValid(const RR3Vector &value) const
         return false;
     }
     return (value.size() == 3);
+}
+
+bool DrawEngineInput::isValid(const RLocalDirection &value) const
+{
+    if (this->type != DrawEngineInput::LocalDirection)
+    {
+        return false;
+    }
+    return true;
 }
 
 bool DrawEngineInput::isValid(const QString &value) const

@@ -36,6 +36,19 @@ DrawInputWidget::DrawInputWidget(QWidget *parent) :
                      this,
                      &DrawInputWidget::onPositionWidgetClosed);
 
+    this->localDirectionWidget = new LocalDirectionWidget(tr("Local direction"),RLocalDirection());
+    this->localDirectionWidget->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Minimum);
+    this->stackedLayout->addWidget(this->localDirectionWidget);
+
+    QObject::connect(this->localDirectionWidget,
+                     &LocalDirectionWidget::changed,
+                     this,
+                     &DrawInputWidget::onLocalDirectionWidgetChanged);
+    QObject::connect(this->localDirectionWidget,
+                     &LocalDirectionWidget::closed,
+                     this,
+                     &DrawInputWidget::onLocalDirectionWidgetClosed);
+
     this->textWidget = new TextEditWidget;
     this->textWidget->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Minimum);
     this->stackedLayout->addWidget(this->textWidget);
@@ -67,6 +80,10 @@ DrawInputWidget::DrawInputWidget(QWidget *parent) :
                      &DrawInputTree::positionRequest,
                      this,
                      &DrawInputWidget::onPositionRequest);
+    QObject::connect(this->tree,
+                     &DrawInputTree::localDirectionRequest,
+                     this,
+                     &DrawInputWidget::onLocalDirectionRequest);
     QObject::connect(this->tree,
                      &DrawInputTree::textRequest,
                      this,
@@ -112,8 +129,8 @@ DrawInputWidget::DrawInputWidget(QWidget *parent) :
 
 void DrawInputWidget::onPositionRequest(const RR3Vector &position)
 {
-    this->stackedLayout->setCurrentWidget(this->positionWidget);
     this->positionWidget->setPosition(position);
+    this->stackedLayout->setCurrentWidget(this->positionWidget);
 }
 
 void DrawInputWidget::onPositionWidgetChanged(const RR3Vector &position)
@@ -126,10 +143,26 @@ void DrawInputWidget::onPositionWidgetClosed()
     this->stackedLayout->setCurrentWidget(this->layoutWidget);
 }
 
+void DrawInputWidget::onLocalDirectionRequest(const RLocalDirection &localDirection)
+{
+    this->localDirectionWidget->setLocalDirection(localDirection);
+    this->stackedLayout->setCurrentWidget(this->localDirectionWidget);
+}
+
+void DrawInputWidget::onLocalDirectionWidgetChanged(const RLocalDirection &localDirection)
+{
+    this->tree->setRequestedItemLocalDirectionValue(localDirection);
+}
+
+void DrawInputWidget::onLocalDirectionWidgetClosed()
+{
+    this->stackedLayout->setCurrentWidget(this->layoutWidget);
+}
+
 void DrawInputWidget::onTextRequest(const QString &text)
 {
-    this->stackedLayout->setCurrentWidget(this->textWidget);
     this->textWidget->setText(text);
+    this->stackedLayout->setCurrentWidget(this->textWidget);
 }
 
 void DrawInputWidget::onTextWidgetChanged(const QString &text)

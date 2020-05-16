@@ -5,6 +5,7 @@ Version 3.2.4
 * GUI: Display time required to draw model in 3D area
 * GUI: Added 'Cancel' push button to drawing widget which removes all object at once
 * GUI: Newly drawn objects are shown transparent
+* GUI: Draw circle/elips: United position and direction into one input widget
 
 Bug fixes:
 

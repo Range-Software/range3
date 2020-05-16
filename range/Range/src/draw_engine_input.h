@@ -22,6 +22,7 @@ typedef struct _DrawEngineInputDataType
     uint u;
     double d;
     double v[3];
+    RLocalDirection localDirection;
     QString text;
 } DrawEngineInputDataType;
 
@@ -37,6 +38,7 @@ class DrawEngineInput
             Uint,
             Double,
             Vector,
+            LocalDirection,
             Text
         };
 
@@ -78,6 +80,9 @@ class DrawEngineInput
         DrawEngineInput(const RR3Vector &v, const QString &name = QString(), const QString &desc = QString(), const QString &units = QString());
 
         //! Constructor.
+        DrawEngineInput(const RLocalDirection &localDirection, const QString &name = QString(), const QString &desc = QString(), const QString &units = QString());
+
+        //! Constructor.
         DrawEngineInput(const QString &text, const QString &name = QString(), const QString &desc = QString(), const QString &units = QString());
 
         //! Copy constructor.
@@ -106,6 +111,10 @@ class DrawEngineInput
         //! Return true if value has the same type and is valid.
         bool setValue(const RR3Vector &v);
 
+        //! Assign local direction value.
+        //! Return true if value has the same type and is valid.
+        bool setValue(const RLocalDirection &localDirection);
+
         //! Assign text value.
         //! Return true if value has the same type and valid.
         bool setValue(const QString &text);
@@ -124,6 +133,9 @@ class DrawEngineInput
 
         //! Return vector.
         RR3Vector toVector(bool *isOk = nullptr) const;
+
+        //! Return local direction.
+        RLocalDirection toLocalDirection(bool *isOk = nullptr) const;
 
         //! Return text.
         QString toText(bool *isOk = nullptr) const;
@@ -156,6 +168,9 @@ class DrawEngineInput
 
         //! Validate current value.
         bool isValid(const RR3Vector &value) const;
+
+        //! Validate current value.
+        bool isValid(const RLocalDirection &value) const;
 
         //! Validate current value.
         bool isValid(const QString &value) const;

@@ -149,38 +149,38 @@ PositionWidget::PositionWidget(const QString &title, const RR3Vector &position, 
                      &PositionWidget::onPickListChanged);
 }
 
-void PositionWidget::showSliders(void)
+void PositionWidget::showSliders()
 {
     this->xSlider->show();
     this->ySlider->show();
     this->zSlider->show();
 }
 
-void PositionWidget::hideSliders(void)
+void PositionWidget::hideSliders()
 {
     this->xSlider->hide();
     this->ySlider->hide();
     this->zSlider->hide();
 }
 
-void PositionWidget::showPickButton(void)
+void PositionWidget::showPickButton()
 {
     this->pickButton->show();
 }
 
-void PositionWidget::hidePickButton(void)
+void PositionWidget::hidePickButton()
 {
     this->pickButton->hide();
 }
 
-void PositionWidget::showButtons(void)
+void PositionWidget::showButtons()
 {
     this->showButtonBox = true;
     this->cancelButton->show();
     this->okButton->show();
 }
 
-void PositionWidget::hideButtons(void)
+void PositionWidget::hideButtons()
 {
     this->showButtonBox = false;
     this->cancelButton->hide();
@@ -205,7 +205,7 @@ void PositionWidget::setZRange(double zMin, double zMax)
     this->setPosition(this->getPosition());
 }
 
-RR3Vector PositionWidget::getPosition(void) const
+RR3Vector PositionWidget::getPosition() const
 {
     RR3Vector position;
 
@@ -370,7 +370,7 @@ void PositionWidget::onZLineEditValueChanged(double)
     emit this->changed(this->getPosition());
 }
 
-void PositionWidget::onPickButtonClicked(void)
+void PositionWidget::onPickButtonClicked()
 {
     const PickList &pickList = Session::getInstance().getPickList();
 
@@ -400,18 +400,18 @@ void PositionWidget::onPickButtonClicked(void)
     }
 }
 
-void PositionWidget::onOkButtonClicked(void)
+void PositionWidget::onOkButtonClicked()
 {
     emit this->changed(this->getPosition());
     emit this->closed();
 }
 
-void PositionWidget::onCancelButtonClicked(void)
+void PositionWidget::onCancelButtonClicked()
 {
     emit this->closed();
 }
 
-void PositionWidget::onPickListChanged(void)
+void PositionWidget::onPickListChanged()
 {
     this->pickButton->setDisabled(Session::getInstance().getPickList().isEmpty());
 }

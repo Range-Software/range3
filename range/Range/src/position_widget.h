@@ -56,22 +56,22 @@ class PositionWidget : public QGroupBox
         explicit PositionWidget(const QString &title, const RR3Vector &position, bool horizontalLayout = false, QWidget *parent = nullptr);
 
         //! Show sliders.
-        void showSliders(void);
+        void showSliders();
 
         //! Hide sliders.
-        void hideSliders(void);
+        void hideSliders();
 
         //! Show pick button.
-        void showPickButton(void);
+        void showPickButton();
 
         //! Hide pick button.
-        void hidePickButton(void);
+        void hidePickButton();
 
         //! Show buttons.
-        void showButtons(void);
+        void showButtons();
 
         //! Hide buttons.
-        void hideButtons(void);
+        void hideButtons();
 
         //! Set X range.
         void setXRange(double xMin, double xMax);
@@ -82,8 +82,8 @@ class PositionWidget : public QGroupBox
         //! Set Z range.
         void setZRange(double zMin, double zMax);
 
-        //! Return direction.
-        RR3Vector getPosition(void) const;
+        //! Return position.
+        RR3Vector getPosition() const;
 
         //! Set position.
         void setPosition(const RR3Vector &position);
@@ -102,7 +102,7 @@ class PositionWidget : public QGroupBox
         void changed(const RR3Vector &position);
 
         //! Close signal.
-        void closed(void);
+        void closed();
 
     private slots:
 
@@ -125,16 +125,16 @@ class PositionWidget : public QGroupBox
         void onZLineEditValueChanged(double);
 
         //! On pick button clicked.
-        void onPickButtonClicked(void);
+        void onPickButtonClicked();
 
         //! On ok button clicked.
-        void onOkButtonClicked(void);
+        void onOkButtonClicked();
 
         //! On cancel button clicked.
-        void onCancelButtonClicked(void);
+        void onCancelButtonClicked();
 
         //! Session pick list has changed.
-        void onPickListChanged(void);
+        void onPickListChanged();
         
 };
 

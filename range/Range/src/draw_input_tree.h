@@ -36,6 +36,9 @@ class DrawInputTree : public QTreeWidget
         //! Set vector to requested item.
         void setRequestedItemVectorValue(const RR3Vector &v);
 
+        //! Set local direction to requested item.
+        void setRequestedItemLocalDirectionValue(const RLocalDirection &localDirection);
+
         //! Set text to requested item.
         void setRequestedItemTextValue(const QString &text);
 
@@ -59,6 +62,15 @@ class DrawInputTree : public QTreeWidget
         //! Convert string into a vector.
         static RR3Vector stringToVector(const QString &vectorStr);
 
+        //! Set item local direction.
+        static void setItemLocalDirectionValue(QTreeWidgetItem *item, const RLocalDirection &localDirectionStr);
+
+        //! Set item local direction.
+        static RLocalDirection getItemLocalDirectionValue(QTreeWidgetItem *item);
+
+        //! Convert string into a local direction.
+        static RLocalDirection stringToLocalDirection(const QString &localDirectionStr);
+
         //! Set item text.
         static void setItemTextValue(QTreeWidgetItem *item, const QString &text);
 
@@ -72,6 +84,9 @@ class DrawInputTree : public QTreeWidget
 
         //! Position request signal.
         void positionRequest(const RR3Vector &position);
+
+        //! Local direction request signal.
+        void localDirectionRequest(const RLocalDirection &localDirection);
 
         //! Text request signal.
         void textRequest(const QString &text);

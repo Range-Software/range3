@@ -31,6 +31,9 @@ class RLocalDirection
     public:
 
         //! Constructor.
+        RLocalDirection();
+
+        //! Constructor.
         RLocalDirection(const RR3Vector &position, const RR3Vector &direction);
 
         //! Copy constructor.

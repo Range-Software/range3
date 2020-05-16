@@ -1,4 +1,5 @@
-QT += core gui opengl printsupport network
+QT += core gui opengl printsupport network \
+    widgets
 win*-msvc* {
     QMAKE_CXXFLAGS += -openmp
     LIB_EXT = "lib"
@@ -129,6 +130,7 @@ SOURCES += \
     src/job_manager.cpp \
     src/keyboard_shortcuts_edit.cpp \
     src/light_properties_widget.cpp \
+    src/local_direction_widget.cpp \
     src/locker.cpp \
     src/log_browser.cpp \
     src/log_browser_dialog.cpp \
@@ -336,6 +338,7 @@ HEADERS += \
     src/job_manager.h \
     src/keyboard_shortcuts_edit.h \
     src/light_properties_widget.h \
+    src/local_direction_widget.h \
     src/locker.h \
     src/log_browser.h \
     src/log_browser_dialog.h \
