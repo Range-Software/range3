@@ -48,6 +48,7 @@ class LocalDirectionWidget : public QGroupBox
 
     protected:
 
+        //! Show event handler.
         void showEvent(QShowEvent *event);
 
     signals:
