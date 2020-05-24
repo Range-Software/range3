@@ -13,6 +13,8 @@
 #include "rsolverfluid.h"
 #include "rmatrixsolver.h"
 
+//#define _OPTIMAL_ASSEMBLY_
+
 static const double inv6 = 1.0 / 6.0;
 
 class FluidMatrixContainer
@@ -340,14 +342,30 @@ void RSolverFluid::prepare(void)
     RBVector elementFreePressureSetValues;
     this->computeElementFreePressure(elementFreePressure,elementFreePressureSetValues);
 
-    this->b.resize(this->nodeBook.getNEnabled());
-    this->x.resize(this->nodeBook.getNEnabled());
-
     this->A.clear();
     this->A.setNRows(this->nodeBook.getNEnabled());
     this->A.reserveNColumns(100);
+    this->b.resize(this->nodeBook.getNEnabled());
     this->b.fill(0.0);
+    this->x.resize(this->nodeBook.getNEnabled());
     this->x.fill(0.0);
+
+#ifdef _OPTIMAL_ASSEMBLY_
+    int np = omp_get_max_threads();
+
+    QVector<RSparseMatrix> Ap;
+    Ap.resize(np);
+    QVector<RRVector> bp;
+    bp.resize(np);
+
+    for (int i=0;i<np;i++)
+    {
+        Ap[i].setNRows(this->nodeBook.getNEnabled());
+        Ap[i].reserveNColumns(100);
+        bp[i].resize(this->nodeBook.getNEnabled());
+        bp[i].fill(0.0);
+    }
+#endif /* _OPTIMAL_ASSEMBLY_ */
 
     bool abort = false;
 
@@ -365,7 +383,7 @@ void RSolverFluid::prepare(void)
     #pragma omp parallel for default(shared) private(matrixManager)
     for (int64_t i=0;i<int64_t(this->pModel->getNElements());i++)
     {
-        uint elementID = i;
+        uint elementID = uint(i);
 
         const RElement &element = this->pModel->getElement(elementID);
 
@@ -437,7 +455,11 @@ void RSolverFluid::prepare(void)
                 this->computeElement(elementID,Ae,be,matrixManager);
             }
             this->applyLocalRotations(elementID,Ae);
+#ifdef _OPTIMAL_ASSEMBLY_
+            this->assemblyMatrix(elementID,Ae,be,Ap[omp_get_thread_num()],bp[omp_get_thread_num()]);
+#else
             this->assemblyMatrix(elementID,Ae,be);
+#endif
         }
         catch (const RError &rError)
         {
@@ -449,6 +471,18 @@ void RSolverFluid::prepare(void)
             #pragma omp flush (abort)
         }
     }
+
+#ifdef _OPTIMAL_ASSEMBLY_
+#pragma omp parallel for default(shared)
+    for (int64_t i=0;i<int64_t(this->A.getNRows());i++)
+    {
+        for (int j=0;j<np;j++)
+        {
+            A.getVector(uint(i)).addVector(Ap[j].getVector(uint(i)));
+            this->b[uint(i)] += bp[j][uint(i)];
+        }
+    }
+#endif
 
     this->buildStopWatch.pause();
 
@@ -1072,7 +1106,7 @@ void RSolverFluid::generateNodeBook(void)
         }
         for (int64_t j=0;j<pElementGroup->size();j++)
         {
-            uint elementID = pElementGroup->get(j);
+            uint elementID = pElementGroup->get(uint(j));
             const RElement &rElement = this->pModel->getElement(elementID);
 
             bool elementHasVelocityX = hasVelocityX;
@@ -1209,7 +1243,7 @@ void RSolverFluid::computeFreePressureNodeHeight(void)
 
 void RSolverFluid::computeShapeDerivatives(void)
 {
-    this->shapeDerivations.resize(this->pModel->getNElements(),0);
+    this->shapeDerivations.resize(this->pModel->getNElements(),nullptr);
 
     for (uint i=0;i<this->pModel->getNElements();i++)
     {
@@ -1700,27 +1734,27 @@ void RSolverFluid::computeElementGeneral(unsigned int elementID, RRMatrix &Ae, R
                                            - ytv[m] + ev[m]);
             }
 
-            for (uint m=0;m<nen;m++)
+            for (uint k=0;k<nen;k++)
             {
-                for (uint n=0;n<nen;n++)
+                for (uint l=0;l<nen;l++)
                 {
                     if (unsteady)
                     {
-                        Ae22[m][n] = dt * the[m][n];
+                        Ae22[k][l] = dt * the[k][l];
                     }
                     else
                     {
-                        Ae22[m][n] = the[m][n];
+                        Ae22[k][l] = the[k][l];
                     }
                 }
                 if (unsteady)
                 {
-                    be2[m] = dt * (etv[m] - (  btv[m] + gvT[m]
-                                             + yv[m] + thv[m]) );
+                    be2[k] = dt * (etv[k] - (  btv[k] + gvT[k]
+                                             + yv[k] + thv[k]) );
                 }
                 else
                 {
-                    be2[m] = etv[m] - (gvT[m] + yv[m] + thv[m]);
+                    be2[k] = etv[k] - (gvT[k] + yv[k] + thv[k]);
                 }
             }
         }
@@ -2208,27 +2242,27 @@ void RSolverFluid::computeElementConstantDerivative(unsigned int elementID, RRMa
                                        - ytv[m] + ev[m]);
         }
 
-        for (uint m=0;m<nen;m++)
+        for (uint k=0;k<nen;k++)
         {
-            for (uint n=0;n<nen;n++)
+            for (uint l=0;l<nen;l++)
             {
                 if (unsteady)
                 {
-                    Ae22[m][n] = dt * the[m][n];
+                    Ae22[k][l] = dt * the[k][l];
                 }
                 else
                 {
-                    Ae22[m][n] = the[m][n];
+                    Ae22[k][l] = the[k][l];
                 }
             }
             if (unsteady)
             {
-                be2[m] = dt * (etv[m] - (  btv[m] + gvT[m]
-                                         + yv[m] + thv[m]) );
+                be2[k] = dt * (etv[k] - (  btv[k] + gvT[k]
+                                         + yv[k] + thv[k]) );
             }
             else
             {
-                be2[m] = etv[m] - (gvT[m] + yv[m] + thv[m]);
+                be2[k] = etv[k] - (gvT[k] + yv[k] + thv[k]);
             }
         }
     }
@@ -2311,11 +2345,11 @@ void RSolverFluid::computeElementScales(void)
 #pragma omp parallel for default(shared)
     for (int64_t i=0;i<int64_t(this->pModel->getNElements());i++)
     {
-        if (!this->computableElements[i])
+        if (!this->computableElements[uint(i)])
         {
             continue;
         }
-        const RElement &rElement = this->pModel->getElement(i);
+        const RElement &rElement = this->pModel->getElement(uint(i));
         double volume = 0.0;
         if (!rElement.findVolume(this->pModel->getNodes(),volume))
         {
@@ -2323,11 +2357,11 @@ void RSolverFluid::computeElementScales(void)
         }
         if (rElement.getType() == R_ELEMENT_TETRA1)
         {
-            this->elementScales[i] = std::pow(6.0 * volume / RConstants::pi, third);
+            this->elementScales[uint(i)] = std::pow(6.0 * volume / RConstants::pi, third);
         }
         else if (rElement.getType() == R_ELEMENT_HEXA1)
         {
-            this->elementScales[i] = std::pow(volume, third);
+            this->elementScales[uint(i)] = std::pow(volume, third);
         }
         else
         {
@@ -2348,7 +2382,7 @@ void RSolverFluid::computeElementFreePressure(RRVector &values, RBVector &setVal
 #pragma omp parallel for default(shared)
     for (int64_t i=0;i<int64_t(this->pModel->getNSurfaces());i++)
     {
-        const RSurface &rSurface = this->pModel->getSurface(i);
+        const RSurface &rSurface = this->pModel->getSurface(uint(i));
         for (uint j=0;j<rSurface.getNBoundaryConditions();j++)
         {
             const RBoundaryCondition &bc = rSurface.getBoundaryCondition(j);
@@ -2401,6 +2435,36 @@ void RSolverFluid::assemblyMatrix(uint elementID, const RRMatrix &Ae, const RRVe
                             {
                                 this->A.addValue(mp,np,Ae[dims*m+i][dims*n+j]);
                             }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+void RSolverFluid::assemblyMatrix(unsigned int elementID, const RRMatrix &Ae, const RRVector &fe, RSparseMatrix &Ap, RRVector &bp)
+{
+    const RElement &rElement = this->pModel->getElement(elementID);
+
+    // Assembly final matrix system
+    uint dims = 4;
+    for (uint m=0;m<rElement.size();m++)
+    {
+        for (uint i=0;i<dims;i++)
+        {
+            uint mp = 0;
+            if (this->nodeBook.getValue(dims*rElement.getNodeId(m)+i,mp))
+            {
+                bp[mp] += fe[dims*m+i];
+                for (uint n=0;n<rElement.size();n++)
+                {
+                    for (uint j=0;j<dims;j++)
+                    {
+                        uint np = 0;
+                        if (this->nodeBook.getValue(dims*rElement.getNodeId(n)+j,np))
+                        {
+                            Ap.addValue(mp,np,Ae[dims*m+i][dims*n+j]);
                         }
                     }
                 }
@@ -2515,7 +2579,9 @@ double RSolverFluid::computeStreamVelocity(const RModel &rModel, const RSolverCa
 #pragma omp for
             for (int64_t i=0;i<rModel.getNNodes();i++)
             {
-                vm_local += std::sqrt(std::pow(nodeVelocity.x[i],2) + std::pow(nodeVelocity.y[i],2) + std::pow(nodeVelocity.z[i],2));
+                vm_local += std::sqrt(  std::pow(nodeVelocity.x[uint(i)],2)
+                                      + std::pow(nodeVelocity.y[uint(i)],2)
+                                      + std::pow(nodeVelocity.z[uint(i)],2));
             }
 #pragma omp atomic
             vm += vm_local;

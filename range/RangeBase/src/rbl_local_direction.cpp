@@ -19,6 +19,13 @@ void RLocalDirection::_init(const RLocalDirection *pLocalDirection)
     }
 }
 
+RLocalDirection::RLocalDirection()
+    : position(0.0,0.0,0.0)
+    , direction(1.0,0.0,0.0)
+{
+
+}
+
 RLocalDirection::RLocalDirection(const RR3Vector &position, const RR3Vector &direction)
     : position(position)
     , direction(direction)

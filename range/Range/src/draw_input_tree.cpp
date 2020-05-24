@@ -98,6 +98,14 @@ void DrawInputTree::setRequestedItemVectorValue(const RR3Vector &v)
     }
 }
 
+void DrawInputTree::setRequestedItemLocalDirectionValue(const RLocalDirection &localDirection)
+{
+    if (this->requestedItem)
+    {
+        DrawInputTree::setItemLocalDirectionValue(this->requestedItem,localDirection);
+    }
+}
+
 void DrawInputTree::setRequestedItemTextValue(const QString &text)
 {
     if (this->requestedItem)
@@ -176,6 +184,11 @@ void DrawInputTree::populate()
                     DrawInputTree::setItemVectorValue(childItem,object->getInputParamater(j).toVector());
                     break;
                 }
+                case DrawEngineInput::LocalDirection:
+                {
+                    DrawInputTree::setItemLocalDirectionValue(childItem,object->getInputParamater(j).toLocalDirection());
+                    break;
+                }
                 case DrawEngineInput::Text:
                 {
                     DrawInputTree::setItemTextValue(childItem,object->getInputParamater(j).toText());
@@ -243,6 +256,36 @@ RR3Vector DrawInputTree::stringToVector(const QString &vectorStr)
     return v;
 }
 
+void DrawInputTree::setItemLocalDirectionValue(QTreeWidgetItem *item, const RLocalDirection &localDirectionStr)
+{
+    const RR3Vector &p = localDirectionStr.getPosition();
+    const RR3Vector &d = localDirectionStr.getDirection();
+    QString vStr = QString::number(p[0]) + ";" + QString::number(p[1]) + ";" + QString::number(p[2]) + "/" + QString::number(d[0]) + ";" + QString::number(d[1]) + ";" + QString::number(d[2]);
+    item->setText(DRAW_INPUT_TREE_COLUMN_2,vStr);
+}
+
+RLocalDirection DrawInputTree::getItemLocalDirectionValue(QTreeWidgetItem *item)
+{
+    return DrawInputTree::stringToLocalDirection(item->text(DRAW_INPUT_TREE_COLUMN_2));
+}
+
+RLocalDirection DrawInputTree::stringToLocalDirection(const QString &localDirectionStr)
+{
+    RR3Vector position(0.0,0.0,0.0);
+    RR3Vector direction(0.0,0.0,1.0);
+
+    QStringList strList = localDirectionStr.split('/');
+    if (strList.size() > 0)
+    {
+        position = DrawInputTree::stringToVector(strList[0]);
+    }
+    if (strList.size() > 1)
+    {
+        direction = DrawInputTree::stringToVector(strList[1]);
+    }
+    return RLocalDirection(position,direction);
+}
+
 void DrawInputTree::setItemTextValue(QTreeWidgetItem *item, const QString &text)
 {
     int nLines = 0;
@@ -284,6 +327,11 @@ void DrawInputTree::onItemDoubleClicked(QTreeWidgetItem *item, int column)
         {
             this->requestedItem = item;
             emit this->positionRequest(DrawInputTree::getItemVectorValue(item));
+        }
+        else if (item->data(DRAW_INPUT_TREE_COLUMN_1,Qt::UserRole).toInt() == DrawEngineInput::LocalDirection)
+        {
+            this->requestedItem = item;
+            emit this->localDirectionRequest(DrawInputTree::getItemLocalDirectionValue(item));
         }
         else if (item->data(DRAW_INPUT_TREE_COLUMN_1,Qt::UserRole).toInt() == DrawEngineInput::Text)
         {
@@ -366,6 +414,16 @@ void DrawInputTree::onItemChanged(QTreeWidgetItem *item, int column)
                 v = object->getInputParamater(parameterID).toVector();
             }
             DrawInputTree::setItemVectorValue(item,v);
+            break;
+        }
+        case DrawEngineInput::LocalDirection:
+        {
+            RLocalDirection localDirection(DrawInputTree::stringToLocalDirection(valueStr));
+            if (!(valueChanged = object->getInputParamater(parameterID).setValue(localDirection)))
+            {
+                localDirection = object->getInputParamater(parameterID).toLocalDirection();
+            }
+            DrawInputTree::setItemLocalDirectionValue(item,localDirection);
             break;
         }
         case DrawEngineInput::Text:

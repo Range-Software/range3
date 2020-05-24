@@ -107,6 +107,8 @@ class GLWidget : public QOpenGLWidget
         QFont font;
         //! Use GL_CULL_FACE
         bool useGlCullFace;
+        //! Model draw time in milliseconds;
+        qint64 modelDrawTime;
 
     public:
 

@@ -64,6 +64,7 @@ class RFileIO
 
         //! Write new line character.
         static void writeNewLineAscii(RSaveFile &outFile);
+        static void writeNewLineAscii(RFile &outFile);
 
         // bool
 
@@ -84,6 +85,7 @@ class RFileIO
         static void readBinary(RFile &inFile, char &cValue);
         //! Write char value.
         static void writeAscii(RSaveFile &outFile, const char &cValue, bool addNewLine = true);
+        static void writeAscii(RFile &outFile, const char &cValue, bool addNewLine = true);
         //! Write char value.
         static void writeBinary(RSaveFile &outFile, const char &cValue);
 
@@ -106,6 +108,7 @@ class RFileIO
         static void readBinary(RFile &inFile, unsigned int &uValue);
         //! Write unsigned int value.
         static void writeAscii(RSaveFile &outFile, const unsigned int &uValue, bool addNewLine = true);
+        static void writeAscii(RFile &outFile, const unsigned int &uValue, bool addNewLine = true);
         //! Write unsigned int value.
         static void writeBinary(RSaveFile &outFile, const unsigned int &uValue);
 
@@ -117,6 +120,7 @@ class RFileIO
         static void readBinary(RFile &inFile, double &dValue);
         //! Write double value.
         static void writeAscii(RSaveFile &outFile, const double &dValue, bool addNewLine = true);
+        static void writeAscii(RFile &outFile, const double &dValue, bool addNewLine = true);
         //! Write double value.
         static void writeBinary(RSaveFile &outFile, const double &dValue);
 
@@ -128,6 +132,7 @@ class RFileIO
         static void readBinary(RFile &inFile, QString &sValue);
         //! Write string value.
         static void writeAscii(RSaveFile &outFile, const QString &sValue, bool addNewLine = true);
+        static void writeAscii(RFile &outFile, const QString &sValue, bool addNewLine = true);
         //! Write string value.
         static void writeBinary(RSaveFile &outFile, const QString &sValue);
 
@@ -176,6 +181,7 @@ class RFileIO
         static void readBinary(RFile &inFile, RRVector &rVector, bool readSize);
         //! Write RRVector.
         static void writeAscii(RSaveFile &outFile, const RRVector &rVector, bool writeSize, bool addNewLine = true);
+        static void writeAscii(RFile &outFile, const RRVector &rVector, bool writeSize, bool addNewLine = true);
         //! Write RRVector.
         static void writeBinary(RSaveFile &outFile, const RRVector &rVector, bool writeSize);
 
@@ -187,6 +193,7 @@ class RFileIO
         static void readBinary(RFile &inFile, RR3Vector &rVector);
         //! Write RR3Vector.
         static void writeAscii(RSaveFile &outFile, const RR3Vector &rVector, bool addNewLine = true);
+        static void writeAscii(RFile &outFile, const RR3Vector &rVector, bool addNewLine = true);
         //! Write RR3Vector.
         static void writeBinary(RSaveFile &outFile, const RR3Vector &rVector);
 
@@ -308,6 +315,7 @@ class RFileIO
         static void readBinary(RFile &inFile, RVariableType &variableType);
         //! Write RVariableType.
         static void writeAscii(RSaveFile &outFile, const RVariableType &variableType, bool addNewLine = true);
+        static void writeAscii(RFile &outFile, const RVariableType &variableType, bool addNewLine = true);
         //! Write RVariableType.
         static void writeBinary(RSaveFile &outFile, const RVariableType &variableType);
 
@@ -726,6 +734,7 @@ class RFileIO
         static void readBinary(RFile &inFile, RMonitoringPoint &monitoringPoint);
         //! Write RMonitoringPoint.
         static void writeAscii(RSaveFile &outFile, const RMonitoringPoint &monitoringPoint, bool addNewLine = true);
+        static void writeAscii(RFile &outFile, const RMonitoringPoint &monitoringPoint, bool addNewLine = true);
         //! Write RMonitoringPoint.
         static void writeBinary(RSaveFile &outFile, const RMonitoringPoint &monitoringPoint);
 

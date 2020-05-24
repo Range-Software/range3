@@ -22,7 +22,7 @@ void RBook::_init(const RBook *pBook)
     }
 }
 
-RBook::RBook(unsigned int size)
+RBook::RBook(uint size)
 {
     this->_init();
     this->resize(size);
@@ -43,26 +43,26 @@ RBook &RBook::operator =(const RBook &book)
     return (*this);
 }
 
-void RBook::resize(unsigned int size)
+void RBook::resize(uint size)
 {
     this->book.resize(size);
     this->initialize();
 }
 
-unsigned int RBook::size(void) const
+uint RBook::size() const
 {
-    return (unsigned int)this->book.size();
+    return (uint)this->book.size();
 }
 
-void RBook::initialize(void)
+void RBook::initialize()
 {
-    for (unsigned int i=0;i<this->book.size();i++)
+    for (uint i=0;i<this->book.size();i++)
     {
         this->book[i] = i;
     }
 }
 
-bool RBook::getValue(unsigned int position, unsigned int &value) const
+bool RBook::getValue(uint position, uint &value) const
 {
     value = this->book[position];
     if (value != RConstants::eod)
@@ -72,12 +72,12 @@ bool RBook::getValue(unsigned int position, unsigned int &value) const
     return false;
 }
 
-void RBook::setValue(unsigned int position, unsigned int value)
+void RBook::setValue(uint position, uint value)
 {
     this->book[position] = value;
 }
 
-void RBook::enable(unsigned int position, bool consolidate)
+void RBook::enable(uint position, bool consolidate)
 {
     if (this->book[position] != RConstants::eod)
     {
@@ -90,7 +90,7 @@ void RBook::enable(unsigned int position, bool consolidate)
     }
     else
     {
-        for (unsigned int i=position;i>0;i--)
+        for (uint i=position;i>0;i--)
         {
             if (this->book[i-1] != RConstants::eod)
             {
@@ -103,7 +103,7 @@ void RBook::enable(unsigned int position, bool consolidate)
 
     if (consolidate)
     {
-        for (unsigned int i=position+1;i<this->book.size();i++)
+        for (uint i=position+1;i<this->book.size();i++)
         {
             if (this->book[i] != RConstants::eod)
             {
@@ -113,7 +113,7 @@ void RBook::enable(unsigned int position, bool consolidate)
     }
 }
 
-void RBook::disable(unsigned int position, bool consolidate)
+void RBook::disable(uint position, bool consolidate)
 {
     if (this->book[position] == RConstants::eod)
     {
@@ -124,7 +124,7 @@ void RBook::disable(unsigned int position, bool consolidate)
 
     if (consolidate)
     {
-        for (unsigned int i=position+1;i<this->book.size();i++)
+        for (uint i=position+1;i<this->book.size();i++)
         {
             if (this->book[i] != RConstants::eod)
             {
@@ -134,15 +134,15 @@ void RBook::disable(unsigned int position, bool consolidate)
     }
 }
 
-unsigned int RBook::getNEnabled(void) const
+uint RBook::getNEnabled() const
 {
-    return (unsigned int)this->book.size() - this->getNDisabled();
+    return (uint)this->book.size() - this->getNDisabled();
 }
 
-unsigned int RBook::getNDisabled(void) const
+uint RBook::getNDisabled() const
 {
-    unsigned int nDisabled = 0;
-    for (unsigned int i=0;i<this->book.size();i++)
+    uint nDisabled = 0;
+    for (uint i=0;i<this->book.size();i++)
     {
         if (this->book[i] == RConstants::eod)
         {
@@ -152,7 +152,7 @@ unsigned int RBook::getNDisabled(void) const
     return nDisabled;
 }
 
-RUVector RBook::getEnabled(void) const
+RUVector RBook::getEnabled() const
 {
     uint nEnabled = 0;
     RUVector enabled;
@@ -173,10 +173,10 @@ RUVector RBook::getEnabled(void) const
     return enabled;
 }
 
-void RBook::print(void) const
+void RBook::print() const
 {
     RLogger::info("Node book: [%u]\n",this->size());
-    for (unsigned int i=0;i<this->size();i++)
+    for (uint i=0;i<this->size();i++)
     {
         RLogger::info("%9u: %9u\n",i,this->book[i]);
     }

@@ -27,6 +27,7 @@ ApplicationSettings::ApplicationSettings(QObject *parent)
     , nThreads(ApplicationSettings::getDefaultNThreads())
     , nHistoryRecords(ApplicationSettings::getDefaultNHistoryRecords())
     , style(ApplicationSettings::getDefaultStyle())
+    , toolbarIconSize(ApplicationSettings::getDefaultToolbarIconSize())
     , sendUsageInfo(ApplicationSettings::getDefaultSendUsageInfo())
     , rangeApiAllowed(ApplicationSettings::getDefaultRangeApiAllowed())
     , rangeApiServer(ApplicationSettings::getDefaultRangeApiServer())
@@ -41,17 +42,17 @@ ApplicationSettings::ApplicationSettings(QObject *parent)
                      &ApplicationSettings::onShortcutChanged);
 }
 
-const ActionDefinition *ApplicationSettings::getActionDefinition(void) const
+const ActionDefinition *ApplicationSettings::getActionDefinition() const
 {
     return this->actionDefinition;
 }
 
-ActionDefinition *ApplicationSettings::getActionDefinition(void)
+ActionDefinition *ApplicationSettings::getActionDefinition()
 {
     return this->actionDefinition;
 }
 
-const QString &ApplicationSettings::getSolverPath(void) const
+const QString &ApplicationSettings::getSolverPath() const
 {
     return this->solverPath;
 }
@@ -61,7 +62,7 @@ void ApplicationSettings::setSolverPath(const QString &rangeSolverPath)
     this->solverPath = rangeSolverPath;
 }
 
-const QString &ApplicationSettings::getHelpDir(void) const
+const QString &ApplicationSettings::getHelpDir() const
 {
     return this->helpDir;
 }
@@ -71,7 +72,7 @@ void ApplicationSettings::setHelpDir(const QString &helpDir)
     this->helpDir = helpDir;
 }
 
-uint ApplicationSettings::getNThreads(void) const
+uint ApplicationSettings::getNThreads() const
 {
     return this->nThreads;
 }
@@ -82,7 +83,7 @@ void ApplicationSettings::setNThreads(uint nCPUs)
     this->nThreads = (nCPUs < 1 || nCPUs > defaultNCPUs) ? defaultNCPUs : nCPUs;
 }
 
-uint ApplicationSettings::getNHistoryRecords(void) const
+uint ApplicationSettings::getNHistoryRecords() const
 {
     return this->nHistoryRecords;
 }
@@ -102,7 +103,7 @@ void ApplicationSettings::setNHistoryRecords(uint nHistoryRecords)
     }
 }
 
-const QString &ApplicationSettings::getStyle(void) const
+const QString &ApplicationSettings::getStyle() const
 {
     return this->style;
 }
@@ -121,7 +122,18 @@ void ApplicationSettings::setStyle(const QString &style)
     emit this->styleChanged(this->style);
 }
 
-bool ApplicationSettings::getSendUsageInfo(void) const
+int ApplicationSettings::getToolbarIconSize() const
+{
+    return this->toolbarIconSize;
+}
+
+void ApplicationSettings::setToolbarIconSize(int toolbarIconSize)
+{
+    this->toolbarIconSize = toolbarIconSize;
+    emit this->toolbarIconSizeChanged(this->toolbarIconSize);
+}
+
+bool ApplicationSettings::getSendUsageInfo() const
 {
     return this->sendUsageInfo;
 }
@@ -131,7 +143,7 @@ void ApplicationSettings::setSendUsageInfo(bool sendUsageInfo)
     this->sendUsageInfo = sendUsageInfo;
 }
 
-bool ApplicationSettings::getRangeApiAllowed(void) const
+bool ApplicationSettings::getRangeApiAllowed() const
 {
     return this->rangeApiAllowed;
 }
@@ -141,7 +153,7 @@ void ApplicationSettings::setRangeApiAllowed(bool rangeApiAllowed)
     this->rangeApiAllowed = rangeApiAllowed;
 }
 
-const QString &ApplicationSettings::getRangeApiServer(void) const
+const QString &ApplicationSettings::getRangeApiServer() const
 {
     return this->rangeApiServer;
 }
@@ -151,7 +163,7 @@ void ApplicationSettings::setRangeApiServer(const QString &rangeApiServer)
     this->rangeApiServer = rangeApiServer;
 }
 
-const QString &ApplicationSettings::getRangeAccount(void) const
+const QString &ApplicationSettings::getRangeAccount() const
 {
     return this->rangeAccount;
 }
@@ -161,7 +173,7 @@ void ApplicationSettings::setRangeAccount(const QString &rangeAccount)
     this->rangeAccount = rangeAccount;
 }
 
-const QString &ApplicationSettings::getRangePassword(void) const
+const QString &ApplicationSettings::getRangePassword() const
 {
     return this->rangePassword;
 }
@@ -171,12 +183,12 @@ void ApplicationSettings::setRangePassword(const QString &rangePassword)
     this->rangePassword = rangePassword;
 }
 
-uint ApplicationSettings::getMaxThreads(void)
+uint ApplicationSettings::getMaxThreads()
 {
     return (uint)omp_get_num_procs();
 }
 
-QStringList ApplicationSettings::getStyles(void)
+QStringList ApplicationSettings::getStyles()
 {
     QStringList styles = QStyleFactory::keys();
     styles.append(ApplicationSettings::FusionDark);
@@ -186,7 +198,7 @@ QStringList ApplicationSettings::getStyles(void)
     return styles;
 }
 
-QString ApplicationSettings::getDefaultRangeSolverExecutable(void)
+QString ApplicationSettings::getDefaultRangeSolverExecutable()
 {
 #ifdef DEBUG
     QString baseName("RangeSolver_debug");
@@ -197,47 +209,52 @@ QString ApplicationSettings::getDefaultRangeSolverExecutable(void)
     return QDir(QApplication::applicationDirPath()).filePath(baseName);
 }
 
-QString ApplicationSettings::getDefaultHelpDir(void)
+QString ApplicationSettings::getDefaultHelpDir()
 {
     return MainSettings::getInstance().findHelpDir();
 }
 
-uint ApplicationSettings::getDefaultNThreads(void)
+uint ApplicationSettings::getDefaultNThreads()
 {
     return ApplicationSettings::getMaxThreads();
 }
 
-uint ApplicationSettings::getDefaultNHistoryRecords(void)
+uint ApplicationSettings::getDefaultNHistoryRecords()
 {
     return 3;
 }
 
-QString ApplicationSettings::getDefaultStyle(void)
+QString ApplicationSettings::getDefaultStyle()
 {
     return ApplicationSettings::Fusion;
 }
 
-bool ApplicationSettings::getDefaultSendUsageInfo(void)
+int ApplicationSettings::getDefaultToolbarIconSize()
+{
+    return 32;
+}
+
+bool ApplicationSettings::getDefaultSendUsageInfo()
 {
     return true;
 }
 
-bool ApplicationSettings::getDefaultRangeApiAllowed(void)
+bool ApplicationSettings::getDefaultRangeApiAllowed()
 {
     return true;
 }
 
-const QString ApplicationSettings::getDefaultRangeApiServer(void)
+const QString ApplicationSettings::getDefaultRangeApiServer()
 {
     return RVendor::www;
 }
 
-const QString ApplicationSettings::getDefaultRangeAccount(void)
+const QString ApplicationSettings::getDefaultRangeAccount()
 {
     return QString();
 }
 
-const QString ApplicationSettings::getDefaultRangePassword(void)
+const QString ApplicationSettings::getDefaultRangePassword()
 {
     return QString();
 }

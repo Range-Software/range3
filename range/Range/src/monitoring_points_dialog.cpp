@@ -44,7 +44,7 @@ MonitoringPointsDialog::MonitoringPointsDialog(uint modelID, QWidget *parent) :
     }
     mainLayout->addWidget(this->tableWidget, mainLayoutRow++, 0, 1, 1);
 
-    QHBoxLayout *actionButtonsLayout = new QHBoxLayout;;
+    QHBoxLayout *actionButtonsLayout = new QHBoxLayout;
     mainLayout->addLayout(actionButtonsLayout, mainLayoutRow++, 0, 1, 1);
 
     QPushButton *addButton = new QPushButton(tr("Add"));
@@ -90,7 +90,7 @@ int MonitoringPointsDialog::exec(void)
 
         for (int i=0;i<this->tableWidget->rowCount();i++)
         {
-            VariableSelector *variableSelector = (VariableSelector*)this->tableWidget->cellWidget(i,0);
+            VariableSelector *variableSelector = dynamic_cast<VariableSelector*>(this->tableWidget->cellWidget(i,0));
             QTableWidgetItem *xItem = this->tableWidget->item(i,1);
             QTableWidgetItem *yItem = this->tableWidget->item(i,2);
             QTableWidgetItem *zItem = this->tableWidget->item(i,3);
@@ -139,7 +139,7 @@ QList<int> MonitoringPointsDialog::findSelectedRows(void) const
     }
 
     QList<int> rowList = rowBook.uniqueKeys();
-    qSort(rowList);
+    std::sort(rowList.begin(),rowList.end());
 
     return rowList;
 }

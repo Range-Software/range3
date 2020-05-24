@@ -92,7 +92,7 @@ void RInterpolatedElement::sortNodes(void)
                        this->operator [](1),
                        RNode(c[0],c[1],c[2]));
 
-    const RRVector &normal = triangle.getNormal();
+    const RR3Vector &normal = triangle.getNormal();
 
     RR3Vector v1(this->operator [](0).getX() - c[0],
                  this->operator [](0).getY() - c[1],

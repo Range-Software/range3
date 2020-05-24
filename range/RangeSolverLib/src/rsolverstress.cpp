@@ -232,8 +232,7 @@ void RSolverStress::prepare(void)
                     continue;
                 }
 
-                const RElement &element = this->pModel->getElement(elementID);
-                R_ERROR_ASSERT(R_ELEMENT_TYPE_IS_POINT(element.getType()));
+                R_ERROR_ASSERT(R_ELEMENT_TYPE_IS_POINT(this->pModel->getElement(elementID).getType()));
                 RRMatrix Me(3,3);
                 RRMatrix Ke(3,3);
                 RRVector fe(3);

@@ -1150,7 +1150,7 @@ void RModel::removeNodes(const QList<uint> &nodeIDs, bool closeHole)
 {
     QList<uint> sortedNodeIDs(nodeIDs);
 
-    qSort(sortedNodeIDs.begin(),sortedNodeIDs.end());
+    std::sort(sortedNodeIDs.begin(),sortedNodeIDs.end());
 
     for (int i=sortedNodeIDs.size()-1;i>=0;i--)
     {
@@ -1640,7 +1640,7 @@ void RModel::addElement (const RElement &element,
                     RR3Vector nn;
                     this->getElement(elementID).findNormal(this->getNodes(),nn[0],nn[1],nn[2]);
 
-                    double angle = RRVector::angle(en,nn);
+                    double angle = RR3Vector::angle(en,nn);
                     if (angle < minNormalAngle)
                     {
                         minNormalAngle = angle;
@@ -1928,7 +1928,7 @@ void RModel::removeElements(const QList<uint> &elementIDs, bool closeHole)
 {
     QList<uint> sortedElementIDs(elementIDs);
 
-    qSort(sortedElementIDs.begin(),sortedElementIDs.end());
+    std::sort(sortedElementIDs.begin(),sortedElementIDs.end());
 
     for (int i=sortedElementIDs.size()-1;i>=0;i--)
     {
@@ -6164,15 +6164,24 @@ uint RModel::tetrahedralizeSurface(const std::vector<uint> surfaceIDs)
     }
 
     // Generate tetrahedrons.
+    std::vector<RNode> steinerNodes;
     std::vector<RElement> volumeElements;
     try
     {
-        volumeElements = surface.tetrahedralize(this->getNodes(),this->getElements());
+        surface.tetrahedralize(this->getNodes(),this->getElements(),steinerNodes,volumeElements);
     }
     catch (const RError &error)
     {
         RLogger::unindent();
         throw RError(R_ERROR_APPLICATION,R_ERROR_REF,"Failed to tetrahedralize surface. %s", error.getMessage().toUtf8().constData());
+    }
+
+    // Add steiner nodes.
+    uint nNodes = uint(this->nodes.size());
+    this->nodes.resize(this->nodes.size() + steinerNodes.size());
+    for (uint i=0;i<steinerNodes.size();i++)
+    {
+        this->nodes[nNodes + i] = steinerNodes[i];
     }
 
     // Add tetrahedrons to volume.
@@ -8018,8 +8027,8 @@ void RModel::markSurfaceNeighbors(uint elementID,
     std::vector<uint> stack;
     stack.resize(this->getNElements());
     stack[uint(cpos)] = elementID;
-    RRVector cNormal(3);
-    RRVector nNormal(3);
+    RR3Vector cNormal;
+    RR3Vector nNormal;
 
     while (cpos >= 0)
     {
@@ -8045,7 +8054,7 @@ void RModel::markSurfaceNeighbors(uint elementID,
                 continue;
             }
 
-            cnAngle = R_RAD_TO_DEG(RRVector::angle(cNormal,nNormal));
+            cnAngle = R_RAD_TO_DEG(RR3Vector::angle(cNormal,nNormal));
 
             if (cnAngle <= angle || cnAngle >= (360.0 - angle))
             {
@@ -8068,44 +8077,44 @@ void RModel::addEntityGroupIdReference(uint entityGroupId)
     for (uint i=0;i<this->getNVectorFields();i++)
     {
         std::vector<uint> &groupIDs(this->getVectorField(i).getElementGroupIDs());
-        for (uint i=0;i<groupIDs.size();i++)
+        for (uint j=0;j<groupIDs.size();j++)
         {
-            if (groupIDs[i] >= entityGroupId)
+            if (groupIDs[j] >= entityGroupId)
             {
-                groupIDs[i]++;
+                groupIDs[j]++;
             }
         }
     }
     for (uint i=0;i<this->getNScalarFields();i++)
     {
         std::vector<uint> &groupIDs(this->getScalarField(i).getElementGroupIDs());
-        for (uint i=0;i<groupIDs.size();i++)
+        for (uint j=0;j<groupIDs.size();j++)
         {
-            if (groupIDs[i] >= entityGroupId)
+            if (groupIDs[j] >= entityGroupId)
             {
-                groupIDs[i]++;
+                groupIDs[j]++;
             }
         }
     }
     for (uint i=0;i<this->getNCuts();i++)
     {
         std::vector<uint> &groupIDs(this->getCut(i).getElementGroupIDs());
-        for (uint i=0;i<groupIDs.size();i++)
+        for (uint j=0;j<groupIDs.size();j++)
         {
-            if (groupIDs[i] >= entityGroupId)
+            if (groupIDs[j] >= entityGroupId)
             {
-                groupIDs[i]++;
+                groupIDs[j]++;
             }
         }
     }
     for (uint i=0;i<this->getNIsos();i++)
     {
         std::vector<uint> &groupIDs(this->getIso(i).getElementGroupIDs());
-        for (uint i=0;i<groupIDs.size();i++)
+        for (uint j=0;j<groupIDs.size();j++)
         {
-            if (groupIDs[i] >= entityGroupId)
+            if (groupIDs[j] >= entityGroupId)
             {
-                groupIDs[i]++;
+                groupIDs[j]++;
             }
         }
     }
@@ -8158,8 +8167,8 @@ void RModel::updateEntityGroupIdReferences(const QMap<REntityGroupType, RUVector
         ++iter;
     }
 
-    qSort(addGroupIDs);
-    qSort(removeGroupIDs);
+    std::sort(addGroupIDs.begin(),addGroupIDs.end());
+    std::sort(removeGroupIDs.begin(),removeGroupIDs.end());
     std::reverse(removeGroupIDs.begin(),removeGroupIDs.end());
 
     foreach (uint gid, addGroupIDs)
@@ -8203,7 +8212,7 @@ void RModel::generateElementDistanceVector(uint startElementID, uint maximumDist
                         if (distanceVector[neighborIDs->at(i)] > distanceVector[elementID] + 1)
                         {
                             this->getElement(neighborIDs->at(i)).findNormal(this->nodes,n2[0],n2[1],n2[2]);
-                            if (RRVector::angle(n1,n2) < separationAngle)
+                            if (RR3Vector::angle(n1,n2) < separationAngle)
                             {
                                 elementStack.push(elementID);
                                 elementID = neighborIDs->at(i);

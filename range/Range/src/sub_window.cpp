@@ -43,63 +43,66 @@ void SubWindow::createSubWindow(void)
 //    this->glWidget->setFormat(format);
     gridLayoutSubwindow->addWidget(this->glWidget, 0, 0, 1, 1);
 
-    QToolBar *toolBar = new QToolBar(QString("Sub window toolbar"));
+    int toolbarIconSize = MainSettings::getInstance().getApplicationSettings()->getToolbarIconSize();
+    this->toolBar = new QToolBar(QString("Sub window toolbar"));
+    this->toolBar->setIconSize(QSize(toolbarIconSize,toolbarIconSize));
+
     gridLayoutSubwindow->addWidget(toolBar, 1, 0, 1, 1);
 
     QAction *actionResetO = new QAction(this);
     actionResetO->setText(tr("Reset to original view."));
     actionResetO->setShortcut(QString("O"));
     actionResetO->setIcon(QIcon(":/icons/file/pixmaps/range-resetO.svg"));
-    toolBar->addAction(actionResetO);
+    this->toolBar->addAction(actionResetO);
     QObject::connect(actionResetO,&QAction::triggered,this,&SubWindow::onResetO);
 
     QAction *actionResetX = new QAction(this);
     actionResetX->setText(tr("Reset to X plane."));
     actionResetX->setShortcut(QString("X"));
     actionResetX->setIcon(QIcon(":/icons/file/pixmaps/range-resetX.svg"));
-    toolBar->addAction(actionResetX);
+    this->toolBar->addAction(actionResetX);
     QObject::connect(actionResetX,&QAction::triggered,this,&SubWindow::onResetX);
 
     QAction *actionResetY = new QAction(this);
     actionResetY->setText(tr("Reset to Y plane."));
     actionResetY->setShortcut(QString("Y"));
     actionResetY->setIcon(QIcon(":/icons/file/pixmaps/range-resetY.svg"));
-    toolBar->addAction(actionResetY);
+    this->toolBar->addAction(actionResetY);
     QObject::connect(actionResetY,&QAction::triggered,this,&SubWindow::onResetY);
 
     QAction *actionResetZ = new QAction(this);
     actionResetZ->setText(tr("Reset to Z plane."));
     actionResetZ->setShortcut(QString("Z"));
     actionResetZ->setIcon(QIcon(":/icons/file/pixmaps/range-resetZ.svg"));
-    toolBar->addAction(actionResetZ);
+    this->toolBar->addAction(actionResetZ);
     QObject::connect(actionResetZ,&QAction::triggered,this,&SubWindow::onResetZ);
 
-    toolBar->addSeparator();
+    this->toolBar->addSeparator();
 
     QAction *actionScreenshot = new QAction(this);
     actionScreenshot->setText("Take screen shot.");
     actionScreenshot->setShortcut(QString("Ctrl+P"));
     actionScreenshot->setIcon(QIcon(":/icons/file/pixmaps/range-screenshot.svg"));
-    toolBar->addAction(actionScreenshot);
+    this->toolBar->addAction(actionScreenshot);
     QObject::connect(actionScreenshot,&QAction::triggered,this,&SubWindow::onScreenshot);
 
     QWidget* spacer = new QWidget();
     spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    toolBar->addWidget(spacer);
+    this->toolBar->addWidget(spacer);
 
     QCheckBox *backSideColorCheck = new QCheckBox(tr("Back side color"));
-    toolBar->addWidget(backSideColorCheck);
+    this->toolBar->addWidget(backSideColorCheck);
 
     QObject::connect(backSideColorCheck,&QCheckBox::stateChanged,this,&SubWindow::onBackSideColorChanged);
 
     ClippingPlaneWidget *clippingPlaneWidget = new ClippingPlaneWidget;
-    toolBar->addWidget(clippingPlaneWidget);
+    this->toolBar->addWidget(clippingPlaneWidget);
 
     QAction *actionPreferences = new QAction(this);
     actionPreferences->setText("Display preferences.");
     actionPreferences->setShortcut(QString("Ctrl+P"));
     actionPreferences->setIcon(QIcon(":/icons/application/pixmaps/range-display_preferences.svg"));
-    toolBar->addAction(actionPreferences);
+    this->toolBar->addAction(actionPreferences);
     QObject::connect(actionPreferences,&QAction::triggered,this,&SubWindow::onPreferences);
 
     QObject::connect(&Session::getInstance(),
@@ -116,6 +119,12 @@ void SubWindow::createSubWindow(void)
                      &ClippingPlaneWidget::changed,
                      this->glWidget,
                      &GLWidget::setClippingPlane);
+
+    // Tooplbar icon size changed signal
+    QObject::connect(MainSettings::getInstance().getApplicationSettings(),
+                     &ApplicationSettings::toolbarIconSizeChanged,
+                     this,
+                     &SubWindow::onToolbarIconSizeChanged);
 }
 
 uint SubWindow::getModelID(void) const
@@ -201,4 +210,9 @@ void SubWindow::onPreferences(void)
     {
         this->glWidget->update();
     }
+}
+
+void SubWindow::onToolbarIconSizeChanged(int toolbarIconSize)
+{
+    this->toolBar->setIconSize(QSize(toolbarIconSize,toolbarIconSize));
 }

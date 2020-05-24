@@ -42,6 +42,9 @@ class Color : public QColor
         //! Constructor from global color.
         Color(Qt::GlobalColor color);
 
+        //! Copy operator.
+        Color& operator=(const Color &color);
+
         //! Set random color.
         void randomize(bool fromGlobal = false, bool excludeWhiteAndBlack = true);
 

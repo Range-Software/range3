@@ -21,6 +21,16 @@ void RFileIO::writeNewLineAscii(RSaveFile &outFile)
 } /* RFileIO::writeNewLineAscii */
 
 
+void RFileIO::writeNewLineAscii(RFile &outFile)
+{
+    outFile.getTextStream() << RConstants::endl;
+    if (outFile.getTextStream().status() != QTextStream::Ok)
+    {
+        throw RError(R_ERROR_WRITE_FILE,R_ERROR_REF,"Failed to write the new line.");
+    }
+} /* RFileIO::writeNewLineAscii */
+
+
 /*********************************************************************
  *  bool                                                             *
  *********************************************************************/
@@ -102,6 +112,23 @@ void RFileIO::readBinary(RFile &inFile, char &cValue)
 
 
 void RFileIO::writeAscii(RSaveFile &outFile, const char &cValue, bool addNewLine)
+{
+    if (!addNewLine)
+    {
+        outFile.getTextStream() << cValue;
+    }
+    else
+    {
+        outFile.getTextStream() << cValue << RConstants::endl;
+    }
+    if (outFile.getTextStream().status() != QTextStream::Ok)
+    {
+        throw RError(R_ERROR_WRITE_FILE,R_ERROR_REF,"Failed to write char value.");
+    }
+} /* RFileIO::writeAscii */
+
+
+void RFileIO::writeAscii(RFile &outFile, const char &cValue, bool addNewLine)
 {
     if (!addNewLine)
     {
@@ -222,6 +249,23 @@ void RFileIO::writeAscii(RSaveFile &outFile, const unsigned int &uValue, bool ad
 } /* RFileIO::writeAscii */
 
 
+void RFileIO::writeAscii(RFile &outFile, const unsigned int &uValue, bool addNewLine)
+{
+    if (!addNewLine)
+    {
+        outFile.getTextStream() << uValue;
+    }
+    else
+    {
+        outFile.getTextStream() << uValue << RConstants::endl;
+    }
+    if (outFile.getTextStream().status() != QTextStream::Ok)
+    {
+        throw RError(R_ERROR_WRITE_FILE,R_ERROR_REF,"Failed to write unsigned int value.");
+    }
+} /* RFileIO::writeAscii */
+
+
 void RFileIO::writeBinary(RSaveFile &outFile, const unsigned int &uValue)
 {
     outFile.write((char*)&uValue,sizeof(unsigned int));
@@ -263,6 +307,23 @@ void RFileIO::readBinary(RFile &inFile, double &dValue)
 
 
 void RFileIO::writeAscii(RSaveFile &outFile, const double &dValue, bool addNewLine)
+{
+    if (!addNewLine)
+    {
+        outFile.getTextStream() << dValue;
+    }
+    else
+    {
+        outFile.getTextStream() << dValue << RConstants::endl;
+    }
+    if (outFile.getTextStream().status() != QTextStream::Ok)
+    {
+        throw RError(R_ERROR_WRITE_FILE,R_ERROR_REF,"Failed to write double value.");
+    }
+} /* RFileIO::writeAscii */
+
+
+void RFileIO::writeAscii(RFile &outFile, const double &dValue, bool addNewLine)
 {
     if (!addNewLine)
     {
@@ -375,6 +436,31 @@ void RFileIO::readBinary(RFile &inFile, QString &sValue)
 
 
 void RFileIO::writeAscii(RSaveFile &outFile, const QString &sValue, bool addNewLine)
+{
+//    QTextCodec *textCodec = outFile.codec();
+//    outFile.setCodec("UTF-8");
+    QString oValue(sValue);
+    if (oValue.isEmpty())
+    {
+        oValue = "\"\"";
+    }
+    if (!addNewLine)
+    {
+        outFile.getTextStream() << oValue;
+    }
+    else
+    {
+        outFile.getTextStream() << oValue << RConstants::endl;
+    }
+    if (outFile.getTextStream().status() != QTextStream::Ok)
+    {
+        throw RError(R_ERROR_WRITE_FILE,R_ERROR_REF, "Failed to write string value.");
+    }
+//    outFile.setCodec(textCodec);
+} /* RFileIO::writeAscii */
+
+
+void RFileIO::writeAscii(RFile &outFile, const QString &sValue, bool addNewLine)
 {
 //    QTextCodec *textCodec = outFile.codec();
 //    outFile.setCodec("UTF-8");
@@ -705,6 +791,32 @@ void RFileIO::writeAscii(RSaveFile &outFile, const RRVector &rVector, bool write
 } /* RFileIO::writeAscii */
 
 
+void RFileIO::writeAscii(RFile &outFile, const RRVector &rVector, bool writeSize, bool addNewLine)
+{
+    unsigned int nr = rVector.getNRows();
+    if (writeSize)
+    {
+        RFileIO::writeAscii(outFile,nr,addNewLine);
+        if (!addNewLine)
+        {
+            RFileIO::writeAscii(outFile,' ',false);
+        }
+    }
+    for (unsigned int i=0;i<nr;i++)
+    {
+        RFileIO::writeAscii(outFile,rVector[i], false);
+        if (i+1 < nr)
+        {
+            RFileIO::writeAscii(outFile,' ', false);
+        }
+    }
+    if (addNewLine)
+    {
+        RFileIO::writeNewLineAscii(outFile);
+    }
+} /* RFileIO::writeAscii */
+
+
 void RFileIO::writeBinary(RSaveFile &outFile, const RRVector &rVector, bool writeSize)
 {
     unsigned int nr = rVector.getNRows();
@@ -741,6 +853,22 @@ void RFileIO::readBinary(RFile &inFile, RR3Vector &rVector)
 
 
 void RFileIO::writeAscii(RSaveFile &outFile, const RR3Vector &rVector, bool addNewLine)
+{
+    RFileIO::writeAscii(outFile,rVector[0],addNewLine);
+    if (!addNewLine)
+    {
+        RFileIO::writeAscii(outFile," ",false);
+    }
+    RFileIO::writeAscii(outFile,rVector[1],addNewLine);
+    if (!addNewLine)
+    {
+        RFileIO::writeAscii(outFile," ",false);
+    }
+    RFileIO::writeAscii(outFile,rVector[2],addNewLine);
+} /* RFileIO::readAscii */
+
+
+void RFileIO::writeAscii(RFile &outFile, const RR3Vector &rVector, bool addNewLine)
 {
     RFileIO::writeAscii(outFile,rVector[0],addNewLine);
     if (!addNewLine)
@@ -1572,6 +1700,11 @@ void RFileIO::readBinary(RFile &inFile, RVariableType &variableType)
 
 
 void RFileIO::writeAscii(RSaveFile &outFile, const RVariableType &variableType, bool addNewLine)
+{
+    RFileIO::writeAscii(outFile,RVariable::getId(variableType),addNewLine);
+} /* RFileIO::writeAscii */
+
+void RFileIO::writeAscii(RFile &outFile, const RVariableType &variableType, bool addNewLine)
 {
     RFileIO::writeAscii(outFile,RVariable::getId(variableType),addNewLine);
 } /* RFileIO::writeAscii */
@@ -3851,6 +3984,17 @@ void RFileIO::readBinary(RFile &inFile, RMonitoringPoint &monitoringPoint)
 
 
 void RFileIO::writeAscii(RSaveFile &outFile, const RMonitoringPoint &monitoringPoint, bool addNewLine)
+{
+    RFileIO::writeAscii(outFile,monitoringPoint.variableType,addNewLine);
+    if (!addNewLine)
+    {
+        RFileIO::writeAscii(outFile,' ',false);
+    }
+    RFileIO::writeAscii(outFile,monitoringPoint.position,false,addNewLine);
+}
+
+
+void RFileIO::writeAscii(RFile &outFile, const RMonitoringPoint &monitoringPoint, bool addNewLine)
 {
     RFileIO::writeAscii(outFile,monitoringPoint.variableType,addNewLine);
     if (!addNewLine)

@@ -56,13 +56,13 @@ class DirectionWidget : public QGroupBox
         //! Hide buttons.
         void hideButtons(void);
 
-    private:
-
         //! Return direction.
         RR3Vector getDirection(void) const;
 
         //! Set direction.
         void setDirection(const RR3Vector &direction);
+
+    private:
 
         //! Set plane normal.
         void normalize(RR3Vector &direction, int keepPosition);

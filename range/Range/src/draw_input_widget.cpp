@@ -36,6 +36,19 @@ DrawInputWidget::DrawInputWidget(QWidget *parent) :
                      this,
                      &DrawInputWidget::onPositionWidgetClosed);
 
+    this->localDirectionWidget = new LocalDirectionWidget(tr("Local direction"),RLocalDirection());
+    this->localDirectionWidget->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Minimum);
+    this->stackedLayout->addWidget(this->localDirectionWidget);
+
+    QObject::connect(this->localDirectionWidget,
+                     &LocalDirectionWidget::changed,
+                     this,
+                     &DrawInputWidget::onLocalDirectionWidgetChanged);
+    QObject::connect(this->localDirectionWidget,
+                     &LocalDirectionWidget::closed,
+                     this,
+                     &DrawInputWidget::onLocalDirectionWidgetClosed);
+
     this->textWidget = new TextEditWidget;
     this->textWidget->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Minimum);
     this->stackedLayout->addWidget(this->textWidget);
@@ -68,6 +81,10 @@ DrawInputWidget::DrawInputWidget(QWidget *parent) :
                      this,
                      &DrawInputWidget::onPositionRequest);
     QObject::connect(this->tree,
+                     &DrawInputTree::localDirectionRequest,
+                     this,
+                     &DrawInputWidget::onLocalDirectionRequest);
+    QObject::connect(this->tree,
                      &DrawInputTree::textRequest,
                      this,
                      &DrawInputWidget::onTextRequest);
@@ -82,6 +99,7 @@ DrawInputWidget::DrawInputWidget(QWidget *parent) :
 
     QIcon removeIcon(":/icons/file/pixmaps/range-remove.svg");
     QIcon okIcon(":/icons/file/pixmaps/range-ok.svg");
+    QIcon cancelIcon(":/icons/file/pixmaps/range-cancel.svg");
 
     this->removeButton = new QPushButton(removeIcon,tr("Remove"));
     this->removeButton->setDisabled(true);
@@ -99,12 +117,20 @@ DrawInputWidget::DrawInputWidget(QWidget *parent) :
                      &QPushButton::clicked,
                      this,
                      &DrawInputWidget::onOkClicked);
+
+    QPushButton *cancelButton = new QPushButton(cancelIcon,tr("Cancel"));
+    layout->addWidget(cancelButton,3,0,1,2);
+
+    QObject::connect(cancelButton,
+                     &QPushButton::clicked,
+                     this,
+                     &DrawInputWidget::onCancelClicked);
 }
 
 void DrawInputWidget::onPositionRequest(const RR3Vector &position)
 {
-    this->stackedLayout->setCurrentWidget(this->positionWidget);
     this->positionWidget->setPosition(position);
+    this->stackedLayout->setCurrentWidget(this->positionWidget);
 }
 
 void DrawInputWidget::onPositionWidgetChanged(const RR3Vector &position)
@@ -117,10 +143,26 @@ void DrawInputWidget::onPositionWidgetClosed()
     this->stackedLayout->setCurrentWidget(this->layoutWidget);
 }
 
+void DrawInputWidget::onLocalDirectionRequest(const RLocalDirection &localDirection)
+{
+    this->localDirectionWidget->setLocalDirection(localDirection);
+    this->stackedLayout->setCurrentWidget(this->localDirectionWidget);
+}
+
+void DrawInputWidget::onLocalDirectionWidgetChanged(const RLocalDirection &localDirection)
+{
+    this->tree->setRequestedItemLocalDirectionValue(localDirection);
+}
+
+void DrawInputWidget::onLocalDirectionWidgetClosed()
+{
+    this->stackedLayout->setCurrentWidget(this->layoutWidget);
+}
+
 void DrawInputWidget::onTextRequest(const QString &text)
 {
-    this->stackedLayout->setCurrentWidget(this->textWidget);
     this->textWidget->setText(text);
+    this->stackedLayout->setCurrentWidget(this->textWidget);
 }
 
 void DrawInputWidget::onTextWidgetChanged(const QString &text)
@@ -185,4 +227,13 @@ void DrawInputWidget::onOkClicked()
                                                            this->mergeNodesCheck->checkState() != Qt::Unchecked,
                                                            RConstants::eps,
                                                            true);
+}
+
+void DrawInputWidget::onCancelClicked()
+{
+    uint nObjects = Session::getInstance().getDrawEngine()->getNObjects();
+    do
+    {
+        Session::getInstance().getDrawEngine()->removeObject(--nObjects);
+    } while (nObjects > 0);
 }

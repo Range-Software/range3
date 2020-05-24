@@ -90,7 +90,7 @@ void GLSimplexSegment::draw(void)
         RR3Vector orth1(direction.findOrthogonal());
 
         RR3Vector orth2;
-        RRVector::cross(direction,orth1,orth2);
+        RR3Vector::cross(direction,orth1,orth2);
 
         double r = std::sqrt(this->crossArea / RConstants::pi);
         orth1 *= r;

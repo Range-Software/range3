@@ -15,7 +15,7 @@
 #include "rbl_logger.h"
 
 
-RBVector::RBVector (unsigned int nRows, bool value)
+RBVector::RBVector (uint nRows, bool value)
 {
     this->resize(nRows,value);
     this->_init();
@@ -49,7 +49,7 @@ void RBVector::_init(const RBVector *pArray)
 } /* RBVector::_init */
 
 
-//bool & RBVector::operator [] (unsigned int n)
+//bool & RBVector::operator [] (uint n)
 //{
 //    R_ERROR_ASSERT(n<this->getNRows());
 
@@ -57,7 +57,7 @@ void RBVector::_init(const RBVector *pArray)
 //} /* RBVector::operator [] */
 
 
-//const bool & RBVector::operator [] (unsigned int n) const
+//const bool & RBVector::operator [] (uint n) const
 //{
 //    R_ERROR_ASSERT(n<this->getNRows());
 
@@ -77,7 +77,7 @@ void RBVector::print(bool oneLine, bool newLine) const
     {
         RLogger::info("Vector - bool: [%u]\n",this->size());
     }
-    for (unsigned int i=0;i<this->size();i++)
+    for (uint i=0;i<this->size();i++)
     {
         RLogger::info("%7s",this->at(i)?"true":"false");
         if (!oneLine)

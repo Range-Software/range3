@@ -45,15 +45,28 @@ class RR3Vector : public RRVector
         void findRotationMatrix ( RRMatrix &R ) const;
 
         //! Return opposite vector.
-        RR3Vector getOpposite(void) const;
+        RR3Vector getOpposite() const;
 
         //! Find orthogonal vector.
-        RR3Vector findOrthogonal(void) const;
+        RR3Vector findOrthogonal() const;
 
         //! Clear vector.
-        void clear(void);
+        void clear();
 
         static double findDistance(const RR3Vector &v1,const RR3Vector &v2);
+
+        //! Cross product of two vectors.
+        static void cross(const RR3Vector &v1,
+                          const RR3Vector &v2,
+                          RR3Vector       &vp);
+
+        //! Check if vectors are parallel and return number of parallel dimensions.
+        static bool areParallel(const RR3Vector &v1,
+                                const RR3Vector &v2);
+
+        //! Angle between two vectors (in radians).
+        static double angle(const RR3Vector &v1,
+                            const RR3Vector &v2);
 
 };
 

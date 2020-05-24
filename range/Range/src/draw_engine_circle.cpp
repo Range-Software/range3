@@ -15,19 +15,15 @@ DrawEngineCircle::DrawEngineCircle(QObject *parent) :
 {
     this->name = tr("circle");
 
-    this->inputParameters.append(DrawEngineInput(RR3Vector(0.0,0.0,0.0),
-                                                 tr("Center node position"),
-                                                 tr("Center node position in X,Y,Z coordinate system."),
+    this->inputParameters.append(DrawEngineInput(RLocalDirection(RR3Vector(0.0,0.0,0.0),RR3Vector(0.0,0.0,1.0)),
+                                                 tr("Center node position and direction"),
+                                                 tr("Center node position in X,Y,Z coordinate system and its direction (normal)."),
                                                  "m"));
     this->inputParameters.append(DrawEngineInput(0.25,
                                                  tr("Radius"),
                                                  tr("Circle\'s radius."),
                                                  "m",
                                                  RConstants::eps));
-    this->inputParameters.append(DrawEngineInput(RR3Vector(0.0,0.0,1.0),
-                                                 tr("Direction"),
-                                                 tr("Normal direction."),
-                                                 "m"));
     this->inputParameters.append(DrawEngineInput(0.0,
                                                  tr("Start angle"),
                                                  tr("Opening angle of the circle section."),
@@ -53,12 +49,14 @@ RModelRaw DrawEngineCircle::generate() const
 {
     RModelRaw modelRaw;
 
-    RR3Vector center = this->inputParameters.at(0).toVector();
+    RLocalDirection localDirection = this->inputParameters.at(0).toLocalDirection();
+    const RR3Vector &center = localDirection.getPosition();
+    const RR3Vector &direction = localDirection.getDirection();
+
     double r = this->inputParameters.at(1).toDouble();
-    RR3Vector direction = this->inputParameters.at(2).toVector();
-    double sa = this->inputParameters.at(3).toDouble();
-    double ea = this->inputParameters.at(4).toDouble();
-    double nai = this->inputParameters.at(5).toUint();
+    double sa = this->inputParameters.at(2).toDouble();
+    double ea = this->inputParameters.at(3).toDouble();
+    double nai = this->inputParameters.at(4).toUint();
 
     double da = 0.0;
     if (sa > ea)
@@ -102,7 +100,7 @@ RModelRaw DrawEngineCircle::generate() const
     }
 
     RRMatrix R;
-    direction.normalize();
+//    direction.normalize();
     direction.findRotationMatrix(R);
 
     for (uint i=0;i<modelRaw.getNNodes();i++)

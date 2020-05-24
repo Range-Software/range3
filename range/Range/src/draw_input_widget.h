@@ -17,6 +17,7 @@
 #include <QTextEdit>
 
 #include "draw_input_tree.h"
+#include "local_direction_widget.h"
 #include "position_widget.h"
 #include "text_edit_widget.h"
 
@@ -31,6 +32,8 @@ class DrawInputWidget : public QWidget
         QStackedLayout *stackedLayout;
         //! Position widget.
         PositionWidget *positionWidget;
+        //! Local direction widget.
+        LocalDirectionWidget *localDirectionWidget;
         //! Position widget.
         TextEditWidget *textWidget;
         //! Layout widget.
@@ -60,6 +63,15 @@ class DrawInputWidget : public QWidget
         //! Position widget has closed.
         void onPositionWidgetClosed();
 
+        //! Catch position request signal.
+        void onLocalDirectionRequest(const RLocalDirection &localDirection);
+
+        //! Local direction widget has changed.
+        void onLocalDirectionWidgetChanged(const RLocalDirection &localDirection);
+
+        //! Local direction direction widget has closed.
+        void onLocalDirectionWidgetClosed();
+
         //! Catch text request signal.
         void onTextRequest(const QString &text);
 
@@ -80,6 +92,9 @@ class DrawInputWidget : public QWidget
 
         //! OK button was clicked.
         void onOkClicked();
+
+        //! Cancel button was clicked.
+        void onCancelClicked();
 
 };
 

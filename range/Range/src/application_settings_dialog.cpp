@@ -81,6 +81,7 @@ int ApplicationSettingsDialog::exec(void)
         this->applicationSettings->setNThreads(this->nThreadsSpin->value());
         this->applicationSettings->setNHistoryRecords(this->nHistoryRecordsSpin->value());
         this->applicationSettings->setStyle(this->styleCombo->currentText());
+        this->applicationSettings->setToolbarIconSize(this->toolbarIconSizeSpin->value());
         this->applicationSettings->setSendUsageInfo(this->sendUsageInfoAllowed->isChecked());
         this->applicationSettings->setRangeApiAllowed(this->rangeApiAllowed->isChecked());
         this->applicationSettings->setRangeApiServer(this->rangeApiServer->text());
@@ -141,22 +142,34 @@ QWidget *ApplicationSettingsDialog::createGeneralTab(void)
     }
     layout->addWidget(this->styleCombo,3,1,1,1);
 
+    QLabel *toolbarIconSizeLabel = new QLabel(tr("Icon size:"));
+    layout->addWidget(toolbarIconSizeLabel,4,0,1,1);
+
+    this->toolbarIconSizeSpin = new QSpinBox;
+    this->toolbarIconSizeSpin->setRange(8,128);
+    this->toolbarIconSizeSpin->setSingleStep(8);
+    this->toolbarIconSizeSpin->setValue(this->applicationSettings->getToolbarIconSize());
+    RLogger::info("%d\n",this->applicationSettings->getToolbarIconSize());
+    this->toolbarIconSizeSpin->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Minimum);
+    layout->addWidget(this->toolbarIconSizeSpin,4,1,1,1);
+
     this->helpFileChooserButton = new FileChooserButton("Help directory:",
                                                         FileChooserButton::Directory,
                                                         this,
                                                         "Select directory containing help files",
                                                         this->applicationSettings->getHelpDir());
-    layout->addWidget(this->helpFileChooserButton,4,0,1,2);
+    layout->addWidget(this->helpFileChooserButton,5,0,1,2);
 
     QWidget *spacer = new QWidget();
     spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    layout->addWidget(spacer,5,0,1,2);
+    layout->addWidget(spacer,6,0,1,2);
 
     this->connect(this->solverFileChooserButton,SIGNAL(fileNameChanged(QString)),SLOT(onSolverPathChanged(QString)));
     this->connect(this->helpFileChooserButton,SIGNAL(fileNameChanged(QString)),SLOT(onHelpDirChanged(QString)));
     this->connect(this->nThreadsSpin,SIGNAL(valueChanged(int)),SLOT(onNThreadsChanged(int)));
     this->connect(this->nHistoryRecordsSpin,SIGNAL(valueChanged(int)),SLOT(onNHistoryRecordsChanged(int)));
     this->connect(this->styleCombo,SIGNAL(currentIndexChanged(int)),SLOT(onStyleChanged(int)));
+    this->connect(this->toolbarIconSizeSpin,SIGNAL(valueChanged(int)),SLOT(onToolbarIconSizeChanged(int)));
 
     return widget;
 }
@@ -245,6 +258,11 @@ void ApplicationSettingsDialog::onStyleChanged(int)
     this->okButton->setEnabled(true);
 }
 
+void ApplicationSettingsDialog::onToolbarIconSizeChanged(int)
+{
+    this->okButton->setEnabled(true);
+}
+
 void ApplicationSettingsDialog::onKeyboardShortcutChanged(ActionType actionType, const QString &shortcut)
 {
     this->changedShortcut.insert(actionType,shortcut);
@@ -280,6 +298,7 @@ void ApplicationSettingsDialog::onDefaultClicked(void)
             break;
         }
     }
+    this->toolbarIconSizeSpin->setValue(ApplicationSettings::getDefaultToolbarIconSize());
     this->keyboardShortcutsEdit->resetToDefault();
     this->changedShortcut.clear();
     this->sendUsageInfoAllowed->setChecked(ApplicationSettings::getDefaultSendUsageInfo());

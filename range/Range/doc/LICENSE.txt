@@ -3,7 +3,7 @@ Software for engineering simulations
 Version 3
 
 --------------------------------------------------
-Copyright 2019
+Copyright 2020
 Tomas Soltys
 Ke Zlatkovu 597, 25070 Odolena Voda, Czech Republic
 tomas.soltys@range-software.com

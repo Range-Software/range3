@@ -161,6 +161,9 @@ class RSolverFluid : public RSolverGeneric
         //! Assembly matrix.
         void assemblyMatrix(unsigned int elementID, const RRMatrix &Ae, const RRVector &fe);
 
+        //! Assembly matrix.
+        void assemblyMatrix(unsigned int elementID, const RRMatrix &Ae, const RRVector &fe, RSparseMatrix &Ap, RRVector &bp);
+
         //! Apply local rotations.
         void applyLocalRotations(unsigned int elementID, RRMatrix &Ae);
 

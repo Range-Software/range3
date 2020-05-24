@@ -50,7 +50,7 @@ QList<QString> ColorScale::getColorScales(void)
     {
         colorScales.append(it.next());
     }
-    qSort(colorScales.begin(),colorScales.end());
+    std::sort(colorScales.begin(),colorScales.end());
     return colorScales;
 }
 

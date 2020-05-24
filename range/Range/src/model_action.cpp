@@ -23,7 +23,7 @@ ModelAction::ModelAction(QObject *parent)
 void ModelAction::addAction(const ModelActionInput &modelActionInput)
 {
     this->actions.append(modelActionInput);
-    qSort(this->actions.begin(),this->actions.end());
+    std::sort(this->actions.begin(),this->actions.end());
 }
 
 void ModelAction::run(void)
@@ -325,7 +325,7 @@ void ModelAction::createElement(const ModelActionInput &modelActionInput)
         uint n4 = e.getNodeId(3);
         RTriangle t1(rModel.getNode(n1),rModel.getNode(n2),rModel.getNode(n3));
         RTriangle t2(rModel.getNode(n2),rModel.getNode(n3),rModel.getNode(n4));
-        if (RRVector::angle(t1.getNormal(),t2.getNormal()) > RConstants::pi / 2.0)
+        if (RR3Vector::angle(t1.getNormal(),t2.getNormal()) > RConstants::pi / 2.0)
         {
             e.swapNodeIds(2,3);
         }

@@ -154,29 +154,29 @@ void ValueTable::addValue(double key, double value, int rowNumber)
 
     this->resizeColumnToContents(ValueTableTreeTypes::COLUMN_KEY);
 
-    emit this->sizeChanged(this->rowCount());
+    emit this->sizeChanged(uint(this->rowCount()));
 }
 
 void ValueTable::removeValue(int rowNumber)
 {
     this->removeRow(rowNumber);
-    emit this->sizeChanged(this->rowCount());
+    emit this->sizeChanged(uint(this->rowCount()));
 }
 
 double ValueTable::getKey(uint row) const
 {
-    return this->item(row,ValueTableTreeTypes::COLUMN_KEY)->text().toDouble();
+    return this->item(int(row),ValueTableTreeTypes::COLUMN_KEY)->text().toDouble();
 }
 
 double ValueTable::getValue(uint row) const
 {
     if (this->dataType == R_VARIABLE_DATA_BOOLEAN)
     {
-        return (this->item(row,ValueTableTreeTypes::COLUMN_VALUE)->data(Qt::CheckStateRole).toInt() != Qt::Unchecked ? 1.0 : 0.0);
+        return (this->item(int(row),ValueTableTreeTypes::COLUMN_VALUE)->data(Qt::CheckStateRole).toInt() != Qt::Unchecked ? 1.0 : 0.0);
     }
     else
     {
-        return this->item(row,ValueTableTreeTypes::COLUMN_VALUE)->text().toDouble();
+        return this->item(int(row),ValueTableTreeTypes::COLUMN_VALUE)->text().toDouble();
     }
 }
 
@@ -240,7 +240,7 @@ void ValueTable::onInsertValue(void)
         }
     }
 
-    qSort(selectedRows.begin(), selectedRows.end(), qGreater<int>());
+    std::sort(selectedRows.begin(), selectedRows.end(), std::greater<int>());
 
     for (int i=0;i<selectedRows.size();i++)
     {
@@ -263,7 +263,7 @@ void ValueTable::onDeleteValue(void)
 
 void ValueTable::onImportFromFile(void)
 {
-    QString fileName = QFileDialog::getOpenFileName((QWidget*)this->parent(),
+    QString fileName = QFileDialog::getOpenFileName(dynamic_cast<QWidget*>(this->parent()),
                                                     tr("Open data file"),
                                                     MainSettings::getInstance().getHomeDir(),
                                                     "Any files (*)");
@@ -300,10 +300,10 @@ void ValueTable::onImportFromFile(void)
             QVector2D value;
             for (int i=0;i<stringList.size();i++)
             {
-                value[isOdd?0:1] = stringList[i].toDouble();
+                value[isOdd?0:1] = stringList[i].toFloat();
                 if (!isOdd)
                 {
-                    this->addValue(value[0],value[1]);
+                    this->addValue(double(value[0]),double(value[1]));
                 }
                 isOdd = !isOdd;
             }
@@ -364,9 +364,9 @@ void ValueTable::onFillValues(void)
         bool isSomethingSelected = (this->selectedItems().size() > 0);
         for (int i=0;i<this->rowCount();i++)
         {
-            if (!isSomethingSelected || this->isItemSelected(this->item(i,ValueTableTreeTypes::COLUMN_VALUE)))
+            if (!isSomethingSelected || this->item(i,ValueTableTreeTypes::COLUMN_VALUE)->isSelected())
             {
-                this->item(i,ValueTableTreeTypes::COLUMN_VALUE)->setText(QString::number(valueTable.getValue(i)));
+                this->item(i,ValueTableTreeTypes::COLUMN_VALUE)->setText(QString::number(valueTable.getValue(uint(i))));
             }
         }
     }

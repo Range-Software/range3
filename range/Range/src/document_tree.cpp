@@ -39,7 +39,7 @@ DocumentTree::DocumentTree(QWidget *parent) :
     this->setColumnHidden(DOCUMENT_TREE_COLUMN_MODEL_ID,true);
     this->setColumnHidden(DOCUMENT_TREE_COLUMN_IS_DOCUMENT,true);
 
-    this->sortByColumn(DOCUMENT_TREE_COLUMN_FILENAME);
+    this->sortByColumn(DOCUMENT_TREE_COLUMN_FILENAME,Qt::AscendingOrder);
 
     this->populate();
 

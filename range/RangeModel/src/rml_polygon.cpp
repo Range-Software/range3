@@ -130,12 +130,12 @@ std::vector<uint> RPolygon::sortNodes(std::vector<RNode> &nodes)
         nodeAngleList.back().id = nodeIDs[i];
         nodeAngleList.back().node = nodes[i];
         RR3Vector v2(nodes[i].getX()-nodes[0].getX(),nodes[i].getY()-nodes[0].getY(),nodes[i].getZ()-nodes[0].getZ());
-        nodeAngleList.back().angle = RRVector::angle(v1,v2);
+        nodeAngleList.back().angle = RR3Vector::angle(v1,v2);
 
         if (i > 2)
         {
             RTriangle t(nodes[0],nodes[1],nodes[i]);
-            if (RRVector::angle(firstNormal,t.getNormal()) > RConstants::pi/2.0)
+            if (RR3Vector::angle(firstNormal,t.getNormal()) > RConstants::pi/2.0)
             {
                 nodeAngleList.back().angle *= -1.0;
             }
@@ -281,7 +281,7 @@ uint RPolygon::findEarNode(void) const
 
         RR3Vector::cross(v12,v23,vn);
 
-        if (RRVector::angle(vn,this->normal) < RConstants::pi / 2.0)
+        if (RR3Vector::angle(vn,this->normal) < RConstants::pi / 2.0)
         {
 
             RTriangle t(this->nodes[n1],this->nodes[n2],this->nodes[n3]);
@@ -294,7 +294,7 @@ uint RPolygon::findEarNode(void) const
 
                 if (!t.isPointInside(this->nodes[j].toVector(),false))
                 {
-                    double angle = RRVector::angle(v12,v23);
+                    double angle = RR3Vector::angle(v12,v23);
                     if (angle < earAngle)
                     {
                         earAngle = angle;

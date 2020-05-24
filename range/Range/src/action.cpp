@@ -934,7 +934,7 @@ void Action::onGeometryMoveNode()
 
         if (nodeIDs.size() > 0)
         {
-            qSort(nodeIDs);
+            std::sort(nodeIDs.begin(),nodeIDs.end());
 
             MoveNodeDialog moveNodeDialog(modelIDs[i],nodeIDs,this->mainWindow);
             moveNodeDialog.exec();

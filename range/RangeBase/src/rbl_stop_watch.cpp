@@ -59,14 +59,9 @@ void RStopWatch::resume(void)
     this->startTime += QDateTime::currentMSecsSinceEpoch() - this->pauseTime;
 }
 
-qint64 RStopWatch::getClock(void) const
-{
-    return QDateTime::currentMSecsSinceEpoch() - this->startTime;
-}
-
 qint64 RStopWatch::getMiliSeconds(void) const
 {
-    return this->getClock();
+    return QDateTime::currentMSecsSinceEpoch() - this->startTime;
 }
 
 void RStopWatch::addElapsedTime(qint64 elapsedTime)

@@ -137,7 +137,7 @@ void RMeshGenerator::generate(const RMeshInput &meshInput, RModel &model)
     }
 }
 
-std::vector<RElement> RMeshGenerator::generate(const std::vector<RNode> &nodes, const std::vector<RElement> &elements)
+void RMeshGenerator::generate(const std::vector<RNode> &nodes, const std::vector<RElement> &elements, std::vector<RNode> &steinerNodes, std::vector<RElement> &volumes)
 {
     RModel model;
 
@@ -171,7 +171,14 @@ std::vector<RElement> RMeshGenerator::generate(const std::vector<RNode> &nodes, 
         throw error;
     }
 
-    std::vector<RElement> volumes;
+    uint nSteinerNodes = model.getNNodes() - uint(nodes.size());
+
+    steinerNodes.resize(nSteinerNodes,RNode(0.0,0.0,0.0));
+
+    for (uint i=0;i<nSteinerNodes;i++)
+    {
+        steinerNodes[i] = model.getNode(uint(nodes.size()) + i);
+    }
 
     for (uint i=0;i<model.getNVolumes();i++)
     {
@@ -186,8 +193,6 @@ std::vector<RElement> RMeshGenerator::generate(const std::vector<RNode> &nodes, 
             volumes.push_back(rElement);
         }
     }
-
-    return volumes;
 }
 
 std::vector<RTetrahedron> RMeshGenerator::generate(const std::vector<RTriangle> &triangles)

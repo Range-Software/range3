@@ -51,9 +51,6 @@ class RStopWatch
         //! Resume stop-watch.
         void resume(void);
 
-        //! Return elapsed clock.
-        qint64 getClock(void) const;
-
         //! Return elapsed time in mili seconds.
         qint64 getMiliSeconds(void) const;
 

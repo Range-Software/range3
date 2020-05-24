@@ -45,38 +45,47 @@ class RSparseMatrix
         RSparseMatrix & operator =(const RSparseMatrix &matrix);
 
         //! Return number of rows.
-        unsigned int getNRows(void) const;
+        uint getNRows(void) const;
 
         //! Set number of rows.
-        void setNRows(unsigned int nRows);
+        void setNRows(uint nRows);
 
         //! Return number of columns for given row index.
-        unsigned int getNColumns(unsigned int rowIndex) const;
+        uint getNColumns(uint rowIndex) const;
 
         //! Set number of rows.
-        void reserveNColumns(unsigned int nColumns);
+        void reserveNColumns(uint nColumns);
 
         //! Return value at given row index and column position.
-        double getValue(unsigned int rowIndex, unsigned int columnPosition) const;
+        double getValue(uint rowIndex, uint columnPosition) const;
 
         //! Return vector of position indexes for given row index.
-        std::vector<unsigned int> getRowIndexes(unsigned int rowIndex) const;
+        std::vector<uint> getRowIndexes(uint rowIndex) const;
+
+        //! Return const reference to sparse vector at given position.
+        const RSparseVector<double> & getVector(uint rowIndex) const;
+
+        //! Return reference to sparse vector at given position.
+        RSparseVector<double> & getVector(uint rowIndex);
 
         //! Add value.
         //! If value with given row and column indexes already exist given value will be added to its current value.
-        void addValue(unsigned int rowIndex, unsigned int columnIndex, double value);
+        void addValue(uint rowIndex, uint columnIndex, double value);
 
         //! Find value at given row and column index. If value is not found 0.0 is returned.
-        double findValue(unsigned int rowIndex, unsigned int columnIndex) const;
+        double findValue(uint rowIndex, uint columnIndex) const;
+
+        //! Add matrix operation.
+        void addMatrix(const RSparseMatrix &A);
 
         //! Clear all values.
         void clear(void);
 
         //! Find column position.
-        bool findColumnPosition(unsigned int rowIndex, unsigned int columnIndex, unsigned int &rowPosition) const;
+        bool findColumnPosition(uint rowIndex, uint columnIndex, uint &rowPosition) const;
 
         //! Find maximum column index.
-        unsigned int findMaxColumnIndex(void) const;
+        uint findMaxColumnIndex(void) const;
 
         //! Return euclidean norm of the matrix.
         double findNorm(void) const;
