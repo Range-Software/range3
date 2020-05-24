@@ -14,7 +14,7 @@ jobs:
       - run:
           name: Upload
           command: scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -P $UPLOAD_PORT build-Release/packages/rpmbuild/RPMS/$(uname -m)/*.rpm $UPLOAD_USER@$UPLOAD_HOST:.
-  build-fedora30:
+  build-fedora32:
     docker:
       - image: fedora:32
     steps:
