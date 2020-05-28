@@ -8,6 +8,8 @@
  *  DESCRIPTION: OpenGL widget class definition                      *
  *********************************************************************/
 
+#include <QApplication>
+#include <QDesktopWidget>
 #include <QFileDialog>
 #include <QPainter>
 #include <QGuiApplication>
@@ -34,6 +36,7 @@
 
 const GLsizei GLWidget::lAxisWpWidth = 100;
 const GLsizei GLWidget::lAxisWpHeight = 100;
+//static int GLWidget::dsktopDevicePixelRatio = 1;
 
 GLWidget::GLWidget(uint modelID, QWidget *parent)
     : QOpenGLWidget(parent),
@@ -58,6 +61,8 @@ GLWidget::GLWidget(uint modelID, QWidget *parent)
       showRotationSphere(false),
       useGlCullFace(true)
 {
+    this->desktopDevicePixelRatio = QApplication::desktop()->devicePixelRatio();
+
     this->setFocusPolicy(Qt::StrongFocus);
     this->setAutoFillBackground(false);
 
@@ -124,7 +129,7 @@ void GLWidget::initializeGL(void)
 
 void GLWidget::resizeGL(int width, int height)
 {
-    GL_SAFE_CALL(glViewport(0, 0, GLsizei(width), GLsizei(height)));
+    GL_SAFE_CALL(glViewport(0, 0, GLsizei(width*this->desktopDevicePixelRatio), GLsizei(height*this->desktopDevicePixelRatio)));
     GL_SAFE_CALL(glMatrixMode(GL_PROJECTION));
     GL_SAFE_CALL(glLoadIdentity());
 
@@ -175,8 +180,10 @@ void GLWidget::paintGL(void)
 
 void GLWidget::drawBackgroundGradient(void)
 {
+
+
     // MAIN VIEWPORT
-    GL_SAFE_CALL(glViewport(0, 0, GLsizei(this->width()), GLsizei(this->height())));
+    GL_SAFE_CALL(glViewport(0, 0, GLsizei(this->width()*this->desktopDevicePixelRatio), GLsizei(this->height()*this->desktopDevicePixelRatio)));
 
     GL_SAFE_CALL(glMatrixMode(GL_PROJECTION));
     GL_SAFE_CALL(glLoadIdentity());
@@ -211,7 +218,7 @@ void GLWidget::drawBackgroundGradient(void)
 void GLWidget::drawModel(void)
 {
     // MAIN VIEWPORT
-    GL_SAFE_CALL(glViewport(0, 0, GLsizei(this->width()), GLsizei(this->height())));
+    GL_SAFE_CALL(glViewport(0, 0, GLsizei(this->width()*this->desktopDevicePixelRatio), GLsizei(this->height()*this->desktopDevicePixelRatio)));
 
     GL_SAFE_CALL(glMatrixMode(GL_PROJECTION));
     GL_SAFE_CALL(glLoadIdentity());
@@ -421,7 +428,7 @@ void GLWidget::drawModel(void)
     if (this->displayProperties.getDrawLocalAxis())
     {
         // LOWER-LEFT CORNER VIEWPORT
-        GL_SAFE_CALL(glViewport (0,0,GLWidget::lAxisWpWidth,GLWidget::lAxisWpHeight));
+        GL_SAFE_CALL(glViewport (0,0,GLWidget::lAxisWpWidth*this->desktopDevicePixelRatio,GLWidget::lAxisWpHeight*this->desktopDevicePixelRatio));
 
         GL_SAFE_CALL(glMatrixMode(GL_PROJECTION));
         GL_SAFE_CALL(glLoadIdentity());
@@ -1255,8 +1262,8 @@ GLint GLWidget::project(GLdouble objx, GLdouble objy, GLdouble objz, const GLdou
     in[1] /= in[3];
     in[2] /= in[3];
 
-    *winx = viewport[0] + (1 + in[0]) * viewport[2] / 2;
-    *winy = viewport[1] + (1 + in[1]) * viewport[3] / 2;
+    *winx = viewport[0] / this->desktopDevicePixelRatio + (1 + in[0]) * (viewport[2] / this->desktopDevicePixelRatio) / 2;
+    *winy = viewport[1] / this->desktopDevicePixelRatio + (1 + in[1]) * (viewport[3] / this->desktopDevicePixelRatio) / 2;
 
     *winz = (1 + in[2]) / 2;
     return GL_TRUE;

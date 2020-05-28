@@ -11,6 +11,7 @@ Bug fixes:
 
 * SOLVER: New values for monitoring points overwrite instead of append
 * GUI: Crash when performing boolean operations
+* GUI: Fixed invalid scaling on Linux High DPI Displays
 
 ------------------------------------------------------------------
 Version 3.2.3

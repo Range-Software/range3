@@ -32,6 +32,8 @@ class GLWidget : public QOpenGLWidget
         static const GLsizei lAxisWpWidth;
         //! Local axis viewport height.
         static const GLsizei lAxisWpHeight;
+        //! Desktop device pixel ratio.
+        int desktopDevicePixelRatio;
 
     protected:
 
