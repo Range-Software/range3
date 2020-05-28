@@ -3,9 +3,9 @@ Version 3.2.4
 
 * GUI: Configurable toolbar icon size
 * GUI: Display time required to draw model in 3D area
-* GUI: Added 'Cancel' push button to drawing widget which removes all object at once
+* GUI: Added 'Cancel' push button to drawing widget which removes all objects at once
 * GUI: Newly drawn objects are shown as transparent
-* GUI: Draw circle/elipse: United position and direction into one input widget
+* GUI: Draw circle/ellipse: United position and direction widgets into one input widget
 
 Bug fixes:
 
