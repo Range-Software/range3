@@ -27,8 +27,10 @@ class RGLDisplayProperties
         bool drawLocalAxis;
         //! Show model edges.
         bool showModelEdges;
-        //! Show model edges.
+        //! Show model dimensions.
         bool showModelDimensions;
+        //! Show model grid.
+        bool showModelGrid;
         //! Show errors.
         bool showErrors;
         //! Background color.
@@ -80,6 +82,12 @@ class RGLDisplayProperties
 
         //! Set whether to show model dimensions.
         void setShowModelDimensions(bool showModelDimensions);
+
+        //! Return whether to show model grid.
+        bool getShowModelGrid(void) const;
+
+        //! Set whether to show model dimensions.
+        void setShowModelGrid(bool showModelGrid);
 
         //! return whether to show errors.
         bool getShowErrors(void) const;

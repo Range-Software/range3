@@ -92,6 +92,7 @@ SOURCES += \
     src/gl_entity.cpp \
     src/gl_entity_list.cpp \
     src/gl_functions.cpp \
+    src/gl_grid.cpp \
     src/gl_interpolated_element.cpp \
     src/gl_interpolated_entity.cpp \
     src/gl_line.cpp \
@@ -300,6 +301,7 @@ HEADERS += \
     src/gl_entity.h \
     src/gl_entity_list.h \
     src/gl_functions.h \
+    src/gl_grid.h \
     src/gl_interpolated_element.h \
     src/gl_interpolated_entity.h \
     src/gl_line.h \

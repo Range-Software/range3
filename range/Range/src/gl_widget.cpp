@@ -20,6 +20,7 @@
 #include "gl_axis.h"
 #include "gl_dimension.h"
 #include "gl_cut_plane.h"
+#include "gl_grid.h"
 #include "gl_line.h"
 #include "gl_point.h"
 #include "gl_rotation_sphere.h"
@@ -341,8 +342,21 @@ void GLWidget::drawModel(void)
         Session::getInstance().getModel(this->getModelID()).findNodeLimits(xMin,xMax,yMin,yMax,zMin,zMax);
         int lineColorValue = qGray(this->getGLDisplayProperties().getBgColor().rgb()) < 96 ? 255 : 0;
         this->qglColor(QColor(lineColorValue,lineColorValue,lineColorValue,100));
+
         GLDimension gDimension(this,1.0/double(this->scale),xMin,xMax,yMin,yMax,zMin,zMax);
         gDimension.paint();
+    }
+
+    // Draw grid
+    if (this->displayProperties.getShowModelGrid())
+    {
+        double xMin=0.0,xMax=0.0,yMin=0.0,yMax=0.0,zMin=0.0,zMax=0.0;
+        Session::getInstance().getModel(this->getModelID()).findNodeLimits(xMin,xMax,yMin,yMax,zMin,zMax);
+        int lineColorValue = qGray(this->getGLDisplayProperties().getBgColor().rgb()) < 96 ? 255 : 0;
+        this->qglColor(QColor(lineColorValue,lineColorValue,lineColorValue,100));
+
+        GLGrid gGrid(this,1.0/double(this->scale),xMin,xMax,yMin,yMax,zMin,zMax);
+        gGrid.paint();
     }
 
     // Draw draw-engine objects

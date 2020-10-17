@@ -96,6 +96,28 @@ namespace RUtil
         return arg * pow(10 , -(*exp));
     }
 
+
+    inline int findExponent(double value)
+    {
+        int exp = 0;
+
+        if (std::abs(value) < 1.0)
+        {
+            while (std::abs(value)/std::pow(10.0,exp) < 1)
+            {
+                exp--;
+            }
+        }
+        else
+        {
+            while (std::abs(value)/std::pow(10.0,exp) >= 10)
+            {
+                exp ++;
+            }
+        }
+
+        return exp;
+    }
 } // RUtil
 
 #endif /* RBL_MACROS_H */
