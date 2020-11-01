@@ -90,7 +90,13 @@ class GLActionEvent : public QObject
         QString getKeyMouseCombination(void) const;
 
         //! Return string representation of keay mouse combination.
-        static QString findKeyMouseCombination(GLActionEventType type);
+        static QString findKeyMouseCombination(Qt::KeyboardModifiers keyModifiers,
+                                               int key,
+                                               Qt::MouseButtons buttons,
+                                               Qt::ScrollPhase scrollPhase);
+
+        //! Return string representations of keay mouse combination for specified action type.
+        static QVector<QString> findKeyMouseCombinations(GLActionEventType type);
 
         //! Get string representation of action type.
         static QString toString(GLActionEventType type);

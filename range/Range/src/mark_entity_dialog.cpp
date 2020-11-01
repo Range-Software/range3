@@ -36,10 +36,19 @@ MarkEntityDialog::MarkEntityDialog(REntityGroupType entityType, QWidget *parent)
     this->autoMarkRadio = new QRadioButton("Auto-mark all entities");
     mainLayout->addWidget(this->autoMarkRadio,0,0,1,2);
 
-    QString markPickMessage = tr("To mark elements at least one element must be picked.")
-                              + " " + tr("Use") + " <strong>"
-                              + GLActionEvent::findKeyMouseCombination(GL_ACTION_EVENT_PICK_ELEMENT)
-                              + "</strong> " + tr("to pick element") + ".";
+    QVector<QString> keyMouseCombinations = GLActionEvent::findKeyMouseCombinations(GL_ACTION_EVENT_PICK_ELEMENT);
+    QString markPickMessage = tr("To mark elements at least one element must be picked.") + " " + tr("Use") + " ";
+    bool isFirst = true;
+    foreach (auto keyMouseCombination,keyMouseCombinations)
+    {
+        if (!isFirst)
+        {
+            markPickMessage += " or ";
+        }
+        markPickMessage += "<strong>" + keyMouseCombination + "</strong>";
+        isFirst = true;
+    }
+    markPickMessage += " " + tr("to pick element") + ".";
     this->pickedMarkRadio = new QRadioButton("Mark only selected and related elements");
     this->pickedMarkRadio->setToolTip(markPickMessage);
     mainLayout->addWidget(this->pickedMarkRadio,1,0,1,2);
@@ -167,10 +176,21 @@ bool MarkEntityDialog::markEntities(uint modelID, const QVector<PickItem> &pickL
 
     if (elementIDs.size() == 0)
     {
-        QMessageBox::warning(this,tr("No elements were picked."),tr("To mark elements at least one element must be picked.")
-                                                                 + " " + tr("Use") + " "
-                                                                 + GLActionEvent::findKeyMouseCombination(GL_ACTION_EVENT_PICK_ELEMENT)
-                                                                 + " " + tr("to pick element") + ".");
+        QVector<QString> keyMouseCombinations = GLActionEvent::findKeyMouseCombinations(GL_ACTION_EVENT_PICK_ELEMENT);
+        QString markPickMessage = tr("To mark elements at least one element must be picked.") + " " + tr("Use") + " ";
+        bool isFirst = true;
+        foreach (auto keyMouseCombination,keyMouseCombinations)
+        {
+            if (!isFirst)
+            {
+                markPickMessage += " or ";
+            }
+            markPickMessage += "<strong>" + keyMouseCombination + "</strong>";
+            isFirst = true;
+        }
+        markPickMessage += " " + tr("to pick element") + ".";
+
+        QMessageBox::warning(this,tr("No elements were picked."),markPickMessage);
         return false;
     }
 
