@@ -89,13 +89,13 @@ void LocalDirectionWidget::showEvent(QShowEvent *event)
     this->directionWidget->blockSignals(false);
 }
 
-void LocalDirectionWidget::onPositionChanged(const RR3Vector &position)
+void LocalDirectionWidget::onPositionChanged(const RR3Vector &)
 {
     this->okButton->setEnabled(true);
     emit this->changed(this->getLocalDirection());
 }
 
-void LocalDirectionWidget::onDirectionChanged(const RR3Vector &direction)
+void LocalDirectionWidget::onDirectionChanged(const RR3Vector &)
 {
     this->okButton->setEnabled(true);
     emit this->changed(this->getLocalDirection());

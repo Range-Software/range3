@@ -170,7 +170,7 @@ class DrawEngineInput
         bool isValid(const RR3Vector &value) const;
 
         //! Validate current value.
-        bool isValid(const RLocalDirection &value) const;
+        bool isValid(const RLocalDirection &) const;
 
         //! Validate current value.
         bool isValid(const QString &value) const;

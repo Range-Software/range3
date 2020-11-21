@@ -62,10 +62,10 @@ class LocalDirectionWidget : public QGroupBox
     private slots:
 
         //! On position changed.
-        void onPositionChanged(const RR3Vector &position);
+        void onPositionChanged(const RR3Vector &);
 
         //! On direction changed.
-        void onDirectionChanged(const RR3Vector &direction);
+        void onDirectionChanged(const RR3Vector &);
 
         //! On cancel button clicked.
         void onCancelButtonClicked();
