@@ -12,6 +12,7 @@
 #define ACTION_DEFINITION_ITEM_H
 
 #include <QString>
+#include <QAction>
 
 #define ACTION_TYPE_IS_VALID(_type) \
             ( _type >= ACTION_NONE && _type < ACTION_N_TYPES )
@@ -164,6 +165,7 @@ class ActionDefinitionItem
         QString shortCut;
         QString icon;
         PointerToMemberFunction slot;
+        QAction::MenuRole menuRole;
 
     private:
 
@@ -179,7 +181,8 @@ class ActionDefinitionItem
                              const QString &desc = QString(),
                              const QString &shortCut = QString(),
                              const QString &icon = QString(),
-                             PointerToMemberFunction slot = nullptr);
+                             PointerToMemberFunction slot = nullptr,
+                             QAction::MenuRole menuRole = QAction::NoRole);
 
         //! Copy constructor.
         ActionDefinitionItem(const ActionDefinitionItem &actionDefinitionItem);

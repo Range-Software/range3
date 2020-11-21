@@ -282,6 +282,8 @@ void MainWindow::createMenus(void)
     menuFile->addAction(this->actionList->getAction(ACTION_SEPARATOR));
     menuFile->addAction(this->actionList->getAction(ACTION_MODEL_RENAME));
     menuFile->addAction(this->actionList->getAction(ACTION_SEPARATOR));
+    menuFile->addAction(this->actionList->getAction(ACTION_APPLICATION_SETTINGS));
+    menuFile->addAction(this->actionList->getAction(ACTION_SEPARATOR));
     menuFile->addAction(this->actionList->getAction(ACTION_APPLICATION_QUIT));
     menubar->addAction(menuFile->menuAction());
 
@@ -426,11 +428,6 @@ void MainWindow::createMenus(void)
     menuReport->addAction(this->actionList->getAction(ACTION_REPORT_MONITORING_POINT_GRAPH));
     menuReport->addAction(this->actionList->getAction(ACTION_REPORT_CREATE_REPORT));
     menubar->addAction(menuReport->menuAction());
-
-    QMenu *menuTools = new QMenu(menubar);
-    menuTools->setTitle(QApplication::translate("MainWindow", "Tools"));
-    menuTools->addAction(this->actionList->getAction(ACTION_APPLICATION_SETTINGS));
-    menubar->addAction(menuTools->menuAction());
 
     menubar->addSeparator();
 

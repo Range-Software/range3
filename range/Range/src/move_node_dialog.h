@@ -8,7 +8,7 @@
  *  DESCRIPTION: Move node dialog class declaration                  *
  *********************************************************************/
 
-#ifndef __MOVE_NODE_DIALOG_Hv
+#ifndef MOVE_NODE_DIALOG_H
 #define MOVE_NODE_DIALOG_H
 
 #include <QDialog>

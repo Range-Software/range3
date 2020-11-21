@@ -93,6 +93,7 @@ Action::Action(ActionType type, MainWindow *mainWindow, QObject *parent) :
                 this->setIcon(QIcon(actionDefinition->getIcon(this->type).toUtf8().constData()));
                 this->setIconVisibleInMenu(true);
             }
+            this->setMenuRole(actionDefinition->getMenuRole(this->type));
             QObject::connect(this, &Action::triggered, this, actionDefinition->getSlot(this->type));
             break;
         }

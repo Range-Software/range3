@@ -52,8 +52,11 @@ class ActionDefinition : public QObject
         //! Return action text.
         const QString &getIcon(ActionType type) const;
 
-        //! Return action text.
+        //! Return action slot.
         PointerToMemberFunction getSlot(ActionType type) const;
+
+        //! Return action menu role.
+        QAction::MenuRole getMenuRole(ActionType type) const;
 
         //! Return list of action types for given group type.
         QList<ActionType> getActionTypes(ActionGroupTypeMask actionGroupTypeMask = ACTION_GROUP_ALL) const;
