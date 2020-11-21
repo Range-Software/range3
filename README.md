@@ -12,12 +12,21 @@ Following command will download and install all required packages, therefore it 
 $ sudo ./scripts/prereqs.sh
 ```
 ## Build & Install
+### Linux
 ```
 $ ./scripts/build.sh --clean && ./scripts/create_package.sh
 ```
+### MacOS
+```
+$ ./scripts/build.sh --clean && ./scripts/create_mac_app.sh
+```
+Above command will produce `./build-Release/packages/range-3.2.4.dmg` which can be installed with following command:
+```
+$ open './build-Release/packages/range-3.2.4.dmg'
+```
 ## Running the software
 ```
-$ $HOME/bin/range-3.2.2/bin/Range
+$ $HOME/bin/range-3.2.4/bin/Range
 ```
 
 ## Download

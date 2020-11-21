@@ -283,7 +283,11 @@ void Application::onStarted(void)
 
         MaterialUpdater *pMaterialUpdater = new MaterialUpdater;
 
+#ifdef Q_OS_DARWIN
+        QDir matSrcDir(QDir::cleanPath(QDir(this->applicationDirPath()).filePath("../Resources/materials")));
+#else
         QDir matSrcDir(QDir::cleanPath(QDir(this->applicationDirPath()).filePath("../materials")));
+#endif
 
         RLogger::info("Source directory: \'%s\'\n",matSrcDir.absolutePath().toUtf8().constData());
 
@@ -304,7 +308,11 @@ void Application::onStarted(void)
 
         FileUpdater *pFileUpdater = new FileUpdater;
 
+#ifdef Q_OS_DARWIN
+        QDir dataSrcDir(QDir::cleanPath(QDir(this->applicationDirPath()).filePath("../Resources/data")));
+#else
         QDir dataSrcDir(QDir::cleanPath(QDir(this->applicationDirPath()).filePath("../data")));
+#endif
         QDir dataDstDir(MainSettings::getInstance().getDataDir());
 
         RLogger::info("Source directory: \'%s\'\n",dataSrcDir.absolutePath().toUtf8().constData());

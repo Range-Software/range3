@@ -1,6 +1,7 @@
 ------------------------------------------------------------------
 Version 3.2.5
 
+* ALL: Added upport for MacOS
 * GUI: Added 3D area mouse action help
 * GUI: Show model grid
 

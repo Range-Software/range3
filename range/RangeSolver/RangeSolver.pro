@@ -4,8 +4,13 @@ win*-msvc* {
     LIB_EXT = "lib"
     LIB_PRE = ""
 } else {
-    QMAKE_CXXFLAGS += -fopenmp
-    LIBS += -fopenmp
+    macx: {
+        QMAKE_CXXFLAGS += -Xpreprocessor -fopenmp -I/usr/local/include
+        LIBS += -lomp -L /usr/local/lib
+    } else {
+        QMAKE_CXXFLAGS += -fopenmp
+        LIBS += -fopenmp
+    }
     LIB_EXT = "a"
     LIB_PRE = "lib"
 }

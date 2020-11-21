@@ -9,10 +9,16 @@
 selfDebug=false
 
 myName=$(basename $0 .sh)
-myPath=$(dirname  $(realpath ${BASH_SOURCE[0]}))
 myUser=$(id -nu)
 myNode=$(hostname -s)
 timeStamp=$(date +%H%M%S)
+
+getScriptPath () {
+	echo ${0%/*}/
+}
+pushd "$(getScriptPath)"
+myPath="$(pwd)"
+popd
 
 . ${myPath}/lib.sh
 
