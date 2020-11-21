@@ -33,11 +33,12 @@ TextBrowser::TextBrowser(bool hasClearButton, QWidget *parent)
 
 void TextBrowser::resizeEvent(QResizeEvent *event)
 {
+    QTextBrowser::resizeEvent(event);
+
     if (!this->hasClearButton)
     {
         return;
     }
-    QTextBrowser::resizeEvent(event);
 
     int bw = this->clearButton->width();
     int bh = this->clearButton->height();
