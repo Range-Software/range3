@@ -17,14 +17,10 @@
 #include "log_browser.h"
 
 LogBrowser::LogBrowser(const QString &logFileName, QWidget *parent) :
-    QTextBrowser(parent),
+    TextBrowser(false,parent),
     logFileName(logFileName),
     fileStreamEnd(0)
 {
-    QFont font("Monospace");
-    font.setStyleHint(QFont::TypeWriter);
-    this->setFont(font);
-
     QFileSystemWatcher *systemWatcher = new QFileSystemWatcher(QStringList(this->logFileName),this);
 
     this->onFileChanged(this->logFileName);
