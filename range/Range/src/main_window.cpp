@@ -275,12 +275,11 @@ void MainWindow::createMenus(void)
     menuFileExport->addAction(this->actionList->getAction(ACTION_MODEL_EXPORT_STL_ASCII));
     menuFileExport->addAction(this->actionList->getAction(ACTION_MODEL_EXPORT_STL_BINARY));
     menuFile->addAction(menuFileExport->menuAction());
+    menuFile->addAction(this->actionList->getAction(ACTION_MODEL_RENAME));
     menuFile->addAction(this->actionList->getAction(ACTION_MODEL_CLOSE));
     menuFile->addAction(this->actionList->getAction(ACTION_SEPARATOR));
     menuFile->addAction(this->actionList->getAction(ACTION_MODEL_RELOAD_RESULTS));
     menuFile->addAction(this->actionList->getAction(ACTION_MODEL_DROP_RESULTS));
-    menuFile->addAction(this->actionList->getAction(ACTION_SEPARATOR));
-    menuFile->addAction(this->actionList->getAction(ACTION_MODEL_RENAME));
     menuFile->addAction(this->actionList->getAction(ACTION_SEPARATOR));
     menuFile->addAction(this->actionList->getAction(ACTION_APPLICATION_SETTINGS));
     menuFile->addAction(this->actionList->getAction(ACTION_SEPARATOR));
