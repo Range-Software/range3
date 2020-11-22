@@ -46,14 +46,14 @@ void GLGrid::_init(const GLGrid *pGlGrid)
 
     if (tmin > 0)
     {
-        while (this->gMin + this->gdt < tmin)
+        while (this->gMin + this->gdt <= tmin)
         {
             this->gMin += this->gdt;
         }
     }
     else
     {
-        while (this->gMin > tmin)
+        while (this->gMin >= tmin)
         {
             this->gMin -= this->gdt;
         }
@@ -61,14 +61,14 @@ void GLGrid::_init(const GLGrid *pGlGrid)
 
     if (tmax < 0)
     {
-        while (this->gMax - this->gdt > tmax)
+        while (this->gMax - this->gdt >= tmax)
         {
             this->gMax -= this->gdt;
         }
     }
     else
     {
-        while (this->gMax < tmax)
+        while (this->gMax <= tmax)
         {
             this->gMax += this->gdt;
         }
@@ -119,9 +119,27 @@ void GLGrid::finalize()
 
 void GLGrid::draw()
 {
-    double dt = 0.0;
-    do
+    int e = RUtil::findExponent(this->scale);
+    if (std::ceil(this->scale / std::pow(10,e)) > 2)
     {
+        e++;
+    }
+    double sdt = this->gdt * std::pow(10,e);
+    double dt = 0.0;
+    uint n = 0;
+    GLboolean stipple = false;
+    while (this->gMin + dt < this->gMax || std::abs(this->gMin + dt - this->gMax) < RConstants::eps)
+    {
+        if (n % 10 != 0 && n*sdt + this->gMin < this->gMax)
+        {
+            GL_SAFE_CALL(glGetBooleanv(GL_LINE_STIPPLE,&stipple));
+
+            GL_SAFE_CALL(glPushAttrib(GL_ENABLE_BIT));
+
+            GL_SAFE_CALL(glLineStipple(6, 0xAAAA));
+            GL_SAFE_CALL(glEnable(GL_LINE_STIPPLE));
+        }
+
         // X - Y
         GLLine(this->getGLWidget(),RR3Vector(this->gMin,this->gMin+dt,0.0),RR3Vector(this->gMax,this->gMin+dt,0.0),1.0).paint();
         GLLine(this->getGLWidget(),RR3Vector(this->gMin+dt,this->gMin,0.0),RR3Vector(this->gMin+dt,this->gMax,0.0),1.0).paint();
@@ -131,6 +149,16 @@ void GLGrid::draw()
         // Y - Z
         GLLine(this->getGLWidget(),RR3Vector(0.0,this->gMin,this->gMin+dt),RR3Vector(0.0,this->gMax,this->gMin+dt),1.0).paint();
         GLLine(this->getGLWidget(),RR3Vector(0.0,this->gMin+dt,this->gMin),RR3Vector(0.0,this->gMin+dt,this->gMax),1.0).paint();
+
+        if (n % 10 != 0 && n*sdt + this->gMin < this->gMax)
+        {
+            GL_SAFE_CALL(glPopAttrib());
+
+            if (!stipple)
+            {
+                GL_SAFE_CALL(glDisable(GL_LINE_STIPPLE));
+            }
+        }
 
         GLNode node(this->getGLWidget());
 
@@ -147,6 +175,7 @@ void GLGrid::draw()
         this->getGLWidget()->renderText(0.0,this->gMin+dt,0.0,QString::number(this->gMin+dt),QFont("Courier",20));
         this->getGLWidget()->renderText(0.0,0.0,this->gMin+dt,QString::number(this->gMin+dt),QFont("Courier",20));
 
-        dt += this->gdt;
-    } while (this->gMin + (dt - this->gdt) < this->gMax);
+        dt += sdt;
+        n++;
+    }
 }
