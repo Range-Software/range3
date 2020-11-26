@@ -995,10 +995,22 @@ void GLWidget::wheelEvent(QWheelEvent *mouseEvent)
 {
     this->actionEvent.setScrollPhase(Qt::ScrollUpdate);
 
-    int numDegrees = mouseEvent->delta() / 8;
-    int numSteps = numDegrees / 15;
-    float x = float(mouseEvent->x());
-    float y = float(mouseEvent->y());
+    QPoint numPixels = mouseEvent->pixelDelta();
+    QPoint numDegrees = mouseEvent->angleDelta();
+    QPoint numSteps;
+    float scaleFactor = 8.0f;
+
+    if (!numPixels.isNull())
+    {
+        numSteps = numPixels;
+    }
+    else if (!numDegrees.isNull())
+    {
+        numSteps = numDegrees / 15;
+    }
+
+    float x = float(mouseEvent->position().x());
+    float y = float(mouseEvent->position().y());
     float w = float(this->width());
     float h = float(this->height());
 
@@ -1007,16 +1019,16 @@ void GLWidget::wheelEvent(QWheelEvent *mouseEvent)
         this->showRotationSphere = true;
         this->dtx = 0.0;
         this->dty = 0.0;
-        this->dtz = this->scale*float(numSteps)/100.0f;
+        this->dtz = this->scale*float(numSteps.y())/(100.0f*scaleFactor);
     }
     else if (this->actionEvent.getType() == GL_ACTION_EVENT_ZOOM)
     {
         this->dtx = 2.0f*x/w - 1.0f;
         this->dty = 2.0f*y/h - 1.0f;
         this->dty = (0.5f - y/h)*2.0f*h/w;
-        this->dtx *= numSteps/10.0f;
-        this->dty *= numSteps/10.0f;
-        this->dscale = -float(numSteps)/10.0f;
+        this->dtx *= numSteps.y()/(10.0f*scaleFactor);
+        this->dty *= numSteps.y()/(10.0f*scaleFactor);
+        this->dscale = -float(numSteps.y())/(10.0f*scaleFactor);
     }
 
     this->actionEvent.setScrollPhase(Qt::NoScrollPhase);
