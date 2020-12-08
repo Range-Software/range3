@@ -43,7 +43,8 @@ void GLGrid::_init(const GLGrid *pGlGrid)
         return;
     }
 
-    int e = RUtil::findExponent(d) + 1;
+    int e = RUtil::findExponent(d) - 1;
+    if (e == 0) e--;
 
     this->gdt = (std::ceil(d / std::pow(10,e)) * std::pow(10,e)) / 10.0;
 

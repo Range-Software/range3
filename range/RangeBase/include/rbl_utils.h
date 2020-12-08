@@ -110,7 +110,7 @@ namespace RUtil
         }
         else
         {
-            while (std::abs(value)/std::pow(10.0,exp) >= 10)
+            while (std::abs(value)/std::pow(10.0,exp) >= 1)
             {
                 exp ++;
             }
