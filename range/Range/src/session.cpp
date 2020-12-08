@@ -916,8 +916,7 @@ QString Session::getDefaultFileName()
 
 bool Session::selectedModelsHasEntities(REntityGroupTypeMask entityTypeMask)
 {
-    R_LOG_TRACE_IN;
-
+//    R_LOG_TRACE_IN;
     foreach (uint modelID, Session::getInstance().getSelectedModelIDs())
     {
         if (((entityTypeMask & R_ENTITY_GROUP_POINT) && Session::getInstance().getModel(modelID).getNPoints())
@@ -938,30 +937,29 @@ bool Session::selectedModelsHasEntities(REntityGroupTypeMask entityTypeMask)
             ||
             ((entityTypeMask & R_ENTITY_GROUP_VECTOR_FIELD) && Session::getInstance().getModel(modelID).getNVectorFields()))
         {
-            R_LOG_TRACE_OUT;
+//            R_LOG_TRACE_OUT;
             return true;
         }
     }
-    R_LOG_TRACE_OUT;
+//    R_LOG_TRACE_OUT;
     return false;
 }
 
 bool Session::selectedModelsHasEntitySelected(REntityGroupType entityGroupType)
 {
-    R_LOG_TRACE_IN;
-
+//    R_LOG_TRACE_IN;
     foreach (uint modelID, Session::getInstance().getSelectedModelIDs())
     {
         foreach (SessionEntityID sessionID, Session::getInstance().getModel(modelID).getSelectedEntityIDs(modelID))
         {
             if (sessionID.getType() == entityGroupType)
             {
-                R_LOG_TRACE_OUT;
+//                R_LOG_TRACE_OUT;
                 return true;
             }
         }
     }
-    R_LOG_TRACE_OUT;
+//    R_LOG_TRACE_OUT;
     return false;
 }
 
