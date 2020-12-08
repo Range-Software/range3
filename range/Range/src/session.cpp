@@ -46,69 +46,56 @@ const QString &Session::getID() const
 
 void Session::lock()
 {
-    R_LOG_TRACE_IN;
     this->mutex.lock();
-    R_LOG_TRACE_OUT;
 }
 
 bool Session::trylock(int timeout)
 {
-    R_LOG_TRACE;
     return this->mutex.tryLock(timeout);
 }
 
 void Session::unlock()
 {
-    R_LOG_TRACE_IN;
     this->mutex.unlock();
-    R_LOG_TRACE_OUT;
 }
 
 DownloadManager *Session::getDownloadManager()
 {
-    R_LOG_TRACE;
     return this->downloadManager;
 }
 
 DrawEngine *Session::getDrawEngine()
 {
-    R_LOG_TRACE;
     return this->drawEngine;
 }
 
 const QString &Session::getFileName() const
 {
-    R_LOG_TRACE;
     return this->fileName;
 }
 
 uint Session::getNModels() const
 {
-    R_LOG_TRACE;
     return uint(this->models.size());
 }
 
 const Model & Session::getModel(uint position) const
 {
-//    R_LOG_TRACE;
     return this->models[int(position)];
 }
 
 Model & Session::getModel(uint position)
 {
-//    R_LOG_TRACE;
     return this->models[int(position)];
 }
 
 const Model * Session::getModelPtr(uint position) const
 {
-    R_LOG_TRACE;
     return &this->models[int(position)];
 }
 
 Model * Session::getModelPtr(uint position)
 {
-    R_LOG_TRACE;
     return &this->models[int(position)];
 }
 
@@ -268,7 +255,7 @@ void Session::setModelVisible(uint modelID, bool visible)
 
 QList<uint> Session::getSelectedModelIDs() const
 {
-    R_LOG_TRACE_IN;
+//    R_LOG_TRACE_IN;
     QList<uint> selectedModelIDs;
 
     for (uint i=0;i<this->getNModels();i++)
@@ -280,7 +267,7 @@ QList<uint> Session::getSelectedModelIDs() const
         }
     }
 
-    R_LOG_TRACE_OUT;
+//    R_LOG_TRACE_OUT;
     return selectedModelIDs;
 }
 
