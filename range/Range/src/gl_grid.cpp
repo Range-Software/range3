@@ -37,6 +37,14 @@ void GLGrid::_init(const GLGrid *pGlGrid)
 
     double d = std::max(std::abs(tmin),std::abs(tmax));
 
+    if (d < RConstants::eps)
+    {
+        this->gMin = tmin;
+        this->gMax = tmax;
+        this->gdt = RConstants::eps;
+        return;
+    }
+
     int e = RUtil::findExponent(d) + 1;
 
     this->gdt = (std::ceil(d / std::pow(10,e)) * std::pow(10,e)) / 10.0;
