@@ -14,6 +14,7 @@
 ResultsVariableSelector::ResultsVariableSelector(QWidget *parent) :
     VariableSelector(std::vector<RVariableType>(),parent)
 {
+    R_LOG_TRACE;
     this->populate();
 
     QObject::connect(&Session::getInstance(),&Session::modelAdded,this,&ResultsVariableSelector::onResultsChanged);
@@ -24,6 +25,7 @@ ResultsVariableSelector::ResultsVariableSelector(QWidget *parent) :
 
 void ResultsVariableSelector::populate(RVariableType selectedVariableType)
 {
+    R_LOG_TRACE;
     QList<uint> selectedModelIDs = Session::getInstance().getSelectedModelIDs();
 
     this->blockSignals(true);
@@ -72,6 +74,7 @@ void ResultsVariableSelector::populate(RVariableType selectedVariableType)
 
 void ResultsVariableSelector::onResultsChanged(uint)
 {
+    R_LOG_TRACE;
     RVariableType selectedVariableType = RVariableType(this->itemData(this->currentIndex()).toInt());
     this->clear();
     this->populate(selectedVariableType);

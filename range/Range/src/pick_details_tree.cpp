@@ -26,6 +26,7 @@ typedef enum _PickDetailsTreeColumn
 PickDetailsTree::PickDetailsTree(QWidget *parent) :
     QTreeWidget(parent)
 {
+    R_LOG_TRACE;
     this->setColumnCount(PICK_DETAILS_TREE_N_COLUMNS);
     this->setHeaderHidden(true);
 
@@ -55,6 +56,7 @@ PickDetailsTree::PickDetailsTree(QWidget *parent) :
 
 void PickDetailsTree::populate(void)
 {
+    R_LOG_TRACE;
     this->clear();
 
     const QVector<PickItem> &rPickItems = Session::getInstance().getPickList().getItems();
@@ -251,16 +253,19 @@ void PickDetailsTree::populate(void)
 
 void PickDetailsTree::onPickListChanged(void)
 {
+    R_LOG_TRACE;
     this->populate();
 }
 
 void PickDetailsTree::onItemExpanded(QTreeWidgetItem *)
 {
+    R_LOG_TRACE;
     this->resizeColumnsToContent();
 }
 
 void PickDetailsTree::resizeColumnsToContent(void)
 {
+    R_LOG_TRACE;
     this->resizeColumnToContents(PICK_DETAILS_TREE_COLUMN_5);
     this->resizeColumnToContents(PICK_DETAILS_TREE_COLUMN_4);
     this->resizeColumnToContents(PICK_DETAILS_TREE_COLUMN_3);

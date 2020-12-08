@@ -16,25 +16,30 @@ PickList::PickList(QObject *parent)
     : QObject(parent)
     , multipleSelection(true)
 {
+    R_LOG_TRACE;
 }
 
 bool PickList::getMultipleSelection() const
 {
+    R_LOG_TRACE;
     return this->multipleSelection;
 }
 
 void PickList::setMultipleSelection(bool multipleSelection)
 {
+    R_LOG_TRACE;
     this->multipleSelection = multipleSelection;
 }
 
 const QVector<PickItem> &PickList::getItems(void) const
 {
+    R_LOG_TRACE;
     return this->items;
 }
 
 QVector<PickItem> PickList::getItems(uint modelID) const
 {
+    R_LOG_TRACE;
     QVector<PickItem> modelItems;
     QVector<PickItem>::const_iterator iter = this->items.begin();
 
@@ -53,6 +58,7 @@ QVector<PickItem> PickList::getItems(uint modelID) const
 
 uint PickList::getNItems(PickItemType type, uint modelID) const
 {
+    R_LOG_TRACE;
     uint nItems = 0;
     QVector<PickItem>::const_iterator iter = this->items.begin();
 
@@ -73,11 +79,13 @@ uint PickList::getNItems(PickItemType type, uint modelID) const
 
 bool PickList::isEmpty(void) const
 {
+    R_LOG_TRACE;
     return this->items.isEmpty();
 }
 
 bool PickList::isEmpty(uint modelID, REntityGroupType elementGroupType) const
 {
+    R_LOG_TRACE;
     QVector<PickItem>::const_iterator iter = this->items.begin();
 
     while (iter != this->items.end())
@@ -97,6 +105,7 @@ bool PickList::isEmpty(uint modelID, REntityGroupType elementGroupType) const
 
 QList<uint> PickList::getModelIDs(void) const
 {
+    R_LOG_TRACE;
     QList<uint> modelIDs;
     QVector<PickItem>::const_iterator iter;
     QMap<uint,uint> modelIDcnt;
@@ -120,6 +129,7 @@ QList<uint> PickList::getModelIDs(void) const
 
 bool PickList::registerItem(const PickItem &pickItem)
 {
+    R_LOG_TRACE;
     QVector<PickItem>::iterator iter = this->items.begin();
 
     bool itemErased = false;
@@ -167,6 +177,7 @@ bool PickList::registerItem(const PickItem &pickItem)
 
 void PickList::addItem(const PickItem &pickItem)
 {
+    R_LOG_TRACE;
     QVector<PickItem>::iterator iter = this->items.begin();
 
     while (iter != this->items.end())
@@ -206,6 +217,7 @@ void PickList::addItem(const PickItem &pickItem)
 
 void PickList::removeItem(const PickItem &pickItem)
 {
+    R_LOG_TRACE;
     QVector<PickItem>::iterator iter = this->items.begin();
 
     while (iter != this->items.end())
@@ -226,6 +238,7 @@ void PickList::removeItem(const PickItem &pickItem)
 
 void PickList::removeItems(uint modelID)
 {
+    R_LOG_TRACE;
     QVector<PickItem>::iterator iter = this->items.begin();
 
     while (iter != this->items.end())
@@ -246,6 +259,7 @@ void PickList::removeItems(uint modelID)
 
 bool PickList::hasItem(const PickItem &pickItem)
 {
+    R_LOG_TRACE;
     QVector<PickItem>::iterator iter = this->items.begin();
 
     while (iter != this->items.end())
@@ -261,6 +275,7 @@ bool PickList::hasItem(const PickItem &pickItem)
 
 void PickList::clear(void)
 {
+    R_LOG_TRACE;
     this->items.clear();
 
     emit this->pickListChanged();

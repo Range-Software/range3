@@ -29,6 +29,7 @@ MaterialManagerTree::MaterialManagerTree(ActionList *actionList,
     problemTypeMask(R_PROBLEM_NONE),
     doNotPopulate(false)
 {
+    R_LOG_TRACE;
     this->setSelectionMode(QAbstractItemView::SingleSelection);
     this->setSortingEnabled(true);
     this->sortByColumn(MATERIAL_TREE_COLUMN_NAME,Qt::AscendingOrder);
@@ -100,6 +101,7 @@ MaterialManagerTree::MaterialManagerTree(ActionList *actionList,
 
 void MaterialManagerTree::populate(void)
 {
+    R_LOG_TRACE;
     if (this->doNotPopulate)
     {
         return;
@@ -141,6 +143,7 @@ void MaterialManagerTree::populate(void)
 
 void MaterialManagerTree::updateCheckStates(void)
 {
+    R_LOG_TRACE;
     QList<SessionEntityID> selectedEntityIDs = Session::getInstance().getSelectedEntityIDs();
     QMap<QString,bool> selectedMaterialNames;
 
@@ -200,6 +203,7 @@ void MaterialManagerTree::updateCheckStates(void)
 
 void MaterialManagerTree::updateProblemTypeMask(void)
 {
+    R_LOG_TRACE;
     QList<uint> selectedModelIDs = Session::getInstance().getSelectedModelIDs();
 
     this->problemTypeMask = R_PROBLEM_NONE;
@@ -220,6 +224,7 @@ void MaterialManagerTree::updateProblemTypeMask(void)
 
 void MaterialManagerTree::setItemValid(QTreeWidgetItem *item, bool valid)
 {
+    R_LOG_TRACE;
     QFont font = item->font(MATERIAL_TREE_COLUMN_NAME);
     font.setBold(valid);
     font.setItalic(!valid);
@@ -228,6 +233,7 @@ void MaterialManagerTree::setItemValid(QTreeWidgetItem *item, bool valid)
 
 void MaterialManagerTree::addMaterial(const QString &materialName, bool setSelected)
 {
+    R_LOG_TRACE;
     this->blockSignals(true);
 
     RMaterial material = MaterialList::getInstance().get(materialName);
@@ -254,12 +260,14 @@ void MaterialManagerTree::addMaterial(const QString &materialName, bool setSelec
 
 void MaterialManagerTree::onModelSelectionChanged(uint)
 {
+    R_LOG_TRACE;
     this->updateProblemTypeMask();
     this->updateCheckStates();
 }
 
 void MaterialManagerTree::onModelAdded(uint modelID)
 {
+    R_LOG_TRACE;
     QMap<QString,RMaterial> unknownMaterials;
     QMap<QString,RMaterial> differentMaterials;
 
@@ -544,17 +552,20 @@ void MaterialManagerTree::onModelAdded(uint modelID)
 
 void MaterialManagerTree::onProblemChanged(uint)
 {
+    R_LOG_TRACE;
     this->updateProblemTypeMask();
 }
 
 void MaterialManagerTree::onMaterialAdded(const QString &materialName, bool isNew)
 {
+    R_LOG_TRACE;
     this->addMaterial(materialName, isNew);
     this->updateCheckStates();
 }
 
 void MaterialManagerTree::onMaterialRemoved(const QString &, uint removedID)
 {
+    R_LOG_TRACE;
     for (int i=this->topLevelItemCount()-1;i>=0;i--)
     {
         if (this->topLevelItem(i)->data(MATERIAL_TREE_COLUMN_NAME,Qt::UserRole).toUInt() == removedID)
@@ -599,6 +610,7 @@ void MaterialManagerTree::onMaterialRemoved(const QString &, uint removedID)
 
 void MaterialManagerTree::onMaterialRenamed(const QString &materialOldName, const QString &materialNewName)
 {
+    R_LOG_TRACE;
     // Loop over all element groups and rename applied material.
     for (uint i=0;i<Session::getInstance().getNModels();i++)
     {
@@ -635,6 +647,7 @@ void MaterialManagerTree::onMaterialRenamed(const QString &materialOldName, cons
 
 void MaterialManagerTree::onMaterialChanged(const QString &materialName)
 {
+    R_LOG_TRACE;
     // Loop over all element groups and set changed material.
 
     RMaterial material = MaterialList::getInstance().get(materialName);
@@ -676,6 +689,7 @@ void MaterialManagerTree::onMaterialChanged(const QString &materialName)
 
 void MaterialManagerTree::onItemChanged(QTreeWidgetItem *item, int)
 {
+    R_LOG_TRACE;
     uint id = item->data(MATERIAL_TREE_COLUMN_NAME,Qt::UserRole).toUInt();
     QString oldName = MaterialList::getInstance().findID(id);
     QString newName = item->text(MATERIAL_TREE_COLUMN_NAME);
@@ -737,6 +751,7 @@ void MaterialManagerTree::onItemChanged(QTreeWidgetItem *item, int)
 
 void MaterialManagerTree::onItemDoubleClicked(QTreeWidgetItem *item, int column)
 {
+    R_LOG_TRACE;
     this->blockSignals(true);
     if (column == MATERIAL_TREE_COLUMN_NAME)
     {
@@ -754,6 +769,7 @@ void MaterialManagerTree::onItemDoubleClicked(QTreeWidgetItem *item, int column)
 
 void MaterialManagerTree::onItemSelectionChanged(void)
 {
+    R_LOG_TRACE;
     QList<QTreeWidgetItem *> items = this->selectedItems();
 
     if (items.size() == 0)
@@ -776,6 +792,7 @@ void MaterialManagerTree::onItemSelectionChanged(void)
 
 void MaterialManagerTree::onMaterialSelected(void)
 {
+    R_LOG_TRACE;
     this->doNotPopulate = true;
     QList<uint> modelIDs = Session::getInstance().getSelectedModelIDs();
     for (int i=0;i<modelIDs.size();i++)

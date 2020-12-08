@@ -20,12 +20,15 @@
 SubWindow::SubWindow (uint modelID, QWidget *parent)
     : QMdiSubWindow(parent)
 {
+    R_LOG_TRACE_IN;
     this->modelID = modelID;
     this->createSubWindow();
+    R_LOG_TRACE_OUT;
 }
 
 void SubWindow::createSubWindow(void)
 {
+    R_LOG_TRACE_IN;
     QString windowTitle = Session::getInstance().getModel(this->modelID).getName();
     this->setWindowTitle(windowTitle);
     this->setWindowIcon(QIcon(":/icons/logos/pixmaps/range-logo-128.png"));
@@ -125,94 +128,124 @@ void SubWindow::createSubWindow(void)
                      &ApplicationSettings::toolbarIconSizeChanged,
                      this,
                      &SubWindow::onToolbarIconSizeChanged);
+    R_LOG_TRACE_OUT;
 }
 
 uint SubWindow::getModelID(void) const
 {
+    R_LOG_TRACE;
     return this->modelID;
 }
 
 void SubWindow::setModelID(uint modelID)
 {
+    R_LOG_TRACE_IN;
     this->modelID = modelID;
     this->glWidget->setModelID(modelID);
+    R_LOG_TRACE_OUT;
 }
 
 GLWidget *SubWindow::getGlWidget(void) const
 {
+    R_LOG_TRACE;
     return this->glWidget;
 }
 
 void SubWindow::closeEvent(QCloseEvent *closeEvent)
 {
+    R_LOG_TRACE_IN;
     emit closed(this->getModelID());
     closeEvent->accept();
+    R_LOG_TRACE_OUT;
 }
 
 void SubWindow::onResetO(void)
 {
+    R_LOG_TRACE_IN;
     this->glWidget->resetView(-45.0, 0.0, -135.0);
+    R_LOG_TRACE_OUT;
 }
 
 void SubWindow::onResetX(void)
 {
+    R_LOG_TRACE_IN;
     this->glWidget->resetView(-90.0, 0.0, -90.0);
+    R_LOG_TRACE_OUT;
 }
 
 void SubWindow::onResetY(void)
 {
+    R_LOG_TRACE_IN;
     this->glWidget->resetView(-90.0, 0.0, 180.0);
+    R_LOG_TRACE_OUT;
 }
 
 void SubWindow::onResetZ(void)
 {
+    R_LOG_TRACE_IN;
     this->glWidget->resetView(0.0, 0.0, 0.0);
+    R_LOG_TRACE_OUT;
 }
 
 void SubWindow::onScreenshot(void)
 {
+    R_LOG_TRACE_IN;
     this->onSessionScreenshot(this->getModelID(),QString());
+    R_LOG_TRACE_OUT;
 }
 
 void SubWindow::onSessionScreenshot(uint modelID, const QString &fileName)
 {
+    R_LOG_TRACE_IN;
     if (modelID != this->getModelID())
     {
+        R_LOG_TRACE_OUT;
         return;
     }
 
     this->glWidget->takeScreenShot(fileName);
+    R_LOG_TRACE_OUT;
 }
 
 void SubWindow::onShowModelEdgesToggled(bool checked)
 {
+    R_LOG_TRACE_IN;
     this->glWidget->getGLDisplayProperties().setShowModelEdges(checked);
     this->glWidget->getGLDisplayProperties().store();
     this->glWidget->update();
+    R_LOG_TRACE_OUT;
 }
 
 void SubWindow::onShowErrorsToggled(bool checked)
 {
+    R_LOG_TRACE_IN;
     this->glWidget->getGLDisplayProperties().setShowErrors(checked);
     this->glWidget->getGLDisplayProperties().store();
     this->glWidget->update();
+    R_LOG_TRACE_OUT;
 }
 
 void SubWindow::onBackSideColorChanged(int state)
 {
+    R_LOG_TRACE_IN;
     this->glWidget->setUseGlCullFace(state == Qt::Unchecked);
+    R_LOG_TRACE_OUT;
 }
 
 void SubWindow::onPreferences(void)
 {
+    R_LOG_TRACE_IN;
     GLDisplayPropertiesDialog preferencesDialog(this->glWidget,MainWindow::getInstance());
     if (preferencesDialog.exec() == QDialog::Accepted)
     {
         this->glWidget->update();
     }
+    R_LOG_TRACE_OUT;
 }
 
 void SubWindow::onToolbarIconSizeChanged(int toolbarIconSize)
 {
+    R_LOG_TRACE_IN;
     this->toolBar->setIconSize(QSize(toolbarIconSize,toolbarIconSize));
+    R_LOG_TRACE_OUT;
 }

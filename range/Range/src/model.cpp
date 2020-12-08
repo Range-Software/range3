@@ -39,6 +39,7 @@ const double Model::SliverElementEdgeRatio = 30.0;
 
 void Model::_init(const Model *pModel)
 {
+    R_LOG_TRACE;
     if (pModel)
     {
         this->edgeNodes = pModel->edgeNodes;
@@ -58,46 +59,57 @@ void Model::_init(const Model *pModel)
 
 Model::Model()
 {
+    R_LOG_TRACE;
     this->_init();
 }
 
 Model::Model(const Model &model) : RModel(model)
 {
+    R_LOG_TRACE;
     this->_init(&model);
 }
 
 Model::Model (const RModelMsh &modelMsh) : RModel(modelMsh)
 {
+    R_LOG_TRACE_IN;
     this->_init();
     this->consolidate(Model::ConsolidateEdgeElements | Model::ConsolidateHoleElements | Model::ConsolidateSliverElements | Model::ConsolidateIntersectedElements);
+    R_LOG_TRACE_OUT;
 }
 
 Model::Model (const RModelStl &modelStl) : RModel(modelStl)
 {
+    R_LOG_TRACE_IN;
     this->_init();
     this->consolidate(Model::ConsolidateEdgeElements | Model::ConsolidateHoleElements | Model::ConsolidateSliverElements | Model::ConsolidateIntersectedElements);
+    R_LOG_TRACE_OUT;
 }
 
 Model::Model (const RModelRaw &modelRaw,
               const QString &name,
               const QString &description, bool consolidate) : RModel(modelRaw,name,description)
 {
+    R_LOG_TRACE_IN;
     this->_init();
     if (consolidate)
     {
         this->consolidate(Model::ConsolidateEdgeElements | Model::ConsolidateHoleElements | Model::ConsolidateSliverElements | Model::ConsolidateIntersectedElements);
     }
+    R_LOG_TRACE_OUT;
 }
 
 Model & Model::operator = (const Model &model)
 {
+    R_LOG_TRACE_IN;
     this->RModel::operator =(model);
     this->_init(&model);
+    R_LOG_TRACE_OUT;
     return (*this);
 }
 
 void Model::insertModel(const Model &model, bool mergeNearNodes, double tolerance, bool findNearest)
 {
+    R_LOG_TRACE_IN;
     uint nn = this->getNNodes();
     uint ne = this->getNElements();
     uint neg = this->getNElementGroups();
@@ -271,6 +283,7 @@ void Model::insertModel(const Model &model, bool mergeNearNodes, double toleranc
         }
     }
     this->consolidate(Model::ConsolidateEdgeElements | Model::ConsolidateHoleElements | Model::ConsolidateSliverElements | Model::ConsolidateIntersectedElements);
+    R_LOG_TRACE_OUT;
 }
 
 const QString &Model::getFileName() const
@@ -1823,21 +1836,27 @@ void Model::setColor(REntityGroupType elementGroupType, uint position, const QCo
 
 void Model::glDrawLock()
 {
+    R_LOG_TRACE_IN;
     this->drawLock.lock();
+    R_LOG_TRACE_OUT;
 }
 
 bool Model::glDrawTrylock()
 {
+    R_LOG_TRACE;
     return this->drawLock.tryLock();
 }
 
 void Model::glDrawUnlock()
 {
+    R_LOG_TRACE_IN;
     this->drawLock.unlock();
+    R_LOG_TRACE_OUT;
 }
 
 void Model::glDraw(GLWidget *glWidget) const
 {
+    R_LOG_TRACE_IN;
     try
     {
         // Reset OpenGL list sizes.
@@ -2024,10 +2043,12 @@ void Model::glDraw(GLWidget *glWidget) const
     {
         RLogger::error("Failed to draw model. Unknown exception\n");
     }
+    R_LOG_TRACE_OUT;
 }
 
 void Model::glDraw(GLWidget *glWidget, const QVector<PickItem> &pickedItems) const
 {
+    R_LOG_TRACE_IN;
     try
     {
         GLint depthFunc;
@@ -2233,10 +2254,12 @@ void Model::glDraw(GLWidget *glWidget, const QVector<PickItem> &pickedItems) con
     {
         RLogger::error("Failed to draw model. Unknown exception.\n");
     }
+    R_LOG_TRACE_OUT;
 }
 
 QMap<RVariableType, PickValue> Model::getPickedResultsValues(const PickItem &rPickItem) const
 {
+    R_LOG_TRACE_IN;
     QMap<RVariableType, PickValue> resultsValues;
 
     for (uint i=0;i<this->getNVariables();i++)
@@ -2406,11 +2429,13 @@ QMap<RVariableType, PickValue> Model::getPickedResultsValues(const PickItem &rPi
         }
     }
 
+    R_LOG_TRACE_OUT;
     return resultsValues;
 }
 
 bool Model::nodeIsOnEdge(uint nodeID) const
 {
+    R_LOG_TRACE;
     return (this->edgeNodes[int(nodeID)]);
 }
 

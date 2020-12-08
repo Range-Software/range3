@@ -49,6 +49,7 @@ MainWindow::MainWindow (QWidget *parent)
     : QMainWindow(parent)
     , isFirstRun(true)
 {
+    R_LOG_TRACE;
     if (this->objectName().isEmpty())
     {
         this->setObjectName(QString::fromUtf8("MainWindow"));
@@ -153,12 +154,14 @@ MainWindow::MainWindow (QWidget *parent)
 
 MainWindow *MainWindow::getInstance(void)
 {
+    R_LOG_TRACE;
     static MainWindow *mainWindow = new MainWindow;
     return mainWindow;
 }
 
 void MainWindow::showTransformGeometryWidget(void)
 {
+    R_LOG_TRACE;
     QString dockName = QString::fromUtf8("dockTransform");
     GeometryTransformWidget *transformGeometryWidget = nullptr;
 
@@ -176,37 +179,44 @@ void MainWindow::showTransformGeometryWidget(void)
 
 void MainWindow::hideTransformGeometryWidget(void)
 {
+    R_LOG_TRACE;
     this->hideCustomDockWidget(QString::fromUtf8("dockTransform"));
 }
 
 void MainWindow::showDrawWidget(void)
 {
+    R_LOG_TRACE;
     QString dockName = QString::fromUtf8("dockDraw");
     this->showCustomDockWidget((findCustomDockWidget(dockName) ? nullptr : new DrawInputWidget),dockName,tr("Draw object"));
 }
 
 void MainWindow::hideDrawWidget(void)
 {
+    R_LOG_TRACE;
     this->hideCustomDockWidget(QString::fromUtf8("dockDraw"));
 }
 
 void MainWindow::progressAutoHideEnable(void)
 {
+    R_LOG_TRACE;
     this->mainProgressBar->setAutoHide(true);
 }
 
 void MainWindow::progressAutoHideDisable(void)
 {
+    R_LOG_TRACE;
     this->mainProgressBar->setAutoHide(false);
 }
 
 QDockWidget *MainWindow::findCustomDockWidget(const QString &name)
 {
+    R_LOG_TRACE;
     return this->findChild<QDockWidget*>(name);
 }
 
 void MainWindow::showCustomDockWidget(QWidget *widget, const QString &name, const QString &title)
 {
+    R_LOG_TRACE;
     QDockWidget *dockWidget = this->findCustomDockWidget(name);
 
     if (!dockWidget)
@@ -240,6 +250,7 @@ void MainWindow::showCustomDockWidget(QWidget *widget, const QString &name, cons
 
 void MainWindow::hideCustomDockWidget(const QString &name)
 {
+    R_LOG_TRACE;
     QDockWidget *dockWidget = this->findCustomDockWidget(name);
     if (dockWidget)
     {
@@ -249,6 +260,7 @@ void MainWindow::hideCustomDockWidget(const QString &name)
 
 void MainWindow::createMenus(void)
 {
+    R_LOG_TRACE;
     QMenuBar *menubar = new QMenuBar(this);
     this->setMenuBar(menubar);
 
@@ -443,6 +455,7 @@ void MainWindow::createMenus(void)
 
 void MainWindow::createToolBars(void)
 {
+    R_LOG_TRACE;
     QString key, actionName;
 
     uint nToolBars;
@@ -563,6 +576,7 @@ void MainWindow::createToolBars(void)
 
 void MainWindow::createStatusBar(void)
 {
+    R_LOG_TRACE;
     QStatusBar *statusbar;
 
     statusbar = new QStatusBar(this);
@@ -588,11 +602,13 @@ void MainWindow::createStatusBar(void)
 
 void MainWindow::createDownloadBar(void)
 {
+    R_LOG_TRACE;
 
 }
 
 void MainWindow::createCentralWidget(void)
 {
+    R_LOG_TRACE;
     this->centralTabWidget = new CentralTabWidget(this);
     this->setCentralWidget(this->centralTabWidget);
     this->modelSubWindows = new SubWindowManager(this->centralTabWidget->getMdiArea(), this);
@@ -600,6 +616,7 @@ void MainWindow::createCentralWidget(void)
 
 void MainWindow::createModelDock(void)
 {
+    R_LOG_TRACE;
     this->dockModel = new QDockWidget(this);
     this->dockModel->setObjectName(QString::fromUtf8("dockModel"));
     this->dockModel->setWindowTitle(QApplication::translate("MainWindow", "Model"));
@@ -634,6 +651,7 @@ void MainWindow::createModelDock(void)
 
 void MainWindow::createProblemDock(void)
 {
+    R_LOG_TRACE;
     QWidget *layoutProblem;
     QGridLayout *gridLayoutProblem;
 
@@ -653,6 +671,7 @@ void MainWindow::createProblemDock(void)
 
 void MainWindow::createDocumentDock(void)
 {
+    R_LOG_TRACE;
     QWidget *layoutDocuments;
     QGridLayout *gridLayoutDocuments;
 
@@ -672,6 +691,7 @@ void MainWindow::createDocumentDock(void)
 
 void MainWindow::createRecordsDock(void)
 {
+    R_LOG_TRACE;
     QWidget *layoutRecords;
     QGridLayout *gridLayoutRecords;
 
@@ -691,6 +711,7 @@ void MainWindow::createRecordsDock(void)
 
 void MainWindow::createBcDock(void)
 {
+    R_LOG_TRACE;
     this->dockBc = new QDockWidget(this);
     this->dockBc->setObjectName(QString::fromUtf8("dockBcList"));
     this->dockBc->setWindowTitle(QApplication::translate("MainWindow", "Boundary conditions"));
@@ -713,6 +734,7 @@ void MainWindow::createBcDock(void)
 
 void MainWindow::createIcDock(void)
 {
+    R_LOG_TRACE;
     this->dockIc = new QDockWidget(this);
     this->dockIc->setObjectName(QString::fromUtf8("dockIcList"));
     this->dockIc->setWindowTitle(QApplication::translate("MainWindow", "Initial conditions"));
@@ -735,6 +757,7 @@ void MainWindow::createIcDock(void)
 
 void MainWindow::createEcDock(void)
 {
+    R_LOG_TRACE;
     this->dockEc = new QDockWidget(this);
     this->dockEc->setObjectName(QString::fromUtf8("dockEcList"));
     this->dockEc->setWindowTitle(QApplication::translate("MainWindow", "Environment conditions"));
@@ -757,6 +780,7 @@ void MainWindow::createEcDock(void)
 
 void MainWindow::createMaterialDock(void)
 {
+    R_LOG_TRACE;
     this->dockMaterial = new QDockWidget(this);
     this->dockMaterial->setObjectName(QString::fromUtf8("dockMaterialList"));
     this->dockMaterial->setWindowTitle(QApplication::translate("MainWindow", "Materials"));
@@ -779,6 +803,7 @@ void MainWindow::createMaterialDock(void)
 
 void MainWindow::createResultsDock(void)
 {
+    R_LOG_TRACE;
     this->dockResults = new QDockWidget(this);
     this->dockResults->setObjectName(QString::fromUtf8("dockResultsList"));
     this->dockResults->setWindowTitle(QApplication::translate("MainWindow", "Results"));
@@ -804,6 +829,7 @@ void MainWindow::createResultsDock(void)
 
 QMenu * MainWindow::createPopupMenu (void)
 {
+    R_LOG_TRACE;
     QMenu *popupMenu = this->QMainWindow::createPopupMenu();
 //    Disabled untill toolbar modification is not implemented.
 //    popupMenu->addAction(this->actionList->getAction(ACTION_SEPARATOR));
@@ -813,6 +839,7 @@ QMenu * MainWindow::createPopupMenu (void)
 
 void MainWindow::readSettings(void)
 {
+    R_LOG_TRACE;
     ApplicationSettings *pApplicationSettings = MainSettings::getInstance().getApplicationSettings();
     if (!pApplicationSettings)
     {
@@ -869,6 +896,7 @@ void MainWindow::readSettings(void)
 
 void MainWindow::writeSettings(void) const
 {
+    R_LOG_TRACE;
     QList<QAction*> actionList;
     QAction *action;
     QString key;
@@ -933,16 +961,19 @@ void MainWindow::writeSettings(void) const
 
 uint MainWindow::getNToolBars(void) const
 {
+    R_LOG_TRACE;
     return uint(this->toolBars.size());
 }
 
 QList<uint> MainWindow::getSelectedModelIDs(void) const
 {
+    R_LOG_TRACE;
     return this->treeModelManager->getSelectedModelIDs();
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
+    R_LOG_TRACE;
     QuitDialog quitDialog(this);
 
     if (quitDialog.exec() == QDialog::Accepted) {
@@ -958,6 +989,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
 
 QDockWidget *MainWindow::findFirstDockWidget(Qt::DockWidgetArea area)
 {
+    R_LOG_TRACE;
     QList<QDockWidget *> dockWidgets = this->findChildren<QDockWidget *>();
 
     for (int i=0;i<dockWidgets.size();i++)
@@ -972,12 +1004,14 @@ QDockWidget *MainWindow::findFirstDockWidget(Qt::DockWidgetArea area)
 
 void MainWindow::progressBar(ProgressBar *progressBar, double fraction)
 {
+    R_LOG_TRACE;
     progressBar->setValue(qRound(fraction*100));
 //    progressBar->show();
 }
 
 void MainWindow::progressBarInitialize(ProgressBar *progressBar, const QString &message, bool pulseType)
 {
+    R_LOG_TRACE;
     if (pulseType)
     {
         progressBar->startPulse();
@@ -994,6 +1028,7 @@ void MainWindow::progressBarInitialize(ProgressBar *progressBar, const QString &
 
 void MainWindow::progressBarFinalize(ProgressBar *progressBar, const QString &message)
 {
+    R_LOG_TRACE;
     progressBar->stopPulse();
     progressBar->setRange(0,100);
     progressBar->setValue(100);
@@ -1004,6 +1039,7 @@ void MainWindow::progressBarFinalize(ProgressBar *progressBar, const QString &me
 
 void MainWindow::setEnabled(bool enabled)
 {
+    R_LOG_TRACE;
     this->dockModel->setEnabled(enabled);
     this->dockProblem->setEnabled(enabled);
     this->dockBc->setEnabled(enabled);
@@ -1025,31 +1061,37 @@ void MainWindow::setEnabled(bool enabled)
 
 void MainWindow::enable(void)
 {
+    R_LOG_TRACE;
     this->setEnabled(true);
 }
 
 void MainWindow::disable(void)
 {
+    R_LOG_TRACE;
     this->setEnabled(false);
 }
 
 void MainWindow::onMainProgress(double fraction)
 {
+    R_LOG_TRACE;
     this->progressBar(this->mainProgressBar,fraction);
 }
 
 void MainWindow::onMainProgressInitialize(const QString &message, bool pulseType)
 {
+    R_LOG_TRACE;
     this->progressBarInitialize(this->mainProgressBar,message,pulseType);
 }
 
 void MainWindow::onMainProgressFinalize(const QString &message)
 {
+    R_LOG_TRACE;
     this->progressBarFinalize(this->mainProgressBar,message);
 }
 
 void MainWindow::onDownloadProgress(uint downloadID, qint64 bytesReceived, qint64 bytesTotal, double speed)
 {
+    R_LOG_TRACE;
     double fraction = bytesTotal == 0 ?  0.0 : double(bytesReceived) / double(bytesTotal);
 
     QString unit;
@@ -1085,21 +1127,25 @@ void MainWindow::onDownloadProgress(uint downloadID, qint64 bytesReceived, qint6
 
 void MainWindow::onDownloadProgressInitialize(uint)
 {
+    R_LOG_TRACE;
     this->progressBarInitialize(this->downloadProgressBar,tr("Downloading"),false);
 }
 
 void MainWindow::onDownloadProgressFinalize(uint)
 {
+    R_LOG_TRACE;
     this->progressBarFinalize(this->downloadProgressBar,tr("Download complete"));
 }
 
 void MainWindow::onDrawObjectAdded(void)
 {
+    R_LOG_TRACE;
     this->showDrawWidget();
 }
 
 void MainWindow::onDrawObjectRemoved(void)
 {
+    R_LOG_TRACE;
     if (Session::getInstance().getDrawEngine()->getNObjects() == 0)
     {
         this->hideDrawWidget();
@@ -1108,6 +1154,7 @@ void MainWindow::onDrawObjectRemoved(void)
 
 void MainWindow::onJobBlocking(bool blocking)
 {
+    R_LOG_TRACE;
     if (blocking)
     {
         this->disable();
@@ -1120,14 +1167,17 @@ void MainWindow::onJobBlocking(bool blocking)
 
 void MainWindow::onJobStarted(void)
 {
+    R_LOG_TRACE;
 }
 
 void MainWindow::onJobEnded(void)
 {
+    R_LOG_TRACE;
 }
 
 void MainWindow::onModelAdded(uint position)
 {
+    R_LOG_TRACE;
     this->modelSubWindows->onModelAdded(position);
     this->treeModelManager->onModelAdded(position);
     if (!Session::getInstance().isModelSelected(position))
@@ -1143,6 +1193,7 @@ void MainWindow::onModelAdded(uint position)
 
 void MainWindow::onModelRemoved(uint position)
 {
+    R_LOG_TRACE;
     this->modelSubWindows->onModelRemoved(position);
     this->treeModelManager->onModelRemoved(position);
     this->actionList->processAvailability();
@@ -1150,6 +1201,7 @@ void MainWindow::onModelRemoved(uint position)
 
 void MainWindow::onModelChanged(uint position)
 {
+    R_LOG_TRACE;
     this->modelSubWindows->onModelChanged(position);
     this->treeModelManager->onModelChanged(position);
     this->actionList->processAvailability();
@@ -1157,16 +1209,19 @@ void MainWindow::onModelChanged(uint position)
 
 void MainWindow::onProblemChanged(uint)
 {
+    R_LOG_TRACE;
     this->actionList->processAvailability();
 }
 
 void MainWindow::onResultsChanged(uint)
 {
+    R_LOG_TRACE;
     this->actionList->processAvailability();
 }
 
 void MainWindow::onEntityVisibilityChanged(uint modelID, REntityGroupType, uint, bool visible)
 {
+    R_LOG_TRACE;
     bool modelIsVisible = false;
     if (visible)
     {
@@ -1190,15 +1245,18 @@ void MainWindow::onEntityVisibilityChanged(uint modelID, REntityGroupType, uint,
 
 void MainWindow::onGeometryTransformFinalize(void)
 {
+    R_LOG_TRACE;
     this->hideTransformGeometryWidget();
 }
 
 void MainWindow::onNHistoryRecordsChanged(uint)
 {
+    R_LOG_TRACE;
     this->actionList->processAvailability();
 }
 
 void MainWindow::onToolbarIconSizeChanged(int toolbarIconSize)
 {
+    R_LOG_TRACE;
     this->setIconSize(QSize(toolbarIconSize,toolbarIconSize));
 }

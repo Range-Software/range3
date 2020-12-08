@@ -18,6 +18,7 @@
 ProblemSelectorDialog::ProblemSelectorDialog(QWidget *parent) :
     QDialog(parent)
 {
+    R_LOG_TRACE;
     this->setWindowTitle(QString("Problem type selector"));
 
     QIcon cancelIcon(":/icons/file/pixmaps/range-cancel.svg");
@@ -54,8 +55,9 @@ ProblemSelectorDialog::ProblemSelectorDialog(QWidget *parent) :
     QObject::connect(this->okButton,&QPushButton::clicked,this,&ProblemSelectorDialog::accept);
 }
 
-RProblemTypeMask ProblemSelectorDialog::exec(void)
+RProblemTypeMask ProblemSelectorDialog::exec()
 {
+    R_LOG_TRACE;
     if (QDialog::exec() == QDialog::Accepted)
     {
         return this->problemTree->findProblemTypeMask();
@@ -64,7 +66,8 @@ RProblemTypeMask ProblemSelectorDialog::exec(void)
     return R_PROBLEM_NONE;
 }
 
-void ProblemSelectorDialog::onProblemTreeChanged(void)
+void ProblemSelectorDialog::onProblemTreeChanged()
 {
+    R_LOG_TRACE;
     this->okButton->setEnabled(this->problemTree->checkProblemIsChecked());
 }

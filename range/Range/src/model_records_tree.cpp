@@ -48,6 +48,7 @@ class ModelRecordsTreeRecordID
 ModelRecordsTree::ModelRecordsTree(QWidget *parent) :
     QTreeWidget(parent)
 {
+    R_LOG_TRACE;
     this->setColumnCount(ModelRecordsTree::NColumns);
     this->setSelectionMode(QAbstractItemView::SingleSelection);
     this->setRootIsDecorated(false);
@@ -99,6 +100,7 @@ ModelRecordsTree::ModelRecordsTree(QWidget *parent) :
 
 bool ModelRecordsTree::isFirst(void)
 {
+    R_LOG_TRACE;
     QList<uint> modelIDs = Session::getInstance().getSelectedModelIDs();
 
     for (int i=0;i<modelIDs.size();i++)
@@ -125,6 +127,7 @@ bool ModelRecordsTree::isFirst(void)
 
 bool ModelRecordsTree::isLast(void)
 {
+    R_LOG_TRACE;
     QList<uint> modelIDs = Session::getInstance().getSelectedModelIDs();
 
     for (int i=0;i<modelIDs.size();i++)
@@ -158,6 +161,7 @@ bool ModelRecordsTree::isLast(void)
 
 void ModelRecordsTree::markCurrent(void)
 {
+    R_LOG_TRACE;
     QList<uint> modelIDs = Session::getInstance().getSelectedModelIDs();
 
     for (int i=0;i<modelIDs.size();i++)
@@ -183,6 +187,7 @@ void ModelRecordsTree::markCurrent(void)
 
 void ModelRecordsTree::markPrevious(void)
 {
+    R_LOG_TRACE;
     QList<uint> modelIDs = Session::getInstance().getSelectedModelIDs();
 
     for (int i=0;i<modelIDs.size();i++)
@@ -216,6 +221,7 @@ void ModelRecordsTree::markPrevious(void)
 
 void ModelRecordsTree::markNext(void)
 {
+    R_LOG_TRACE;
     QList<uint> modelIDs = Session::getInstance().getSelectedModelIDs();
 
     for (int i=0;i<modelIDs.size();i++)
@@ -252,6 +258,7 @@ void ModelRecordsTree::markNext(void)
 
 void ModelRecordsTree::markFirst(void)
 {
+    R_LOG_TRACE;
     QList<uint> modelIDs = Session::getInstance().getSelectedModelIDs();
 
     for (int i=0;i<modelIDs.size();i++)
@@ -275,6 +282,7 @@ void ModelRecordsTree::markFirst(void)
 
 void ModelRecordsTree::markLast(void)
 {
+    R_LOG_TRACE;
     QList<uint> modelIDs = Session::getInstance().getSelectedModelIDs();
 
     for (int i=0;i<modelIDs.size();i++)
@@ -318,6 +326,7 @@ void ModelRecordsTree::markLast(void)
 
 void ModelRecordsTree::populate(void)
 {
+    R_LOG_TRACE;
     if (!Session::getInstance().trylock())
     {
         return;
@@ -419,6 +428,7 @@ void ModelRecordsTree::populate(void)
 
 void ModelRecordsTree::onModelSelectionChanged(uint modelID)
 {
+    R_LOG_TRACE;
     this->blockSignals(true);
     QTreeWidgetItemIterator it(this);
     while (*it)
@@ -443,11 +453,13 @@ void ModelRecordsTree::onModelSelectionChanged(uint modelID)
 
 void ModelRecordsTree::onModelChanged(uint)
 {
+    R_LOG_TRACE;
     this->populate();
 }
 
 void ModelRecordsTree::onItemChanged(QTreeWidgetItem *item, int column)
 {
+    R_LOG_TRACE;
     if (column != ModelRecordsTree::Marked)
     {
         return;
@@ -481,6 +493,7 @@ void ModelRecordsTree::onItemChanged(QTreeWidgetItem *item, int column)
 
 void ModelRecordsTree::onItemActivated(QTreeWidgetItem *item, int)
 {
+    R_LOG_TRACE;
     uint modelID = item->data(ModelRecordsTree::ModelID,Qt::UserRole).toUInt();
 
     QTreeWidgetItemIterator it(this);

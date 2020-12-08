@@ -12,6 +12,7 @@
 
 void PickItem::_init(const PickItem *pPickItem)
 {
+    R_LOG_TRACE;
     if (pPickItem)
     {
         this->entityID = pPickItem->entityID;
@@ -29,6 +30,7 @@ PickItem::PickItem()
     , nodeID(RConstants::eod)
     , nodePosition(RConstants::eod)
 {
+    R_LOG_TRACE;
     this->_init();
 }
 
@@ -39,51 +41,61 @@ PickItem::PickItem(const SessionEntityID &entityID, uint elementID, uint element
     , nodeID(nodeID)
     , nodePosition(nodePosition)
 {
+    R_LOG_TRACE;
     this->_init();
 }
 
 PickItem::PickItem(const PickItem &pickItem)
 {
+    R_LOG_TRACE;
     this->_init(&pickItem);
 }
 
 PickItem::~PickItem()
 {
+    R_LOG_TRACE;
 }
 
 PickItem &PickItem::operator =(const PickItem &pickItem)
 {
+    R_LOG_TRACE;
     this->_init(&pickItem);
     return (*this);
 }
 
 const SessionEntityID &PickItem::getEntityID(void) const
 {
+    R_LOG_TRACE;
     return this->entityID;
 }
 
 uint PickItem::getElementID(void) const
 {
+    R_LOG_TRACE;
     return this->elementID;
 }
 
 uint PickItem::getElementPosition(void) const
 {
+    R_LOG_TRACE;
     return this->elementPosition;
 }
 
 uint PickItem::getNodeID(void) const
 {
+    R_LOG_TRACE;
     return this->nodeID;
 }
 
 uint PickItem::getNodePosition(void) const
 {
+    R_LOG_TRACE;
     return this->nodePosition;
 }
 
 PickItemType PickItem::getItemType(void) const
 {
+    R_LOG_TRACE;
     if (this->entityID.getType() != R_ENTITY_GROUP_NONE)
     {
         if (this->elementPosition != RConstants::eod && this->elementID != RConstants::eod)
@@ -107,6 +119,7 @@ PickItemType PickItem::getItemType(void) const
 
 bool PickItem::operator ==(const PickItem &pickItem)
 {
+    R_LOG_TRACE;
     return (this->entityID == pickItem.entityID &&
             this->elementPosition == pickItem.elementPosition &&
             this->elementID == pickItem.elementID &&
