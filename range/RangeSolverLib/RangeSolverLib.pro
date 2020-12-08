@@ -1,4 +1,5 @@
 QT += core
+
 win*-msvc* {
     QMAKE_CXXFLAGS += -openmp
     LIBS += -openmp

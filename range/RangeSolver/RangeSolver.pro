@@ -1,4 +1,5 @@
 QT += core network
+
 win*-msvc* {
     QMAKE_CXXFLAGS += -openmp
     LIB_EXT = "lib"

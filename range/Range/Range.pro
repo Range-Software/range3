@@ -1,5 +1,5 @@
-QT += core gui opengl printsupport network \
-    widgets
+QT += core gui opengl printsupport network widgets
+
 win*-msvc* {
     QMAKE_CXXFLAGS += -openmp
     LIB_EXT = "lib"
@@ -15,8 +15,10 @@ win*-msvc* {
     LIB_EXT = "a"
     LIB_PRE = "lib"
 
-    CONFIG += link_pkgconfig
-    PKGCONFIG += libavutil libavformat libswscale
+    !win* {
+        CONFIG += link_pkgconfig
+        PKGCONFIG += libavutil libavformat libswscale
+    }
 }
 
 TARGET = Range
@@ -455,7 +457,7 @@ CONFIG(debug, debug|release) {
     CONFIG += console
 }
 
-win*-msvc* {
+win* {
     LIBS += \
         -L../../ffmpeg/ffmpeg-3.4.1-win64/bin/ \
         -L../../ffmpeg/ffmpeg-3.4.1-win64/lib/
