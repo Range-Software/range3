@@ -50,11 +50,17 @@ class RLimitBox
         //! Set limits.
         void setLimits(double xl, double xu, double yl, double yu, double zl, double zu);
 
+        //! Get limits.
+        void getLimits(double &xl, double &xu, double &yl, double &yu, double &zl, double &zu) const;
+
         //! Scale limit box by factor.
         void scale(double scaleFactor);
 
         //! Print limit box.
         void print(void) const;
+
+        //! Merge in limit box.
+        void merge(const RLimitBox &lb);
 
         //! Return true if two boxes intersect.
         static bool areIntersecting(const RLimitBox &b1, const RLimitBox &b2);

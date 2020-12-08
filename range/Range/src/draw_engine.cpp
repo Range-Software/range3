@@ -94,3 +94,19 @@ void DrawEngine::setObjectChanged(uint position)
 {
     emit this->objectChanged(position);
 }
+
+bool DrawEngine::findLimits(RLimitBox &limitBox) const
+{
+    bool limitFound = false;
+    foreach (const auto object, this->objects)
+    {
+        RLimitBox lb = object->getModel().findNodeLimits();
+        if (!limitFound)
+        {
+            limitBox = lb;
+        }
+        limitBox.merge(lb);
+        limitFound = true;
+    }
+    return limitFound;
+}

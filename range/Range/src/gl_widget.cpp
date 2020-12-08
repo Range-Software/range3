@@ -378,12 +378,18 @@ void GLWidget::drawModel(void)
     {
         RLogger::trace("Draw main grid\n");
 
-        double xMin=0.0,xMax=0.0,yMin=0.0,yMax=0.0,zMin=0.0,zMax=0.0;
-        Session::getInstance().getModel(this->getModelID()).findNodeLimits(xMin,xMax,yMin,yMax,zMin,zMax);
+        RLimitBox modelLimitBox = Session::getInstance().getModel(this->getModelID()).findNodeLimits();
+        RLimitBox drawLimitBox;
+
+        if (Session::getInstance().getDrawEngine()->findLimits(drawLimitBox))
+        {
+            modelLimitBox.merge(drawLimitBox);
+        }
+
         int lineColorValue = qGray(this->getGLDisplayProperties().getBgColor().rgb()) < 96 ? 255 : 0;
         this->qglColor(QColor(lineColorValue,lineColorValue,lineColorValue,100));
 
-        GLGrid gGrid(this,1.0/double(this->scale),xMin,xMax,yMin,yMax,zMin,zMax);
+        GLGrid gGrid(this,1.0/double(this->scale),modelLimitBox);
         gGrid.paint();
     }
 

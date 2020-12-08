@@ -23,12 +23,7 @@ class GLGrid : public GLObject
     protected:
 
         double scale;
-        double xMin;
-        double xMax;
-        double yMin;
-        double yMax;
-        double zMin;
-        double zMax;
+        RLimitBox limitBox;
         double gMin;
         double gMax;
         double gdt;
@@ -43,12 +38,7 @@ class GLGrid : public GLObject
         //! Constructor.
         explicit GLGrid(GLWidget *glWidget,
                         double scale,
-                        double xMin,
-                        double xMax,
-                        double yMin,
-                        double yMax,
-                        double zMin,
-                        double zMax);
+                        const RLimitBox &limitBox);
 
         //! Copy constructor.
         GLGrid(const GLGrid &glGrid);

@@ -17,23 +17,21 @@ void GLGrid::_init(const GLGrid *pGlGrid)
     if (pGlGrid)
     {
         this->scale = pGlGrid->scale;
-        this->xMin = pGlGrid->xMin;
-        this->xMax = pGlGrid->xMax;
-        this->yMin = pGlGrid->yMin;
-        this->yMax = pGlGrid->yMax;
-        this->zMin = pGlGrid->zMin;
-        this->zMax = pGlGrid->zMax;
+        this->limitBox = pGlGrid->limitBox;
     }
 
-    double txmin = std::min(0.0,this->xMin);
-    double txmax = std::max(0.0,this->xMax);
-    double tymin = std::min(0.0,this->yMin);
-    double tymax = std::max(0.0,this->yMax);
-    double tzmin = std::min(0.0,this->zMin);
-    double tzmax = std::max(0.0,this->zMax);
+    double xmin, xmax, ymin, ymax, zmin, zmax;
+    this->limitBox.getLimits(xmin,xmax,ymin,ymax,zmin,zmax);
 
-    double tmin = std::min(txmin,std::min(tymin,tzmin));
-    double tmax = std::max(txmax,std::max(tymax,tzmax));
+    xmin = std::min(0.0,xmin);
+    xmax = std::max(0.0,xmax);
+    ymin = std::min(0.0,ymin);
+    ymax = std::max(0.0,ymax);
+    zmin = std::min(0.0,zmin);
+    zmax = std::max(0.0,zmax);
+
+    double tmin = std::min(xmin,std::min(ymin,zmin));
+    double tmax = std::max(xmax,std::max(ymax,zmax));
 
     double d = std::max(std::abs(tmin),std::abs(tmax));
 
@@ -85,20 +83,10 @@ void GLGrid::_init(const GLGrid *pGlGrid)
 
 GLGrid::GLGrid(GLWidget *glWidget,
                double scale,
-               double xMin,
-               double xMax,
-               double yMin,
-               double yMax,
-               double zMin,
-               double zMax)
+               const RLimitBox &limitBox)
     : GLObject(glWidget)
     , scale(scale)
-    , xMin(xMin)
-    , xMax(xMax)
-    , yMin(yMin)
-    , yMax(yMax)
-    , zMin(zMin)
-    , zMax(zMax)
+    , limitBox(limitBox)
 {
     this->_init();
 }

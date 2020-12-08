@@ -1348,6 +1348,15 @@ void RModel::findNodeLimits(double &xmin, double &xmax, double &ymin, double &ym
 } /* RModel::getNodeLimits */
 
 
+RLimitBox RModel::findNodeLimits() const
+{
+    double xmin, xmax, ymin, ymax, zmin, zmax;
+    this->findNodeLimits(xmin,xmax,ymin,ymax,zmin,zmax);
+
+    return RLimitBox(xmin,xmax,ymin,ymax,zmin,zmax);
+} /* RModel::getNodeLimits */
+
+
 double RModel::findNodeScale() const
 {
     double xmin,xmax,ymin,ymax,zmin,zmax;
