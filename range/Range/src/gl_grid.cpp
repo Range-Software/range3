@@ -119,6 +119,30 @@ void GLGrid::finalize()
 
 void GLGrid::draw()
 {
+    GL_SAFE_CALL(glNormal3d(0.0,0.0,-1.0));
+    GLFunctions::begin(GL_QUADS);
+    GL_SAFE_CALL(glVertex3d(this->gMin,this->gMin,0.0));
+    GL_SAFE_CALL(glVertex3d(this->gMin,this->gMax,0.0));
+    GL_SAFE_CALL(glVertex3d(this->gMax,this->gMax,0.0));
+    GL_SAFE_CALL(glVertex3d(this->gMax,this->gMin,0.0));
+    GLFunctions::end();
+
+    GL_SAFE_CALL(glNormal3d(0.0,1.0,0.0));
+    GLFunctions::begin(GL_QUADS);
+    GL_SAFE_CALL(glVertex3d(this->gMin,0.0,this->gMin));
+    GL_SAFE_CALL(glVertex3d(this->gMin,0.0,this->gMax));
+    GL_SAFE_CALL(glVertex3d(this->gMax,0.0,this->gMax));
+    GL_SAFE_CALL(glVertex3d(this->gMax,0.0,this->gMin));
+    GLFunctions::end();
+
+    GL_SAFE_CALL(glNormal3d(-1.0,0.0,0.0));
+    GLFunctions::begin(GL_QUADS);
+    GL_SAFE_CALL(glVertex3d(0.0,this->gMin,this->gMin));
+    GL_SAFE_CALL(glVertex3d(0.0,this->gMin,this->gMax));
+    GL_SAFE_CALL(glVertex3d(0.0,this->gMax,this->gMax));
+    GL_SAFE_CALL(glVertex3d(0.0,this->gMax,this->gMin));
+    GLFunctions::end();
+
     int e = RUtil::findExponent(this->scale);
     if (this->scale / std::pow(10,e) > 2)
     {
