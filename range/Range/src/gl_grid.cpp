@@ -44,7 +44,10 @@ void GLGrid::_init(const GLGrid *pGlGrid)
     }
 
     int e = RUtil::findExponent(d) - 1;
-    if (e == 0) e--;
+    if (e == 0)
+    {
+        e--;
+    }
 
     this->gdt = (std::ceil(d / std::pow(10,e)) * std::pow(10,e)) / 10.0;
 
@@ -117,17 +120,18 @@ void GLGrid::finalize()
 void GLGrid::draw()
 {
     int e = RUtil::findExponent(this->scale);
-    if (std::ceil(this->scale / std::pow(10,e)) > 2)
+    if (this->scale / std::pow(10,e) > 2)
     {
         e++;
     }
-    double sdt = this->gdt * std::pow(10,e);
+
+    double sdt = std::min(this->gdt * std::pow(10,e),this->gdt*10.0);
     double dt = 0.0;
     uint n = 0;
     GLboolean stipple = false;
     while (this->gMin + dt < this->gMax || std::abs(this->gMin + dt - this->gMax) < RConstants::eps)
     {
-        if (n % 10 != 0 && n*sdt + this->gMin < this->gMax)
+        if (n % 10 != 0 && (n+1)*sdt + this->gMin < this->gMax)
         {
             GL_SAFE_CALL(glGetBooleanv(GL_LINE_STIPPLE,&stipple));
 
@@ -147,7 +151,7 @@ void GLGrid::draw()
         GLLine(this->getGLWidget(),RR3Vector(0.0,this->gMin,this->gMin+dt),RR3Vector(0.0,this->gMax,this->gMin+dt),1.0).paint();
         GLLine(this->getGLWidget(),RR3Vector(0.0,this->gMin+dt,this->gMin),RR3Vector(0.0,this->gMin+dt,this->gMax),1.0).paint();
 
-        if (n % 10 != 0 && n*sdt + this->gMin < this->gMax)
+        if (n % 10 != 0 && (n+1)*sdt + this->gMin < this->gMax)
         {
             GL_SAFE_CALL(glPopAttrib());
 
