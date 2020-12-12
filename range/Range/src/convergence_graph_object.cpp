@@ -10,6 +10,7 @@
 
 #include <QFile>
 #include <QTextStream>
+#include <QRegularExpression>
 
 #include <rblib.h>
 
@@ -86,7 +87,7 @@ QStringList ConvergenceGraphObject::findDataColumns(const QString &sourceFileNam
 
     QString line = in.readLine();
 
-    QStringList dataColumns = line.split(QRegExp("(\\||\\;)"));
+    QStringList dataColumns = line.split(QRegularExpression("(\\||\\;)"));
     dataColumns.erase(dataColumns.begin());
 
     file.close();
@@ -123,7 +124,7 @@ void ConvergenceGraphObject::readSource(void)
     {
         QString line = in.readLine();
 
-        QStringList query = line.split(QRegExp("(\\||\\;)"));
+        QStringList query = line.split(QRegularExpression("(\\||\\;)"));
 
         if (uint(query.size()) < this->dataColumn + 1)
         {

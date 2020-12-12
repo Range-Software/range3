@@ -69,9 +69,6 @@ class HttpRequestWorker
         //! Finished request.
         void onManagerFinished(QNetworkReply *reply);
 
-        //! Network accessibility has changed.
-        void onManagerNetworkAccessibleChanged(QNetworkAccessManager::NetworkAccessibility accessible);
-
         //! Pre-shared key authentication is required.
         void onManagerPreSharedKeyAuthenticationRequired(QNetworkReply *, QSslPreSharedKeyAuthenticator *);
 

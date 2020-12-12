@@ -138,7 +138,7 @@ QList<int> MonitoringPointsDialog::findSelectedRows(void) const
         rowBook[selectedItems.at(i)->row()] = true;
     }
 
-    QList<int> rowList = rowBook.uniqueKeys();
+    QList<int> rowList = rowBook.keys();
     std::sort(rowList.begin(),rowList.end());
 
     return rowList;

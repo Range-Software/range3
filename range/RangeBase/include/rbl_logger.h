@@ -12,7 +12,8 @@
 #define RBL_LOGGER_H
 
 #include <QString>
-#include <QTime>
+#include <QList>
+#include <QElapsedTimer>
 
 #include <vector>
 #include <cstdarg>
@@ -92,7 +93,7 @@ class RLogger
         //! Current indent level.
         unsigned int indentLevel;
         //! Time measurement stack.
-        QList<QTime> timerStack;
+        QList<QElapsedTimer> timerStack;
 
     public:
 

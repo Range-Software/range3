@@ -10,6 +10,7 @@
 
 #include <QFile>
 #include <QTextStream>
+#include <QDateTime>
 
 #include <vector>
 #include <string>
@@ -499,7 +500,7 @@ void RLogger::timestamp(const QString prefix)
 
 void RLogger::indent (void)
 {
-    RLogger::getInstance().timerStack.push_front(QTime());
+    RLogger::getInstance().timerStack.push_front(QElapsedTimer());
     RLogger::getInstance().timerStack.first().start();
     RLogger::info("{\n");
     RLogger::getInstance().increaseIndent();
@@ -512,7 +513,7 @@ void RLogger::unindent (bool printTime)
     int elapsed = qRound(double(RLogger::getInstance().timerStack.first().elapsed())/1000.0);
     if (printTime)
     {
-        RLogger::info("} %s\n", QDateTime::fromTime_t(elapsed).toUTC().toString("hh:mm:ss").toUtf8().constData());
+        RLogger::info("} %s\n", QDateTime::fromSecsSinceEpoch(elapsed).toUTC().toString("hh:mm:ss").toUtf8().constData());
     }
     else
     {

@@ -13,7 +13,7 @@
 
 #include <rblib.h>
 
-#include <qglfunctions.h>
+#include <QOpenGLFunctions>
 
 #define GL_SAFE_CALL(__safe_call) { __safe_call; GLFunctions::printError(#__safe_call,__FILE__,__LINE__); }
 

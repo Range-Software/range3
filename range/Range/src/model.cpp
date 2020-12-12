@@ -372,9 +372,9 @@ void Model::generatePatchColors()
     for (uint i=0;i<this->viewFactorMatrix.getPatchBook().getNPatches();i++)
     {
         int r,g,b;
-        r = qRound(255*double(qrand())/double(RAND_MAX));
-        g = qRound(255*double(qrand())/double(RAND_MAX));
-        b = qRound(255*double(qrand())/double(RAND_MAX));
+        r = qRound(255*double(QRandomGenerator::global()->generate())/double(RAND_MAX));
+        g = qRound(255*double(QRandomGenerator::global()->generate())/double(RAND_MAX));
+        b = qRound(255*double(QRandomGenerator::global()->generate())/double(RAND_MAX));
         this->patchColors.push_back(QColor(r,g,b,255));
     }
 }
@@ -2257,10 +2257,10 @@ void Model::glDraw(GLWidget *glWidget, const QVector<PickItem> &pickedItems) con
     R_LOG_TRACE_OUT;
 }
 
-QMap<RVariableType, PickValue> Model::getPickedResultsValues(const PickItem &rPickItem) const
+QMultiMap <RVariableType, PickValue> Model::getPickedResultsValues(const PickItem &rPickItem) const
 {
     R_LOG_TRACE_IN;
-    QMap<RVariableType, PickValue> resultsValues;
+    QMultiMap<RVariableType, PickValue> resultsValues;
 
     for (uint i=0;i<this->getNVariables();i++)
     {
@@ -2365,7 +2365,7 @@ QMap<RVariableType, PickValue> Model::getPickedResultsValues(const PickItem &rPi
             }
             for (uint j=0;j<resultsValuesVector.size();j++)
             {
-                resultsValues.insertMulti(rVariable.getType(),PickValue(positionVector[j],resultsValuesVector[j]));
+                resultsValues.insert(rVariable.getType(),PickValue(positionVector[j],resultsValuesVector[j]));
             }
         }
         else if (rPickItem.getItemType() == PICK_ITEM_NODE)
@@ -2425,7 +2425,7 @@ QMap<RVariableType, PickValue> Model::getPickedResultsValues(const PickItem &rPi
                 position[1] = pIElement->at(rPickItem.getNodePosition()).getY() + displacement[1];
                 position[2] = pIElement->at(rPickItem.getNodePosition()).getZ() + displacement[2];
             }
-            resultsValues[rVariable.getType()] = PickValue(position,resultsValuesVector);
+            resultsValues.insert(rVariable.getType(),PickValue(position,resultsValuesVector));
         }
     }
 

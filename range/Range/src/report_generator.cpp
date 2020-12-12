@@ -9,6 +9,7 @@
  *********************************************************************/
 
 #include <QTextCursor>
+#include <QStyleFactory>
 
 #include <rblib.h>
 
@@ -459,7 +460,8 @@ void ReportGenerator::generateResultsChapter(void)
     blockFormat.setAlignment(Qt::AlignCenter);
     cursor.insertBlock(blockFormat);
     QImage modelScreenShotImage(this->takeModelScreenshot());
-    cursor.insertImage(modelScreenShotImage.scaledToWidth(qCeil(double(this->printer->pageRect().width())*0.9),Qt::SmoothTransformation));
+    QRect pageRect(this->printer->pageLayout().paintRectPixels(this->printer->resolution()));
+    cursor.insertImage(modelScreenShotImage.scaledToWidth(qCeil(double(pageRect.width())*0.9),Qt::SmoothTransformation));
 }
 
 QImage ReportGenerator::takeModelScreenshot(void) const

@@ -189,14 +189,14 @@ void PickDetailsTree::populate(void)
             }
         }
 
-        QMap<RVariableType, PickValue> resultsValues = rModel.getPickedResultsValues(rPickItems[i]);
+        QMultiMap<RVariableType, PickValue> resultsValues = rModel.getPickedResultsValues(rPickItems[i]);
         if (resultsValues.size() > 0)
         {
             QTreeWidgetItem *childItem = new QTreeWidgetItem(topItem);
             childItem->setText(PICK_DETAILS_TREE_COLUMN_1,"Computed results");
             childItem->setFirstColumnSpanned(true);
 
-            QMap<RVariableType, PickValue>::iterator iter;
+            QMultiMap<RVariableType, PickValue>::iterator iter;
 
             for (iter = resultsValues.begin(); iter != resultsValues.end(); ++iter)
             {

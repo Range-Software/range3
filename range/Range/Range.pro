@@ -1,5 +1,9 @@
 QT += core gui opengl printsupport network widgets
 
+equals(QT_MAJOR_VERSION, 6) {
+    QT += openglwidgets
+}
+
 win*-msvc* {
     QMAKE_CXXFLAGS += -openmp
     LIB_EXT = "lib"
@@ -20,6 +24,8 @@ win*-msvc* {
         PKGCONFIG += libavutil libavformat libswscale
     }
 }
+
+DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x050F00
 
 TARGET = Range
 TEMPLATE = app

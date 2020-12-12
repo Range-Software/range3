@@ -13,6 +13,8 @@ win*-msvc* {
     }
 }
 
+DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x050F00
+
 TARGET = RangeModel
 TEMPLATE = lib
 

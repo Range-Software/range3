@@ -14,6 +14,7 @@
 #include <QBuffer>
 #include <QAuthenticator>
 #include <QNetworkProxyFactory>
+#include <QRandomGenerator>
 
 #include <rblib.h>
 
@@ -23,8 +24,6 @@ HttpRequestWorker::HttpRequestWorker(QNetworkAccessManager *networkAccessManager
     : QObject(parent)
     , manager(networkAccessManager)
 {
-    qsrand(QDateTime::currentDateTime().toTime_t());
-
     QNetworkProxyFactory *pProxyFactory = this->manager->proxyFactory();
     pProxyFactory->setUseSystemConfiguration(true);
 
@@ -42,11 +41,6 @@ HttpRequestWorker::HttpRequestWorker(QNetworkAccessManager *networkAccessManager
                      &QNetworkAccessManager::finished,
                      this,
                      &HttpRequestWorker::onManagerFinished);
-
-    QObject::connect(this->manager,
-                     &QNetworkAccessManager::networkAccessibleChanged,
-                     this,
-                     &HttpRequestWorker::onManagerNetworkAccessibleChanged);
 
     QObject::connect(this->manager,
                      &QNetworkAccessManager::preSharedKeyAuthenticationRequired,
@@ -143,22 +137,22 @@ void HttpRequestWorker::execute(HttpRequestInput *pInput)
         // variable layout is MULTIPART
 
         boundary = "__-----------------------"
-            + QString::number(QDateTime::currentDateTime().toTime_t())
-            + QString::number(qrand());
-        QString boundary_delimiter = "--";
-        QString new_line = "\r\n";
+            + QString::number(QDateTime::currentSecsSinceEpoch())
+            + QString::number(QRandomGenerator::global()->generate());
+        const char *boundary_delimiter = "--";
+        const char *new_line = "\r\n";
 
         // add variables
         foreach (QString key, rVariables.keys())
         {
             // add boundary
             requestContent.append(boundary_delimiter);
-            requestContent.append(boundary);
+            requestContent.append(boundary.toStdString().c_str());
             requestContent.append(new_line);
 
             // add header
             requestContent.append("Content-Disposition: form-data; ");
-            requestContent.append(HttpRequestWorker::httpAttributeEncode("name", key));
+            requestContent.append(HttpRequestWorker::httpAttributeEncode("name", key).toStdString().c_str());
             requestContent.append(new_line);
             requestContent.append("Content-Type: text/plain");
             requestContent.append(new_line);
@@ -167,7 +161,7 @@ void HttpRequestWorker::execute(HttpRequestInput *pInput)
             requestContent.append(new_line);
 
             // add variable content
-            requestContent.append(rVariables.value(key));
+            requestContent.append(rVariables.value(key).toStdString().c_str());
             requestContent.append(new_line);
         }
 
@@ -206,20 +200,20 @@ void HttpRequestWorker::execute(HttpRequestInput *pInput)
 
             // add boundary
             requestContent.append(boundary_delimiter);
-            requestContent.append(boundary);
+            requestContent.append(boundary.toStdString().c_str());
             requestContent.append(new_line);
 
             // add header
             requestContent.append(QString("Content-Disposition: form-data; %1; %2").arg(
                 HttpRequestWorker::httpAttributeEncode("name", fileIterator->variableName),
                 HttpRequestWorker::httpAttributeEncode("filename", fileIterator->requestFilename)
-            ));
+            ).toStdString().c_str());
             requestContent.append(new_line);
 
             if (fileIterator->mimeType != nullptr && !fileIterator->mimeType.isEmpty())
             {
                 requestContent.append("Content-Type: ");
-                requestContent.append(fileIterator->mimeType);
+                requestContent.append(fileIterator->mimeType.toStdString().c_str());
                 requestContent.append(new_line);
             }
 
@@ -238,7 +232,7 @@ void HttpRequestWorker::execute(HttpRequestInput *pInput)
 
         // add end of body
         requestContent.append(boundary_delimiter);
-        requestContent.append(boundary);
+        requestContent.append(boundary.toStdString().c_str());
         requestContent.append(boundary_delimiter);
     }
 
@@ -401,29 +395,6 @@ void HttpRequestWorker::onManagerFinished(QNetworkReply *reply)
     delete this->pRequestInput;
     this->pRequestInput = nullptr;
     emit this->finished();
-}
-
-void HttpRequestWorker::onManagerNetworkAccessibleChanged(QNetworkAccessManager::NetworkAccessibility accessible)
-{
-    RLogger::info("Network eccessibility has changed to .");
-    switch (accessible)
-    {
-        case QNetworkAccessManager::UnknownAccessibility:
-        {
-            RLogger::warning("The network accessibility cannot be determined.\n");
-            break;
-        }
-        case QNetworkAccessManager::NotAccessible:
-        {
-            RLogger::warning("The network is not currently accessible.\n");
-            break;
-        }
-        case QNetworkAccessManager::Accessible:
-        {
-            RLogger::info("The network is accessible.\n");
-            break;
-        }
-    }
 }
 
 void HttpRequestWorker::onManagerPreSharedKeyAuthenticationRequired(QNetworkReply *, QSslPreSharedKeyAuthenticator *)

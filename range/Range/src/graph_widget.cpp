@@ -545,10 +545,10 @@ void GraphWidget::paintPosition(QPainter &painter,uint dataFieldID)
     painter.setFont(textFont);
 
     QFontMetrics fm = painter.fontMetrics();
-    double lw = std::max(fm.width(this->graphObject->getData().getXLabel() + QString(": ")),
-                         fm.width(this->graphObject->getData().getYLabel() + QString(": ")));
-    double vw = std::max(fm.width(QString::number(xValue)),
-                         fm.width(QString::number(yValue)));
+    double lw = std::max(fm.horizontalAdvance(this->graphObject->getData().getXLabel() + QString(": ")),
+                         fm.horizontalAdvance(this->graphObject->getData().getYLabel() + QString(": ")));
+    double vw = std::max(fm.horizontalAdvance(QString::number(xValue)),
+                         fm.horizontalAdvance(QString::number(yValue)));
 
     int x = int(std::round(this->getX(1.0,0.0,1.0) - lw - vw));
     int y = int(std::round(this->getY(1.0,0.0,1.0)));

@@ -9,6 +9,7 @@
  *********************************************************************/
 
 #include <QStringList>
+#include <QRegularExpression>
 
 #include <time.h>
 
@@ -135,7 +136,7 @@ std::vector<QString> RMessage::explode(const QString &str, char ch, bool keepCh)
 {
     std::vector<QString> result;
 
-    QStringList query = str.split(QRegExp(QString("(\\") + ch + ")"));
+    QStringList query = str.split(QRegularExpression(QString("(\\") + ch + ")"));
 
     for (int i=0;i<query.size();i++)
     {

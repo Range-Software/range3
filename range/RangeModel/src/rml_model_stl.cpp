@@ -11,6 +11,7 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QTextStream>
+#include <QRegularExpression>
 
 #include <rblib.h>
 
@@ -146,7 +147,7 @@ void RModelStl::readBinary(const QString &fileName, double tolerance)
 
     this->name = QFileInfo(stlFile).baseName();
 
-    QStringList query = line.split(QRegExp("(\\ |\\t)"));
+    QStringList query = line.split(QRegularExpression("(\\ |\\t)"));
     for (int i=0;i<query.size();i++)
     {
         this->description += query.at(i);
@@ -336,7 +337,7 @@ void RModelStl::readAscii (const QString &fileName,
 
     this->name = QFileInfo(fileName).baseName();
 
-    QStringList query = line.split(QRegExp("(\\ |\\t)"));
+    QStringList query = line.split(QRegularExpression("(\\ |\\t)"));
     for (int i=0;i<query.size();i++)
     {
         this->description += query.at(i);
@@ -452,7 +453,7 @@ void RModelStl::writeAscii (const QString &fileName) const
     out.setFieldAlignment(QTextStream::AlignRight);
 
     out << "solid " << this->getName().toUtf8().constData() << " " << this->getDescription().toUtf8().constData();
-    endl(out);
+    Qt::endl(out);
     if (out.status() != QTextStream::Ok)
     {
         throw RError(R_ERROR_WRITE_FILE,R_ERROR_REF,"Failed to write to file \'%s\'.",fileName.toUtf8().constData());
@@ -469,13 +470,13 @@ void RModelStl::writeAscii (const QString &fileName) const
         this->getNormal(i,xyz[0],xyz[1],xyz[2]);
 
         out << "  facet normal " << xyz[0] << " " << xyz[1] << " " << xyz[2];
-        endl(out);
+        Qt::endl(out);
         if (out.status() != QTextStream::Ok)
         {
             throw RError(R_ERROR_WRITE_FILE,R_ERROR_REF,"Failed to write to file \'%s\'.",fileName.toUtf8().constData());
         }
         out << "    outer loop ";
-        endl(out);
+        Qt::endl(out);
         if (out.status() != QTextStream::Ok)
         {
             throw RError(R_ERROR_WRITE_FILE,R_ERROR_REF,"Failed to write to file \'%s\'.",fileName.toUtf8().constData());
@@ -487,20 +488,20 @@ void RModelStl::writeAscii (const QString &fileName) const
                     << this->getNode(nId).getX() << " "
                     << this->getNode(nId).getY() << " "
                     << this->getNode(nId).getZ();
-            endl(out);
+            Qt::endl(out);
             if (out.status() != QTextStream::Ok)
             {
                 throw RError(R_ERROR_WRITE_FILE,R_ERROR_REF,"Failed to write to file \'%s\'.",fileName.toUtf8().constData());
             }
         }
         out << "    endloop";
-        endl(out);
+        Qt::endl(out);
         if (out.status() != QTextStream::Ok)
         {
             throw RError(R_ERROR_WRITE_FILE,R_ERROR_REF,"Failed to write to file \'%s\'.",fileName.toUtf8().constData());
         }
         out << "  endfacet";
-        endl(out);
+        Qt::endl(out);
         if (out.status() != QTextStream::Ok)
         {
             throw RError(R_ERROR_WRITE_FILE,R_ERROR_REF,"Failed to write to file \'%s\'.",fileName.toUtf8().constData());
@@ -508,7 +509,7 @@ void RModelStl::writeAscii (const QString &fileName) const
     }
 
     out << "endsolid";
-    endl(out);
+    Qt::endl(out);
     if (out.status() != QTextStream::Ok)
     {
         throw RError(R_ERROR_WRITE_FILE,R_ERROR_REF,"Failed to write to file \'%s\'.",fileName.toUtf8().constData());

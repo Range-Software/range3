@@ -60,14 +60,14 @@ void Color::randomize(bool fromGlobal, bool excludeWhiteAndBlack)
         {
             return;
         }
-        int colorPos = int((nColors-1)*double(qrand())/double(RAND_MAX));
+        int colorPos = int((nColors-1)*double(QRandomGenerator::global()->generate())/double(RAND_MAX));
         this->operator = (colorList[colorPos]);
     }
     else
     {
-        this->setRed(int(51.0*qrand()/(RAND_MAX*5.0)));
-        this->setGreen(int(51.0*qrand()/(RAND_MAX*5.0)));
-        this->setBlue(int(51.0*qrand()/(RAND_MAX*5.0)));
+        this->setRed(int(51.0*QRandomGenerator::global()->generate()/(RAND_MAX*5.0)));
+        this->setGreen(int(51.0*QRandomGenerator::global()->generate()/(RAND_MAX*5.0)));
+        this->setBlue(int(51.0*QRandomGenerator::global()->generate()/(RAND_MAX*5.0)));
         this->setAlpha(255);
     }
 }

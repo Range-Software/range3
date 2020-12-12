@@ -11,6 +11,7 @@
 #include <QDir>
 #include <QDesktopServices>
 #include <QImageWriter>
+#include <QStandardPaths>
 
 #include <rblib.h>
 

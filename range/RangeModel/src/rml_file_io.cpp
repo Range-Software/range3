@@ -351,6 +351,80 @@ void RFileIO::writeBinary(RSaveFile &outFile, const double &dValue)
 
 
 /*********************************************************************
+ *  qsizetype                                                           *
+ *********************************************************************/
+
+
+void RFileIO::readAscii(RFile &inFile, qsizetype &sValue)
+{
+    inFile.getTextStream() >> sValue;
+    if (inFile.getTextStream().status() != QTextStream::Ok)
+    {
+        if (inFile.getTextStream().status() == QTextStream::ReadCorruptData)
+        {
+            inFile.getTextStream().resetStatus();
+            return;
+        }
+        throw RError(R_ERROR_READ_FILE,R_ERROR_REF, "Failed to read qsizetype value.");
+    }
+} /* RFileIO::readAscii */
+
+
+void RFileIO::readBinary(RFile &inFile, qsizetype &sValue)
+{
+    inFile.read((char*)&sValue,sizeof(qsizetype));
+    if (inFile.error() != RFile::NoError)
+    {
+        throw RError(R_ERROR_READ_FILE,R_ERROR_REF,"Failed to read qsizetype value.");
+    }
+} /* RFileIO::readBinary */
+
+
+void RFileIO::writeAscii(RSaveFile &outFile, const qsizetype &sValue, bool addNewLine)
+{
+    if (!addNewLine)
+    {
+        outFile.getTextStream() << sValue;
+    }
+    else
+    {
+        outFile.getTextStream() << sValue << RConstants::endl;
+    }
+    if (outFile.getTextStream().status() != QTextStream::Ok)
+    {
+        throw RError(R_ERROR_WRITE_FILE,R_ERROR_REF,"Failed to write qsizetype value.");
+    }
+} /* RFileIO::writeAscii */
+
+
+void RFileIO::writeAscii(RFile &outFile, const qsizetype &sValue, bool addNewLine)
+{
+    if (!addNewLine)
+    {
+        outFile.getTextStream() << sValue;
+    }
+    else
+    {
+        outFile.getTextStream() << sValue << RConstants::endl;
+    }
+    if (outFile.getTextStream().status() != QTextStream::Ok)
+    {
+        throw RError(R_ERROR_WRITE_FILE,R_ERROR_REF,"Failed to write qsizetype value.");
+    }
+} /* RFileIO::writeAscii */
+
+
+void RFileIO::writeBinary(RSaveFile &outFile, const qsizetype &sValue)
+{
+    outFile.write((char*)&sValue,sizeof(qsizetype));
+    if (outFile.error() != RFile::NoError)
+    {
+        throw RError(R_ERROR_WRITE_FILE,R_ERROR_REF,"Failed to write qsizetype value.");
+    }
+} /* RFileIO::writeBinary */
+
+
+/*********************************************************************
  *  QString                                                          *
  *********************************************************************/
 

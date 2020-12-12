@@ -588,7 +588,7 @@ void MainWindow::createStatusBar(void)
 
     QVBoxLayout *progressBarLayout = new QVBoxLayout;
     progressBarLayout->setSpacing(0);
-    progressBarLayout->setMargin(0);
+    progressBarLayout->setContentsMargins(0,0,0,0);
     progressBarWidget->setLayout(progressBarLayout);
 
     this->mainProgressBar = new ProgressBar(this);

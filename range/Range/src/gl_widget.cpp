@@ -9,10 +9,11 @@
  *********************************************************************/
 
 #include <QApplication>
-#include <QDesktopWidget>
 #include <QFileDialog>
 #include <QPainter>
 #include <QGuiApplication>
+//#include <QDesktopWidget>
+#include <QScreen>
 
 #include <rmlib.h>
 
@@ -37,7 +38,6 @@
 
 const GLsizei GLWidget::lAxisWpWidth = 100;
 const GLsizei GLWidget::lAxisWpHeight = 100;
-//static int GLWidget::dsktopDevicePixelRatio = 1;
 
 GLWidget::GLWidget(uint modelID, QWidget *parent)
     : QOpenGLWidget(parent),
@@ -63,7 +63,8 @@ GLWidget::GLWidget(uint modelID, QWidget *parent)
       useGlCullFace(true)
 {
     R_LOG_TRACE_IN;
-    this->desktopDevicePixelRatio = QApplication::desktop()->devicePixelRatio();
+//    this->desktopDevicePixelRatio = QApplication::desktop()->devicePixelRatio();
+    this->desktopDevicePixelRatio = int(MainWindow::getInstance()->screen()->devicePixelRatio());
 
     this->setFocusPolicy(Qt::StrongFocus);
     this->setAutoFillBackground(false);
@@ -727,7 +728,7 @@ void GLWidget::drawMessageBox(QPainter &painter, bool drawBox)
         std::vector<REntityGroupType> entityTypes = REntityGroup::getAllTypes();
         for (uint i=0;i<entityTypes.size();i++)
         {
-            QMap<QString,uint> pickedEntities;
+            QMultiMap<QString,uint> pickedEntities;
             for (int j=0;j<pickItems.size();j++)
             {
                 if (pickItems.at(j).getEntityID().getType() == entityTypes[i])

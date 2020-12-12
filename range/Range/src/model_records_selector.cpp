@@ -31,7 +31,7 @@ ModelRecordsSelector::ModelRecordsSelector(QWidget *parent)
 {
     QVBoxLayout *layout = new QVBoxLayout;
     layout->setSpacing(0);
-    layout->setMargin(0);
+    layout->setContentsMargins(0,0,0,0);
     this->setLayout(layout);
 
     this->tree = new ModelRecordsTree;
