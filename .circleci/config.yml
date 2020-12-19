@@ -1,8 +1,8 @@
 version: 2
 jobs:
-  build-centos8:
+  build-centos:
     docker:
-      - image: centos:centos8
+      - image: centos:latest
     steps:
       - checkout
       - run:
@@ -80,7 +80,7 @@ workflows:
   version: 2
   build_all:
     jobs:
-      - build-centos8
+      - build-centos
       - build-fedora33
       - build-opensusetumbleweed
       - build-ubuntu2010
