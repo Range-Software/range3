@@ -5,6 +5,7 @@ Version 3.2.5
 * GUI: Added command line option '--reset-defaults' which resets all settings to their default values
 * GUI: Added 3D area mouse action help
 * GUI: Show model grid
+* GUI: Changed mouse action buttons and key modifiers in 3D area
 
 ------------------------------------------------------------------
 Version 3.2.4
