@@ -1,8 +1,8 @@
 version: 2
 jobs:
-  build-centos7:
+  build-centos8:
     docker:
-      - image: centos:centos7
+      - image: centos:centos8
     steps:
       - checkout
       - run:
@@ -14,9 +14,9 @@ jobs:
       - run:
           name: Upload
           command: scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -P $UPLOAD_PORT build-Release/packages/rpmbuild/RPMS/$(uname -m)/*.rpm $UPLOAD_USER@$UPLOAD_HOST:.
-  build-fedora32:
+  build-fedora33:
     docker:
-      - image: fedora:32
+      - image: fedora:33
     steps:
       - checkout
       - run:
@@ -42,9 +42,9 @@ jobs:
       - run:
           name: Upload
           command: scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -P $UPLOAD_PORT build-Release/packages/rpmbuild/RPMS/$(uname -m)/*.rpm $UPLOAD_USER@$UPLOAD_HOST:.
-  build-debian9:
+  build-debian10:
     docker:
-      - image: debian:9
+      - image: debian:10
     steps:
       - checkout
       - run:
@@ -61,7 +61,7 @@ jobs:
           command: scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -P $UPLOAD_PORT *.deb $UPLOAD_USER@$UPLOAD_HOST:.
   build-ubuntu2004:
     docker:
-      - image: ubuntu:focal
+      - image: ubuntu:20.04
     steps:
       - checkout
       - run:
@@ -80,8 +80,8 @@ workflows:
   version: 2
   build_all:
     jobs:
-      - build-centos7
-      - build-fedora32
+      - build-centos8
+      - build-fedora33
       - build-opensuseleap
-      - build-debian9
+      - build-debian10
       - build-ubuntu2004
