@@ -24,11 +24,11 @@ GraphWidget::GraphWidget(GraphObject *graphObject, bool editLimits, QWidget *par
     lineWidth(5.0),
     barWidth(0.0),
     spacing(2.0),
-    titleFontSize(14),
-    labelFontSize(12),
+    titleFontSize(12),
+    labelFontSize(10),
     labelSpace(this->labelFontSize*2.0),
     xAxisSpace(this->labelFontSize*2.0),
-    yAxisSpace(this->labelFontSize*2.),
+    yAxisSpace(this->labelFontSize*2.0),
     showPointer(true),
     snapPointerX(true),
     snapPointerY(true),
@@ -301,8 +301,8 @@ void GraphWidget::paintTitle(QPainter &painter)
     painter.setFont(textFont);
     int x = int(std::round(this->getX(0.0,0.0,1.0)));
     int y = int(std::round(this->getY(1.0,0.0,1.0)));
-    int w = int(std::round(this->getX(1.0,0.0,1.0) - x));
-    int h = int(std::round(2.0*fontSize));
+    int w = int(std::round(this->getX(1.0,0.0,1.0))) - x;
+    int h = int(std::round(2.5*fontSize));
 
     painter.drawText(QRect(x, y, w, h), Qt::AlignCenter, this->graphObject->getData().getTitle());
 
@@ -440,7 +440,7 @@ void GraphWidget::paintXLabel(QPainter &painter)
     int x = int(std::round(this->getX(0.0,0.0,1.0)));
     int y = int(std::round(this->height() - this->labelSpace));
     int h = int(std::round(this->labelSpace));
-    int w = int(std::round(this->getX(1.0,0.0,1.0) - x));
+    int w = int(std::round(this->getX(1.0,0.0,1.0))) - x;
 
     painter.drawText(QRect(x, y, w, h), Qt::AlignCenter, this->graphObject->getData().getXLabel());
 
@@ -552,8 +552,8 @@ void GraphWidget::paintPosition(QPainter &painter,uint dataFieldID)
 
     int x = int(std::round(this->getX(1.0,0.0,1.0) - lw - vw));
     int y = int(std::round(this->getY(1.0,0.0,1.0)));
-    int w = int(std::round(this->getX(1.0,0.0,1.0) - x));
-    int h = int(std::round(2.0*2.0*fontSize));
+    int w = int(std::round(this->getX(1.0,0.0,1.0))) - x;
+    int h = int(std::round(2.0*3.0*fontSize));
 
     painter.drawText(QRect(x, y, w, h), Qt::AlignLeft, labelText);
     painter.drawText(QRect(x + int(std::round(lw)), y, w - int(std::round(lw)), h), Qt::AlignLeft, valueText);
