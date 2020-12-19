@@ -372,9 +372,9 @@ void Model::generatePatchColors()
     for (uint i=0;i<this->viewFactorMatrix.getPatchBook().getNPatches();i++)
     {
         int r,g,b;
-        r = qRound(255*double(QRandomGenerator::global()->generate())/double(RAND_MAX));
-        g = qRound(255*double(QRandomGenerator::global()->generate())/double(RAND_MAX));
-        b = qRound(255*double(QRandomGenerator::global()->generate())/double(RAND_MAX));
+        r = qRound(255*QRandomGenerator::global()->generateDouble());
+        g = qRound(255*QRandomGenerator::global()->generateDouble());
+        b = qRound(255*QRandomGenerator::global()->generateDouble());
         this->patchColors.push_back(QColor(r,g,b,255));
     }
 }
