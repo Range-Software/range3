@@ -22,7 +22,7 @@ $ ./scripts/build.sh --clean && ./scripts/create_mac_app.sh
 ```
 Above command will produce `./build-Release/packages/range-3.2.5.dmg` which can be installed with following command:
 ```
-$ open './build-Release/packages/range-3.2.4.dmg'
+$ open './build-Release/packages/range-3.2.5.dmg'
 ```
 ## Running the software
 ```
