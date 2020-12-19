@@ -2533,11 +2533,14 @@ bool Model::findPickedElement(const RR3Vector &position, const RR3Vector &direct
                     double distance;
                     if (rElement.findPickDistance(dispNodes,position,direction,tolerance,distance))
                     {
-                        if (!found || minDistance > distance)
+#pragma omp critical
                         {
-                            minDistance = distance;
-                            pickItem = PickItem(SessionEntityID(0,entityType,entityID),elementID,uint(j));
-                            found = true;
+                            if (!found || minDistance > distance)
+                            {
+                                minDistance = distance;
+                                pickItem = PickItem(SessionEntityID(0,entityType,entityID),elementID,uint(j));
+                                found = true;
+                            }
                         }
                     }
                 }
@@ -2566,11 +2569,14 @@ bool Model::findPickedElement(const RR3Vector &position, const RR3Vector &direct
                     double distance;
                     if (iElement.findPickDistance(position,direction,tolerance,distance))
                     {
-                        if (!found || minDistance > distance)
+#pragma omp critical
                         {
-                            minDistance = distance;
-                            pickItem = PickItem(SessionEntityID(0,entityType,entityID),uint(j),uint(j));
-                            found = true;
+                            if (!found || minDistance > distance)
+                            {
+                                minDistance = distance;
+                                pickItem = PickItem(SessionEntityID(0,entityType,entityID),uint(j),uint(j));
+                                found = true;
+                            }
                         }
                     }
                 }
@@ -2646,11 +2652,14 @@ bool Model::findPickedNode(const RR3Vector &position, const RR3Vector &direction
                         if (u <= tolerance)
                         {
                             double distance = node.getDistance(RNode(position));
-                            if (!found || minDistance > distance)
+#pragma omp critical
                             {
-                                minDistance = distance;
-                                pickItem = PickItem(SessionEntityID(0,entityType,entityID),elementID,uint(j),nodeID,k);
-                                found = true;
+                                if (!found || minDistance > distance)
+                                {
+                                    minDistance = distance;
+                                    pickItem = PickItem(SessionEntityID(0,entityType,entityID),elementID,uint(j),nodeID,k);
+                                    found = true;
+                                }
                             }
                         }
                     }
@@ -2683,11 +2692,14 @@ bool Model::findPickedNode(const RR3Vector &position, const RR3Vector &direction
                         if (u <= tolerance)
                         {
                             double distance = iElement[k].getDistance(RNode(position));
-                            if (!found || minDistance > distance)
+#pragma omp critical
                             {
-                                minDistance = distance;
-                                pickItem = PickItem(SessionEntityID(0,entityType,entityID),uint(j),uint(j),k,k);
-                                found = true;
+                                if (!found || minDistance > distance)
+                                {
+                                    minDistance = distance;
+                                    pickItem = PickItem(SessionEntityID(0,entityType,entityID),uint(j),uint(j),k,k);
+                                    found = true;
+                                }
                             }
                         }
                     }

@@ -7,6 +7,10 @@ Version 3.2.5
 * GUI: Show model grid
 * GUI: Changed mouse action buttons and key modifiers in 3D area
 
+Bug fixes:
+
+* GUI: Picking elements and nodes can produce invalid results
+
 ------------------------------------------------------------------
 Version 3.2.4
 
