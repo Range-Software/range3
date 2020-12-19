@@ -20,13 +20,13 @@ $ ./scripts/build.sh --clean && ./scripts/create_package.sh
 ```
 $ ./scripts/build.sh --clean && ./scripts/create_mac_app.sh
 ```
-Above command will produce `./build-Release/packages/range-3.2.4.dmg` which can be installed with following command:
+Above command will produce `./build-Release/packages/range-3.2.5.dmg` which can be installed with following command:
 ```
 $ open './build-Release/packages/range-3.2.4.dmg'
 ```
 ## Running the software
 ```
-$ $HOME/bin/range-3.2.4/bin/Range
+$ $HOME/bin/range-3.2.5/bin/Range
 ```
 
 ## Download
