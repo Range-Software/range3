@@ -11,10 +11,16 @@ clean=false
 debug=false
 
 myName=$(basename $0 .sh)
-myPath=$(dirname  $(realpath ${BASH_SOURCE[0]}))
 myUser=$(id -nu)
 myNode=$(hostname -s)
 timeStamp=$(date +%H%M%S)
+
+getScriptPath () {
+	echo ${0%/*}/
+}
+pushd "$(getScriptPath)"
+myPath="$(pwd)"
+popd
 
 . ${myPath}/lib.sh
 
@@ -139,9 +145,7 @@ then
     qmakeArgs+=" CONFIG+=debug CONFIG+=qml_debug"
 fi
 
-currentDir=$(pwd)
-
-cd $buildDir
+pushd $buildDir
 
 if [[ $(uname -s) == "Darwin" ]]; then
     # This doesn't work yet.
@@ -169,7 +173,7 @@ do
     if [ ${PIPESTATUS[0]} -ne 0 ]
     then
         echo_e "Command '$qmakeCmd $projectFile $qmakeArgs -o $makefile' failed. Check log file '$qmakeLogFile' for errors"
-        cd $currentDir
+        popd
         exit 1
     fi
     # MAKE
@@ -178,10 +182,10 @@ do
     if [ ${PIPESTATUS[0]} -ne 0 ]
     then
         echo_e "Command '$MAKE' failed. Check log file '$makeLogFile' for errors"
-        cd $currentDir
+        popd
         exit 1
     fi
     set_unindent
 done
 
-cd $currentDir
+popd

@@ -17,7 +17,7 @@
 
 Session::Session()
 {
-    RLogger::trace("Session::Session()\n");
+    R_LOG_TRACE_IN;
     this->sessionID = QDateTime::currentDateTimeUtc().toString("yyyyMMddHHmmsszzz");
     this->downloadManager = new DownloadManager(this);
     this->drawEngine = new DrawEngine(this);
@@ -29,6 +29,7 @@ Session::Session()
                      &ApplicationSettings::nHistoryRecordsChanged,
                      this,
                      &Session::onNHistoryRecordsChanged);
+    R_LOG_TRACE_OUT;
 }
 
 Session & Session::getInstance()
@@ -45,73 +46,62 @@ const QString &Session::getID() const
 
 void Session::lock()
 {
-    RLogger::trace("void Session::lock()\n");
     this->mutex.lock();
 }
 
 bool Session::trylock(int timeout)
 {
-    RLogger::trace("bool Session::trylock(int timeout)\n");
     return this->mutex.tryLock(timeout);
 }
 
 void Session::unlock()
 {
-    RLogger::trace("void Session::unlock()\n");
     this->mutex.unlock();
 }
 
 DownloadManager *Session::getDownloadManager()
 {
-    RLogger::trace("DownloadManager *Session::getDownloadManager()\n");
     return this->downloadManager;
 }
 
 DrawEngine *Session::getDrawEngine()
 {
-    RLogger::trace("DrawEngine *Session::getDrawEngine()\n");
     return this->drawEngine;
 }
 
 const QString &Session::getFileName() const
 {
-    RLogger::trace("const QString &Session::getFileName() const\n");
     return this->fileName;
 }
 
 uint Session::getNModels() const
 {
-    RLogger::trace("uint Session::getNModels() const\n");
     return uint(this->models.size());
 }
 
 const Model & Session::getModel(uint position) const
 {
-//    RLogger::trace("const Model & Session::getModel(uint position) const\n");
     return this->models[int(position)];
 }
 
 Model & Session::getModel(uint position)
 {
-//    RLogger::trace("Model & Session::getModel(uint position)\n");
     return this->models[int(position)];
 }
 
 const Model * Session::getModelPtr(uint position) const
 {
-    RLogger::trace("const Model * Session::getModelPtr(uint position) const\n");
     return &this->models[int(position)];
 }
 
 Model * Session::getModelPtr(uint position)
 {
-    RLogger::trace("Model * Session::getModelPtr(uint position)\n");
     return &this->models[int(position)];
 }
 
 void Session::addModel(const Model &model)
 {
-    RLogger::trace("void Session::addModel(const Model &model)\n");
+    R_LOG_TRACE_IN;
     bool locked = this->trylock();
     this->models.push_back(model);
     this->models.last().initializeMeshInput();
@@ -120,11 +110,12 @@ void Session::addModel(const Model &model)
         this->unlock();
     }
     emit this->modelAdded(uint(this->models.size()-1));
+    R_LOG_TRACE_OUT;
 }
 
 void Session::setModel(uint position, const Model &model)
 {
-    RLogger::trace("void Session::setModel(uint position, const Model &model)\n");
+    R_LOG_TRACE_IN;
     bool locked = this->trylock();
     this->models[int(position)] = model;
     if (locked)
@@ -132,11 +123,12 @@ void Session::setModel(uint position, const Model &model)
         this->unlock();
     }
     this->setModelChanged(position);
+    R_LOG_TRACE_OUT;
 }
 
 void Session::removeModel(uint position)
 {
-    RLogger::trace("void Session::removeModel(uint position)\n");
+    R_LOG_TRACE_IN;
     bool locked = this->trylock();
     this->models.removeAt(int(position));
     this->pickList.removeItems(position);
@@ -145,11 +137,12 @@ void Session::removeModel(uint position)
         this->unlock();
     }
     emit this->modelRemoved(position);
+    R_LOG_TRACE_OUT;
 }
 
 void Session::setModelSelected(uint modelID, bool selected)
 {
-    RLogger::trace("void Session::setModelSelected(uint modelID, bool selected)\n");
+    R_LOG_TRACE_IN;
     for (uint i=0;i<this->getModel(modelID).getNPoints();i++)
     {
         this->setEntitySelected(modelID,R_ENTITY_GROUP_POINT,i,selected,false);
@@ -188,11 +181,12 @@ void Session::setModelSelected(uint modelID, bool selected)
     }
     this->getModel(modelID).setSelected(selected);
     this->setModelSelectionChanged(modelID);
+    R_LOG_TRACE_OUT;
 }
 
 void Session::setEntitySelected(uint modelID, REntityGroupType elementGrpType, uint entityID, bool selected, bool notifyModel)
 {
-    RLogger::trace("void Session::setEntitySelected(uint modelID, REntityGroupType elementGrpType, uint entityID, bool selected, bool notifyModel)\n");
+    R_LOG_TRACE_IN;
     if (this->getModel(modelID).getSelected(elementGrpType,entityID) != selected)
     {
         this->getModel(modelID).setSelected(elementGrpType,entityID,selected);
@@ -202,22 +196,24 @@ void Session::setEntitySelected(uint modelID, REntityGroupType elementGrpType, u
             this->setModelSelectionChanged(modelID);
         }
     }
+    R_LOG_TRACE_OUT;
 }
 
 void Session::setEntityVisible(uint modelID, REntityGroupType elementGrpType, uint entityID, bool visible)
 {
-    RLogger::trace("void Session::setEntityVisible(uint modelID, REntityGroupType elementGrpType, uint entityID, bool visible)\n");
+    R_LOG_TRACE_IN;
     if (this->getModel(modelID).getVisible(elementGrpType,entityID) != visible)
     {
         this->getModel(modelID).setVisible(elementGrpType,entityID,visible);
         emit this->entityVisibilityChanged(modelID,elementGrpType,entityID,visible);
         emit this->modelVisibilityChanged(modelID);
     }
+    R_LOG_TRACE_OUT;
 }
 
 void Session::setModelVisible(uint modelID, bool visible)
 {
-    RLogger::trace("void Session::setModelVisible(uint modelID, bool visible)\n");
+    R_LOG_TRACE_IN;
     for (uint i=0;i<this->getModel(modelID).getNPoints();i++)
     {
         this->setEntityVisible(modelID,R_ENTITY_GROUP_POINT,i,visible);
@@ -254,11 +250,12 @@ void Session::setModelVisible(uint modelID, bool visible)
     {
         this->setEntityVisible(modelID,R_ENTITY_GROUP_ISO,i,visible);
     }
+    R_LOG_TRACE_OUT;
 }
 
 QList<uint> Session::getSelectedModelIDs() const
 {
-    RLogger::trace("QList<uint> Session::getSelectedModelIDs() const\n");
+//    R_LOG_TRACE_IN;
     QList<uint> selectedModelIDs;
 
     for (uint i=0;i<this->getNModels();i++)
@@ -270,12 +267,13 @@ QList<uint> Session::getSelectedModelIDs() const
         }
     }
 
+//    R_LOG_TRACE_OUT;
     return selectedModelIDs;
 }
 
 QList<uint> Session::getVisibleModelIDs() const
 {
-    RLogger::trace("QList<uint> Session::getVisibleModelIDs() const\n");
+    R_LOG_TRACE_IN;
     QList<uint> visibleModelIDs;
 
     for (uint i=0;i<this->getNModels();i++)
@@ -287,30 +285,32 @@ QList<uint> Session::getVisibleModelIDs() const
         }
     }
 
+    R_LOG_TRACE_OUT;
     return visibleModelIDs;
 }
 
 bool Session::isModelSelected(uint modelID)
 {
-//    RLogger::trace("bool Session::isModelSelected(uint modelID)\n");
+//    R_LOG_TRACE_IN;
     return (!this->getModel(modelID).isSelected(false));
 }
 
 QList<SessionEntityID> Session::getAllEntityIDs() const
 {
-    RLogger::trace("QList<SessionEntityID> Session::getAllEntityIDs() const\n");
+    R_LOG_TRACE_IN;
     QList<SessionEntityID> allEntityIDs;
 
     for (uint i=0;i<this->getNModels();i++)
     {
         allEntityIDs += this->getAllEntityIDs(i);
     }
+    R_LOG_TRACE_OUT;
     return allEntityIDs;
 }
 
 QList<SessionEntityID> Session::getAllEntityIDs(uint modelID) const
 {
-    RLogger::trace("QList<SessionEntityID> Session::getAllEntityIDs(uint modelID) const\n");
+    R_LOG_TRACE_IN;
     QList<SessionEntityID> allEntityIDs;
     SessionEntityID entityID;
 
@@ -379,36 +379,39 @@ QList<SessionEntityID> Session::getAllEntityIDs(uint modelID) const
         allEntityIDs.push_back(entityID);
     }
 
+    R_LOG_TRACE_OUT;
     return allEntityIDs;
 }
 
 QList<SessionEntityID> Session::getSelectedEntityIDs() const
 {
-    RLogger::trace("QList<SessionEntityID> Session::getSelectedEntityIDs() const\n");
+    R_LOG_TRACE_IN;
     QList<SessionEntityID> selectedEntityIDs;
 
     for (uint i=0;i<this->getNModels();i++)
     {
         selectedEntityIDs += this->getModel(i).getSelectedEntityIDs(i);
     }
+    R_LOG_TRACE_OUT;
     return selectedEntityIDs;
 }
 
 QList<SessionEntityID> Session::getVisibleEntityIDs() const
 {
-    RLogger::trace("QList<SessionEntityID> Session::getVisibleEntityIDs() const\n");
+    R_LOG_TRACE_IN;
     QList<SessionEntityID> visibleEntityIDs;
 
     for (uint i=0;i<this->getNModels();i++)
     {
         visibleEntityIDs += this->getModel(i).getVisibleEntityIDs(i);
     }
+    R_LOG_TRACE_OUT;
     return visibleEntityIDs;
 }
 
 QList<SessionEntityID> Session::filterSelectedEntityIDs(const QList<SessionEntityID> selectedEntityIDs, uint modelID, REntityGroupTypeMask entityTypeMask)
 {
-    RLogger::trace("QList<SessionEntityID> Session::filterSelectedEntityIDs(const QList<SessionEntityID> selectedEntityIDs, uint modelID, REntityGroupTypeMask entityTypeMask)\n");
+    R_LOG_TRACE_IN;
     QList<SessionEntityID> selectedEntities(selectedEntityIDs);
 
     for (int i=selectedEntities.size()-1;i>=0;i--)
@@ -424,200 +427,230 @@ QList<SessionEntityID> Session::filterSelectedEntityIDs(const QList<SessionEntit
         selectedEntities.erase(selectedEntities.begin()+i);
     }
 
+    R_LOG_TRACE_OUT;
     return selectedEntities;
 }
 
 uint Session::findModelByName(const QString &modelName)
 {
-    RLogger::trace("uint Session::findModelByName(const QString &modelName)\n");
+    R_LOG_TRACE_IN;
     for (uint i=0;i<this->getNModels();i++)
     {
         if (this->getModel(i).getName() == modelName)
         {
+            R_LOG_TRACE_OUT;
             return i;
         }
     }
+    R_LOG_TRACE_OUT;
     return RConstants::eod;
 }
 
 uint Session::findModelByPtr(const Model *pModel)
 {
-    RLogger::trace("uint Session::findModelByPtr(const Model *pModel)\n");
+    R_LOG_TRACE_IN;
     for (uint i=0;i<this->getNModels();i++)
     {
         if (this->getModelPtr(i) == pModel)
         {
+            R_LOG_TRACE_OUT;
             return i;
         }
     }
+    R_LOG_TRACE_OUT;
     return RConstants::eod;
 }
 
 void Session::setModelSelectionChanged(uint modelID)
 {
-    RLogger::trace("void Session::setModelSelectionChanged(uint modelID)\n");
+    R_LOG_TRACE_IN;
     emit this->modelSelectionChanged(modelID);
+    R_LOG_TRACE_OUT;
 }
 
 void Session::setDisplayPropertiesChanged(uint modelID, REntityGroupType elementGrpType, uint entityID)
 {
-    RLogger::trace("void Session::setDisplayPropertiesChanged(uint modelID, REntityGroupType elementGrpType, uint entityID)\n");
+    R_LOG_TRACE_IN;
     emit this->displayPropertiesChanged(modelID,elementGrpType,entityID);
+    R_LOG_TRACE_OUT;
 }
 
 void Session::setModelChanged(uint modelID)
 {
-    RLogger::trace("void Session::setModelChanged(uint modelID)\n");
+    R_LOG_TRACE_IN;
     emit this->modelChanged(modelID);
+    R_LOG_TRACE_OUT;
 }
 
 void Session::setModelRenamed(uint modelID)
 {
-    RLogger::trace("void Session::setModelRenamed(uint modelID)\n");
+    R_LOG_TRACE_IN;
     emit this->modelRenamed(modelID);
+    R_LOG_TRACE_OUT;
 }
 
 void Session::setProblemChanged(uint modelID)
 {
-    RLogger::trace("void Session::setProblemChanged(uint modelID)\n");
+    R_LOG_TRACE_IN;
     emit this->problemChanged(modelID);
+    R_LOG_TRACE_OUT;
 }
 
 void Session::setProblemSelectionChanged(uint modelID)
 {
-    RLogger::trace("void Session::setProblemSelectionChanged(uint modelID)\n");
+    R_LOG_TRACE_IN;
     emit this->problemSelectionChanged(modelID);
+    R_LOG_TRACE_OUT;
 }
 
 void Session::setResultsChanged(uint modelID)
 {
-    RLogger::trace("void Session::setResultsChanged(uint modelID)\n");
+    R_LOG_TRACE_IN;
     emit this->resultsChanged(modelID);
+    R_LOG_TRACE_OUT;
 }
 
 void Session::setBoundaryConditionChanged(uint modelID, REntityGroupType elementGrpType, uint entityID)
 {
-    RLogger::trace("void Session::setBoundaryConditionChanged(uint modelID, REntityGroupType elementGrpType, uint entityID)\n");
+    R_LOG_TRACE_IN;
     emit this->boundaryConditionChanged(modelID,elementGrpType,entityID);
+    R_LOG_TRACE_OUT;
 }
 
 void Session::setInitialConditionChanged(uint modelID, REntityGroupType elementGrpType, uint entityID)
 {
-    RLogger::trace("void Session::setInitialConditionChanged(uint modelID, REntityGroupType elementGrpType, uint entityID)\n");
+    R_LOG_TRACE_IN;
     emit this->initialConditionChanged(modelID,elementGrpType,entityID);
+    R_LOG_TRACE_OUT;
 }
 
 void Session::setEnvironmentConditionChanged(uint modelID, REntityGroupType elementGrpType, uint entityID)
 {
-    RLogger::trace("void Session::setEnvironmentConditionChanged(uint modelID, REntityGroupType elementGrpType, uint entityID)\n");
+    R_LOG_TRACE_IN;
     emit this->environmentConditionChanged(modelID,elementGrpType,entityID);
+    R_LOG_TRACE_OUT;
 }
 
 void Session::setMaterialChanged(uint modelID, REntityGroupType elementGrpType, uint entityID)
 {
-    RLogger::trace("void Session::setMaterialChanged(uint modelID, REntityGroupType elementGrpType, uint entityID)\n");
+    R_LOG_TRACE_IN;
     emit this->materialChanged(modelID,elementGrpType,entityID);
+    R_LOG_TRACE_OUT;
 }
 
 void Session::setVariableDataChanged(uint modelID, RVariableType variableType)
 {
-    RLogger::trace("void Session::setVariableDataChanged(uint modelID, RVariableType variableType)\n");
+    R_LOG_TRACE_IN;
     emit this->variableDataChanged(modelID,variableType);
+    R_LOG_TRACE_OUT;
 }
 
 void Session::setVariableDataChanged(const SessionEntityID &entityID, RVariableType variableType)
 {
-    RLogger::trace("void Session::setVariableDataChanged(const SessionEntityID &entityID, RVariableType variableType)\n");
+    R_LOG_TRACE_IN;
     emit this->variableDataChanged(entityID,variableType);
+    R_LOG_TRACE_OUT;
 }
 
 const PickList &Session::getPickList() const
 {
-    RLogger::trace("const PickList &Session::getPickList() const\n");
+    R_LOG_TRACE;
     return this->pickList;
 }
 
 PickList &Session::getPickList()
 {
-    RLogger::trace("PickList &Session::getPickList()\n");
+    R_LOG_TRACE;
     return this->pickList;
 }
 
 void Session::setBeginDrawStreamLinePosition(const RR3Vector &position)
 {
-    RLogger::trace("void Session::setBeginDrawStreamLinePosition(const RR3Vector &position)\n");
+    R_LOG_TRACE_IN;
     emit this->beginDrawStreamLinePosition(position);
+    R_LOG_TRACE_OUT;
 }
 
 void Session::setEndDrawStreamLinePosition()
 {
-    RLogger::trace("void Session::setEndDrawStreamLinePosition()\n");
+    R_LOG_TRACE_IN;
     emit this->endDrawStreamLinePosition();
+    R_LOG_TRACE_OUT;
 }
 
 void Session::setBeginDrawScaleOrigin(const RR3Vector &position)
 {
-    RLogger::trace("void Session::setBeginDrawScaleOrigin(const RR3Vector &position)\n");
+    R_LOG_TRACE_IN;
     emit this->beginDrawScaleOrigin(position);
+    R_LOG_TRACE_OUT;
 }
 
 void Session::setEndDrawScaleOrigin()
 {
-    RLogger::trace("void Session::setEndDrawScaleOrigin()\n");
+    R_LOG_TRACE_IN;
     emit this->endDrawScaleOrigin();
+    R_LOG_TRACE_OUT;
 }
 
 void Session::setBeginDrawRotationOrigin(const RR3Vector &position)
 {
-    RLogger::trace("void Session::setBeginDrawRotationOrigin(const RR3Vector &position)\n");
+    R_LOG_TRACE_IN;
     emit this->beginDrawRotationOrigin(position);
+    R_LOG_TRACE_OUT;
 }
 
 void Session::setEndDrawRotationOrigin()
 {
-    RLogger::trace("void Session::setEndDrawRotationOrigin()\n");
+    R_LOG_TRACE_IN;
     emit this->endDrawRotationOrigin();
+    R_LOG_TRACE_OUT;
 }
 
 void Session::setBeginDrawLocalDirections(const QList<RLocalDirection> &localDirections)
 {
-    RLogger::trace("void Session::setBeginDrawLocalDirections(const QList<RLocalDirection> &localDirections)\n");
+    R_LOG_TRACE_IN;
     emit this->beginDrawLocalDirections(localDirections);
+    R_LOG_TRACE_OUT;
 }
 
 void Session::setEndDrawLocalDirections()
 {
-    RLogger::trace("void Session::setEndDrawLocalDirections()\n");
+    R_LOG_TRACE_IN;
     emit this->endDrawLocalDirections();
+    R_LOG_TRACE_OUT;
 }
 
 void Session::setBeginDrawCutPlane(const RPlane &plane)
 {
-    RLogger::trace("void Session::setBeginDrawCutPlane(const RPlane &plane)\n");
+    R_LOG_TRACE_IN;
     emit this->beginDrawCutPlane(plane);
+    R_LOG_TRACE_OUT;
 }
 
 void Session::setEndDrawCutPlane()
 {
-    RLogger::trace("void Session::setEndDrawCutPlane()\n");
+    R_LOG_TRACE_IN;
     emit this->endDrawCutPlane();
+    R_LOG_TRACE_OUT;
 }
 
 void Session::setBeginDrawMoveNodes(const QMap<SessionNodeID, RR3Vector> &nodesToMove)
 {
-    RLogger::trace("void Session::setBeginDrawMoveNodes(const QMap<SessionNodeID, RR3Vector> &nodesToMove)\n");
+    R_LOG_TRACE_IN;
     emit this->beginDrawMoveNodes(nodesToMove);
+    R_LOG_TRACE_OUT;
 }
 
 void Session::setEndDrawMoveNodes()
 {
-    RLogger::trace("void Session::setEndDrawMoveNodes()\n");
+    R_LOG_TRACE_IN;
     emit this->endDrawMoveNodes();
+    R_LOG_TRACE_OUT;
 }
 
 void Session::setTakeScreenShot(uint modelID, const QString &screenShotFileName, bool blocking)
 {
-    RLogger::trace("void Session::setTakeScreenShot(uint modelID, const QString &screenShotFileName, bool blocking)\n");
+    R_LOG_TRACE_IN;
     if (blocking)
     {
         emit this->takeScreenShotBlocking(modelID, screenShotFileName);
@@ -626,10 +659,12 @@ void Session::setTakeScreenShot(uint modelID, const QString &screenShotFileName,
     {
         emit this->takeScreenShot(modelID, screenShotFileName);
     }
+    R_LOG_TRACE_OUT;
 }
 
 void Session::readModels(const QStringList &fileNames)
 {
+    R_LOG_TRACE_IN;
     RLogger::info("Loading %u files\n",fileNames.size());
     RLogger::indent();
     for (int i=0;i<fileNames.size();i++)
@@ -646,13 +681,15 @@ void Session::readModels(const QStringList &fileNames)
         }
     }
     RLogger::unindent();
+    R_LOG_TRACE_OUT;
 }
 
 void Session::read(const QString &fileName)
 {
-    RLogger::trace("void Session::read(const QString &fileName)\n");
+    R_LOG_TRACE_IN;
     if (fileName.isEmpty())
     {
+        R_LOG_TRACE_OUT;
         throw RError(R_ERROR_INVALID_FILE_NAME,R_ERROR_REF,"No file name was provided.");
     }
 
@@ -666,6 +703,7 @@ void Session::read(const QString &fileName)
     if (!sessionFile.open(QIODevice::ReadOnly | QIODevice::Text))
     {
         RLogger::unindent();
+        R_LOG_TRACE_OUT;
         throw RError(R_ERROR_OPEN_FILE,R_ERROR_REF,"Failed to open the file \'%s\'.",this->fileName.toUtf8().constData());
     }
 
@@ -698,15 +736,17 @@ void Session::read(const QString &fileName)
     this->readModels(modelFileNames);
 
     RLogger::unindent();
+    R_LOG_TRACE_OUT;
 }
 
 void Session::write(const QString &fileName, bool writeModels)
 {
-    RLogger::trace("void Session::write(const QString &fileName, bool writeModels)\n");
+    R_LOG_TRACE_IN;
     RLogger::info("Writing session file \'%s\'.\n",fileName.toUtf8().constData());
 
     if (fileName.isEmpty())
     {
+        R_LOG_TRACE_OUT;
         throw RError(R_ERROR_INVALID_FILE_NAME,R_ERROR_REF,"No file name was provided.");
     }
 
@@ -716,6 +756,7 @@ void Session::write(const QString &fileName, bool writeModels)
 
     if (!sessionFile.open(QIODevice::WriteOnly | QIODevice::Text))
     {
+        R_LOG_TRACE_OUT;
         throw RError(R_ERROR_OPEN_FILE,R_ERROR_REF,"Failed to open the file \'%s\'.",this->fileName.toUtf8().constData());
     }
 
@@ -748,11 +789,12 @@ void Session::write(const QString &fileName, bool writeModels)
     }
 
     sessionFile.commit();
+    R_LOG_TRACE_OUT;
 }
 
 void Session::clear()
 {
-    RLogger::trace("void Session::clear()\n");
+    R_LOG_TRACE_IN;
     RLogger::info("Closing session\n");
     this->fileName.clear();
 
@@ -765,45 +807,51 @@ void Session::clear()
 
         RLogger::unindent();
     }
+    R_LOG_TRACE_OUT;
 }
 
 void Session::storeCurentModelVersion(uint modelID, const QString &message)
 {
-    RLogger::trace("void Session::storeCurentModelVersion(uint modelID, const QString &message)\n");
+    R_LOG_TRACE_IN;
     this->getModel(modelID).storeCurentVersion(MainSettings::getInstance().getApplicationSettings()->getNHistoryRecords(),message);
+    R_LOG_TRACE_OUT;
 }
 
 bool Session::isUndoAvailable() const
 {
-    RLogger::trace("bool Session::isUndoAvailable()\n");
+    R_LOG_TRACE_IN;
     QList<uint> selectedModelIDs = this->getSelectedModelIDs();
     for (int i=0;i<selectedModelIDs.size();i++)
     {
         if (this->getModel(selectedModelIDs[i]).getUndoStackSize() > 0)
         {
+            R_LOG_TRACE_OUT;
             return true;
         }
     }
+    R_LOG_TRACE_OUT;
     return false;
 }
 
 bool Session::isRedoAvailable() const
 {
-    RLogger::trace("bool Session::isRedoAvailable()\n");
+    R_LOG_TRACE_IN;
     QList<uint> selectedModelIDs = this->getSelectedModelIDs();
     for (int i=0;i<selectedModelIDs.size();i++)
     {
         if (this->getModel(selectedModelIDs[i]).getRedoStackSize() > 0)
         {
+            R_LOG_TRACE_OUT;
             return true;
         }
     }
+    R_LOG_TRACE_OUT;
     return false;
 }
 
 QString Session::getUndoTooltip() const
 {
-    RLogger::trace("QString Session::getUndoTooltip()\n");
+    R_LOG_TRACE_IN;
     QString undoMessage;
 
     QList<uint> selectedModelIDs = this->getSelectedModelIDs();
@@ -816,12 +864,13 @@ QString Session::getUndoTooltip() const
         undoMessage += this->getModel(selectedModelIDs[i]).getUndoActionMessage();
     }
     undoMessage = tr("Undo") + (undoMessage.isEmpty() ? QString() : ": " + undoMessage);
+    R_LOG_TRACE_OUT;
     return undoMessage;
 }
 
 QString Session::getRedoTooltip() const
 {
-    RLogger::trace("QString Session::getRedoTooltip()\n");
+    R_LOG_TRACE_IN;
     QString redoMessage;
 
     QList<uint> selectedModelIDs = this->getSelectedModelIDs();
@@ -834,26 +883,27 @@ QString Session::getRedoTooltip() const
         redoMessage += this->getModel(selectedModelIDs[i]).getRedoActionMessage();
     }
     redoMessage = tr("Redo") + (redoMessage.isEmpty() ? QString() : ": " + redoMessage);
+    R_LOG_TRACE_OUT;
     return redoMessage;
 }
 
 QString Session::getDefaultFileExtension()
 {
-    RLogger::trace("QString Session::getDefaultFileExtension()\n");
+    R_LOG_TRACE;
     return "ras";
 }
 
 QString Session::getDefaultFileName()
 {
-    RLogger::trace("QString Session::getDefaultFileName()\n");
+    R_LOG_TRACE_IN;
     QDir sesionDir = MainSettings::getInstancePtr()->getSessionDir();
+    R_LOG_TRACE_OUT;
     return sesionDir.filePath(QString("default.") + Session::getDefaultFileExtension());
 }
 
 bool Session::selectedModelsHasEntities(REntityGroupTypeMask entityTypeMask)
 {
-    RLogger::trace("bool Session::selectedModelsHasEntities(REntityGroupTypeMask entityTypeMask)\n");
-
+//    R_LOG_TRACE_IN;
     foreach (uint modelID, Session::getInstance().getSelectedModelIDs())
     {
         if (((entityTypeMask & R_ENTITY_GROUP_POINT) && Session::getInstance().getModel(modelID).getNPoints())
@@ -874,64 +924,72 @@ bool Session::selectedModelsHasEntities(REntityGroupTypeMask entityTypeMask)
             ||
             ((entityTypeMask & R_ENTITY_GROUP_VECTOR_FIELD) && Session::getInstance().getModel(modelID).getNVectorFields()))
         {
+//            R_LOG_TRACE_OUT;
             return true;
         }
     }
+//    R_LOG_TRACE_OUT;
     return false;
 }
 
 bool Session::selectedModelsHasEntitySelected(REntityGroupType entityGroupType)
 {
-    RLogger::trace("bool Session::selectedModelsHasEntitySelected(REntityGroupType entityGroupType)\n");
-
+//    R_LOG_TRACE_IN;
     foreach (uint modelID, Session::getInstance().getSelectedModelIDs())
     {
         foreach (SessionEntityID sessionID, Session::getInstance().getModel(modelID).getSelectedEntityIDs(modelID))
         {
             if (sessionID.getType() == entityGroupType)
             {
+//                R_LOG_TRACE_OUT;
                 return true;
             }
         }
     }
+//    R_LOG_TRACE_OUT;
     return false;
 }
 
 void Session::onPickListChanged()
 {
-    RLogger::trace("void Session::onPickListChanged()\n");
+    R_LOG_TRACE_IN;
     emit this->pickListChanged();
+    R_LOG_TRACE_OUT;
 }
 
 void Session::onModelAdded(uint modelID)
 {
-    RLogger::trace("void Session::onModelAdded(uint modelID)\n");
+    R_LOG_TRACE_IN;
     this->getModel(modelID).createDependentEntities();
+    R_LOG_TRACE_OUT;
 }
 
 void Session::onModelChanged(uint modelID)
 {
-    RLogger::trace("void Session::onModelChanged(uint modelID)\n");
+    R_LOG_TRACE_IN;
     this->getModel(modelID).createDependentEntities();
+    R_LOG_TRACE_OUT;
 }
 
 void Session::onNHistoryRecordsChanged(uint nHistoryRecords)
 {
-    RLogger::trace("void Session::onNHistoryRecordsChanged(uint nHistoryRecords)\n");
+    R_LOG_TRACE_IN;
     for (uint i=0;i<this->getNModels();i++)
     {
         this->getModel(i).updateHistoryStackSize(nHistoryRecords);
     }
     emit this->nHistoryRecordsChanged(nHistoryRecords);
+    R_LOG_TRACE_OUT;
 }
 
 void Session::onSoftwareUpdateFileSaved(uint downloadID, const QString &fileName)
 {
-    RLogger::trace("void Session::onSoftwareUpdateFileSaved(uint downloadID, const QString &fileName)\n");
+    R_LOG_TRACE_IN;
     RLogger::info("Opening downloaded file \'%s\' (id=\'%u\')\n",fileName.toUtf8().constData(),downloadID);
 
     if (!QDesktopServices::openUrl(QUrl("file:///" + fileName)))
     {
         RLogger::error("Failed to open the file \'%s\'\n",fileName.toUtf8().constData());
     }
+    R_LOG_TRACE_OUT;
 }

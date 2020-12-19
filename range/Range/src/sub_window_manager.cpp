@@ -13,25 +13,32 @@
 
 SubWindowManager::SubWindowManager(QMdiArea *mdiArea, QObject *parent) : QObject(parent)
 {
+    R_LOG_TRACE_IN;
     this->mdiArea = mdiArea;
+    R_LOG_TRACE_OUT;
 }
 
 uint SubWindowManager::findWindow(uint modelID)
 {
+    R_LOG_TRACE_IN;
     for (int i=0;i<this->subWindows.size();i++)
     {
         if (this->subWindows[i]->getModelID() == modelID)
         {
+            R_LOG_TRACE_OUT;
             return uint(i);
         }
     }
+    R_LOG_TRACE_OUT;
     return uint(this->subWindows.size());
 }
 
 bool SubWindowManager::windowCreate(uint modelID)
 {
+    R_LOG_TRACE_IN;
     if (this->windowExists(modelID))
     {
+        R_LOG_TRACE_OUT;
         return false;
     }
 
@@ -55,14 +62,17 @@ bool SubWindowManager::windowCreate(uint modelID)
 
     emit this->windowCreated(modelID);
 
+    R_LOG_TRACE_OUT;
     return true;
 }
 
 bool SubWindowManager::windowClose(uint modelID)
 {
+    R_LOG_TRACE_IN;
     uint winPos = this->findWindow(modelID);
     if (winPos == this->getNWindows())
     {
+        R_LOG_TRACE_OUT;
         return false;
     }
 
@@ -74,26 +84,32 @@ bool SubWindowManager::windowClose(uint modelID)
 
     emit this->windowClosed(modelID);
 
+    R_LOG_TRACE_OUT;
     return true;
 }
 
 bool SubWindowManager::windowExists(uint modelID)
 {
+    R_LOG_TRACE_IN;
     uint winPos = this->findWindow(modelID);
     if (winPos == this->getNWindows())
     {
+        R_LOG_TRACE_OUT;
         return false;
     }
+    R_LOG_TRACE_OUT;
     return true;
 }
 
 uint SubWindowManager::getNWindows(void) const
 {
+    R_LOG_TRACE;
     return this->subWindows.size();
 }
 
 void SubWindowManager::onModelAdded(uint modelID)
 {
+    R_LOG_TRACE_IN;
     for (int i=0;i<this->subWindows.size();i++)
     {
         if (this->subWindows[i]->getModelID() >= modelID)
@@ -103,10 +119,12 @@ void SubWindowManager::onModelAdded(uint modelID)
     }
 
     this->windowCreate(modelID);
+    R_LOG_TRACE_OUT;
 }
 
 void SubWindowManager::onModelRemoved(uint modelID)
 {
+    R_LOG_TRACE_IN;
     this->windowClose(modelID);
 
     for (int i=0;i<this->subWindows.size();i++)
@@ -116,16 +134,19 @@ void SubWindowManager::onModelRemoved(uint modelID)
             this->subWindows[i]->setModelID(this->subWindows[i]->getModelID()-1);
         }
     }
+    R_LOG_TRACE_OUT;
 }
 
 void SubWindowManager::onModelChanged(uint)
 {
-
+    R_LOG_TRACE;
 }
 
 void SubWindowManager::onWindowClosed(uint modelID)
 {
+    R_LOG_TRACE_IN;
     Session::getInstance().setModelVisible(modelID,false);
     uint winPos = this->findWindow(modelID);
     this->subWindows.removeAt(winPos);
+    R_LOG_TRACE_OUT;
 }

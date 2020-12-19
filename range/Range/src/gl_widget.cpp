@@ -9,10 +9,11 @@
  *********************************************************************/
 
 #include <QApplication>
-#include <QDesktopWidget>
 #include <QFileDialog>
 #include <QPainter>
 #include <QGuiApplication>
+//#include <QDesktopWidget>
+#include <QScreen>
 
 #include <rmlib.h>
 
@@ -20,6 +21,7 @@
 #include "gl_axis.h"
 #include "gl_dimension.h"
 #include "gl_cut_plane.h"
+#include "gl_grid.h"
 #include "gl_line.h"
 #include "gl_point.h"
 #include "gl_rotation_sphere.h"
@@ -36,7 +38,6 @@
 
 const GLsizei GLWidget::lAxisWpWidth = 100;
 const GLsizei GLWidget::lAxisWpHeight = 100;
-//static int GLWidget::dsktopDevicePixelRatio = 1;
 
 GLWidget::GLWidget(uint modelID, QWidget *parent)
     : QOpenGLWidget(parent),
@@ -61,7 +62,9 @@ GLWidget::GLWidget(uint modelID, QWidget *parent)
       showRotationSphere(false),
       useGlCullFace(true)
 {
-    this->desktopDevicePixelRatio = QApplication::desktop()->devicePixelRatio();
+    R_LOG_TRACE_IN;
+//    this->desktopDevicePixelRatio = QApplication::desktop()->devicePixelRatio();
+    this->desktopDevicePixelRatio = int(MainWindow::getInstance()->screen()->devicePixelRatio());
 
     this->setFocusPolicy(Qt::StrongFocus);
     this->setAutoFillBackground(false);
@@ -100,35 +103,44 @@ GLWidget::GLWidget(uint modelID, QWidget *parent)
     QObject::connect(Session::getInstance().getDrawEngine(),&DrawEngine::objectChanged,this,&GLWidget::onDrawObjectChanged);
 
     this->font = QPainter(this).font();
+    R_LOG_TRACE_OUT;
 }
 
 uint GLWidget::getModelID(void) const
 {
+    R_LOG_TRACE;
     return this->modelID;
 }
 
 void GLWidget::setModelID(uint modelID)
 {
+    R_LOG_TRACE_IN;
     this->modelID = modelID;
+    R_LOG_TRACE_OUT;
 }
 
 QSize GLWidget::minimumSizeHint(void) const
 {
+    R_LOG_TRACE;
     return QSize(50, 50);
 }
 
 QSize GLWidget::sizeHint(void) const
 {
+    R_LOG_TRACE;
     return QSize(400, 400);
 }
 
 void GLWidget::initializeGL(void)
 {
+    R_LOG_TRACE_IN;
     this->resetView(-45.0, 0.0, -135.0);
+    R_LOG_TRACE_OUT;
 }
 
 void GLWidget::resizeGL(int width, int height)
 {
+    R_LOG_TRACE_IN;
     GL_SAFE_CALL(glViewport(0, 0, GLsizei(width*this->desktopDevicePixelRatio), GLsizei(height*this->desktopDevicePixelRatio)));
     GL_SAFE_CALL(glMatrixMode(GL_PROJECTION));
     GL_SAFE_CALL(glLoadIdentity());
@@ -138,10 +150,12 @@ void GLWidget::resizeGL(int width, int height)
 
     GL_SAFE_CALL(glOrtho(-1.0, 1.0, -winRatio, winRatio, -winScale, winScale));
     GL_SAFE_CALL(glMatrixMode(GL_MODELVIEW));
+    R_LOG_TRACE_OUT;
 }
 
 void GLWidget::paintGL(void)
 {
+    R_LOG_TRACE_IN;
     this->qglClearColor(this->displayProperties.getBgColor());
 
     GL_SAFE_CALL(glPushMatrix());
@@ -176,11 +190,12 @@ void GLWidget::paintGL(void)
     painter.end();
 
     this->makeCurrent();
+    R_LOG_TRACE_OUT;
 }
 
 void GLWidget::drawBackgroundGradient(void)
 {
-
+    R_LOG_TRACE_IN;
 
     // MAIN VIEWPORT
     GL_SAFE_CALL(glViewport(0, 0, GLsizei(this->width()*this->desktopDevicePixelRatio), GLsizei(this->height()*this->desktopDevicePixelRatio)));
@@ -213,10 +228,12 @@ void GLWidget::drawBackgroundGradient(void)
     GL_SAFE_CALL(glVertex3d( 1.0, -1.0, 0.0));
 
     GLFunctions::end();
+    R_LOG_TRACE_OUT;
 }
 
 void GLWidget::drawModel(void)
 {
+    R_LOG_TRACE_IN;
     // MAIN VIEWPORT
     GL_SAFE_CALL(glViewport(0, 0, GLsizei(this->width()*this->desktopDevicePixelRatio), GLsizei(this->height()*this->desktopDevicePixelRatio)));
 
@@ -235,10 +252,12 @@ void GLWidget::drawModel(void)
 
     if (this->clippingPlaneEnabled)
     {
+        RLogger::trace("Clipping plane\n");
         const GLdouble clippingPlane[4] = { 0.0, 0.0, -1.0, - GLdouble(this->scale)  + 2.0 * this->clippingPlaneDistance * GLdouble(this->scale) };
         GL_SAFE_CALL(glClipPlane(GL_CLIP_PLANE0,clippingPlane));
     }
 
+    RLogger::trace("Show lights\n");
     GL_SAFE_CALL(glEnable(GL_LIGHTING));
     for (uint i=0;i<this->displayProperties.getNLights();i++)
     {
@@ -251,6 +270,7 @@ void GLWidget::drawModel(void)
     GL_SAFE_CALL(glEnable(GL_COLOR_MATERIAL));
     GL_SAFE_CALL(glMaterialf(GL_FRONT, GL_SHININESS, 1.0));
 
+    RLogger::trace("Apply transformations\n");
     this->applyTransformations();
 
     GL_SAFE_CALL(glMultMatrixd(this->gMatrix));
@@ -266,6 +286,7 @@ void GLWidget::drawModel(void)
 
     if (this->displayProperties.getDrawGlobalAxis())
     {
+        RLogger::trace("Draw main axis\n");
         // Draw main axis
         GLAxis gAxis(this,GL_AXIS_GLOBAL);
         gAxis.setSize(0.8f/this->scale);
@@ -274,6 +295,7 @@ void GLWidget::drawModel(void)
 
     if (this->showRotationSphere)
     {
+        RLogger::trace("Draw rotation sphere\n");
         // Draw rotation sphere
         int lineColorValue = qGray(this->getGLDisplayProperties().getBgColor().rgb()) < 96 ? 255 : 0;
         this->qglColor(QColor(lineColorValue,lineColorValue,lineColorValue,255));
@@ -301,6 +323,8 @@ void GLWidget::drawModel(void)
 
     if (Session::getInstance().getModel(this->getModelID()).glDrawTrylock())
     {
+        RLogger::trace("Draw model\n");
+
         RStopWatch modelDrawStopWatch;
         modelDrawStopWatch.reset();
 
@@ -322,6 +346,8 @@ void GLWidget::drawModel(void)
     // Draw local directions
     if (this->drawLocalDirections)
     {
+        RLogger::trace("Draw local directions\n");
+
         int lineColorValue = qGray(this->getGLDisplayProperties().getBgColor().rgb()) < 96 ? 255 : 0;
         this->qglColor(QColor(lineColorValue,lineColorValue,lineColorValue,255));
 
@@ -337,15 +363,39 @@ void GLWidget::drawModel(void)
     // Draw model dimensions
     if (this->displayProperties.getShowModelDimensions())
     {
+        RLogger::trace("Draw model dimensions\n");
+
         double xMin=0.0,xMax=0.0,yMin=0.0,yMax=0.0,zMin=0.0,zMax=0.0;
         Session::getInstance().getModel(this->getModelID()).findNodeLimits(xMin,xMax,yMin,yMax,zMin,zMax);
         int lineColorValue = qGray(this->getGLDisplayProperties().getBgColor().rgb()) < 96 ? 255 : 0;
         this->qglColor(QColor(lineColorValue,lineColorValue,lineColorValue,100));
+
         GLDimension gDimension(this,1.0/double(this->scale),xMin,xMax,yMin,yMax,zMin,zMax);
         gDimension.paint();
     }
 
+    // Draw grid
+    if (this->displayProperties.getShowModelGrid())
+    {
+        RLogger::trace("Draw main grid\n");
+
+        RLimitBox modelLimitBox = Session::getInstance().getModel(this->getModelID()).findNodeLimits();
+        RLimitBox drawLimitBox;
+
+        if (Session::getInstance().getDrawEngine()->findLimits(drawLimitBox))
+        {
+            modelLimitBox.merge(drawLimitBox);
+        }
+
+        int lineColorValue = qGray(this->getGLDisplayProperties().getBgColor().rgb()) < 96 ? 255 : 0;
+        this->qglColor(QColor(lineColorValue,lineColorValue,lineColorValue,100));
+
+        GLGrid gGrid(this,1.0/double(this->scale),modelLimitBox);
+        gGrid.paint();
+    }
+
     // Draw draw-engine objects
+    RLogger::trace("Draw engine objects\n");
     const DrawEngine *pDrawEngine = Session::getInstance().getDrawEngine();
     for (uint i=0;i<pDrawEngine->getNObjects();i++)
     {
@@ -355,6 +405,7 @@ void GLWidget::drawModel(void)
     // Draw nodes to move
     if (this->drawMoveNodes)
     {
+        RLogger::trace("Draw nodes to move\n");
         for (QMap<SessionNodeID,RR3Vector>::const_iterator it = this->nodesToMove.constBegin();
              it != this->nodesToMove.constEnd();
              ++it)
@@ -374,6 +425,7 @@ void GLWidget::drawModel(void)
     // Draw stream line position
     if (this->drawStreamLinePosition && this->streamLinePosition != RR3Vector(0.0,0.0,0.0))
     {
+        RLogger::trace("Draw stream line position\n");
         glPushMatrix();
 
         glTranslated(this->streamLinePosition[0],this->streamLinePosition[1],this->streamLinePosition[2]);
@@ -388,6 +440,7 @@ void GLWidget::drawModel(void)
     // Draw geometry scale origin
     if (this->drawScaleOrigin && this->scaleOrigin != RR3Vector(0.0,0.0,0.0))
     {
+        RLogger::trace("Draw geometry scale origin\n");
         glPushMatrix();
 
         glTranslated(this->scaleOrigin[0],this->scaleOrigin[1],this->scaleOrigin[2]);
@@ -402,6 +455,7 @@ void GLWidget::drawModel(void)
     // Draw geometry rotation origin
     if (this->drawRotationOrigin && this->rotationOrigin != RR3Vector(0.0,0.0,0.0))
     {
+        RLogger::trace("Draw geometry rotation origin\n");
         glPushMatrix();
 
         glTranslated(this->rotationOrigin[0],this->rotationOrigin[1],this->rotationOrigin[2]);
@@ -416,17 +470,20 @@ void GLWidget::drawModel(void)
     // Draw cut plane.
     if (this->drawCutPlane)
     {
+        RLogger::trace("Draw cut plane\n");
         GLCutPlane glCutPlane(this,this->cutPlane);
         glCutPlane.setSize(1.2f/this->mscale);
         glCutPlane.paint();
     }
 
     // Restore original scale.
+    RLogger::trace("Restore scale\n");
     double invMscale = 1.0/double(this->mscale);
     GL_SAFE_CALL(glScaled(invMscale,invMscale,invMscale));
 
     if (this->displayProperties.getDrawLocalAxis())
     {
+        RLogger::trace("Draw local axis\n");
         // LOWER-LEFT CORNER VIEWPORT
         GL_SAFE_CALL(glViewport (0,0,GLWidget::lAxisWpWidth*this->desktopDevicePixelRatio,GLWidget::lAxisWpHeight*this->desktopDevicePixelRatio));
 
@@ -459,10 +516,12 @@ void GLWidget::drawModel(void)
     this->dtx = this->dty = this->dtz = 0.0;
     this->drx = this->dry = 0.0;
     this->dscale = 0.0;
+    R_LOG_TRACE_OUT;
 } // drawModel()
 
 void GLWidget::drawValueRanges(QPainter &painter)
 {
+    R_LOG_TRACE_IN;
     const Model &rModel = Session::getInstance().getModel(this->getModelID());
     uint nDisplayVariableRanges = 0;
 
@@ -499,6 +558,7 @@ void GLWidget::drawValueRanges(QPainter &painter)
                                  rVariable.getUnits());
         }
     }
+    R_LOG_TRACE_OUT;
 }
 
 void GLWidget::drawValueRange(QPainter &painter,
@@ -511,6 +571,7 @@ void GLWidget::drawValueRange(QPainter &painter,
                               const QString &valueRangeName,
                               const QString &valueRangeUnits)
 {
+    R_LOG_TRACE_IN;
     int lineColorValue = qGray(this->getGLDisplayProperties().getBgColor().rgb()) < 96 ? 255 : 0;
 
     int offset = 10;
@@ -629,10 +690,12 @@ void GLWidget::drawValueRange(QPainter &painter,
         painter.setPen(QColor(200,0,0,255));
         painter.drawText(rangeX+padding,pickedY-fontPixelDescent+qRound(double(fontPixelHeight)*(pickedValues[i] - lowerValue)/ (upperValue - lowerValue)),QString::number(pickedValues[i]));
     }
+    R_LOG_TRACE_OUT;
 }
 
 void GLWidget::drawMessageBox(QPainter &painter, bool drawBox)
 {
+    R_LOG_TRACE_IN;
     painter.setFont(QGuiApplication::font());
 
     const Model &rModel = Session::getInstance().getModel(this->getModelID());
@@ -665,7 +728,7 @@ void GLWidget::drawMessageBox(QPainter &painter, bool drawBox)
         std::vector<REntityGroupType> entityTypes = REntityGroup::getAllTypes();
         for (uint i=0;i<entityTypes.size();i++)
         {
-            QMap<QString,uint> pickedEntities;
+            QMultiMap<QString,uint> pickedEntities;
             for (int j=0;j<pickItems.size();j++)
             {
                 if (pickItems.at(j).getEntityID().getType() == entityTypes[i])
@@ -731,10 +794,12 @@ void GLWidget::drawMessageBox(QPainter &painter, bool drawBox)
     {
         painter.drawText(posX+padding,posY+(fontPixelHeight+padding)*(i+1),messages[i]);
     }
+    R_LOG_TRACE_OUT;
 }
 
 void GLWidget::drawInfoBox(QPainter &painter, bool drawBox)
 {
+    R_LOG_TRACE_IN;
     painter.setFont(QGuiApplication::font());
 
     QList<QString> messages;
@@ -761,6 +826,7 @@ void GLWidget::drawInfoBox(QPainter &painter, bool drawBox)
 
     if (messages.size() == 0)
     {
+        R_LOG_TRACE_OUT;
         return;
     }
 
@@ -790,10 +856,12 @@ void GLWidget::drawInfoBox(QPainter &painter, bool drawBox)
     {
         painter.drawText(posX+padding,posY+(fontPixelHeight+padding)*(i+1),messages[i]);
     }
+    R_LOG_TRACE_OUT;
 }
 
 void GLWidget::applyTransformations(void)
 {
+    R_LOG_TRACE_IN;
     if (this->dtx != 0.0f || this->dty != 0.0f || this->dtz != 0.0f)
     {
         glTranslatef(this->dtx, this->dty, this->dtz);
@@ -820,11 +888,12 @@ void GLWidget::applyTransformations(void)
             this->scale /= 1.0f+this->dscale;
         }
     }
+    R_LOG_TRACE_OUT;
 }
 
 void GLWidget::processActionEvent(void)
 {
-    RLogger::trace("GLWidget::processActionEvent(void)\n");
+    R_LOG_TRACE_IN;
 
     GLActionEventType glActionEventType = this->actionEvent.getType();
 
@@ -839,6 +908,7 @@ void GLWidget::processActionEvent(void)
                 this->getGLModelList().getGlSurfaceList(i).setListInvalid(GL_ENTITY_LIST_ITEM_NORMAL);
             }
         }
+        R_LOG_TRACE_OUT;
         return;
     }
 
@@ -846,6 +916,7 @@ void GLWidget::processActionEvent(void)
         glActionEventType != GL_ACTION_EVENT_PICK_NODE &&
         glActionEventType != GL_ACTION_EVENT_PICK_HOLE_ELEMENT)
     {
+        R_LOG_TRACE_OUT;
         return;
     }
 
@@ -901,20 +972,24 @@ void GLWidget::processActionEvent(void)
             }
         }
     }
+    R_LOG_TRACE_OUT;
 }
 
 void GLWidget::mousePressEvent(QMouseEvent *mouseEvent)
 {
+    R_LOG_TRACE_IN;
     this->actionEvent.setMouseEvent(mouseEvent,false);
     this->bpStart = mouseEvent->pos();
 
     this->processActionEvent();
 
     this->update();
+    R_LOG_TRACE_OUT;
 }
 
 void GLWidget::mouseReleaseEvent(QMouseEvent *mouseEvent)
 {
+    R_LOG_TRACE_IN;
     this->actionEvent.setMouseEvent(mouseEvent,true);
     this->bpEnd = mouseEvent->pos();
     this->showRotationSphere = false;
@@ -930,10 +1005,12 @@ void GLWidget::mouseReleaseEvent(QMouseEvent *mouseEvent)
 
     this->processActionEvent();
     this->update();
+    R_LOG_TRACE_OUT;
 }
 
 void GLWidget::mouseMoveEvent(QMouseEvent *mouseEvent)
 {
+    R_LOG_TRACE_IN;
     this->actionEvent.setMouseEvent(mouseEvent,false);
     this->bpEnd = mouseEvent->pos();
 
@@ -966,25 +1043,42 @@ void GLWidget::mouseMoveEvent(QMouseEvent *mouseEvent)
 
     this->processActionEvent();
     this->update();
+    R_LOG_TRACE_OUT;
 }
 
 void GLWidget::enterEvent(QEvent *)
 {
+    R_LOG_TRACE_IN;
     this->setFocus();
+    R_LOG_TRACE_OUT;
 }
 
 void GLWidget::leaveEvent(QEvent *)
 {
+    R_LOG_TRACE;
 }
 
 void GLWidget::wheelEvent(QWheelEvent *mouseEvent)
 {
+    R_LOG_TRACE_IN;
     this->actionEvent.setScrollPhase(Qt::ScrollUpdate);
 
-    int numDegrees = mouseEvent->delta() / 8;
-    int numSteps = numDegrees / 15;
-    float x = float(mouseEvent->x());
-    float y = float(mouseEvent->y());
+    QPoint numPixels = mouseEvent->pixelDelta();
+    QPoint numDegrees = mouseEvent->angleDelta();
+    QPoint numSteps;
+    float scaleFactor = 8.0f;
+
+    if (!numPixels.isNull())
+    {
+        numSteps = numPixels;
+    }
+    else if (!numDegrees.isNull())
+    {
+        numSteps = numDegrees / 15;
+    }
+
+    float x = float(mouseEvent->position().x());
+    float y = float(mouseEvent->position().y());
     float w = float(this->width());
     float h = float(this->height());
 
@@ -993,48 +1087,56 @@ void GLWidget::wheelEvent(QWheelEvent *mouseEvent)
         this->showRotationSphere = true;
         this->dtx = 0.0;
         this->dty = 0.0;
-        this->dtz = this->scale*float(numSteps)/100.0f;
+        this->dtz = this->scale*float(numSteps.y())/(100.0f*scaleFactor);
     }
     else if (this->actionEvent.getType() == GL_ACTION_EVENT_ZOOM)
     {
         this->dtx = 2.0f*x/w - 1.0f;
         this->dty = 2.0f*y/h - 1.0f;
         this->dty = (0.5f - y/h)*2.0f*h/w;
-        this->dtx *= numSteps/10.0f;
-        this->dty *= numSteps/10.0f;
-        this->dscale = -float(numSteps)/10.0f;
+        this->dtx *= numSteps.y()/(10.0f*scaleFactor);
+        this->dty *= numSteps.y()/(10.0f*scaleFactor);
+        this->dscale = -float(numSteps.y())/(10.0f*scaleFactor);
     }
 
     this->actionEvent.setScrollPhase(Qt::NoScrollPhase);
 
     this->processActionEvent();
     this->update();
+    R_LOG_TRACE_OUT;
 }
 
 void GLWidget::keyPressEvent(QKeyEvent *keyEvent)
 {
+    R_LOG_TRACE_IN;
     this->actionEvent.setKeyEvent(keyEvent,false);
     this->update();
+    R_LOG_TRACE_OUT;
 }
 
 void GLWidget::keyReleaseEvent(QKeyEvent *keyEvent)
 {
+    R_LOG_TRACE_IN;
     this->actionEvent.setKeyEvent(keyEvent,true);
     this->showRotationSphere = false;
     this->update();
+    R_LOG_TRACE_OUT;
 }
 
 void GLWidget::calculateModelScale(void)
 {
+    R_LOG_TRACE_IN;
     this->mscale = float(Session::getInstance().getModel(this->getModelID()).findNodeScale());
     if (this->mscale < float(RConstants::eps))
     {
         this->mscale = float(RConstants::eps);
     }
+    R_LOG_TRACE_OUT;
 }
 
 void GLWidget::calculatePickRay(const QPoint &screenPosition, double viewDepth, RR3Vector &position, RR3Vector &direction, bool applyModelScale) const
 {
+    R_LOG_TRACE_IN;
     double wx = 1.0;
     double wy = double(this->height()) / double(this->width());
     double x = 2.0*wx*(double(screenPosition.x()) / double(this->width())) - wx;
@@ -1075,10 +1177,12 @@ void GLWidget::calculatePickRay(const QPoint &screenPosition, double viewDepth, 
     direction[1] = v2[1]-position[1];
     direction[2] = v2[2]-position[2];
     direction.normalize();
+    R_LOG_TRACE_OUT;
 }
 
 void GLWidget::convertModelToScreen(const RR3Vector &realPosition, QPoint &screenPosition) const
 {
+    R_LOG_TRACE_IN;
     RRMatrix R(4,4);
     for (uint i=0;i<4;i++)
     {
@@ -1105,10 +1209,12 @@ void GLWidget::convertModelToScreen(const RR3Vector &realPosition, QPoint &scree
 
     screenPosition.setX(qRound(x));
     screenPosition.setY(qRound(y));
+    R_LOG_TRACE_OUT;
 }
 
 void GLWidget::convertScreenToModel(const QPoint &screenPosition, RR3Vector &modelPosition)
 {
+    R_LOG_TRACE_IN;
     double wx = 1.0;
     double wy = double(this->height()) / double(this->width());
     double x = 2.0*wx*(double(screenPosition.x()) / double(this->width())) - wx;
@@ -1136,15 +1242,18 @@ void GLWidget::convertScreenToModel(const QPoint &screenPosition, RR3Vector &mod
     modelPosition[0] = v2[0];
     modelPosition[1] = v2[1];
     modelPosition[2] = v2[2];
+    R_LOG_TRACE_OUT;
 }
 
 double GLWidget::calculateViewDepth(void) const
 {
+    R_LOG_TRACE;
     return 1000.0 * double(this->scale);
 }
 
 void GLWidget::showLight(const RGLLight &rGlLight)
 {
+    R_LOG_TRACE_IN;
     GLenum lightNumber = GL_LIGHT0;
 
     switch (rGlLight.getLightNumber())
@@ -1199,6 +1308,7 @@ void GLWidget::showLight(const RGLLight &rGlLight)
     if (!rGlLight.getEnabled())
     {
         GL_SAFE_CALL(glDisable(lightNumber));
+        R_LOG_TRACE_OUT;
         return;
     }
 
@@ -1239,10 +1349,12 @@ void GLWidget::showLight(const RGLLight &rGlLight)
     GL_SAFE_CALL(glLightfv(lightNumber,GL_DIFFUSE,lightKd));
     GL_SAFE_CALL(glLightfv(lightNumber,GL_SPOT_DIRECTION,lightDr));
     GL_SAFE_CALL(glLightfv(lightNumber,GL_POSITION,lightPs));
+    R_LOG_TRACE_OUT;
 }
 
 GLint GLWidget::project(GLdouble objx, GLdouble objy, GLdouble objz, const GLdouble model[], const GLdouble proj[], const GLint viewport[], GLdouble *winx, GLdouble *winy, GLdouble *winz)
 {
+    R_LOG_TRACE_IN;
     GLdouble in[4], out[4];
 
     in[0] = objx;
@@ -1255,6 +1367,7 @@ GLint GLWidget::project(GLdouble objx, GLdouble objy, GLdouble objz, const GLdou
 
     if (in[3] == 0.0)
     {
+        R_LOG_TRACE_OUT;
         return GL_FALSE;
     }
 
@@ -1266,21 +1379,25 @@ GLint GLWidget::project(GLdouble objx, GLdouble objy, GLdouble objz, const GLdou
     *winy = viewport[1] / this->desktopDevicePixelRatio + (1 + in[1]) * (viewport[3] / this->desktopDevicePixelRatio) / 2;
 
     *winz = (1 + in[2]) / 2;
+    R_LOG_TRACE_OUT;
     return GL_TRUE;
 }
 
 void GLWidget::transformPoint(GLdouble out[], const GLdouble m[], const GLdouble in[])
 {
+    R_LOG_TRACE_IN;
     #define M(row,col)  m[col*4+row]
     out[0] = M(0, 0) * in[0] + M(0, 1) * in[1] + M(0, 2) * in[2] + M(0, 3) * in[3];
     out[1] = M(1, 0) * in[0] + M(1, 1) * in[1] + M(1, 2) * in[2] + M(1, 3) * in[3];
     out[2] = M(2, 0) * in[0] + M(2, 1) * in[1] + M(2, 2) * in[2] + M(2, 3) * in[3];
     out[3] = M(3, 0) * in[0] + M(3, 1) * in[1] + M(3, 2) * in[2] + M(3, 3) * in[3];
     #undef M
+    R_LOG_TRACE_OUT;
 }
 
 void GLWidget::resetView(float xRotation, float yRotation, float zRotation)
 {
+    R_LOG_TRACE_IN;
     this->scale = 1.0;
 
     this->calculateModelScale();
@@ -1306,26 +1423,32 @@ void GLWidget::resetView(float xRotation, float yRotation, float zRotation)
     glGetDoublev (GL_MODELVIEW_MATRIX, this->gMatrix);
 
     this->update();
+    R_LOG_TRACE_OUT;
 }
 
 void GLWidget::setClippingPlane(bool enabled, double distance)
 {
+    R_LOG_TRACE_IN;
     this->clippingPlaneEnabled = enabled;
     this->clippingPlaneDistance = distance;
     this->update();
+    R_LOG_TRACE_OUT;
 }
 
 void GLWidget::onEntityVisibilityChanged(uint, REntityGroupType, uint, bool )
 {
+    R_LOG_TRACE_IN;
     this->update();
+    R_LOG_TRACE_OUT;
 }
 
 void GLWidget::onDisplayPropertiesChanged(uint modelID, REntityGroupType elementGrpType, uint entityID)
 {
-    RLogger::trace("GLWidget::onDisplayPropertiesChanged(uint modelID, REntityGroupType elementGrpType, uint entityID)\n");
+    R_LOG_TRACE_IN;
 
     if (this->modelID != modelID)
     {
+        R_LOG_TRACE_OUT;
         return;
     }
 
@@ -1398,14 +1521,16 @@ void GLWidget::onDisplayPropertiesChanged(uint modelID, REntityGroupType element
     }
 
     this->update();
+    R_LOG_TRACE_OUT;
 }
 
 void GLWidget::onVariableDataChanged(uint modelID, RVariableType variableType)
 {
-    RLogger::trace("GLWidget::onVariableDataChanged(uint modelID, RVariableType variableType)\n");
+    R_LOG_TRACE_IN;
 
     if (this->modelID != modelID)
     {
+        R_LOG_TRACE_OUT;
         return;
     }
 
@@ -1536,14 +1661,16 @@ void GLWidget::onVariableDataChanged(uint modelID, RVariableType variableType)
     }
 
     this->update();
+    R_LOG_TRACE_OUT;
 }
 
 void GLWidget::onVariableDataChanged(const SessionEntityID &entityID, RVariableType)
 {
-    RLogger::trace("GLWidget::onVariableDataChanged(const SessionEntityID &entityID, RVariableType)\n");
+    R_LOG_TRACE_IN;
 
     if (this->modelID != entityID.getMid())
     {
+        R_LOG_TRACE_OUT;
         return;
     }
 
@@ -1623,174 +1750,222 @@ void GLWidget::onVariableDataChanged(const SessionEntityID &entityID, RVariableT
     }
 
     this->update();
+    R_LOG_TRACE_OUT;
 }
 
 void GLWidget::onModelChanged(uint modelID)
 {
+    R_LOG_TRACE_IN;
     if (this->modelID != modelID)
     {
+        R_LOG_TRACE_OUT;
         return;
     }
     this->calculateModelScale();
     this->glModelList.clear();
     this->update();
+    R_LOG_TRACE_OUT;
 }
 
 void GLWidget::onResultsChanged(uint modelID)
 {
+    R_LOG_TRACE_IN;
     if (this->modelID != modelID)
     {
+        R_LOG_TRACE_OUT;
         return;
     }
     this->glModelList.clear();
     this->update();
+    R_LOG_TRACE_OUT;
 }
 
 void GLWidget::onBeginDrawStreamLinePosition(const RR3Vector &streamLinePosition)
 {
+    R_LOG_TRACE_IN;
     this->drawStreamLinePosition = true;
     this->streamLinePosition = streamLinePosition;
     this->update();
+    R_LOG_TRACE_OUT;
 }
 
 void GLWidget::onEndDrawStreamLinePosition(void)
 {
+    R_LOG_TRACE_IN;
     this->drawStreamLinePosition = false;
     this->update();
+    R_LOG_TRACE_OUT;
 }
 
 void GLWidget::onBeginDrawScaleOrigin(const RR3Vector &scaleOrigin)
 {
+    R_LOG_TRACE_IN;
     this->drawScaleOrigin = true;
     this->scaleOrigin = scaleOrigin;
     this->update();
+    R_LOG_TRACE_OUT;
 }
 
 void GLWidget::onEndDrawScaleOrigin(void)
 {
+    R_LOG_TRACE_IN;
     this->drawScaleOrigin = false;
     this->update();
+    R_LOG_TRACE_OUT;
 }
 
 void GLWidget::onBeginDrawRotationOrigin(const RR3Vector &rotationOrigin)
 {
+    R_LOG_TRACE_IN;
     this->drawRotationOrigin = true;
     this->rotationOrigin = rotationOrigin;
     this->update();
+    R_LOG_TRACE_OUT;
 }
 
 void GLWidget::onEndDrawRotationOrigin(void)
 {
+    R_LOG_TRACE_IN;
     this->drawRotationOrigin = false;
     this->update();
+    R_LOG_TRACE_OUT;
 }
 
 void GLWidget::onBeginDrawLocalDirections(const QList<RLocalDirection> &localDirections)
 {
+    R_LOG_TRACE_IN;
     this->drawLocalDirections = true;
     this->localDirections = localDirections;
     this->update();
+    R_LOG_TRACE_OUT;
 }
 
 void GLWidget::onEndDrawLocalDirections()
 {
+    R_LOG_TRACE_IN;
     this->drawLocalDirections = false;
     this->update();
+    R_LOG_TRACE_OUT;
 }
 
 void GLWidget::onBeginDrawCutPlane(const RPlane &plane)
 {
+    R_LOG_TRACE_IN;
     this->drawCutPlane = true;
     this->cutPlane = plane;
     this->update();
+    R_LOG_TRACE_OUT;
 }
 
 void GLWidget::onEndDrawCutPlane(void)
 {
     this->drawCutPlane = false;
     this->update();
+    R_LOG_TRACE_OUT;
 }
 
 void GLWidget::onBeginDrawMoveNodes(const QMap<SessionNodeID, RR3Vector> &nodesToMove)
 {
+    R_LOG_TRACE_IN;
     this->nodesToMove = nodesToMove;
     this->drawMoveNodes = true;
     this->update();
+    R_LOG_TRACE_OUT;
 }
 
 void GLWidget::onEndDrawMoveNodes(void)
 {
+    R_LOG_TRACE_IN;
     this->drawMoveNodes = false;
     this->update();
+    R_LOG_TRACE_OUT;
 }
 
 void GLWidget::onDrawObjectAdded(void)
 {
+    R_LOG_TRACE_IN;
     this->update();
+    R_LOG_TRACE_OUT;
 }
 
 void GLWidget::onDrawObjectRemoved(void)
 {
+    R_LOG_TRACE_IN;
     this->update();
+    R_LOG_TRACE_OUT;
 }
 
 void GLWidget::onDrawObjectChanged(uint)
 {
+    R_LOG_TRACE_IN;
     this->update();
+    R_LOG_TRACE_OUT;
 }
 
 const GLModelList &GLWidget::getGLModelList(void) const
 {
+    R_LOG_TRACE;
     return this->useGlVoidModelList ? this->glVoidModelList : this->glModelList;
 }
 
 GLModelList &GLWidget::getGLModelList(void)
 {
+    R_LOG_TRACE;
     return this->useGlVoidModelList ? this->glVoidModelList : this->glModelList;
 }
 
 const GLActionEvent &GLWidget::getGLActionEvent(void) const
 {
+    R_LOG_TRACE;
     return this->actionEvent;
 }
 
 const GLDisplayProperties &GLWidget::getGLDisplayProperties(void) const
 {
+    R_LOG_TRACE;
     return this->displayProperties;
 }
 
 GLDisplayProperties &GLWidget::getGLDisplayProperties(void)
 {
+    R_LOG_TRACE;
     return this->displayProperties;
 }
 
 bool GLWidget::getUseGLVoidModelList(void) const
 {
+    R_LOG_TRACE;
     return this->useGlVoidModelList;
 }
 
 void GLWidget::setUseGLVoidModelList(bool useGlVoidModelList)
 {
+    R_LOG_TRACE_IN;
     this->useGlVoidModelList = useGlVoidModelList;
+    R_LOG_TRACE_OUT;
 }
 
 bool GLWidget::getUseGlCullFace(void) const
 {
+    R_LOG_TRACE;
     return this->useGlCullFace;
 }
 
 void GLWidget::setUseGlCullFace(bool useGlCullFace)
 {
+    R_LOG_TRACE_IN;
     bool isDifferent = this->useGlCullFace != useGlCullFace;
     this->useGlCullFace = useGlCullFace;
     if (isDifferent)
     {
         Session::getInstance().setModelChanged(this->modelID);
     }
+    R_LOG_TRACE_OUT;
 }
 
 void GLWidget::takeScreenShot(const QString &fileName)
 {
+    R_LOG_TRACE_IN;
     QPixmap screenShot(QPixmap::fromImage(this->grabFramebuffer()));
     QString format = "PNG";
     QString saveFileName(fileName);
@@ -1841,23 +2016,29 @@ void GLWidget::takeScreenShot(const QString &fileName)
         RLogger::info("Saving screen-shot file \'%s\' in format \'%s\'.\n",saveFileName.toUtf8().constData(), format.toUtf8().constData());
         screenShot.save(saveFileName, format.toUtf8().constData());
     }
+    R_LOG_TRACE_OUT;
 }
 
 void GLWidget::qglColor(const QColor &color)
 {
+    R_LOG_TRACE_IN;
     GL_SAFE_CALL(glColor4d(color.redF(),color.greenF(),color.blueF(),color.alphaF()));
+    R_LOG_TRACE_OUT;
 }
 
 void GLWidget::qglClearColor(const QColor &clearColor)
 {
+    R_LOG_TRACE_IN;
     GL_SAFE_CALL(glClearColor(GLclampf(clearColor.redF()),
                               GLclampf(clearColor.greenF()),
                               GLclampf(clearColor.blueF()),
                               GLclampf(clearColor.alphaF())));
+    R_LOG_TRACE_OUT;
 }
 
 void GLWidget::renderText(double x, double y, double z, const QString &str, const QFont &font)
 {
+    R_LOG_TRACE_IN;
     // Identify x and y locations to render text within widget
     int height = this->height();
     GLdouble model[4][4], proj[4][4];
@@ -1881,4 +2062,5 @@ void GLWidget::renderText(double x, double y, double z, const QString &str, cons
     fontColor.setAlphaF(qreal(glColor[3]));
 
     this->glTextRenderer.add(GLTextRendererItem(fontColor,font,QPointF(textPosX, textPosY)," " + str));
+    R_LOG_TRACE_OUT;
 }

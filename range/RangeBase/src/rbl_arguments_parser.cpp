@@ -10,6 +10,8 @@
 
 #include <QStringList>
 #include <QTextDocument>
+#include <QDate>
+#include <QRegularExpression>
 
 #include "rbl_arguments_parser.h"
 #include "rbl_logger.h"
@@ -221,10 +223,10 @@ bool RArgumentsParser::processArgument(const QString &argument, RArgumentOption 
             return false;
         }
 
-        QStringList query = argument.split(QRegExp("(\\=)"));
+        QStringList query = argument.split(QRegularExpression("(\\=)"));
 
         flag = query.at(0);
-        flag.remove(QRegExp("^[-]*"));
+        flag.remove(QRegularExpression("^[-]*"));
         if (query.size() > 1)
         {
             value = query.at(1);

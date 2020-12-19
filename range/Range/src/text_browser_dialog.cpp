@@ -14,6 +14,7 @@
 #include <QPushButton>
 #include <QTextBrowser>
 
+#include "text_browser.h"
 #include "text_browser_dialog.h"
 
 TextBrowserDialog::TextBrowserDialog(const QString &title,
@@ -34,10 +35,7 @@ TextBrowserDialog::TextBrowserDialog(const QString &title,
     QLabel *titleLabel = new QLabel(desc);
     mainLayout->addWidget(titleLabel);
 
-    QTextBrowser *textBrowser = new QTextBrowser(this);
-    QFont font("Monospace");
-    font.setStyleHint(QFont::TypeWriter);
-    textBrowser->setFont(font);
+    TextBrowser *textBrowser = new TextBrowser(false,this);
     textBrowser->insertPlainText(text);
     mainLayout->addWidget(textBrowser);
 

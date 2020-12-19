@@ -239,6 +239,9 @@ class RModel : public RProblem, public RResults
                              double &ymin, double &ymax,
                              double &zmin, double &zmax ) const;
 
+        //! Find node limits.
+        RLimitBox findNodeLimits() const;
+
         //! Return scale of the model.
         //! Scale represent real number that its inverse multiplication
         //! with model coordinates will result in maximum size

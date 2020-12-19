@@ -10,6 +10,7 @@
 
 #include <QVBoxLayout>
 #include <QHBoxLayout>
+#include <QFontDatabase>
 
 #include "text_edit_widget.h"
 
@@ -25,9 +26,7 @@ TextEditWidget::TextEditWidget(QWidget *parent)
     this->textEdit = new QPlainTextEdit;
     layout->addWidget(this->textEdit);
 
-    QFont font("Monospace");
-    font.setStyleHint(QFont::TypeWriter);
-    this->textEdit->setFont(font);
+    this->textEdit->setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
 
     QObject::connect(this->textEdit,&QPlainTextEdit::textChanged,this,&TextEditWidget::onTextEditChanged);
 

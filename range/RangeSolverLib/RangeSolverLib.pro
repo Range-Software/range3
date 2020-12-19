@@ -1,11 +1,19 @@
 QT += core
+
 win*-msvc* {
     QMAKE_CXXFLAGS += -openmp
     LIBS += -openmp
 } else {
-    QMAKE_CXXFLAGS += -fopenmp
-    LIBS += -fopenmp
+    macx: {
+        QMAKE_CXXFLAGS += -Xpreprocessor -fopenmp -I/usr/local/include
+        LIBS += -lomp
+    } else {
+        QMAKE_CXXFLAGS += -fopenmp
+        LIBS += -fopenmp
+    }
 }
+
+DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x050F00
 
 TARGET = RangeSolverLib
 TEMPLATE = lib

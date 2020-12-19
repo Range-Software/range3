@@ -1,4 +1,17 @@
 ------------------------------------------------------------------
+Version 3.2.5
+
+* ALL: Added support for MacOS
+* GUI: Added command line option '--reset-defaults' which resets all settings to their default values
+* GUI: Added 3D area mouse action help
+* GUI: Show model grid
+* GUI: Changed mouse action buttons and key modifiers in 3D area
+
+Bug fixes:
+
+* GUI: Picking elements and nodes can produce invalid results
+
+------------------------------------------------------------------
 Version 3.2.4
 
 * GUI: Configurable toolbar icon size

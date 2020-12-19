@@ -31,10 +31,10 @@ class DocumentTree : public QTreeWidget
     protected slots:
 
         //! Populate.
-        void populate(void);
+        void populate();
 
         //! Update tree.
-        void updateDocuments(void);
+        void updateDocuments();
 
         //! Model has been added.
         void onModelAdded(uint modelID);

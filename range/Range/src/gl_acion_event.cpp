@@ -28,19 +28,27 @@ typedef struct _GLActionCombination
 
 static std::vector<GLActionCombination> glActionCombinations =
 {
-    { Qt::NoModifier,                          0, Qt::NoButton,                     Qt::NoScrollPhase, GL_ACTION_EVENT_NONE              },
-    { Qt::NoModifier,                          0, Qt::LeftButton,                   Qt::NoScrollPhase, GL_ACTION_EVENT_TRANSLATE         },
-    { Qt::ControlModifier,                     0, Qt::MiddleButton,                 Qt::NoScrollPhase, GL_ACTION_EVENT_TRANSLATE_Z       },
-    { Qt::ControlModifier,                     0, Qt::LeftButton | Qt::RightButton, Qt::NoScrollPhase, GL_ACTION_EVENT_TRANSLATE_Z       },
-    { Qt::ControlModifier,                     0, Qt::NoButton,                     Qt::ScrollUpdate,  GL_ACTION_EVENT_TRANSLATE_Z       },
-    { Qt::NoModifier,                          0, Qt::MiddleButton,                 Qt::NoScrollPhase, GL_ACTION_EVENT_ROTATE            },
-    { Qt::NoModifier,                          0, Qt::LeftButton | Qt::RightButton, Qt::NoScrollPhase, GL_ACTION_EVENT_ROTATE            },
-    { Qt::NoModifier,                          0, Qt::RightButton,                  Qt::NoScrollPhase, GL_ACTION_EVENT_ZOOM              },
-    { Qt::NoModifier,                          0, Qt::NoButton,                     Qt::ScrollUpdate,  GL_ACTION_EVENT_ZOOM              },
-    { Qt::ControlModifier,                     0, Qt::LeftButton,                   Qt::NoScrollPhase, GL_ACTION_EVENT_PICK_ELEMENT      },
-    { Qt::ControlModifier | Qt::AltModifier,   0, Qt::LeftButton,                   Qt::NoScrollPhase, GL_ACTION_EVENT_PICK_NODE         },
-    { Qt::ControlModifier | Qt::ShiftModifier, 0, Qt::LeftButton,                   Qt::NoScrollPhase, GL_ACTION_EVENT_PICK_HOLE_ELEMENT },
-    { Qt::ControlModifier,                     0, Qt::RightButton,                  Qt::NoScrollPhase, GL_ACTION_EVENT_PICK_CLEAR        }
+    { Qt::NoModifier,                          0, Qt::NoButton,     Qt::NoScrollPhase, GL_ACTION_EVENT_NONE              },
+    // Translate
+    { Qt::NoModifier,                          0, Qt::LeftButton,   Qt::NoScrollPhase, GL_ACTION_EVENT_TRANSLATE         },
+    // Translate Z
+    { Qt::ControlModifier,                     0, Qt::NoButton,     Qt::ScrollUpdate,  GL_ACTION_EVENT_TRANSLATE_Z       },
+    // Zoom
+    { Qt::NoModifier,                          0, Qt::NoButton,     Qt::ScrollUpdate,  GL_ACTION_EVENT_ZOOM              },
+    { Qt::ShiftModifier | Qt::AltModifier,     0, Qt::LeftButton,   Qt::NoScrollPhase, GL_ACTION_EVENT_ZOOM              },
+    // Rotate
+    { Qt::ShiftModifier,                       0, Qt::LeftButton,   Qt::NoScrollPhase, GL_ACTION_EVENT_ROTATE            },
+    { Qt::NoModifier,                          0, Qt::MiddleButton, Qt::NoScrollPhase, GL_ACTION_EVENT_ROTATE            },
+    // Pick element
+    { Qt::ControlModifier,                     0, Qt::LeftButton,   Qt::NoScrollPhase, GL_ACTION_EVENT_PICK_ELEMENT      },
+    // Pick node
+    { Qt::ControlModifier | Qt::AltModifier,   0, Qt::LeftButton,   Qt::NoScrollPhase, GL_ACTION_EVENT_PICK_NODE         },
+    // Pick hole element
+    { Qt::ControlModifier | Qt::ShiftModifier, 0, Qt::LeftButton,   Qt::NoScrollPhase, GL_ACTION_EVENT_PICK_HOLE_ELEMENT },
+    // Pick clear
+
+    { Qt::ControlModifier | Qt::MetaModifier,  0, Qt::LeftButton,   Qt::NoScrollPhase, GL_ACTION_EVENT_PICK_CLEAR        },
+    { Qt::ControlModifier,                     0, Qt::RightButton,  Qt::NoScrollPhase, GL_ACTION_EVENT_PICK_CLEAR        }
 };
 
 GLActionEvent::GLActionEvent(QObject *parent)
@@ -115,7 +123,12 @@ void GLActionEvent::clear(void)
 
 QString GLActionEvent::getKeyMouseCombination(void) const
 {
-    int _key = this->key;
+    return GLActionEvent::findKeyMouseCombination(this->keyModifiers,this->key,this->buttons,this->scrollPhase);
+}
+
+QString GLActionEvent::findKeyMouseCombination(Qt::KeyboardModifiers keyModifiers, int key, Qt::MouseButtons buttons, Qt::ScrollPhase scrollPhase)
+{
+    int _key = key;
     if (_key == Qt::Key_Alt     ||
         _key == Qt::Key_AltGr   ||
         _key == Qt::Key_Control ||
@@ -124,52 +137,40 @@ QString GLActionEvent::getKeyMouseCombination(void) const
     {
         _key = 0;
     }
-    QString keyString(QKeySequence(int(this->keyModifiers)+_key).toString(QKeySequence::NativeText));
+    QString keyString(QKeySequence(int(keyModifiers) + _key).toString(QKeySequence::NativeText));
     QString mouseButtonString;
 
-    if (this->buttons & Qt::LeftButton)
+    if (buttons & Qt::LeftButton)
     {
-        mouseButtonString = (mouseButtonString.length() > 0 ? " + " : "") + tr("Left mouse button");
+        mouseButtonString += (mouseButtonString.length() > 0 ? "+" : "") + tr("Left mouse button");
     }
-    if (this->buttons & Qt::MiddleButton)
+    if (buttons & Qt::MiddleButton)
     {
-        mouseButtonString = (mouseButtonString.length() > 0 ? " + " : "") + tr("Middle mouse button");
+        mouseButtonString += (mouseButtonString.length() > 0 ? "+" : "") + tr("Middle mouse button");
     }
-    if (this->buttons & Qt::RightButton)
+    if (buttons & Qt::RightButton)
     {
-        mouseButtonString = (mouseButtonString.length() > 0 ? " + " : "") + tr("Right mouse button");
+        mouseButtonString += (mouseButtonString.length() > 0 ? "+" : "") + tr("Right mouse button");
+    }
+    if (scrollPhase == Qt::ScrollUpdate)
+    {
+        mouseButtonString += (mouseButtonString.length() > 0 ? "+" : "") + tr("Mouse scroll");
     }
 
     return keyString + mouseButtonString;
 }
 
-QString GLActionEvent::findKeyMouseCombination(GLActionEventType type)
+QVector<QString> GLActionEvent::findKeyMouseCombinations(GLActionEventType type)
 {
+    QVector<QString> combinations;
     for (auto &glActionCombination : glActionCombinations)
     {
         if (glActionCombination.eventType == type)
         {
-            QString keyString(QKeySequence(int(glActionCombination.keyModifiers) + glActionCombination.key).toString(QKeySequence::NativeText));
-
-            QString mouseButtonString;
-
-            if (glActionCombination.buttons & Qt::LeftButton)
-            {
-                mouseButtonString = (mouseButtonString.length() > 0 ? " + " : "") + tr("Left mouse button");
-            }
-            if (glActionCombination.buttons & Qt::MiddleButton)
-            {
-                mouseButtonString = (mouseButtonString.length() > 0 ? " + " : "") + tr("Middle mouse button");
-            }
-            if (glActionCombination.buttons & Qt::RightButton)
-            {
-                mouseButtonString = (mouseButtonString.length() > 0 ? " + " : "") + tr("Right mouse button");
-            }
-
-            return keyString + mouseButtonString;
+            combinations.append(GLActionEvent::findKeyMouseCombination(glActionCombination.keyModifiers,glActionCombination.key,glActionCombination.buttons,glActionCombination.scrollPhase));
         }
     }
-    return QString();
+    return combinations;
 }
 
 QString GLActionEvent::toString(GLActionEventType type)

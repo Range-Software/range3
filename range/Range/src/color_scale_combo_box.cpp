@@ -21,7 +21,7 @@ ColorScaleComboBox::ColorScaleComboBox(QWidget *parent) :
     for (int i=0;i<colorScales.size();i++)
     {
         this->addItem(this->createIcon(colorScales[i]),
-                      colorScales[i].section(QRegExp("[-.]"),3,3),
+                      colorScales[i].section(QRegularExpression("[-.]"),3,3),
                       QColor(colorScales[i]));
         this->setItemData(i,QVariant(colorScales[i]));
     }

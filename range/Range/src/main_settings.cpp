@@ -11,6 +11,7 @@
 #include <QDir>
 #include <QDesktopServices>
 #include <QImageWriter>
+#include <QStandardPaths>
 
 #include <rblib.h>
 
@@ -101,6 +102,9 @@ QString MainSettings::findLicenseFileName(void) const
 {
     QDir dir(this->applicationDirPath);
     dir.cdUp();
+#ifdef Q_OS_DARWIN
+    dir.cd("Resources");
+#endif
     dir.cd("doc");
     return dir.filePath(MainSettings::licenseFileName);
 }
@@ -109,6 +113,9 @@ QString MainSettings::findReleaseNotesFileName(void) const
 {
     QDir dir(this->applicationDirPath);
     dir.cdUp();
+#ifdef Q_OS_DARWIN
+    dir.cd("Resources");
+#endif
     dir.cd("doc");
     return dir.filePath(MainSettings::releaseNotesFileName);
 }
@@ -117,6 +124,9 @@ QString MainSettings::findHelpDir(void) const
 {
     QDir dir(this->applicationDirPath);
     dir.cdUp();
+#ifdef Q_OS_DARWIN
+    dir.cd("Resources");
+#endif
     return dir.filePath("help");
 }
 
@@ -124,6 +134,9 @@ QString MainSettings::findPixmapsDir(void) const
 {
     QDir dir(this->applicationDirPath);
     dir.cdUp();
+#ifdef Q_OS_DARWIN
+    dir.cd("Resources");
+#endif
     return dir.filePath("pixmaps");
 }
 

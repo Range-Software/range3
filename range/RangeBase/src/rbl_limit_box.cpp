@@ -75,6 +75,16 @@ void RLimitBox::setLimits(double xl, double xu, double yl, double yu, double zl,
     this->fixLimits();
 }
 
+void RLimitBox::getLimits(double &xl, double &xu, double &yl, double &yu, double &zl, double &zu) const
+{
+    xl = this->xl;
+    xu = this->xu;
+    yl = this->yl;
+    yu = this->yu;
+    zl = this->zl;
+    zu = this->zu;
+}
+
 void RLimitBox::scale(double scaleFactor)
 {
     double dx = (this->xu - this->xl) * (scaleFactor - 1.0) / 2.0;
@@ -96,6 +106,19 @@ void RLimitBox::print(void) const
     RLogger::info("Limit box:\n");
     RLogger::info("  lower: %15.6e %15.6e %15.6e\n", this->xl, this->yl, this->zl);
     RLogger::info("  upper: %15.6e %15.6e %15.6e\n", this->xu, this->yu, this->zu);
+}
+
+void RLimitBox::merge(const RLimitBox &lb)
+{
+    double bxl, bxu, byl, byu, bzl, bzu;
+    lb.getLimits(bxl, bxu, byl, byu, bzl, bzu);
+
+    this->xl = std::min(this->xl,bxl);
+    this->xu = std::max(this->xu,bxu);
+    this->yl = std::min(this->yl,byl);
+    this->yu = std::max(this->yu,byu);
+    this->zl = std::min(this->zl,bzl);
+    this->zu = std::max(this->zu,bzu);
 }
 
 bool RLimitBox::areIntersecting(const RLimitBox &b1, const RLimitBox &b2)

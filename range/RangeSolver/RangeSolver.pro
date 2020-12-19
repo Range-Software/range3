@@ -1,14 +1,22 @@
 QT += core network
+
 win*-msvc* {
     QMAKE_CXXFLAGS += -openmp
     LIB_EXT = "lib"
     LIB_PRE = ""
 } else {
-    QMAKE_CXXFLAGS += -fopenmp
-    LIBS += -fopenmp
+    macx: {
+        QMAKE_CXXFLAGS += -Xpreprocessor -fopenmp -I/usr/local/include
+        LIBS += -lomp -L /usr/local/lib
+    } else {
+        QMAKE_CXXFLAGS += -fopenmp
+        LIBS += -fopenmp
+    }
     LIB_EXT = "a"
     LIB_PRE = "lib"
 }
+
+DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x050F00
 
 TARGET = RangeSolver
 TEMPLATE = app

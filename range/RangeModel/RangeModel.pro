@@ -1,11 +1,19 @@
 QT += core
+
 win*-msvc* {
     QMAKE_CXXFLAGS += -openmp
     LIBS += -openmp
 } else {
-    QMAKE_CXXFLAGS += -fopenmp
-    LIBS += -fopenmp
+    macx: {
+        QMAKE_CXXFLAGS += -Xpreprocessor -fopenmp -I/usr/local/include
+        LIBS += -lomp
+    } else {
+        QMAKE_CXXFLAGS += -fopenmp
+        LIBS += -fopenmp
+    }
 }
+
+DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x050F00
 
 TARGET = RangeModel
 TEMPLATE = lib
@@ -13,7 +21,7 @@ TEMPLATE = lib
 DEFINES += RANGEMODEL_LIBRARY
 
 DEFINES += "FILE_MAJOR_VERSION=1"
-DEFINES += "FILE_MINOR_VERSION=0"
+DEFINES += "FILE_MINOR_VERSION=1"
 DEFINES += "FILE_RELEASE_VERSION=0"
 
 INCLUDEPATH += include

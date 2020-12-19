@@ -87,7 +87,7 @@ QList<uint> DrawInputTree::getSelectedObjectIDs() const
     {
         objectIDs.insert(this->getItemObjectID(selectedItems[i]));
     }
-    return objectIDs.toList();
+    return QList<uint>(objectIDs.begin(),objectIDs.end());
 }
 
 void DrawInputTree::setRequestedItemVectorValue(const RR3Vector &v)

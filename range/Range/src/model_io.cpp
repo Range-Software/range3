@@ -19,13 +19,16 @@ ModelIO::ModelIO(ModelIOType    type,
                  Model         *pModel,
                  QObject       *parent) : Job(parent)
 {
+    R_LOG_TRACE_IN;
     this->type = type;
     this->fileName = fileName;
     this->pModel = pModel;
+    R_LOG_TRACE_OUT;
 }
 
 QString ModelIO::findNewModelName(const QString &fileName)
 {
+    R_LOG_TRACE_IN;
     QString modelBaseName = QFileInfo(fileName).baseName();
     QString modelName = modelBaseName;
     uint nTries = 2;
@@ -34,11 +37,13 @@ QString ModelIO::findNewModelName(const QString &fileName)
         modelName = modelBaseName + " [" + QString::number(nTries) + "]";
         nTries++;
     }
+    R_LOG_TRACE_OUT;
     return modelName;
 }
 
 QString ModelIO::getModelSaveName(const MainSettings &mainSettings, QWidget *parent, const Model &rModel, bool saveAs)
 {
+    R_LOG_TRACE_IN;
     QDir dataDir(mainSettings.getDataDir());
     QString binaryExtension = RModel::getDefaultFileExtension(true);
     QString asciiExtension = RModel::getDefaultFileExtension(false);
@@ -64,11 +69,13 @@ QString ModelIO::getModelSaveName(const MainSettings &mainSettings, QWidget *par
         }
     }
 
+    R_LOG_TRACE_OUT;
     return fileName;
 }
 
 void ModelIO::save(Model &rModel, const QString &fileName, bool writeLinkFile)
 {
+    R_LOG_TRACE_IN;
     RLogger::info("Saving model to file \'%s\'.\n", fileName.toUtf8().constData());
     RLogger::indent();
 
@@ -85,10 +92,12 @@ void ModelIO::save(Model &rModel, const QString &fileName, bool writeLinkFile)
         RLogger::error("Failed to save model to file \'%s\'.\n", fileName.toUtf8().constData());
         throw error;
     }
+    R_LOG_TRACE_OUT;
 }
 
 void ModelIO::open(Model &rModel, const QString &fileName)
 {
+    R_LOG_TRACE_IN;
     RLogger::info("Loading model file \'%s\'.\n", fileName.toUtf8().constData());
     RLogger::indent();
 
@@ -105,10 +114,12 @@ void ModelIO::open(Model &rModel, const QString &fileName)
         RLogger::error("Failed to load model from file \'%s\'.\n", fileName.toUtf8().constData());
         throw error;
     }
+    R_LOG_TRACE_OUT;
 }
 
 void ModelIO::update(Model &rModel, const QString &fileName)
 {
+    R_LOG_TRACE_IN;
     RLogger::info("Updating model from file \'%s\'.\n", fileName.toUtf8().constData());
     RLogger::indent();
 
@@ -129,10 +140,12 @@ void ModelIO::update(Model &rModel, const QString &fileName)
         RLogger::error("Failed to update from file \'%s\'.\n", fileName.toUtf8().constData());
         throw error;
     }
+    R_LOG_TRACE_OUT;
 }
 
 void ModelIO::exportMsh(Model &rModel, const QString &fileName)
 {
+    R_LOG_TRACE_IN;
     RModelMsh modelMsh;
     rModel.exportTo(modelMsh);
 
@@ -152,10 +165,12 @@ void ModelIO::exportMsh(Model &rModel, const QString &fileName)
         RLogger::error("Failed to export MSH file \'%s\'.\n", fileName.toUtf8().constData());
         throw error;
     }
+    R_LOG_TRACE_OUT;
 }
 
 void ModelIO::importMsh(Model &rModel, const QString &fileName)
 {
+    R_LOG_TRACE_IN;
     RModelMsh modelMsh;
 
     RLogger::info("Importing MSH file \'%s\'.\n", fileName.toUtf8().constData());
@@ -176,10 +191,12 @@ void ModelIO::importMsh(Model &rModel, const QString &fileName)
         RLogger::error("Failed to import MSH file \'%s\'.\n", fileName.toUtf8().constData());
         throw error;
     }
+    R_LOG_TRACE_OUT;
 }
 
 void ModelIO::exportRaw(Model &rModel, const QString &fileName)
 {
+    R_LOG_TRACE_IN;
     RModelRaw modelRaw;
     rModel.exportTo(modelRaw);
 
@@ -199,10 +216,12 @@ void ModelIO::exportRaw(Model &rModel, const QString &fileName)
         RLogger::error("Failed to export RAW file \'%s\'.\n", fileName.toUtf8().constData());
         throw error;
     }
+    R_LOG_TRACE_OUT;
 }
 
 void ModelIO::importRaw(Model &rModel, const QString &fileName)
 {
+    R_LOG_TRACE_IN;
     RModelRaw modelRaw;
     double tolerance = 0.0;
 
@@ -224,10 +243,12 @@ void ModelIO::importRaw(Model &rModel, const QString &fileName)
         RLogger::error("Failed to import RAW file \'%s\'.\n", fileName.toUtf8().constData());
         throw error;
     }
+    R_LOG_TRACE_OUT;
 }
 
 void ModelIO::exportStl(Model &rModel, const QString &fileName, bool binary)
 {
+    R_LOG_TRACE_IN;
     RModelStl modelStl;
     rModel.exportTo(modelStl);
 
@@ -247,10 +268,12 @@ void ModelIO::exportStl(Model &rModel, const QString &fileName, bool binary)
         RLogger::error("Failed to export STL file \'%s\'.\n", fileName.toUtf8().constData());
         throw error;
     }
+    R_LOG_TRACE_OUT;
 }
 
 void ModelIO::importStl(Model &rModel, const QString &fileName)
 {
+    R_LOG_TRACE_IN;
     RModelStl modelStl;
     double tolerance = 0.0;
 
@@ -272,10 +295,12 @@ void ModelIO::importStl(Model &rModel, const QString &fileName)
         RLogger::error("Failed to import STL file \'%s\'.\n", fileName.toUtf8().constData());
         throw error;
     }
+    R_LOG_TRACE_OUT;
 }
 
 void ModelIO::run(void)
 {
+    R_LOG_TRACE_IN;
     try
     {
         if (this->type == MODEL_IO_ADD)
@@ -348,4 +373,5 @@ void ModelIO::run(void)
                        error.getMessage().toUtf8().constData(),
                        fileName.toUtf8().constData());
     }
+    R_LOG_TRACE_OUT;
 }

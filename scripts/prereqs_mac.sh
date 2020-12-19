@@ -1,6 +1,9 @@
 #!/bin/bash
 
-myPath=$(dirname $(realpath ${BASH_SOURCE[0]}))
+getScriptPath () {
+	echo ${0%/*}/
+}
+myPath=$(getScriptPath)
 
 . ${myPath}/lib.sh
 
@@ -29,14 +32,21 @@ if [[ ! -x $(which ffmpeg) ]]; then
     packagesToInstall+="ffmpeg "
 fi
 
-if [[ ! -x /usr/local/opt/llvm/bin/clang ]]; then
-    echo_i "Installing llvm/clang"
-    packagesToInstall+="llvm "
+if [[ ! -x $(which create-dmg) ]]; then
+    echo_i "Instalilng create-dmg"
+    packagesToInstall+="create-dmg "
 fi
 
-brew install $packagesToInstall
-if [ $? -ne 0 ]
-then
-    echo_e "Failed to install required packages"
-    exit 2
+if [[ ! -x /usr/local/opt/llvm/bin/clang ]]; then
+    echo_i "Installing llvm/clang"
+    packagesToInstall+="llvm libopm"
+fi
+
+if [ -n "$packagesToInstall" ]; then
+    brew install $packagesToInstall
+    if [ $? -ne 0 ]
+    then
+        echo_e "Failed to install required packages"
+        exit 2
+    fi
 fi

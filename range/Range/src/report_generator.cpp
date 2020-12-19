@@ -9,6 +9,7 @@
  *********************************************************************/
 
 #include <QTextCursor>
+#include <QStyleFactory>
 
 #include <rblib.h>
 
@@ -19,13 +20,13 @@ ReportGenerator::ReportGenerator(uint modelID, QObject *parent)
     : DocumentGenerator(parent)
     , modelID(modelID)
 {
-    RLogger::trace("ReportGenerator::ReportGenerator(uint modelID, QObject *parent)\n");
+    R_LOG_TRACE;
     this->setEnableHeaderCounters(false);
 }
 
 void ReportGenerator::generateTitle(void)
 {
-    RLogger::trace("void ReportGenerator::generateTitle(void)\n");
+    R_LOG_TRACE;
     const Model &rModel = Session::getInstance().getModel(this->modelID);
 
     QTextCursor cursor(this->docTitle);
@@ -56,7 +57,7 @@ void ReportGenerator::generateTitle(void)
 
 void ReportGenerator::generateBody(void)
 {
-    RLogger::trace("void ReportGenerator::generateBody(void)\n");
+    R_LOG_TRACE;
     this->generateModelChapter();
     this->generateProblemChapter();
     this->generateResultsChapter();
@@ -64,7 +65,7 @@ void ReportGenerator::generateBody(void)
 
 void ReportGenerator::generateModelChapter(void)
 {
-    RLogger::trace("void ReportGenerator::generateModelChapter(void)\n");
+    R_LOG_TRACE;
 
     const Model &rModel = Session::getInstance().getModel(this->modelID);
 
@@ -115,7 +116,7 @@ void ReportGenerator::generateModelChapter(void)
 
 void ReportGenerator::generateProblemChapter(void)
 {
-    RLogger::trace("void ReportGenerator::generateProblemChapter(void)\n");
+    R_LOG_TRACE;
 
     const Model &rModel = Session::getInstance().getModel(this->modelID);
 
@@ -334,7 +335,7 @@ void ReportGenerator::generateProblemChapter(void)
 
 void ReportGenerator::generateResultsChapter(void)
 {
-    RLogger::trace("void ReportGenerator::generateResultsChapter(void)\n");
+    R_LOG_TRACE;
 
     const Model &rModel = Session::getInstance().getModel(this->modelID);
 
@@ -459,12 +460,13 @@ void ReportGenerator::generateResultsChapter(void)
     blockFormat.setAlignment(Qt::AlignCenter);
     cursor.insertBlock(blockFormat);
     QImage modelScreenShotImage(this->takeModelScreenshot());
-    cursor.insertImage(modelScreenShotImage.scaledToWidth(qCeil(double(this->printer->pageRect().width())*0.9),Qt::SmoothTransformation));
+    QRect pageRect(this->printer->pageLayout().paintRectPixels(this->printer->resolution()));
+    cursor.insertImage(modelScreenShotImage.scaledToWidth(qCeil(double(pageRect.width())*0.9),Qt::SmoothTransformation));
 }
 
 QImage ReportGenerator::takeModelScreenshot(void) const
 {
-    RLogger::trace("QImage ReportGenerator::takeModelScreenshot(void)\n");
+    R_LOG_TRACE;
 
     const Model &rModel = Session::getInstance().getModel(this->modelID);
     QString screenShotFile(rModel.buildScreenShotFileName());

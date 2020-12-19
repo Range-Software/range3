@@ -1,6 +1,9 @@
 #!/bin/bash
 
-myPath=$(dirname $(realpath ${BASH_SOURCE[0]}))
+getScriptPath () {
+	echo ${0%/*}/
+}
+myPath=$(getScriptPath)
 
 . ${myPath}/lib.sh
 

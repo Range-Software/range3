@@ -158,6 +158,7 @@ void Application::onStarted(void)
         QList<RArgumentOption> validOptions;
         validOptions.append(RArgumentOption("log-debug",RArgumentOption::Switch,QVariant(),"Switch on debug log level",false,false));
         validOptions.append(RArgumentOption("log-trace",RArgumentOption::Switch,QVariant(),"Switch on trace log level",false,false));
+        validOptions.append(RArgumentOption("reset-defaults",RArgumentOption::Switch,QVariant(),"Reset all settings to defaults",false,false));
 
         RArgumentsParser argumentsParser(Application::arguments(),validOptions,true);
 
@@ -182,6 +183,10 @@ void Application::onStarted(void)
         if (argumentsParser.isSet("log-trace"))
         {
             RLogger::getInstance().setLevel(R_LOG_LEVEL_TRACE);
+        }
+        if (argumentsParser.isSet("reset-defaults"))
+        {
+            MainSettings::getInstance().clear();
         }
 
         filesToLoad = argumentsParser.getFiles();
@@ -283,7 +288,11 @@ void Application::onStarted(void)
 
         MaterialUpdater *pMaterialUpdater = new MaterialUpdater;
 
+#ifdef Q_OS_DARWIN
+        QDir matSrcDir(QDir::cleanPath(QDir(this->applicationDirPath()).filePath("../Resources/materials")));
+#else
         QDir matSrcDir(QDir::cleanPath(QDir(this->applicationDirPath()).filePath("../materials")));
+#endif
 
         RLogger::info("Source directory: \'%s\'\n",matSrcDir.absolutePath().toUtf8().constData());
 
@@ -304,7 +313,11 @@ void Application::onStarted(void)
 
         FileUpdater *pFileUpdater = new FileUpdater;
 
+#ifdef Q_OS_DARWIN
+        QDir dataSrcDir(QDir::cleanPath(QDir(this->applicationDirPath()).filePath("../Resources/data")));
+#else
         QDir dataSrcDir(QDir::cleanPath(QDir(this->applicationDirPath()).filePath("../data")));
+#endif
         QDir dataDstDir(MainSettings::getInstance().getDataDir());
 
         RLogger::info("Source directory: \'%s\'\n",dataSrcDir.absolutePath().toUtf8().constData());

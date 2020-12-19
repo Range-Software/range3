@@ -18,28 +18,34 @@ JobManager::JobManager(QObject *parent)
     : QObject(parent)
     , jobIsStarting(false)
 {
+    R_LOG_TRACE;
 }
 
 JobManager & JobManager::getInstance(void)
 {
+    R_LOG_TRACE;
     static JobManager jobManager;
     return jobManager;
 }
 
 void JobManager::submit(Job *job)
 {
+    R_LOG_TRACE_IN;
     this->waitingJobs.enqueue(job);
     this->processWaitingJobs();
     this->processFinishedJobs();
+    R_LOG_TRACE_OUT;
 }
 
 uint JobManager::getNWaiting(void) const
 {
+    R_LOG_TRACE;
     return (uint)this->waitingJobs.size();
 }
 
 uint JobManager::getNRunning(void) const
 {
+    R_LOG_TRACE_IN;
     QList<Job*>::const_iterator iter;
     uint nRunning = 0;
 
@@ -52,11 +58,13 @@ uint JobManager::getNRunning(void) const
             nRunning ++;
         }
     }
+    R_LOG_TRACE_OUT;
     return nRunning;
 }
 
 QVector<uint> JobManager::getRunningIDs(void) const
 {
+    R_LOG_TRACE_IN;
     QVector<uint> runningIDs;
 
     QList<Job*>::const_iterator iter;
@@ -70,42 +78,54 @@ QVector<uint> JobManager::getRunningIDs(void) const
         }
     }
 
+    R_LOG_TRACE_OUT;
     return runningIDs;
 }
 
 void JobManager::onJobBlocking(bool blocking)
 {
+    R_LOG_TRACE_IN;
     emit this->jobBlocking(blocking);
+    R_LOG_TRACE_OUT;
 }
 
 void JobManager::onJobStarted(void)
 {
+    R_LOG_TRACE_IN;
     this->jobIsStarting = false;
     emit this->jobStarted();
+    R_LOG_TRACE_OUT;
 }
 
 void JobManager::onJobFinished(void)
 {
+    R_LOG_TRACE_IN;
     emit this->jobFinished();
     this->processWaitingJobs();
     this->processFinishedJobs();
+    R_LOG_TRACE_OUT;
 }
 
 void JobManager::processWaitingJobs(void)
 {
+    R_LOG_TRACE_IN;
     if (this->getNRunning() == 0 && this->getNWaiting() > 0 && !this->jobIsStarting)
     {
         this->startJob(this->waitingJobs.dequeue());
     }
+    R_LOG_TRACE_OUT;
 }
 
 void JobManager::processFinishedJobs(void)
 {
+    R_LOG_TRACE_IN;
     this->removeFinishedJobs();
+    R_LOG_TRACE_OUT;
 }
 
 void JobManager::startJob(Job *job)
 {
+    R_LOG_TRACE_IN;
     this->jobIsStarting = true;
 
     job->moveToThread(&this->runningThread);
@@ -119,10 +139,12 @@ void JobManager::startJob(Job *job)
     this->runningJobs.append(job);
 
     this->runningThread.start();
+    R_LOG_TRACE_OUT;
 }
 
 Job * JobManager::findFinishedJob(void) const
 {
+    R_LOG_TRACE_IN;
     QList<Job*>::const_iterator iter;
     for (iter = this->runningJobs.begin();
          iter != this->runningJobs.end();
@@ -130,14 +152,17 @@ Job * JobManager::findFinishedJob(void) const
     {
         if ((*iter)->isFinished())
         {
+            R_LOG_TRACE_OUT;
             return (*iter);
         }
     }
+    R_LOG_TRACE_OUT;
     return 0;
 }
 
 uint JobManager::removeFinishedJobs()
 {
+    R_LOG_TRACE_IN;
     Job *job;
     uint nRemovedTotal = 0;
     int nRemoved = 0;
@@ -164,5 +189,6 @@ uint JobManager::removeFinishedJobs()
         }
     }
 
+    R_LOG_TRACE_OUT;
     return nRemovedTotal;
 }

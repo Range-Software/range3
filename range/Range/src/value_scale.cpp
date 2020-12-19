@@ -30,7 +30,7 @@ ValueScale::ValueScale(const QString &title, QWidget *parent)
     , setScaleAllowed(true)
 {
     QVBoxLayout *mainLayout = new QVBoxLayout;
-    mainLayout->setMargin(0);
+    mainLayout->setContentsMargins(0,0,0,0);
     this->setLayout(mainLayout);
 
     QGroupBox *scaleGroupBox= new QGroupBox(title);
@@ -40,7 +40,7 @@ ValueScale::ValueScale(const QString &title, QWidget *parent)
     scaleGroupBox->setLayout(scaleLayout);
 
     QHBoxLayout *editLayout = new QHBoxLayout;
-    editLayout->setMargin(0);
+    editLayout->setContentsMargins(0,0,0,0);
     scaleLayout->addLayout(editLayout);
 
     this->scaleEdit = new ValueLineEdit(-ValueScale::mantisScale*std::pow(10,ValueScale::exponentSize),ValueScale::mantisScale*std::pow(10,ValueScale::exponentSize));
@@ -63,7 +63,7 @@ ValueScale::ValueScale(const QString &title, QWidget *parent)
     scaleLayout->addWidget(expandWidget);
 
     QGridLayout *expandLayout = new QGridLayout;
-    expandLayout->setMargin(0);
+    expandLayout->setContentsMargins(0,0,0,0);
     expandWidget->setLayout(expandLayout);
 
     QLabel *mantisLabel = new QLabel(tr("Scale") + ":");

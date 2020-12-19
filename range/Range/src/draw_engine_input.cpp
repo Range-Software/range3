@@ -348,7 +348,7 @@ bool DrawEngineInput::isValid(const RR3Vector &value) const
     return (value.size() == 3);
 }
 
-bool DrawEngineInput::isValid(const RLocalDirection &value) const
+bool DrawEngineInput::isValid(const RLocalDirection &) const
 {
     if (this->type != DrawEngineInput::LocalDirection)
     {

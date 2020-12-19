@@ -35,12 +35,12 @@ class ProblemSelectorDialog : public QDialog
         explicit ProblemSelectorDialog(QWidget *parent = nullptr);
 
         //! Execute dialog.
-        RProblemTypeMask exec(void);
+        RProblemTypeMask exec();
 
     protected slots:
 
         //! Handle ProblemSelectorTree::changed signal.
-        void onProblemTreeChanged(void);
+        void onProblemTreeChanged();
 
 };
 

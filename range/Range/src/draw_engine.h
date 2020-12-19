@@ -71,6 +71,10 @@ class DrawEngine : public QObject
         //! Force to emit signal that object has changed.
         void setObjectChanged(uint position);
 
+        //! Find size limits.
+        bool findLimits(RLimitBox &limitBox) const;
+
+
     signals:
 
         //! Object was added signal.

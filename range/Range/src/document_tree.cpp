@@ -25,6 +25,7 @@ typedef enum _DocumentTreeColumn
 DocumentTree::DocumentTree(QWidget *parent) :
     QTreeWidget(parent)
 {
+    R_LOG_TRACE;
     this->setColumnCount(DOCUMENT_TREE_N_COLUMNS);
     this->setSelectionMode(QAbstractItemView::ExtendedSelection);
     this->setRootIsDecorated(true);
@@ -75,6 +76,7 @@ DocumentTree::DocumentTree(QWidget *parent) :
 
 void DocumentTree::addDocument(QTreeWidgetItem *item, uint modelID, const QString &filename)
 {
+    R_LOG_TRACE;
     QFileInfo fi(filename);
 
     QTreeWidgetItem *childItem = new QTreeWidgetItem(item);
@@ -85,8 +87,9 @@ void DocumentTree::addDocument(QTreeWidgetItem *item, uint modelID, const QStrin
     childItem->setData(DOCUMENT_TREE_COLUMN_IS_DOCUMENT,Qt::UserRole,QVariant(true));
 }
 
-void DocumentTree::populate(void)
+void DocumentTree::populate()
 {
+    R_LOG_TRACE;
     this->blockSignals(true);
     this->clear();
     this->blockSignals(false);
@@ -97,8 +100,9 @@ void DocumentTree::populate(void)
     }
 }
 
-void DocumentTree::updateDocuments(void)
+void DocumentTree::updateDocuments()
 {
+    R_LOG_TRACE;
     if (!Session::getInstance().trylock())
     {
         return;
@@ -150,6 +154,7 @@ void DocumentTree::updateDocuments(void)
 
 void DocumentTree::onModelAdded(uint modelID)
 {
+    R_LOG_TRACE;
     this->blockSignals(true);
     Model &rModel = Session::getInstance().getModel(modelID);
 
@@ -169,6 +174,7 @@ void DocumentTree::onModelAdded(uint modelID)
 
 void DocumentTree::onModelChanged(uint modelID)
 {
+    R_LOG_TRACE;
     for (int i=0;i<this->topLevelItemCount();i++)
     {
         QTreeWidgetItem *item = this->topLevelItem(i);
@@ -182,6 +188,7 @@ void DocumentTree::onModelChanged(uint modelID)
 
 void DocumentTree::onModelRemoved(uint modelID)
 {
+    R_LOG_TRACE;
     int i = this->topLevelItemCount() - 1;
     while (i >= 0)
     {
@@ -204,6 +211,7 @@ void DocumentTree::onModelRemoved(uint modelID)
 
 void DocumentTree::onItemDoubleClicked(QTreeWidgetItem *item, int column)
 {
+    R_LOG_TRACE;
     if (column == DOCUMENT_TREE_COLUMN_NAME)
     {
         if (item->data(DOCUMENT_TREE_COLUMN_IS_DOCUMENT,Qt::UserRole).toBool())

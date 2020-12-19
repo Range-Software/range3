@@ -8,6 +8,7 @@
  *  DESCRIPTION: Application class definition                        *
  *********************************************************************/
 
+#include <locale.h>
 #include <QTimer>
 
 #include "application.h"

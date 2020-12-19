@@ -39,6 +39,7 @@ const double Model::SliverElementEdgeRatio = 30.0;
 
 void Model::_init(const Model *pModel)
 {
+    R_LOG_TRACE;
     if (pModel)
     {
         this->edgeNodes = pModel->edgeNodes;
@@ -58,46 +59,57 @@ void Model::_init(const Model *pModel)
 
 Model::Model()
 {
+    R_LOG_TRACE;
     this->_init();
 }
 
 Model::Model(const Model &model) : RModel(model)
 {
+    R_LOG_TRACE;
     this->_init(&model);
 }
 
 Model::Model (const RModelMsh &modelMsh) : RModel(modelMsh)
 {
+    R_LOG_TRACE_IN;
     this->_init();
     this->consolidate(Model::ConsolidateEdgeElements | Model::ConsolidateHoleElements | Model::ConsolidateSliverElements | Model::ConsolidateIntersectedElements);
+    R_LOG_TRACE_OUT;
 }
 
 Model::Model (const RModelStl &modelStl) : RModel(modelStl)
 {
+    R_LOG_TRACE_IN;
     this->_init();
     this->consolidate(Model::ConsolidateEdgeElements | Model::ConsolidateHoleElements | Model::ConsolidateSliverElements | Model::ConsolidateIntersectedElements);
+    R_LOG_TRACE_OUT;
 }
 
 Model::Model (const RModelRaw &modelRaw,
               const QString &name,
               const QString &description, bool consolidate) : RModel(modelRaw,name,description)
 {
+    R_LOG_TRACE_IN;
     this->_init();
     if (consolidate)
     {
         this->consolidate(Model::ConsolidateEdgeElements | Model::ConsolidateHoleElements | Model::ConsolidateSliverElements | Model::ConsolidateIntersectedElements);
     }
+    R_LOG_TRACE_OUT;
 }
 
 Model & Model::operator = (const Model &model)
 {
+    R_LOG_TRACE_IN;
     this->RModel::operator =(model);
     this->_init(&model);
+    R_LOG_TRACE_OUT;
     return (*this);
 }
 
 void Model::insertModel(const Model &model, bool mergeNearNodes, double tolerance, bool findNearest)
 {
+    R_LOG_TRACE_IN;
     uint nn = this->getNNodes();
     uint ne = this->getNElements();
     uint neg = this->getNElementGroups();
@@ -271,6 +283,7 @@ void Model::insertModel(const Model &model, bool mergeNearNodes, double toleranc
         }
     }
     this->consolidate(Model::ConsolidateEdgeElements | Model::ConsolidateHoleElements | Model::ConsolidateSliverElements | Model::ConsolidateIntersectedElements);
+    R_LOG_TRACE_OUT;
 }
 
 const QString &Model::getFileName() const
@@ -359,9 +372,9 @@ void Model::generatePatchColors()
     for (uint i=0;i<this->viewFactorMatrix.getPatchBook().getNPatches();i++)
     {
         int r,g,b;
-        r = qRound(255*double(qrand())/double(RAND_MAX));
-        g = qRound(255*double(qrand())/double(RAND_MAX));
-        b = qRound(255*double(qrand())/double(RAND_MAX));
+        r = qRound(255*QRandomGenerator::global()->generateDouble());
+        g = qRound(255*QRandomGenerator::global()->generateDouble());
+        b = qRound(255*QRandomGenerator::global()->generateDouble());
         this->patchColors.push_back(QColor(r,g,b,255));
     }
 }
@@ -1823,21 +1836,27 @@ void Model::setColor(REntityGroupType elementGroupType, uint position, const QCo
 
 void Model::glDrawLock()
 {
+    R_LOG_TRACE_IN;
     this->drawLock.lock();
+    R_LOG_TRACE_OUT;
 }
 
 bool Model::glDrawTrylock()
 {
+    R_LOG_TRACE;
     return this->drawLock.tryLock();
 }
 
 void Model::glDrawUnlock()
 {
+    R_LOG_TRACE_IN;
     this->drawLock.unlock();
+    R_LOG_TRACE_OUT;
 }
 
 void Model::glDraw(GLWidget *glWidget) const
 {
+    R_LOG_TRACE_IN;
     try
     {
         // Reset OpenGL list sizes.
@@ -2024,10 +2043,12 @@ void Model::glDraw(GLWidget *glWidget) const
     {
         RLogger::error("Failed to draw model. Unknown exception\n");
     }
+    R_LOG_TRACE_OUT;
 }
 
 void Model::glDraw(GLWidget *glWidget, const QVector<PickItem> &pickedItems) const
 {
+    R_LOG_TRACE_IN;
     try
     {
         GLint depthFunc;
@@ -2233,11 +2254,13 @@ void Model::glDraw(GLWidget *glWidget, const QVector<PickItem> &pickedItems) con
     {
         RLogger::error("Failed to draw model. Unknown exception.\n");
     }
+    R_LOG_TRACE_OUT;
 }
 
-QMap<RVariableType, PickValue> Model::getPickedResultsValues(const PickItem &rPickItem) const
+QMultiMap <RVariableType, PickValue> Model::getPickedResultsValues(const PickItem &rPickItem) const
 {
-    QMap<RVariableType, PickValue> resultsValues;
+    R_LOG_TRACE_IN;
+    QMultiMap<RVariableType, PickValue> resultsValues;
 
     for (uint i=0;i<this->getNVariables();i++)
     {
@@ -2342,7 +2365,7 @@ QMap<RVariableType, PickValue> Model::getPickedResultsValues(const PickItem &rPi
             }
             for (uint j=0;j<resultsValuesVector.size();j++)
             {
-                resultsValues.insertMulti(rVariable.getType(),PickValue(positionVector[j],resultsValuesVector[j]));
+                resultsValues.insert(rVariable.getType(),PickValue(positionVector[j],resultsValuesVector[j]));
             }
         }
         else if (rPickItem.getItemType() == PICK_ITEM_NODE)
@@ -2402,15 +2425,17 @@ QMap<RVariableType, PickValue> Model::getPickedResultsValues(const PickItem &rPi
                 position[1] = pIElement->at(rPickItem.getNodePosition()).getY() + displacement[1];
                 position[2] = pIElement->at(rPickItem.getNodePosition()).getZ() + displacement[2];
             }
-            resultsValues[rVariable.getType()] = PickValue(position,resultsValuesVector);
+            resultsValues.insert(rVariable.getType(),PickValue(position,resultsValuesVector));
         }
     }
 
+    R_LOG_TRACE_OUT;
     return resultsValues;
 }
 
 bool Model::nodeIsOnEdge(uint nodeID) const
 {
+    R_LOG_TRACE;
     return (this->edgeNodes[int(nodeID)]);
 }
 
@@ -2508,11 +2533,14 @@ bool Model::findPickedElement(const RR3Vector &position, const RR3Vector &direct
                     double distance;
                     if (rElement.findPickDistance(dispNodes,position,direction,tolerance,distance))
                     {
-                        if (!found || minDistance > distance)
+#pragma omp critical
                         {
-                            minDistance = distance;
-                            pickItem = PickItem(SessionEntityID(0,entityType,entityID),elementID,uint(j));
-                            found = true;
+                            if (!found || minDistance > distance)
+                            {
+                                minDistance = distance;
+                                pickItem = PickItem(SessionEntityID(0,entityType,entityID),elementID,uint(j));
+                                found = true;
+                            }
                         }
                     }
                 }
@@ -2541,11 +2569,14 @@ bool Model::findPickedElement(const RR3Vector &position, const RR3Vector &direct
                     double distance;
                     if (iElement.findPickDistance(position,direction,tolerance,distance))
                     {
-                        if (!found || minDistance > distance)
+#pragma omp critical
                         {
-                            minDistance = distance;
-                            pickItem = PickItem(SessionEntityID(0,entityType,entityID),uint(j),uint(j));
-                            found = true;
+                            if (!found || minDistance > distance)
+                            {
+                                minDistance = distance;
+                                pickItem = PickItem(SessionEntityID(0,entityType,entityID),uint(j),uint(j));
+                                found = true;
+                            }
                         }
                     }
                 }
@@ -2621,11 +2652,14 @@ bool Model::findPickedNode(const RR3Vector &position, const RR3Vector &direction
                         if (u <= tolerance)
                         {
                             double distance = node.getDistance(RNode(position));
-                            if (!found || minDistance > distance)
+#pragma omp critical
                             {
-                                minDistance = distance;
-                                pickItem = PickItem(SessionEntityID(0,entityType,entityID),elementID,uint(j),nodeID,k);
-                                found = true;
+                                if (!found || minDistance > distance)
+                                {
+                                    minDistance = distance;
+                                    pickItem = PickItem(SessionEntityID(0,entityType,entityID),elementID,uint(j),nodeID,k);
+                                    found = true;
+                                }
                             }
                         }
                     }
@@ -2658,11 +2692,14 @@ bool Model::findPickedNode(const RR3Vector &position, const RR3Vector &direction
                         if (u <= tolerance)
                         {
                             double distance = iElement[k].getDistance(RNode(position));
-                            if (!found || minDistance > distance)
+#pragma omp critical
                             {
-                                minDistance = distance;
-                                pickItem = PickItem(SessionEntityID(0,entityType,entityID),uint(j),uint(j),k,k);
-                                found = true;
+                                if (!found || minDistance > distance)
+                                {
+                                    minDistance = distance;
+                                    pickItem = PickItem(SessionEntityID(0,entityType,entityID),uint(j),uint(j),k,k);
+                                    found = true;
+                                }
                             }
                         }
                     }

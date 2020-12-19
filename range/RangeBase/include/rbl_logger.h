@@ -12,7 +12,8 @@
 #define RBL_LOGGER_H
 
 #include <QString>
-#include <QTime>
+#include <QList>
+#include <QElapsedTimer>
 
 #include <vector>
 #include <cstdarg>
@@ -23,6 +24,24 @@
 #define R_LOG_LEVEL_DETAIL static_cast<RLogLevel>(R_MESSAGE_INFO | R_MESSAGE_NOTICE | R_MESSAGE_ERROR | R_MESSAGE_WARNING)
 #define R_LOG_LEVEL_DEBUG  static_cast<RLogLevel>(R_MESSAGE_INFO | R_MESSAGE_NOTICE | R_MESSAGE_ERROR | R_MESSAGE_WARNING | R_MESSAGE_DEBUG)
 #define R_LOG_LEVEL_TRACE  static_cast<RLogLevel>(R_MESSAGE_INFO | R_MESSAGE_NOTICE | R_MESSAGE_ERROR | R_MESSAGE_WARNING | R_MESSAGE_DEBUG | R_MESSAGE_TRACE)
+
+#define R_LOG_TRACE RLogger::trace("%s @ %d\n",__FILE__,__LINE__)
+#define R_LOG_TRACE_IN \
+{ \
+    if (RLogger::getInstance().getLevel() == R_LOG_LEVEL_TRACE) \
+    { \
+        RLogger::indent(); \
+        RLogger::trace("%s @ %d +\n",__FILE__,__LINE__); \
+    } \
+}
+#define R_LOG_TRACE_OUT \
+{ \
+    if (RLogger::getInstance().getLevel() == R_LOG_LEVEL_TRACE) \
+    { \
+        RLogger::trace("%s @ %d -\n",__FILE__,__LINE__); \
+        RLogger::unindent(false); \
+    } \
+}
 
 #define R_LOG_LEVEL_IS_VALID(_level) \
 (                                    \
@@ -74,7 +93,7 @@ class RLogger
         //! Current indent level.
         unsigned int indentLevel;
         //! Time measurement stack.
-        QList<QTime> timerStack;
+        QList<QElapsedTimer> timerStack;
 
     public:
 

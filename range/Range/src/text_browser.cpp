@@ -8,15 +8,15 @@
  *  DESCRIPTION: Text browser class definition                       *
  *********************************************************************/
 
+#include <QFontDatabase>
+
 #include "text_browser.h"
 
 TextBrowser::TextBrowser(bool hasClearButton, QWidget *parent)
   : QTextBrowser(parent)
   , hasClearButton(hasClearButton)
 {
-    QFont font("Monospace");
-    font.setStyleHint(QFont::TypeWriter);
-    this->setFont(font);
+    this->setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
 
     if (this->hasClearButton)
     {
@@ -33,11 +33,12 @@ TextBrowser::TextBrowser(bool hasClearButton, QWidget *parent)
 
 void TextBrowser::resizeEvent(QResizeEvent *event)
 {
+    QTextBrowser::resizeEvent(event);
+
     if (!this->hasClearButton)
     {
         return;
     }
-    QTextBrowser::resizeEvent(event);
 
     int bw = this->clearButton->width();
     int bh = this->clearButton->height();

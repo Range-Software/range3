@@ -60,7 +60,7 @@ std::vector<REntityGroupType> REntityGroup::getAllTypes(void)
     types[5] = R_ENTITY_GROUP_STREAM_LINE;
     types[6] = R_ENTITY_GROUP_CUT;
     types[7] = R_ENTITY_GROUP_ISO;
-    types[9] = R_ENTITY_GROUP_SCALAR_FIELD;
+    types[8] = R_ENTITY_GROUP_SCALAR_FIELD;
     return types;
 } /* REntityGroup::getAllTypes */
 

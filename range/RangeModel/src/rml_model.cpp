@@ -1348,6 +1348,15 @@ void RModel::findNodeLimits(double &xmin, double &xmax, double &ymin, double &ym
 } /* RModel::getNodeLimits */
 
 
+RLimitBox RModel::findNodeLimits() const
+{
+    double xmin, xmax, ymin, ymax, zmin, zmax;
+    this->findNodeLimits(xmin,xmax,ymin,ymax,zmin,zmax);
+
+    return RLimitBox(xmin,xmax,ymin,ymax,zmin,zmax);
+} /* RModel::getNodeLimits */
+
+
 double RModel::findNodeScale() const
 {
     double xmin,xmax,ymin,ymax,zmin,zmax;
@@ -5861,8 +5870,8 @@ bool RModel::boolDifference(uint nIterations, QList<uint> surfaceEntityIDs, uint
 bool RModel::boolIntersection(uint nIterations, QList<uint> surfaceEntityIDs)
 {
     // Backup arrays
-    std::vector <RNode> nodesBkp(this->nodes);
-    std::vector <RElement> elementsBkp(this->elements);
+    std::vector<RNode> nodesBkp(this->nodes);
+    std::vector<RElement> elementsBkp(this->elements);
     std::vector<RSurface> surfacesBkp;
     for (int i=0;i<surfaceEntityIDs.size();i++)
     {
@@ -5872,7 +5881,7 @@ bool RModel::boolIntersection(uint nIterations, QList<uint> surfaceEntityIDs)
     // Break intersected elemements
     try
     {
-        uint nIntersected = this->breakIntersectedElements(nIterations,this->findElementIDs(R_ENTITY_GROUP_SURFACE,surfaceEntityIDs.toVector().toStdVector()));
+        uint nIntersected = this->breakIntersectedElements(nIterations,this->findElementIDs(R_ENTITY_GROUP_SURFACE,std::vector<uint>(surfaceEntityIDs.begin(),surfaceEntityIDs.end())));
         if (nIntersected == 0)
         {
             RLogger::info("No intersections were found\n.");
@@ -5942,8 +5951,8 @@ bool RModel::boolIntersection(uint nIterations, QList<uint> surfaceEntityIDs)
 bool RModel::boolUnion(uint nIterations, QList<uint> surfaceEntityIDs)
 {
     // Backup arrays
-    std::vector <RNode> nodesBkp(this->nodes);
-    std::vector <RElement> elementsBkp(this->elements);
+    std::vector<RNode> nodesBkp(this->nodes);
+    std::vector<RElement> elementsBkp(this->elements);
     std::vector<RSurface> surfacesBkp;
     for (int i=0;i<surfaceEntityIDs.size();i++)
     {
@@ -5953,7 +5962,7 @@ bool RModel::boolUnion(uint nIterations, QList<uint> surfaceEntityIDs)
     // Break intersected elemements
     try
     {
-        uint nIntersected = this->breakIntersectedElements(nIterations,this->findElementIDs(R_ENTITY_GROUP_SURFACE,surfaceEntityIDs.toVector().toStdVector()));
+        uint nIntersected = this->breakIntersectedElements(nIterations,this->findElementIDs(R_ENTITY_GROUP_SURFACE,std::vector<uint>(surfaceEntityIDs.begin(),surfaceEntityIDs.end())));
         if (nIntersected == 0)
         {
             RLogger::info("No intersections were found\n.");

@@ -424,7 +424,7 @@ class Model : public RModel
         void glDraw(GLWidget *glWidget, const QVector<PickItem> &pickedItems) const;
 
         //! Return results values for picked item.
-        QMap<RVariableType,PickValue> getPickedResultsValues(const PickItem &rPickItem) const;
+        QMultiMap<RVariableType, PickValue> getPickedResultsValues(const PickItem &rPickItem) const;
 
         //! Return true if node is on edge.
         bool nodeIsOnEdge(uint nodeID) const;

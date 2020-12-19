@@ -24,10 +24,11 @@ void ActionDefinitionItem::_init(const ActionDefinitionItem *pActionDefinitionIt
         this->shortCut = pActionDefinitionItem->shortCut;
         this->icon = pActionDefinitionItem->icon;
         this->slot = pActionDefinitionItem->slot;
+        this->menuRole = pActionDefinitionItem->menuRole;
     }
 }
 
-ActionDefinitionItem::ActionDefinitionItem(ActionType type, ActionGroupType groupType, const QString &text, const QString &desc, const QString &shortCut, const QString &icon, PointerToMemberFunction slot)
+ActionDefinitionItem::ActionDefinitionItem(ActionType type, ActionGroupType groupType, const QString &text, const QString &desc, const QString &shortCut, const QString &icon, PointerToMemberFunction slot, QAction::MenuRole menuRole)
     : type(type)
     , groupType(groupType)
     , text(text)
@@ -35,6 +36,7 @@ ActionDefinitionItem::ActionDefinitionItem(ActionType type, ActionGroupType grou
     , shortCut(shortCut)
     , icon(icon)
     , slot(slot)
+    , menuRole(menuRole)
 {
     this->_init();
 }

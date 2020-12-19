@@ -10,77 +10,95 @@
 
 #include <QtCore>
 
+#include <rblib.h>
+
 #include "color.h"
 
 Color::Color()
 {
+    R_LOG_TRACE;
 }
 
 Color::Color(int r, int g, int b, int a) : QColor(r,g,b,a)
 {
+    R_LOG_TRACE;
 }
 
 Color::Color(QRgb color) : QColor(color)
 {
+    R_LOG_TRACE;
 }
 
 Color::Color(const QString &name) : QColor(name)
 {
+    R_LOG_TRACE;
 }
 
 Color::Color(const char *name) : QColor(name)
 {
+    R_LOG_TRACE;
 }
 
 Color::Color(const QColor &color) : QColor(color)
 {
+    R_LOG_TRACE;
 }
 
 Color::Color(const Color &color) : QColor(color)
 {
+    R_LOG_TRACE;
 }
 
 Color::Color(Qt::GlobalColor color) : QColor(color)
 {
+    R_LOG_TRACE;
 }
 
 Color &Color::operator=(const Color &color)
 {
+    R_LOG_TRACE_IN;
     this->QColor::operator=(color);
+    R_LOG_TRACE_OUT;
     return (*this);
 }
 
 void Color::randomize(bool fromGlobal, bool excludeWhiteAndBlack)
 {
+    R_LOG_TRACE_IN;
     if (fromGlobal)
     {
         QList<Qt::GlobalColor> colorList = this->getGlobalColors(excludeWhiteAndBlack);
         int nColors = colorList.size();
         if (nColors == 0)
         {
+            R_LOG_TRACE_OUT;
             return;
         }
-        int colorPos = int((nColors-1)*double(qrand())/double(RAND_MAX));
+        int colorPos = qRound((nColors-1)*QRandomGenerator::global()->generateDouble());
         this->operator = (colorList[colorPos]);
     }
     else
     {
-        this->setRed(int(51.0*qrand()/(RAND_MAX*5.0)));
-        this->setGreen(int(51.0*qrand()/(RAND_MAX*5.0)));
-        this->setBlue(int(51.0*qrand()/(RAND_MAX*5.0)));
+        this->setRed(qRound(255.0*QRandomGenerator::global()->generateDouble()));
+        this->setGreen(qRound(255.0*QRandomGenerator::global()->generateDouble()));
+        this->setBlue(qRound(255.0*QRandomGenerator::global()->generateDouble()));
         this->setAlpha(255);
     }
+    R_LOG_TRACE_OUT;
 }
 
 QColor Color::random(bool fromGlobal, bool excludeWhiteAndBlack)
 {
+    R_LOG_TRACE_IN;
     Color color;
     color.randomize(fromGlobal,excludeWhiteAndBlack);
+    R_LOG_TRACE_OUT;
     return QColor(color.rgba());
 }
 
 QList<Qt::GlobalColor> Color::getGlobalColors(bool excludeWhiteAndBlack)
 {
+    R_LOG_TRACE_IN;
     QList<Qt::GlobalColor> colorList;
     if (!excludeWhiteAndBlack)
     {
@@ -102,11 +120,13 @@ QList<Qt::GlobalColor> Color::getGlobalColors(bool excludeWhiteAndBlack)
     colorList.append(Qt::gray);
     colorList.append(Qt::darkGray);
     colorList.append(Qt::lightGray);
+    R_LOG_TRACE_OUT;
     return colorList;
 }
 
 QList<Qt::GlobalColor> Color::getPaintColors(void)
 {
+    R_LOG_TRACE_IN;
     QList<Qt::GlobalColor> colorList;
     colorList.append(Qt::red);
     colorList.append(Qt::green);
@@ -120,5 +140,6 @@ QList<Qt::GlobalColor> Color::getPaintColors(void)
     colorList.append(Qt::darkCyan);
     colorList.append(Qt::darkMagenta);
     colorList.append(Qt::darkYellow);
+    R_LOG_TRACE_OUT;
     return colorList;
 }

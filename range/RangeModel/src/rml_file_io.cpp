@@ -351,6 +351,80 @@ void RFileIO::writeBinary(RSaveFile &outFile, const double &dValue)
 
 
 /*********************************************************************
+ *  qsizetype                                                           *
+ *********************************************************************/
+
+
+void RFileIO::readAscii(RFile &inFile, qsizetype &sValue)
+{
+    inFile.getTextStream() >> sValue;
+    if (inFile.getTextStream().status() != QTextStream::Ok)
+    {
+        if (inFile.getTextStream().status() == QTextStream::ReadCorruptData)
+        {
+            inFile.getTextStream().resetStatus();
+            return;
+        }
+        throw RError(R_ERROR_READ_FILE,R_ERROR_REF, "Failed to read qsizetype value.");
+    }
+} /* RFileIO::readAscii */
+
+
+void RFileIO::readBinary(RFile &inFile, qsizetype &sValue)
+{
+    inFile.read((char*)&sValue,sizeof(qsizetype));
+    if (inFile.error() != RFile::NoError)
+    {
+        throw RError(R_ERROR_READ_FILE,R_ERROR_REF,"Failed to read qsizetype value.");
+    }
+} /* RFileIO::readBinary */
+
+
+void RFileIO::writeAscii(RSaveFile &outFile, const qsizetype &sValue, bool addNewLine)
+{
+    if (!addNewLine)
+    {
+        outFile.getTextStream() << sValue;
+    }
+    else
+    {
+        outFile.getTextStream() << sValue << RConstants::endl;
+    }
+    if (outFile.getTextStream().status() != QTextStream::Ok)
+    {
+        throw RError(R_ERROR_WRITE_FILE,R_ERROR_REF,"Failed to write qsizetype value.");
+    }
+} /* RFileIO::writeAscii */
+
+
+void RFileIO::writeAscii(RFile &outFile, const qsizetype &sValue, bool addNewLine)
+{
+    if (!addNewLine)
+    {
+        outFile.getTextStream() << sValue;
+    }
+    else
+    {
+        outFile.getTextStream() << sValue << RConstants::endl;
+    }
+    if (outFile.getTextStream().status() != QTextStream::Ok)
+    {
+        throw RError(R_ERROR_WRITE_FILE,R_ERROR_REF,"Failed to write qsizetype value.");
+    }
+} /* RFileIO::writeAscii */
+
+
+void RFileIO::writeBinary(RSaveFile &outFile, const qsizetype &sValue)
+{
+    outFile.write((char*)&sValue,sizeof(qsizetype));
+    if (outFile.error() != RFile::NoError)
+    {
+        throw RError(R_ERROR_WRITE_FILE,R_ERROR_REF,"Failed to write qsizetype value.");
+    }
+} /* RFileIO::writeBinary */
+
+
+/*********************************************************************
  *  QString                                                          *
  *********************************************************************/
 
@@ -1548,6 +1622,10 @@ void RFileIO::readAscii(RFile &inFile, RGLDisplayProperties &displayProperties)
     RFileIO::readAscii(inFile,displayProperties.drawLocalAxis);
     RFileIO::readAscii(inFile,displayProperties.showModelEdges);
     RFileIO::readAscii(inFile,displayProperties.showModelDimensions);
+    if (inFile.getVersion() > RVersion(1,0,0))
+    {
+        RFileIO::readAscii(inFile,displayProperties.showModelGrid);
+    }
     RFileIO::readAscii(inFile,displayProperties.showErrors);
     RFileIO::readAscii(inFile,displayProperties.bgColor);
     RFileIO::readAscii(inFile,displayProperties.bgGradient);
@@ -1567,6 +1645,10 @@ void RFileIO::readBinary(RFile &inFile, RGLDisplayProperties &displayProperties)
     RFileIO::readBinary(inFile,displayProperties.drawLocalAxis);
     RFileIO::readBinary(inFile,displayProperties.showModelEdges);
     RFileIO::readBinary(inFile,displayProperties.showModelDimensions);
+    if (inFile.getVersion() > RVersion(1,0,0))
+    {
+        RFileIO::readBinary(inFile,displayProperties.showModelGrid);
+    }
     RFileIO::readBinary(inFile,displayProperties.showErrors);
     RFileIO::readBinary(inFile,displayProperties.bgColor);
     RFileIO::readBinary(inFile,displayProperties.bgGradient);
@@ -1597,6 +1679,11 @@ void RFileIO::writeAscii(RSaveFile &outFile, const RGLDisplayProperties &display
         RFileIO::writeAscii(outFile,' ',false);
     }
     RFileIO::writeAscii(outFile,displayProperties.showModelDimensions,addNewLine);
+    if (!addNewLine)
+    {
+        RFileIO::writeAscii(outFile,' ',false);
+    }
+    RFileIO::writeAscii(outFile,displayProperties.showModelGrid,addNewLine);
     if (!addNewLine)
     {
         RFileIO::writeAscii(outFile,' ',false);
@@ -1638,6 +1725,7 @@ void RFileIO::writeBinary(RSaveFile &outFile, const RGLDisplayProperties &displa
     RFileIO::writeBinary(outFile,displayProperties.drawLocalAxis);
     RFileIO::writeBinary(outFile,displayProperties.showModelEdges);
     RFileIO::writeBinary(outFile,displayProperties.showModelDimensions);
+    RFileIO::writeBinary(outFile,displayProperties.showModelGrid);
     RFileIO::writeBinary(outFile,displayProperties.showErrors);
     RFileIO::writeBinary(outFile,displayProperties.bgColor);
     RFileIO::writeBinary(outFile,displayProperties.bgGradient);

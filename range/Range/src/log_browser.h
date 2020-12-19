@@ -11,9 +11,9 @@
 #ifndef LOG_BROWSER_H
 #define LOG_BROWSER_H
 
-#include <QTextBrowser>
+#include "text_browser.h"
 
-class LogBrowser : public QTextBrowser
+class LogBrowser : public TextBrowser
 {
 
     Q_OBJECT

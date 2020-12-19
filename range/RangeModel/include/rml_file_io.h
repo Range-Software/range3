@@ -124,6 +124,18 @@ class RFileIO
         //! Write double value.
         static void writeBinary(RSaveFile &outFile, const double &dValue);
 
+        // qsizetype
+
+        //! Read qsizetype value.
+        static void readAscii(RFile &inFile, qsizetype &sValue);
+        //! Read qsizetype value.
+        static void readBinary(RFile &inFile, qsizetype &sValue);
+        //! Write qsizetype value.
+        static void writeAscii(RSaveFile &outFile, const qsizetype &sValue, bool addNewLine = true);
+        static void writeAscii(RFile &outFile, const qsizetype &sValue, bool addNewLine = true);
+        //! Write qsizetype value.
+        static void writeBinary(RSaveFile &outFile, const qsizetype &sValue);
+
         // QString
 
         //! Read string value.

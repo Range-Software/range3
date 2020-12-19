@@ -295,7 +295,7 @@ void ValueTable::onImportFromFile(void)
         while (!in.atEnd())
         {
             QString line = in.readLine();
-            QStringList stringList = line.split(' ',QString::SkipEmptyParts);
+            QStringList stringList = line.split(' ',Qt::SkipEmptyParts);
 
             QVector2D value;
             for (int i=0;i<stringList.size();i++)

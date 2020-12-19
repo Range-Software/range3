@@ -10,6 +10,7 @@
 
 #include <QFile>
 #include <QTextStream>
+#include <QRegularExpression>
 
 #include <rblib.h>
 
@@ -508,8 +509,8 @@ void RModelRaw::readTextStream(QTextStream &textSTream, double tolerance)
 
         if (!line.isEmpty())
         {
-            QRegExp rx("[,; ]");// match a comma or semicolon or a space
-            QStringList list = line.split(rx, QString::SkipEmptyParts);
+            QRegularExpression rx("[,; ]");// match a comma or semicolon or a space
+            QStringList list = line.split(rx, Qt::SkipEmptyParts);
 
             RRVector coordinates(list.size(),0.0);
 

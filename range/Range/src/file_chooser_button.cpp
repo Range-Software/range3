@@ -26,7 +26,7 @@ FileChooserButton::FileChooserButton(const QString &labelText, Type type, QWidge
     , filter(filter)
 {
     QHBoxLayout *layout = new QHBoxLayout;
-    layout->setMargin(0);
+    layout->setContentsMargins(0,0,0,0);
     this->setLayout(layout);
 
     QIcon icon(":/icons/file/pixmaps/range-open.svg");

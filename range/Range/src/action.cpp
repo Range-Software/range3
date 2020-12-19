@@ -93,6 +93,7 @@ Action::Action(ActionType type, MainWindow *mainWindow, QObject *parent) :
                 this->setIcon(QIcon(actionDefinition->getIcon(this->type).toUtf8().constData()));
                 this->setIconVisibleInMenu(true);
             }
+            this->setMenuRole(actionDefinition->getMenuRole(this->type));
             QObject::connect(this, &Action::triggered, this, actionDefinition->getSlot(this->type));
             break;
         }
@@ -122,6 +123,7 @@ void Action::disable()
 
 void Action::onSessionNew()
 {
+    R_LOG_TRACE_IN;
     int response = QMessageBox::question(this->mainWindow,
                                          tr("Close session"),
                                          tr("Are you sure you want to close current session?"),
@@ -132,33 +134,35 @@ void Action::onSessionNew()
         Session::getInstance().clear();
         this->onSessionSaveAs();
     }
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onSessionOpen()
 {
+    R_LOG_TRACE_IN;
     QString fileExtension = Session::getDefaultFileExtension();
     QString dialogDesc = "Range model files (*." + fileExtension + ");;Any files (*)";
     QString fileName = QFileDialog::getOpenFileName(this->mainWindow,
                                                     tr("Open session"),
                                                     MainSettings::getInstance().getDataDir(),
                                                     dialogDesc);
-    if (fileName.isEmpty())
+    if (!fileName.isEmpty())
     {
-        return;
+        try
+        {
+            Session::getInstance().read(fileName);
+        }
+        catch (const RError &error)
+        {
+            RLogger::error("Failed to read the session file \'%s\'. ERROR: %s\n",fileName.toUtf8().constData(),error.getMessage().toUtf8().constData());
+        }
     }
-
-    try
-    {
-        Session::getInstance().read(fileName);
-    }
-    catch (const RError &error)
-    {
-        RLogger::error("Failed to read the session file \'%s\'. ERROR: %s\n",fileName.toUtf8().constData(),error.getMessage().toUtf8().constData());
-    }
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onSessionSave()
 {
+    R_LOG_TRACE_IN;
     QDir dataDir(MainSettings::getInstance().getDataDir());
     QString dialogDesc = "Range session files (*.ras);;Any files (*)";
 
@@ -171,16 +175,16 @@ void Action::onSessionSave()
                                                 fileName,
                                                 dialogDesc);
     }
-    if (fileName.isEmpty())
+    if (!fileName.isEmpty())
     {
-        return;
+        Session::getInstance().write(fileName,true);
     }
-
-    Session::getInstance().write(fileName,true);
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onSessionSaveAs()
 {
+    R_LOG_TRACE_IN;
     QDir sessionDir(MainSettings::getInstance().getSessionDir());
     QString dialogDesc = "Range session files (*.ras);;Any files (*)";
 
@@ -193,16 +197,16 @@ void Action::onSessionSaveAs()
                                             tr("Save session"),
                                             fileName,
                                             dialogDesc);
-    if (fileName.isEmpty())
+    if (!fileName.isEmpty())
     {
-        return;
+        Session::getInstance().write(fileName,true);
     }
-
-    Session::getInstance().write(fileName,true);
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onSessionClose()
 {
+    R_LOG_TRACE_IN;
     int response = QMessageBox::question(this->mainWindow,
                                          tr("Close session"),
                                          tr("Are you sure you want to close current session?"),
@@ -212,15 +216,19 @@ void Action::onSessionClose()
     {
         Session::getInstance().clear();
     }
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onModelNew()
 {
+    R_LOG_TRACE_IN;
     NewModelDialog(this->mainWindow).exec();
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onModelOpen()
 {
+    R_LOG_TRACE_IN;
     QString binaryExtension = RModel::getDefaultFileExtension(true);
     QString asciiExtension = RModel::getDefaultFileExtension(false);
     QString dialogDesc = "All supported files (*." + binaryExtension + " *." + asciiExtension + " *.tmsh *.bmsh *.raw *.stl);;"
@@ -233,53 +241,53 @@ void Action::onModelOpen()
                                                     tr("Open model"),
                                                     MainSettings::getInstance().getDataDir(),
                                                     dialogDesc);
-    if (fileName.isEmpty())
+    if (!fileName.isEmpty())
     {
-        return;
-    }
+        ModelIOType modelIOType;
 
-    ModelIOType modelIOType;
+        QString extension = RFileManager::getExtension(fileName).toLower();
+        if (extension == "tmsh" || extension == "bmsh")
+        {
+            modelIOType = MODEL_IO_MSH_IMPORT;
+        }
+        else if (extension == "raw")
+        {
+            modelIOType = MODEL_IO_RAW_IMPORT;
+        }
+        else if (extension == "stl")
+        {
+            modelIOType = MODEL_IO_STL_IMPORT;
+        }
+        else
+        {
+            modelIOType = MODEL_IO_OPEN;
+        }
 
-    QString extension = RFileManager::getExtension(fileName).toLower();
-    if (extension == "tmsh" || extension == "bmsh")
-    {
-        modelIOType = MODEL_IO_MSH_IMPORT;
+        JobManager::getInstance().submit(new ModelIO(modelIOType, fileName));
     }
-    else if (extension == "raw")
-    {
-        modelIOType = MODEL_IO_RAW_IMPORT;
-    }
-    else if (extension == "stl")
-    {
-        modelIOType = MODEL_IO_STL_IMPORT;
-    }
-    else
-    {
-        modelIOType = MODEL_IO_OPEN;
-    }
-
-    JobManager::getInstance().submit(new ModelIO(modelIOType, fileName));
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onModelSave()
 {
+    R_LOG_TRACE_IN;
     foreach (uint selectedModelID,Session::getInstance().getSelectedModelIDs())
     {
         Model &rModel = Session::getInstance().getModel(selectedModelID);
 
         QString fileName = ModelIO::getModelSaveName(MainSettings::getInstance(),this->mainWindow,rModel);
 
-        if (fileName.isEmpty())
+        if (!fileName.isEmpty())
         {
-            continue;
+            JobManager::getInstance().submit(new ModelIO(MODEL_IO_SAVE, fileName, &rModel));
         }
-
-        JobManager::getInstance().submit(new ModelIO(MODEL_IO_SAVE, fileName, &rModel));
     }
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onModelSaveAs()
 {
+    R_LOG_TRACE_IN;
     QList<uint> selectedModelIDs = Session::getInstance().getSelectedModelIDs();
 
     for (int i=0;i<selectedModelIDs.size();i++)
@@ -288,17 +296,17 @@ void Action::onModelSaveAs()
 
         QString fileName = ModelIO::getModelSaveName(MainSettings::getInstance(),this->mainWindow,model,true);
 
-        if (fileName.isEmpty())
+        if (!fileName.isEmpty())
         {
-            continue;
+            JobManager::getInstance().submit(new ModelIO(MODEL_IO_SAVE, fileName, &model));
         }
-
-        JobManager::getInstance().submit(new ModelIO(MODEL_IO_SAVE, fileName, &model));
     }
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onModelExportMsh()
 {
+    R_LOG_TRACE_IN;
     QDir dataDir(MainSettings::getInstance().getDataDir());
     QList<uint> selectedModelIDs = Session::getInstance().getSelectedModelIDs();
     for (int i=0;i<selectedModelIDs.size();i++)
@@ -309,17 +317,17 @@ void Action::onModelExportMsh()
                                                 tr("Export model to MSH file"),
                                                 fileName,
                                                 "Range mesh files (*.tmsh *.bmsh);;Any files (*)");
-        if (fileName.isEmpty())
+        if (!fileName.isEmpty())
         {
-            continue;
+            JobManager::getInstance().submit(new ModelIO(MODEL_IO_MSH_EXPORT, fileName, pModel));
         }
-
-        JobManager::getInstance().submit(new ModelIO(MODEL_IO_MSH_EXPORT, fileName, pModel));
     }
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onModelExportRaw()
 {
+    R_LOG_TRACE_IN;
     QDir dataDir(MainSettings::getInstance().getDataDir());
     QList<uint> selectedModelIDs = Session::getInstance().getSelectedModelIDs();
     for (int i=0;i<selectedModelIDs.size();i++)
@@ -330,17 +338,17 @@ void Action::onModelExportRaw()
                                                 tr("Export model to RAW file"),
                                                 fileName,
                                                 "RAW triangle files (*.raw);;Any files (*)");
-        if (fileName.isEmpty())
+        if (!fileName.isEmpty())
         {
-            continue;
+            JobManager::getInstance().submit(new ModelIO(MODEL_IO_RAW_EXPORT, fileName, pModel));
         }
-
-        JobManager::getInstance().submit(new ModelIO(MODEL_IO_RAW_EXPORT, fileName, pModel));
     }
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onModelExportStlAscii()
 {
+    R_LOG_TRACE_IN;
     QDir dataDir(MainSettings::getInstance().getDataDir());
     QList<uint> selectedModelIDs = Session::getInstance().getSelectedModelIDs();
     for (int i=0;i<selectedModelIDs.size();i++)
@@ -351,17 +359,17 @@ void Action::onModelExportStlAscii()
                                                 tr("Export model to STL (ascii) file"),
                                                 fileName,
                                                 "STL triangle files (*.stl);;Any files (*)");
-        if (fileName.isEmpty())
+        if (!fileName.isEmpty())
         {
-            continue;
+            JobManager::getInstance().submit(new ModelIO(MODEL_IO_STL_ASCII_EXPORT, fileName, pModel));
         }
-
-        JobManager::getInstance().submit(new ModelIO(MODEL_IO_STL_ASCII_EXPORT, fileName, pModel));
     }
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onModelExportStlBinary()
 {
+    R_LOG_TRACE_IN;
     QDir dataDir(MainSettings::getInstance().getDataDir());
     QList<uint> selectedModelIDs = Session::getInstance().getSelectedModelIDs();
     for (int i=0;i<selectedModelIDs.size();i++)
@@ -372,59 +380,66 @@ void Action::onModelExportStlBinary()
                                                 tr("Export model to STL (binary) file"),
                                                 fileName,
                                                 "STL triangle files (*.stl);;Any files (*)");
-        if (fileName.isEmpty())
+        if (!fileName.isEmpty())
         {
-            continue;
+            JobManager::getInstance().submit(new ModelIO(MODEL_IO_STL_BINARY_EXPORT, fileName, pModel));
         }
-
-        JobManager::getInstance().submit(new ModelIO(MODEL_IO_STL_BINARY_EXPORT, fileName, pModel));
     }
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onModelClose()
 {
+    R_LOG_TRACE_IN;
     int response = QMessageBox::question(this->mainWindow,
                                          tr("Close model?"),
                                          tr("Are you sure you want to close selected models?"));
-    if (response != QMessageBox::Yes)
+    if (response == QMessageBox::Yes)
     {
-        return;
+        QList<uint> modelIDs = Session::getInstance().getSelectedModelIDs();
+        for (int i=0;i<modelIDs.size();i++)
+        {
+            RLogger::info("Closing model \'%s\'\n",Session::getInstance().getModel(uint(modelIDs.size()-i-1)).getName().toUtf8().constData());
+            Session::getInstance().removeModel(modelIDs[modelIDs.size()-i-1]);
+        }
     }
-    QList<uint> modelIDs = Session::getInstance().getSelectedModelIDs();
-    for (int i=0;i<modelIDs.size();i++)
-    {
-        RLogger::info("Closing model \'%s\'\n",Session::getInstance().getModel(uint(modelIDs.size()-i-1)).getName().toUtf8().constData());
-        Session::getInstance().removeModel(modelIDs[modelIDs.size()-i-1]);
-    }
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onModelReloadResults()
 {
+    R_LOG_TRACE_IN;
     QList<uint> modelIDs = Session::getInstance().getSelectedModelIDs();
     for (int i=0;i<modelIDs.size();i++)
     {
         Job *updateJob = new ModelIO(MODEL_IO_UPDATE, Session::getInstance().getModel(modelIDs[i]).getFileName(), &Session::getInstance().getModel(modelIDs[i]));
         JobManager::getInstance().submit(updateJob);
     }
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onModelRename()
 {
+    R_LOG_TRACE_IN;
     QList<uint> modelIDs = Session::getInstance().getSelectedModelIDs();
     for (int i=0;i<modelIDs.size();i++)
     {
         RenameModelDialog(modelIDs.at(i)).exec();
     }
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onModelDropResults()
 {
+    R_LOG_TRACE_IN;
     DropResultsDialog dropResultsDialog(this->mainWindow);
     dropResultsDialog.exec();
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onMaterialNew()
 {
+    R_LOG_TRACE_IN;
     QString materialNameBase = tr("New material");
     QString materialName = materialNameBase;
     uint nTries = 0;
@@ -436,72 +451,74 @@ void Action::onMaterialNew()
     RMaterial material = RMaterial::generateDefault();
     material.setName(materialName);
     MaterialList::getInstance().addMaterial(material,true);
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onMaterialImport()
 {
+    R_LOG_TRACE_IN;
     QString fileName = QFileDialog::getOpenFileName(this->mainWindow,
                                                     tr("Select material file"),
                                                     MainSettings::getInstance().getHomeDir(),
                                                     "Material files (*.tmat);;Any files (*)");
-    if (fileName.isEmpty())
+    if (!fileName.isEmpty())
     {
-        return;
-    }
+        RLogger::info("Importing legacy material file \'%s\'\n",fileName.toUtf8().constData());
 
-    RLogger::info("Importing legacy material file \'%s\'\n",fileName.toUtf8().constData());
-
-    RMaterial material;
-    try
-    {
-        material.import(fileName);
-    }
-    catch (const RError &error)
-    {
-        RLogger::error("Failed to import legacy material file \'%s\'. %s",
-                       fileName.toUtf8().constData(),
-                       error.getMessage().toUtf8().constData());
-        return;
-    }
-    bool isNew = true;
-    if (MaterialList::getInstance().containName(material.getName()))
-    {
-        int response = QMessageBox::question(this->mainWindow,
-                                             tr("Overwrite?"),
-                                             tr("Material with such name already exists. Do you want to overwrite it?"));
-        if (response != QMessageBox::Yes)
+        RMaterial material;
+        try
         {
+            material.import(fileName);
+        }
+        catch (const RError &error)
+        {
+            RLogger::error("Failed to import legacy material file \'%s\'. %s",
+                           fileName.toUtf8().constData(),
+                           error.getMessage().toUtf8().constData());
             return;
         }
-        isNew = false;
+        bool isNew = true;
+        if (MaterialList::getInstance().containName(material.getName()))
+        {
+            int response = QMessageBox::question(this->mainWindow,
+                                                 tr("Overwrite?"),
+                                                 tr("Material with such name already exists. Do you want to overwrite it?"));
+            if (response != QMessageBox::Yes)
+            {
+                return;
+            }
+            isNew = false;
+        }
+        MaterialList::getInstance().addMaterial(material,isNew);
     }
-    MaterialList::getInstance().addMaterial(material,isNew);
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onMaterialDelete()
 {
-    if (MaterialList::getInstance().getSelectedMaterialName().length() == 0)
+    R_LOG_TRACE_IN;
+    if (MaterialList::getInstance().getSelectedMaterialName().length() > 0)
     {
-        return;
-    }
+        QString question = QString("Are you sure you want to delete material <b>")
+                         + MaterialList::getInstance().getSelectedMaterialName()
+                         + QString("</b>?");
 
-    QString question = QString("Are you sure you want to delete material <b>")
-                     + MaterialList::getInstance().getSelectedMaterialName()
-                     + QString("</b>?");
-
-    int response = QMessageBox::question(this->mainWindow,
-                                         tr("Delete selected material?"),
-                                  question,
-                                  QMessageBox::Yes | QMessageBox::No,
-                                  QMessageBox::No);
-    if (response == QMessageBox::Yes)
-    {
-        MaterialList::getInstance().remove(MaterialList::getInstance().getSelectedMaterialName());
+        int response = QMessageBox::question(this->mainWindow,
+                                             tr("Delete selected material?"),
+                                             question,
+                                             QMessageBox::Yes | QMessageBox::No,
+                                             QMessageBox::No);
+        if (response == QMessageBox::Yes)
+        {
+            MaterialList::getInstance().remove(MaterialList::getInstance().getSelectedMaterialName());
+        }
     }
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onGeometryUndo()
 {
+    R_LOG_TRACE_IN;
     QList<uint> selectedModelIDs = Session::getInstance().getSelectedModelIDs();
     for (int i=0;i<selectedModelIDs.size();i++)
     {
@@ -513,10 +530,12 @@ void Action::onGeometryUndo()
         }
         Session::getInstance().setModelChanged(selectedModelIDs[i]);
     }
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onGeometryRedo()
 {
+    R_LOG_TRACE_IN;
     QList<uint> selectedModelIDs = Session::getInstance().getSelectedModelIDs();
     for (int i=0;i<selectedModelIDs.size();i++)
     {
@@ -528,65 +547,89 @@ void Action::onGeometryRedo()
         }
         Session::getInstance().setModelChanged(selectedModelIDs[i]);
     }
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onGeometryDrawPoint()
 {
+    R_LOG_TRACE_IN;
     Session::getInstance().getDrawEngine()->addObject(new DrawEnginePoint);
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onGeometryDrawLine()
 {
+    R_LOG_TRACE_IN;
     Session::getInstance().getDrawEngine()->addObject(new DrawEngineLine);
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onGeometryDrawTriangle()
 {
+    R_LOG_TRACE_IN;
     Session::getInstance().getDrawEngine()->addObject(new DrawEngineTriangle);
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onGeometryDrawQuadrilateral()
 {
+    R_LOG_TRACE_IN;
     Session::getInstance().getDrawEngine()->addObject(new DrawEngineQuadrilateral);
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onGeometryDrawCircle()
 {
+    R_LOG_TRACE_IN;
     Session::getInstance().getDrawEngine()->addObject(new DrawEngineCircle);
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onGeometryDrawEllipse()
 {
+    R_LOG_TRACE_IN;
     Session::getInstance().getDrawEngine()->addObject(new DrawEngineEllipse);
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onGeometryDrawTetrahedron()
 {
+    R_LOG_TRACE_IN;
     Session::getInstance().getDrawEngine()->addObject(new DrawEngineTetrahedron);
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onGeometryDrawHexahedron()
 {
+    R_LOG_TRACE_IN;
     Session::getInstance().getDrawEngine()->addObject(new DrawEngineHexahedron);
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onGeometryDrawCylinder()
 {
+    R_LOG_TRACE_IN;
     Session::getInstance().getDrawEngine()->addObject(new DrawEngineCylinder);
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onGeometryDrawSphere()
 {
+    R_LOG_TRACE_IN;
     Session::getInstance().getDrawEngine()->addObject(new DrawEngineSphere);
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onGeometryDrawRaw()
 {
+    R_LOG_TRACE_IN;
     Session::getInstance().getDrawEngine()->addObject(new DrawEngineRaw);
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onGeometryCreateElement()
 {
+    R_LOG_TRACE_IN;
     PickList &pickList = Session::getInstance().getPickList();
 
     if (pickList.getNItems(PICK_ITEM_NODE) == 0)
@@ -595,6 +638,7 @@ void Action::onGeometryCreateElement()
                                  tr("Create element"),
                                  tr("No node selected."),
                                  QMessageBox::Close);
+        R_LOG_TRACE_OUT;
         return;
     }
 
@@ -660,6 +704,7 @@ void Action::onGeometryCreateElement()
                                          tr("Create element"),
                                          tr("Too many nodes selected."),
                                          QMessageBox::Close);
+                R_LOG_TRACE_OUT;
                 return;
             }
         }
@@ -694,10 +739,12 @@ void Action::onGeometryCreateElement()
         modelAction->addAction(modelActionInput);
         JobManager::getInstance().submit(modelAction);
     }
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onGeometryFindSliverElements()
 {
+    R_LOG_TRACE_IN;
     QList<uint> modelIDs = Session::getInstance().getSelectedModelIDs();
 
     for (int i=0;i<modelIDs.size();i++)
@@ -705,10 +752,12 @@ void Action::onGeometryFindSliverElements()
         FindSliverElementsDialog findliverElementsDialog(modelIDs[i],this->mainWindow);
         findliverElementsDialog.exec();
     }
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onGeometryFixSliverElements()
 {
+    R_LOG_TRACE_IN;
     QList<uint> modelIDs = Session::getInstance().getSelectedModelIDs();
 
     for (int i=0;i<modelIDs.size();i++)
@@ -716,10 +765,12 @@ void Action::onGeometryFixSliverElements()
         FixSliverElementsDialog fixSliverElementsDialog(modelIDs[i],this->mainWindow);
         fixSliverElementsDialog.exec();
     }
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onGeometryFindIntersectedElements()
 {
+    R_LOG_TRACE_IN;
     QList<uint> modelIDs = Session::getInstance().getSelectedModelIDs();
 
     for (int i=0;i<modelIDs.size();i++)
@@ -732,10 +783,12 @@ void Action::onGeometryFindIntersectedElements()
         modelAction->addAction(modelActionInput);
         JobManager::getInstance().submit(modelAction);
     }
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onGeometryBreakIntersectedElements()
 {
+    R_LOG_TRACE_IN;
     QList<uint> modelIDs = Session::getInstance().getSelectedModelIDs();
 
     for (int i=0;i<modelIDs.size();i++)
@@ -751,6 +804,7 @@ void Action::onGeometryBreakIntersectedElements()
 //                                      QMessageBox::No,
 //                                      QMessageBox::Yes) == QMessageBox::No)
 //            {
+//                R_LOG_TRACE_OUT;
 //                return;
 //            }
 //        }
@@ -758,10 +812,12 @@ void Action::onGeometryBreakIntersectedElements()
         BreakIntersectedElementsDialog bieDialog(modelIDs[i],this->mainWindow);
         bieDialog.exec();
     }
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onGeometryBoolUnion()
 {
+    R_LOG_TRACE_IN;
     QList<SessionEntityID> selectedEntityIDs = Session::getInstance().getSelectedEntityIDs();
     QList<uint> selectedModelIDs = Session::getInstance().getSelectedModelIDs();
 
@@ -782,6 +838,7 @@ void Action::onGeometryBoolUnion()
             QMessageBox::warning(this->mainWindow,
                               tr("Too few surfaces selected"),
                               tr("To perform union boolean operation at least two surfaces must be selected."));
+            R_LOG_TRACE_OUT;
             return;
         }
 
@@ -794,6 +851,7 @@ void Action::onGeometryBoolUnion()
                                      tr("Surface is not closed"),
                                      tr("Surface") + QString(" <b>") + rModel.getSurface(entityIDs[j].getEid()).getName()  + QString("</b> ") + tr("is not closed.<br/>")
                                      + tr("To perform union boolean operation all selected surfaces must be closed."));
+                R_LOG_TRACE_OUT;
                 return;
             }
         }
@@ -801,10 +859,12 @@ void Action::onGeometryBoolUnion()
         BoolUnionDialog boolUnionDialog(selectedModelIDs[i],entityIDs,this->mainWindow);
         boolUnionDialog.exec();
     }
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onGeometryBoolDifference()
 {
+    R_LOG_TRACE_IN;
     QList<SessionEntityID> selectedEntityIDs = Session::getInstance().getSelectedEntityIDs();
     QList<uint> selectedModelIDs = Session::getInstance().getSelectedModelIDs();
 
@@ -825,6 +885,7 @@ void Action::onGeometryBoolDifference()
             QMessageBox::warning(this->mainWindow,
                               tr("Too few surfaces selected"),
                               tr("To perform difference boolean operation at least two surfaces must be selected."));
+            R_LOG_TRACE_OUT;
             return;
         }
 
@@ -837,6 +898,7 @@ void Action::onGeometryBoolDifference()
                                      tr("Surface is not closed"),
                                      tr("Surface") + QString(" <b>") + rModel.getSurface(entityIDs[j].getEid()).getName()  + QString("</b> ") + tr("is not closed.<br/>")
                                      + tr("To perform difference boolean operation all selected surfaces must be closed."));
+                R_LOG_TRACE_OUT;
                 return;
             }
         }
@@ -844,10 +906,12 @@ void Action::onGeometryBoolDifference()
         BoolDifferenceDialog boolDifferenceDialog(selectedModelIDs[i],entityIDs,this->mainWindow);
         boolDifferenceDialog.exec();
     }
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onGeometryBoolIntersection()
 {
+    R_LOG_TRACE_IN;
     QList<SessionEntityID> selectedEntityIDs = Session::getInstance().getSelectedEntityIDs();
     QList<uint> selectedModelIDs = Session::getInstance().getSelectedModelIDs();
 
@@ -868,6 +932,7 @@ void Action::onGeometryBoolIntersection()
             QMessageBox::warning(this->mainWindow,
                               tr("Too few surfaces selected"),
                               tr("To perform intersection boolean operation at least two surfaces must be selected."));
+            R_LOG_TRACE_OUT;
             return;
         }
 
@@ -880,6 +945,7 @@ void Action::onGeometryBoolIntersection()
                                      tr("Surface is not closed"),
                                      tr("Surface") + QString(" <b>") + rModel.getSurface(entityIDs[j].getEid()).getName()  + QString("</b> ") + tr("is not closed.<br/>")
                                      + tr("To perform intersection boolean operation all selected surfaces must be closed."));
+                R_LOG_TRACE_OUT;
                 return;
             }
         }
@@ -887,10 +953,12 @@ void Action::onGeometryBoolIntersection()
         BoolIntersectionDialog boolIntersectionDialog(selectedModelIDs[i],entityIDs,this->mainWindow);
         boolIntersectionDialog.exec();
     }
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onGeometryMergeNearNodes()
 {
+    R_LOG_TRACE_IN;
     QList<uint> selectedModelIDs = Session::getInstance().getSelectedModelIDs();
 
     for (int i=0;i<selectedModelIDs.size();i++)
@@ -898,10 +966,12 @@ void Action::onGeometryMergeNearNodes()
         MergeNearNodesDialog mergeNearNodesDialog(selectedModelIDs[i],this->mainWindow);
         mergeNearNodesDialog.exec();
     }
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onGeometryMoveNode()
 {
+    R_LOG_TRACE_IN;
     PickList &pickList = Session::getInstance().getPickList();
 
     if (pickList.getNItems(PICK_ITEM_NODE) == 0)
@@ -910,6 +980,7 @@ void Action::onGeometryMoveNode()
                                  tr("Move node"),
                                  tr("No node selected."),
                                  QMessageBox::Close);
+        R_LOG_TRACE_OUT;
         return;
     }
 
@@ -940,10 +1011,12 @@ void Action::onGeometryMoveNode()
             moveNodeDialog.exec();
         }
     }
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onGeometryRemoveNode()
 {
+    R_LOG_TRACE_IN;
     PickList &pickList = Session::getInstance().getPickList();
 
     if (pickList.getNItems(PICK_ITEM_NODE) == 0)
@@ -952,6 +1025,7 @@ void Action::onGeometryRemoveNode()
                                  tr("Remove nodes"),
                                  tr("No node selected."),
                                  QMessageBox::Close);
+        R_LOG_TRACE_OUT;
         return;
     }
     if (QMessageBox::question(this->mainWindow,
@@ -960,6 +1034,7 @@ void Action::onGeometryRemoveNode()
                                QMessageBox::No,
                                QMessageBox::Yes) == QMessageBox::No)
     {
+        R_LOG_TRACE_OUT;
         return;
     }
 
@@ -992,10 +1067,12 @@ void Action::onGeometryRemoveNode()
         modelAction->addAction(modelActionInput);
         JobManager::getInstance().submit(modelAction);
     }
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onGeometryRemoveNodeAndCloseHole()
 {
+    R_LOG_TRACE_IN;
     PickList &pickList = Session::getInstance().getPickList();
 
     if (pickList.getNItems(PICK_ITEM_NODE) == 0)
@@ -1004,6 +1081,7 @@ void Action::onGeometryRemoveNodeAndCloseHole()
                                  tr("Remove nodes"),
                                  tr("No node selected."),
                                  QMessageBox::Close);
+        R_LOG_TRACE_OUT;
         return;
     }
     if (QMessageBox::question(this->mainWindow,
@@ -1012,6 +1090,7 @@ void Action::onGeometryRemoveNodeAndCloseHole()
                                QMessageBox::No,
                                QMessageBox::Yes) == QMessageBox::No)
     {
+        R_LOG_TRACE_OUT;
         return;
     }
 
@@ -1044,10 +1123,12 @@ void Action::onGeometryRemoveNodeAndCloseHole()
         modelAction->addAction(modelActionInput);
         JobManager::getInstance().submit(modelAction);
     }
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onGeometryRemoveElement()
 {
+    R_LOG_TRACE_IN;
     PickList &pickList = Session::getInstance().getPickList();
 
     if (pickList.getNItems(PICK_ITEM_ELEMENT) == 0)
@@ -1056,6 +1137,7 @@ void Action::onGeometryRemoveElement()
                                  tr("Remove elements"),
                                  tr("No element selected."),
                                  QMessageBox::Close);
+        R_LOG_TRACE_OUT;
         return;
     }
     if (QMessageBox::question(this->mainWindow,
@@ -1064,6 +1146,7 @@ void Action::onGeometryRemoveElement()
                                QMessageBox::No,
                                QMessageBox::Yes) == QMessageBox::No)
     {
+        R_LOG_TRACE_OUT;
         return;
     }
 
@@ -1095,10 +1178,12 @@ void Action::onGeometryRemoveElement()
         modelAction->addAction(modelActionInput);
         JobManager::getInstance().submit(modelAction);
     }
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onGeometryLineGenerateFromEdges()
 {
+    R_LOG_TRACE_IN;
     QList<uint> modelIDs = Session::getInstance().getSelectedModelIDs();
 
     for (int i=0;i<modelIDs.size();i++)
@@ -1111,16 +1196,20 @@ void Action::onGeometryLineGenerateFromEdges()
         modelAction->addAction(modelActionInput);
         JobManager::getInstance().submit(modelAction);
     }
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onGeometrySurfaceMark()
 {
+    R_LOG_TRACE_IN;
     MarkEntityDialog markEntityDialog(R_ENTITY_GROUP_SURFACE,this->mainWindow);
     markEntityDialog.exec();
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onGeometrySurfaceSwapElementNormal()
 {
+    R_LOG_TRACE_IN;
     PickList &pickList = Session::getInstance().getPickList();
 
     if (pickList.getNItems(PICK_ITEM_ELEMENT) == 0)
@@ -1129,6 +1218,7 @@ void Action::onGeometrySurfaceSwapElementNormal()
                                  tr("Swap element normal"),
                                  tr("No element selected."),
                                  QMessageBox::Close);
+        R_LOG_TRACE_OUT;
         return;
     }
     QList<uint> modelIDs = pickList.getModelIDs();
@@ -1158,10 +1248,12 @@ void Action::onGeometrySurfaceSwapElementNormal()
         modelAction->addAction(modelActionInput);
         JobManager::getInstance().submit(modelAction);
     }
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onGeometrySurfaceSwapNormals()
 {
+    R_LOG_TRACE_IN;
     QList<SessionEntityID> selectedEntityIDs = Session::getInstance().getSelectedEntityIDs();
     QList<uint> selectedModelIDs = Session::getInstance().getSelectedModelIDs();
 
@@ -1185,10 +1277,12 @@ void Action::onGeometrySurfaceSwapNormals()
         modelAction->addAction(modelActionInput);
         JobManager::getInstance().submit(modelAction);
     }
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onGeometrySurfaceSyncNormals()
 {
+    R_LOG_TRACE_IN;
     QList<uint> selectedModelIDs = Session::getInstance().getSelectedModelIDs();
 
     for (int i=0;i<selectedModelIDs.size();i++)
@@ -1201,10 +1295,12 @@ void Action::onGeometrySurfaceSyncNormals()
         modelAction->addAction(modelActionInput);
         JobManager::getInstance().submit(modelAction);
     }
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onGeometrySurfaceCloseHole()
 {
+    R_LOG_TRACE_IN;
     PickList &pickList = Session::getInstance().getPickList();
 
     if (pickList.getNItems(PICK_ITEM_HOLE_ELEMENT) == 0)
@@ -1213,6 +1309,7 @@ void Action::onGeometrySurfaceCloseHole()
                                  tr("Close surface hole"),
                                  tr("No edge selected."),
                                  QMessageBox::Close);
+        R_LOG_TRACE_OUT;
         return;
     }
 
@@ -1242,10 +1339,12 @@ void Action::onGeometrySurfaceCloseHole()
         modelAction->addAction(modelActionInput);
         JobManager::getInstance().submit(modelAction);
     }
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onGeometrySurfaceCoarsen()
 {
+    R_LOG_TRACE_IN;
     QList<SessionEntityID> selectedEntityIDs = Session::getInstance().getSelectedEntityIDs();
     QList<uint> selectedModelIDs = Session::getInstance().getSelectedModelIDs();
 
@@ -1264,10 +1363,12 @@ void Action::onGeometrySurfaceCoarsen()
         CoarsenSurfaceDialog coarsenSurfaceDialog(selectedModelIDs[i],entityIDs,this->mainWindow);
         coarsenSurfaceDialog.exec();
     }
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onGeometryVectorFieldCreate()
 {
+    R_LOG_TRACE_IN;
     QList<uint> modelIDs = Session::getInstance().getSelectedModelIDs();
 
     for (int i=0;i<modelIDs.size();i++)
@@ -1275,25 +1376,28 @@ void Action::onGeometryVectorFieldCreate()
         VectorFieldDialog vectorFieldDialog(modelIDs[i],this->mainWindow);
         vectorFieldDialog.exec();
     }
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onGeometryVectorFieldEdit()
 {
+    R_LOG_TRACE_IN;
     QList<SessionEntityID> entityIDs = Session::getInstance().getSelectedEntityIDs();
 
     for (int i=0;i<entityIDs.size();i++)
     {
-        if (entityIDs[i].getType() != R_ENTITY_GROUP_VECTOR_FIELD)
+        if (entityIDs[i].getType() == R_ENTITY_GROUP_VECTOR_FIELD)
         {
-            continue;
+            VectorFieldDialog vectorFieldDialog(entityIDs[i].getMid(),entityIDs[i].getEid(),this->mainWindow);
+            vectorFieldDialog.exec();
         }
-        VectorFieldDialog vectorFieldDialog(entityIDs[i].getMid(),entityIDs[i].getEid(),this->mainWindow);
-        vectorFieldDialog.exec();
     }
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onGeometryScalarFieldCreate()
 {
+    R_LOG_TRACE_IN;
     QList<uint> modelIDs = Session::getInstance().getSelectedModelIDs();
 
     for (int i=0;i<modelIDs.size();i++)
@@ -1301,10 +1405,12 @@ void Action::onGeometryScalarFieldCreate()
         ScalarFieldDialog scalarFieldDialog(modelIDs[i],this->mainWindow);
         scalarFieldDialog.exec();
     }
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onGeometryScalarFieldEdit()
 {
+    R_LOG_TRACE_IN;
     QList<SessionEntityID> entityIDs = Session::getInstance().getSelectedEntityIDs();
 
     for (int i=0;i<entityIDs.size();i++)
@@ -1316,10 +1422,12 @@ void Action::onGeometryScalarFieldEdit()
         ScalarFieldDialog scalarFieldDialog(entityIDs[i].getMid(),entityIDs[i].getEid(),this->mainWindow);
         scalarFieldDialog.exec();
     }
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onGeometryStreamLineCreate()
 {
+    R_LOG_TRACE_IN;
     QList<uint> modelIDs = Session::getInstance().getSelectedModelIDs();
 
     for (int i=0;i<modelIDs.size();i++)
@@ -1327,10 +1435,12 @@ void Action::onGeometryStreamLineCreate()
         StreamLineDialog streamLineDialog(modelIDs[i],this->mainWindow);
         streamLineDialog.exec();
     }
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onGeometryStreamLineEdit()
 {
+    R_LOG_TRACE_IN;
     QList<SessionEntityID> entityIDs = Session::getInstance().getSelectedEntityIDs();
 
     for (int i=0;i<entityIDs.size();i++)
@@ -1342,10 +1452,12 @@ void Action::onGeometryStreamLineEdit()
         StreamLineDialog streamLineDialog(entityIDs[i].getMid(),entityIDs[i].getEid(),this->mainWindow);
         streamLineDialog.exec();
     }
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onGeometryCutCreate()
 {
+    R_LOG_TRACE_IN;
     QList<uint> modelIDs = Session::getInstance().getSelectedModelIDs();
 
     for (int i=0;i<modelIDs.size();i++)
@@ -1353,10 +1465,12 @@ void Action::onGeometryCutCreate()
         CutDialog *cutDialog = new CutDialog(modelIDs[i],RConstants::eod,this->mainWindow);
         cutDialog->show();
     }
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onGeometryCutEdit()
 {
+    R_LOG_TRACE_IN;
     QList<SessionEntityID> entityIDs = Session::getInstance().getSelectedEntityIDs();
 
     for (int i=0;i<entityIDs.size();i++)
@@ -1368,10 +1482,12 @@ void Action::onGeometryCutEdit()
         CutDialog *cutDialog = new CutDialog(entityIDs[i].getMid(),entityIDs[i].getEid(),this->mainWindow);
         cutDialog->show();
     }
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onGeometryIsoCreate()
 {
+    R_LOG_TRACE_IN;
     QList<uint> modelIDs = Session::getInstance().getSelectedModelIDs();
 
     for (int i=0;i<modelIDs.size();i++)
@@ -1379,10 +1495,12 @@ void Action::onGeometryIsoCreate()
         IsoDialog isoDialog(modelIDs[i],this->mainWindow);
         isoDialog.exec();
     }
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onGeometryIsoEdit()
 {
+    R_LOG_TRACE_IN;
     QList<SessionEntityID> entityIDs = Session::getInstance().getSelectedEntityIDs();
 
     for (int i=0;i<entityIDs.size();i++)
@@ -1394,22 +1512,28 @@ void Action::onGeometryIsoEdit()
         IsoDialog isoDialog(entityIDs[i].getMid(),entityIDs[i].getEid(),this->mainWindow);
         isoDialog.exec();
     }
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onGeometryEntityMerge()
 {
+    R_LOG_TRACE_IN;
     MergeEntityDialog mergeEntityDialog(R_ENTITY_GROUP_ELEMENT,this->mainWindow);
     mergeEntityDialog.exec();
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onGeometryEntityRemove()
 {
+    R_LOG_TRACE_IN;
     RemoveEntityDialog removeEntityDialog(R_ENTITY_GROUP_ALL,this->mainWindow);
     removeEntityDialog.exec();
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onGeometryGenerateTetrahedra()
 {
+    R_LOG_TRACE_IN;
     QList<uint> modelIDs = Session::getInstance().getSelectedModelIDs();
 
     for (int i=0;i<modelIDs.size();i++)
@@ -1417,15 +1541,19 @@ void Action::onGeometryGenerateTetrahedra()
         MeshGeneratorDialog meshGeneratorDialog(modelIDs[i],this->mainWindow);
         meshGeneratorDialog.exec();
     }
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onGeometryTransform()
 {
+    R_LOG_TRACE_IN;
     MainWindow::getInstance()->showTransformGeometryWidget();
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onGeometryDevExportSliverElements()
 {
+    R_LOG_TRACE_IN;
     QList<uint> modelIDs = Session::getInstance().getSelectedModelIDs();
 
     for (int i=0;i<modelIDs.size();i++)
@@ -1438,10 +1566,12 @@ void Action::onGeometryDevExportSliverElements()
         modelAction->addAction(modelActionInput);
         JobManager::getInstance().submit(modelAction);
     }
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onGeometryDevExportIntersectedElements()
 {
+    R_LOG_TRACE_IN;
     foreach (uint modelID, Session::getInstance().getSelectedModelIDs())
     {
         ModelActionInput modelActionInput(modelID);
@@ -1452,10 +1582,12 @@ void Action::onGeometryDevExportIntersectedElements()
         modelAction->addAction(modelActionInput);
         JobManager::getInstance().submit(modelAction);
     }
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onGeometryDevPurgeUnusedNodes()
 {
+    R_LOG_TRACE_IN;
     foreach (uint modelID, Session::getInstance().getSelectedModelIDs())
     {
         ModelActionInput modelActionInput(modelID);
@@ -1466,10 +1598,12 @@ void Action::onGeometryDevPurgeUnusedNodes()
         modelAction->addAction(modelActionInput);
         JobManager::getInstance().submit(modelAction);
     }
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onGeometryDevPurgeUnusedElements()
 {
+    R_LOG_TRACE_IN;
     foreach (uint modelID, Session::getInstance().getSelectedModelIDs())
     {
         ModelActionInput modelActionInput(modelID);
@@ -1480,10 +1614,12 @@ void Action::onGeometryDevPurgeUnusedElements()
         modelAction->addAction(modelActionInput);
         JobManager::getInstance().submit(modelAction);
     }
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onGeometryDevRemoveDuplicateNodes()
 {
+    R_LOG_TRACE_IN;
     foreach (uint modelID, Session::getInstance().getSelectedModelIDs())
     {
         ModelActionInput modelActionInput(modelID);
@@ -1494,10 +1630,12 @@ void Action::onGeometryDevRemoveDuplicateNodes()
         modelAction->addAction(modelActionInput);
         JobManager::getInstance().submit(modelAction);
     }
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onGeometryDevRemoveDuplicateElements()
 {
+    R_LOG_TRACE_IN;
     foreach (uint modelID, Session::getInstance().getSelectedModelIDs())
     {
         ModelActionInput modelActionInput(modelID);
@@ -1508,10 +1646,12 @@ void Action::onGeometryDevRemoveDuplicateElements()
         modelAction->addAction(modelActionInput);
         JobManager::getInstance().submit(modelAction);
     }
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onGeometryDevPointInsideSurface()
 {
+    R_LOG_TRACE_IN;
     QList<SessionEntityID> selectedEntityIDs = Session::getInstance().getSelectedEntityIDs();
     QList<uint> selectedModelIDs = Session::getInstance().getSelectedModelIDs();
 
@@ -1534,6 +1674,7 @@ void Action::onGeometryDevPointInsideSurface()
             QMessageBox::warning(this->mainWindow,
                               tr("Too few surfaces selected"),
                               tr("To perform point inside check at least one surface must be selected."));
+            R_LOG_TRACE_OUT;
             return;
         }
 
@@ -1543,16 +1684,19 @@ void Action::onGeometryDevPointInsideSurface()
             QMessageBox::warning(this->mainWindow,
                               tr("Unclosed surfaces"),
                               tr("Selected surfaces do not form closed surface."));
+            R_LOG_TRACE_OUT;
             return;
         }
 
         PointInsideSurfaceDialog pointInsideSurfaceDialog(selectedModelIDs[i],entityIDs,this->mainWindow);
         pointInsideSurfaceDialog.exec();
     }
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onGeometryDevTetrahedralizeeSurface()
 {
+    R_LOG_TRACE_IN;
     QList<SessionEntityID> selectedEntityIDs = Session::getInstance().getSelectedEntityIDs();
     QList<uint> selectedModelIDs = Session::getInstance().getSelectedModelIDs();
 
@@ -1575,6 +1719,7 @@ void Action::onGeometryDevTetrahedralizeeSurface()
             QMessageBox::warning(this->mainWindow,
                               tr("Too few surfaces selected"),
                               tr("To perform point inside check at least one surface must be selected."));
+            R_LOG_TRACE_OUT;
             return;
         }
 
@@ -1584,6 +1729,7 @@ void Action::onGeometryDevTetrahedralizeeSurface()
             QMessageBox::warning(this->mainWindow,
                               tr("Unclosed surfaces"),
                               tr("Selected surfaces do not form closed surface."));
+            R_LOG_TRACE_OUT;
             return;
         }
 
@@ -1595,10 +1741,12 @@ void Action::onGeometryDevTetrahedralizeeSurface()
         modelAction->addAction(modelActionInput);
         JobManager::getInstance().submit(modelAction);
     }
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onGeometryDevConsolidate()
 {
+    R_LOG_TRACE_IN;
     QList<uint> selectedModelIDs = Session::getInstance().getSelectedModelIDs();
 
     for (int i=0;i<selectedModelIDs.size();i++)
@@ -1611,10 +1759,12 @@ void Action::onGeometryDevConsolidate()
         modelAction->addAction(modelActionInput);
         JobManager::getInstance().submit(modelAction);
     }
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onProblemTaskFlow()
 {
+    R_LOG_TRACE_IN;
     QList<uint> modelIDs = Session::getInstance().getSelectedModelIDs();
 
     for (int i=0;i<modelIDs.size();i++)
@@ -1622,10 +1772,12 @@ void Action::onProblemTaskFlow()
         ProblemTaskDialog problemTaskDialog(modelIDs[i],this->mainWindow);
         problemTaskDialog.exec();
     }
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onProblemSolverSetup()
 {
+    R_LOG_TRACE_IN;
     QList<uint> modelIDs = Session::getInstance().getSelectedModelIDs();
 
     for (int i=0;i<modelIDs.size();i++)
@@ -1633,10 +1785,12 @@ void Action::onProblemSolverSetup()
         MatrixSolverConfigDialog matrixSolverConfigDialog(modelIDs[i],this->mainWindow);
         matrixSolverConfigDialog.exec();
     }
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onProblemDefineMonitoringPoints()
 {
+    R_LOG_TRACE_IN;
     QList<uint> modelIDs = Session::getInstance().getSelectedModelIDs();
 
     for (int i=0;i<modelIDs.size();i++)
@@ -1644,16 +1798,19 @@ void Action::onProblemDefineMonitoringPoints()
         MonitoringPointsDialog monitoringPointsDialog(modelIDs[i],this->mainWindow);
         monitoringPointsDialog.exec();
     }
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onProblemReset()
 {
+    R_LOG_TRACE_IN;
     if (QMessageBox::question(this->mainWindow,
                                tr("Reset problem setup"),
                                tr("Are you sure you want to reset all problem setup including boundary, initial and environment conditions?"),
                                QMessageBox::No,
                                QMessageBox::Yes) == QMessageBox::No)
     {
+        R_LOG_TRACE_OUT;
         return;
     }
 
@@ -1668,13 +1825,15 @@ void Action::onProblemReset()
         Session::getInstance().getModel(modelIDs[i]).clearEntityVariableData();
         Session::getInstance().setModelChanged(modelIDs[i]);
     }
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onSolverStart()
 {
+    R_LOG_TRACE_IN;
     QList<uint> modelIDs = Session::getInstance().getSelectedModelIDs();
 
-    // First perform checks whether setup is correct.
+    // First perform checks whether the setup is correct.
     for (int i=0;i<modelIDs.size();i++)
     {
         Model &rModel = Session::getInstance().getModel(modelIDs[i]);
@@ -1686,16 +1845,19 @@ void Action::onSolverStart()
             solverStartDialog.exec();
         }
     }
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onSolverStop()
 {
+    R_LOG_TRACE_IN;
     if (QMessageBox::question(this->mainWindow,
                                tr("Stop solver"),
                                tr("Are you sure you want to stop all running solvers?"),
                                QMessageBox::No,
                                QMessageBox::Yes) == QMessageBox::No)
     {
+        R_LOG_TRACE_OUT;
         return;
     }
 
@@ -1707,16 +1869,19 @@ void Action::onSolverStop()
     {
         RLogger::error("Could not stop the solver (%s).\n",error.getMessage().toUtf8().constData());
     }
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onSolverKill()
 {
+    R_LOG_TRACE_IN;
     if (QMessageBox::question(this->mainWindow,
                                tr("Kill solver"),
                                tr("Are you sure you want to kill all running solvers?"),
                                QMessageBox::No,
                                QMessageBox::Yes) == QMessageBox::No)
     {
+        R_LOG_TRACE_OUT;
         return;
     }
 
@@ -1728,10 +1893,12 @@ void Action::onSolverKill()
     {
         RLogger::error("Could not kill the solver (%s).\n",error.getMessage().toUtf8().constData());
     }
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onReportModelStatistics()
 {
+    R_LOG_TRACE_IN;
     QList<uint> modelIDs = Session::getInstance().getSelectedModelIDs();
 
     for (int i=0;i<modelIDs.size();i++)
@@ -1739,10 +1906,12 @@ void Action::onReportModelStatistics()
         ModelStatisticsDialog modelStatisticsDialog(modelIDs[i],this->mainWindow);
         modelStatisticsDialog.exec();
     }
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onReportSolverLog()
 {
+    R_LOG_TRACE_IN;
     QList<uint> modelIDs = Session::getInstance().getSelectedModelIDs();
 
     for (int i=0;i<modelIDs.size();i++)
@@ -1758,10 +1927,12 @@ void Action::onReportSolverLog()
             logBrowserDialog.exec();
         }
     }
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onReportConvergenceGraph()
 {
+    R_LOG_TRACE_IN;
     QList<uint> modelIDs = Session::getInstance().getSelectedModelIDs();
 
     for (int i=0;i<modelIDs.size();i++)
@@ -1800,10 +1971,12 @@ void Action::onReportConvergenceGraph()
             convergenceGraphDialog->show();
         }
     }
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onReportMonitoringPointGraph()
 {
+    R_LOG_TRACE_IN;
     QList<uint> modelIDs = Session::getInstance().getSelectedModelIDs();
 
     for (int i=0;i<modelIDs.size();i++)
@@ -1819,10 +1992,12 @@ void Action::onReportMonitoringPointGraph()
             monitoringPointGraphDialog.exec();
         }
     }
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onReportCreateReport()
 {
+    R_LOG_TRACE_IN;
     QList<uint> modelIDs = Session::getInstance().getSelectedModelIDs();
 
     for (int i=0;i<modelIDs.size();i++)
@@ -1830,37 +2005,47 @@ void Action::onReportCreateReport()
         ReportDialog reportDialog(modelIDs[i],this->mainWindow);
         reportDialog.exec();
     }
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onHelp()
 {
+    R_LOG_TRACE_IN;
     HelpCenterDialog *pHelpCenterDialog = new HelpCenterDialog(this->mainWindow);
     pHelpCenterDialog->setModal(false);
     pHelpCenterDialog->show();
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onQuit()
 {
+    R_LOG_TRACE_IN;
     this->mainWindow->close();
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onApplicationSettings()
 {
+    R_LOG_TRACE_IN;
     ApplicationSettingsDialog applicationSettingsDialog(MainSettings::getInstance().getApplicationSettings(),
                                                         this->mainWindow);
     applicationSettingsDialog.exec();
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onUpdate()
 {
+    R_LOG_TRACE_IN;
     UpdateDialog updateDialog(RRASession::getInstance().getAvailableSoftwareVersion(),
                               RRASession::getInstance().getAvailableSoftwareLink(),
                               this->mainWindow);
     updateDialog.exec();
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onAbout()
 {
+    R_LOG_TRACE_IN;
     QString title = tr("About");
     QString body = QString("<h1>") + RVendor::name + QString(" ") + QString::number(RVendor::version.getMajor()) + QString("</h1>")
                  + QString("<h2>") + RVendor::description + QString("</h2>")
@@ -1871,17 +2056,19 @@ void Action::onAbout()
                  + QString("<a href=\"") + RVendor::www + QString("\">") + RVendor::www + QString("</a>");
 
     QMessageBox::about(this->mainWindow,title,body);
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onAboutQt()
 {
-    QString title = tr("About Qt");
-
-    QMessageBox::aboutQt(this->mainWindow,title);
+    R_LOG_TRACE_IN;
+    QMessageBox::aboutQt(this->mainWindow,tr("About Qt"));
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onLicense()
 {
+    R_LOG_TRACE_IN;
     QString licenseFileName(MainSettings::getInstance().findLicenseFileName());
 
     try
@@ -1907,10 +2094,12 @@ void Action::onLicense()
     {
         RLogger::error("Failed to display license from file \'%s\'.\n",licenseFileName.toUtf8().constData());
     }
+    R_LOG_TRACE_OUT;
 }
 
 void Action::onReleaseNotes()
 {
+    R_LOG_TRACE_IN;
     QString releaseNotesFileName(MainSettings::getInstance().findReleaseNotesFileName());
 
     try
@@ -1936,5 +2125,6 @@ void Action::onReleaseNotes()
     {
         RLogger::error("Failed to display release notes from file \'%s\'.\n",releaseNotesFileName.toUtf8().constData());
     }
+    R_LOG_TRACE_OUT;
 }
 
