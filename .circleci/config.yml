@@ -83,5 +83,5 @@ workflows:
       - build-centos8
       - build-fedora33
       - build-opensusetumbleweed
-      - build-debian10
       - build-ubuntu2010
+#      - build-debian10
