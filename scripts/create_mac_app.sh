@@ -156,6 +156,7 @@ packageMatDir="${packageAppDir}/Contents/Resources/materials"
 packageDatDir="${packageAppDir}/Contents/Resources/data"
 packageHlpDir="${packageAppDir}/Contents/Resources/help"
 packagePixDir="${packageAppDir}/Contents/Resources/pixmaps"
+packagePlist="${packageAppDir}/Contents/Info.plist"
 
 packageRangeSolverBin="${packageBinDir}/RangeSolver${versionSuffix}"
 
@@ -193,6 +194,14 @@ macdeployqt $packageAppDir -executable=$packageRangeSolverBin -verbose=2
 if [ $? -ne 0 ]
 then
     echo_e "Failed to run macdeployqt"
+    exit 1
+fi
+
+plutil -replace CFBundleIdentifier -string "Range-Software" $packagePlist && \
+plutil -replace CFBundleVersion -string "$version" $packagePlist
+if [ $? -ne 0 ]
+then
+    echo_e "Failed to edit application plist file"
     exit 1
 fi
 
