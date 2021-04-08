@@ -83,18 +83,9 @@ MainWindow::MainWindow (QWidget *parent)
     this->createMaterialDock();
     this->createResultsDock();
 
-    this->setTabPosition(Qt::LeftDockWidgetArea,QTabWidget::West);
-    this->setTabPosition(Qt::RightDockWidgetArea,QTabWidget::East);
+    this->setDockOptions(QMainWindow::ForceTabbedDocks | QMainWindow::VerticalTabs);
 
-    this->tabifyDockWidget(this->dockModel,this->dockRecords);
-    this->tabifyDockWidget(this->dockRecords,this->dockDocuments);
     this->dockModel->raise();
-
-    this->tabifyDockWidget(this->dockProblem,this->dockBc);
-    this->tabifyDockWidget(this->dockBc,this->dockIc);
-    this->tabifyDockWidget(this->dockIc,this->dockEc);
-    this->tabifyDockWidget(this->dockEc,this->dockMaterial);
-    this->tabifyDockWidget(this->dockMaterial,this->dockResults);
     this->dockProblem->raise();
 
     this->restoreGeometry(MainSettings::getInstance().value("mainWindow/geometry").toByteArray());
