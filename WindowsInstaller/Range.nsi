@@ -1,5 +1,7 @@
 ;NSIS Modern User Interface
 
+Unicode True
+
 ;--------------------------------
 ;Include Modern UI
 
@@ -130,7 +132,7 @@ SectionGroup "Range Software" SecRange
         File ${BUILD_DIR}\Range\Range.exe
         File ${BUILD_DIR}\RangeSolver\RangeSolver.exe
         File ${BUILD_KIT_DIR}\*.dll
-		File ..\ffmpeg\ffmpeg-3.4.1-win64\bin\*.dll
+		File ..\ffmpeg\ffmpeg-4.3.2-win64\bin\*.dll
 	    ${If} ${VC_REDIST} != ""
             ;Check if we have redistributable installed
             Call  CheckRedistributableInstalled

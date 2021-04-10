@@ -38,8 +38,8 @@ class VideoOutput : public QObject
         AVCodec *videoCodec;
         SwsContext *swsContext;
         AVFrame *frame;
-        AVPicture srcPicture;
-        AVPicture dstPicture;
+        AVFrame srcPicture;
+        AVFrame dstPicture;
         AVPixelFormat streamPixFmt;
         uint streamFrameRate;
         int swsFlags;
@@ -85,7 +85,7 @@ class VideoOutput : public QObject
         bool openVideo(AVCodec *codec, AVStream *st);
 
         //! Writes video frame.
-        bool writeVideoFrame(const AVPicture &src,
+        bool writeVideoFrame(const AVFrame &src,
                              int srcWidth,
                              int srcHeight,
                              AVFormatContext *inFormatContext,

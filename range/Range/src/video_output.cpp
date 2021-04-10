@@ -12,6 +12,10 @@
 
 #include <rblib.h>
 
+extern "C" {
+#include <libavutil/imgutils.h>
+}
+
 #include "video_output.h"
 
 // Macro redefinition since original does not compile in c++
@@ -34,8 +38,6 @@ VideoOutput::VideoOutput(QObject *parent)
     , width(640)
     , height(480)
 {
-    // Init FFmpeg
-    av_register_all();
 }
 
 VideoOutput::~VideoOutput()
@@ -92,7 +94,7 @@ bool VideoOutput::openMediaFile(int width, int height, const QString &filename)
     {
         this->frame->pts = 0;
     }
-    return avpicture_alloc(&this->srcPicture, AV_PIX_FMT_RGBA, width, height) >= 0;
+    return av_image_alloc(this->srcPicture.data, this->srcPicture.linesize, width, height, AV_PIX_FMT_RGBA, 1);
 }
 
 bool VideoOutput::closeMediaFile()
@@ -257,18 +259,19 @@ bool VideoOutput::openVideo(AVCodec *codec, AVStream *stream)
         return false;
     }
     // Allocate the encoded raw picture.
-    ret = avpicture_alloc(&this->dstPicture, c->pix_fmt, c->width, c->height);
+    ret = av_image_alloc(this->dstPicture.data, this->dstPicture.linesize, c->width, c->height, c->pix_fmt, 1);
     if (ret < 0)
     {
         RLogger::error("Could not allocate picture: %s\n", av_err2str(ret));
         return false;
     }
     // copy data and linesize picture pointers to frame
-    *((AVPicture *)this->frame) = this->dstPicture;
+    memcpy(this->frame->data,this->dstPicture.data,sizeof(uint8_t*)*AV_NUM_DATA_POINTERS);
+    memcpy(this->frame->linesize,this->dstPicture.linesize,sizeof(int)*AV_NUM_DATA_POINTERS);
     return true;
 }
 
-bool VideoOutput::writeVideoFrame(const AVPicture &src,
+bool VideoOutput::writeVideoFrame(const AVFrame &src,
                                   int srcWidth,
                                   int srcHeight,
                                   AVFormatContext *inFormatContext,

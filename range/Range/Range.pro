@@ -463,9 +463,8 @@ CONFIG(debug, debug|release) {
 
 win* {
     LIBS += \
-        -L../../ffmpeg/ffmpeg-3.4.1-win64/bin/ \
-        -L../../ffmpeg/ffmpeg-3.4.1-win64/lib/
-    #QMAKE_LFLAGS += /OPT:NOREF
+            -L../../ffmpeg/ffmpeg-4.3.2-win64/bin/ \
+            -L../../ffmpeg/ffmpeg-4.3.2-win64/lib/
 }
 
 LIBS += \
@@ -496,7 +495,7 @@ INCLUDEPATH += $${_PRO_FILE_PWD_}/../TetGen
 INCLUDEPATH += $${_PRO_FILE_PWD_}/../RangeBase/include
 INCLUDEPATH += $${_PRO_FILE_PWD_}/../RangeModel/include
 INCLUDEPATH += $${_PRO_FILE_PWD_}/../RangeSolverLib/include
-INCLUDEPATH += $${_PRO_FILE_PWD_}/../../ffmpeg/ffmpeg-3.4.1-win64/include
+INCLUDEPATH += $${_PRO_FILE_PWD_}/../../ffmpeg/ffmpeg-4.3.2-win64/include
 
 win32 {
     LIBS += -lopengl32
