@@ -63,8 +63,7 @@ GLWidget::GLWidget(uint modelID, QWidget *parent)
       useGlCullFace(true)
 {
     R_LOG_TRACE_IN;
-//    this->desktopDevicePixelRatio = QApplication::desktop()->devicePixelRatio();
-    this->desktopDevicePixelRatio = int(MainWindow::getInstance()->screen()->devicePixelRatio());
+    this->desktopDevicePixelRatio = MainWindow::getInstance()->devicePixelRatio();
 
     this->setFocusPolicy(Qt::StrongFocus);
     this->setAutoFillBackground(false);
