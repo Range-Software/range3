@@ -10,6 +10,17 @@
 
 #include "rml_file_header.h"
 
+static const char* fileTypeDesc [] =
+{
+
+    "None",
+    "Model",
+    "Material",
+    "ViewFactorMatrix",
+    "DisplayProperties",
+    "Link"
+};
+
 void RFileHeader::_init(const RFileHeader *pHeader)
 {
     if (pHeader)
@@ -73,4 +84,9 @@ const QString &RFileHeader::getInformation(void) const
 void RFileHeader::setInformation(const QString &information)
 {
     this->information = information;
+}
+
+QString RFileHeader::toString() const
+{
+    return "{ Version: " + this->version.toString() + ", File type: " + fileTypeDesc[this->type] + ", Information: " + this->information + " }";
 }

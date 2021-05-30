@@ -77,6 +77,9 @@ class RFileHeader
         //! Set file type.
         void setInformation ( const QString &information );
 
+        //! Convert to printable string.
+        QString toString() const;
+
         //! Allow RFileIO to access private members.
         friend class RFileIO;
 

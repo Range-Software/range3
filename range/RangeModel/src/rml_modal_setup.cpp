@@ -118,6 +118,16 @@ void RModalSetup::setFrequency(double modeFrequency)
     this->frequency = modeFrequency;
 }
 
+QString RModalSetup::toString() const
+{
+    return "{ Modal method: " + RModalSetup::getMethodName(this->method)
+            + ", Number of iterations: " + QString::number(this->nIterations)
+            + ", Number of modes to extract: " + QString::number(this->nModesToExtract)
+            + ", Convergence value: " + QString::number(this->convergenceValue)
+            + ", Mode: " + QString::number(this->mode)
+            + ", Frequency: " + QString::number(this->frequency) + " }";
+}
+
 const QString &RModalSetup::getMethodName(RModalMethod modalMethod)
 {
     R_ERROR_ASSERT(R_MODAL_METHOD_TYPE_IS_VALID(modalMethod));

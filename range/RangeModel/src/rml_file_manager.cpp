@@ -138,7 +138,7 @@ QString RFileManager::getFileNameWithOutTimeStep(const QString &fileName, unsign
     {
         for (uint i=0;i<numberWidth;i++)
         {
-            if (!fileName[i+dashPos].isDigit())
+            if (!fileName[i+dashPos+1].isDigit())
             {
                 return fileName;
             }
@@ -252,6 +252,8 @@ void RFileManager::writeLink(const QString &linkFileName, const QString &targetF
     if (binary)
     {
         RLogger::info("Writing binary link file \'%s\'\n",linkFileName.toUtf8().constData());
+        RLogger::debug("Version: \'%s\'\n",version.toString().toUtf8().constData());
+        RLogger::debug("Target: \'%s\'\n",relativeTargetFileName.toUtf8().constData());
 
         RSaveFile linkFile(linkFileName,RSaveFile::BINARY);
 
@@ -259,7 +261,6 @@ void RFileManager::writeLink(const QString &linkFileName, const QString &targetF
         {
             throw RError(R_ERROR_OPEN_FILE,R_ERROR_REF,"Failed to open the file \'%s\'.",linkFileName.toUtf8().constData());
         }
-
         RFileIO::writeBinary(linkFile,RFileHeader(R_FILE_TYPE_LINK,version,relativeTargetFileName));
 
         linkFile.commit();
@@ -267,6 +268,8 @@ void RFileManager::writeLink(const QString &linkFileName, const QString &targetF
     else
     {
         RLogger::info("Writing ascii link file \'%s\'\n",linkFileName.toUtf8().constData());
+        RLogger::debug("Version: \'%s\'\n",version.toString().toUtf8().constData());
+        RLogger::debug("Target: \'%s\'\n",relativeTargetFileName.toUtf8().constData());
 
         RSaveFile linkFile(linkFileName,RSaveFile::ASCII);
 

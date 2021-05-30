@@ -107,6 +107,9 @@ class RModalSetup
         //! Set current mode frequency.
         void setFrequency(double frequency);
 
+        //! Convert to printable string.
+        QString toString() const;
+
         //! Return modal analysis method name.
         static const QString &getMethodName(RModalMethod method);
 
