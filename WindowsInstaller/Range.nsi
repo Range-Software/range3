@@ -74,7 +74,7 @@ Var StartMenuFolder
 ; Build KIT
 
 !define BUILD_KIT "MSVC2019"
-!define BUILD_KIT_VERSION "5.15.2"
+!define BUILD_KIT_VERSION "6.1.0"
 !define BUILD_KIT_DIR bin-${BUILD_KIT}\${BUILD_KIT_VERSION}
 !define VC_REDIST "VC_redist.x64.exe"
 
