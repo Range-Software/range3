@@ -2,6 +2,7 @@
 Version 3.2.6
 
 * ALL: Upgrade to TetGen 1.6.0
+* ALL: Upgrade to Qt6
 
 ------------------------------------------------------------------
 Version 3.2.5

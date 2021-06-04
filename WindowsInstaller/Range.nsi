@@ -20,7 +20,7 @@ Unicode True
 
 ;Name and file
 Name "Range Software Package"
-OutFile "range-3.2.5-installer.exe"
+OutFile "range-3.2.6-installer.exe"
 
 ;Icon "range.ico"
 ;UninstallIcon "range.ico"
