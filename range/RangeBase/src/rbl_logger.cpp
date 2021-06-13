@@ -20,7 +20,7 @@
 #include "rbl_error.h"
 
 
-void RLogger::_init (const RLogger *pLogger)
+void RLogger::_init(const RLogger *pLogger)
 {
     if (pLogger)
     {
@@ -36,8 +36,9 @@ void RLogger::_init (const RLogger *pLogger)
 } /* RLogger::_init */
 
 
-RLogger::RLogger (RLogLevel logLevel) : logHandler(0)
-                                      , indentLevel(0)
+RLogger::RLogger(RLogLevel logLevel)
+    : logHandler(0)
+    , indentLevel(0)
 {
     this->_init ();
     this->setLevel (logLevel);
@@ -47,18 +48,18 @@ RLogger::RLogger (RLogLevel logLevel) : logHandler(0)
 } /* RLogger::RLogger */
 
 
-RLogger::RLogger (const RLogger &logger)
+RLogger::RLogger(const RLogger &logger)
 {
     this->_init (&logger);
 } /* RLogger::RLogger (copy) */
 
 
-RLogger::~RLogger ()
+RLogger::~RLogger()
 {
 } /* RLogger::~RLogger */
 
 
-RLogger & RLogger::operator = (const RLogger &logger)
+RLogger & RLogger::operator =(const RLogger &logger)
 {
     this->_init (&logger);
     return (*this);
@@ -72,7 +73,7 @@ RLogger & RLogger::getInstance()
 } /* rbl_logger_get_default_instance */
 
 
-RLogLevel RLogger::getLevel (void) const
+RLogLevel RLogger::getLevel() const
 {
     RLogLevel tmpLevel;
     RLocker::lock();
@@ -82,7 +83,7 @@ RLogLevel RLogger::getLevel (void) const
 } /* RLogger::getLevel */
 
 
-void RLogger::setLevel (RLogLevel level)
+void RLogger::setLevel(RLogLevel level)
 {
     R_ERROR_ASSERT(R_LOG_LEVEL_IS_VALID (level));
 
@@ -92,7 +93,7 @@ void RLogger::setLevel (RLogLevel level)
 } /* RLogger::setLevel */
 
 
-bool RLogger::getHalted (void) const
+bool RLogger::getHalted() const
 {
     bool tmpHalted;
     RLocker::lock();
@@ -102,7 +103,7 @@ bool RLogger::getHalted (void) const
 } /* RLogger::getHalted */
 
 
-void RLogger::setHalted (bool halt)
+void RLogger::setHalted(bool halt)
 {
     RLocker::lock();
     this->halted = halt;
@@ -114,7 +115,7 @@ void RLogger::setHalted (bool halt)
 } /* RLogger::setHalted */
 
 
-bool RLogger::getPrintTimeEnabled (void) const
+bool RLogger::getPrintTimeEnabled() const
 {
     bool tmpTime;
     RLocker::lock();
@@ -124,7 +125,7 @@ bool RLogger::getPrintTimeEnabled (void) const
 } /* RLogger::getPrintTimeEnabled */
 
 
-void RLogger::setPrintTimeEnabled (bool printTime)
+void RLogger::setPrintTimeEnabled(bool printTime)
 {
     RLocker::lock();
     this->printTime = printTime;
@@ -132,7 +133,7 @@ void RLogger::setPrintTimeEnabled (bool printTime)
 } /* RLogger::setPrintTimeEnabled */
 
 
-bool RLogger::getAddNewLine (void) const
+bool RLogger::getAddNewLine() const
 {
     bool tmpNewLine;
     RLocker::lock();
@@ -142,7 +143,7 @@ bool RLogger::getAddNewLine (void) const
 } /* RLogger::getAddNewLine */
 
 
-void RLogger::setAddNewLine (bool addNewLine)
+void RLogger::setAddNewLine(bool addNewLine)
 {
     RLocker::lock();
     this->addNewLine = addNewLine;
@@ -150,7 +151,7 @@ void RLogger::setAddNewLine (bool addNewLine)
 } /* RLogger::setAddNewLine */
 
 
-const QString RLogger::getFile (void) const
+const QString RLogger::getFile() const
 {
     QString tmpFileName;
     RLocker::lock();
@@ -160,7 +161,7 @@ const QString RLogger::getFile (void) const
 } /* RLogger::getFile */
 
 
-void RLogger::setFile (const QString & logFileName)
+void RLogger::setFile(const QString & logFileName)
 {
     RLocker::lock();
     this->logFileName = logFileName;
@@ -168,7 +169,7 @@ void RLogger::setFile (const QString & logFileName)
 } /* RLogger::setFile */
 
 
-RLogHandler RLogger::getLogHandler (void) const
+RLogHandler RLogger::getLogHandler() const
 {
     RLogHandler tmpHandler;
     RLocker::lock();
@@ -178,7 +179,7 @@ RLogHandler RLogger::getLogHandler (void) const
 } /* RLogger::getLogHandler */
 
 
-void RLogger::setLogHandler (RLogHandler logHandler)
+void RLogger::setLogHandler(RLogHandler logHandler)
 {
     RLocker::lock();
     this->logHandler = logHandler;
@@ -186,7 +187,7 @@ void RLogger::setLogHandler (RLogHandler logHandler)
 } /* RLogger::setLogHandler */
 
 
-unsigned int RLogger::getIndentLevel (void) const
+unsigned int RLogger::getIndentLevel() const
 {
     unsigned int tmpLevel;
     RLocker::lock();
@@ -196,7 +197,7 @@ unsigned int RLogger::getIndentLevel (void) const
 } /* RLogger::getIndentLevel */
 
 
-void RLogger::setIndentLevel (unsigned int indentLevel)
+void RLogger::setIndentLevel(unsigned int indentLevel)
 {
     RLocker::lock();
     this->indentLevel = indentLevel;
@@ -204,7 +205,7 @@ void RLogger::setIndentLevel (unsigned int indentLevel)
 } /* RLogger::setIndentLevel */
 
 
-void RLogger::increaseIndent (void)
+void RLogger::increaseIndent()
 {
     RLocker::lock();
     this->indentLevel++;
@@ -212,7 +213,7 @@ void RLogger::increaseIndent (void)
 } /* RLogger::increaseIndent */
 
 
-void RLogger::decreaseIndent (void)
+void RLogger::decreaseIndent()
 {
     RLocker::lock();
     if (this->indentLevel > 0)
@@ -223,8 +224,7 @@ void RLogger::decreaseIndent (void)
 } /* RLogger::decreaseIndent */
 
 
-void RLogger::printToFile (time_t         pTime,
-                           const QString &cppString) const
+void RLogger::printToFile(time_t pTime, const QString &cppString) const
 {
     if (this->logFileName.isEmpty())
     {
@@ -244,7 +244,9 @@ void RLogger::printToFile (time_t         pTime,
     if (this->printTime)
     {
         char buffer [80];
-        strftime (buffer,80,"%Y/%m/%d - %H:%M:%S > ",localtime (&pTime));
+        struct tm timeinfo;
+        localtime_s(&timeinfo, &pTime);
+        strftime(buffer,80,"%Y/%m/%d - %H:%M:%S > ",&timeinfo);
         out << buffer;
     }
     out << cppString;
@@ -270,18 +272,18 @@ void RLogger::insertLabel(const QString &label, QString &message)
 } /* RLogger::insertLabel */
 
 
-void RLogger::print (const RMessage &message)
+void RLogger::print(const RMessage &message)
 {
-    RMessageType messageType;
-    messageType = message.getType();
-    QString fullMessage;
-    bool printToStderr = false;
+    RMessageType messageType = message.getType();
 
     if (!(messageType & this->getLevel()))
     {
         // Message is out of the log level, so it will be dropped.
         return;
     }
+
+    QString fullMessage;
+    bool printToStderr = false;
 
     for (unsigned int i=0;i<this->getIndentLevel();i++)
     {
@@ -353,8 +355,7 @@ void RLogger::print (const RMessage &message)
 } /* RLogger::print */
 
 
-void RLogger::print (const QString &cppString,
-                     RMessageType   messageType)
+void RLogger::print(const QString &cppString, RMessageType messageType)
 {
     std::vector<QString> messages = RMessage::explode(cppString,'\n',true);
     for (unsigned int i=0;i<messages.size();i++)
@@ -366,23 +367,21 @@ void RLogger::print (const QString &cppString,
 } /* RLogger::print */
 
 
-void RLogger::print (const char   *cString,
-                     RMessageType  messageType)
+void RLogger::print(const char *cString, RMessageType  messageType)
 {
-    this->print (QString(cString),messageType);
+    this->print(QString(cString),messageType);
 } /* RLogger::print */
 
 
-void RLogger::print (const char   cChar,
-                     RMessageType messageType)
+void RLogger::print(const char cChar, RMessageType messageType)
 {
     RMessage message(1,cChar);
-    message.setType (messageType);
-    this->print (message);
+    message.setType(messageType);
+    this->print(message);
 } /* RLogger::print */
 
 
-void RLogger::flush (void)
+void RLogger::flush()
 {
     std::vector<RMessage>::iterator iter;
 
@@ -402,7 +401,7 @@ void RLogger::flush (void)
 } /* RLogger::flush */
 
 
-void RLogger::purge (unsigned int nMessages)
+void RLogger::purge(unsigned int nMessages)
 {
     RLocker::lock();
     if (nMessages == 0)
@@ -430,9 +429,14 @@ void RLogger::purge (unsigned int nMessages)
 
 int RLogger::trace(const char *format, ...)
 {
+    RMessageType messageType(R_MESSAGE_TRACE);
+    if (!(messageType & RLogger::getInstance().getLevel()))
+    {
+        return 0;
+    }
     va_list ap;
     va_start(ap, format);
-    RLogger::getInstance().print(QString::vasprintf(format, ap), R_MESSAGE_TRACE);
+    RLogger::getInstance().print(QString::vasprintf(format, ap), messageType);
     va_end(ap);
     return 0;
 } /* RLogger::trace */
@@ -440,9 +444,14 @@ int RLogger::trace(const char *format, ...)
 
 int RLogger::debug(const char *format, ...)
 {
+    RMessageType messageType(R_MESSAGE_DEBUG);
+    if (!(messageType & RLogger::getInstance().getLevel()))
+    {
+        return 0;
+    }
     va_list ap;
     va_start(ap, format);
-    RLogger::getInstance().print(QString::vasprintf(format, ap), R_MESSAGE_DEBUG);
+    RLogger::getInstance().print(QString::vasprintf(format, ap), messageType);
     va_end(ap);
     return 0;
 } /* RLogger::debug */
@@ -450,9 +459,14 @@ int RLogger::debug(const char *format, ...)
 
 int RLogger::info(const char *format, ...)
 {
+    RMessageType messageType(R_MESSAGE_INFO);
+    if (!(messageType & RLogger::getInstance().getLevel()))
+    {
+        return 0;
+    }
     va_list ap;
     va_start(ap, format);
-    RLogger::getInstance().print(QString::vasprintf(format, ap), R_MESSAGE_INFO);
+    RLogger::getInstance().print(QString::vasprintf(format, ap), messageType);
     va_end(ap);
     return 0;
 } /* RLogger::info */
@@ -460,9 +474,14 @@ int RLogger::info(const char *format, ...)
 
 int RLogger::notice(const char *format, ...)
 {
+    RMessageType messageType(R_MESSAGE_NOTICE);
+    if (!(messageType & RLogger::getInstance().getLevel()))
+    {
+        return 0;
+    }
     va_list ap;
     va_start(ap, format);
-    RLogger::getInstance().print(QString::vasprintf(format, ap), R_MESSAGE_NOTICE);
+    RLogger::getInstance().print(QString::vasprintf(format, ap), messageType);
     va_end(ap);
     return 0;
 } /* RLogger::notice */
@@ -470,9 +489,14 @@ int RLogger::notice(const char *format, ...)
 
 int RLogger::warning(const char *format, ...)
 {
+    RMessageType messageType(R_MESSAGE_WARNING);
+    if (!(messageType & RLogger::getInstance().getLevel()))
+    {
+        return 0;
+    }
     va_list ap;
     va_start(ap, format);
-    RLogger::getInstance().print(QString::vasprintf(format, ap), R_MESSAGE_WARNING);
+    RLogger::getInstance().print(QString::vasprintf(format, ap), messageType);
     va_end(ap);
     return 0;
 } /* RLogger::warning */
@@ -480,9 +504,14 @@ int RLogger::warning(const char *format, ...)
 
 int RLogger::error(const char *format, ...)
 {
+    RMessageType messageType(R_MESSAGE_ERROR);
+    if (!(messageType & RLogger::getInstance().getLevel()))
+    {
+        return 0;
+    }
     va_list ap;
     va_start(ap, format);
-    RLogger::getInstance().print(QString::vasprintf(format, ap), R_MESSAGE_ERROR);
+    RLogger::getInstance().print(QString::vasprintf(format, ap), messageType);
     va_end(ap);
     return 0;
 } /* RLogger::error */
@@ -498,7 +527,7 @@ void RLogger::timestamp(const QString prefix)
 } /* RLogger::timestamp */
 
 
-void RLogger::indent (void)
+void RLogger::indent()
 {
     RLogger::getInstance().timerStack.push_front(QElapsedTimer());
     RLogger::getInstance().timerStack.first().start();
@@ -507,7 +536,7 @@ void RLogger::indent (void)
 } /* RLogger::indent */
 
 
-void RLogger::unindent (bool printTime)
+void RLogger::unindent(bool printTime)
 {
     RLogger::getInstance().decreaseIndent();
     int elapsed = qRound(double(RLogger::getInstance().timerStack.first().elapsed())/1000.0);
