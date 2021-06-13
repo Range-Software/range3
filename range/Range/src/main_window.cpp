@@ -67,7 +67,7 @@ MainWindow::MainWindow (QWidget *parent)
     this->setIconSize(QSize(toolbarIconSize,toolbarIconSize));
     this->setToolButtonStyle(Qt::ToolButtonIconOnly);
 
-    this->setDockOptions(QMainWindow::ForceTabbedDocks | QMainWindow::VerticalTabs);
+    this->setDockOptions(QMainWindow::ForceTabbedDocks);
 
     this->createMenus();
     this->createToolBars();
