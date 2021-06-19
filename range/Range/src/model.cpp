@@ -2986,11 +2986,12 @@ QList<QString> Model::getRecordFiles(bool onlyExistingFiles) const
     }
 
     QList<QString> recordFiles;
+    recordFiles.reserve(nRecords);
 
     for (uint j=0;j<nRecords;j++)
     {
         QString recordFileName(RFileManager::getFileNameWithTimeStep(this->getFileName(),j+1));
-        if (RFileManager::fileExists(recordFileName) || !onlyExistingFiles)
+        if (!onlyExistingFiles || RFileManager::fileExists(recordFileName))
         {
             recordFiles.append(recordFileName);
         }
