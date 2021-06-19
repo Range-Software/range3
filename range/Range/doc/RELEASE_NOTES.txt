@@ -8,6 +8,7 @@ Version 3.2.6
 Bug fixes:
 
 * Number of variables saved as size_t and loaded as unsigned int
+* Fixed memory leak when refreshing results record list
 
 ------------------------------------------------------------------
 Version 3.2.5

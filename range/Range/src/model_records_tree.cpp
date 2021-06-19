@@ -9,7 +9,10 @@
  *********************************************************************/
 
 #include <QMap>
+#include <QFileSystemWatcher>
+#include <QScrollBar>
 
+#include "main_settings.h"
 #include "model_records_tree.h"
 #include "session.h"
 
@@ -45,8 +48,9 @@ class ModelRecordsTreeRecordID
         uint recordNumber;
 };
 
-ModelRecordsTree::ModelRecordsTree(QWidget *parent) :
-    QTreeWidget(parent)
+ModelRecordsTree::ModelRecordsTree(QWidget *parent)
+    : QTreeWidget(parent)
+    , directoryChanged(false)
 {
     R_LOG_TRACE;
     this->setColumnCount(ModelRecordsTree::NColumns);
@@ -94,11 +98,19 @@ ModelRecordsTree::ModelRecordsTree(QWidget *parent) :
     QObject::connect(timer,
                      &QTimer::timeout,
                      this,
-                     &ModelRecordsTree::populate);
-    timer->start(1000);
+                     &ModelRecordsTree::onTimeout);
+    timer->start(1500);
+
+    QFileSystemWatcher *directoryWatcher = new QFileSystemWatcher(this);
+    directoryWatcher->addPath(MainSettings::getInstance().getDataDir());
+
+    QObject::connect(directoryWatcher,
+                     &QFileSystemWatcher::directoryChanged,
+                     this,
+                     &ModelRecordsTree::onDirectoryChanged);
 }
 
-bool ModelRecordsTree::isFirst(void)
+bool ModelRecordsTree::isFirst()
 {
     R_LOG_TRACE;
     QList<uint> modelIDs = Session::getInstance().getSelectedModelIDs();
@@ -125,7 +137,7 @@ bool ModelRecordsTree::isFirst(void)
     return false;
 }
 
-bool ModelRecordsTree::isLast(void)
+bool ModelRecordsTree::isLast()
 {
     R_LOG_TRACE;
     QList<uint> modelIDs = Session::getInstance().getSelectedModelIDs();
@@ -159,180 +171,13 @@ bool ModelRecordsTree::isLast(void)
     return true;
 }
 
-void ModelRecordsTree::markCurrent(void)
-{
-    R_LOG_TRACE;
-    QList<uint> modelIDs = Session::getInstance().getSelectedModelIDs();
-
-    for (int i=0;i<modelIDs.size();i++)
-    {
-        uint modelID = modelIDs[i];
-
-        QTreeWidgetItemIterator it(this);
-        while (*it)
-        {
-            if ((*it)->data(ModelRecordsTree::IsRecord,Qt::UserRole).toBool() &&
-                (*it)->data(ModelRecordsTree::ModelID,Qt::UserRole).toUInt() == modelID)
-            {
-                if ((*it)->data(ModelRecordsTree::Marked,Qt::UserRole).toBool())
-                {
-                    emit this->recordMarked((*it)->data(ModelRecordsTree::ModelID,Qt::UserRole).toUInt(),
-                                            (*it)->text(ModelRecordsTree::PathFileName));
-                }
-            }
-            ++it;
-        }
-    }
-}
-
-void ModelRecordsTree::markPrevious(void)
-{
-    R_LOG_TRACE;
-    QList<uint> modelIDs = Session::getInstance().getSelectedModelIDs();
-
-    for (int i=0;i<modelIDs.size();i++)
-    {
-        uint modelID = modelIDs[i];
-
-        QTreeWidgetItem *prevItem = nullptr;
-
-        QTreeWidgetItemIterator it(this);
-        while (*it)
-        {
-            if ((*it)->data(ModelRecordsTree::Marked,Qt::UserRole).toBool() &&
-                (*it)->data(ModelRecordsTree::ModelID,Qt::UserRole).toUInt() == modelID)
-            {
-                if (prevItem)
-                {
-                    (*it)->setData(ModelRecordsTree::Marked,Qt::UserRole,QVariant(false));
-                    prevItem->setData(ModelRecordsTree::Marked,Qt::UserRole,QVariant(true));
-                }
-                break;
-            }
-            if ((*it)->data(ModelRecordsTree::IsRecord,Qt::UserRole).toBool() &&
-                (*it)->data(ModelRecordsTree::ModelID,Qt::UserRole).toUInt() == modelID)
-            {
-                prevItem = (*it);
-            }
-            ++it;
-        }
-    }
-}
-
-void ModelRecordsTree::markNext(void)
-{
-    R_LOG_TRACE;
-    QList<uint> modelIDs = Session::getInstance().getSelectedModelIDs();
-
-    for (int i=0;i<modelIDs.size();i++)
-    {
-        uint modelID = modelIDs[i];
-
-        bool markItem = false;
-
-        QTreeWidgetItem *prevItem = nullptr;
-
-        QTreeWidgetItemIterator it(this);
-        while (*it)
-        {
-            if (markItem)
-            {
-                if ((*it)->data(ModelRecordsTree::ModelID,Qt::UserRole).toUInt() == modelID)
-                {
-                    prevItem->setData(ModelRecordsTree::Marked,Qt::UserRole,false);
-                    (*it)->setData(ModelRecordsTree::Marked,Qt::UserRole,true);
-                }
-                break;
-            }
-            if ((*it)->data(ModelRecordsTree::Marked,Qt::UserRole).toBool() &&
-                (*it)->data(ModelRecordsTree::ModelID,Qt::UserRole).toUInt() == modelID)
-            {
-                modelID = (*it)->data(ModelRecordsTree::ModelID,Qt::UserRole).toUInt();
-                prevItem = (*it);
-                markItem = true;
-            }
-            ++it;
-        }
-    }
-}
-
-void ModelRecordsTree::markFirst(void)
-{
-    R_LOG_TRACE;
-    QList<uint> modelIDs = Session::getInstance().getSelectedModelIDs();
-
-    for (int i=0;i<modelIDs.size();i++)
-    {
-        uint modelID = modelIDs[i];
-        bool isFirst = true;
-
-        QTreeWidgetItemIterator it(this);
-        while (*it)
-        {
-            if ((*it)->data(ModelRecordsTree::ModelID,Qt::UserRole).toUInt() == modelID &&
-                (*it)->data(ModelRecordsTree::IsRecord,Qt::UserRole).toBool())
-            {
-                (*it)->setData(ModelRecordsTree::Marked,Qt::UserRole,isFirst);
-                isFirst = false;
-            }
-            ++it;
-        }
-    }
-}
-
-void ModelRecordsTree::markLast(void)
-{
-    R_LOG_TRACE;
-    QList<uint> modelIDs = Session::getInstance().getSelectedModelIDs();
-
-    for (int i=0;i<modelIDs.size();i++)
-    {
-        uint modelID = modelIDs[i];
-        uint itemID1 = 0;
-        uint itemID2 = 0;
-        QTreeWidgetItem *lastItem = nullptr;
-
-        QTreeWidgetItemIterator it(this);
-        while (*it)
-        {
-            if ((*it)->data(ModelRecordsTree::ModelID,Qt::UserRole).toUInt() == modelID)
-            {
-                lastItem = (*it);
-                itemID1++;
-            }
-            ++it;
-        }
-
-        if (lastItem && !lastItem->data(ModelRecordsTree::Marked,Qt::UserRole).toBool())
-        {
-            lastItem->setData(ModelRecordsTree::Marked,Qt::UserRole,true);
-
-            QTreeWidgetItemIterator it(this);
-            while (*it)
-            {
-                if ((*it)->data(ModelRecordsTree::ModelID,Qt::UserRole).toUInt() == modelID)
-                {
-                    itemID2++;
-                    if (itemID1 != itemID2)
-                    {
-                        (*it)->setData(ModelRecordsTree::Marked,Qt::UserRole,false);
-                    }
-                }
-                ++it;
-            }
-        }
-    }
-}
-
-void ModelRecordsTree::populate(void)
+void ModelRecordsTree::populate()
 {
     R_LOG_TRACE;
     if (!Session::getInstance().trylock())
     {
         return;
     }
-
-    this->blockSignals(true);
 
     QList<QTreeWidgetItem*> selectedItemList = this->selectedItems();
 
@@ -346,13 +191,17 @@ void ModelRecordsTree::populate(void)
         selectedIDs[recordID] = true;
     }
 
-    uint nTopLevelItems = this->topLevelItemCount();
-
     uint nModels = Session::getInstance().getNModels();
+
+    this->blockSignals(true);
+
+    QScrollBar *vScrollBar = this->verticalScrollBar();
+    int vScrollValue = vScrollBar->value();
+    this->clear();
 
     for (uint i=0;i<nModels;i++)
     {
-        Model &rModel = Session::getInstance().getModel(i);
+        const Model &rModel = Session::getInstance().getModel(i);
 
         QTreeWidgetItem *item = new QTreeWidgetItem(this);
         item->setFirstColumnSpanned(true);
@@ -412,18 +261,194 @@ void ModelRecordsTree::populate(void)
         item->setExpanded(true);
     }
 
-    for (uint i=0;i<nTopLevelItems;i++)
-    {
-        this->takeTopLevelItem(0);
-    }
-
     this->resizeColumnToContents(ModelRecordsTree::RecordNumber);
     this->resizeColumnToContents(ModelRecordsTree::RecordFileName);
     this->resizeColumnToContents(ModelRecordsTree::Marked);
 
+    vScrollBar->setValue(vScrollValue);
+
     this->blockSignals(false);
 
     Session::getInstance().unlock();
+}
+
+void ModelRecordsTree::markCurrent()
+{
+    R_LOG_TRACE;
+    QList<uint> modelIDs = Session::getInstance().getSelectedModelIDs();
+
+    for (int i=0;i<modelIDs.size();i++)
+    {
+        uint modelID = modelIDs[i];
+
+        QTreeWidgetItemIterator it(this);
+        while (*it)
+        {
+            if ((*it)->data(ModelRecordsTree::IsRecord,Qt::UserRole).toBool() &&
+                (*it)->data(ModelRecordsTree::ModelID,Qt::UserRole).toUInt() == modelID)
+            {
+                if ((*it)->data(ModelRecordsTree::Marked,Qt::UserRole).toBool())
+                {
+                    emit this->recordMarked((*it)->data(ModelRecordsTree::ModelID,Qt::UserRole).toUInt(),
+                                            (*it)->text(ModelRecordsTree::PathFileName));
+                }
+            }
+            ++it;
+        }
+    }
+}
+
+void ModelRecordsTree::markPrevious()
+{
+    R_LOG_TRACE;
+    QList<uint> modelIDs = Session::getInstance().getSelectedModelIDs();
+
+    for (int i=0;i<modelIDs.size();i++)
+    {
+        uint modelID = modelIDs[i];
+
+        QTreeWidgetItem *prevItem = nullptr;
+
+        QTreeWidgetItemIterator it(this);
+        while (*it)
+        {
+            if ((*it)->data(ModelRecordsTree::Marked,Qt::UserRole).toBool() &&
+                (*it)->data(ModelRecordsTree::ModelID,Qt::UserRole).toUInt() == modelID)
+            {
+                if (prevItem)
+                {
+                    (*it)->setData(ModelRecordsTree::Marked,Qt::UserRole,QVariant(false));
+                    prevItem->setData(ModelRecordsTree::Marked,Qt::UserRole,QVariant(true));
+                }
+                break;
+            }
+            if ((*it)->data(ModelRecordsTree::IsRecord,Qt::UserRole).toBool() &&
+                (*it)->data(ModelRecordsTree::ModelID,Qt::UserRole).toUInt() == modelID)
+            {
+                prevItem = (*it);
+            }
+            ++it;
+        }
+    }
+}
+
+void ModelRecordsTree::markNext()
+{
+    R_LOG_TRACE;
+    QList<uint> modelIDs = Session::getInstance().getSelectedModelIDs();
+
+    for (int i=0;i<modelIDs.size();i++)
+    {
+        uint modelID = modelIDs[i];
+
+        bool markItem = false;
+
+        QTreeWidgetItem *prevItem = nullptr;
+
+        QTreeWidgetItemIterator it(this);
+        while (*it)
+        {
+            if (markItem)
+            {
+                if ((*it)->data(ModelRecordsTree::ModelID,Qt::UserRole).toUInt() == modelID)
+                {
+                    prevItem->setData(ModelRecordsTree::Marked,Qt::UserRole,false);
+                    (*it)->setData(ModelRecordsTree::Marked,Qt::UserRole,true);
+                }
+                break;
+            }
+            if ((*it)->data(ModelRecordsTree::Marked,Qt::UserRole).toBool() &&
+                (*it)->data(ModelRecordsTree::ModelID,Qt::UserRole).toUInt() == modelID)
+            {
+                modelID = (*it)->data(ModelRecordsTree::ModelID,Qt::UserRole).toUInt();
+                prevItem = (*it);
+                markItem = true;
+            }
+            ++it;
+        }
+    }
+}
+
+void ModelRecordsTree::markFirst()
+{
+    R_LOG_TRACE;
+    QList<uint> modelIDs = Session::getInstance().getSelectedModelIDs();
+
+    for (int i=0;i<modelIDs.size();i++)
+    {
+        uint modelID = modelIDs[i];
+        bool isFirst = true;
+
+        QTreeWidgetItemIterator it(this);
+        while (*it)
+        {
+            if ((*it)->data(ModelRecordsTree::ModelID,Qt::UserRole).toUInt() == modelID &&
+                (*it)->data(ModelRecordsTree::IsRecord,Qt::UserRole).toBool())
+            {
+                (*it)->setData(ModelRecordsTree::Marked,Qt::UserRole,isFirst);
+                isFirst = false;
+            }
+            ++it;
+        }
+    }
+}
+
+void ModelRecordsTree::markLast()
+{
+    R_LOG_TRACE;
+    QList<uint> modelIDs = Session::getInstance().getSelectedModelIDs();
+
+    for (int i=0;i<modelIDs.size();i++)
+    {
+        uint modelID = modelIDs[i];
+        uint itemID1 = 0;
+        uint itemID2 = 0;
+        QTreeWidgetItem *lastItem = nullptr;
+
+        QTreeWidgetItemIterator it(this);
+        while (*it)
+        {
+            if ((*it)->data(ModelRecordsTree::ModelID,Qt::UserRole).toUInt() == modelID)
+            {
+                lastItem = (*it);
+                itemID1++;
+            }
+            ++it;
+        }
+
+        if (lastItem && !lastItem->data(ModelRecordsTree::Marked,Qt::UserRole).toBool())
+        {
+            lastItem->setData(ModelRecordsTree::Marked,Qt::UserRole,true);
+
+            QTreeWidgetItemIterator it(this);
+            while (*it)
+            {
+                if ((*it)->data(ModelRecordsTree::ModelID,Qt::UserRole).toUInt() == modelID)
+                {
+                    itemID2++;
+                    if (itemID1 != itemID2)
+                    {
+                        (*it)->setData(ModelRecordsTree::Marked,Qt::UserRole,false);
+                    }
+                }
+                ++it;
+            }
+        }
+    }
+}
+
+void ModelRecordsTree::onTimeout()
+{
+    if (this->directoryChanged)
+    {
+        this->directoryChanged = false;
+        this->populate();
+    }
+}
+
+void ModelRecordsTree::onDirectoryChanged(const QString &)
+{
+    this->directoryChanged = true;
 }
 
 void ModelRecordsTree::onModelSelectionChanged(uint modelID)

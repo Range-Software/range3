@@ -194,7 +194,7 @@ void DocumentTree::onModelRemoved(uint modelID)
     {
         if (this->topLevelItem(i)->data(DOCUMENT_TREE_COLUMN_MODEL_ID,Qt::UserRole).toUInt() == modelID)
         {
-            this->takeTopLevelItem(i);
+            delete this->takeTopLevelItem(i);
         }
         i--;
     }
