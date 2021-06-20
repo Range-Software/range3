@@ -23,7 +23,7 @@ LogBrowser::LogBrowser(const QString &logFileName, QWidget *parent) :
 {
     QFileSystemWatcher *systemWatcher = new QFileSystemWatcher(QStringList(this->logFileName),this);
 
-    this->onFileChanged(this->logFileName);
+    this->readFile(this->logFileName,true);
 
     QObject::connect(systemWatcher,&QFileSystemWatcher::fileChanged,this,&LogBrowser::onFileChanged);
 }
@@ -42,7 +42,7 @@ void LogBrowser::clearLog(void)
     this->clear();
 }
 
-void LogBrowser::onFileChanged(const QString &path)
+void LogBrowser::readFile(const QString &path, bool whole)
 {
     QFile file(path);
 
@@ -51,6 +51,8 @@ void LogBrowser::onFileChanged(const QString &path)
         RLogger::warning("Failed to open the file \'%s\' for reading.\n", path.toUtf8().constData());
         return;
     }
+
+    QString fileContent;
 
     try
     {
@@ -68,10 +70,24 @@ void LogBrowser::onFileChanged(const QString &path)
 
         while (!fileStream.atEnd())
         {
-            // add line
-            this->append(fileStream.readLine());
+            if (whole)
+            {
+                if (!fileContent.isEmpty())
+                {
+                    fileContent.append('\n');
+                }
+                fileContent.append(fileStream.readLine());
+            }
+            else
+            {
+                this->append(fileStream.readLine());
+            }
         }
         this->fileStreamEnd = fileStream.pos();
+        if (whole)
+        {
+            this->setText(fileContent);
+        }
     }
     catch (...)
     {
@@ -79,4 +95,9 @@ void LogBrowser::onFileChanged(const QString &path)
     }
 
     file.close();
+}
+
+void LogBrowser::onFileChanged(const QString &path)
+{
+    this->readFile(path,false);
 }
