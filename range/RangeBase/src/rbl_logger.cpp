@@ -245,7 +245,11 @@ void RLogger::printToFile(time_t pTime, const QString &cppString) const
     {
         char buffer [80];
         struct tm timeinfo;
+#ifdef __STDC_LIB_EXT1__
         localtime_r(&pTime, &timeinfo);
+#else
+        localtime_s(&timeinfo, &pTime);
+#endif
         strftime(buffer,80,"%Y/%m/%d - %H:%M:%S > ",&timeinfo);
         out << buffer;
     }
