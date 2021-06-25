@@ -424,7 +424,7 @@ QList<SessionEntityID> Session::filterSelectedEntityIDs(const QList<SessionEntit
         {
             continue;
         }
-        selectedEntities.erase(selectedEntities.constBegin()+i);
+        selectedEntities.erase(selectedEntities.begin()+i);
     }
 
     R_LOG_TRACE_OUT;

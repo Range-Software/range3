@@ -245,7 +245,7 @@ void RLogger::printToFile(time_t pTime, const QString &cppString) const
     {
         char buffer [80];
         struct tm timeinfo;
-#ifdef __STDC_LIB_EXT1__
+#ifdef _POSIX_SOURCE
         localtime_r(&pTime, &timeinfo);
 #else
         localtime_s(&timeinfo, &pTime);
