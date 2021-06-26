@@ -100,8 +100,6 @@ GLWidget::GLWidget(uint modelID, QWidget *parent)
     QObject::connect(Session::getInstance().getDrawEngine(),&DrawEngine::objectAdded,this,&GLWidget::onDrawObjectAdded);
     QObject::connect(Session::getInstance().getDrawEngine(),&DrawEngine::objectRemoved,this,&GLWidget::onDrawObjectRemoved);
     QObject::connect(Session::getInstance().getDrawEngine(),&DrawEngine::objectChanged,this,&GLWidget::onDrawObjectChanged);
-
-    this->font = QPainter(this).font();
     R_LOG_TRACE_OUT;
 }
 
@@ -133,6 +131,7 @@ QSize GLWidget::sizeHint(void) const
 void GLWidget::initializeGL(void)
 {
     R_LOG_TRACE_IN;
+    this->font = QPainter(this).font();
     this->resetView(-45.0, 0.0, -135.0);
     R_LOG_TRACE_OUT;
 }

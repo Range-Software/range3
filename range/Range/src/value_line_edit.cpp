@@ -25,7 +25,7 @@ ValueLineEdit::ValueLineEdit(double min, double max, QWidget *parent)
     : QLineEdit(parent)
 {
     this->createTimer();
-    this->setValidator(new QDoubleValidator(min,max,1000));
+    this->setValidator(new QDoubleValidator(min,max,1000,this));
     QObject::connect(this,&QLineEdit::textChanged,this,&ValueLineEdit::onTextChaged);
 }
 
@@ -33,31 +33,31 @@ ValueLineEdit::ValueLineEdit(int min, int max, QWidget *parent)
     : QLineEdit(parent)
 {
     this->createTimer();
-    this->setValidator(new QIntValidator(min, max));
+    this->setValidator(new QIntValidator(min,max,this));
     QObject::connect(this,&QLineEdit::textChanged,this,&ValueLineEdit::onTextChaged);
 }
 
 void ValueLineEdit::setDoubleValidator()
 {
-    this->setValidator(new QDoubleValidator(-DBL_MAX,DBL_MAX,1000));
+    this->setValidator(new QDoubleValidator(-DBL_MAX,DBL_MAX,1000,this));
     this->paintBackground();
 }
 
 void ValueLineEdit::setIntValidator()
 {
-    this->setValidator(new QIntValidator(INT_MIN, INT_MAX));
+    this->setValidator(new QIntValidator(INT_MIN,INT_MAX,this));
     this->paintBackground();
 }
 
 void ValueLineEdit::setRange(double min, double max)
 {
-    this->setValidator(new QDoubleValidator(min,max,1000));
+    this->setValidator(new QDoubleValidator(min,max,1000,this));
     this->paintBackground();
 }
 
 void ValueLineEdit::setRange(int min, int max)
 {
-    this->setValidator(new QIntValidator(min, max));
+    this->setValidator(new QIntValidator(min,max,this));
     this->paintBackground();
 }
 
