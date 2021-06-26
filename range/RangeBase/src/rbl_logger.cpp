@@ -245,7 +245,7 @@ void RLogger::printToFile(time_t pTime, const QString &cppString) const
     {
         char buffer [80];
         struct tm timeinfo;
-#ifdef _POSIX_SOURCE
+#if defined(_POSIX_SOURCE) || defined(__APPLE__) || defined(__linux__) || defined(__unix__)
         localtime_r(&pTime, &timeinfo);
 #else
         localtime_s(&timeinfo, &pTime);
