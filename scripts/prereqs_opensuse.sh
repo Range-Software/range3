@@ -23,6 +23,6 @@ zypper ar -cfp 90 http://ftp.gwdg.de/pub/linux/misc/packman/suse/${PRETTY_NAME//
 assert_success $? "Failed to install pacman repository" || exit 2
 
 echo_i "Install tools, Qt and ffmpeg"
-zypper --gpg-auto-import-keys install -y sudo make openssh rpm-build libqt5-qtbase-common-devel libqt5-qtbase-devel libqt5-qtsvg-devel ffmpeg-devel
+zypper --gpg-auto-import-keys install -y sudo make openssh rpm-build libQt6Gui6 libQt6Svg libQt6Core6 qt6-base qt6-svg ffmpeg-devel
 assert_success $? "Failed to install tools, Qt and ffmpeg" || exit 2
 
