@@ -97,3 +97,11 @@ void RProblemSetup::setMeshSetup(const RMeshSetup &meshSetup)
 {
     this->meshSetup = meshSetup;
 }
+
+QString RProblemSetup::toString() const
+{
+    return "{ Restart: " + QString(this->restart?"True":"False")
+            + ", Radiation setup: " + this->radiationSetup.toString()
+            + ", Modal setup: " + this->modalSetup.toString()
+            + ", Mesh setup: " + this->meshSetup.toString() + " }";
+}

@@ -149,7 +149,6 @@ QWidget *ApplicationSettingsDialog::createGeneralTab(void)
     this->toolbarIconSizeSpin->setRange(8,128);
     this->toolbarIconSizeSpin->setSingleStep(8);
     this->toolbarIconSizeSpin->setValue(this->applicationSettings->getToolbarIconSize());
-    RLogger::info("%d\n",this->applicationSettings->getToolbarIconSize());
     this->toolbarIconSizeSpin->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Minimum);
     layout->addWidget(this->toolbarIconSizeSpin,4,1,1,1);
 

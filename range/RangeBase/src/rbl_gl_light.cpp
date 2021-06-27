@@ -120,10 +120,10 @@ void RGLLight::setDefault(void)
     this->enabled = true;
 //    this->lightNum = GL_LIGHT0;
     this->lightNum = 0;
-    this->ambient.fromRgbF(0.1,0.1,0.1,1.0);
-//    this->diffuse.fromRgbF(0.5,0.5,0.5,1.0);
-    this->diffuse.fromRgbF(1.0,1.0,1.0,1.0);
-    this->specular.fromRgbF(1.0,1.0,1.0,1.0);
+    this->ambient.fromRgbF(0.1f,0.1f,0.1f,1.0f);
+//    this->diffuse.fromRgbF(0.5f,0.5f,0.5f,1.0f);
+    this->diffuse.fromRgbF(1.0f,1.0f,1.0f,1.0f);
+    this->specular.fromRgbF(1.0f,1.0f,1.0f,1.0f);
     this->direction[0] = -0.6666667;
     this->direction[1] = 0.6666667;
     this->direction[2] = 0.3333333;

@@ -30,8 +30,8 @@ void MainTask::run(void)
 
     try
     {
-        QString rangeAccount = settings.value("application/rangeAccount").toString();
-        QString rangePassword = settings.value("application/rangePassword").toString();
+//        QString rangeAccount = settings.value("application/rangeAccount").toString();
+//        QString rangePassword = settings.value("application/rangePassword").toString();
 
         // Process command line arguments.
         QList<RArgumentOption> validOptions;
@@ -43,6 +43,8 @@ void MainTask::run(void)
         validOptions.append(RArgumentOption("restart",RArgumentOption::Switch,QVariant(),"Restart solver",false,false));
         validOptions.append(RArgumentOption("task-id",RArgumentOption::Path,QVariant(),"Task ID for inter process communication",false,false));
         validOptions.append(RArgumentOption("task-server",RArgumentOption::Path,QVariant(),"Task server for inter process communication",false,false));
+        validOptions.append(RArgumentOption("log-debug",RArgumentOption::Switch,QVariant(),"Switch on debug log level",false,false));
+        validOptions.append(RArgumentOption("log-trace",RArgumentOption::Switch,QVariant(),"Switch on trace log level",false,false));
 
         RArgumentsParser argumentsParser(QCoreApplication::arguments(),validOptions,false);
 
@@ -60,6 +62,14 @@ void MainTask::run(void)
             return;
         }
 
+        if (argumentsParser.isSet("log-debug"))
+        {
+            RLogger::getInstance().setLevel(R_LOG_LEVEL_DEBUG);
+        }
+        if (argumentsParser.isSet("log-trace"))
+        {
+            RLogger::getInstance().setLevel(R_LOG_LEVEL_TRACE);
+        }
         if (argumentsParser.isSet("log-file"))
         {
             RLogger::getInstance().setFile(argumentsParser.getValue("log-file").toString());

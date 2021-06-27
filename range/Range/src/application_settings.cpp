@@ -216,7 +216,12 @@ QString ApplicationSettings::getDefaultHelpDir()
 
 uint ApplicationSettings::getDefaultNThreads()
 {
-    return ApplicationSettings::getMaxThreads();
+    uint maxThreads = ApplicationSettings::getMaxThreads();
+    if (maxThreads > 1)
+    {
+        maxThreads--;
+    }
+    return maxThreads;
 }
 
 uint ApplicationSettings::getDefaultNHistoryRecords()

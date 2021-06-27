@@ -32,6 +32,11 @@ class LogBrowser : public TextBrowser
 
         //! Clear log.
         void clearLog(void);
+
+    private:
+
+        //! Read file
+        void readFile(const QString &path, bool whole);
         
     signals:
         

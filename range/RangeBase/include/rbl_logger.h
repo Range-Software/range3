@@ -53,7 +53,7 @@
 
 typedef RMessageType RLogLevel;
 
-typedef void (*RLogHandler) ( const RMessage &message );
+typedef void (*RLogHandler)(const RMessage &message);
 
 //! Logger class.
 class RLogger
@@ -62,11 +62,10 @@ class RLogger
     private:
 
         //! Internal initialization function.
-        void _init ( const RLogger *pLogger = nullptr );
+        void _init(const RLogger *pLogger = nullptr);
 
         //! Print to log file.
-        void printToFile ( time_t         pTime,
-                           const QString &cppString ) const;
+        void printToFile(time_t pTime, const QString &cppString) const;
 
         //! Insert label string to message.
         static void insertLabel(const QString &label, QString &message);
@@ -107,109 +106,109 @@ class RLogger
         ~RLogger();
 
         //! Assignment operator.
-        RLogger & operator = ( const RLogger &logger );
+        RLogger & operator =(const RLogger &logger);
 
         //! Return static instance.
-        static RLogger & getInstance ( void );
+        static RLogger & getInstance();
 
         //! Return log level.
-        RLogLevel getLevel ( void ) const;
+        RLogLevel getLevel() const;
 
         //! Set log level.
-        void setLevel ( RLogLevel level );
+        void setLevel(RLogLevel level);
 
         //! Return halt state of the logger.
-        bool getHalted ( void ) const;
+        bool getHalted() const;
 
         //! Halt/Unhalt the logger.
         //! If halted messages will not be printed into a file.
-        void setHalted ( bool halt );
+        void setHalted(bool halt);
 
         //! Return true/false whether the time will be printed into
         //! a log file.
-        bool getPrintTimeEnabled ( void ) const;
+        bool getPrintTimeEnabled() const;
 
         //! Enable/disable print time into a log file
-        void setPrintTimeEnabled ( bool printTime );
+        void setPrintTimeEnabled(bool printTime);
 
         //! Return whether a new line char should be added.
-        bool getAddNewLine ( void ) const;
+        bool getAddNewLine() const;
 
         //! Set whether a new line char should be added.
-        void setAddNewLine ( bool addNewLine );
+        void setAddNewLine(bool addNewLine);
 
         //! Return log file name.
-        const QString getFile ( void ) const;
+        const QString getFile() const;
 
         //! Set log file name.
-        void setFile ( const QString & logFileName );
+        void setFile(const QString & logFileName);
 
         //! Return custom log handler.
-        RLogHandler getLogHandler ( void ) const;
+        RLogHandler getLogHandler() const;
 
         //! Set custom log handler.
-        void setLogHandler ( RLogHandler logHandler );
+        void setLogHandler(RLogHandler logHandler);
 
         //! Return current indent level.
-        unsigned int getIndentLevel ( void ) const;
+        unsigned int getIndentLevel() const;
 
         //! Set current indent level.
-        void setIndentLevel ( unsigned int indentLevel );
+        void setIndentLevel(unsigned int indentLevel);
 
         //! Increase current indent level.
-        void increaseIndent ( void );
+        void increaseIndent();
 
         //! Decrease current indent level.
-        void decreaseIndent ( void );
+        void decreaseIndent();
 
         //! Print message.
-        void print ( const RMessage &message);
+        void print(const RMessage &message);
 
         //! Print c++ string
-        void print ( const QString &cppString,
-                     RMessageType   messageType = R_MESSAGE_INFO );
+        void print(const QString &cppString,
+                   RMessageType   messageType = R_MESSAGE_INFO);
 
         //! Print c string
-        void print ( const char   *cString,
-                     RMessageType  messageType = R_MESSAGE_INFO );
+        void print(const char   *cString,
+                   RMessageType  messageType = R_MESSAGE_INFO);
 
         //! Print c char
-        void print ( const char   cChar,
-                     RMessageType messageType = R_MESSAGE_INFO );
+        void print(const char   cChar,
+                   RMessageType messageType = R_MESSAGE_INFO);
 
         //! Flush all unprocessed messages to file.
-        void flush ( void );
+        void flush();
 
         //! Purge unprocessed messages.
         //! If nMessages is set to 0 all messages will be purged.
-        void purge ( unsigned int nMessages = 0 );
+        void purge(unsigned int nMessages = 0);
 
         //! Convenience function to log trace message.
-        static int trace ( const char *format, ... );
+        static int trace(const char *format, ...);
 
         //! Convenience function to log debug message.
-        static int debug ( const char *format, ... );
+        static int debug(const char *format, ...);
 
         //! Convenience function to log info message.
-        static int info ( const char *format, ... );
+        static int info(const char *format, ...);
 
         //! Convenience function to log notice message.
-        static int notice ( const char *format, ... );
+        static int notice(const char *format, ...);
 
         //! Convenience function to log warning message.
-        static int warning( const char *format, ... );
+        static int warning( const char *format, ...);
 
         //! Convenience function to log error message.
-        static int error ( const char *format, ... );
+        static int error(const char *format, ...);
 
         //! Convenience function to print timestamp.
-        static void timestamp ( const QString prefix = QString() );
+        static void timestamp(const QString prefix = QString());
 
         //! Convenience function to increase indent.
-        static void indent ( void );
+        static void indent();
 
         //! Convenience function to decrease indent.
-        static void unindent ( bool printTime = true );
+        static void unindent(bool printTime = true);
 
 };
 

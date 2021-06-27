@@ -17,6 +17,7 @@
 #include <QSplitter>
 #include <QScrollBar>
 #include <QMessageBox>
+#include <QHBoxLayout>
 
 #include "logger.h"
 #include "progress.h"
@@ -62,40 +63,64 @@ MainWindow::MainWindow (QWidget *parent)
     this->setWindowTitle(QApplication::translate("MainWindow", "Range :: Finite Element Analysis"));
     this->setWindowIcon(QIcon(":/icons/logos/pixmaps/range-logo-128.png"));
 
-    this->setDockNestingEnabled(true);
-
     int toolbarIconSize = MainSettings::getInstance().getApplicationSettings()->getToolbarIconSize();
     this->setIconSize(QSize(toolbarIconSize,toolbarIconSize));
     this->setToolButtonStyle(Qt::ToolButtonIconOnly);
+
+    this->setDockOptions(QMainWindow::ForceTabbedDocks);
 
     this->createMenus();
     this->createToolBars();
     this->createStatusBar();
     this->createDownloadBar();
     this->createCentralWidget();
-    this->createModelDock();
-    this->createDocumentDock();
-    this->createRecordsDock();
-    this->createProblemDock();
-    this->createBcDock();
-    this->createIcDock();
-    this->createEcDock();
-    this->createMaterialDock();
-    this->createResultsDock();
 
-    this->setTabPosition(Qt::LeftDockWidgetArea,QTabWidget::West);
-    this->setTabPosition(Qt::RightDockWidgetArea,QTabWidget::East);
+    QDockWidget *modelDock = new QDockWidget(this);
+    modelDock->setObjectName(QString::fromUtf8("modelDock"));
+    modelDock->setWindowTitle(tr("Models"));
+    modelDock->setTitleBarWidget(new QWidget(modelDock));
+    this->addDockWidget(Qt::LeftDockWidgetArea, modelDock);
 
-    this->tabifyDockWidget(this->dockModel,this->dockRecords);
-    this->tabifyDockWidget(this->dockRecords,this->dockDocuments);
-    this->dockModel->raise();
+    QTabWidget *modelDockTabWidget = new QTabWidget;
+    modelDockTabWidget->setTabPosition(QTabWidget::West);
+    modelDock->setWidget(modelDockTabWidget);
 
-    this->tabifyDockWidget(this->dockProblem,this->dockBc);
-    this->tabifyDockWidget(this->dockBc,this->dockIc);
-    this->tabifyDockWidget(this->dockIc,this->dockEc);
-    this->tabifyDockWidget(this->dockEc,this->dockMaterial);
-    this->tabifyDockWidget(this->dockMaterial,this->dockResults);
-    this->dockProblem->raise();
+    this->modelsTab = this->createModelTab();
+    modelDockTabWidget->addTab(this->modelsTab,tr("Model"));
+
+    this->documentsTab = this->createDocumentTab();
+    modelDockTabWidget->addTab(this->documentsTab,tr("Documents"));
+
+    this->recordsTab = this->createRecordsTab();
+    modelDockTabWidget->addTab(this->recordsTab,tr("Records"));
+
+    QDockWidget *solverDock = new QDockWidget(this);
+    solverDock->setObjectName(QString::fromUtf8("solverDock"));
+    solverDock->setWindowTitle(tr("Solver"));
+    solverDock->setTitleBarWidget(new QWidget(solverDock));
+    this->addDockWidget(Qt::RightDockWidgetArea, solverDock);
+
+    QTabWidget *solverDockTabWidget = new QTabWidget;
+    solverDockTabWidget->setTabPosition(QTabWidget::East);
+    solverDock->setWidget(solverDockTabWidget);
+
+    this->problemTab = this->createProblemTab();
+    solverDockTabWidget->addTab(this->problemTab,tr("Problem"));
+
+    this->bcTab = this->createBcTab();
+    solverDockTabWidget->addTab(this->bcTab,tr("Boundary conditions"));
+
+    this->icTab = this->createIcTab();
+    solverDockTabWidget->addTab(this->icTab,tr("Initial conditions"));
+
+    this->ecTab = this->createEcTab();
+    solverDockTabWidget->addTab(this->ecTab,tr("Environment conditions"));
+
+    this->materialTab = this->createMaterialTab();
+    solverDockTabWidget->addTab(this->materialTab,tr("Material"));
+
+    this->resultsTab = this->createResultsTab();
+    solverDockTabWidget->addTab(this->resultsTab,tr("Results"));
 
     this->restoreGeometry(MainSettings::getInstance().value("mainWindow/geometry").toByteArray());
     this->restoreState(MainSettings::getInstance().value("mainWindow/windowState").toByteArray());
@@ -461,9 +486,8 @@ void MainWindow::createToolBars(void)
     uint nToolBars;
     uint nActions;
 
-    nToolBars = MainSettings::getInstance().value("nToolBars", 0).toUInt();
-
     //! Disable toolbar restoring untill its modification is not implemented.
+//    nToolBars = MainSettings::getInstance().value("nToolBars", 0).toUInt();
     nToolBars = 0;
 
     if (nToolBars == 0 || nToolBars != 1)
@@ -614,27 +638,17 @@ void MainWindow::createCentralWidget(void)
     this->modelSubWindows = new SubWindowManager(this->centralTabWidget->getMdiArea(), this);
 }
 
-void MainWindow::createModelDock(void)
+QWidget *MainWindow::createModelTab()
 {
     R_LOG_TRACE;
-    this->dockModel = new QDockWidget(this);
-    this->dockModel->setObjectName(QString::fromUtf8("dockModel"));
-    this->dockModel->setWindowTitle(QApplication::translate("MainWindow", "Model"));
-    this->addDockWidget(Qt::LeftDockWidgetArea, this->dockModel);
-
-    QWidget *layoutModels = new QWidget();
-    this->dockModel->setWidget(layoutModels);
-
-    QGridLayout *gridLayoutModels = new QGridLayout(layoutModels);
 
     QSplitter *splitter = new QSplitter;
     splitter->setOpaqueResize(false);
     splitter->setOrientation(Qt::Vertical);
     splitter->setChildrenCollapsible(false);
-    gridLayoutModels->addWidget(splitter);
 
     //! Model tree.
-    this->treeModelManager = new ModelTree(this->actionList,splitter);
+    this->modelManagerTree = new ModelTree(this->actionList,splitter);
 
     //! Model display properties tree.
     ModelEntityDisplayPropertiesTree *treeModelDisplayProperties = new ModelEntityDisplayPropertiesTree;
@@ -647,80 +661,43 @@ void MainWindow::createModelDock(void)
     splitter->setStretchFactor(0,10);
     splitter->setStretchFactor(1,4);
     splitter->setStretchFactor(2,1);
+
+    return splitter;
 }
 
-void MainWindow::createProblemDock(void)
+QWidget *MainWindow::createDocumentTab()
 {
     R_LOG_TRACE;
-    QWidget *layoutProblem;
-    QGridLayout *gridLayoutProblem;
-
-    layoutProblem = new QWidget();
-
-    gridLayoutProblem = new QGridLayout(layoutProblem);
-
-    ProblemTree*treeProblem = new ProblemTree;
-    gridLayoutProblem->addWidget(treeProblem);
-
-    this->dockProblem = new QDockWidget(this);
-    this->dockProblem->setObjectName(QString::fromUtf8("dockProblem"));
-    this->dockProblem->setWindowTitle(QApplication::translate("MainWindow", "Problem setup"));
-    this->dockProblem->setWidget(layoutProblem);
-    this->addDockWidget(Qt::RightDockWidgetArea, this->dockProblem);
-}
-
-void MainWindow::createDocumentDock(void)
-{
-    R_LOG_TRACE;
-    QWidget *layoutDocuments;
-    QGridLayout *gridLayoutDocuments;
-
-    layoutDocuments = new QWidget();
-    gridLayoutDocuments = new QGridLayout(layoutDocuments);
 
     DocumentTree *treeDocuments = new DocumentTree;
-    gridLayoutDocuments->addWidget(treeDocuments);
 
-    this->dockDocuments = new QDockWidget(this);
-    this->dockDocuments->setObjectName(QString::fromUtf8("dockDocuments"));
-    this->dockDocuments->setWindowTitle(QApplication::translate("MainWindow", "Documents"));
-    this->dockDocuments->setWidget(layoutDocuments);
-
-    this->addDockWidget(Qt::LeftDockWidgetArea, this->dockDocuments);
+    return treeDocuments;
 }
 
-void MainWindow::createRecordsDock(void)
+QWidget *MainWindow::createRecordsTab()
 {
     R_LOG_TRACE;
-    QWidget *layoutRecords;
-    QGridLayout *gridLayoutRecords;
-
-    layoutRecords = new QWidget();
-    gridLayoutRecords = new QGridLayout(layoutRecords);
 
     ModelRecordsSelector *treeRecords = new ModelRecordsSelector;
-    gridLayoutRecords->addWidget(treeRecords);
 
-    this->dockRecords = new QDockWidget(this);
-    this->dockRecords->setObjectName(QString::fromUtf8("dockRecords"));
-    this->dockRecords->setWindowTitle(QApplication::translate("MainWindow", "Model records"));
-    this->dockRecords->setWidget(layoutRecords);
-
-    this->addDockWidget(Qt::LeftDockWidgetArea, this->dockRecords);
+    return treeRecords;
 }
 
-void MainWindow::createBcDock(void)
+QWidget *MainWindow::createProblemTab()
 {
     R_LOG_TRACE;
-    this->dockBc = new QDockWidget(this);
-    this->dockBc->setObjectName(QString::fromUtf8("dockBcList"));
-    this->dockBc->setWindowTitle(QApplication::translate("MainWindow", "Boundary conditions"));
-    this->addDockWidget(Qt::RightDockWidgetArea, this->dockBc);
 
-    QSplitter *splitter = new QSplitter(this->dockBc);
+    ProblemTree *treeProblem = new ProblemTree;
+
+    return treeProblem;
+}
+
+QWidget *MainWindow::createBcTab()
+{
+    R_LOG_TRACE;
+    QSplitter *splitter = new QSplitter;
     splitter->setOrientation(Qt::Vertical);
     splitter->setChildrenCollapsible(false);
-    this->dockBc->setWidget(splitter);
 
     BCManagerTree *treeBcList = new BCManagerTree(splitter);
 
@@ -730,20 +707,16 @@ void MainWindow::createBcDock(void)
                      &BCManagerTree::bcSelected,
                      treeBc,
                      &BCTree::onBcSelected);
+
+    return splitter;
 }
 
-void MainWindow::createIcDock(void)
+QWidget *MainWindow::createIcTab()
 {
     R_LOG_TRACE;
-    this->dockIc = new QDockWidget(this);
-    this->dockIc->setObjectName(QString::fromUtf8("dockIcList"));
-    this->dockIc->setWindowTitle(QApplication::translate("MainWindow", "Initial conditions"));
-    this->addDockWidget(Qt::RightDockWidgetArea, this->dockIc);
-
-    QSplitter *splitter = new QSplitter(this->dockIc);
+    QSplitter *splitter = new QSplitter;
     splitter->setOrientation(Qt::Vertical);
     splitter->setChildrenCollapsible(false);
-    this->dockIc->setWidget(splitter);
 
     ICManagerTree *treeIcList = new ICManagerTree(splitter);
 
@@ -753,20 +726,16 @@ void MainWindow::createIcDock(void)
                      &ICManagerTree::icSelected,
                      treeIc,
                      &ICTree::onIcSelected);
+
+    return splitter;
 }
 
-void MainWindow::createEcDock(void)
+QWidget *MainWindow::createEcTab()
 {
     R_LOG_TRACE;
-    this->dockEc = new QDockWidget(this);
-    this->dockEc->setObjectName(QString::fromUtf8("dockEcList"));
-    this->dockEc->setWindowTitle(QApplication::translate("MainWindow", "Environment conditions"));
-    this->addDockWidget(Qt::RightDockWidgetArea, this->dockEc);
-
-    QSplitter *splitter = new QSplitter(this->dockEc);
+    QSplitter *splitter = new QSplitter;
     splitter->setOrientation(Qt::Vertical);
     splitter->setChildrenCollapsible(false);
-    this->dockEc->setWidget(splitter);
 
     ECManagerTree *treeEcList = new ECManagerTree(splitter);
 
@@ -776,20 +745,16 @@ void MainWindow::createEcDock(void)
                      &ECManagerTree::ecSelected,
                      treeEc,
                      &ECTree::onEcSelected);
+
+    return splitter;
 }
 
-void MainWindow::createMaterialDock(void)
+QWidget *MainWindow::createMaterialTab()
 {
     R_LOG_TRACE;
-    this->dockMaterial = new QDockWidget(this);
-    this->dockMaterial->setObjectName(QString::fromUtf8("dockMaterialList"));
-    this->dockMaterial->setWindowTitle(QApplication::translate("MainWindow", "Materials"));
-    this->addDockWidget(Qt::RightDockWidgetArea, this->dockMaterial);
-
-    QSplitter *splitter = new QSplitter(this->dockMaterial);
+    QSplitter *splitter = new QSplitter;
     splitter->setOrientation(Qt::Vertical);
     splitter->setChildrenCollapsible(false);
-    this->dockMaterial->setWidget(splitter);
 
     MaterialManagerTree *treeMaterialList = new MaterialManagerTree(this->actionList,splitter);
 
@@ -799,20 +764,15 @@ void MainWindow::createMaterialDock(void)
                      &MaterialManagerTree::materialSelected,
                      treeMaterial,
                      &MaterialTree::onMaterialSelected);
+
+    return splitter;
 }
 
-void MainWindow::createResultsDock(void)
+QWidget *MainWindow::createResultsTab()
 {
     R_LOG_TRACE;
-    this->dockResults = new QDockWidget(this);
-    this->dockResults->setObjectName(QString::fromUtf8("dockResultsList"));
-    this->dockResults->setWindowTitle(QApplication::translate("MainWindow", "Results"));
-    this->addDockWidget(Qt::RightDockWidgetArea, this->dockResults);
-
     QWidget *layoutResults = new QWidget();
     QGridLayout *gridLayout = new QGridLayout(layoutResults);
-
-    this->dockResults->setWidget(layoutResults);
 
     ResultsVariableSelector *resultsComboBox = new ResultsVariableSelector;
 
@@ -825,6 +785,8 @@ void MainWindow::createResultsDock(void)
                      &ResultsVariableSelector::resultsVariableSelected,
                      treeResultsVariable,
                      &ResultsVariableTree::onResultsVariableSelected);
+
+    return layoutResults;
 }
 
 QMenu * MainWindow::createPopupMenu (void)
@@ -968,7 +930,7 @@ uint MainWindow::getNToolBars(void) const
 QList<uint> MainWindow::getSelectedModelIDs(void) const
 {
     R_LOG_TRACE;
-    return this->treeModelManager->getSelectedModelIDs();
+    return this->modelManagerTree->getSelectedModelIDs();
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
@@ -1040,15 +1002,15 @@ void MainWindow::progressBarFinalize(ProgressBar *progressBar, const QString &me
 void MainWindow::setEnabled(bool enabled)
 {
     R_LOG_TRACE;
-    this->dockModel->setEnabled(enabled);
-    this->dockProblem->setEnabled(enabled);
-    this->dockBc->setEnabled(enabled);
-    this->dockIc->setEnabled(enabled);
-    this->dockEc->setEnabled(enabled);
-    this->dockMaterial->setEnabled(enabled);
-    this->dockResults->setEnabled(enabled);
-    this->dockDocuments->setEnabled(enabled);
+    this->modelsTab->setEnabled(enabled);
+    this->documentsTab->setEnabled(enabled);
 //    this->dockRecords->setEnabled(enabled);
+    this->problemTab->setEnabled(enabled);
+    this->bcTab->setEnabled(enabled);
+    this->icTab->setEnabled(enabled);
+    this->ecTab->setEnabled(enabled);
+    this->materialTab->setEnabled(enabled);
+    this->resultsTab->setEnabled(enabled);
     if (enabled)
     {
         this->actionList->enable();
@@ -1179,7 +1141,7 @@ void MainWindow::onModelAdded(uint position)
 {
     R_LOG_TRACE;
     this->modelSubWindows->onModelAdded(position);
-    this->treeModelManager->onModelAdded(position);
+    this->modelManagerTree->onModelAdded(position);
     if (!Session::getInstance().isModelSelected(position))
     {
         Session::getInstance().setModelSelected(position,true);
@@ -1195,7 +1157,7 @@ void MainWindow::onModelRemoved(uint position)
 {
     R_LOG_TRACE;
     this->modelSubWindows->onModelRemoved(position);
-    this->treeModelManager->onModelRemoved(position);
+    this->modelManagerTree->onModelRemoved(position);
     this->actionList->processAvailability();
 }
 
@@ -1203,7 +1165,7 @@ void MainWindow::onModelChanged(uint position)
 {
     R_LOG_TRACE;
     this->modelSubWindows->onModelChanged(position);
-    this->treeModelManager->onModelChanged(position);
+    this->modelManagerTree->onModelChanged(position);
     this->actionList->processAvailability();
 }
 

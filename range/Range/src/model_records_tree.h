@@ -31,16 +31,23 @@ class ModelRecordsTree : public QTreeWidget
             NColumns
         };
 
+        bool directoryChanged;
+
     public:
 
         //! Constructor.
         explicit ModelRecordsTree(QWidget *parent = nullptr);
 
         //! Return true if marked record is first.
-        bool isFirst(void);
+        bool isFirst();
 
         //! Return true if marked record is last.
-        bool isLast(void);
+        bool isLast();
+
+    private:
+
+        //! Populate tree.
+        void populate();
 
     signals:
 
@@ -50,24 +57,27 @@ class ModelRecordsTree : public QTreeWidget
     public slots:
 
         //! Forced mark current record.
-        void markCurrent(void);
+        void markCurrent();
 
         //! Mark previous record.
-        void markPrevious(void);
+        void markPrevious();
 
         //! Mark next record.
-        void markNext(void);
+        void markNext();
 
         //! Mark first record.
-        void markFirst(void);
+        void markFirst();
 
         //! Mark last record.
-        void markLast(void);
+        void markLast();
         
     protected slots:
 
-        //! Populate tree.
-        void populate(void);
+        //! Timeout expired.
+        void onTimeout();
+
+        //! Directory has changed.
+        void onDirectoryChanged(const QString &);
 
         //! Model selection has changed.
         void onModelSelectionChanged(uint modelID);

@@ -67,6 +67,9 @@ class RMeshSetup
         //! Set maximum edge length.
         void setMaxEdgeLength(double maxEdgeLength);
 
+        //! Convert to printable string.
+        QString toString() const;
+
         //! Allow RFileIO to access private members.
         friend class RFileIO;
 

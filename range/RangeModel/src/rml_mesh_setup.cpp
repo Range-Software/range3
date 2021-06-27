@@ -77,3 +77,17 @@ void RMeshSetup::setMaxEdgeLength(double maxEdgeLength)
 {
     this->maxEdgeLength = maxEdgeLength;
 }
+
+QString RMeshSetup::toString() const
+{
+    QString variableCsvList;
+    foreach (auto variable, this->variables)
+    {
+        if (!variableCsvList.isEmpty())
+        {
+            variableCsvList.append(", ");
+        }
+        variableCsvList.append(RVariable::getName(variable));
+    }
+    return "{ Variables: [ " + variableCsvList + " ], Minimum edge length: " + QString::number(this->minEdgeLength) + ", Maximum edge length: " + QString::number(this->maxEdgeLength);
+}

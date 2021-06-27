@@ -1,8 +1,8 @@
 version: 2
 jobs:
-  build-centos:
+  build-centos8:
     docker:
-      - image: centos:latest
+      - image: centos:centos8
     steps:
       - checkout
       - run:
@@ -14,9 +14,9 @@ jobs:
       - run:
           name: Upload
           command: scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -P $UPLOAD_PORT build-Release/packages/rpmbuild/RPMS/$(uname -m)/*.rpm $UPLOAD_USER@$UPLOAD_HOST:.
-  build-fedora33:
+  build-fedora34:
     docker:
-      - image: fedora:33
+      - image: fedora:34
     steps:
       - checkout
       - run:
@@ -42,31 +42,14 @@ jobs:
       - run:
           name: Upload
           command: scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -P $UPLOAD_PORT build-Release/packages/rpmbuild/RPMS/$(uname -m)/*.rpm $UPLOAD_USER@$UPLOAD_HOST:.
-  build-debian10:
+  build-ubuntu2104:
     docker:
-      - image: debian:10
+      - image: ubuntu:21.04
     steps:
       - checkout
       - run:
           name: Prerequisites
-          command: ./scripts/prereqs_debian.sh
-      - run:
-          name: Build
-          command: ./scripts/build.sh --clean --max-nc=2 && ./scripts/create_package.sh --rpm --distro=debian$(lsb_release -r -s)
-      - run:
-          name: Alien
-          command: alien -k -d build-Release/packages/rpmbuild/RPMS/$(uname -m)/*.rpm
-      - run:
-          name: Upload
-          command: scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -P $UPLOAD_PORT *.deb $UPLOAD_USER@$UPLOAD_HOST:.
-  build-ubuntu2010:
-    docker:
-      - image: ubuntu:20.10
-    steps:
-      - checkout
-      - run:
-          name: Prerequisites
-          command: ./scripts/prereqs_debian.sh
+          command: ./scripts/prereqs_ubuntu.sh
       - run:
           name: Build
           command: ./scripts/build.sh --clean --max-nc=2 && ./scripts/create_package.sh --rpm --distro=ubuntu$(lsb_release -r -s)
@@ -80,8 +63,7 @@ workflows:
   version: 2
   build_all:
     jobs:
-      - build-fedora33
+      - build-fedora34
       - build-opensusetumbleweed
-      - build-ubuntu2010
-#      - build-centos
-#      - build-debian10
+      - build-ubuntu2104
+      - build-centos8

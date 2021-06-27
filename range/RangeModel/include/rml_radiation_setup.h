@@ -67,6 +67,9 @@ class RRadiationSetup
         //! Get radiation resolution text representation.
         static QString getResolutionText(RRadiationResolution resolution);
 
+        //! Convert to printable string.
+        QString toString() const;
+
         //! Allow RFileIO to access private members.
         friend class RFileIO;
 };

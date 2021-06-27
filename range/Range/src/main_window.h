@@ -37,28 +37,28 @@ class MainWindow : public QMainWindow
         SubWindowManager *modelSubWindows;
         //! List of toolbars containing action types.
         QList<QToolBar*> toolBars;
-        //! Model manager dock.
-        QDockWidget *dockModel;
-        //! Problem setup manager dock.
-        QDockWidget *dockProblem;
-        //! Boundary conditions manager dock.
-        QDockWidget *dockBc;
-        //! Initial conditions manager dock.
-        QDockWidget *dockIc;
-        //! Environment conditions manager dock.
-        QDockWidget *dockEc;
-        //! Material manager dock.
-        QDockWidget *dockMaterial;
-        //! Results manager dock.
-        QDockWidget *dockResults;
-        //! Document manager dock.
-        QDockWidget *dockDocuments;
-        //! Record manager dock.
-        QDockWidget *dockRecords;
+        //! Model manager tab.
+        QWidget *modelsTab;
+        //! Document manager tab.
+        QWidget *documentsTab;
+        //! Record manager tab.
+        QWidget *recordsTab;
+        //! Problem setup manager tab.
+        QWidget *problemTab;
+        //! Boundary conditions manager tab.
+        QWidget *bcTab;
+        //! Initial conditions manager tab.
+        QWidget *icTab;
+        //! Environment conditions manager tab.
+        QWidget *ecTab;
+        //! Material manager tab.
+        QWidget *materialTab;
+        //! Results manager tab.
+        QWidget *resultsTab;
         //! Central tab widget.
         CentralTabWidget *centralTabWidget;
         //! Model manager.
-        ModelTree *treeModelManager;
+        ModelTree *modelManagerTree;
         //! Progress bar.
         ProgressBar* mainProgressBar;
         //! Download bar.
@@ -128,32 +128,32 @@ class MainWindow : public QMainWindow
         //! Create central widget.
         void createCentralWidget(void);
 
-        //! Create model dock.
-        void createModelDock(void);
+        //! Create model tab.
+        QWidget *createModelTab();
 
-        //! Create problem setup dock.
-        void createProblemDock(void);
+        //! Create document tab.
+        QWidget *createDocumentTab();
 
-        //! Create boundary condition dock.
-        void createBcDock(void);
+        //! Create records tab.
+        QWidget *createRecordsTab();
 
-        //! Create initial condition dock.
-        void createIcDock(void);
+        //! Create problem setup tab.
+        QWidget *createProblemTab();
 
-        //! Create environmant condition dock.
-        void createEcDock(void);
+        //! Create boundary condition tab.
+        QWidget *createBcTab();
 
-        //! Create material dock.
-        void createMaterialDock(void);
+        //! Create initial condition tab.
+        QWidget *createIcTab();
 
-        //! Create results dock.
-        void createResultsDock(void);
+        //! Create environmant condition tab.
+        QWidget *createEcTab();
 
-        //! Create document dock.
-        void createDocumentDock(void);
+        //! Create material tab.
+        QWidget *createMaterialTab();
 
-        //! Create records dock.
-        void createRecordsDock(void);
+        //! Create results tab.
+        QWidget *createResultsTab();
 
         //! Create custom popup menu.
         QMenu * createPopupMenu (void);

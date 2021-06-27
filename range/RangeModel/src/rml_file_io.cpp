@@ -562,8 +562,10 @@ void RFileIO::writeAscii(RFile &outFile, const QString &sValue, bool addNewLine)
 void RFileIO::writeBinary(RSaveFile &outFile, const QString &sValue)
 {
     QByteArray array = sValue.toUtf8();
-    RFileIO::writeBinary(outFile,array.size());
-    outFile.write(array,array.size());
+//    RFileIO::writeBinary(outFile,array.size());
+//    outFile.write(array,array.size());
+    RFileIO::writeBinary(outFile,uint(strlen(array.constData())));
+    outFile.write(array.constData(),uint(strlen(array.constData())));
     if (outFile.error() != RFile::NoError)
     {
         throw RError(R_ERROR_WRITE_FILE,R_ERROR_REF, "Failed to write string value.");
@@ -2209,7 +2211,7 @@ void RFileIO::writeAscii(RSaveFile &outFile, const RCondition &condition, bool a
     {
         RFileIO::writeAscii(outFile,' ',false);
     }
-    RFileIO::writeAscii(outFile,condition.size(),addNewLine);
+    RFileIO::writeAscii(outFile,uint(condition.size()),addNewLine);
     if (!addNewLine)
     {
         RFileIO::writeAscii(outFile,' ',false);
@@ -2249,7 +2251,7 @@ void RFileIO::writeAscii(RSaveFile &outFile, const RCondition &condition, bool a
 void RFileIO::writeBinary(RSaveFile &outFile, const RCondition &condition)
 {
     RFileIO::writeBinary(outFile,condition.name);
-    RFileIO::writeBinary(outFile,condition.size());
+    RFileIO::writeBinary(outFile,uint(condition.size()));
     for (unsigned int i=0;i<condition.components.size();i++)
     {
         RFileIO::writeBinary(outFile,condition.components[i]);
@@ -2607,7 +2609,7 @@ void RFileIO::writeAscii(RSaveFile &outFile, const RMaterial &material, bool add
     {
         RFileIO::writeAscii(outFile,' ',false);
     }
-    RFileIO::writeAscii(outFile,material.size(),addNewLine);
+    RFileIO::writeAscii(outFile,uint(material.size()),addNewLine);
     if (!addNewLine)
     {
         RFileIO::writeAscii(outFile,' ',false);
@@ -2628,7 +2630,7 @@ void RFileIO::writeBinary(RSaveFile &outFile, const RMaterial &material)
     RFileIO::writeBinary(outFile,material.id);
     RFileIO::writeBinary(outFile,material.name);
     RFileIO::writeBinary(outFile,material.state);
-    RFileIO::writeBinary(outFile,material.size());
+    RFileIO::writeBinary(outFile,uint(material.size()));
     for (unsigned int i=0;i<material.properties.size();i++)
     {
         RFileIO::writeBinary(outFile,material.properties[i]);
@@ -2752,7 +2754,7 @@ void RFileIO::writeAscii(RSaveFile &outFile, const RElement &element, bool addNe
     {
         RFileIO::writeAscii(outFile,' ',false);
     }
-    RFileIO::writeAscii(outFile,element.size(),addNewLine);
+    RFileIO::writeAscii(outFile,uint(element.size()),addNewLine);
     if (!addNewLine)
     {
         RFileIO::writeAscii(outFile,' ',false);
@@ -2771,7 +2773,7 @@ void RFileIO::writeAscii(RSaveFile &outFile, const RElement &element, bool addNe
 void RFileIO::writeBinary(RSaveFile &outFile, const RElement &element)
 {
     RFileIO::writeBinary(outFile,element.type);
-    RFileIO::writeBinary(outFile,element.size());
+    RFileIO::writeBinary(outFile,uint(element.size()));
     for (unsigned int i=0;i<element.nodeIDs.size();i++)
     {
         RFileIO::writeBinary(outFile,element.nodeIDs[i]);
@@ -3154,7 +3156,7 @@ void RFileIO::writeAscii(RSaveFile &outFile, const RElementGroup &elementGroup, 
     {
         RFileIO::writeAscii(outFile,' ',false);
     }
-    RFileIO::writeAscii(outFile,elementGroup.size(),addNewLine);
+    RFileIO::writeAscii(outFile,uint(elementGroup.size()),addNewLine);
     if (!addNewLine)
     {
         RFileIO::writeAscii(outFile,' ',false);
@@ -3213,7 +3215,7 @@ void RFileIO::writeAscii(RSaveFile &outFile, const RElementGroup &elementGroup, 
 void RFileIO::writeBinary(RSaveFile &outFile, const RElementGroup &elementGroup)
 {
     RFileIO::writeBinary(outFile,static_cast<const REntityGroup&>(elementGroup));
-    RFileIO::writeBinary(outFile,elementGroup.size());
+    RFileIO::writeBinary(outFile,uint(elementGroup.size()));
     for (unsigned int i=0;i<elementGroup.elementIDs.size();i++)
     {
         RFileIO::writeBinary(outFile,elementGroup.elementIDs[i]);
@@ -4484,9 +4486,9 @@ void RFileIO::readBinary(RFile &inFile, RMeshSetup &meshSetup)
 {
     meshSetup.variables.clear();
 
-    int nVariables = 0;
+    uint nVariables = 0;
     RFileIO::readBinary(inFile,nVariables);
-    for (int i=0;i<nVariables;i++)
+    for (uint i=0;i<nVariables;i++)
     {
         RVariableType variableType;
         RFileIO::readBinary(inFile,variableType);
@@ -4498,7 +4500,7 @@ void RFileIO::readBinary(RFile &inFile, RMeshSetup &meshSetup)
 
 void RFileIO::writeAscii(RSaveFile &outFile, const RMeshSetup &meshSetup, bool addNewLine)
 {
-    RFileIO::writeAscii(outFile,meshSetup.variables.size(),addNewLine);
+    RFileIO::writeAscii(outFile,uint(meshSetup.variables.size()),addNewLine);
     if (!addNewLine)
     {
         RFileIO::writeAscii(outFile,' ',false);
@@ -4521,7 +4523,7 @@ void RFileIO::writeAscii(RSaveFile &outFile, const RMeshSetup &meshSetup, bool a
 
 void RFileIO::writeBinary(RSaveFile &outFile, const RMeshSetup &meshSetup)
 {
-    RFileIO::writeBinary(outFile,meshSetup.variables.size());
+    RFileIO::writeBinary(outFile,uint(meshSetup.variables.size()));
     foreach (RVariableType variableType, meshSetup.variables)
     {
         RFileIO::writeBinary(outFile,variableType);

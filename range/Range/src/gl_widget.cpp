@@ -63,8 +63,7 @@ GLWidget::GLWidget(uint modelID, QWidget *parent)
       useGlCullFace(true)
 {
     R_LOG_TRACE_IN;
-//    this->desktopDevicePixelRatio = QApplication::desktop()->devicePixelRatio();
-    this->desktopDevicePixelRatio = int(MainWindow::getInstance()->screen()->devicePixelRatio());
+    this->desktopDevicePixelRatio = MainWindow::getInstance()->devicePixelRatio();
 
     this->setFocusPolicy(Qt::StrongFocus);
     this->setAutoFillBackground(false);
@@ -101,7 +100,6 @@ GLWidget::GLWidget(uint modelID, QWidget *parent)
     QObject::connect(Session::getInstance().getDrawEngine(),&DrawEngine::objectAdded,this,&GLWidget::onDrawObjectAdded);
     QObject::connect(Session::getInstance().getDrawEngine(),&DrawEngine::objectRemoved,this,&GLWidget::onDrawObjectRemoved);
     QObject::connect(Session::getInstance().getDrawEngine(),&DrawEngine::objectChanged,this,&GLWidget::onDrawObjectChanged);
-
     this->font = QPainter(this).font();
     R_LOG_TRACE_OUT;
 }

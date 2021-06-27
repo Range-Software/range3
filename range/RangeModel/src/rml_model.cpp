@@ -7280,7 +7280,9 @@ QString RModel::readAscii(const QString &fileName)
 
     RFileHeader fileHeader;
 
+    RLogger::debug("Reading file header\n");
     RFileIO::readAscii(modelFile,fileHeader);
+    RLogger::debug("File header: %s\n",fileHeader.toString().toUtf8().constData());
     if (fileHeader.getType() == R_FILE_TYPE_LINK)
     {
         QString targetFileName(RFileManager::findLinkTargetFileName(fileName,fileHeader.getInformation()));
@@ -7292,15 +7294,22 @@ QString RModel::readAscii(const QString &fileName)
         throw RError(R_ERROR_INVALID_FILE_FORMAT,R_ERROR_REF,"File type of the file \'" + fileName + "\' is not MODEL.");
     }
 
+    RLogger::debug("File version: %s (target: %s)\n",
+                   fileHeader.getVersion().toString().toUtf8().constData(),
+                   _version.toString().toUtf8().constData());
+
     // Set file version
     modelFile.setVersion(fileHeader.getVersion());
 
     // Reading mesh/model values
 
     RFileIO::readAscii(modelFile,this->name);
+    RLogger::debug("Name: '%s'\n",this->name.toUtf8().constData());
     RFileIO::readAscii(modelFile,this->description);
+    RLogger::debug("Description: '%s'\n",this->description.toUtf8().constData());
     uint nNodes = 0;
     RFileIO::readAscii(modelFile,nNodes);
+    RLogger::debug("Nodes: %u\n",nNodes);
     this->nodes.resize(nNodes);
     for (uint i=0;i<nNodes;i++)
     {
@@ -7308,6 +7317,7 @@ QString RModel::readAscii(const QString &fileName)
     }
     uint nElements = 0;
     RFileIO::readAscii(modelFile,nElements);
+    RLogger::debug("Elements: %u\n",nElements);
     this->elements.resize(nElements);
     for (uint i=0;i<nElements;i++)
     {
@@ -7315,6 +7325,7 @@ QString RModel::readAscii(const QString &fileName)
     }
     uint nPoints = 0;
     RFileIO::readAscii(modelFile,nPoints);
+    RLogger::debug("Points: %u\n",nPoints);
     this->points.resize(nPoints);
     for (uint i=0;i<nPoints;i++)
     {
@@ -7322,6 +7333,7 @@ QString RModel::readAscii(const QString &fileName)
     }
     uint nLines = 0;
     RFileIO::readAscii(modelFile,nLines);
+    RLogger::debug("Lines: %u\n",nLines);
     this->lines.resize(nLines);
     for (uint i=0;i<nLines;i++)
     {
@@ -7329,6 +7341,7 @@ QString RModel::readAscii(const QString &fileName)
     }
     uint nSurfaces = 0;
     RFileIO::readAscii(modelFile,nSurfaces);
+    RLogger::debug("Surfaces: %u\n",nSurfaces);
     this->surfaces.resize(nSurfaces);
     for (uint i=0;i<nSurfaces;i++)
     {
@@ -7336,6 +7349,7 @@ QString RModel::readAscii(const QString &fileName)
     }
     uint nVolumes = 0;
     RFileIO::readAscii(modelFile,nVolumes);
+    RLogger::debug("Volumes: %u\n",nVolumes);
     this->volumes.resize(nVolumes);
     for (uint i=0;i<nVolumes;i++)
     {
@@ -7343,6 +7357,7 @@ QString RModel::readAscii(const QString &fileName)
     }
     uint nVectorFields = 0;
     RFileIO::readAscii(modelFile,nVectorFields);
+    RLogger::debug("Vector fields: %u\n",nVectorFields);
     this->vectorFields.resize(nVectorFields);
     for (uint i=0;i<nVectorFields;i++)
     {
@@ -7350,6 +7365,7 @@ QString RModel::readAscii(const QString &fileName)
     }
     uint nScalarFields = 0;
     RFileIO::readAscii(modelFile,nScalarFields);
+    RLogger::debug("Scalar fields: %u\n",nScalarFields);
     this->scalarFields.resize(nScalarFields);
     for (uint i=0;i<nScalarFields;i++)
     {
@@ -7357,6 +7373,7 @@ QString RModel::readAscii(const QString &fileName)
     }
     uint nStreamLines = 0;
     RFileIO::readAscii(modelFile,nStreamLines);
+    RLogger::debug("Stream lines: %u\n",nStreamLines);
     this->streamLines.resize(nStreamLines);
     for (uint i=0;i<nStreamLines;i++)
     {
@@ -7364,6 +7381,7 @@ QString RModel::readAscii(const QString &fileName)
     }
     uint nCuts = 0;
     RFileIO::readAscii(modelFile,nCuts);
+    RLogger::debug("Cuts: %u\n",nCuts);
     this->cuts.resize(nCuts);
     for (uint i=0;i<nCuts;i++)
     {
@@ -7371,6 +7389,7 @@ QString RModel::readAscii(const QString &fileName)
     }
     uint nIsos = 0;
     RFileIO::readAscii(modelFile,nIsos);
+    RLogger::debug("ISOs: %u\n",nIsos);
     this->isos.resize(nIsos);
     for (uint i=0;i<nIsos;i++)
     {
@@ -7381,21 +7400,30 @@ QString RModel::readAscii(const QString &fileName)
     // Reading problem values
 
     RFileIO::readAscii(modelFile,this->taskTree);
+    RLogger::debug("Task tree ...\n");
     RFileIO::readAscii(modelFile,this->timeSolver);
+    RLogger::debug("Time solver ...\n");
     RFileIO::readAscii(modelFile,this->getMatrixSolverConf(RMatrixSolverConf::CG));
+    RLogger::debug("Matrix solver configuration (CG) ...\n");
     if (modelFile.getVersion() > RVersion(0,3,2))
     {
         RFileIO::readAscii(modelFile,this->getMatrixSolverConf(RMatrixSolverConf::GMRES));
+        RLogger::debug("Matrix solver configuration (GMRES) ...\n");
     }
     RFileIO::readAscii(modelFile,this->monitoringPointManager);
+    RLogger::debug("Monitoring points manager ...\n");
     RFileIO::readAscii(modelFile,this->problemSetup);
+    RLogger::debug("Problem setup: %s\n",problemSetup.toString().toUtf8().constData());
 
     // Reading results values
 
     RFileIO::readAscii(modelFile,this->RResults::nnodes);
+    RLogger::debug("Results nodes: %u\n",this->RResults::nnodes);
     RFileIO::readAscii(modelFile,this->RResults::nelements);
+    RLogger::debug("Results elements: %u\n",this->RResults::nelements);
     uint nVariables = 0;
     RFileIO::readAscii(modelFile,nVariables);
+    RLogger::debug("variables: %u\n",nVariables);
     this->RResults::variables.resize(nVariables);
     for (uint i=0;i<this->RResults::variables.size();i++)
     {
@@ -7405,6 +7433,7 @@ QString RModel::readAscii(const QString &fileName)
     // Reading neighbor information.
     uint nSurfaceNeigs = 0;
     RFileIO::readAscii(modelFile,nSurfaceNeigs);
+    RLogger::debug("Surface neighbors: %u\n",nSurfaceNeigs);
     this->surfaceNeigs.resize(nSurfaceNeigs);
     for (uint i=0;i<this->surfaceNeigs.size();i++)
     {
@@ -7412,6 +7441,7 @@ QString RModel::readAscii(const QString &fileName)
     }
     uint nVolumeNeigs = 0;
     RFileIO::readAscii(modelFile,nVolumeNeigs);
+    RLogger::debug("Volume neighbors: %u\n",nVolumeNeigs);
     this->volumeNeigs.resize(nVolumeNeigs);
     for (uint i=0;i<this->volumeNeigs.size();i++)
     {
@@ -7442,7 +7472,9 @@ QString RModel::readBinary(const QString &fileName)
 
     RFileHeader fileHeader;
 
+    RLogger::debug("Reading file header\n");
     RFileIO::readBinary(modelFile,fileHeader);
+    RLogger::debug("File header: %s\n",fileHeader.toString().toUtf8().constData());
     if (fileHeader.getType() == R_FILE_TYPE_LINK)
     {
         QString targetFileName(RFileManager::findLinkTargetFileName(fileName,fileHeader.getInformation()));
@@ -7454,15 +7486,22 @@ QString RModel::readBinary(const QString &fileName)
         throw RError(R_ERROR_INVALID_FILE_FORMAT,R_ERROR_REF,"File type of the file \'" + fileName + "\' is not MODEL.");
     }
 
+    RLogger::debug("File version: %s (target: %s)\n",
+                   fileHeader.getVersion().toString().toUtf8().constData(),
+                   _version.toString().toUtf8().constData());
+
     // Set file version
     modelFile.setVersion(fileHeader.getVersion());
 
     // Reading mesh/model values
 
     RFileIO::readBinary(modelFile,this->name);
+    RLogger::debug("Name: '%s'\n",this->name.toUtf8().constData());
     RFileIO::readBinary(modelFile,this->description);
+    RLogger::debug("Description: '%s'\n",this->description.toUtf8().constData());
     uint nNodes = 0;
     RFileIO::readBinary(modelFile,nNodes);
+    RLogger::debug("Nodes: %u\n",nNodes);
     this->nodes.resize(nNodes);
     for (uint i=0;i<nNodes;i++)
     {
@@ -7470,6 +7509,7 @@ QString RModel::readBinary(const QString &fileName)
     }
     uint nElements = 0;
     RFileIO::readBinary(modelFile,nElements);
+    RLogger::debug("Elements: %u\n",nElements);
     this->elements.resize(nElements);
     for (uint i=0;i<nElements;i++)
     {
@@ -7477,6 +7517,7 @@ QString RModel::readBinary(const QString &fileName)
     }
     uint nPoints = 0;
     RFileIO::readBinary(modelFile,nPoints);
+    RLogger::debug("Points: %u\n",nPoints);
     this->points.resize(nPoints);
     for (uint i=0;i<nPoints;i++)
     {
@@ -7484,6 +7525,7 @@ QString RModel::readBinary(const QString &fileName)
     }
     uint nLines = 0;
     RFileIO::readBinary(modelFile,nLines);
+    RLogger::debug("Lines: %u\n",nLines);
     this->lines.resize(nLines);
     for (uint i=0;i<nLines;i++)
     {
@@ -7491,6 +7533,7 @@ QString RModel::readBinary(const QString &fileName)
     }
     uint nSurfaces = 0;
     RFileIO::readBinary(modelFile,nSurfaces);
+    RLogger::debug("Surfaces: %u\n",nSurfaces);
     this->surfaces.resize(nSurfaces);
     for (uint i=0;i<nSurfaces;i++)
     {
@@ -7498,6 +7541,7 @@ QString RModel::readBinary(const QString &fileName)
     }
     uint nVolumes = 0;
     RFileIO::readBinary(modelFile,nVolumes);
+    RLogger::debug("Volumes: %u\n",nVolumes);
     this->volumes.resize(nVolumes);
     for (uint i=0;i<nVolumes;i++)
     {
@@ -7505,6 +7549,7 @@ QString RModel::readBinary(const QString &fileName)
     }
     uint nVectorFields = 0;
     RFileIO::readBinary(modelFile,nVectorFields);
+    RLogger::debug("Vector fields: %u\n",nVectorFields);
     this->vectorFields.resize(nVectorFields);
     for (uint i=0;i<nVectorFields;i++)
     {
@@ -7512,6 +7557,7 @@ QString RModel::readBinary(const QString &fileName)
     }
     uint nScalarFields = 0;
     RFileIO::readBinary(modelFile,nScalarFields);
+    RLogger::debug("Scalar fields: %u\n",nScalarFields);
     this->scalarFields.resize(nScalarFields);
     for (uint i=0;i<nScalarFields;i++)
     {
@@ -7519,6 +7565,7 @@ QString RModel::readBinary(const QString &fileName)
     }
     uint nStreamLines = 0;
     RFileIO::readBinary(modelFile,nStreamLines);
+    RLogger::debug("Stream lines: %u\n",nStreamLines);
     this->streamLines.resize(nStreamLines);
     for (uint i=0;i<nStreamLines;i++)
     {
@@ -7526,6 +7573,7 @@ QString RModel::readBinary(const QString &fileName)
     }
     uint nCuts = 0;
     RFileIO::readBinary(modelFile,nCuts);
+    RLogger::debug("Cuts: %u\n",nCuts);
     this->cuts.resize(nCuts);
     for (uint i=0;i<nCuts;i++)
     {
@@ -7533,6 +7581,7 @@ QString RModel::readBinary(const QString &fileName)
     }
     uint nIsos = 0;
     RFileIO::readBinary(modelFile,nIsos);
+    RLogger::debug("ISOs: %u\n",nIsos);
     this->isos.resize(nIsos);
     for (uint i=0;i<nIsos;i++)
     {
@@ -7543,21 +7592,30 @@ QString RModel::readBinary(const QString &fileName)
     // Reading problem values
 
     RFileIO::readBinary(modelFile,this->taskTree);
+    RLogger::debug("Task tree ...\n");
     RFileIO::readBinary(modelFile,this->timeSolver);
+    RLogger::debug("Time solver ...\n");
     RFileIO::readBinary(modelFile,this->getMatrixSolverConf(RMatrixSolverConf::CG));
+    RLogger::debug("Matrix solver configuration (CG) ...\n");
     if (modelFile.getVersion() > RVersion(0,3,2))
     {
         RFileIO::readBinary(modelFile,this->getMatrixSolverConf(RMatrixSolverConf::GMRES));
+        RLogger::debug("Matrix solver configuration (GMRES) ...\n");
     }
     RFileIO::readBinary(modelFile,this->monitoringPointManager);
+    RLogger::debug("Monitoring points manager ...\n");
     RFileIO::readBinary(modelFile,this->problemSetup);
+    RLogger::debug("Problem setup: %s\n",problemSetup.toString().toUtf8().constData());
 
     // Reading results values
 
     RFileIO::readBinary(modelFile,this->RResults::nnodes);
+    RLogger::debug("Results nodes: %u\n",this->RResults::nnodes);
     RFileIO::readBinary(modelFile,this->RResults::nelements);
+    RLogger::debug("Results elements: %u\n",this->RResults::nelements);
     uint nVariables = 0;
     RFileIO::readBinary(modelFile,nVariables);
+    RLogger::debug("variables: %u\n",nVariables);
     this->RResults::variables.resize(nVariables);
     for (uint i=0;i<this->RResults::variables.size();i++)
     {
@@ -7567,6 +7625,7 @@ QString RModel::readBinary(const QString &fileName)
     // Reading neighbor information.
     uint nSurfaceNeigs = 0;
     RFileIO::readBinary(modelFile,nSurfaceNeigs);
+    RLogger::debug("Surface neighbors: %u\n",nSurfaceNeigs);
     this->surfaceNeigs.resize(nSurfaceNeigs);
     for (uint i=0;i<this->surfaceNeigs.size();i++)
     {
@@ -7574,6 +7633,7 @@ QString RModel::readBinary(const QString &fileName)
     }
     uint nVolumeNeigs = 0;
     RFileIO::readBinary(modelFile,nVolumeNeigs);
+    RLogger::debug("Volume neighbors: %u\n",nVolumeNeigs);
     this->volumeNeigs.resize(nVolumeNeigs);
     for (uint i=0;i<this->volumeNeigs.size();i++)
     {
@@ -7617,12 +7677,17 @@ void RModel::writeAscii(const QString &fileName) const
                         + this->getNIsos();
     uint cstep = 0;
 
-    RFileIO::writeAscii(modelFile,RFileHeader(R_FILE_TYPE_MODEL,_version));
+    RFileHeader fileHeader(R_FILE_TYPE_MODEL,_version);
+    RLogger::debug("File header: %s\n",fileHeader.toString().toUtf8().constData());
+    RFileIO::writeAscii(modelFile,fileHeader);
 
     // Writing mesh/model values
 
+    RLogger::debug("Name: '%s'\n",this->name.toUtf8().constData());
     RFileIO::writeAscii(modelFile,"\"" + this->name + "\"");
+    RLogger::debug("Description: '%s'\n",this->description.toUtf8().constData());
     RFileIO::writeAscii(modelFile,"\"" + this->description + "\"");
+    RLogger::debug("Nodes: %u\n",this->getNNodes());
     RFileIO::writeAscii(modelFile,this->getNNodes());
     for (uint i=0;i<this->getNNodes();i++)
     {
@@ -7630,6 +7695,7 @@ void RModel::writeAscii(const QString &fileName) const
         RFileIO::writeAscii(modelFile,this->nodes[i],false);
         RFileIO::writeNewLineAscii(modelFile);
     }
+    RLogger::debug("Elements: %u\n",this->getNElements());
     RFileIO::writeAscii(modelFile,this->getNElements());
     for (uint i=0;i<this->getNElements();i++)
     {
@@ -7637,6 +7703,7 @@ void RModel::writeAscii(const QString &fileName) const
         RFileIO::writeAscii(modelFile,this->elements[i],false);
         RFileIO::writeNewLineAscii(modelFile);
     }
+    RLogger::debug("Points: %u\n",this->getNPoints());
     RFileIO::writeAscii(modelFile,this->getNPoints());
     for (uint i=0;i<this->getNPoints();i++)
     {
@@ -7644,6 +7711,7 @@ void RModel::writeAscii(const QString &fileName) const
         RFileIO::writeAscii(modelFile,this->points[i],false);
         RFileIO::writeNewLineAscii(modelFile);
     }
+    RLogger::debug("Lines: %u\n",this->getNLines());
     RFileIO::writeAscii(modelFile,this->getNLines());
     for (uint i=0;i<this->getNLines();i++)
     {
@@ -7651,6 +7719,7 @@ void RModel::writeAscii(const QString &fileName) const
         RFileIO::writeAscii(modelFile,this->lines[i],false);
         RFileIO::writeNewLineAscii(modelFile);
     }
+    RLogger::debug("Surfaces: %u\n",this->getNSurfaces());
     RFileIO::writeAscii(modelFile,this->getNSurfaces());
     for (uint i=0;i<this->getNSurfaces();i++)
     {
@@ -7658,6 +7727,7 @@ void RModel::writeAscii(const QString &fileName) const
         RFileIO::writeAscii(modelFile,this->surfaces[i],false);
         RFileIO::writeNewLineAscii(modelFile);
     }
+    RLogger::debug("Volumes: %u\n",this->getNVolumes());
     RFileIO::writeAscii(modelFile,this->getNVolumes());
     for (uint i=0;i<this->getNVolumes();i++)
     {
@@ -7665,6 +7735,7 @@ void RModel::writeAscii(const QString &fileName) const
         RFileIO::writeAscii(modelFile,this->volumes[i],false);
         RFileIO::writeNewLineAscii(modelFile);
     }
+    RLogger::debug("Vector fields: %u\n",this->getNVectorFields());
     RFileIO::writeAscii(modelFile,this->getNVectorFields());
     for (uint i=0;i<this->getNVectorFields();i++)
     {
@@ -7672,6 +7743,7 @@ void RModel::writeAscii(const QString &fileName) const
         RFileIO::writeAscii(modelFile,this->vectorFields[i],false);
         RFileIO::writeNewLineAscii(modelFile);
     }
+    RLogger::debug("Scalar fields: %u\n",this->getNScalarFields());
     RFileIO::writeAscii(modelFile,this->getNScalarFields());
     for (uint i=0;i<this->getNScalarFields();i++)
     {
@@ -7679,6 +7751,7 @@ void RModel::writeAscii(const QString &fileName) const
         RFileIO::writeAscii(modelFile,this->scalarFields[i],false);
         RFileIO::writeNewLineAscii(modelFile);
     }
+    RLogger::debug("Stream lines: %u\n",this->getNStreamLines());
     RFileIO::writeAscii(modelFile,this->getNStreamLines());
     for (uint i=0;i<this->getNStreamLines();i++)
     {
@@ -7686,6 +7759,7 @@ void RModel::writeAscii(const QString &fileName) const
         RFileIO::writeAscii(modelFile,this->streamLines[i],false);
         RFileIO::writeNewLineAscii(modelFile);
     }
+    RLogger::debug("Cuts: %u\n",this->getNCuts());
     RFileIO::writeAscii(modelFile,this->getNCuts());
     for (uint i=0;i<this->getNCuts();i++)
     {
@@ -7693,6 +7767,7 @@ void RModel::writeAscii(const QString &fileName) const
         RFileIO::writeAscii(modelFile,this->cuts[i],false);
         RFileIO::writeNewLineAscii(modelFile);
     }
+    RLogger::debug("ISOs: %u\n",this->getNIsos());
     RFileIO::writeAscii(modelFile,this->getNIsos());
     for (uint i=0;i<this->getNIsos();i++)
     {
@@ -7704,17 +7779,26 @@ void RModel::writeAscii(const QString &fileName) const
 
     // Writing problem values
 
+    RLogger::debug("Task tree ...\n");
     RFileIO::writeAscii(modelFile,this->taskTree);
+    RLogger::debug("Time solver ...\n");
     RFileIO::writeAscii(modelFile,this->timeSolver);
+    RLogger::debug("Matrix solver configuration (CG) ...\n");
     RFileIO::writeAscii(modelFile,this->getMatrixSolverConf(RMatrixSolverConf::CG));
+    RLogger::debug("Matrix solver configuration (GMRES) ...\n");
     RFileIO::writeAscii(modelFile,this->getMatrixSolverConf(RMatrixSolverConf::GMRES));
+    RLogger::debug("Monitoring points manager ...\n");
     RFileIO::writeAscii(modelFile,this->monitoringPointManager);
+    RLogger::debug("Problem setup: %s\n",problemSetup.toString().toUtf8().constData());
     RFileIO::writeAscii(modelFile,this->problemSetup);
 
-    // Reading results values
+    // Writing results values
 
+    RLogger::debug("Results nodes: %u\n",this->RResults::nnodes);
     RFileIO::writeAscii(modelFile,this->RResults::nnodes);
+    RLogger::debug("Results elements: %u\n",this->RResults::nelements);
     RFileIO::writeAscii(modelFile,this->RResults::nelements);
+    RLogger::debug("variables: %u\n",this->RResults::variables.size());
     RFileIO::writeAscii(modelFile,uint(this->RResults::variables.size()));
     for (uint i=0;i<this->RResults::variables.size();i++)
     {
@@ -7722,11 +7806,13 @@ void RModel::writeAscii(const QString &fileName) const
     }
 
     // Writing neighbor information.
+    RLogger::debug("Surface neighbors: %u\n",this->surfaceNeigs.size());
     RFileIO::writeAscii(modelFile,uint(this->surfaceNeigs.size()));
     for (uint i=0;i<this->surfaceNeigs.size();i++)
     {
         RFileIO::writeAscii(modelFile,this->surfaceNeigs[i]);
     }
+    RLogger::debug("Volume neighbors: %u\n",this->volumeNeigs.size());
     RFileIO::writeAscii(modelFile,uint(this->volumeNeigs.size()));
     for (uint i=0;i<this->volumeNeigs.size();i++)
     {
@@ -7770,72 +7856,87 @@ void RModel::writeBinary(const QString &fileName) const
                         + this->getNIsos();
     uint cstep = 0;
 
-    RFileIO::writeBinary(modelFile,RFileHeader(R_FILE_TYPE_MODEL,_version));
+    RFileHeader fileHeader(R_FILE_TYPE_MODEL,_version);
+    RLogger::debug("File header: %s\n",fileHeader.toString().toUtf8().constData());
+    RFileIO::writeBinary(modelFile,fileHeader);
 
     // Writing mesh/model values
 
+    RLogger::debug("Name: '%s'\n",this->name.toUtf8().constData());
     RFileIO::writeBinary(modelFile,this->name);
+    RLogger::debug("Description: '%s'\n",this->description.toUtf8().constData());
     RFileIO::writeBinary(modelFile,this->description);
+    RLogger::debug("Nodes: %u\n",this->getNNodes());
     RFileIO::writeBinary(modelFile,this->getNNodes());
     for (uint i=0;i<this->getNNodes();i++)
     {
         RProgressPrint(cstep++,nsteps);
         RFileIO::writeBinary(modelFile,this->nodes[i]);
     }
+    RLogger::debug("Elements: %u\n",this->getNElements());
     RFileIO::writeBinary(modelFile,this->getNElements());
     for (uint i=0;i<this->getNElements();i++)
     {
         RProgressPrint(cstep++,nsteps);
         RFileIO::writeBinary(modelFile,this->elements[i]);
     }
+    RLogger::debug("Points: %u\n",this->getNPoints());
     RFileIO::writeBinary(modelFile,this->getNPoints());
     for (uint i=0;i<this->getNPoints();i++)
     {
         RProgressPrint(cstep++,nsteps);
         RFileIO::writeBinary(modelFile,this->points[i]);
     }
+    RLogger::debug("Lines: %u\n",this->getNLines());
     RFileIO::writeBinary(modelFile,this->getNLines());
     for (uint i=0;i<this->getNLines();i++)
     {
         RProgressPrint(cstep++,nsteps);
         RFileIO::writeBinary(modelFile,this->lines[i]);
     }
+    RLogger::debug("Surfaces: %u\n",this->getNSurfaces());
     RFileIO::writeBinary(modelFile,this->getNSurfaces());
     for (uint i=0;i<this->getNSurfaces();i++)
     {
         RProgressPrint(cstep++,nsteps);
         RFileIO::writeBinary(modelFile,this->surfaces[i]);
     }
+    RLogger::debug("Volumes: %u\n",this->getNVolumes());
     RFileIO::writeBinary(modelFile,this->getNVolumes());
     for (uint i=0;i<this->getNVolumes();i++)
     {
         RProgressPrint(cstep++,nsteps);
         RFileIO::writeBinary(modelFile,this->volumes[i]);
     }
+    RLogger::debug("Vector fields: %u\n",this->getNVectorFields());
     RFileIO::writeBinary(modelFile,this->getNVectorFields());
     for (uint i=0;i<this->getNVectorFields();i++)
     {
         RProgressPrint(cstep++,nsteps);
         RFileIO::writeBinary(modelFile,this->vectorFields[i]);
     }
+    RLogger::debug("Scalar fields: %u\n",this->getNScalarFields());
     RFileIO::writeBinary(modelFile,this->getNScalarFields());
     for (uint i=0;i<this->getNScalarFields();i++)
     {
         RProgressPrint(cstep++,nsteps);
         RFileIO::writeBinary(modelFile,this->scalarFields[i]);
     }
+    RLogger::debug("Stream lines: %u\n",this->getNStreamLines());
     RFileIO::writeBinary(modelFile,this->getNStreamLines());
     for (uint i=0;i<this->getNStreamLines();i++)
     {
         RProgressPrint(cstep++,nsteps);
         RFileIO::writeBinary(modelFile,this->streamLines[i]);
     }
+    RLogger::debug("Cuts: %u\n",this->getNCuts());
     RFileIO::writeBinary(modelFile,this->getNCuts());
     for (uint i=0;i<this->getNCuts();i++)
     {
         RProgressPrint(cstep++,nsteps);
         RFileIO::writeBinary(modelFile,this->cuts[i]);
     }
+    RLogger::debug("ISOs: %u\n",this->getNIsos());
     RFileIO::writeBinary(modelFile,this->getNIsos());
     for (uint i=0;i<this->getNIsos();i++)
     {
@@ -7846,17 +7947,26 @@ void RModel::writeBinary(const QString &fileName) const
 
     // Writing problem values
 
+    RLogger::debug("Task tree ...\n");
     RFileIO::writeBinary(modelFile,this->taskTree);
+    RLogger::debug("Time solver ...\n");
     RFileIO::writeBinary(modelFile,this->timeSolver);
+    RLogger::debug("Matrix solver configuration (CG) ...\n");
     RFileIO::writeBinary(modelFile,this->getMatrixSolverConf(RMatrixSolverConf::CG));
+    RLogger::debug("Matrix solver configuration (GMRES) ...\n");
     RFileIO::writeBinary(modelFile,this->getMatrixSolverConf(RMatrixSolverConf::GMRES));
+    RLogger::debug("Monitoring points manager ...\n");
     RFileIO::writeBinary(modelFile,this->monitoringPointManager);
+    RLogger::debug("Problem setup: %s\n",problemSetup.toString().toUtf8().constData());
     RFileIO::writeBinary(modelFile,this->problemSetup);
 
     // Writing results values
 
+    RLogger::debug("Results nodes: %u\n",this->RResults::nnodes);
     RFileIO::writeBinary(modelFile,this->RResults::nnodes);
+    RLogger::debug("Results elements: %u\n",this->RResults::nelements);
     RFileIO::writeBinary(modelFile,this->RResults::nelements);
+    RLogger::debug("variables: %u\n",this->RResults::variables.size());
     RFileIO::writeBinary(modelFile,uint(this->RResults::variables.size()));
     for (uint i=0;i<this->RResults::variables.size();i++)
     {
@@ -7864,11 +7974,13 @@ void RModel::writeBinary(const QString &fileName) const
     }
 
     // Writing neighbor information.
+    RLogger::debug("Surface neighbors: %u\n",this->surfaceNeigs.size());
     RFileIO::writeBinary(modelFile,uint(this->surfaceNeigs.size()));
     for (uint i=0;i<this->surfaceNeigs.size();i++)
     {
         RFileIO::writeBinary(modelFile,this->surfaceNeigs[i]);
     }
+    RLogger::debug("Volume neighbors: %u\n",this->volumeNeigs.size());
     RFileIO::writeBinary(modelFile,uint(this->volumeNeigs.size()));
     for (uint i=0;i<this->volumeNeigs.size();i++)
     {

@@ -18,6 +18,9 @@ int main(int argc, char *argv[])
 
     QLocale::setDefault(QLocale::c());
 
+    // Uncomment in case there are some issues with fractional scaling
+//    QGuiApplication::setHighDpiScaleFactorRoundingPolicy(Qt::HighDpiScaleFactorRoundingPolicy::RoundPreferFloor);
+
     int exitValue = 0;
     if ((exitValue = Application(argc, argv).exec()) != 0)
     {

@@ -1,4 +1,16 @@
 ------------------------------------------------------------------
+Version 3.2.6
+
+* ALL: Upgrade to TetGen 1.6.0
+* ALL: Upgrade to Qt6
+* ALL: Upgrade to ffmpeg 4.3.2
+
+Bug fixes:
+
+* Number of variables saved as size_t and loaded as unsigned int
+* Fixed memory leak when refreshing results record list
+
+------------------------------------------------------------------
 Version 3.2.5
 
 * ALL: Added support for MacOS

@@ -570,7 +570,7 @@ void MaterialManagerTree::onMaterialRemoved(const QString &, uint removedID)
     {
         if (this->topLevelItem(i)->data(MATERIAL_TREE_COLUMN_NAME,Qt::UserRole).toUInt() == removedID)
         {
-            this->takeTopLevelItem(i);
+            delete this->takeTopLevelItem(i);
         }
     }
 

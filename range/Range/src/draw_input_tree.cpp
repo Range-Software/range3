@@ -311,7 +311,7 @@ void DrawInputTree::onDrawObjectAdded()
 
 void DrawInputTree::onDrawObjectRemoved(uint position)
 {
-    this->takeTopLevelItem(position);
+    delete this->takeTopLevelItem(position);
 }
 
 void DrawInputTree::onDrawObjectsRemoved()

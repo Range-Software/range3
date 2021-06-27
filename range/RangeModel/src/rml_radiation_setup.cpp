@@ -107,3 +107,8 @@ QString RRadiationSetup::getResolutionText(RRadiationResolution resolution)
     return "Unknown";
 }
 
+QString RRadiationSetup::toString() const
+{
+    return "{ Resolution: " + QString::number(this->resolution) + ", View-factor matrix file: " + this->viewFactorMatrixFile + " }";
+}
+

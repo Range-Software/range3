@@ -81,6 +81,9 @@ class RProblemSetup
         //! Set mesh setup.
         void setMeshSetup(const RMeshSetup &meshSetup);
 
+        //! Convert to printable string.
+        QString toString() const;
+
         //! Allow RFileIO to access private members.
         friend class RFileIO;
 

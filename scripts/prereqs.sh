@@ -42,9 +42,9 @@ elif [ -f "/etc/os-release" ]; then
         prereqsScript="${myPath}/prereqs_opensuse.sh"
     fi
 elif [ -f "/etc/issue" ]; then
-    # Debian based Linux
+    # Ububntu
     echo_i "Building on $(cat /etc/issue)"
-    prereqsScript="${myPath}/prereqs_debian.sh"
+    prereqsScript="${myPath}/prereqs_ubuntu.sh"
 elif [ $(uname) == "Darwin" ]; then
     # MacOS
     echo_i "Building on Mac."
