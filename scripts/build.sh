@@ -1,7 +1,7 @@
 #!/bin/bash
 
 moduleList="range"
-qmakeCmd=$(which qmake)
+qmakeCmd=$(which qmake6)
 if [[ ! -x $qmakeCmd ]]; then
     qmakeCmd=$(which qmake)
 fi

@@ -66,4 +66,4 @@ workflows:
       - build-fedora34
       - build-opensusetumbleweed
       - build-ubuntu2104
-      - build-centos8
+#      - build-centos8
