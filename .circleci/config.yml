@@ -5,8 +5,8 @@ jobs:
       - image: centos:centos8
     steps:
       - checkout
-      - setup_remote_docker:
-          version: 20.10.6
+#      - setup_remote_docker:
+#          version: 20.10.6
       - run:
           name: Prerequisites
           command: ./scripts/prereqs_centos.sh
@@ -21,8 +21,8 @@ jobs:
       - image: fedora:34
     steps:
       - checkout
-      - setup_remote_docker:
-          version: 20.10.6
+#      - setup_remote_docker:
+#          version: 20.10.6
       - run:
           name: Prerequisites
           command: ./scripts/prereqs_fedora.sh
@@ -37,8 +37,8 @@ jobs:
       - image: opensuse/tumbleweed
     steps:
       - checkout
-      - setup_remote_docker:
-          version: 20.10.6
+#      - setup_remote_docker:
+#          version: 20.10.6
       - run:
           name: Prerequisites
           command: ./scripts/prereqs_opensuse.sh
@@ -53,8 +53,8 @@ jobs:
       - image: ubuntu:21.04
     steps:
       - checkout
-      - setup_remote_docker:
-          version: 20.10.6
+#      - setup_remote_docker:
+#          version: 20.10.6
       - run:
           name: Prerequisites
           command: ./scripts/prereqs_ubuntu.sh

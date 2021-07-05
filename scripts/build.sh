@@ -21,13 +21,13 @@ popd
 . ${myPath}/lib.sh
 
 qmakeCmd=$(which qmake6)
-if [ ! -x "$qmakeCmd" ]
+if [ -e "$qmakeCmd" ]
 then
-    echo_e "File is not executable '${qmakeCmd}'"
+    echo_e "File does not exist '${qmakeCmd}'"
     qmakeCmd=$(which qmake)
-    if [ ! -x "$qmakeCmd" ]
+    if [ -e "$qmakeCmd" ]
     then
-        echo_e "File is not executable '${qmakeCmd}'"
+        echo_e "File does not exist '${qmakeCmd}'"
         exit 1
     fi
 fi
