@@ -2,8 +2,15 @@
 
 moduleList="range"
 qmakeCmd=$(which qmake6)
-if [[ ! -x $qmakeCmd ]]; then
+if [ ! -x "$qmakeCmd" ]
+then
+    echo_e "File is not executable '${qmakeCmd}'"
     qmakeCmd=$(which qmake)
+    if [ ! -x "$qmakeCmd" ]
+    then
+        echo_e "File is not executable '${qmakeCmd}'"
+        exit 1
+    fi
 fi
 selfDebug=false
 
@@ -110,12 +117,6 @@ then
 fi
 
 logDir="${buildDir}/log"
-
-if [ ! -x $qmakeCmd ]
-then
-    echo_e "File is not executable '${qmakeCmd}'"
-    exit 1
-fi
 
 touch_dir $buildDir
 if [ $? -ne 0 ]
