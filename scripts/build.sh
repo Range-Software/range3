@@ -20,12 +20,12 @@ popd
 
 . ${myPath}/lib.sh
 
-qmakeCmd=$(which qmake6)
-if [ -e "$qmakeCmd" ]
+qmakeCmd="qmake6"
+if ! which $qmakeCmd
 then
     echo_e "File does not exist '${qmakeCmd}'"
-    qmakeCmd=$(which qmake)
-    if [ -e "$qmakeCmd" ]
+    qmakeCmd="qmake"
+    if ! which $qmakeCmd
     then
         echo_e "File does not exist '${qmakeCmd}'"
         exit 1
