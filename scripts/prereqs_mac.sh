@@ -39,7 +39,7 @@ fi
 
 if [[ ! -x /usr/local/opt/llvm/bin/clang ]]; then
     echo_i "Installing llvm/clang"
-    packagesToInstall+="llvm libopm"
+    packagesToInstall+="llvm libomp"
 fi
 
 if [ -n "$packagesToInstall" ]; then
