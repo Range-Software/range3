@@ -1,4 +1,11 @@
 ------------------------------------------------------------------
+Version 3.2.7
+
+Bug fixes:
+
+* Fixed crash when unindenting already unindented log line
+
+------------------------------------------------------------------
 Version 3.2.6
 
 * ALL: Upgrade to TetGen 1.6.0
