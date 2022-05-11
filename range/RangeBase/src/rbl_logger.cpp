@@ -24,13 +24,13 @@ void RLogger::_init(const RLogger *pLogger)
 {
     if (pLogger)
     {
-        this->setLevel (pLogger->getLevel());
-        this->setHalted (pLogger->getHalted());
-        this->setPrintTimeEnabled (pLogger->getPrintTimeEnabled());
-        this->setAddNewLine (pLogger->getAddNewLine());
-        this->setFile (pLogger->getFile());
-        this->setLogHandler (pLogger->getLogHandler());
-        this->setIndentLevel (pLogger->getIndentLevel());
+        this->setLevel(pLogger->getLevel());
+        this->setHalted(pLogger->getHalted());
+        this->setPrintTimeEnabled(pLogger->getPrintTimeEnabled());
+        this->setAddNewLine(pLogger->getAddNewLine());
+        this->setFile(pLogger->getFile());
+        this->setLogHandler(pLogger->getLogHandler());
+        this->setIndentLevel(pLogger->getIndentLevel());
         // Copy unprocessed messages.
     }
 } /* RLogger::_init */
@@ -40,17 +40,17 @@ RLogger::RLogger(RLogLevel logLevel)
     : logHandler(0)
     , indentLevel(0)
 {
-    this->_init ();
-    this->setLevel (logLevel);
-    this->setHalted (false);
-    this->setPrintTimeEnabled (true);
-    this->setAddNewLine (false);
+    this->_init();
+    this->setLevel(logLevel);
+    this->setHalted(false);
+    this->setPrintTimeEnabled(true);
+    this->setAddNewLine(false);
 } /* RLogger::RLogger */
 
 
 RLogger::RLogger(const RLogger &logger)
 {
-    this->_init (&logger);
+    this->_init(&logger);
 } /* RLogger::RLogger (copy) */
 
 
@@ -61,7 +61,7 @@ RLogger::~RLogger()
 
 RLogger & RLogger::operator =(const RLogger &logger)
 {
-    this->_init (&logger);
+    this->_init(&logger);
     return (*this);
 } /* RLogger::operator = */
 
@@ -70,7 +70,7 @@ RLogger & RLogger::getInstance()
 {
     static RLogger logger;
     return logger;
-} /* rbl_logger_get_default_instance */
+} /* RLogger::getInstance */
 
 
 RLogLevel RLogger::getLevel() const
@@ -85,7 +85,7 @@ RLogLevel RLogger::getLevel() const
 
 void RLogger::setLevel(RLogLevel level)
 {
-    R_ERROR_ASSERT(R_LOG_LEVEL_IS_VALID (level));
+    R_ERROR_ASSERT(R_LOG_LEVEL_IS_VALID(level));
 
     RLocker::lock();
     this->logLevel = level;
@@ -343,13 +343,13 @@ void RLogger::print(const RMessage &message)
     {
         RLocker::lock();
         // Print to file is halted => store message
-        this->messages.push_back (fullMessage);
+        this->messages.push_back(fullMessage);
         RLocker::unlock();
     }
     else
     {
         RLocker::lock();
-        this->printToFile (message.getAtime(), fullMessage);
+        this->printToFile(message.getAtime(), fullMessage);
         if (this->logHandler)
         {
             this->logHandler(RMessage(fullMessage, messageType));
@@ -365,8 +365,8 @@ void RLogger::print(const QString &cppString, RMessageType messageType)
     for (unsigned int i=0;i<messages.size();i++)
     {
         RMessage message(messages[i]);
-        message.setType (messageType);
-        this->print (message);
+        message.setType(messageType);
+        this->print(message);
     }
 } /* RLogger::print */
 
@@ -394,7 +394,7 @@ void RLogger::flush()
          iter != this->messages.end();
          ++iter)
     {
-        this->printToFile (iter->getAtime(), *iter);
+        this->printToFile(iter->getAtime(), *iter);
         if (this->logHandler)
         {
             this->logHandler(*iter);
@@ -410,7 +410,7 @@ void RLogger::purge(unsigned int nMessages)
     RLocker::lock();
     if (nMessages == 0)
     {
-        this->messages.clear ();
+        this->messages.clear();
         RLocker::unlock();
         return;
     }
@@ -426,7 +426,7 @@ void RLogger::purge(unsigned int nMessages)
 
     std::advance(iter,n);
 
-    this->messages.erase (this->messages.begin(),iter);
+    this->messages.erase(this->messages.begin(),iter);
     RLocker::unlock();
 } /* RLogger::purge */
 
@@ -543,14 +543,21 @@ void RLogger::indent()
 void RLogger::unindent(bool printTime)
 {
     RLogger::getInstance().decreaseIndent();
-    int elapsed = qRound(double(RLogger::getInstance().timerStack.first().elapsed())/1000.0);
     if (printTime)
     {
+        int elapsed = 0;
+        if (!RLogger::getInstance().timerStack.isEmpty())
+        {
+            elapsed = qRound(double(RLogger::getInstance().timerStack.first().elapsed())/1000.0);
+        }
         RLogger::info("} %s\n", QDateTime::fromSecsSinceEpoch(elapsed).toUTC().toString("hh:mm:ss").toUtf8().constData());
     }
     else
     {
         RLogger::info("}\n");
     }
-    RLogger::getInstance().timerStack.pop_front();
+    if (!RLogger::getInstance().timerStack.isEmpty())
+    {
+        RLogger::getInstance().timerStack.pop_front();
+    }
 } /* RLogger::unindent */
