@@ -18,7 +18,7 @@ jobs:
           command: scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -P $UPLOAD_PORT build-Release/packages/rpmbuild/RPMS/$(uname -m)/*.rpm $UPLOAD_USER@$UPLOAD_HOST:.
   build-fedora34:
     docker:
-      - image: fedora:34
+      - image: fedora:36
     steps:
       - checkout
 #      - setup_remote_docker:
@@ -48,9 +48,9 @@ jobs:
       - run:
           name: Upload
           command: scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -P $UPLOAD_PORT build-Release/packages/rpmbuild/RPMS/$(uname -m)/*.rpm $UPLOAD_USER@$UPLOAD_HOST:.
-  build-ubuntu2104:
+  build-ubuntu2204:
     docker:
-      - image: ubuntu:21.04
+      - image: ubuntu:22.04
     steps:
       - checkout
 #      - setup_remote_docker:
@@ -71,7 +71,7 @@ workflows:
   version: 2
   build_all:
     jobs:
-      - build-fedora34
+      - build-fedora36
       - build-opensusetumbleweed
-      - build-ubuntu2104
+      - build-ubuntu2204
 #      - build-centos8
