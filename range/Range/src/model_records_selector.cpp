@@ -21,8 +21,9 @@
 #include "model_io.h"
 #include "session.h"
 #include "main_window.h"
-#include "video_output.h"
 #include "video_settings_dialog.h"
+
+#include "video_encoder.h"
 
 ModelRecordsSelector::ModelRecordsSelector(QWidget *parent)
     : QWidget(parent)
@@ -83,9 +84,7 @@ ModelRecordsSelector::ModelRecordsSelector(QWidget *parent)
 void ModelRecordsSelector::createAnimation(bool modelID)
 {
     Model &rModel = Session::getInstance().getModel(modelID);
-
     std::vector<double> &rTimes = rModel.getTimeSolver().getTimes();
-
     QList<QString> imageFileNames;
 
     for (uint j=0;j<rTimes.size();j++)
@@ -98,20 +97,18 @@ void ModelRecordsSelector::createAnimation(bool modelID)
         }
     }
 
-    if (imageFileNames.size() > 0)
+    if (imageFileNames.size() <= 0)
     {
-        QString fileName(rModel.buildAnimationFileName(this->videoSettings.getFormat()));
+        return;
+    }
 
+    QString fileName(rModel.buildAnimationFileName(this->videoSettings.getFormat()));
+    try
+    {
         RLogger::info("Creating animation file \'%s\'\n",fileName.toUtf8().constData());
 
-        VideoOutput videoOutput;
-        videoOutput.setStreamRate(this->videoSettings.getFps());
-        videoOutput.setResolution(this->videoSettings.getWidth(),this->videoSettings.getHeight());
-        if (!videoOutput.openMediaFile(this->videoSettings.getWidth(),this->videoSettings.getHeight(),fileName))
-        {
-            RLogger::error("Failed to create animation file \'%s\'\n",fileName.toUtf8().constData());
-            return;
-        }
+        VideoEncoder videoEncoder;
+        videoEncoder.open(fileName,this->videoSettings.getWidth(),this->videoSettings.getHeight(),this->videoSettings.getFps());
 
         uint cnt=0;
         foreach (const QString &imageFileName, imageFileNames)
@@ -138,36 +135,20 @@ void ModelRecordsSelector::createAnimation(bool modelID)
                 }
             }
 
-            QImage fImage(this->videoSettings.getWidth(),this->videoSettings.getHeight(),sImage.format());
-            QPainter painter;
-            painter.begin(&fImage);
-            painter.setBackground(QBrush(Qt::black));
-            painter.setBrush(QBrush(Qt::black));
-            painter.setPen(Qt::black);
-            painter.drawRect(0,0,this->videoSettings.getWidth(),this->videoSettings.getHeight());
-            painter.drawImage((this->videoSettings.getWidth()-sImage.width())/2,
-                              (this->videoSettings.getHeight()-sImage.height())/2,
-                              sImage);
-            painter.end();
-
             RLogger::info("Adding frame from image file \'%s\'\n",imageFileName.toUtf8().constData());
             for (uint i=0;i<this->videoSettings.getFpp();i++)
             {
-                if (!videoOutput.newFrame(fImage))
-                {
-                    RLogger::error("Failed to add frame from image file \'%s\'\n",imageFileName.toUtf8().constData());
-                    return;
-                }
+                videoEncoder.newFrame(sImage);
             }
             RProgressPrint(cnt++,imageFileNames.size());
         }
-
-        if (!videoOutput.closeMediaFile())
-        {
-            RLogger::error("Failed to create animation file \'%s\'\n",fileName.toUtf8().constData());
-            return;
-        }
+        videoEncoder.close();
         RLogger::info("Animation file \'%s\' created\n",fileName.toUtf8().constData());
+    }
+    catch (const RError &rError)
+    {
+        RLogger::error("Failed to create animation file \'%s\':  %s\n",fileName.toUtf8().constData(), rError.getMessage().toUtf8().constData());
+        return;
     }
 }
 

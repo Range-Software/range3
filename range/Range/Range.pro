@@ -234,7 +234,7 @@ SOURCES += \
     src/variable_selector.cpp \
     src/variable_value_edit.cpp \
     src/vector_field_dialog.cpp \
-    src/video_output.cpp \
+    src/video_encoder.cpp \
     src/video_settings.cpp \
     src/video_settings_dialog.cpp
 
@@ -444,7 +444,7 @@ HEADERS += \
     src/variable_selector.h \
     src/variable_value_edit.h \
     src/vector_field_dialog.h \
-    src/video_output.h \
+    src/video_encoder.h \
     src/video_settings.h \
     src/video_settings_dialog.h
 
