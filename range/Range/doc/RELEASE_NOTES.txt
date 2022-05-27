@@ -4,6 +4,7 @@ Version 3.2.7
 Bug fixes:
 
 * Fixed crash when unindenting already unindented log line
+* Reimplemented video encoding using FFMPEG library
 
 ------------------------------------------------------------------
 Version 3.2.6
