@@ -21,7 +21,6 @@
 #include "model_io.h"
 #include "session.h"
 #include "main_window.h"
-#include "video_output.h"
 #include "video_settings_dialog.h"
 
 #include "video_encoder.h"
