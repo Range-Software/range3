@@ -14,7 +14,7 @@
 #include <cstdarg>
 #include <QObject>
 
-#include "main_window.h"
+#include <rmlib.h>
 
 class Logger : public QObject
 {
