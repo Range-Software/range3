@@ -172,16 +172,24 @@ QList<QString> MainSettings::getSupportedVideoFormats(void)
 {
     QList<QString> formats;
 
+    formats.append("3gp2");
+    formats.append("3gpp");
     formats.append("avi");
-    formats.append("mpeg");
-    formats.append("ogg");
+    formats.append("m2ts");
+    formats.append("m4v");
+    formats.append("mkv");
+    formats.append("mov");
+    formats.append("mp4");
+    formats.append("mpg");
+
+    formats.sort();
 
     return formats;
 }
 
 QString MainSettings::getDefaultVideoFormat(void)
 {
-    return QString("avi");
+    return QString("mp4");
 }
 
 QList<QString> MainSettings::getSupportedDocumentFormats(void)

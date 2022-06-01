@@ -11,10 +11,13 @@
 #ifndef VIDEO_ENCODER_H
 #define VIDEO_ENCODER_H
 
+#include <rmlib.h>
+
 #include <QString>
 #include <QImage>
 
 extern "C" {
+#include <libavformat/avformat.h>
 #include <libavcodec/avcodec.h>
 #include <libswscale/swscale.h>
 }
@@ -24,11 +27,13 @@ class VideoEncoder
 
     protected:
 
+        AVFormatContext *oc;
+        AVStream *st;
         AVCodecContext *c;
         AVPacket *pkt;
         AVFrame *frame;
         SwsContext *swsContext;
-        FILE *f;
+        AVDictionary *opt;
 
     public:
 
@@ -47,7 +52,7 @@ class VideoEncoder
     private:
 
         //! Encode video frame.
-        static void encode(AVCodecContext *enc_ctx, AVFrame *frame, AVPacket *pkt, FILE *outfile);
+        static void encode(AVFormatContext *fmt_ctx, AVCodecContext *enc_ctx, AVStream *st, AVFrame *frame, AVPacket *pkt);
 
 };
 
