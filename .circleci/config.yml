@@ -66,4 +66,4 @@ workflows:
       - build-fedora
       - build-opensuse
       - build-ubuntu
-      - build-rhubi
+#      - build-rhubi
