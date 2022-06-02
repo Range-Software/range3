@@ -2,11 +2,9 @@ version: 2
 jobs:
   build-centos8:
     docker:
-      - image: centos:centos8
+      - image: centos:latest
     steps:
       - checkout
-#      - setup_remote_docker:
-#          version: 20.10.6
       - run:
           name: Prerequisites
           command: ./scripts/prereqs_centos.sh
@@ -21,8 +19,6 @@ jobs:
       - image: fedora:36
     steps:
       - checkout
-#      - setup_remote_docker:
-#          version: 20.10.6
       - run:
           name: Prerequisites
           command: ./scripts/prereqs_fedora.sh
@@ -37,8 +33,6 @@ jobs:
       - image: opensuse/tumbleweed
     steps:
       - checkout
-#      - setup_remote_docker:
-#          version: 20.10.6
       - run:
           name: Prerequisites
           command: ./scripts/prereqs_opensuse.sh
@@ -53,8 +47,6 @@ jobs:
       - image: ubuntu:22.04
     steps:
       - checkout
-#      - setup_remote_docker:
-#          version: 20.10.6
       - run:
           name: Prerequisites
           command: ./scripts/prereqs_ubuntu.sh
@@ -74,4 +66,4 @@ workflows:
       - build-fedora36
       - build-opensusetumbleweed
       - build-ubuntu2204
-#      - build-centos8
+      - build-centos8
