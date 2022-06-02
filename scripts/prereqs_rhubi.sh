@@ -9,7 +9,7 @@ myPath=$(getScriptPath)
 
 echo_i "Remove RH Subscription"
 subscription-manager config --rhsm.manage_repos=0
-assert_success $? "Failed to remove subscription" || exit 2
+#assert_success $? "Failed to remove subscription" || exit 2
 
 echo_i "Update"
 yum update -y
