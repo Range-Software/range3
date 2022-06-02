@@ -27,7 +27,7 @@ if [ -f "/etc/redhat-release" ]; then
         grep -qi "rhel" /etc/redhat-release
         if [ $? -eq 0 ]; then
             echo_i "Building on $(cat /etc/redhat-release)"
-            prereqsScript="${myPath}/prereqs_rhel.sh"
+            prereqsScript="${myPath}/prereqs_rhubi.sh"
         fi
     fi
     if [ -z "$prereqsScript" ]; then
