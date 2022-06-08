@@ -1,13 +1,17 @@
 QT += core
 
+include(../range.pri)
+
 win*-msvc* {
     QMAKE_CXXFLAGS += -openmp
     LIBS += -openmp
-} else {
-    macx: {
+}
+else {
+    macx {
         QMAKE_CXXFLAGS += -Xpreprocessor -fopenmp -I/usr/local/include
         LIBS += -lomp
-    } else {
+    }
+    else {
         QMAKE_CXXFLAGS += -fopenmp
         LIBS += -fopenmp
     }
@@ -92,6 +96,5 @@ DEFINES += TETLIBRARY
 
 CONFIG(debug,debug|release) {
     TARGET = $$join(TARGET,,,_debug)
-    DEFINES += DEBUG
 }
 

@@ -32,8 +32,8 @@ ProblemTaskTree::ProblemTaskTree(const RProblemTaskItem &rTaskTree, QWidget *par
 
     this->treeWidget->expandAll();
 
-    this->treeWidget->resizeColumnToContents(ProblemTaskTree::NAME);
-    this->treeWidget->resizeColumnToContents(ProblemTaskTree::VALUE);
+    this->treeWidget->resizeColumnToContents(ProblemTaskTree::C_NAME);
+    this->treeWidget->resizeColumnToContents(ProblemTaskTree::C_VALUE);
 
     QObject::connect(this->treeWidget,&QTreeWidget::itemSelectionChanged,
                      this,&ProblemTaskTree::onItemSelectionChanged);
@@ -104,13 +104,13 @@ void ProblemTaskTree::addTaskItemToWidget(QTreeWidgetItem *parent, const RProble
         item = new QTreeWidgetItem(this->treeWidget);
     }
 
-    item->setData(ProblemTaskTree::NAME,Qt::UserRole,QVariant(taskItem.getProblemType()));
-    item->setData(ProblemTaskTree::VALUE,Qt::UserRole,QVariant(taskItem.getNIterations()));
+    item->setData(ProblemTaskTree::C_NAME,Qt::UserRole,QVariant(taskItem.getProblemType()));
+    item->setData(ProblemTaskTree::C_VALUE,Qt::UserRole,QVariant(taskItem.getNIterations()));
 
     if (taskItem.getProblemType() == R_PROBLEM_NONE)
     {
-        item->setText(ProblemTaskTree::NAME,"# of iterations:");
-        item->setText(ProblemTaskTree::VALUE,QString::number(taskItem.getNIterations()));
+        item->setText(ProblemTaskTree::C_NAME,"# of iterations:");
+        item->setText(ProblemTaskTree::C_VALUE,QString::number(taskItem.getNIterations()));
 
         for (uint i=0;i<taskItem.getNChildren();i++)
         {
@@ -119,7 +119,7 @@ void ProblemTaskTree::addTaskItemToWidget(QTreeWidgetItem *parent, const RProble
     }
     else
     {
-        item->setText(ProblemTaskTree::NAME,RProblem::getName(taskItem.getProblemType()));
+        item->setText(ProblemTaskTree::C_NAME,RProblem::getName(taskItem.getProblemType()));
         item->setFirstColumnSpanned(true);
     }
 }
@@ -138,8 +138,8 @@ void ProblemTaskTree::removeItem(QTreeWidgetItem *item)
 
 void ProblemTaskTree::addWidgetItemToTree(RProblemTaskItem &taskItem, const QTreeWidgetItem *item)
 {
-    RProblemType problemType = RProblemType(item->data(ProblemTaskTree::NAME,Qt::UserRole).toInt());
-    uint nIterations = item->data(ProblemTaskTree::VALUE,Qt::UserRole).toUInt();
+    RProblemType problemType = RProblemType(item->data(ProblemTaskTree::C_NAME,Qt::UserRole).toInt());
+    uint nIterations = item->data(ProblemTaskTree::C_VALUE,Qt::UserRole).toUInt();
 
     RProblemTaskItem newItem(problemType);
     newItem.setNIterations(nIterations);
@@ -210,7 +210,7 @@ void ProblemTaskTree::onItemSelectionChanged(void)
 
 void ProblemTaskTree::onItemChanged(QTreeWidgetItem *item, int column)
 {
-    if (column != ProblemTaskTree::VALUE)
+    if (column != ProblemTaskTree::C_VALUE)
     {
         return;
     }
@@ -221,13 +221,13 @@ void ProblemTaskTree::onItemChanged(QTreeWidgetItem *item, int column)
 
     if (ok && nIterations > 0)
     {
-        item->setData(ProblemTaskTree::VALUE,Qt::UserRole,nIterations);
+        item->setData(ProblemTaskTree::C_VALUE,Qt::UserRole,nIterations);
         emit this->changed();
     }
     else
     {
-        nIterations = item->data(ProblemTaskTree::VALUE,Qt::UserRole).toUInt();
-        item->setText(ProblemTaskTree::VALUE,QString::number(nIterations));
+        nIterations = item->data(ProblemTaskTree::C_VALUE,Qt::UserRole).toUInt();
+        item->setText(ProblemTaskTree::C_VALUE,QString::number(nIterations));
     }
 }
 
@@ -237,9 +237,9 @@ void ProblemTaskTree::onItemDoubleClicked(QTreeWidgetItem *item, int column)
 
     bool isEditable = false;
 
-    if (column == ProblemTaskTree::VALUE)
+    if (column == ProblemTaskTree::C_VALUE)
     {
-        isEditable = (RProblemType(item->data(ProblemTaskTree::NAME,Qt::UserRole).toInt()) == R_PROBLEM_NONE);
+        isEditable = (RProblemType(item->data(ProblemTaskTree::C_NAME,Qt::UserRole).toInt()) == R_PROBLEM_NONE);
     }
 
     if (isEditable)
@@ -296,7 +296,7 @@ void ProblemTaskTree::onUpButtonClicked(void)
         }
     }
 
-    if (RProblemType(item->data(ProblemTaskTree::NAME,Qt::UserRole).toInt()) != R_PROBLEM_NONE)
+    if (RProblemType(item->data(ProblemTaskTree::C_NAME,Qt::UserRole).toInt()) != R_PROBLEM_NONE)
     {
         item->setFirstColumnSpanned(true);
     }
@@ -306,8 +306,8 @@ void ProblemTaskTree::onUpButtonClicked(void)
     }
 
     this->treeWidget->setCurrentItem(item);
-    this->treeWidget->resizeColumnToContents(ProblemTaskTree::NAME);
-    this->treeWidget->resizeColumnToContents(ProblemTaskTree::VALUE);
+    this->treeWidget->resizeColumnToContents(ProblemTaskTree::C_NAME);
+    this->treeWidget->resizeColumnToContents(ProblemTaskTree::C_VALUE);
 
     emit this->changed();
 }
@@ -352,7 +352,7 @@ void ProblemTaskTree::onDownButtonClicked(void)
         }
     }
 
-    if (RProblemType(item->data(ProblemTaskTree::NAME,Qt::UserRole).toInt()) != R_PROBLEM_NONE)
+    if (RProblemType(item->data(ProblemTaskTree::C_NAME,Qt::UserRole).toInt()) != R_PROBLEM_NONE)
     {
         item->setFirstColumnSpanned(true);
     }
@@ -362,8 +362,8 @@ void ProblemTaskTree::onDownButtonClicked(void)
     }
 
     this->treeWidget->setCurrentItem(item);
-    this->treeWidget->resizeColumnToContents(ProblemTaskTree::NAME);
-    this->treeWidget->resizeColumnToContents(ProblemTaskTree::VALUE);
+    this->treeWidget->resizeColumnToContents(ProblemTaskTree::C_NAME);
+    this->treeWidget->resizeColumnToContents(ProblemTaskTree::C_VALUE);
 
     emit this->changed();
 }
@@ -383,18 +383,18 @@ void ProblemTaskTree::onIndentButtonClicked(void)
     item = parent->takeChild(index);
     QTreeWidgetItem *newItem = new QTreeWidgetItem;
 
-    newItem->setText(ProblemTaskTree::NAME,"# of iterations:");
-    newItem->setText(ProblemTaskTree::VALUE,QString::number(1));
+    newItem->setText(ProblemTaskTree::C_NAME,"# of iterations:");
+    newItem->setText(ProblemTaskTree::C_VALUE,QString::number(1));
 
-    newItem->setData(ProblemTaskTree::NAME,Qt::UserRole,QVariant(R_PROBLEM_NONE));
-    newItem->setData(ProblemTaskTree::VALUE,Qt::UserRole,QVariant(1));
+    newItem->setData(ProblemTaskTree::C_NAME,Qt::UserRole,QVariant(R_PROBLEM_NONE));
+    newItem->setData(ProblemTaskTree::C_VALUE,Qt::UserRole,QVariant(1));
 
     parent->insertChild(index,newItem);
     newItem->addChild(item);
 
     newItem->setExpanded(true);
 
-    if (RProblemType(item->data(ProblemTaskTree::NAME,Qt::UserRole).toInt()) != R_PROBLEM_NONE)
+    if (RProblemType(item->data(ProblemTaskTree::C_NAME,Qt::UserRole).toInt()) != R_PROBLEM_NONE)
     {
         item->setFirstColumnSpanned(true);
     }
@@ -404,8 +404,8 @@ void ProblemTaskTree::onIndentButtonClicked(void)
     }
 
     this->treeWidget->setCurrentItem(item);
-    this->treeWidget->resizeColumnToContents(ProblemTaskTree::NAME);
-    this->treeWidget->resizeColumnToContents(ProblemTaskTree::VALUE);
+    this->treeWidget->resizeColumnToContents(ProblemTaskTree::C_NAME);
+    this->treeWidget->resizeColumnToContents(ProblemTaskTree::C_VALUE);
 
     emit this->changed();
 }
@@ -431,7 +431,7 @@ void ProblemTaskTree::onUnindentButtonClicked(void)
     }
     topParent->insertChild(parentIndex,item);
 
-    if (RProblemType(item->data(ProblemTaskTree::NAME,Qt::UserRole).toInt()) != R_PROBLEM_NONE)
+    if (RProblemType(item->data(ProblemTaskTree::C_NAME,Qt::UserRole).toInt()) != R_PROBLEM_NONE)
     {
         item->setFirstColumnSpanned(true);
     }
@@ -441,8 +441,8 @@ void ProblemTaskTree::onUnindentButtonClicked(void)
     }
 
     this->treeWidget->setCurrentItem(item);
-    this->treeWidget->resizeColumnToContents(ProblemTaskTree::NAME);
-    this->treeWidget->resizeColumnToContents(ProblemTaskTree::VALUE);
+    this->treeWidget->resizeColumnToContents(ProblemTaskTree::C_NAME);
+    this->treeWidget->resizeColumnToContents(ProblemTaskTree::C_VALUE);
 
     emit this->changed();
 }

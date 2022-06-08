@@ -1,19 +1,27 @@
 QT += core network
 
+include(../range.pri)
+
 win*-msvc* {
     QMAKE_CXXFLAGS += -openmp
     LIB_EXT = "lib"
     LIB_PRE = ""
-} else {
-    macx: {
+}
+else {
+    macx {
         QMAKE_CXXFLAGS += -Xpreprocessor -fopenmp -I/usr/local/include
         LIBS += -lomp -L /usr/local/lib
-    } else {
+    }
+    else {
         QMAKE_CXXFLAGS += -fopenmp
         LIBS += -fopenmp
     }
     LIB_EXT = "a"
     LIB_PRE = "lib"
+
+    !win* {
+        CONFIG += link_pkgconfig
+    }
 }
 
 TARGET = RangeSolver
@@ -43,12 +51,8 @@ CONFIG += exceptions
 CONFIG += console
 CONFIG -= app_bundle
 
-DEBUG_EXT = ""
-
 CONFIG(debug, debug|release) {
     TARGET = $$join(TARGET,,,_debug)
-    DEFINES += DEBUG
-    DEBUG_EXT = "_debug"
 }
 
 LIBS += \
@@ -72,3 +76,6 @@ INCLUDEPATH += $${_PRO_FILE_PWD_}/../RangeBase/include
 INCLUDEPATH += $${_PRO_FILE_PWD_}/../RangeModel/include
 INCLUDEPATH += $${_PRO_FILE_PWD_}/../RangeSolverLib/include
 
+target.path = $${INSTALLER_DATA_DIR_PATH}/bin
+
+INSTALLS += target

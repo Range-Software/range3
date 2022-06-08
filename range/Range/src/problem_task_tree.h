@@ -25,8 +25,8 @@ class ProblemTaskTree : public QWidget
 
         enum ColumnType
         {
-            NAME = 0,
-            VALUE,
+            C_NAME = 0,
+            C_VALUE,
             N_COLUMNS
         };
 

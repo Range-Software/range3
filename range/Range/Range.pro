@@ -1,5 +1,7 @@
 QT += core gui opengl printsupport network widgets
 
+include(../range.pri)
+
 equals(QT_MAJOR_VERSION, 6) {
     QT += openglwidgets
 }
@@ -8,12 +10,15 @@ win*-msvc* {
     QMAKE_CXXFLAGS += -openmp
     LIB_EXT = "lib"
     LIB_PRE = ""
-} else {
-    macx: {
+}
+else {
+    macx {
         QMAKE_CXXFLAGS += -Xpreprocessor -fopenmp -I/usr/local/include
         LIBS += -lomp -L /usr/local/lib
-    } else {
+    }
+    else {
         QMAKE_CXXFLAGS += -fopenmp
+        QMAKE_LFLAGS += "-Wl,-rpath,\'\$$ORIGIN/../lib\'"
         LIBS += -fopenmp
     }
     LIB_EXT = "a"
@@ -71,8 +76,8 @@ SOURCES += \
     src/draw_engine_object.cpp \
     src/draw_engine_point.cpp \
     src/draw_engine_quadrilateral.cpp \
-    src/draw_engine_sphere.cpp \
     src/draw_engine_raw.cpp \
+    src/draw_engine_sphere.cpp \
     src/draw_engine_tetrahedron.cpp \
     src/draw_engine_triangle.cpp \
     src/draw_input_tree.cpp \
@@ -82,8 +87,8 @@ SOURCES += \
     src/ec_tree.cpp \
     src/file_chooser_button.cpp \
     src/file_updater.cpp \
-    src/first_run_dialog.cpp \
     src/find_sliver_elements_dialog.cpp \
+    src/first_run_dialog.cpp \
     src/fix_sliver_elements_dialog.cpp \
     src/geometry_rotate_widget.cpp \
     src/geometry_scale_widget.cpp \
@@ -281,8 +286,8 @@ HEADERS += \
     src/draw_engine_object.h \
     src/draw_engine_point.h \
     src/draw_engine_quadrilateral.h \
-    src/draw_engine_sphere.h \
     src/draw_engine_raw.h \
+    src/draw_engine_sphere.h \
     src/draw_engine_tetrahedron.h \
     src/draw_engine_triangle.h \
     src/draw_input_tree.h \
@@ -292,8 +297,8 @@ HEADERS += \
     src/ec_tree.h \
     src/file_chooser_button.h \
     src/file_updater.h \
-    src/first_run_dialog.h \
     src/find_sliver_elements_dialog.h \
+    src/first_run_dialog.h \
     src/fix_sliver_elements_dialog.h \
     src/geometry_rotate_widget.h \
     src/geometry_scale_widget.h \
@@ -449,15 +454,9 @@ HEADERS += \
     src/video_settings_dialog.h
 
 CONFIG -= debug_and_release
-#CONFIG += rtti
-CONFIG += exceptions
-
-DEBUG_EXT = ""
 
 CONFIG(debug, debug|release) {
     TARGET = $$join(TARGET,,,_debug)
-    DEFINES += DEBUG
-    DEBUG_EXT = "_debug"
     CONFIG += console
 }
 
@@ -497,15 +496,33 @@ INCLUDEPATH += $${_PRO_FILE_PWD_}/../RangeModel/include
 INCLUDEPATH += $${_PRO_FILE_PWD_}/../RangeSolverLib/include
 INCLUDEPATH += $${_PRO_FILE_PWD_}/../../ffmpeg/ffmpeg-4.3.2-win64/include
 
-win32 {
-    LIBS += -lopengl32
-}
-
 RESOURCES += \
     range.qrc
 
-win32:RC_ICONS += pixmaps/range.ico
-macx: {
+win* {
+    LIBS += -lopengl32
+    RC_ICONS += pixmaps/range.ico
+}
+macx {
     ICON = pixmaps/range.icns
     BUNDLEIDENTIFIER = com.range-software.Range
+}
+
+target.path = $${INSTALLER_DATA_DIR_PATH}/bin
+
+icons.path = $${INSTALLER_DATA_DIR_PATH}/icons
+icons.files = pixmaps/range.png
+
+resources.path = $${INSTALLER_DATA_DIR_PATH}
+resources.files = data desktop doc help materials pixmaps
+
+config.path = $${INSTALLER_CONF_DIR_PATH}
+config.files = pixmaps/range.ico pixmaps/range.icns pixmaps/range.png
+
+INSTALLS += target icons resources config
+
+win* {
+    ffmpeg.path = $${INSTALLER_DATA_DIR_PATH}/bin
+    ffmpeg.files = ../../ffmpeg/ffmpeg-4.3.2-win64/bin/*.dll
+    INSTALLS += ffmpeg
 }

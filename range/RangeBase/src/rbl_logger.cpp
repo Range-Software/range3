@@ -11,6 +11,7 @@
 #include <QFile>
 #include <QTextStream>
 #include <QDateTime>
+#include <QThread>
 
 #include <vector>
 #include <string>
@@ -24,27 +25,29 @@ void RLogger::_init(const RLogger *pLogger)
 {
     if (pLogger)
     {
-        this->setLevel(pLogger->getLevel());
-        this->setHalted(pLogger->getHalted());
-        this->setPrintTimeEnabled(pLogger->getPrintTimeEnabled());
-        this->setAddNewLine(pLogger->getAddNewLine());
-        this->setFile(pLogger->getFile());
-        this->setLogHandler(pLogger->getLogHandler());
-        this->setIndentLevel(pLogger->getIndentLevel());
+        this->logFileName = pLogger->logFileName;
+        this->logLevel = pLogger->logLevel;
+        this->halted = pLogger->halted;
+        this->printTime = pLogger->printTime;
+        this->printThreadId = pLogger->printThreadId;
+        this->addNewLine = pLogger->addNewLine;
+        this->logHandler = pLogger->logHandler;
+        this->indentLevel = pLogger->indentLevel;
         // Copy unprocessed messages.
     }
 } /* RLogger::_init */
 
 
 RLogger::RLogger(RLogLevel logLevel)
-    : logHandler(0)
+    : logLevel(logLevel)
+    , halted(false)
+    , printTime(true)
+    , printThreadId(false)
+    , addNewLine(false)
+    , logHandler(0)
     , indentLevel(0)
 {
     this->_init();
-    this->setLevel(logLevel);
-    this->setHalted(false);
-    this->setPrintTimeEnabled(true);
-    this->setAddNewLine(false);
 } /* RLogger::RLogger */
 
 
@@ -131,6 +134,20 @@ void RLogger::setPrintTimeEnabled(bool printTime)
     this->printTime = printTime;
     RLocker::unlock();
 } /* RLogger::setPrintTimeEnabled */
+
+
+bool RLogger::getPrintThreadIdEnabled() const
+{
+    return this->printThreadId;
+} /* RLogger::getPrintThreadIdEnabled */
+
+
+void RLogger::setPrintThreadIdEnabled(bool printThreadId)
+{
+    RLocker::lock();
+    this->printThreadId = printThreadId;
+    RLocker::unlock();
+} /* RLogger::setPrintThreadIdEnabled */
 
 
 bool RLogger::getAddNewLine() const
@@ -325,6 +342,12 @@ void RLogger::print(const RMessage &message)
         default:
             printToStderr = false;
             break;
+    }
+
+    if (this->printThreadId)
+    {
+        QThread *ptr = QThread::currentThread();
+        fullMessage = QString("0x%1").arg((quintptr)ptr, QT_POINTER_SIZE * 2, 16, QChar('0')) + " " + fullMessage;
     }
 
     if (printToStderr)
