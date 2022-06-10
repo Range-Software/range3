@@ -19,6 +19,7 @@ TOOL_NAME = RangeSolver
 
 CONFIG(debug, debug|release) {
     APP_NAME = $$join(APP_NAME,,,$${DEBUG_EXT})
+    TOOL_NAME = $$join(TOOL_NAME,,,$${DEBUG_EXT})
 }
 
 INSTALLER_EXTENSION = 
@@ -38,6 +39,9 @@ INSTALLER_NAME = $${INSTALLER_BASE}$${INSTALLER_EXTENSION}
 
 INSTALLER_COMMAND = "binarycreator --offline-only -c $${INSTALLER_CONF_DIR_PATH}/config.xml -p $${INSTALLER_PATH}/packages $${INSTALLER_NAME}"
 macx {
+    DMG_RM_COMMAND = "rm -f $${INSTALLER_BASE}.dmg"
+    INSTALLER_COMMAND = $$join(INSTALLER_COMMAND,,," && ")
+    INSTALLER_COMMAND = $$join(INSTALLER_COMMAND,,,$${DMG_RM_COMMAND})
     DMG_COMMAND = "create-dmg --volname '$${APP_NAME}' $${INSTALLER_BASE}.dmg '$${INSTALLER_NAME}'"
     INSTALLER_COMMAND = $$join(INSTALLER_COMMAND,,," && ")
     INSTALLER_COMMAND = $$join(INSTALLER_COMMAND,,,$${DMG_COMMAND})
