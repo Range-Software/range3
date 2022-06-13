@@ -8,7 +8,7 @@ config.path = $${INSTALLER_CONF_DIR_PATH}
 config.files = config.xml
 
 meta.path = $${INSTALLER_META_DIR_PATH}
-meta.files = package.xml page.ui installscript.qs LICENSE.txt
+meta.files = package.xml installscript.qs LICENSE.txt
 
 COPIES += config meta
 
