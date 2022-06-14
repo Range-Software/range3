@@ -34,4 +34,11 @@ Component.prototype.createOperations = function()
         component.addOperation("InstallIcons",
                                "@TargetDir@/icons");
     }
+
+    if (installer.value("os") === "mac") {
+        component.addOperation("Execute",
+                               "ln", "-s", "-v", "@TargetDir@/Range.app", "/Applications/Range.app",
+                               "UNDOEXECUTE",
+                               "rm", "-vf", "/Applications/Range.app");
+    }
 }
