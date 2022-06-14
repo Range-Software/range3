@@ -76,6 +76,11 @@ INCLUDEPATH += $${_PRO_FILE_PWD_}/../RangeBase/include
 INCLUDEPATH += $${_PRO_FILE_PWD_}/../RangeModel/include
 INCLUDEPATH += $${_PRO_FILE_PWD_}/../RangeSolverLib/include
 
-target.path = $${INSTALLER_DATA_DIR_PATH}/bin
+macx {
+    target.path = $${INSTALLER_DATA_DIR_PATH}
+}
+else {
+    target.path = $${INSTALLER_DATA_DIR_PATH}/bin
+}
 
 INSTALLS += target

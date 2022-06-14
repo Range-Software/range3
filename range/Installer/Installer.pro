@@ -12,8 +12,6 @@ meta.files = package.xml installscript.qs LICENSE.txt
 
 COPIES += config meta
 
-BIN_DIR_PATH = $${INSTALLER_DATA_DIR_PATH}/bin
-
 APP_NAME = Range
 TOOL_NAME = RangeSolver
 
@@ -56,16 +54,17 @@ DEPLOY_COMMAND =
 win* {
     APP_NAME = $$join(APP_NAME,,,".exe")
     TOOL_NAME = $$join(TOOL_NAME,,,".exe")
-    DEPLOY_COMMAND = $$[QT_INSTALL_PREFIX]/bin/windeployqt $${BIN_DIR_PATH}/$${APP_NAME}
+    DEPLOY_COMMAND = $$[QT_INSTALL_PREFIX]/bin/windeployqt $${INSTALLER_DATA_DIR_PATH}/bin/$${APP_NAME}
 }
 else {
     macx {
         APP_NAME = $$join(APP_NAME,,,".app")
-        APP_DIR = $${BIN_DIR_PATH}/$${APP_NAME}
-        DEPLOY_COMMAND = $$[QT_INSTALL_PREFIX]/bin/macdeployqt $${APP_DIR} -executable=$${BIN_DIR_PATH}/$${TOOL_NAME} -verbose=2
+        APP_DIR = $${INSTALLER_DATA_DIR_PATH}/$${APP_NAME}
+        APP_BIN_DIR = $${APP_DIR}/Contents/MacOS
+        DEPLOY_COMMAND = mv -v $${INSTALLER_DATA_DIR_PATH}/$${TOOL_NAME} $${APP_BIN_DIR}/$${TOOL_NAME} && $$[QT_INSTALL_PREFIX]/bin/macdeployqt $${APP_DIR} -executable=$${APP_BIN_DIR}/$${TOOL_NAME} -verbose=2
     }
     else {
-        DEPLOY_COMMAND = $${_PRO_FILE_PWD_}/../../scripts/linux_deploy_qt.sh --executable=$${BIN_DIR_PATH}/$${APP_NAME} --install-to=$${INSTALLER_DATA_DIR_PATH} --only-qt --qt-path=$$[QT_INSTALL_PREFIX]
+        DEPLOY_COMMAND = $${_PRO_FILE_PWD_}/../../scripts/linux_deploy_qt.sh --executable=$${INSTALLER_DATA_DIR_PATH}/bin/$${APP_NAME} --install-to=$${INSTALLER_DATA_DIR_PATH} --only-qt --qt-path=$$[QT_INSTALL_PREFIX]
     }
 }
 

@@ -508,13 +508,18 @@ macx {
     BUNDLEIDENTIFIER = com.range-software.Range
 }
 
-target.path = $${INSTALLER_DATA_DIR_PATH}/bin
+macx {
+    target.path = $${INSTALLER_DATA_DIR_PATH}
+}
+else {
+    target.path = $${INSTALLER_DATA_DIR_PATH}/bin
+}
 
 icons.path = $${INSTALLER_DATA_DIR_PATH}/icons
 icons.files = pixmaps/range.png
 
 macx {
-    resources.path = $${INSTALLER_DATA_DIR_PATH}/bin/$${TARGET}.app/Contents/Resources
+    resources.path = $${INSTALLER_DATA_DIR_PATH}/$${TARGET}.app/Contents/Resources
 }
 else {
     resources.path = $${INSTALLER_DATA_DIR_PATH}

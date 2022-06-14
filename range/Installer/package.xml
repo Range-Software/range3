@@ -8,8 +8,8 @@
         <License name="Range Software License" file="LICENSE.txt" />
     </Licenses>
     <Default>true</Default>
-    <UserInterfaces>
+<!--    <UserInterfaces>
         <UserInterface>page.ui</UserInterface>
-    </UserInterfaces>
+    </UserInterfaces>-->
     <Script>installscript.qs</Script>
 </Package>
