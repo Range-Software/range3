@@ -513,7 +513,12 @@ target.path = $${INSTALLER_DATA_DIR_PATH}/bin
 icons.path = $${INSTALLER_DATA_DIR_PATH}/icons
 icons.files = pixmaps/range.png
 
-resources.path = $${INSTALLER_DATA_DIR_PATH}
+macx {
+    resources.path = $${INSTALLER_DATA_DIR_PATH}/bin/$${TARGET}.app/Contents/Resources
+}
+else {
+    resources.path = $${INSTALLER_DATA_DIR_PATH}
+}
 resources.files = data desktop doc help materials pixmaps
 
 config.path = $${INSTALLER_CONF_DIR_PATH}

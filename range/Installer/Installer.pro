@@ -61,7 +61,8 @@ win* {
 else {
     macx {
         APP_NAME = $$join(APP_NAME,,,".app")
-        DEPLOY_COMMAND = $$[QT_INSTALL_PREFIX]/bin/macdeployqt $${BIN_DIR_PATH}/$${APP_NAME} -executable=$${BIN_DIR_PATH}/$${TOOL_NAME} -verbose=2
+        APP_DIR = $${BIN_DIR_PATH}/$${APP_NAME}
+        DEPLOY_COMMAND = $$[QT_INSTALL_PREFIX]/bin/macdeployqt $${APP_DIR} -executable=$${BIN_DIR_PATH}/$${TOOL_NAME} -verbose=2
     }
     else {
         DEPLOY_COMMAND = $${_PRO_FILE_PWD_}/../../scripts/linux_deploy_qt.sh --executable=$${BIN_DIR_PATH}/$${APP_NAME} --install-to=$${INSTALLER_DATA_DIR_PATH} --only-qt --qt-path=$$[QT_INSTALL_PREFIX]
