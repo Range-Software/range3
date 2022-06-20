@@ -1,6 +1,9 @@
 ------------------------------------------------------------------
 Version 3.2.7
 
+* ALL: New software installer
+* GUI: At startup check configured paths
+
 Bug fixes:
 
 * Fixed crash when unindenting already unindented log line

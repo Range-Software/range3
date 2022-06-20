@@ -151,15 +151,19 @@ pushd $buildDir
 
 if [[ $(uname -s) == "Darwin" ]]; then
     # This doesn't work yet.
-    echo_i "Setting path to include llvm clang for OpenMP support."
-    OLDPATH=$PATH
-    export PATH=/usr/local/opt/llvm/bin:$PATH
-    export LLVM_INCLUDE_FLAGS="-L/usr/local/opt/llvm/lib -I/usr/local/opt/llvm/include"
-    export CC=clang
-    export CXX=clang++
+#    echo_i "Setting path to include llvm clang for OpenMP support."
+#    OLDPATH=$PATH
+#    export PATH=/usr/local/opt/llvm/bin:$PATH
+#    export LLVM_INCLUDE_FLAGS="-L/usr/local/opt/llvm/lib -I/usr/local/opt/llvm/include"
+#    export QMAKE_CC=clang
+#    export QMAKE_CXX=clang++
+    llvm_path="/usr/local/opt/llvm/bin/"
+    qmake_cc="$llvm_path/clang"
+    qmake_link_c="$llvm_path/clang"
+    qmake_cxx="$llvm_path/clang++"
+    qmake_link="$llvm_path/clang++"
 
-    echo_i "Jeez, what does it take to get qmake to use the right compiler?"
-    qmakeArgs+=" CC=/usr/local/opt/llvm/bin/clang CXX=/usr/local/opt/llvm/bin/clang++"
+    qmakeArgs+=" QMAKE_CC=$qmake_cc QMAKE_CXX=$qmake_cxx QMAKE_LINK_C=$qmake_link_c QMAKE_LINK=$qmake_link"
 fi
 
 for module in $moduleList
@@ -184,6 +188,15 @@ do
     if [ ${PIPESTATUS[0]} -ne 0 ]
     then
         echo_e "Command '$MAKE' failed. Check log file '$makeLogFile' for errors"
+        popd
+        exit 1
+    fi
+    # INSTALL
+    echo_i "Running make install"
+    $MAKE install | tee -a $makeLogFile
+    if [ ${PIPESTATUS[0]} -ne 0 ]
+    then
+        echo_e "Command '$MAKE install' failed. Check log file '$makeLogFile' for errors"
         popd
         exit 1
     fi

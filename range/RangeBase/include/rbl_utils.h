@@ -21,15 +21,15 @@
 
 namespace RVendor
 {
-    static const QString name("Range Software");
-    static const QString shortName("Range");
-    static const QString title("Finite Element Analysis");
-    static const QString description("Engineering simulation software");
-    static const QString author("Tomáš Šoltys");
-    static const QString email("tomas.soltys@range-software.com");
-    static const QString www("https://www.range-software.com");
-    static const RVersion version(3,2,7,RVersion::Release);
-    static const short year = 2022;
+    static const QString name(NAME);
+    static const QString shortName(SHORTNAME);
+    static const QString title(TITLE);
+    static const QString description(DESCRIPTION);
+    static const QString author(AUTHOR);
+    static const QString email(EMAIL);
+    static const QString www(WWW);
+    static const RVersion version(VERSION);
+    static const short year = YEAR;
 }
 
 namespace RConstants

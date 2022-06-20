@@ -1,5 +1,7 @@
 QT += core
 
+include(../range.pri)
+
 TARGET = RangeBase
 TEMPLATE = lib
 
@@ -69,13 +71,9 @@ HEADERS += \
 
 CONFIG -= debug_and_release
 CONFIG += copy_dir_files
-CONFIG += rtti
-CONFIG += exceptions
-#CONFIG += dll
 CONFIG += staticlib
 
 CONFIG(debug,debug|release) {
     TARGET = $$join(TARGET,,,_debug)
-    DEFINES += DEBUG
 }
 

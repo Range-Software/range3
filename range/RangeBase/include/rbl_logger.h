@@ -85,6 +85,9 @@ class RLogger
         //! If set to true a message assign time will be printed into
         //! a log file.
         bool printTime;
+        //! If set to true a message assign thread ID will be printed into
+        //! a log file.
+        bool printThreadId;
         //! Append new line character to ech string.
         bool addNewLine;
         //! Custom log handler.
@@ -130,6 +133,13 @@ class RLogger
 
         //! Enable/disable print time into a log file
         void setPrintTimeEnabled(bool printTime);
+
+        //! Return true/false whether the thread ID will be printed into
+        //! a log file.
+        bool getPrintThreadIdEnabled() const;
+
+        //! Enable/disable print thread ID into a log file
+        void setPrintThreadIdEnabled(bool printThreadId);
 
         //! Return whether a new line char should be added.
         bool getAddNewLine() const;

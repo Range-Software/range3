@@ -8,6 +8,8 @@
  *  DESCRIPTION: Application class definition                        *
  *********************************************************************/
 
+#include <clocale>
+
 #include <QTimer>
 #include <QStyleFactory>
 #include <QStyle>
@@ -158,6 +160,7 @@ void Application::onStarted(void)
         QList<RArgumentOption> validOptions;
         validOptions.append(RArgumentOption("log-debug",RArgumentOption::Switch,QVariant(),"Switch on debug log level",false,false));
         validOptions.append(RArgumentOption("log-trace",RArgumentOption::Switch,QVariant(),"Switch on trace log level",false,false));
+        validOptions.append(RArgumentOption("log-threads",RArgumentOption::Switch,QVariant(),"Enable printing thread IDs",false,false));
         validOptions.append(RArgumentOption("reset-defaults",RArgumentOption::Switch,QVariant(),"Reset all settings to defaults",false,false));
 
         RArgumentsParser argumentsParser(Application::arguments(),validOptions,true);
@@ -183,6 +186,10 @@ void Application::onStarted(void)
         if (argumentsParser.isSet("log-trace"))
         {
             RLogger::getInstance().setLevel(R_LOG_LEVEL_TRACE);
+        }
+        if (argumentsParser.isSet("log-threads"))
+        {
+            RLogger::getInstance().setPrintThreadIdEnabled(true);
         }
         if (argumentsParser.isSet("reset-defaults"))
         {
@@ -266,6 +273,7 @@ void Application::onStarted(void)
     RLogger::info("Temporary directory: \'%s\'\n",MainSettings::getInstancePtr()->getTmpDir().toUtf8().constData());
     RLogger::info("Material directory: \'%s\'\n",MainSettings::getInstancePtr()->getMaterialsDir().toUtf8().constData());
     RLogger::info("Session directory: \'%s\'\n",MainSettings::getInstancePtr()->getSessionDir().toUtf8().constData());
+    RLogger::info("Help doc directory: \'%s\'\n",MainSettings::getInstancePtr()->getApplicationSettings()->getHelpDir().toUtf8().constData());
     RLogger::info("Solver path: \'%s\'\n",MainSettings::getInstancePtr()->getApplicationSettings()->getSolverPath().toUtf8().constData());
 
     // Read material database
@@ -376,6 +384,33 @@ void Application::onStarted(void)
     {
         CrashReportDialog crashReportDialog(MainWindow::getInstance(),rotatedLogFile);
         crashReportDialog.exec();
+    }
+
+    if (MainSettings::getInstance().getApplicationSettings()->getDefaultHelpDir() != MainSettings::getInstance().getApplicationSettings()->getHelpDir())
+    {
+        QString messageStr = tr("Default and configured help directories differ") + ":"
+                           + QString("<ul>")
+                           + "<li><code>" + MainSettings::getInstance().getApplicationSettings()->getDefaultHelpDir() + "</code></li>"
+                           + "<li><code>" + MainSettings::getInstance().getApplicationSettings()->getHelpDir() + "</code></li>"
+                           + QString("</ul>")
+                           + "<strong>" + tr("Would you like to set it to default?") + "</strong>";
+        if (QMessageBox::question(MainWindow::getInstance(),tr("Unusual configuration"),messageStr) == QMessageBox::Yes)
+        {
+            MainSettings::getInstance().getApplicationSettings()->setHelpDir(MainSettings::getInstance().getApplicationSettings()->getDefaultHelpDir());
+        }
+    }
+    if (MainSettings::getInstance().getApplicationSettings()->getDefaultRangeSolverExecutable() != MainSettings::getInstance().getApplicationSettings()->getSolverPath())
+    {
+        QString messageStr = tr("Default and configured paths to solver executable differ") + ":"
+                           + QString("<ul>")
+                           + "<li><code>" + MainSettings::getInstance().getApplicationSettings()->getDefaultRangeSolverExecutable() + "</code></li>"
+                           + "<li><code>" + MainSettings::getInstance().getApplicationSettings()->getSolverPath() + "</code></li>"
+                           + QString("</ul>")
+                           + "<strong>" + tr("Would you like to set it to default?") + "</strong>";
+        if (QMessageBox::question(MainWindow::getInstance(),tr("Unusual configuration"),messageStr) == QMessageBox::Yes)
+        {
+            MainSettings::getInstance().getApplicationSettings()->setSolverPath(MainSettings::getInstance().getApplicationSettings()->getDefaultRangeSolverExecutable());
+        }
     }
 }
 

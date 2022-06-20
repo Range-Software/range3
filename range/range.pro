@@ -7,6 +7,7 @@ SUBDIRS = \
     RangeSolverLib \
     RangeSolver \
     Range \
+    Installer
     RangeTests
 
 RangeModel.depends = RangeBase TetGen
@@ -17,3 +18,4 @@ Range.depends = RangeSolverLib
 # build the project sequentially as listed in SUBDIRS !
 CONFIG += ordered
 CONFIG += depend_includepath
+CONFIG += static
