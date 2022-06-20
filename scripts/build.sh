@@ -5,6 +5,7 @@ selfDebug=false
 
 clean=false
 debug=false
+makeInstall=false
 
 myName=$(basename $0 .sh)
 myUser=$(id -nu)
@@ -61,6 +62,7 @@ function print_help
     echo " optional"
     echo ""
     echo "  --max-nc=[NUMBER]        Maximum number of cores used to compile (default=$maxNp)"
+    echo "  --install                Run make install"
     echo "  --clean                  Clean old build"
     echo "  --debug                  Build debug version"
     echo "  --help, -h, -?           Print this help and exit"
@@ -77,6 +79,9 @@ do
             ;;
         --debug)
             debug=true
+            ;;
+        --install)
+            makeInstall=true
             ;;
         --help | -h | -?)
             print_help; exit 0;;
@@ -191,14 +196,17 @@ do
         popd
         exit 1
     fi
-    # INSTALL
-    echo_i "Running make install"
-    $MAKE install | tee -a $makeLogFile
-    if [ ${PIPESTATUS[0]} -ne 0 ]
+    if [ "$makeInstall" == "true" ]
     then
-        echo_e "Command '$MAKE install' failed. Check log file '$makeLogFile' for errors"
-        popd
-        exit 1
+        # INSTALL
+        echo_i "Running make install"
+        $MAKE install | tee -a $makeLogFile
+        if [ ${PIPESTATUS[0]} -ne 0 ]
+        then
+            echo_e "Command '$MAKE install' failed. Check log file '$makeLogFile' for errors"
+            popd
+            exit 1
+        fi
     fi
     set_unindent
 done
