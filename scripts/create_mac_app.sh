@@ -12,6 +12,7 @@ myName=$(basename $0 .sh)
 myUser=$(id -nu)
 myNode=$(hostname -s)
 timeStamp=$(date +%H%M%S)
+arch=$(uname -p)
 
 getScriptPath () {
 	echo ${0%/*}/
@@ -51,21 +52,23 @@ debug=false
 
 # Argument parsing section - Begin ----------------------------------------
 
-function print_help
+print_help()
 {
-    echo "Usage: $myName"
-    echo "Usage: $myName.sh [OPTION]..."
-    echo ""
-    echo " mandatory"
-    echo ""
-    echo " optional"
-    echo ""
-    echo "  --install-to=[DIRECTORY]       Install created package to 'DIRECTORY' (default='$installToDir')"
-    echo ""
-    echo "  --debug                        Create debug package"
-    echo ""
-    echo "  --build-dir=[DIRECTORY]        Custom build directory"
-    echo "  --help, -h, -?                 Print this help and exit"
+cat <<End-of-help
+    Usage: $myName
+    Usage: $myName.sh [OPTION]...
+
+     mandatory
+
+     optional
+
+      --install-to=[DIRECTORY]       Install created package to 'DIRECTORY' (default='$installToDir')
+      --build-dir=[DIRECTORY]        Custom build directory
+
+      --debug                        Create debug package
+
+      --help, -h, -?                 Print this help and exit
+End-of-help
 }
 
 while [ $# -gt 0 ]
@@ -147,7 +150,7 @@ fi
 package="${name}-${packageVersion}"
 packagesDir="${buildDir}/packages"
 packageDir="${packagesDir}/$package"
-packageFile="${packagesDir}/${package}.dmg"
+packageFile="${packagesDir}/${package}-${arch}.dmg"
 
 packageAppDir="${packageDir}/Range${versionSuffix}.app"
 packageBinDir="${packageAppDir}/Contents/MacOS"

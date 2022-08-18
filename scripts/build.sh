@@ -52,20 +52,22 @@ then
 fi
 maxNp=$np
 
-function print_help
+print_help()
 {
-    echo "Usage: $myName"
-    echo "Usage: $myName.sh [OPTION]..."
-    echo ""
-    echo " mandatory"
-    echo ""
-    echo " optional"
-    echo ""
-    echo "  --max-nc=[NUMBER]        Maximum number of cores used to compile (default=$maxNp)"
-    echo "  --install                Run make install"
-    echo "  --clean                  Clean old build"
-    echo "  --debug                  Build debug version"
-    echo "  --help, -h, -?           Print this help and exit"
+cat <<End-of-help
+Usage: $myName
+Usage: $myName.sh [OPTION]...
+
+  mandatory
+
+  optional
+
+    --max-nc=[NUMBER]        Maximum number of cores used to compile (default=$maxNp)
+    --install                Run make install
+    --clean                  Clean old build
+    --debug                  Build debug version
+    --help, -h, -?           Print this help and exit
+End-of-help
 }
 
 while [ $# -gt 0 ]
@@ -155,20 +157,18 @@ fi
 pushd $buildDir
 
 if [[ $(uname -s) == "Darwin" ]]; then
-    # This doesn't work yet.
-#    echo_i "Setting path to include llvm clang for OpenMP support."
-#    OLDPATH=$PATH
-#    export PATH=/usr/local/opt/llvm/bin:$PATH
-#    export LLVM_INCLUDE_FLAGS="-L/usr/local/opt/llvm/lib -I/usr/local/opt/llvm/include"
-#    export QMAKE_CC=clang
-#    export QMAKE_CXX=clang++
-    llvm_path="/usr/local/opt/llvm/bin/"
-    qmake_cc="$llvm_path/clang"
-    qmake_link_c="$llvm_path/clang"
-    qmake_cxx="$llvm_path/clang++"
-    qmake_link="$llvm_path/clang++"
-
-    qmakeArgs+=" QMAKE_CC=$qmake_cc QMAKE_CXX=$qmake_cxx QMAKE_LINK_C=$qmake_link_c QMAKE_LINK=$qmake_link"
+    override_clang="false"
+    if [ "$override_clang" == "true" ]
+    then
+        qmake_cc="$(which clang)"
+        qmake_link_c="$(which clang++)"
+        qmake_cxx="$(which clang++)"
+        qmake_link="$(which clang++)"
+        qmakeArgs+=" QMAKE_CC=$qmake_cc QMAKE_CXX=$qmake_cxx QMAKE_LINK_C=$qmake_link_c QMAKE_LINK=$qmake_link"
+    fi
+    includePath="$HOMEBREW_REPOSITORY/include"
+    libDirectory="$HOMEBREW_REPOSITORY/lib"
+    qmakeArgs+=" QMAKE_INCDIR=$includePath QMAKE_LIBDIR=$libDirectory"
 fi
 
 for module in $moduleList
