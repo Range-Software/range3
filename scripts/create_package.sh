@@ -56,25 +56,26 @@ debug=false
 
 # Argument parsing section - Begin ----------------------------------------
 
-function print_help
+print_help()
 {
-    echo "Usage: $myName"
-    echo "Usage: $myName.sh [OPTION]..."
-    echo ""
-    echo " mandatory"
-    echo ""
-    echo " optional"
-    echo ""
-    echo "  --install-to=[DIRECTORY]       Install created package to 'DIRECTORY' (default='$installToDir')"
-    echo ""
-    echo "  --rpm                          Create RPM"
-    echo "  --distro=[STRING]              Distribution string"
-    echo ""
-    echo "  --debug                        Create debug package"
-    echo ""
-    echo "  --build-dir=[DIRECTORY]        Custom build directory"
-    echo "  --rpm-install-dir=[DIRECTORY]  Custom RPM install directory"
-    echo "  --help, -h, -?                 Print this help and exit"
+cat <<End-of-help
+Usage: $myName
+Usage: $myName.sh [OPTION]...
+
+ mandatory
+
+ optional
+
+  --install-to=[DIRECTORY]       Install created package to 'DIRECTORY' (default='$installToDir')
+  --build-dir=[DIRECTORY]        Custom build directory
+  --rpm                          Create RPM
+  --rpm-install-dir=[DIRECTORY]  Custom RPM install directory
+  --distro=[STRING]              Distribution string
+
+  --debug                        Create debug package
+
+  --help, -h, -?                 Print this help and exit
+End-of-help
 }
 
 while [ $# -gt 0 ]

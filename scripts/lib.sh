@@ -15,12 +15,12 @@ then
     _ECHO_INTEND=$[0]
 fi
 
-function set_indent
+set_indent()
 {
     _ECHO_INTEND=$[_ECHO_INTEND+1]
 }
 
-function set_unindent
+set_unindent()
 {
     _ECHO_INTEND=$[_ECHO_INTEND-1]
     if [ $_ECHO_INTEND -lt 0 ]
@@ -29,12 +29,12 @@ function set_unindent
     fi
 }
 
-function get_indent
+get_indent()
 {
     echo $_ECHO_INTEND
 }
 
-function get_indent_text
+get_indent_text()
 {
     local intMessage=""
     local int=$[0]
@@ -46,13 +46,13 @@ function get_indent_text
     echo "$intMessage"
 }
 
-function get_log_time
+get_log_time()
 {
     local logTimeStr="$(date +%d-%b-%Y) $(date +%T)"
     echo $logTimeStr
 }
 
-function echo_stack
+echo_stack()
 {
     local nIgnore=0
     if [ ! -z "$1" ]
@@ -79,7 +79,7 @@ function echo_stack
     done
 }
 
-function echo_f
+echo_f()
 {
     if [ $# -gt 1 ]
     then
@@ -93,7 +93,7 @@ function echo_f
     fi
 }
 
-function echo_i
+echo_i()
 {
     local message="-I-|$(get_log_time)|$(get_indent_text)""$@"
     echo "$message" >&1
@@ -110,7 +110,7 @@ function echo_i
     fi
 }
 
-function echo_w
+echo_w()
 {
     local message="-W-|$(get_log_time)|$(get_indent_text)""$@"
     echo "$message" >&2
@@ -127,7 +127,7 @@ function echo_w
     fi
 }
 
-function echo_e
+echo_e()
 {
     local message="-E-|$(get_log_time)|$(get_indent_text)""$@"
     echo "$message" >&2
@@ -144,7 +144,7 @@ function echo_e
     fi
 }
 
-function assert_success
+assert_success()
 {
     local _return_value=$1
     local _error_message=$2
@@ -154,11 +154,11 @@ function assert_success
         if [ "$_exit" = "true" ]; then
             exit 2
         fi
-    fi  
+    fi
     return $_return_value
 }
 
-function touch_dir
+touch_dir()
 {
     local dir=$1
     local clean=$2
