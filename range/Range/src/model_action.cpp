@@ -433,20 +433,19 @@ void ModelAction::removeElements(const ModelActionInput &modelActionInput)
         }
     }
 
-    int consolidateActionMask = Model::ConsolidateEdgeNodes | Model::ConsolidateEdgeElements | Model::ConsolidateHoleElements | Model::ConsolidateMeshInput | Model::ConsolidateSliverElements;
-
-    if (nSurfaceElements > 0)
-    {
-        consolidateActionMask |= Model::ConsolidateSurfaceNeighbors;
-        if (rModel.getNIntersected() > 0)
-        {
-            consolidateActionMask |= Model::ConsolidateIntersectedElements;
-        }
-    }
-    if (nVolumeElements > 0)
-    {
-        consolidateActionMask |= Model::ConsolidateVolumeNeighbors;
-    }
+//    int consolidateActionMask = Model::ConsolidateEdgeNodes | Model::ConsolidateEdgeElements | Model::ConsolidateHoleElements | Model::ConsolidateMeshInput | Model::ConsolidateSliverElements;
+//    if (nSurfaceElements > 0)
+//    {
+//        consolidateActionMask |= Model::ConsolidateSurfaceNeighbors;
+//        if (rModel.getNIntersected() > 0)
+//        {
+//            consolidateActionMask |= Model::ConsolidateIntersectedElements;
+//        }
+//    }
+//    if (nVolumeElements > 0)
+//    {
+//        consolidateActionMask |= Model::ConsolidateVolumeNeighbors;
+//    }
 
     rModel.removeElements(modelActionInput.getElementIDs(),modelActionInput.getCloseHole());
     rModel.consolidate(Model::ConsolidateActionAll);

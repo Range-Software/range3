@@ -27,7 +27,6 @@
 #include "rml_file_manager.h"
 #include "rml_view_factor_matrix.h"
 #include "rml_polygon.h"
-#include "rml_segment.h"
 
 
 static const RVersion _version = RVersion(FILE_MAJOR_VERSION,FILE_MINOR_VERSION,FILE_RELEASE_VERSION);
@@ -57,20 +56,21 @@ void RModel::_init (const RModel *pModel)
 } /* RModel::_init */
 
 
-RModel::RModel ()
+RModel::RModel()
 {
-    this->_init ();
+    this->_init();
 } /* RModel::RModel */
 
 
-RModel::RModel (const RModel &model) : RProblem (model)
-                                     , RResults (model)
+RModel::RModel(const RModel &model)
+    : RProblem (model)
+    , RResults (model)
 {
-    this->_init (&model);
+    this->_init(&model);
 } /* RModel::RModel copy */
 
 
-RModel::RModel (const RModelMsh &modelMsh)
+RModel::RModel(const RModelMsh &modelMsh)
 {
     RNode node;
     RElement element;
@@ -79,7 +79,7 @@ RModel::RModel (const RModelMsh &modelMsh)
     RUVector faceBook(modelMsh.facesAll.getNRows());
     RUVector bodyBook(modelMsh.bodiesAll.getNRows());
 
-    this->_init ();
+    this->_init();
 
     // Set name and description
 
@@ -88,7 +88,7 @@ RModel::RModel (const RModelMsh &modelMsh)
 
     // Convert nodes
 
-    this->setNNodes(modelMsh.nodes.getNRows());
+    this->RModel::setNNodes(modelMsh.nodes.getNRows());
     for (uint i=0;i<modelMsh.nodes.getNRows();i++)
     {
         node.set(modelMsh.nodes[i][0],modelMsh.nodes[i][1],modelMsh.nodes[i][2]);
@@ -97,10 +97,10 @@ RModel::RModel (const RModelMsh &modelMsh)
 
     // Convert elements
 
-    this->setNElements(  modelMsh.pointsAll.getNRows()
-                       + modelMsh.linesAll.getNRows()
-                       + modelMsh.facesAll.getNRows()
-                       + modelMsh.bodiesAll.getNRows());
+    this->RModel::setNElements(  modelMsh.pointsAll.getNRows()
+                               + modelMsh.linesAll.getNRows()
+                               + modelMsh.facesAll.getNRows()
+                               + modelMsh.bodiesAll.getNRows());
 
     uint elNum = 0;
     element.setType(R_ELEMENT_POINT);
@@ -200,9 +200,9 @@ RModel::RModel (const RModelMsh &modelMsh)
 } /* RModel::RModel copy - MSH */
 
 
-RModel::RModel (const RModelStl &modelStl)
+RModel::RModel(const RModelStl &modelStl)
 {
-    this->_init ();
+    this->_init();
     this->setName(modelStl.getName());
     this->setDescription(modelStl.getDescription());
     this->setNNodes(modelStl.getNNodes());
@@ -225,11 +225,9 @@ RModel::RModel (const RModelStl &modelStl)
 } /* RModel::RModel copy - STL */
 
 
-RModel::RModel (const RModelRaw &modelRaw,
-                const QString &name,
-                const QString &description)
+RModel::RModel(const RModelRaw &modelRaw, const QString &name, const QString &description)
 {
-    this->_init ();
+    this->_init();
     this->setName(name);
     this->setDescription(description);
     this->setNNodes(modelRaw.getNNodes());
@@ -252,12 +250,12 @@ RModel::RModel (const RModelRaw &modelRaw,
 } /* RModel::RModel copy - RAW */
 
 
-RModel::~RModel ()
+RModel::~RModel()
 {
 } /* RModel::~RModel */
 
 
-RModel & RModel::operator = (const RModel &model)
+RModel &RModel::operator = (const RModel &model)
 {
     this->RProblem::operator = (model);
     this->RResults::operator = (model);
@@ -445,7 +443,7 @@ void RModel::read(const QString &fileName)
         {
             throw RError(R_ERROR_APPLICATION,R_ERROR_REF, "Memory allocation failed.");
         }
-        catch (const std::exception& x)
+        catch (const std::exception&x)
         {
             throw RError(R_ERROR_APPLICATION,R_ERROR_REF, "%s.", typeid(x).name());
         }
@@ -490,7 +488,7 @@ QString RModel::write(const QString &fileName, bool writeLinkFile) const
     }
     else
     {
-        if (this->getProblemTaskTree().getProblemTypeMask() & R_PROBLEM_STRESS_MODAL)
+        if (this->getProblemTaskTree().getProblemTypeMask() &R_PROBLEM_STRESS_MODAL)
         {
             recordNumber = this->getProblemSetup().getModalSetup().getMode() + 1;
         }
@@ -526,7 +524,7 @@ QString RModel::write(const QString &fileName, bool writeLinkFile) const
     {
         throw RError(R_ERROR_APPLICATION,R_ERROR_REF, "Memory allocation failed.");
     }
-    catch (const std::exception& x)
+    catch (const std::exception&x)
     {
         throw RError(R_ERROR_APPLICATION,R_ERROR_REF, "%s.", typeid(x).name());
     }
@@ -943,6 +941,7 @@ void RModel::setProblemTaskTree (const RProblemTaskItem &taskTree)
             else
             {
                 pElementGroup = nullptr;
+                continue;
             }
 
             // Check all boundary conditions
@@ -950,7 +949,7 @@ void RModel::setProblemTaskTree (const RProblemTaskItem &taskTree)
             while (pos < pElementGroup->getNBoundaryConditions())
             {
                 conditionTypeMask = RBoundaryCondition::getProblemTypeMask(pElementGroup->getBoundaryCondition(pos).getType());
-                if (!(conditionTypeMask & typeMask))
+                if (!(conditionTypeMask &typeMask))
                 {
                     pElementGroup->removeBoundaryCondition (pos);
                 }
@@ -965,7 +964,7 @@ void RModel::setProblemTaskTree (const RProblemTaskItem &taskTree)
             while (pos < pElementGroup->getNEnvironmentConditions())
             {
                 conditionTypeMask = REnvironmentCondition::getProblemTypeMask(pElementGroup->getEnvironmentCondition(pos).getType());
-                if (!(conditionTypeMask & typeMask))
+                if (!(conditionTypeMask &typeMask))
                 {
                     pElementGroup->removeEnvironmentCondition (pos);
                 }
@@ -980,7 +979,7 @@ void RModel::setProblemTaskTree (const RProblemTaskItem &taskTree)
             while (pos < pElementGroup->getNInitialConditions())
             {
                 conditionTypeMask = RInitialCondition::getProblemTypeMask(pElementGroup->getInitialCondition(pos).getType());
-                if (!(conditionTypeMask & typeMask))
+                if (!(conditionTypeMask &typeMask))
                 {
                     pElementGroup->removeInitialCondition (pos);
                 }
@@ -1019,7 +1018,7 @@ void RModel::removeAllVariables()
  *********************************************************************/
 
 
-uint RModel::getNNodes () const
+uint RModel::getNNodes() const
 {
     return uint(this->nodes.size());
 } /* RModel::getNNodes */
@@ -1046,14 +1045,14 @@ RNode * RModel::getNodePtr (uint position)
 } /* RModel::get_node_ptr */
 
 
-const RNode & RModel::getNode (uint position) const
+const RNode &RModel::getNode (uint position) const
 {
     R_ERROR_ASSERT (position < this->nodes.size());
     return this->nodes[position];
 } /* RModel::getNode */
 
 
-RNode & RModel::getNode (uint position)
+RNode &RModel::getNode (uint position)
 {
     R_ERROR_ASSERT (position < this->nodes.size());
     return this->nodes[position];
@@ -1066,25 +1065,10 @@ const std::vector<RNode> &RModel::getNodes() const
 } /* RModel::getNodes */
 
 
-void RModel::addNode (const RNode &node,
-                      double  value)
+void RModel::addNode(const RNode &node)
 {
     this->nodes.push_back (node);
-    this->RResults::addNode (value);
-} /* RModel::addNode */
-
-
-void RModel::addNode (double x, 
-                      double y,
-                      double z,
-                      double value)
-{
-    RNode node;
-
-    node.set (x, y, z);
-
-    this->addNode (node);
-    this->RResults::addNode (value);
+    this->RResults::addNode(0.0);
 } /* RModel::addNode */
 
 
@@ -1096,30 +1080,16 @@ void RModel::setNode (uint  position,
 } /* RModel::set_node */
 
 
-void RModel::removeNode (uint                position,
-                         std::vector<uint> * removedElements,
-                         std::vector<uint> * removedPoints,
-                         std::vector<uint> * removedLines,
-                         std::vector<uint> * removedSurfaces,
-                         std::vector<uint> * removedVolumes)
+void RModel::removeNode(uint position)
 {
     R_ERROR_ASSERT (position < this->nodes.size());
 
     // Loop over all elements and remove each containing the node
     std::vector<uint> eps = this->findElementPositionsByNodeId(position);
-    if (removedElements)
-    {
-        (*removedElements) = eps;
-    }
 
     for (std::vector<uint>::reverse_iterator rIterEps = eps.rbegin(); rIterEps != eps.rend(); ++rIterEps)
     {
-        this->removeElement (*rIterEps,
-                              true,
-                              removedPoints,
-                              removedLines,
-                              removedSurfaces,
-                              removedVolumes);
+        this->removeElement(*rIterEps, true);
     }
 
     // Remove node from nodes vector
@@ -1365,15 +1335,15 @@ double RModel::findNodeScale() const
     double dy = ymax - ymin;
     double dz = zmax - zmin;
 
-    if (dx >= dy && dx >= dz && dx != 0.0)
+    if (dx >= dy &&dx >= dz &&dx != 0.0)
     {
         return 1.0/dx;
     }
-    if (dy >= dx && dy >= dz && dy != 0.0)
+    if (dy >= dx &&dy >= dz &&dy != 0.0)
     {
         return 1.0/dy;
     }
-    if (dz >= dx && dz >= dy && dz != 0.0)
+    if (dz >= dx &&dz >= dy &&dz != 0.0)
     {
         return 1.0/dz;
     }
@@ -1582,14 +1552,14 @@ RElement * RModel::getElementPtr (uint position)
 } /* RModel::getElementPtr */
 
 
-const RElement & RModel::getElement (uint position) const
+const RElement &RModel::getElement (uint position) const
 {
     R_ERROR_ASSERT (position < this->elements.size());
     return this->elements[position];
 } /* RModel::getElement */
 
 
-RElement & RModel::getElement (uint position)
+RElement &RModel::getElement (uint position)
 {
     R_ERROR_ASSERT (position < this->elements.size());
     return this->elements[position];
@@ -1741,12 +1711,7 @@ void RModel::setElement (uint    position,
 } /* RModel::setElement */
 
 
-void RModel::removeElement (uint                position,
-                            bool                removeGroups,
-                            std::vector<uint> * removedPoints,
-                            std::vector<uint> * removedLines,
-                            std::vector<uint> * removedSurfaces,
-                            std::vector<uint> * removedVolumes)
+void RModel::removeElement(uint position, bool removeGroups)
 {
     R_ERROR_ASSERT (position < this->elements.size());
 
@@ -1768,12 +1733,7 @@ void RModel::removeElement (uint                position,
             if (rIter->empty())
             {
                 // Remove empty element group
-                if (removedPoints)
-                {
-                    uint gPosition = uint(std::distance(this->points.begin(),(rIter+1).base()));
-                    removedPoints->push_back(gPosition);
-                }
-                this->points.erase ((rIter+1).base());
+                this->points.erase((rIter+1).base());
             }
             else
             {
@@ -1802,11 +1762,6 @@ void RModel::removeElement (uint                position,
             if (rIter->empty())
             {
                 // Remove empty element group
-                if (removedLines)
-                {
-                    uint gPosition = uint(std::distance(this->lines.begin(),(rIter+1).base()));
-                    removedLines->push_back(gPosition);
-                }
                 this->lines.erase((rIter+1).base());
             }
             else
@@ -1836,11 +1791,6 @@ void RModel::removeElement (uint                position,
             if (rIter->empty())
             {
                 // Remove empty element group
-                if (removedSurfaces)
-                {
-                    uint gPosition = uint(std::distance(this->surfaces.begin(),(rIter+1).base()));
-                    removedSurfaces->push_back(gPosition);
-                }
                 this->surfaces.erase((rIter+1).base());
             }
             else
@@ -1870,11 +1820,6 @@ void RModel::removeElement (uint                position,
             if (rIter->empty())
             {
                 // Remove empty element group
-                if (removedVolumes)
-                {
-                    uint gPosition = uint(std::distance(this->volumes.begin(),(rIter+1).base()));
-                    removedVolumes->push_back(gPosition);
-                }
                 this->volumes.erase((rIter+1).base());
             }
             else
@@ -1899,7 +1844,7 @@ void RModel::removeElement (uint                position,
     {
         uint nodeID = this->getElement(position).getNodeId(i);
         bool nodeIsUsed = false;
-        for (uint j=0;j<this->getNElements() && !nodeIsUsed;j++)
+        for (uint j=0;j<this->getNElements() &&!nodeIsUsed;j++)
         {
             if (j == position)
             {
@@ -2223,28 +2168,28 @@ uint RModel::getNEntityElements(REntityGroupType entityType) const
 {
     uint nElements = 0;
 
-    if (R_ENTITY_GROUP_POINT & entityType)
+    if (R_ENTITY_GROUP_POINT &entityType)
     {
         for (uint i=0;i<this->getNPoints();i++)
         {
             nElements += this->getPoint(i).size();
         }
     }
-    if (R_ENTITY_GROUP_LINE & entityType)
+    if (R_ENTITY_GROUP_LINE &entityType)
     {
         for (uint i=0;i<this->getNLines();i++)
         {
             nElements += this->getLine(i).size();
         }
     }
-    if (R_ENTITY_GROUP_SURFACE & entityType)
+    if (R_ENTITY_GROUP_SURFACE &entityType)
     {
         for (uint i=0;i<this->getNSurfaces();i++)
         {
             nElements += this->getSurface(i).size();
         }
     }
-    if (R_ENTITY_GROUP_VOLUME & entityType)
+    if (R_ENTITY_GROUP_VOLUME &entityType)
     {
         for (uint i=0;i<this->getNVolumes();i++)
         {
@@ -3150,7 +3095,7 @@ void RModel::removeEntities(REntityGroupType entityType, const QList<uint> &enti
  *********************************************************************/
 
 
-uint RModel::getNPoints () const
+uint RModel::getNPoints() const
 {
     return uint(this->points.size());
 } /* RModel::getNPoints */
@@ -3185,14 +3130,14 @@ RPoint * RModel::getPointPtr (uint position)
 } /* RModel::getPointPtr */
 
 
-const RPoint & RModel::getPoint (uint position) const
+const RPoint &RModel::getPoint (uint position) const
 {
     R_ERROR_ASSERT (position < this->points.size());
     return this->points[position];
 } /* RModel::getPoint */
 
 
-RPoint & RModel::getPoint (uint position)
+RPoint &RModel::getPoint (uint position)
 {
     R_ERROR_ASSERT (position < this->points.size());
     return this->points[position];
@@ -3234,7 +3179,7 @@ void RModel::removePoint (uint position)
  *********************************************************************/
 
 
-uint RModel::getNLines () const
+uint RModel::getNLines() const
 {
     return uint(this->lines.size());
 } /* RModel::getNLines */
@@ -3269,14 +3214,14 @@ RLine * RModel::getLinePtr (uint position)
 } /* RModel::getLinePtr */
 
 
-const RLine & RModel::getLine (uint position) const
+const RLine &RModel::getLine (uint position) const
 {
     R_ERROR_ASSERT (position < this->lines.size());
     return this->lines[position];
 } /* RModel::getLine */
 
 
-RLine & RModel::getLine (uint position)
+RLine &RModel::getLine (uint position)
 {
     R_ERROR_ASSERT (position < this->lines.size());
     return this->lines[position];
@@ -3318,7 +3263,7 @@ void RModel::removeLine (uint position)
  *********************************************************************/
 
 
-uint RModel::getNSurfaces () const
+uint RModel::getNSurfaces() const
 {
     return uint(this->surfaces.size());
 } /* RModel::getNSurfaces */
@@ -3353,14 +3298,14 @@ RSurface * RModel::getSurfacePtr (uint position)
 } /* RModel::getSurfacePtr */
 
 
-const RSurface & RModel::getSurface (uint position) const
+const RSurface &RModel::getSurface (uint position) const
 {
     R_ERROR_ASSERT (position < this->surfaces.size());
     return this->surfaces[position];
 } /* RModel::getSurface */
 
 
-RSurface & RModel::getSurface (uint position)
+RSurface &RModel::getSurface (uint position)
 {
     R_ERROR_ASSERT (position < this->surfaces.size());
     return this->surfaces[position];
@@ -3483,7 +3428,7 @@ void RModel::syncSurfaceNormals()
                     for (uint k=0;k<this->surfaceNeigs[elementID].size();k++)
                     {
                         uint neighbourID = surfaceNeigs[elementID][k];
-                        if (elementSurface[neighbourID] && !elementChecked[neighbourID])
+                        if (elementSurface[neighbourID] &&!elementChecked[neighbourID])
                         {
                             // Check neighbor orientation.
                             if (!this->getElement(elementID).isNeighborNormalSync(this->getElement(neighbourID)))
@@ -3514,7 +3459,7 @@ void RModel::syncSurfaceNormals()
  *********************************************************************/
 
 
-uint RModel::getNVolumes () const
+uint RModel::getNVolumes() const
 {
     return uint(this->volumes.size());
 } /* RModel::getNVolumes */
@@ -3549,14 +3494,14 @@ RVolume * RModel::getVolumePtr (uint position)
 } /* RModel::getVolumePtr */
 
 
-const RVolume & RModel::getVolume (uint position) const
+const RVolume &RModel::getVolume (uint position) const
 {
     R_ERROR_ASSERT (position < this->volumes.size());
     return this->volumes[position];
 } /* RModel::getVolume */
 
 
-RVolume & RModel::getVolume (uint position)
+RVolume &RModel::getVolume (uint position)
 {
     R_ERROR_ASSERT (position < this->volumes.size());
     return this->volumes[position];
@@ -4228,7 +4173,7 @@ RRVector RModel::getInterpolatedResultsValues(RVariableType variableType, const 
     for (uint i=0;i<this->getNElements();i++)
     {
         const RElement &rElement = this->getElement(i);
-        if (RElementGroup::getGroupType(rElement.getType()) & entityGroup)
+        if (RElementGroup::getGroupType(rElement.getType()) &entityGroup)
         {
             if (rElement.isInside(this->getNodes(),rNode,volumes))
             {
@@ -4676,7 +4621,7 @@ QList<uint> RModel::sortLineElements(const QList<RElement> &edges, uint firstID)
             {
                 item.n2 = uint(j);
             }
-            if (item.n1 != RConstants::eod && item.n2 != RConstants::eod)
+            if (item.n1 != RConstants::eod &&item.n2 != RConstants::eod)
             {
                 break;
             }
@@ -4715,7 +4660,7 @@ QList<uint> RModel::sortLineElements(const QList<RElement> &edges, uint firstID)
     }
     if (elementIDs.last() == elementIDs.first())
     {
-        elementIDs.erase(elementIDs.end()-1);
+        elementIDs.erase(elementIDs.constEnd()-1);
     }
 
     return elementIDs;
@@ -4897,7 +4842,7 @@ void RModel::createStreamLine(RStreamLine &rStreamLine) const
     {
         const RElement &rElement = this->getElement(uint(i));
 
-        if (R_ELEMENT_TYPE_IS_POINT(rElement.getType()) && pointElementID == RConstants::eod)
+        if (R_ELEMENT_TYPE_IS_POINT(rElement.getType()) &&pointElementID == RConstants::eod)
         {
             if (rElement.isInside(this->getNodes(),startNode))
             {
@@ -4907,7 +4852,7 @@ void RModel::createStreamLine(RStreamLine &rStreamLine) const
                 }
             }
         }
-        if (R_ELEMENT_TYPE_IS_LINE(rElement.getType()) && lineElementID == RConstants::eod)
+        if (R_ELEMENT_TYPE_IS_LINE(rElement.getType()) &&lineElementID == RConstants::eod)
         {
             if (rElement.isInside(this->getNodes(),startNode))
             {
@@ -4917,7 +4862,7 @@ void RModel::createStreamLine(RStreamLine &rStreamLine) const
                 }
             }
         }
-        if (R_ELEMENT_TYPE_IS_SURFACE(rElement.getType()) && surfaceElementID == RConstants::eod)
+        if (R_ELEMENT_TYPE_IS_SURFACE(rElement.getType()) &&surfaceElementID == RConstants::eod)
         {
             if (rElement.isInside(this->getNodes(),startNode))
             {
@@ -4927,7 +4872,7 @@ void RModel::createStreamLine(RStreamLine &rStreamLine) const
                 }
             }
         }
-        if (R_ELEMENT_TYPE_IS_VOLUME(rElement.getType()) && volumeElementID == RConstants::eod)
+        if (R_ELEMENT_TYPE_IS_VOLUME(rElement.getType()) &&volumeElementID == RConstants::eod)
         {
             if (rElement.isInside(this->getNodes(),startNode))
             {
@@ -4985,7 +4930,7 @@ void RModel::createStreamLine(RStreamLine &rStreamLine) const
             std::vector<double> nodeValues;
             nodeValues.resize(rElement.size(),0);
 
-            for (uint i=0;i<rVariable.getNVectors() && i<3;i++)
+            for (uint i=0;i<rVariable.getNVectors() &&i<3;i++)
             {
                 for (uint j=0;j<rElement.size();j++)
                 {
@@ -5422,7 +5367,7 @@ QList<uint> RModel::findIntersectedElements() const
             RLimitBox limitBox2;
             bool bothIntersected = false;
 #pragma omp critical
-            bothIntersected = (intElements[int(i)] && intElements[int(j)]);
+            bothIntersected = (intElements[int(i)] &&intElements[int(j)]);
             if (bothIntersected)
             {
                 continue;
@@ -5658,7 +5603,7 @@ uint RModel::breakIntersectedElements(uint nIterations, const std::vector<uint> 
                 std::set<RR3Vector>::const_iterator iter;
                 for (iter=intersectionPoints[i].begin();iter!=intersectionPoints[i].end();++iter)
                 {
-                    this->addNode((*iter)[0],(*iter)[1],(*iter)[2]);
+                    this->addNode(RNode((*iter)[0],(*iter)[1],(*iter)[2]));
                     breakNodeIDs.push_back(this->getNNodes() - 1);
                 }
 
@@ -6329,7 +6274,7 @@ QString RModel::generateMeshTetGenInputParams(const RMeshInput &meshInput) const
     {
         parameters += "e";
     }
-    if (meshInput.getReconstruct() && this->getNVolumes() > 0)
+    if (meshInput.getReconstruct() &&this->getNVolumes() > 0)
     {
         parameters += "r";
     }
@@ -6369,7 +6314,7 @@ void RModel::generatePatchSurface(const std::vector<RPatchInput> &patchInput, RP
         {
             continue;
         }
-        if (!patchInput[surfaceID].getEmitter() && !patchInput[surfaceID].getReceiver())
+        if (!patchInput[surfaceID].getEmitter() &&!patchInput[surfaceID].getReceiver())
         {
             continue;
         }
@@ -6545,7 +6490,7 @@ void RModel::findPatchNormal(const RPatch &rPatch, double &nx, double &ny, doubl
 } /* RModel::findPatchNormal */
 
 
-void RModel::findPatchArea(const RPatch &rPatch, double area) const
+void RModel::findPatchArea(const RPatch &rPatch, double &area) const
 {
     const RUVector &rElementIDs = rPatch.getElementIDs();
 
@@ -6603,7 +6548,7 @@ RBoundaryCondition RModel::generateDefaultBoundayCondition(RBoundaryConditionTyp
 {
     RBoundaryCondition bc(type);
 
-    if (type == R_BOUNDARY_CONDITION_RADIATION && entityGroupType == R_ENTITY_GROUP_SURFACE)
+    if (type == R_BOUNDARY_CONDITION_RADIATION &&entityGroupType == R_ENTITY_GROUP_SURFACE)
     {
         uint cPos;
 
@@ -8346,7 +8291,7 @@ void RModel::generateElementDistanceVector(uint startElementID, uint maximumDist
                 }
             }
         }
-        if (popPrevious && elementStack.size() > 0)
+        if (popPrevious &&elementStack.size() > 0)
         {
             elementID = elementStack.top();
             distance = distanceVector[elementID];

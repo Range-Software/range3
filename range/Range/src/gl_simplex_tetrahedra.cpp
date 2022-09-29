@@ -8,6 +8,7 @@
  *  DESCRIPTION: OpenGL simplex tetrahedra class definition          *
  *********************************************************************/
 
+#include "gl_functions.h"
 #include "gl_simplex_tetrahedra.h"
 
 void GLSimplexTetrahedra::_init(const GLSimplexTetrahedra *pGlTetrahedra)

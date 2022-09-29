@@ -8,6 +8,7 @@
  *  DESCRIPTION: OpenGL simplex polygon class definition             *
  *********************************************************************/
 
+#include "gl_functions.h"
 #include "gl_simplex_polygon.h"
 
 

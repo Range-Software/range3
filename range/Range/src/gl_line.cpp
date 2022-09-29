@@ -8,6 +8,7 @@
  *  DESCRIPTION: OpenGL line class definition                        *
  *********************************************************************/
 
+#include "gl_functions.h"
 #include "gl_line.h"
 
 

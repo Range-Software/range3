@@ -10,9 +10,8 @@
 
 #include <rblib.h>
 
+#include "gl_functions.h"
 #include "gl_element_base.h"
-#include "gl_texture.h"
-#include "session.h"
 
 void GLElementBase::_init(const GLElementBase *pGlElement)
 {

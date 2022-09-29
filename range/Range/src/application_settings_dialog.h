@@ -62,18 +62,18 @@ class ApplicationSettingsDialog : public QDialog
         explicit ApplicationSettingsDialog(ApplicationSettings *applicationSettings, QWidget *parent = nullptr);
 
         //! Execute dialog.
-        int exec(void);
+        int exec();
 
     private:
 
         //! Create tab containing general settings.
-        QWidget *createGeneralTab(void);
+        QWidget *createGeneralTab();
 
         //! Create tab short-cut settings.
-        QWidget *createShortcutsTab(void);
+        QWidget *createShortcutsTab();
 
         //! Create tab containing Range account settings.
-        QWidget *createRangeAccountTab(void);
+        QWidget *createRangeAccountTab();
 
     protected slots:
 
@@ -108,7 +108,7 @@ class ApplicationSettingsDialog : public QDialog
         void onRangeApiServerChanged(const QString &);
 
         //! Default button was clicked.
-        void onDefaultClicked(void);
+        void onDefaultClicked();
         
 };
 

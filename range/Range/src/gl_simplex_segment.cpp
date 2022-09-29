@@ -8,6 +8,7 @@
  *  DESCRIPTION: OpenGL simplex segment class definition             *
  *********************************************************************/
 
+#include "gl_functions.h"
 #include "gl_simplex_segment.h"
 
 void GLSimplexSegment::_init(const GLSimplexSegment *pGlSegment)

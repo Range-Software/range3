@@ -43,7 +43,7 @@ summary='Range Software Package'
 name='range'
 release='1'
 vendor='Tomas Soltys'
-license='Commercial'
+license='GPL v3'
 group='Application/Engineering'
 desc='Range Software Package.\nSoftware for engineering simulations.\nFinite Element Analysis.'
 
@@ -62,19 +62,19 @@ cat <<End-of-help
 Usage: $myName
 Usage: $myName.sh [OPTION]...
 
- mandatory
+  mandatory
 
- optional
+  optional
 
-  --install-to=[DIRECTORY]       Install created package to 'DIRECTORY' (default='$installToDir')
-  --build-dir=[DIRECTORY]        Custom build directory
-  --rpm                          Create RPM
-  --rpm-install-dir=[DIRECTORY]  Custom RPM install directory
-  --distro=[STRING]              Distribution string
+    --install-to=[DIRECTORY]       Install created package to 'DIRECTORY' (default='$installToDir')
+    --build-dir=[DIRECTORY]        Custom build directory
+    --rpm                          Create RPM
+    --rpm-install-dir=[DIRECTORY]  Custom RPM install directory
+    --distro=[STRING]              Distribution string
 
-  --debug                        Create debug package
+    --debug                        Create debug package
 
-  --help, -h, -?                 Print this help and exit
+    --help, -h, -?                 Print this help and exit
 End-of-help
 }
 

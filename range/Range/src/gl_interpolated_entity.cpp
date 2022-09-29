@@ -8,6 +8,7 @@
  *  DESCRIPTION: OpenGL interpolated entity class definition         *
  *********************************************************************/
 
+#include "gl_functions.h"
 #include "gl_interpolated_entity.h"
 #include "gl_interpolated_element.h"
 #include "session.h"

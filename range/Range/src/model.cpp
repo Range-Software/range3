@@ -13,9 +13,9 @@
 #include <rblib.h>
 
 #include "model.h"
-#include "variable_data.h"
 #include "color.h"
 #include "color_scale.h"
+#include "gl_functions.h"
 #include "gl_element.h"
 #include "gl_element_group.h"
 #include "gl_line.h"

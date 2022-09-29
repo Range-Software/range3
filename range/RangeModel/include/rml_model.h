@@ -17,7 +17,6 @@
 
 #include "rml_cut.h"
 #include "rml_element.h"
-#include "rml_interpolated_entity.h"
 #include "rml_iso.h"
 #include "rml_line.h"
 #include "rml_node.h"
@@ -56,11 +55,11 @@ class RModel : public RProblem, public RResults
     private:
 
         //! Internal initialization function.
-        void _init ( const RModel *pModel = nullptr );
+        void _init(const RModel *pModel = nullptr);
 
         //! Add element to element group.
-        void addElementToGroup ( uint elementID,
-                                 uint groupID = 0 );
+        void addElementToGroup(uint elementID,
+                                 uint groupID = 0);
 
     protected:
 
@@ -103,58 +102,56 @@ class RModel : public RProblem, public RResults
         RModel ();
 
         //! Copy constructor.
-        RModel ( const RModel &model );
+        RModel(const RModel &model);
 
         //! Convert constructor from MSH (old range) model.
-        RModel ( const RModelMsh &modelMsh );
+        RModel(const RModelMsh &modelMsh);
 
         //! Convert constructor from RAW model.
-        RModel ( const RModelRaw   &modelRaw,
-                 const QString &name = QString(),
-                 const QString &description = QString() );
+        RModel(const RModelRaw &modelRaw, const QString &name = QString(), const QString &description = QString());
 
         //! Convert constructor from STL model.
-        RModel ( const RModelStl &modelStl );
+        RModel(const RModelStl &modelStl);
 
         //! Destructor.
         virtual ~RModel ();
 
         //! Assignment operator.
-        RModel & operator = ( const RModel &model );
+        RModel &operator =(const RModel &model);
 
         //! Update model data.
-        void update ( const RModel &rModel );
+        void update(const RModel &rModel);
 
         //! Read mesh from the file.
-        void read ( const QString &fileName );
+        void read(const QString &fileName);
 
         //! Write mesh to the file.
         //! Return actual filename to which the model was saved.
-        QString write ( const QString &fileName, bool writeLinkFile = true ) const;
+        QString write(const QString &fileName, bool writeLinkFile = true) const;
 
         //! Export model to MSH (old range) model.
-        void exportTo ( RModelMsh &modelMsh ) const;
+        void exportTo(RModelMsh &modelMsh) const;
 
         //! Export model to RAW model.
-        void exportTo ( RModelRaw &modelRaw ) const;
+        void exportTo(RModelRaw &modelRaw) const;
 
         //! Export model to STL model.
-        void exportTo ( RModelStl &modelStl ) const;
+        void exportTo(RModelStl &modelStl) const;
 
         //! Get model name.
-        QString getName ( void ) const;
+        QString getName() const;
 
         //! Set model name.
-        void setName ( const QString &name );
+        void setName(const QString &name);
 
         //! Get model description.
-        QString getDescription ( void ) const;
+        QString getDescription() const;
 
         //! Set model description.
-        void setDescription ( const QString &name );
+        void setDescription(const QString &name);
 
         //! Set problem task tree.
-        void setProblemTaskTree ( const RProblemTaskItem &taskTree );
+        void setProblemTaskTree(const RProblemTaskItem &taskTree);
 
         /*************************************************************
          * Variable interface                                        *
@@ -171,49 +168,36 @@ class RModel : public RProblem, public RResults
          *************************************************************/
 
         //! Return number of nodes.
-        uint getNNodes ( void ) const;
+        uint getNNodes() const;
 
         //! Set number of nodes.
-        void setNNodes ( uint nnodes );
+        virtual void setNNodes(uint nnodes);
 
         //! Return pointer to node in model at given position.
-        const RNode * getNodePtr ( uint position ) const;
+        const RNode * getNodePtr(uint position) const;
 
         //! Return pointer to node in model at given position.
-        RNode * getNodePtr ( uint position );
+        RNode * getNodePtr(uint position);
 
         //! Return reference to node in model at given position.
-        const RNode & getNode ( uint position ) const;
+        const RNode &getNode(uint position) const;
 
         //! Return reference to node in model at given position.
-        RNode & getNode ( uint position );
+        RNode &getNode(uint position);
 
         //! Return const reference to array of all nodes.
-        const std::vector <RNode> & getNodes ( void ) const;
+        const std::vector <RNode> &getNodes() const;
 
         //! Add node to model.
-        void addNode ( const RNode  &node,
-                       double  value = 0.0 );
-
-        //! Add node specified by its coordinates to model.
-        void addNode ( double x,
-                       double y,
-                       double z,
-                       double value = 0.0 );
+        void addNode(const RNode &node);
 
         //! Set node in model at given position.
-        void setNode ( uint  position,
-                       const RNode  &node      );
+        void setNode(uint position, const RNode &node);
 
         //! Remove node from model at given position.
         //! If specified return vecor of indexes of removed elements and
         //! element groups in ascending order.
-        void removeNode ( uint                position,
-                          std::vector<uint> * removedElements = 0,
-                          std::vector<uint> * removedPoints = 0,
-                          std::vector<uint> * removedLines = 0,
-                          std::vector<uint> * removedSurfaces = 0,
-                          std::vector<uint> * removedVolumes = 0 );
+        void removeNode(uint position);
 
         //! Remove list of nodes.
         //! If closeHole is set to true resulting hole will be patched with new elements.
@@ -235,9 +219,9 @@ class RModel : public RProblem, public RResults
         uint removeDuplicateElements();
 
         //! Find node limits.
-        void findNodeLimits( double &xmin, double &xmax,
-                             double &ymin, double &ymax,
-                             double &zmin, double &zmax ) const;
+        void findNodeLimits(double &xmin, double &xmax,
+                            double &ymin, double &ymax,
+                            double &zmin, double &zmax) const;
 
         //! Find node limits.
         RLimitBox findNodeLimits() const;
@@ -246,10 +230,10 @@ class RModel : public RProblem, public RResults
         //! Scale represent real number that its inverse multiplication
         //! with model coordinates will result in maximum size
         //! to be equal 1.
-        double findNodeScale( void ) const;
+        double findNodeScale() const;
 
         //! Return center of all nodes (geometric center).
-        void findNodeCenter( double &xc, double &yc, double &zc ) const;
+        void findNodeCenter(double &xc, double &yc, double &zc) const;
 
         //! Find node distance statistics.
         RStatistics findNodeDistanceStatistics() const;
@@ -267,53 +251,42 @@ class RModel : public RProblem, public RResults
         //! Return number of elements.
         //! If element type is specified number of elements of that
         //! type will be returned.
-        uint getNElements ( RElementType elementType = R_ELEMENT_NONE ) const;
+        uint getNElements(RElementType elementType = R_ELEMENT_NONE) const;
 
         //! Return number of elements.
         //! If element group type is specified number of elements of that
         //! type will be returned.
-        uint getNElements ( REntityGroupType elementGroupType ) const;
+        uint getNElements(REntityGroupType elementGroupType) const;
 
         //! Set number of elements.
-        void setNElements ( uint nelements );
+        void setNElements(uint nelements);
 
         //! Return pointer to element in model at given position.
-        const RElement * getElementPtr ( uint position ) const;
+        const RElement *getElementPtr(uint position) const;
 
         //! Return pointer to element in model at given position.
-        RElement * getElementPtr ( uint position );
+        RElement * getElementPtr(uint position);
 
         //! Return reference to element in model at given position.
-        const RElement & getElement ( uint position ) const;
+        const RElement &getElement(uint position) const;
 
         //! Return reference to element in model at given position.
-        RElement & getElement ( uint position );
+        RElement &getElement(uint position);
 
         //! Return const reference to array of all elements.
-        const std::vector <RElement> & getElements ( void ) const;
+        const std::vector <RElement> &getElements() const;
 
         //! Return reference to array of all elements.
-        std::vector <RElement> & getElements ( void );
+        std::vector <RElement> &getElements();
 
         //! Add element to model.
-        void addElement ( const RElement &element,
-                          bool            addToGroup = false,
-                          uint            groupID = 0);
+        void addElement(const RElement &element, bool addToGroup = false, uint groupID = 0);
 
         //! Set element in model at given position.
-        void setElement ( uint    position,
-                          const RElement &element,
-                          bool            addToGroup = true);
+        void setElement(uint position, const RElement &element, bool addToGroup = true);
 
         //! Remove element from model at given position.
-        //! If specified return vecor of indexes of removed
-        //! element groups in ascending order.
-        void removeElement ( uint                position,
-                             bool                removeGroups = true,
-                             std::vector<uint> * removedPoints = 0,
-                             std::vector<uint> * removedLines = 0,
-                             std::vector<uint> * removedSurfaces = 0,
-                             std::vector<uint> * removedVolumes = 0  );
+        void removeElement(uint position, bool removeGroups);
 
         //! Remove list of elements.
         //! If closeHole is set to true resulting hole will be patched with new elements.
@@ -322,8 +295,7 @@ class RModel : public RProblem, public RResults
 
         //! Return vector of possitions of elements containing given
         //! node.
-        std::vector<uint> findElementPositionsByNodeId
-                                        ( uint nodeID ) const;
+        std::vector<uint> findElementPositionsByNodeId(uint nodeID) const;
 
         //! Find line element size statistics.
         RStatistics findLineElementSizeStatistics() const;
@@ -354,54 +326,45 @@ class RModel : public RProblem, public RResults
          *************************************************************/
 
         //! Return number of elements in given entity.
-        uint getNEntityElements ( REntityGroupType entityType ) const;
+        uint getNEntityElements(REntityGroupType entityType) const;
 
         //! Return number of element groups.
-        uint getNElementGroups ( void ) const;
+        uint getNElementGroups() const;
 
         //! Return number of entity groups.
-        uint getNEntityGroups ( bool onlyElements = false ) const;
+        uint getNEntityGroups(bool onlyElements = false) const;
 
         //! Return const pointer to element group.
-        const RElementGroup * getElementGroupPtr ( uint groupID ) const;
+        const RElementGroup * getElementGroupPtr(uint groupID) const;
 
         //! Return pointer to element group.
-        RElementGroup * getElementGroupPtr ( uint groupID );
+        RElementGroup * getElementGroupPtr(uint groupID);
 
         //! Return const pointer to entity group.
-        const REntityGroup * getEntityGroupPtr ( uint groupID,
-                                                 bool         onlyElements = false  ) const;
+        const REntityGroup * getEntityGroupPtr(uint groupID, bool onlyElements = false) const;
 
         //! Return pointer to entity group.
-        REntityGroup * getEntityGroupPtr ( uint groupID,
-                                           bool         onlyElements = false  );
+        REntityGroup * getEntityGroupPtr(uint groupID, bool onlyElements = false);
 
         //! Return entity group type.
-        REntityGroupType getEntityGroupType ( uint groupID,
-                                              bool         onlyElements = false  ) const;
+        REntityGroupType getEntityGroupType(uint groupID, bool onlyElements = false) const;
 
         //! Return position of group within the list of its type.
-        uint getEntityGroupPosition ( uint groupID,
-                                      bool         onlyElements = false  ) const;
+        uint getEntityGroupPosition(uint groupID, bool onlyElements = false) const;
 
         //! Convert entity type and ID to element group ID.
-        uint getElementGroupID ( REntityGroupType entityType,
-                                         uint     entityID ) const;
+        uint getElementGroupID(REntityGroupType entityType, uint entityID) const;
 
         //! Convert entity type and ID to entity group ID.
-        uint getEntityGroupID ( REntityGroupType entityType,
-                                        uint     entityID,
-                                        bool             onlyElements = false ) const;
+        uint getEntityGroupID(REntityGroupType entityType, uint entityID, bool onlyElements = false) const;
 
         //! Return list of entity group IDs for given entity type.
-        std::vector<uint> getEntityGroupIDs ( REntityGroupType entityType ) const;
+        std::vector<uint> getEntityGroupIDs(REntityGroupType entityType) const;
 
         QMap<REntityGroupType,RUVector> getEntityIDMap() const;
 
         //! Convert entity group ID to entity type and entity ID.
-        bool getEntityID ( uint      groupID,
-                           REntityGroupType &entityType,
-                           uint     &entityID ) const;
+        bool getEntityID(uint groupID, REntityGroupType &entityType, uint &entityID) const;
 
         //! Return element ID for given entity ID and element position.
         uint findElementID(REntityGroupType entityType, uint entityID, uint elementPosition) const;
@@ -423,96 +386,93 @@ class RModel : public RProblem, public RResults
          *************************************************************/
 
         //! Return number of points.
-        uint getNPoints ( void ) const;
+        uint getNPoints() const;
 
         //! Set number of points.
-        void setNPoints ( uint npoints );
+        void setNPoints(uint npoints);
 
         //! Return pointer to point in model at given position.
-        const RPoint * getPointPtr ( uint position ) const;
+        const RPoint * getPointPtr(uint position) const;
 
         //! Return pointer to point in model at given position.
-        RPoint * getPointPtr ( uint position );
+        RPoint * getPointPtr(uint position);
 
         //! Return reference to point in model at given position.
-        const RPoint & getPoint ( uint position ) const;
+        const RPoint &getPoint(uint position) const;
 
         //! Return reference to point in model at given position.
-        RPoint & getPoint ( uint position );
+        RPoint &getPoint(uint position);
 
         //! Add point to model.
-        void addPoint ( const RPoint &point = RPoint() );
+        void addPoint(const RPoint &point = RPoint());
 
         //! Set point in model at given position.
-        void setPoint ( uint  position,
-                        const RPoint &point );
+        void setPoint(uint position, const RPoint &point);
 
         //! Remove point from model at given position.
-        void removePoint ( uint position );
+        void removePoint(uint position);
 
         /*************************************************************
          * Line interface                                            *
          *************************************************************/
 
         //! Return number of lines.
-        uint getNLines ( void ) const;
+        uint getNLines() const;
 
         //! Set number of lines.
-        void setNLines ( uint nlines );
+        void setNLines(uint nlines);
 
         //! Return pointer to line in model at given position.
-        const RLine * getLinePtr ( uint position ) const;
+        const RLine * getLinePtr(uint position) const;
 
         //! Return pointer to line in model at given position.
-        RLine * getLinePtr ( uint position );
+        RLine * getLinePtr(uint position);
 
         //! Return reference to line in model at given position.
-        const RLine & getLine ( uint position ) const;
+        const RLine &getLine(uint position) const;
 
         //! Return reference to line in model at given position.
-        RLine & getLine ( uint position );
+        RLine &getLine(uint position);
 
         //! Add line to model.
-        void addLine ( const RLine &line );
+        void addLine(const RLine &line);
 
         //! Set line in model at given position.
-        void setLine ( uint  position,
-                       const RLine  &line );
+        void setLine(uint position, const RLine &line);
 
         //! Remove line from model at given position.
-        void removeLine ( uint position );
+        void removeLine(uint position);
 
         /*************************************************************
          * Surface interface                                         *
          *************************************************************/
 
         //! Return number of surfaces.
-        uint getNSurfaces ( void ) const;
+        uint getNSurfaces() const;
 
         //! Set number of surfaces.
-        void setNSurfaces ( uint nsurfaces );
+        void setNSurfaces(uint nsurfaces);
 
         //! Return pointer to surface in model at given position.
-        const RSurface * getSurfacePtr ( uint position ) const;
+        const RSurface *getSurfacePtr(uint position) const;
 
         //! Return pointer to surface in model at given position.
-        RSurface * getSurfacePtr ( uint position );
+        RSurface *getSurfacePtr(uint position);
 
         //! Return reference to surface in model at given position.
-        const RSurface & getSurface ( uint position ) const;
+        const RSurface &getSurface(uint position) const;
 
         //! Return ireference to surface in model at given position.
-        RSurface & getSurface ( uint position );
+        RSurface &getSurface(uint position);
 
         //! Add surface to model.
-        void addSurface ( const RSurface &surface );
+        void addSurface(const RSurface &surface);
 
         //! Set surface in model at given position.
-        void setSurface ( uint    position,
-                          const RSurface &surface );
+        void setSurface(uint position, const RSurface &surface);
 
         //! Remove surface from model at given position.
-        void removeSurface ( uint position );
+        void removeSurface(uint position);
 
         //! Check if given surface forms closed surface.
         bool checkIfSurfaceIsClosed(uint surfaceID) const;
@@ -528,211 +488,205 @@ class RModel : public RProblem, public RResults
          *************************************************************/
 
         //! Return number of volumes.
-        uint getNVolumes ( void ) const;
+        uint getNVolumes() const;
 
         //! Set number of volumes.
-        void setNVolumes ( uint nvolumes );
+        void setNVolumes(uint nvolumes);
 
         //! Return pointer to volume in model at given position.
-        const RVolume * getVolumePtr ( uint position ) const;
+        const RVolume *getVolumePtr(uint position) const;
 
         //! Return pointer to volume in model at given position.
-        RVolume * getVolumePtr ( uint position );
+        RVolume *getVolumePtr(uint position);
 
         //! Return reference to volume in model at given position.
-        const RVolume & getVolume ( uint position ) const;
+        const RVolume &getVolume(uint position) const;
 
         //! Return reference to volume in model at given position.
-        RVolume & getVolume ( uint position );
+        RVolume &getVolume(uint position);
 
         //! Add volume to model.
-        void addVolume ( const RVolume &volume );
+        void addVolume(const RVolume &volume);
 
         //! Set volume in model at given position.
-        void setVolume ( uint   position,
-                         const RVolume &volume );
+        void setVolume(uint position, const RVolume &volume);
 
         //! Remove volume from model at given position.
-        void removeVolume ( uint position );
+        void removeVolume(uint position);
 
         /*************************************************************
          * Vector field interface                                    *
          *************************************************************/
 
         //! Return number of vector fields.
-        uint getNVectorFields ( void ) const;
+        uint getNVectorFields() const;
 
         //! Set number of vector fields.
-        void setNVectorFields ( uint nVectorFields );
+        void setNVectorFields(uint nVectorFields);
 
         //! Return pointer to vector field in model at given position.
-        const RVectorField * getVectorFieldPtr ( uint position ) const;
+        const RVectorField *getVectorFieldPtr(uint position) const;
 
         //! Return pointer to vector field in model at given position.
-        RVectorField * getVectorFieldPtr ( uint position );
+        RVectorField *getVectorFieldPtr(uint position);
 
         //! Return reference to vector field in model at given position.
-        const RVectorField & getVectorField ( uint position ) const;
+        const RVectorField &getVectorField(uint position) const;
 
         //! Return reference to vector field in model at given position.
-        RVectorField & getVectorField ( uint position );
+        RVectorField &getVectorField(uint position);
 
         //! Add vector field to model.
-        void addVectorField ( const RVectorField &vectorField );
+        void addVectorField(const RVectorField &vectorField);
 
         //! Set vector field in model at given position.
-        void setVectorField ( uint        position,
-                              const RVectorField &vectorField );
+        void setVectorField(uint position, const RVectorField &vectorField);
 
         //! Remove vector field from model at given position.
-        void removeVectorField ( uint position );
+        void removeVectorField(uint position);
 
         /*************************************************************
          * Scalar field interface                                  *
          *************************************************************/
 
         //! Return number of scalar fields.
-        uint getNScalarFields ( void ) const;
+        uint getNScalarFields() const;
 
         //! Set number of scalar fields.
-        void setNScalarFields ( uint nScalarFields );
+        void setNScalarFields(uint nScalarFields);
 
         //! Return pointer to scalar field in model at given position.
-        const RScalarField * getScalarFieldPtr ( uint position ) const;
+        const RScalarField *getScalarFieldPtr(uint position) const;
 
         //! Return pointer to scalar field in model at given position.
-        RScalarField * getScalarFieldPtr ( uint position );
+        RScalarField *getScalarFieldPtr(uint position);
 
         //! Return reference to scalar field in model at given position.
-        const RScalarField & getScalarField ( uint position ) const;
+        const RScalarField &getScalarField(uint position) const;
 
         //! Return reference to scalar field in model at given position.
-        RScalarField & getScalarField ( uint position );
+        RScalarField &getScalarField(uint position);
 
         //! Add scalar field to model.
-        void addScalarField ( const RScalarField &scalarField );
+        void addScalarField(const RScalarField &scalarField);
 
         //! Set scalar field in model at given position.
-        void setScalarField ( uint          position,
-                                const RScalarField &scalarField );
+        void setScalarField(uint position, const RScalarField &scalarField);
 
         //! Remove scalar field from model at given position.
-        void removeScalarField ( uint position );
+        void removeScalarField(uint position);
 
         /*************************************************************
          * Stream line interface                                     *
          *************************************************************/
 
         //! Return number of stream lines.
-        uint getNStreamLines ( void ) const;
+        uint getNStreamLines() const;
 
         //! Set number of stream lines.
-        void setNStreamLines ( uint nStreamLines );
+        void setNStreamLines(uint nStreamLines);
 
         //! Return pointer to stream line in model at given position.
-        const RStreamLine * getStreamLinePtr ( uint position ) const;
+        const RStreamLine *getStreamLinePtr(uint position) const;
 
         //! Return pointer to stream line in model at given position.
-        RStreamLine * getStreamLinePtr ( uint position );
+        RStreamLine *getStreamLinePtr(uint position);
 
         //! Return reference to stream line in model at given position.
-        const RStreamLine & getStreamLine ( uint position ) const;
+        const RStreamLine &getStreamLine(uint position) const;
 
         //! Return reference to stream line in model at given position.
-        RStreamLine & getStreamLine ( uint position );
+        RStreamLine &getStreamLine(uint position);
 
         //! Add stream line to model.
-        void addStreamLine ( const RStreamLine &streamLine );
+        void addStreamLine(const RStreamLine &streamLine);
 
         //! Set stream line in model at given position.
-        void setStreamLine ( uint       position,
-                              const RStreamLine &streamLine );
+        void setStreamLine(uint position, const RStreamLine &streamLine);
 
         //! Remove stream line from model at given position.
-        void removeStreamLine ( uint position );
+        void removeStreamLine(uint position);
 
         /*************************************************************
          * Cut interface                                             *
          *************************************************************/
 
         //! Return number of cuts.
-        uint getNCuts ( void ) const;
+        uint getNCuts() const;
 
         //! Set number of cuts.
-        void setNCuts ( uint nCuts );
+        void setNCuts(uint nCuts);
 
         //! Return pointer to cut in model at given position.
-        const RCut * getCutPtr ( uint position ) const;
+        const RCut *getCutPtr(uint position) const;
 
         //! Return pointer to cut in model at given position.
-        RCut * getCutPtr ( uint position );
+        RCut *getCutPtr(uint position);
 
         //! Return reference to cut in model at given position.
-        const RCut & getCut ( uint position ) const;
+        const RCut &getCut(uint position) const;
 
         //! Return reference to cut in model at given position.
-        RCut & getCut ( uint position );
+        RCut &getCut(uint position);
 
         //! Add cut to model.
-        void addCut ( const RCut &cut );
+        void addCut(const RCut &cut);
 
         //! Set cut in model at given position.
-        void setCut ( uint  position,
-                      const RCut   &cut );
+        void setCut(uint position, const RCut &cut);
 
         //! Remove cut from model at given position.
-        void removeCut ( uint position );
+        void removeCut(uint position);
 
         /*************************************************************
          * Iso interface                                             *
          *************************************************************/
 
         //! Return number of isos.
-        uint getNIsos ( void ) const;
+        uint getNIsos() const;
 
         //! Set number of isos.
-        void setNIsos ( uint nIsos );
+        void setNIsos(uint nIsos);
 
         //! Return pointer to iso in model at given position.
-        const RIso * getIsoPtr ( uint position ) const;
+        const RIso *getIsoPtr(uint position) const;
 
         //! Return pointer to iso in model at given position.
-        RIso * getIsoPtr ( uint position );
+        RIso *getIsoPtr(uint position);
 
         //! Return reference to iso in model at given position.
-        const RIso & getIso( uint position ) const;
+        const RIso &getIso(uint position) const;
 
         //! Return reference to iso in model at given position.
-        RIso & getIso( uint position );
+        RIso &getIso(uint position);
 
         //! Add iso to model.
-        void addIso( const RIso &iso );
+        void addIso(const RIso &iso);
 
         //! Set iso in model at given position.
-        void setIso( uint  position,
-                      const RIso   &iso );
+        void setIso(uint position, const RIso &iso);
 
         //! Remove iso from model at given position.
-        void removeIso( uint position );
+        void removeIso(uint position);
 
         /*************************************************************
          * Model data interface                                      *
          *************************************************************/
 
         //! Return const reference to data object.
-        inline const RModelData & getData( void ) const
+        inline const RModelData &getData() const
         {
             return this->modelData;
         }
 
         //! Return reference to data object.
-        inline RModelData & getData( void )
+        inline RModelData &getData()
         {
             return this->modelData;
         }
 
         //! Set data object.
-        inline void setData( const RModelData &modelData )
+        inline void setData(const RModelData &modelData)
         {
             this->modelData = modelData;
         }
@@ -748,38 +702,36 @@ class RModel : public RProblem, public RResults
         //! Return vector of results vector for given element ID.
         //! If variable applies on nodes vector will have a size of number of nodes.
         //! If results vector is scalar then its size will be 1.
-        std::vector<RRVector> getElementResultsValues( RVariableType variableType,
-                                                       uint elementID ) const;
+        std::vector<RRVector> getElementResultsValues(RVariableType variableType, uint elementID) const;
 
         //! Return vector of results vector for given node ID.
         //! If results vector is scalar then its size will be 1.
-        RRVector getNodeResultsValues( RVariableType variableType,
-                                       uint nodeID ) const;
+        RRVector getNodeResultsValues(RVariableType variableType, uint nodeID) const;
 
         //! Return vector of results vectors for given interpolated element ID.
         //! If variable applies on nodes vector will have a size of number of nodes.
         //! If results vector is scalar then its size will be 1.
         //! This function returns valid results only for ISO and CUT entity group types.
-        std::vector<RRVector> getInterpolatedElementResultsValues( RVariableType variableType,
-                                                                   REntityGroupType entityGroupType,
-                                                                   uint entityID,
-                                                                   uint elementID ) const;
+        std::vector<RRVector> getInterpolatedElementResultsValues(RVariableType variableType,
+                                                                  REntityGroupType entityGroupType,
+                                                                  uint entityID,
+                                                                  uint elementID) const;
 
         //! Return results vector for given interpolated node ID.
         //! If results vector is scalar then its size will be 1.
         //! This function returns valid results only for ISO and CUT entity group types.
-        RRVector getInterpolatedNodeResultsValues( RVariableType variableType,
-                                                   REntityGroupType entityGroupType,
-                                                   uint entityID,
-                                                   uint elementID,
-                                                   uint nodeID ) const;
+        RRVector getInterpolatedNodeResultsValues(RVariableType variableType,
+                                                  REntityGroupType entityGroupType,
+                                                  uint entityID,
+                                                  uint elementID,
+                                                  uint nodeID) const;
 
         //! Return results vector for given node.
         //! If results vector is scalar then its size will be 1.
         //! If node is outside of the model empty vector is returned.
-        RRVector getInterpolatedResultsValues( RVariableType variableType,
-                                               const RNode &rNode,
-                                               REntityGroupTypeMask entityGroup = R_ENTITY_GROUP_ELEMENT ) const;
+        RRVector getInterpolatedResultsValues(RVariableType variableType,
+                                              const RNode &rNode,
+                                              REntityGroupTypeMask entityGroup = R_ENTITY_GROUP_ELEMENT) const;
 
 
         /*************************************************************
@@ -809,7 +761,7 @@ class RModel : public RProblem, public RResults
          *************************************************************/
 
         //! Return true if model is empty.
-        inline bool isEmpty( void ) const
+        inline bool isEmpty() const
         {
             return (this->getNNodes() == 0);
         }
@@ -818,7 +770,7 @@ class RModel : public RProblem, public RResults
         RModelProblemTypeMask checkMesh(bool printOutput = true) const;
 
         //! Return book vector of edge nodes.
-        QVector<bool> findEdgeNodes( void ) const;
+        QVector<bool> findEdgeNodes() const;
 
         //! Sort given list of line elements into continuous chain.
         //! Elements which are not in the chain are not listed in returned index list.
@@ -831,25 +783,24 @@ class RModel : public RProblem, public RResults
         double findMinimumNodeDistance() const;
 
         //! Create interpolated entity from plane and list of element IDs.
-        void createCut( RCut &rCut ) const;
+        void createCut(RCut &rCut) const;
 
         //! Create interpolated entity from variable type, variable value and list of element IDs.
-        void createIso( RIso &rIso ) const;
+        void createIso(RIso &rIso) const;
 
         //! Create interpolated entity from variable type, variable value.
-        void createStreamLine( RStreamLine &rStreamLine ) const;
+        void createStreamLine(RStreamLine &rStreamLine) const;
 
         //! Recreate dependent entities such as cuts or isos.
-        void createDependentEntities( void );
+        void createDependentEntities();
 
         //! Return neighbor ID at given position.
         //! If no neighbor is found RConstants::eod is returned.
-        uint getNeighbor( uint elementID,
-                          uint neighborPosition ) const;
+        uint getNeighbor(uint elementID, uint neighborPosition) const;
 
         //! Return pointer to vector of neighbor IDs.
         //! If element has no neighbors assigned NULL pointer is returned.
-        const std::vector<uint> * getNeighborIDs( uint elementID ) const;
+        const std::vector<uint> *getNeighborIDs(uint elementID) const;
 
         //! Set surface neighbors book.
         void setSurfaceNeighbors(const std::vector<RUVector> &surfaceNeigs);
@@ -922,7 +873,7 @@ class RModel : public RProblem, public RResults
         void findPatchNormal(const RPatch &rPatch, double &nx, double &ny, double &nz) const;
 
         //! Find patch area.
-        void findPatchArea(const RPatch &rPatch, double area) const;
+        void findPatchArea(const RPatch &rPatch, double &area) const;
 
         //! Find most recent view factor file.
         QString findRecentViewFactorMatrixFile() const;
@@ -970,27 +921,26 @@ class RModel : public RProblem, public RResults
          *************************************************************/
 
         //! Return default file extension.
-        static QString getDefaultFileExtension ( bool binary = true );
+        static QString getDefaultFileExtension(bool binary = true);
 
         //! Write link file.
-        static void writeLink ( const QString &linkFileName,
-                                const QString &targetFileName );
+        static void writeLink(const QString &linkFileName, const QString &targetFileName);
 
     protected:
 
         //! Read from the ASCII file.
         //! If file is a link target filename is returned.
-        QString readAscii ( const QString &fileName );
+        QString readAscii(const QString &fileName);
 
         //! Read from the binary file.
         //! If file is a link target filename is returned.
-        QString readBinary ( const QString &fileName );
+        QString readBinary(const QString &fileName);
 
         //! Write to the ASCII file.
-        void writeAscii ( const QString &fileName ) const;
+        void writeAscii(const QString &fileName) const;
 
         //! Write to the binary file.
-        void writeBinary ( const QString &fileName ) const;
+        void writeBinary(const QString &fileName) const;
 
     protected:
 
@@ -1023,10 +973,10 @@ class RModel : public RProblem, public RResults
         //! Stop criteria are:
         //!  1. maximum distance from starting element in number of steps
         //!  2. separation angle between two elements in radians.
-        void generateElementDistanceVector( uint                   startElementID,
-                                            uint                   maximumDistance,
-                                            double                 separationAngle,
-                                            RDistanceVector<uint> &distanceVector ) const;
+        void generateElementDistanceVector(uint                   startElementID,
+                                           uint                   maximumDistance,
+                                           double                 separationAngle,
+                                           RDistanceVector<uint> &distanceVector) const;
 
         //! Find near node to the given node.
         //! If no node was found a RConstants::eod is returned.

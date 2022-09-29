@@ -8,6 +8,7 @@
  *  DESCRIPTION: OpenGL simplex point class definition               *
  *********************************************************************/
 
+#include "gl_functions.h"
 #include "gl_simplex_point.h"
 #include "draw_engine_sphere.h"
 

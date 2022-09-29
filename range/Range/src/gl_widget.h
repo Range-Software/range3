@@ -13,6 +13,10 @@
 
 #include <vector>
 
+#ifdef __APPLE__
+#define GL_SILENCE_DEPRECATION
+#endif
+
 #include <QOpenGLWidget>
 
 #include "gl_display_properties.h"
@@ -219,7 +223,7 @@ class GLWidget : public QOpenGLWidget
         void mouseMoveEvent(QMouseEvent *mouseEvent);
 
         //! Process enter event.
-        void enterEvent(QEvent *);
+        void enterEvent(QEnterEvent *);
 
         //! Process leave event.
         void leaveEvent(QEvent *);

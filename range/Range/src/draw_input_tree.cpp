@@ -455,5 +455,5 @@ void DrawInputTree::onItemChanged(QTreeWidgetItem *item, int column)
 
 void DrawInputTree::onItemSelectionChanged()
 {
-    emit this->selectionChanged(this->getSelectedObjectIDs());
+    emit this->objectSelectionChanged(this->getSelectedObjectIDs());
 }

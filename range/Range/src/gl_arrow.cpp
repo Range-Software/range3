@@ -8,6 +8,7 @@
  *  DESCRIPTION: OpenGL arrow class definition                       *
  *********************************************************************/
 
+#include "gl_functions.h"
 #include "gl_arrow.h"
 #include "gl_line.h"
 

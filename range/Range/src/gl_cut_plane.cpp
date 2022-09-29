@@ -8,6 +8,7 @@
  *  DESCRIPTION: OpenGL cut plane class definition                   *
  *********************************************************************/
 
+#include "gl_functions.h"
 #include "gl_cut_plane.h"
 #include "gl_arrow.h"
 

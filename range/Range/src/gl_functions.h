@@ -11,7 +11,9 @@
 #ifndef GL_FUNCTIONS_H
 #define GL_FUNCTIONS_H
 
-#include <rblib.h>
+#ifdef __APPLE__
+#define GL_SILENCE_DEPRECATION
+#endif
 
 #include <QOpenGLFunctions>
 

@@ -1044,7 +1044,7 @@ void GLWidget::mouseMoveEvent(QMouseEvent *mouseEvent)
     R_LOG_TRACE_OUT;
 }
 
-void GLWidget::enterEvent(QEvent *)
+void GLWidget::enterEvent(QEnterEvent *)
 {
     R_LOG_TRACE_IN;
     this->setFocus();

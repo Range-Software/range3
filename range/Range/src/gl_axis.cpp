@@ -8,6 +8,7 @@
  *  DESCRIPTION: OpenGL axis class definition                        *
  *********************************************************************/
 
+#include "gl_functions.h"
 #include "gl_axis.h"
 
 void GLAxis::_init(const GLAxis *pGlAxis)

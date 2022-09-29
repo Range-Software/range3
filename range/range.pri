@@ -30,3 +30,6 @@ CONFIG(debug, debug|release) {
     DEFINES += DEBUG
     DEBUG_EXT = "_debug"
 }
+
+#QMAKE_MACOSX_DEPLOYMENT_TARGET = 12.0
+#QMAKE_APPLE_DEVICE_ARCHS = x86_64 arm64

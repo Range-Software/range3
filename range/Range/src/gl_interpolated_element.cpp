@@ -8,6 +8,7 @@
  *  DESCRIPTION: OpenGL interpolated element class definition        *
  *********************************************************************/
 
+#include "gl_functions.h"
 #include "gl_interpolated_element.h"
 
 void GLInterpolatedElement::_init(const GLInterpolatedElement *pGlElement)

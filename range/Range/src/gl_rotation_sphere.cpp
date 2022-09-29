@@ -8,6 +8,7 @@
  *  DESCRIPTION: OpenGL rotation sphere class definition             *
  *********************************************************************/
 
+#include "gl_functions.h"
 #include "gl_rotation_sphere.h"
 
 

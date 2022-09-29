@@ -26,7 +26,7 @@ else {
 
     !win* {
         CONFIG += link_pkgconfig
-        PKGCONFIG += libavutil libavformat libswscale
+        PKGCONFIG += libavformat libswscale
     }
 }
 
@@ -494,7 +494,9 @@ INCLUDEPATH += $${_PRO_FILE_PWD_}/../TetGen
 INCLUDEPATH += $${_PRO_FILE_PWD_}/../RangeBase/include
 INCLUDEPATH += $${_PRO_FILE_PWD_}/../RangeModel/include
 INCLUDEPATH += $${_PRO_FILE_PWD_}/../RangeSolverLib/include
-INCLUDEPATH += $${_PRO_FILE_PWD_}/../../ffmpeg/ffmpeg-4.3.2-win64/include
+win* {
+    INCLUDEPATH += $${_PRO_FILE_PWD_}/../../ffmpeg/ffmpeg-4.3.2-win64/include
+}
 
 RESOURCES += \
     range.qrc

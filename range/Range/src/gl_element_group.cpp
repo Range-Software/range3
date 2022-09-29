@@ -8,6 +8,7 @@
  *  DESCRIPTION: OpenGL element group class definition               *
  *********************************************************************/
 
+#include "gl_functions.h"
 #include "gl_element_group.h"
 #include "gl_element.h"
 #include "model.h"

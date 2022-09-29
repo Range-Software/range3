@@ -8,6 +8,7 @@
  *  DESCRIPTION: OpenGL node class definition                        *
  *********************************************************************/
 
+#include "gl_functions.h"
 #include "gl_node.h"
 
 GLNode::GLNode(GLWidget *glWidget) : GLObject(glWidget)
