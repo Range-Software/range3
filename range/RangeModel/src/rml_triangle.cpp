@@ -173,7 +173,7 @@ bool RTriangle::findPointIntersection(const RNode &node, RR3Vector &x) const
     return intersectionFound;
 }
 
-bool RTriangle::findPointIntersection(const RNode &node, std::set<RR3Vector> &x) const
+bool RTriangle::findPointIntersection(const RNode &node, QList<RR3Vector> &x) const
 {
     bool intersectionFound = false;
     RR3Vector point(node.toVector());
@@ -187,19 +187,19 @@ bool RTriangle::findPointIntersection(const RNode &node, std::set<RR3Vector> &x)
 
     if (intersectionFound)
     {
-        x.insert(point);
+        x.append(point);
     }
 
     return intersectionFound;
 }
 
-bool RTriangle::findSegmentIntersection(const RSegment &segment, std::set<RR3Vector> &x) const
+bool RTriangle::findSegmentIntersection(const RSegment &segment, QList<RR3Vector> &x, bool testOnly) const
 {
     RPlane plane(this->getNode1().toVector(),this->getNode2().toVector(),this->getNode3().toVector());
     double d1 = plane.findPointDistance(segment.getNode1().toVector());
     double d2 = plane.findPointDistance(segment.getNode2().toVector());
 
-    std::set<RR3Vector> xTemp;
+    QList<RR3Vector> xTemp;
 
     bool intersectionFound = false;
     if (std::fabs(d1-d2) < RConstants::eps)
@@ -218,8 +218,7 @@ bool RTriangle::findSegmentIntersection(const RSegment &segment, std::set<RR3Vec
         intersectionFound = false;
 
         // Delete intersections at corner nodes.
-
-        std::set<RR3Vector>::reverse_iterator it;
+        QList<RR3Vector>::reverse_iterator it;
         for (it=xTemp.rbegin();it!=xTemp.rend();++it)
         {
             bool isNode1 = (RR3Vector::findDistance(this->getNode1().toVector(),*it) < RConstants::eps ||
@@ -232,7 +231,10 @@ bool RTriangle::findSegmentIntersection(const RSegment &segment, std::set<RR3Vec
                 continue;
             }
             // Intersection is not in node.
-            x.insert(*it);
+            if (testOnly)
+            {
+                x.append(*it);
+            }
             intersectionFound = true;
         }
     }
@@ -240,12 +242,14 @@ bool RTriangle::findSegmentIntersection(const RSegment &segment, std::set<RR3Vec
     return intersectionFound;
 }
 
-bool RTriangle::findTriangleIntersection(const RTriangle &triangle, std::set<RR3Vector> &x) const
+bool RTriangle::findTriangleIntersection(const RTriangle &triangle, QList<RR3Vector> &x, bool testOnly) const
 {
     double tolerance = 1.0e-5;
 
     bool intersectionFound = false;
-    std::set<RR3Vector> xTemp;
+    QList<RR3Vector> xTemp;
+    xTemp.reserve(6);
+
     RR3Vector nv;
     RR3Vector::cross(this->getNormal(),triangle.getNormal(),nv);
     if (RR3Vector::norm(nv) < tolerance)
@@ -267,7 +271,7 @@ bool RTriangle::findTriangleIntersection(const RTriangle &triangle, std::set<RR3
 
         // Delete intersections at corner nodes.
 
-        std::set<RR3Vector>::reverse_iterator it;
+        QList<RR3Vector>::reverse_iterator it;
         for (it=xTemp.rbegin();it!=xTemp.rend();++it)
         {
             bool isNode1 = (RR3Vector::findDistance(this->getNode1().toVector(),*it) < tolerance ||
@@ -283,7 +287,10 @@ bool RTriangle::findTriangleIntersection(const RTriangle &triangle, std::set<RR3
             if (this->isPointInside(*it,false) || triangle.isPointInside(*it,false))
             {
                 // Intersection is not in node.
-                x.insert(*it);
+                if (!testOnly)
+                {
+                    x.append(*it);
+                }
                 intersectionFound = true;
             }
         }
@@ -420,7 +427,7 @@ void RTriangle::computeNormal(void)
     this->normal = RTriangle::computeNormal(this->node1,this->node2,this->node3);
 }
 
-bool RTriangle::findParallelSegmentIntersection(const RSegment &segment, std::set<RR3Vector> &x) const
+bool RTriangle::findParallelSegmentIntersection(const RSegment &segment, QList<RR3Vector> &x) const
 {
     bool intersectionFound = false;
     uint nNFound = 0;
@@ -428,13 +435,13 @@ bool RTriangle::findParallelSegmentIntersection(const RSegment &segment, std::se
     // Check if segment's points are inside this triangle.
     if (this->isPointInside(segment.getNode1().toVector()))
     {
-        x.insert(segment.getNode1().toVector());
+        x.append(segment.getNode1().toVector());
         intersectionFound = true;
         nNFound++;
     }
     if (this->isPointInside(segment.getNode2().toVector()))
     {
-        x.insert(segment.getNode2().toVector());
+        x.append(segment.getNode2().toVector());
         intersectionFound = true;
         nNFound++;
     }
@@ -464,7 +471,7 @@ bool RTriangle::findParallelSegmentIntersection(const RSegment &segment, std::se
     return intersectionFound;
 }
 
-bool RTriangle::findSkewedSegmentIntersection(const RSegment &segment, std::set<RR3Vector> &x) const
+bool RTriangle::findSkewedSegmentIntersection(const RSegment &segment, QList<RR3Vector> &x) const
 {
     RR3Vector xVec;
     double u = 0.0;
@@ -472,14 +479,14 @@ bool RTriangle::findSkewedSegmentIntersection(const RSegment &segment, std::set<
     {
         if (R_IS_IN_CLOSED_INTERVAL(0.0,1.0,u))
         {
-            x.insert(xVec);
+            x.append(xVec);
             return true;
         }
     }
     return false;
 }
 
-bool RTriangle::findParallelTriangleIntersection(const RTriangle &triangle, std::set<RR3Vector> &x) const
+bool RTriangle::findParallelTriangleIntersection(const RTriangle &triangle, QList<RR3Vector> &x) const
 {
     bool intersectionFound = false;
     uint nNFound = 0;
@@ -493,7 +500,7 @@ bool RTriangle::findParallelTriangleIntersection(const RTriangle &triangle, std:
     {
         if (!hasNode11)
         {
-            x.insert(triangle.getNode1().toVector());
+            x.append(triangle.getNode1().toVector());
             intersectionFound = true;
         }
         nNFound++;
@@ -502,7 +509,7 @@ bool RTriangle::findParallelTriangleIntersection(const RTriangle &triangle, std:
     {
         if (!hasNode12)
         {
-            x.insert(triangle.getNode2().toVector());
+            x.append(triangle.getNode2().toVector());
             intersectionFound = true;
         }
         nNFound++;
@@ -511,7 +518,7 @@ bool RTriangle::findParallelTriangleIntersection(const RTriangle &triangle, std:
     {
         if (!hasNode13)
         {
-            x.insert(triangle.getNode3().toVector());
+            x.append(triangle.getNode3().toVector());
             intersectionFound = true;
         }
         nNFound++;
@@ -531,7 +538,7 @@ bool RTriangle::findParallelTriangleIntersection(const RTriangle &triangle, std:
     {
         if (!hasNode21)
         {
-            x.insert(this->getNode1().toVector());
+            x.append(this->getNode1().toVector());
             intersectionFound = true;
         }
         nNFound++;
@@ -540,7 +547,7 @@ bool RTriangle::findParallelTriangleIntersection(const RTriangle &triangle, std:
     {
         if (!hasNode22)
         {
-            x.insert(this->getNode2().toVector());
+            x.append(this->getNode2().toVector());
             intersectionFound = true;
         }
         nNFound++;
@@ -549,7 +556,7 @@ bool RTriangle::findParallelTriangleIntersection(const RTriangle &triangle, std:
     {
         if (!hasNode23)
         {
-            x.insert(this->getNode3().toVector());
+            x.append(this->getNode3().toVector());
             intersectionFound = true;
             nNFound++;
         }
@@ -611,7 +618,7 @@ bool RTriangle::findParallelTriangleIntersection(const RTriangle &triangle, std:
 }
 
 
-bool RTriangle::findSkewedTriangleIntersection(const RTriangle &triangle, std::set<RR3Vector> &x) const
+bool RTriangle::findSkewedTriangleIntersection(const RTriangle &triangle, QList<RR3Vector> &x) const
 {
     bool intersectionFound = false;
 
@@ -630,7 +637,7 @@ bool RTriangle::findSkewedTriangleIntersection(const RTriangle &triangle, std::s
     {
         if (R_IS_IN_CLOSED_INTERVAL(0.0,1.0,u))
         {
-            x.insert(vx);
+            x.append(vx);
             intersectionFound = true;
         }
     }
@@ -638,7 +645,7 @@ bool RTriangle::findSkewedTriangleIntersection(const RTriangle &triangle, std::s
     {
         if (R_IS_IN_CLOSED_INTERVAL(0.0,1.0,u))
         {
-            x.insert(vx);
+            x.append(vx);
             intersectionFound = true;
         }
     }
@@ -646,7 +653,7 @@ bool RTriangle::findSkewedTriangleIntersection(const RTriangle &triangle, std::s
     {
         if (R_IS_IN_CLOSED_INTERVAL(0.0,1.0,u))
         {
-            x.insert(vx);
+            x.append(vx);
             intersectionFound = true;
         }
     }
@@ -663,7 +670,7 @@ bool RTriangle::findSkewedTriangleIntersection(const RTriangle &triangle, std::s
     {
         if (R_IS_IN_CLOSED_INTERVAL(0.0,1.0,u))
         {
-            x.insert(vx);
+            x.append(vx);
             intersectionFound = true;
         }
     }
@@ -671,7 +678,7 @@ bool RTriangle::findSkewedTriangleIntersection(const RTriangle &triangle, std::s
     {
         if (R_IS_IN_CLOSED_INTERVAL(0.0,1.0,u))
         {
-            x.insert(vx);
+            x.append(vx);
             intersectionFound = true;
         }
     }
@@ -679,7 +686,7 @@ bool RTriangle::findSkewedTriangleIntersection(const RTriangle &triangle, std::s
     {
         if (R_IS_IN_CLOSED_INTERVAL(0.0,1.0,u))
         {
-            x.insert(vx);
+            x.append(vx);
             intersectionFound = true;
         }
     }

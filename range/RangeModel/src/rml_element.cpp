@@ -648,7 +648,7 @@ bool RElement::findPickDistance(const std::vector<RNode> &nodes,
     }
     else if (R_ELEMENT_TYPE_IS_LINE(this->type))
     {
-        std::vector<RSegment> segments = this->segmentize(nodes);
+        QList<RSegment> segments = this->segmentize(nodes);
         double d;
         bool found = false;
         for (uint i=0;i<segments.size();i++)
@@ -667,7 +667,7 @@ bool RElement::findPickDistance(const std::vector<RNode> &nodes,
     }
     else if (R_ELEMENT_TYPE_IS_SURFACE(this->type))
     {
-        std::vector<RTriangle> triangles = this->triangulate(nodes);
+        QList<RTriangle> triangles = this->triangulate(nodes);
         for (uint i=0;i<triangles.size();i++)
         {
             RR3Vector x;
@@ -1405,14 +1405,14 @@ unsigned int RElement::findIntersectedSide(const std::vector<RNode> &nodes,
     return RConstants::eod;
 } /* RElement::findIntersectedSide */
 
-std::vector<RSegment> RElement::segmentize(const std::vector<RNode> &nodes) const
-{
-    std::vector<RSegment> segments;
 
+void RElement::segmentize(const std::vector<RNode> &nodes, QList<RSegment> segments) const
+{
     switch (this->type)
     {
         case R_ELEMENT_BEAM1:
         case R_ELEMENT_TRUSS1:
+            segments.reserve(1);
             segments.push_back(RSegment(nodes[this->nodeIDs[0]],nodes[this->nodeIDs[1]]));
             break;
         case R_ELEMENT_BEAM2:
@@ -1423,14 +1423,19 @@ std::vector<RSegment> RElement::segmentize(const std::vector<RNode> &nodes) cons
         default:
             break;
     }
+} /* RElement::segmentize */
 
+
+QList<RSegment> RElement::segmentize(const std::vector<RNode> &nodes) const
+{
+    QList<RSegment> segments;
+    this->segmentize(nodes,segments);
     return segments;
 } /* RElement::segmentize */
 
-std::vector<RTriangle> RElement::triangulate(const std::vector<RNode> &nodes) const
-{
-    std::vector<RTriangle> triangles;
 
+void RElement::triangulate(const std::vector<RNode> &nodes, QList<RTriangle> &triangles) const
+{
     switch (this->type)
     {
         case R_ELEMENT_TRI1:
@@ -1438,6 +1443,7 @@ std::vector<RTriangle> RElement::triangulate(const std::vector<RNode> &nodes) co
         {
             RTriangle t1(RTriangle(nodes[this->nodeIDs[0]],nodes[this->nodeIDs[1]],nodes[this->nodeIDs[2]]));
             t1.setNodeIDs(this->nodeIDs[0],this->nodeIDs[1],this->nodeIDs[2]);
+            triangles.reserve(1);
             triangles.push_back(t1);
             break;
         }
@@ -1458,7 +1464,13 @@ std::vector<RTriangle> RElement::triangulate(const std::vector<RNode> &nodes) co
             break;
         }
     }
+} /* RElement::triangulate */
 
+
+QList<RTriangle> RElement::triangulate(const std::vector<RNode> &nodes) const
+{
+    QList<RTriangle> triangles;
+    this->triangulate(nodes,triangles);
     return triangles;
 } /* RElement::triangulate */
 
@@ -2502,14 +2514,14 @@ bool RElement::hasConstantDerivative(RElementType type)
 } /* RElement::getMassVector */
 
 
-bool RElement::findIntersectionPoints(const RElement &e1, const RElement &e2, const std::vector<RNode> &nodes, std::set<RR3Vector> &x)
+bool RElement::findIntersectionPoints(const RElement &e1, const RElement &e2, const std::vector<RNode> &nodes, QList<RR3Vector> &x, bool testOnly)
 {
     std::vector<RNode> p1;
     std::vector<RNode> p2;
-    std::vector<RSegment> s1;
-    std::vector<RSegment> s2;
-    std::vector<RTriangle> t1;
-    std::vector<RTriangle> t2;
+    QList<RSegment> s1;
+    QList<RSegment> s2;
+    QList<RTriangle> t1;
+    QList<RTriangle> t2;
 
     double nodeScale = 1.0;
 
@@ -2548,8 +2560,8 @@ bool RElement::findIntersectionPoints(const RElement &e1, const RElement &e2, co
         zmax = std::max(nodes[e2.getNodeId(i)].getZ(),zmax);
     }
 
-
-    nodeScale = std::sqrt(std::pow(xmax - xmin,2) + std::pow(ymax - ymin,2) + std::pow(zmax - zmin,2));
+    nodeScale = std::min(std::min(std::abs(xmax - xmin),std::abs(ymax - ymin)),std::abs(zmax - zmin));
+//    nodeScale = std::sqrt(std::pow(xmax - xmin,2) + std::pow(ymax - ymin,2) + std::pow(zmax - zmin,2));
     if (nodeScale <= RConstants::eps)
     {
         nodeScale = 1.0;
@@ -2564,148 +2576,192 @@ bool RElement::findIntersectionPoints(const RElement &e1, const RElement &e2, co
         p1.push_back(nodes[e1.getNodeId(0)]);
         p1.at(0).scale(nodeScale);
     }
+    else if (R_ELEMENT_TYPE_IS_LINE(e1.getType()))
+    {
+        s1 = e1.segmentize(nodes);
+        for (uint i=0;i<s1.size();i++)
+        {
+            s1[i].getNode1().scale(nodeScale);
+            s1[i].getNode2().scale(nodeScale);
+        }
+    }
+    else if (R_ELEMENT_TYPE_IS_SURFACE(e1.getType()))
+    {
+        t1 = e1.triangulate(nodes);
+        for (uint i=0;i<t1.size();i++)
+        {
+            t1[i].getNode1().scale(nodeScale);
+            t1[i].getNode2().scale(nodeScale);
+            t1[i].getNode3().scale(nodeScale);
+        }
+    }
+    else
+    {
+        return false;
+    }
     if (R_ELEMENT_TYPE_IS_POINT(e2.getType()))
     {
         p2.push_back(nodes[e2.getNodeId(0)]);
         p2.at(0).scale(nodeScale);
     }
-    if (R_ELEMENT_TYPE_IS_LINE(e1.getType()))
-    {
-        s1 = e1.segmentize(nodes);
-        for (uint i=0;i<s1.size();i++)
-        {
-            s1.at(i).getNode1().scale(nodeScale);
-            s1.at(i).getNode2().scale(nodeScale);
-        }
-    }
-    if (R_ELEMENT_TYPE_IS_LINE(e2.getType()))
+    else if (R_ELEMENT_TYPE_IS_LINE(e2.getType()))
     {
         s2 = e2.segmentize(nodes);
         for (uint i=0;i<s2.size();i++)
         {
-            s2.at(i).getNode1().scale(nodeScale);
-            s2.at(i).getNode2().scale(nodeScale);
+            s2[i].getNode1().scale(nodeScale);
+            s2[i].getNode2().scale(nodeScale);
         }
     }
-    if (R_ELEMENT_TYPE_IS_SURFACE(e1.getType()))
-    {
-        t1 = e1.triangulate(nodes);
-        for (uint i=0;i<t1.size();i++)
-        {
-            t1.at(i).getNode1().scale(nodeScale);
-            t1.at(i).getNode2().scale(nodeScale);
-            t1.at(i).getNode3().scale(nodeScale);
-        }
-    }
-    if (R_ELEMENT_TYPE_IS_SURFACE(e2.getType()))
+    else if (R_ELEMENT_TYPE_IS_SURFACE(e2.getType()))
     {
         t2 = e2.triangulate(nodes);
         for (uint i=0;i<t2.size();i++)
         {
-            t2.at(i).getNode1().scale(nodeScale);
-            t2.at(i).getNode2().scale(nodeScale);
-            t2.at(i).getNode3().scale(nodeScale);
+            t2[i].getNode1().scale(nodeScale);
+            t2[i].getNode2().scale(nodeScale);
+            t2[i].getNode3().scale(nodeScale);
         }
+    }
+    else
+    {
+        return false;
     }
 
     bool intersectionFound = false;
 
-    std::set<RR3Vector> xTmp;
+    QList<RR3Vector> xTmp;
 
     // Segment-point intersection
-    for (uint i=0;i<s1.size();i++)
+    if (s1.size() > 0 && p2.size() > 0)
     {
-        for (uint j=0;j<p2.size();j++)
+        for (uint i=0;i<s1.size();i++)
         {
-            if (s1[i].findPointIntersection(p2[j],xTmp))
+            for (uint j=0;j<p2.size();j++)
             {
-                intersectionFound = true;
+                if (s1[i].findPointIntersection(p2[j],xTmp))
+                {
+                    intersectionFound = true;
+                    if (testOnly) return true;
+                }
             }
         }
     }
-    for (uint i=0;i<s2.size();i++)
+    if (s2.size() > 0 && p1.size() > 0)
     {
-        for (uint j=0;j<p1.size();j++)
+        for (uint i=0;i<s2.size();i++)
         {
-            if (s2[i].findPointIntersection(p1[j],xTmp))
+            for (uint j=0;j<p1.size();j++)
             {
-                intersectionFound = true;
+                if (s2[i].findPointIntersection(p1[j],xTmp))
+                {
+                    intersectionFound = true;
+                    if (testOnly) return true;
+                }
             }
         }
     }
 
     // Segment-segment intersection
-    for (uint i=0;i<s1.size();i++)
+    if (s1.size() > 0 && s2.size() > 0)
     {
-        for (uint j=0;j<s2.size();j++)
+        for (uint i=0;i<s1.size();i++)
         {
-            if (s1[i].findSegmentIntersection(s2[j],xTmp))
+            for (uint j=0;j<s2.size();j++)
             {
-                intersectionFound = true;
+                if (s1[i].findSegmentIntersection(s2[j],xTmp,testOnly))
+                {
+                    intersectionFound = true;
+                    if (testOnly) return true;
+                }
             }
         }
     }
 
     // Triangle-point intersection
-    for (uint i=0;i<t1.size();i++)
+    if (t1.size() > 0 && p2.size() > 0)
     {
-        for (uint j=0;j<p2.size();j++)
+        for (uint i=0;i<t1.size();i++)
         {
-            if (t1[i].findPointIntersection(p2[j],xTmp))
+            for (uint j=0;j<p2.size();j++)
             {
-                intersectionFound = true;
+                if (t1[i].findPointIntersection(p2[j],xTmp))
+                {
+                    intersectionFound = true;
+                    if (testOnly) return true;
+                }
             }
         }
     }
-    for (uint i=0;i<t2.size();i++)
+    if (t2.size() > 0 && p1.size() > 0)
     {
-        for (uint j=0;j<p1.size();j++)
+        for (uint i=0;i<t2.size();i++)
         {
-            if (t2[i].findPointIntersection(p1[j],xTmp))
+            for (uint j=0;j<p1.size();j++)
             {
-                intersectionFound = true;
+                if (t2[i].findPointIntersection(p1[j],xTmp))
+                {
+                    intersectionFound = true;
+                    if (testOnly) return true;
+                }
             }
         }
     }
 
     // Triangle-segment intersection
-    for (uint i=0;i<t1.size();i++)
+    if (t1.size() > 0 && s2.size() > 0)
     {
-        for (uint j=0;j<s2.size();j++)
+        for (uint i=0;i<t1.size();i++)
         {
-            if (t1[i].findSegmentIntersection(s2[j],xTmp))
+            for (uint j=0;j<s2.size();j++)
             {
-                intersectionFound = true;
+                if (t1[i].findSegmentIntersection(s2[j],xTmp,testOnly))
+                {
+                    intersectionFound = true;
+                    if (testOnly) return true;
+                }
             }
         }
     }
-    for (uint i=0;i<t2.size();i++)
+    if (t2.size() > 0 && s1.size() > 0)
     {
-        for (uint j=0;j<s1.size();j++)
+        for (uint i=0;i<t2.size();i++)
         {
-            if (t2[i].findSegmentIntersection(s1[j],xTmp))
+            for (uint j=0;j<s1.size();j++)
             {
-                intersectionFound = true;
+                if (t2[i].findSegmentIntersection(s1[j],xTmp,testOnly))
+                {
+                    intersectionFound = true;
+                    if (testOnly) return true;
+                }
             }
         }
     }
 
     // Triangle-triangle intersection
-    for (uint i=0;i<t1.size();i++)
+    if (t1.size() > 0 && t2.size() > 0)
     {
-        for (uint j=0;j<t2.size();j++)
+        for (uint i=0;i<t1.size();i++)
         {
-            if (t1[i].findTriangleIntersection(t2[j],xTmp))
+            for (uint j=0;j<t2.size();j++)
             {
-                intersectionFound = true;
+                if (t1[i].findTriangleIntersection(t2[j],xTmp,testOnly))
+                {
+                    intersectionFound = true;
+                    if (testOnly) return true;
+                }
             }
         }
     }
 
-    for (auto f : xTmp)
+    if (!testOnly)
     {
-        f.scale(1.0/nodeScale);
-        x.insert(f);
+        x.reserve(xTmp.size());
+        for (auto f : xTmp)
+        {
+            f.scale(1.0/nodeScale);
+            x.append(f);
+        }
     }
 
     return intersectionFound;

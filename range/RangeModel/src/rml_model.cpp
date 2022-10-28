@@ -4846,40 +4846,28 @@ void RModel::createStreamLine(RStreamLine &rStreamLine) const
         {
             if (rElement.isInside(this->getNodes(),startNode))
             {
-#pragma omp critical
-                {
-                    pointElementID = uint(i);
-                }
+                pointElementID = uint(i);
             }
         }
         if (R_ELEMENT_TYPE_IS_LINE(rElement.getType()) &&lineElementID == RConstants::eod)
         {
             if (rElement.isInside(this->getNodes(),startNode))
             {
-#pragma omp critical
-                {
-                    lineElementID = uint(i);
-                }
+                lineElementID = uint(i);
             }
         }
         if (R_ELEMENT_TYPE_IS_SURFACE(rElement.getType()) &&surfaceElementID == RConstants::eod)
         {
             if (rElement.isInside(this->getNodes(),startNode))
             {
-#pragma omp critical
-                {
-                    surfaceElementID = uint(i);
-                }
+                surfaceElementID = uint(i);
             }
         }
         if (R_ELEMENT_TYPE_IS_VOLUME(rElement.getType()) &&volumeElementID == RConstants::eod)
         {
             if (rElement.isInside(this->getNodes(),startNode))
             {
-#pragma omp critical
-                {
-                    volumeElementID = uint(i);
-                }
+                volumeElementID = uint(i);
             }
         }
     }
@@ -5353,37 +5341,37 @@ QList<uint> RModel::findIntersectedElements() const
     intElements.resize(int(this->getNElements()));
     intElements.fill(false);
 
-    RLimitBox limitBox1;
-
-    RProgressInitialize("Finding intersected elements");
+    QVector<RLimitBox> limitBoxes(this->getNElements());
     for (uint i=0;i<this->getNElements();i++)
     {
-        RProgressPrint(i,this->getNElements());
-        this->getElement(i).findLimitBox(this->getNodes(),limitBox1);
+        this->getElement(i).findLimitBox(this->getNodes(),limitBoxes[i]);
+    }
 
+    RProgressInitialize("Finding intersected elements");
+    uint n_total = std::pow(this->getNElements(),2)/2;
+    uint n_count = 0;
 #pragma omp parallel for default(shared)
-        for (int64_t j=int64_t(i)+1;j<int64_t(this->getNElements());j++)
-        {
-            RLimitBox limitBox2;
-            bool bothIntersected = false;
+    for (int64_t i=0;i<int64_t(this->getNElements());i++)
+    {
 #pragma omp critical
-            bothIntersected = (intElements[int(i)] &&intElements[int(j)]);
-            if (bothIntersected)
-            {
-                continue;
-            }
-            this->getElement(uint(j)).findLimitBox(this->getNodes(),limitBox2);
-            if (!RLimitBox::areIntersecting(limitBox1,limitBox2))
+        {
+            RProgressPrint(n_count,n_total);
+        }
+
+        for (int64_t j=i+1;j<int64_t(this->getNElements());j++)
+        {
+#pragma omp atomic
+            n_count++;
+            if ((intElements[int(i)] && intElements[int(j)]) || !RLimitBox::areIntersecting(limitBoxes[i],limitBoxes[j]))
             {
                 continue;
             }
 
-            std::set<RR3Vector> x;
-            if (RElement::findIntersectionPoints(this->getElement(i),this->getElement(uint(j)),this->getNodes(),x))
+            QList<RR3Vector> x;
+            if (RElement::findIntersectionPoints(this->getElement(i),this->getElement(uint(j)),this->getNodes(),x,true))
             {
 #pragma omp critical
                 {
-//                    RLogger::warning("Elements %u and %u are intersecting.\n",i,j);
                     intElements[int(i)] = intElements[int(j)] = true;
                 }
             }
@@ -5448,8 +5436,14 @@ uint RModel::breakIntersectedElements(uint nIterations, const std::vector<uint> 
         RLogger::info("Iteration %u of %u\n",iteration,nIterations);
         RLogger::indent();
 
-        std::vector< std::set<RR3Vector> > intersectionPoints;
+        std::vector< QList<RR3Vector> > intersectionPoints;
         intersectionPoints.resize(bElementIDs.size());
+
+        QVector<RLimitBox> limitBoxes(bElementIDs.size());
+        for (uint i=0;i<bElementIDs.size();i++)
+        {
+            this->getElement(bElementIDs[i]).findLimitBox(this->getNodes(),limitBoxes[i]);
+        }
 
         // Find intersection points.
         RLogger::info("Finding intersection points\n");
@@ -5467,9 +5461,6 @@ uint RModel::breakIntersectedElements(uint nIterations, const std::vector<uint> 
                 continue;
             }
 
-            RLimitBox limitBox1;
-            this->getElement(bElementIDs[i]).findLimitBox(this->getNodes(),limitBox1);
-
 #pragma omp parallel for default(shared)
             for (int64_t j=int64_t(i)+1;j<int64_t(bElementIDs.size());j++)
             {
@@ -5478,25 +5469,23 @@ uint RModel::breakIntersectedElements(uint nIterations, const std::vector<uint> 
                     continue;
                 }
 
-                RLimitBox limitBox2;
-                this->getElement(bElementIDs[uint(j)]).findLimitBox(this->getNodes(),limitBox2);
-                if (!RLimitBox::areIntersecting(limitBox1,limitBox2))
+                if (!RLimitBox::areIntersecting(limitBoxes[i],limitBoxes[j]))
                 {
                     continue;
                 }
 
-                std::set<RR3Vector> x;
+                QList<RR3Vector> x;
                 if (RElement::findIntersectionPoints(this->getElement(bElementIDs[i]),this->getElement(bElementIDs[uint(j)]),this->getNodes(),x))
                 {
 #pragma omp critical
                     {
-                        std::set<RR3Vector>::reverse_iterator it;
+                        QList<RR3Vector>::reverse_iterator it;
                         for (it=x.rbegin();it!=x.rend();++it)
                         {
                             // Insert only nodes which are not in the verticies.
                             bool nodeFound = false;
-                            std::set<RR3Vector>::const_iterator cit;
-                            for (cit=intersectionPoints[i].begin();cit!=intersectionPoints[i].end();++cit)
+                            QList<RR3Vector>::const_iterator cit;
+                            for (cit=intersectionPoints[i].constBegin();cit!=intersectionPoints[i].constEnd();++cit)
                             {
                                 if (RR3Vector::findDistance(*it,*cit) < tolerance)
                                 {
@@ -5506,11 +5495,11 @@ uint RModel::breakIntersectedElements(uint nIterations, const std::vector<uint> 
                             }
                             if (!nodeFound)
                             {
-                                intersectionPoints[i].insert(*it);
+                                intersectionPoints[i].append(*it);
                                 intersectionFound = true;
                             }
                             nodeFound = false;
-                            for (cit=intersectionPoints[uint(j)].begin();cit!=intersectionPoints[uint(j)].end();++cit)
+                            for (cit=intersectionPoints[uint(j)].constBegin();cit!=intersectionPoints[uint(j)].constEnd();++cit)
                             {
                                 if (RR3Vector::findDistance(*it,*cit) < tolerance)
                                 {
@@ -5520,7 +5509,7 @@ uint RModel::breakIntersectedElements(uint nIterations, const std::vector<uint> 
                             }
                             if (!nodeFound)
                             {
-                                intersectionPoints[uint(j)].insert(*it);
+                                intersectionPoints[uint(j)].append(*it);
                                 intersectionFound = true;
                             }
                         }
@@ -5600,8 +5589,8 @@ uint RModel::breakIntersectedElements(uint nIterations, const std::vector<uint> 
             {
                 std::vector<uint> breakNodeIDs;
 
-                std::set<RR3Vector>::const_iterator iter;
-                for (iter=intersectionPoints[i].begin();iter!=intersectionPoints[i].end();++iter)
+                QList<RR3Vector>::const_iterator iter;
+                for (iter=intersectionPoints[i].constBegin();iter!=intersectionPoints[i].constEnd();++iter)
                 {
                     this->addNode(RNode((*iter)[0],(*iter)[1],(*iter)[2]));
                     breakNodeIDs.push_back(this->getNNodes() - 1);
@@ -5838,7 +5827,7 @@ bool RModel::boolIntersection(uint nIterations, QList<uint> surfaceEntityIDs)
     }
 
     // Remove elements
-    std::set<uint> elementIDsSet;
+    QList<uint> elementIDsSet;
     for (int i=0;i<surfaceEntityIDs.size();i++)
     {
         for (int j=0;j<surfaceEntityIDs.size();j++)
@@ -5872,7 +5861,7 @@ bool RModel::boolIntersection(uint nIterations, QList<uint> surfaceEntityIDs)
             {
                 if (!insideBook[k])
                 {
-                    elementIDsSet.insert(rSurface.get(k));
+                    elementIDsSet.append(rSurface.get(k));
                 }
             }
         }
@@ -5881,8 +5870,8 @@ bool RModel::boolIntersection(uint nIterations, QList<uint> surfaceEntityIDs)
     QList<uint> elementsToRemove;
     elementsToRemove.reserve(int(elementIDsSet.size()));
 
-    std::set<uint>::const_iterator iter;
-    for (iter=elementIDsSet.begin();iter!=elementIDsSet.end();++iter)
+    QList<uint>::const_iterator iter;
+    for (iter=elementIDsSet.constBegin();iter!=elementIDsSet.constEnd();++iter)
     {
         elementsToRemove.push_back(*iter);
     }
@@ -5919,7 +5908,7 @@ bool RModel::boolUnion(uint nIterations, QList<uint> surfaceEntityIDs)
     }
 
     // Remove elements
-    std::set<uint> elementIDsSet;
+    QList<uint> elementIDsSet;
     for (int i=0;i<surfaceEntityIDs.size();i++)
     {
         for (int j=0;j<surfaceEntityIDs.size();j++)
@@ -5953,7 +5942,7 @@ bool RModel::boolUnion(uint nIterations, QList<uint> surfaceEntityIDs)
             {
                 if (insideBook[k])
                 {
-                    elementIDsSet.insert(rSurface.get(k));
+                    elementIDsSet.append(rSurface.get(k));
                 }
             }
         }
@@ -5962,8 +5951,8 @@ bool RModel::boolUnion(uint nIterations, QList<uint> surfaceEntityIDs)
     QList<uint> elementsToRemove;
     elementsToRemove.reserve(int(elementIDsSet.size()));
 
-    std::set<uint>::const_iterator iter;
-    for (iter=elementIDsSet.begin();iter!=elementIDsSet.end();++iter)
+    QList<uint>::const_iterator iter;
+    for (iter=elementIDsSet.constBegin();iter!=elementIDsSet.constEnd();++iter)
     {
         elementsToRemove.push_back(*iter);
     }
@@ -8060,10 +8049,10 @@ std::vector<RUVector> RModel::findVolumeNeighbors() const
                 {
                     neigs[elementID1].push_back(elementID2);
                     neigs[elementID2].push_back(elementID1);
-                    if (neigs[elementID1].size() == volumeNeighborCount[elementID1])
-                    {
-                        skip = true;
-                    }
+                }
+                if (neigs[elementID1].size() == volumeNeighborCount[elementID1])
+                {
+                    skip = true;
                 }
             }
             if (skip)

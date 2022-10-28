@@ -2,6 +2,7 @@
 Version 3.2.8
 
 * ALL: Resolved build warnings
+* ALL: Optimised detection of self-intersecting elements
 
 Bug fixes:
 

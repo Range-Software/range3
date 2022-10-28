@@ -78,19 +78,19 @@ class RTriangle
 
         //! Find triangle node intersection points.
         //! Return true if intersection was found.
-        bool findPointIntersection ( const RNode &node, RR3Vector &x ) const;
+        bool findPointIntersection(const RNode &node, RR3Vector &x) const;
 
         //! Find triangle node intersection points.
         //! Return true if intersection was found.
-        bool findPointIntersection ( const RNode &node, std::set<RR3Vector> &x ) const;
+        bool findPointIntersection(const RNode &node, QList<RR3Vector> &x) const;
 
         //! Find triangle segment intersection points.
         //! Return true if intersection was found.
-        bool findSegmentIntersection ( const RSegment &segment, std::set<RR3Vector> &x ) const;
+        bool findSegmentIntersection(const RSegment &segment, QList<RR3Vector> &x, bool testOnly=false) const;
 
         //! Find triangle triangle intersection points.
         //! Return true if intersection was found.
-        bool findTriangleIntersection ( const RTriangle &triangle, std::set<RR3Vector> &x ) const;
+        bool findTriangleIntersection(const RTriangle &triangle, QList<RR3Vector> &x, bool testOnly = false) const;
 
         //! Return true if point is inside the triangle.
         bool isPointInside ( const RR3Vector &point, bool includeNodes = true ) const;
@@ -188,16 +188,16 @@ class RTriangle
         void computeNormal (void);
 
         //! Find parallel segment triangle intersection points.
-        bool findParallelSegmentIntersection ( const RSegment &segment, std::set<RR3Vector> &x ) const;
+        bool findParallelSegmentIntersection (const RSegment &segment, QList<RR3Vector> &x ) const;
 
         //! Find skewed segment triangle intersection points.
-        bool findSkewedSegmentIntersection ( const RSegment &segment, std::set<RR3Vector> &x ) const;
+        bool findSkewedSegmentIntersection ( const RSegment &segment, QList<RR3Vector> &x ) const;
 
         //! Find parallel triangle triangle intersection points.
-        bool findParallelTriangleIntersection ( const RTriangle &triangle, std::set<RR3Vector> &x ) const;
+        bool findParallelTriangleIntersection ( const RTriangle &triangle, QList<RR3Vector> &x ) const;
 
         //! Find skewed triangle triangle intersection points.
-        bool findSkewedTriangleIntersection ( const RTriangle &triangle, std::set<RR3Vector> &x ) const;
+        bool findSkewedTriangleIntersection ( const RTriangle &triangle, QList<RR3Vector> &x ) const;
 
 };
 

@@ -205,7 +205,7 @@ void RHemiCube::calculateViewFactors(const RModel &model, RViewFactorMatrix &rVi
                 for (uint j=0;j<rElementIDs.size();j++)
                 {
                     const RElement &rElement = model.getElement(rElementIDs[j]);
-                    std::vector<RTriangle> triangles = rElement.triangulate(model.getNodes());
+                    QList<RTriangle> triangles = rElement.triangulate(model.getNodes());
                     for (uint k=0;k<triangles.size();k++)
                     {
                         hemiCubeTriangles.push_back(RHemicubeTriangle(triangles[k],patchID));

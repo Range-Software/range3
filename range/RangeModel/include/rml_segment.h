@@ -78,11 +78,11 @@ class RSegment
 
         //! Find segment node intersection points.
         //! Return true if intersection was found.
-        bool findPointIntersection ( const RNode &node, std::set<RR3Vector> &x) const;
+        bool findPointIntersection ( const RNode &node, QList<RR3Vector> &x) const;
 
         //! Find segment segment intersection points.
         //! Return true if intersection was found.
-        bool findSegmentIntersection ( const RSegment &segment, std::set<RR3Vector> &x) const;
+        bool findSegmentIntersection (const RSegment &segment, QList<RR3Vector> &x, bool testOnly=false) const;
 
         //! Find segment segment intersection point.
         //! Return true if intersection was found.
