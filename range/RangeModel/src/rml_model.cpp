@@ -309,6 +309,12 @@ void RModel::update(const RModel &rModel)
         isos.push_back(this->getIso(i));
     }
 
+    std::vector<RStreamLine> streamLines;
+    for (uint i=0;i<this->getNStreamLines();i++)
+    {
+        streamLines.push_back(this->getStreamLine(i));
+    }
+
     std::vector<RScalarField> scalarFields;
     for (uint i=0;i<this->getNScalarFields();i++)
     {
@@ -319,12 +325,6 @@ void RModel::update(const RModel &rModel)
     for (uint i=0;i<this->getNVectorFields();i++)
     {
         vectorFields.push_back(this->getVectorField(i));
-    }
-
-    std::vector<RStreamLine> streamLines;
-    for (uint i=0;i<this->getNStreamLines();i++)
-    {
-        streamLines.push_back(this->getStreamLine(i));
     }
 
     uint nUpdateVariables = std::min(this->getNVariables(),rModel.getNVariables());
@@ -372,6 +372,12 @@ void RModel::update(const RModel &rModel)
         this->setIso(i,isos[i]);
     }
 
+    this->setNStreamLines(uint(streamLines.size()));
+    for (uint i=0;i<this->getNStreamLines();i++)
+    {
+        this->setStreamLine(i,streamLines[i]);
+    }
+
     this->setNScalarFields(uint(scalarFields.size()));
     for (uint i=0;i<this->getNScalarFields();i++)
     {
@@ -382,12 +388,6 @@ void RModel::update(const RModel &rModel)
     for (uint i=0;i<this->getNVectorFields();i++)
     {
         this->setVectorField(i,vectorFields[i]);
-    }
-
-    this->setNStreamLines(uint(streamLines.size()));
-    for (uint i=0;i<this->getNStreamLines();i++)
-    {
-        this->setStreamLine(i,streamLines[i]);
     }
 
     for (uint i=0;i<nUpdateVariables;i++)

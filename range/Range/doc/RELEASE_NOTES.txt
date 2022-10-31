@@ -3,6 +3,7 @@ Version 3.2.8
 
 * ALL: Resolved build warnings
 * ALL: Optimised detection of self-intersecting elements
+* GUI: Change order of entities in the model tree to "Points,Lines,Surfaces,Volumes,Cuts,ISO surfaces,Stream Lines, Scalar fields,Vector fields"
 
 Bug fixes:
 
