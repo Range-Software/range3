@@ -297,6 +297,18 @@ void RModel::update(const RModel &rModel)
         updateVolumeGroupData.push_back(this->getVolume(i).getData());
     }
 
+    std::vector<RCut> cuts;
+    for (uint i=0;i<this->getNCuts();i++)
+    {
+        cuts.push_back(this->getCut(i));
+    }
+
+    std::vector<RIso> isos;
+    for (uint i=0;i<this->getNIsos();i++)
+    {
+        isos.push_back(this->getIso(i));
+    }
+
     std::vector<RScalarField> scalarFields;
     for (uint i=0;i<this->getNScalarFields();i++)
     {
@@ -313,18 +325,6 @@ void RModel::update(const RModel &rModel)
     for (uint i=0;i<this->getNStreamLines();i++)
     {
         streamLines.push_back(this->getStreamLine(i));
-    }
-
-    std::vector<RCut> cuts;
-    for (uint i=0;i<this->getNCuts();i++)
-    {
-        cuts.push_back(this->getCut(i));
-    }
-
-    std::vector<RIso> isos;
-    for (uint i=0;i<this->getNIsos();i++)
-    {
-        isos.push_back(this->getIso(i));
     }
 
     uint nUpdateVariables = std::min(this->getNVariables(),rModel.getNVariables());
@@ -360,6 +360,18 @@ void RModel::update(const RModel &rModel)
         this->getVolume(i).setData(updateVolumeGroupData[i]);
     }
 
+    this->setNCuts(uint(cuts.size()));
+    for (uint i=0;i<this->getNCuts();i++)
+    {
+        this->setCut(i,cuts[i]);
+    }
+
+    this->setNIsos(uint(isos.size()));
+    for (uint i=0;i<this->getNIsos();i++)
+    {
+        this->setIso(i,isos[i]);
+    }
+
     this->setNScalarFields(uint(scalarFields.size()));
     for (uint i=0;i<this->getNScalarFields();i++)
     {
@@ -376,18 +388,6 @@ void RModel::update(const RModel &rModel)
     for (uint i=0;i<this->getNStreamLines();i++)
     {
         this->setStreamLine(i,streamLines[i]);
-    }
-
-    this->setNCuts(uint(cuts.size()));
-    for (uint i=0;i<this->getNCuts();i++)
-    {
-        this->setCut(i,cuts[i]);
-    }
-
-    this->setNIsos(uint(isos.size()));
-    for (uint i=0;i<this->getNIsos();i++)
-    {
-        this->setIso(i,isos[i]);
     }
 
     for (uint i=0;i<nUpdateVariables;i++)

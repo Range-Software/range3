@@ -6,8 +6,8 @@ Version 3.2.8
 
 Bug fixes:
 
-* Fixed glitches when zooming using mouse wheel
-
+* GUI: Fixed glitches when zooming using mouse wheel
+* GUI: Vector and scalar field entity list can get lost when results are reloaded
 
 ------------------------------------------------------------------
 Version 3.2.7
