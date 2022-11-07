@@ -738,7 +738,10 @@ void RSolverFluid::statistics(void)
     this->printStats(R_VARIABLE_PRESSURE);
     this->processMonitoringPoints();
 
-    RLogger::info("Convergence:   %-13g\n",residual);
+    RLogger::info("Residual:      % -13g\n",residual);
+    RLogger::info("Convergence-R: % -13g\n",convergence);
+    RLogger::info("Convergence-V: % -13g\n",this->cvgV);
+    RLogger::info("Convergence-P: % -13g\n",this->cvgP);
 
     RLogger::info("Build time:        %9u [ms]\n",this->buildStopWatch.getMiliSeconds());
     RLogger::info("Solver time:       %9u [ms]\n",this->solverStopWatch.getMiliSeconds());
@@ -2329,7 +2332,7 @@ double RSolverFluid::findWeightScale(void) const
     double ws = (this->avgU == 0.0) ? 1.0 : 1.0 *  v / (this->avgU * l * l);
     if (this->pModel->getTimeSolver().getEnabled())
     {
-        ws *= 1.0e-2 / this->pModel->getTimeSolver().getCurrentTimeStepSize();
+        ws /= this->pModel->getTimeSolver().getCurrentTimeStepSize();
     }
 
     return ws;
@@ -2421,8 +2424,9 @@ void RSolverFluid::assemblyMatrix(uint elementID, const RRMatrix &Ae, const RRVe
 
             if (this->nodeBook.getValue(dims*rElement.getNodeId(m)+i,mp))
             {
+                uint row = dims*m+i;
 #pragma omp atomic
-                this->b[mp] += fe[dims*m+i];
+                this->b[mp] += fe[row];
 #pragma omp critical
                 {
                     for (uint n=0;n<rElement.size();n++)
@@ -2433,7 +2437,7 @@ void RSolverFluid::assemblyMatrix(uint elementID, const RRMatrix &Ae, const RRVe
 
                             if (this->nodeBook.getValue(dims*rElement.getNodeId(n)+j,np))
                             {
-                                this->A.addValue(mp,np,Ae[dims*m+i][dims*n+j]);
+                                this->A.addValue(mp,np,Ae[row][dims*n+j]);
                             }
                         }
                     }
@@ -2505,74 +2509,12 @@ void RSolverFluid::applyLocalRotations(unsigned int elementID, RRMatrix &Ae)
     }
 }
 
-double RSolverFluid::computeStreamVelocity(const RModel &rModel, const RSolverCartesianVector<RRVector> &nodeVelocity, bool averageBased, double streamVelocity)
+double RSolverFluid::computeStreamVelocity(const RModel &rModel, const RSolverCartesianVector<RRVector> &nodeVelocity, bool averageBased)
 {
-    double velocity = 1.0;
-
-    double totalArea = 0.0;
-    double totalVolurate = 0.0;
-
-    for (uint i=0;i<rModel.getNSurfaces();i++)
-    {
-        const RSurface &rSurface = rModel.getSurface(i);
-
-        bool hasVelocity = rSurface.hasBoundaryCondition(R_BOUNDARY_CONDITION_INFLOW_VELOCITY);
-        bool hasVolurate = rSurface.hasBoundaryCondition(R_BOUNDARY_CONDITION_INFLOW_VOLURATE);
-
-        double v = 0.0;
-        double q = 0.0;
-
-        if (!hasVelocity && !hasVolurate)
-        {
-            continue;
-        }
-
-        if (hasVelocity)
-        {
-            const RBoundaryCondition &rBoundaryCondition = rSurface.getBoundaryCondition(R_BOUNDARY_CONDITION_INFLOW_VELOCITY);
-            uint vp = rBoundaryCondition.findComponentPosition(R_VARIABLE_VELOCITY);
-            if (vp != RConstants::eod)
-            {
-                v = rBoundaryCondition.getComponent(vp).get(rModel.getTimeSolver().getCurrentTime());
-            }
-        }
-
-        if (hasVolurate)
-        {
-            const RBoundaryCondition &rBoundaryCondition = rSurface.getBoundaryCondition(R_BOUNDARY_CONDITION_INFLOW_VOLURATE);
-            uint vp = rBoundaryCondition.findComponentPosition(R_VARIABLE_VOLUME_FLOW_RATE);
-            if (vp != RConstants::eod)
-            {
-                q = rBoundaryCondition.getComponent(vp).get(rModel.getTimeSolver().getCurrentTime());
-            }
-        }
-
-        double area = rSurface.findArea(rModel.getNodes(),rModel.getElements());
-        if (area < RConstants::eps)
-        {
-            continue;
-        }
-        if (hasVelocity)
-        {
-            q = v * area;
-        }
-        totalArea += area;
-        totalVolurate += std::fabs(q);
-    }
-
-    if (totalArea < RConstants::eps)
-    {
-        velocity = 1.0;
-    }
-    else
-    {
-        velocity = totalVolurate / totalArea;
-    }
+    double velocity = 0.0;
 
     if (averageBased)
     {
-        double vm = 0.0;
-
 #pragma omp parallel default(shared)
         {
         double vm_local = 0.0;
@@ -2584,17 +2526,75 @@ double RSolverFluid::computeStreamVelocity(const RModel &rModel, const RSolverCa
                                       + std::pow(nodeVelocity.z[uint(i)],2));
             }
 #pragma omp atomic
-            vm += vm_local;
+            velocity += vm_local;
         }
         if (rModel.getNNodes())
         {
-            vm /= double(rModel.getNNodes());
+            velocity /= double(rModel.getNNodes());
         }
-        velocity = (vm + streamVelocity) / 2.0;
     }
-    if (velocity < RConstants::eps)
+    else
     {
-        velocity = 1.0;
+        double totalArea = 0.0;
+        double totalVolurate = 0.0;
+
+        for (uint i=0;i<rModel.getNSurfaces();i++)
+        {
+            const RSurface &rSurface = rModel.getSurface(i);
+
+            bool hasVelocity = rSurface.hasBoundaryCondition(R_BOUNDARY_CONDITION_INFLOW_VELOCITY);
+            bool hasVolurate = rSurface.hasBoundaryCondition(R_BOUNDARY_CONDITION_INFLOW_VOLURATE);
+
+            double v = 0.0;
+            double q = 0.0;
+
+            if (!hasVelocity && !hasVolurate)
+            {
+                continue;
+            }
+
+            if (hasVelocity)
+            {
+                const RBoundaryCondition &rBoundaryCondition = rSurface.getBoundaryCondition(R_BOUNDARY_CONDITION_INFLOW_VELOCITY);
+                uint vp = rBoundaryCondition.findComponentPosition(R_VARIABLE_VELOCITY);
+                if (vp != RConstants::eod)
+                {
+                    v = rBoundaryCondition.getComponent(vp).get(rModel.getTimeSolver().getCurrentTime());
+                }
+            }
+
+            if (hasVolurate)
+            {
+                const RBoundaryCondition &rBoundaryCondition = rSurface.getBoundaryCondition(R_BOUNDARY_CONDITION_INFLOW_VOLURATE);
+                uint vp = rBoundaryCondition.findComponentPosition(R_VARIABLE_VOLUME_FLOW_RATE);
+                if (vp != RConstants::eod)
+                {
+                    q = rBoundaryCondition.getComponent(vp).get(rModel.getTimeSolver().getCurrentTime());
+                }
+            }
+
+            double area = rSurface.findArea(rModel.getNodes(),rModel.getElements());
+            if (area < RConstants::eps)
+            {
+                continue;
+            }
+            if (hasVelocity)
+            {
+                q = v * area;
+            }
+            totalArea += area;
+            totalVolurate += std::abs(q);
+        }
+
+        if (totalArea < RConstants::eps)
+        {
+            velocity = 1.0;
+        }
+        else
+        {
+            velocity = totalVolurate / totalArea;
+        }
     }
-    return velocity;
+
+    return (velocity < RConstants::eps) ? 1.0 : velocity;
 }
