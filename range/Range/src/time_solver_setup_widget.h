@@ -12,10 +12,9 @@
 #define TIME_SOLVER_SETUP_WIDGET_H
 
 #include <QWidget>
+#include <QLabel>
 
 #include <rmlib.h>
-
-#include "value_line_edit.h"
 
 class TimeSolverSetupWidget : public QWidget
 {
@@ -27,7 +26,7 @@ class TimeSolverSetupWidget : public QWidget
         //! Time solver.
         RTimeSolver timeSolver;
         //! End time - readonly.
-        ValueLineEdit *lineEndTime;
+        QLabel *valueEndTime;
 
     public:
 
@@ -37,7 +36,7 @@ class TimeSolverSetupWidget : public QWidget
     protected:
 
         //! Find end time.
-        double findEndTime(void) const;
+        double findEndTime() const;
 
     signals:
 

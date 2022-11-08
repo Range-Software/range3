@@ -243,11 +243,19 @@ class RElement
 
         //! Find line segments.
         //! For line element this function will return list of segments which represent line of element.
-        std::vector<RSegment> segmentize ( const std::vector <RNode> &nodes ) const;
+        void segmentize(const std::vector <RNode> &nodes, QList<RSegment> segments) const;
+
+        //! Find line segments.
+        //! For line element this function will return list of segments which represent line of element.
+        QList<RSegment> segmentize(const std::vector <RNode> &nodes) const;
 
         //! Find surface and volume triangles.
         //! For surface element this function will return list of triangles which represent surface of element.
-        std::vector<RTriangle> triangulate ( const std::vector <RNode> &nodes ) const;
+        void triangulate(const std::vector<RNode> &nodes, QList<RTriangle> &triangles) const;
+
+        //! Find surface and volume triangles.
+        //! For surface element this function will return list of triangles which represent surface of element.
+        QList<RTriangle> triangulate(const std::vector<RNode> &nodes) const;
 
         //! Return number of edge elements.
         uint getNEdgeElements(void) const;
@@ -346,7 +354,7 @@ class RElement
         static bool hasConstantDerivative ( RElementType type );
 
         //! Find intersection points between two elements.
-        static bool findIntersectionPoints(const RElement &e1, const RElement &e2, const std::vector<RNode> &nodes, std::set<RR3Vector> &x);
+        static bool findIntersectionPoints(const RElement &e1, const RElement &e2, const std::vector<RNode> &nodes, QList<RR3Vector> &x, bool testOnly = false);
 
     private:
 

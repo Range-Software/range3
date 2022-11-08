@@ -22,20 +22,20 @@ typedef enum _ModelTreeEntity
     MODEL_TREE_GROUP_LINE,
     MODEL_TREE_GROUP_SURFACE,
     MODEL_TREE_GROUP_VOLUME,
-    MODEL_TREE_GROUP_VECTOR_FIELD,
-    MODEL_TREE_GROUP_SCALAR_FIELD,
-    MODEL_TREE_GROUP_STREAM_LINE,
     MODEL_TREE_GROUP_CUT,
     MODEL_TREE_GROUP_ISO,
+    MODEL_TREE_GROUP_STREAM_LINE,
+    MODEL_TREE_GROUP_SCALAR_FIELD,
+    MODEL_TREE_GROUP_VECTOR_FIELD,
     MODEL_TREE_POINT,
     MODEL_TREE_LINE,
     MODEL_TREE_SURFACE,
     MODEL_TREE_VOLUME,
-    MODEL_TREE_VECTOR_FIELD,
-    MODEL_TREE_SCALAR_FIELD,
-    MODEL_TREE_STREAM_LINE,
     MODEL_TREE_CUT,
     MODEL_TREE_ISO,
+    MODEL_TREE_STREAM_LINE,
+    MODEL_TREE_SCALAR_FIELD,
+    MODEL_TREE_VECTOR_FIELD,
     MODEL_TREE_N_TYPES
 } ModelTreeEntity;
 
@@ -61,16 +61,16 @@ static REntityGroupType EntityTypeToGroupType(ModelTreeEntity entityType)
             return R_ENTITY_GROUP_SURFACE;
         case MODEL_TREE_VOLUME:
             return R_ENTITY_GROUP_VOLUME;
-        case MODEL_TREE_VECTOR_FIELD:
-            return R_ENTITY_GROUP_VECTOR_FIELD;
-        case MODEL_TREE_SCALAR_FIELD:
-            return R_ENTITY_GROUP_SCALAR_FIELD;
-        case MODEL_TREE_STREAM_LINE:
-            return R_ENTITY_GROUP_STREAM_LINE;
         case MODEL_TREE_CUT:
             return R_ENTITY_GROUP_CUT;
         case MODEL_TREE_ISO:
             return R_ENTITY_GROUP_ISO;
+        case MODEL_TREE_STREAM_LINE:
+            return R_ENTITY_GROUP_STREAM_LINE;
+        case MODEL_TREE_SCALAR_FIELD:
+            return R_ENTITY_GROUP_SCALAR_FIELD;
+        case MODEL_TREE_VECTOR_FIELD:
+            return R_ENTITY_GROUP_VECTOR_FIELD;
         default:
             return R_ENTITY_GROUP_NONE;
     }
@@ -245,15 +245,15 @@ void ModelTree::insertModel(uint modelID)
             ||
             (itemModel->child(i)->data(MODEL_TREE_COLUMN_TYPE,Qt::DisplayRole).toInt() == MODEL_TREE_GROUP_VOLUME && rModel.getNVolumes() == 0)
             ||
+            (itemModel->child(i)->data(MODEL_TREE_COLUMN_TYPE,Qt::DisplayRole).toInt() == MODEL_TREE_GROUP_CUT && rModel.getNCuts() == 0)
+            ||
+            (itemModel->child(i)->data(MODEL_TREE_COLUMN_TYPE,Qt::DisplayRole).toInt() == MODEL_TREE_GROUP_ISO && rModel.getNIsos() == 0)
+            ||
             (itemModel->child(i)->data(MODEL_TREE_COLUMN_TYPE,Qt::DisplayRole).toInt() == MODEL_TREE_GROUP_STREAM_LINE && rModel.getNStreamLines() == 0)
             ||
             (itemModel->child(i)->data(MODEL_TREE_COLUMN_TYPE,Qt::DisplayRole).toInt() == MODEL_TREE_GROUP_VECTOR_FIELD && rModel.getNVectorFields() == 0)
             ||
             (itemModel->child(i)->data(MODEL_TREE_COLUMN_TYPE,Qt::DisplayRole).toInt() == MODEL_TREE_GROUP_SCALAR_FIELD && rModel.getNScalarFields() == 0)
-            ||
-            (itemModel->child(i)->data(MODEL_TREE_COLUMN_TYPE,Qt::DisplayRole).toInt() == MODEL_TREE_GROUP_CUT && rModel.getNCuts() == 0)
-            ||
-            (itemModel->child(i)->data(MODEL_TREE_COLUMN_TYPE,Qt::DisplayRole).toInt() == MODEL_TREE_GROUP_ISO && rModel.getNIsos() == 0)
             )
         {
             itemModel->takeChild(i);
@@ -873,42 +873,6 @@ void ModelTree::onSelectionChanged(void)
                 }
             }
         }
-        else if (type == MODEL_TREE_GROUP_VECTOR_FIELD)
-        {
-            // Select all entities in the group
-            for (int j=0;j<allEntityIDs.size();j++)
-            {
-                if (allEntityIDs[j].getMid() == mid &&
-                    allEntityIDs[j].getType() == R_ENTITY_GROUP_VECTOR_FIELD)
-                {
-                    entityIDsSelectedMap[allEntityIDs[j]] = true;
-                }
-            }
-        }
-        else if (type == MODEL_TREE_GROUP_SCALAR_FIELD)
-        {
-            // Select all entities in the group
-            for (int j=0;j<allEntityIDs.size();j++)
-            {
-                if (allEntityIDs[j].getMid() == mid &&
-                    allEntityIDs[j].getType() == R_ENTITY_GROUP_SCALAR_FIELD)
-                {
-                    entityIDsSelectedMap[allEntityIDs[j]] = true;
-                }
-            }
-        }
-        else if (type == MODEL_TREE_GROUP_STREAM_LINE)
-        {
-            // Select all entities in the group
-            for (int j=0;j<allEntityIDs.size();j++)
-            {
-                if (allEntityIDs[j].getMid() == mid &&
-                    allEntityIDs[j].getType() == R_ENTITY_GROUP_STREAM_LINE)
-                {
-                    entityIDsSelectedMap[allEntityIDs[j]] = true;
-                }
-            }
-        }
         else if (type == MODEL_TREE_GROUP_CUT)
         {
             // Select all entities in the group
@@ -933,15 +897,51 @@ void ModelTree::onSelectionChanged(void)
                 }
             }
         }
+        else if (type == MODEL_TREE_GROUP_STREAM_LINE)
+        {
+            // Select all entities in the group
+            for (int j=0;j<allEntityIDs.size();j++)
+            {
+                if (allEntityIDs[j].getMid() == mid &&
+                    allEntityIDs[j].getType() == R_ENTITY_GROUP_STREAM_LINE)
+                {
+                    entityIDsSelectedMap[allEntityIDs[j]] = true;
+                }
+            }
+        }
+        else if (type == MODEL_TREE_GROUP_SCALAR_FIELD)
+        {
+            // Select all entities in the group
+            for (int j=0;j<allEntityIDs.size();j++)
+            {
+                if (allEntityIDs[j].getMid() == mid &&
+                    allEntityIDs[j].getType() == R_ENTITY_GROUP_SCALAR_FIELD)
+                {
+                    entityIDsSelectedMap[allEntityIDs[j]] = true;
+                }
+            }
+        }
+        else if (type == MODEL_TREE_GROUP_VECTOR_FIELD)
+        {
+            // Select all entities in the group
+            for (int j=0;j<allEntityIDs.size();j++)
+            {
+                if (allEntityIDs[j].getMid() == mid &&
+                    allEntityIDs[j].getType() == R_ENTITY_GROUP_VECTOR_FIELD)
+                {
+                    entityIDsSelectedMap[allEntityIDs[j]] = true;
+                }
+            }
+        }
         else if (type == MODEL_TREE_POINT ||
                  type == MODEL_TREE_LINE ||
                  type == MODEL_TREE_SURFACE ||
                  type == MODEL_TREE_VOLUME ||
-                 type == MODEL_TREE_VECTOR_FIELD ||
-                 type == MODEL_TREE_SCALAR_FIELD ||
-                 type == MODEL_TREE_STREAM_LINE ||
                  type == MODEL_TREE_CUT ||
-                 type == MODEL_TREE_ISO)
+                 type == MODEL_TREE_ISO ||
+                 type == MODEL_TREE_STREAM_LINE ||
+                 type == MODEL_TREE_SCALAR_FIELD ||
+                 type == MODEL_TREE_VECTOR_FIELD)
         {
             entityID.setType(EntityTypeToGroupType(type));
             entityID.setEid(eid);
@@ -1052,27 +1052,6 @@ void ModelTree::onItemChanged(QTreeWidgetItem *item, int column)
                 Session::getInstance().setEntityVisible(mid,R_ENTITY_GROUP_VOLUME,i,visible);
             }
         }
-        else if (entityType == MODEL_TREE_GROUP_VECTOR_FIELD)
-        {
-            for (uint i=0;i<Session::getInstance().getModel(mid).getNVectorFields();i++)
-            {
-                Session::getInstance().setEntityVisible(mid,R_ENTITY_GROUP_VECTOR_FIELD,i,visible);
-            }
-        }
-        else if (entityType == MODEL_TREE_GROUP_SCALAR_FIELD)
-        {
-            for (uint i=0;i<Session::getInstance().getModel(mid).getNScalarFields();i++)
-            {
-                Session::getInstance().setEntityVisible(mid,R_ENTITY_GROUP_SCALAR_FIELD,i,visible);
-            }
-        }
-        else if (entityType == MODEL_TREE_GROUP_STREAM_LINE)
-        {
-            for (uint i=0;i<Session::getInstance().getModel(mid).getNStreamLines();i++)
-            {
-                Session::getInstance().setEntityVisible(mid,R_ENTITY_GROUP_STREAM_LINE,i,visible);
-            }
-        }
         else if (entityType == MODEL_TREE_GROUP_CUT)
         {
             for (uint i=0;i<Session::getInstance().getModel(mid).getNCuts();i++)
@@ -1087,15 +1066,36 @@ void ModelTree::onItemChanged(QTreeWidgetItem *item, int column)
                 Session::getInstance().setEntityVisible(mid,R_ENTITY_GROUP_ISO,i,visible);
             }
         }
+        else if (entityType == MODEL_TREE_GROUP_STREAM_LINE)
+        {
+            for (uint i=0;i<Session::getInstance().getModel(mid).getNStreamLines();i++)
+            {
+                Session::getInstance().setEntityVisible(mid,R_ENTITY_GROUP_STREAM_LINE,i,visible);
+            }
+        }
+        else if (entityType == MODEL_TREE_GROUP_SCALAR_FIELD)
+        {
+            for (uint i=0;i<Session::getInstance().getModel(mid).getNScalarFields();i++)
+            {
+                Session::getInstance().setEntityVisible(mid,R_ENTITY_GROUP_SCALAR_FIELD,i,visible);
+            }
+        }
+        else if (entityType == MODEL_TREE_GROUP_VECTOR_FIELD)
+        {
+            for (uint i=0;i<Session::getInstance().getModel(mid).getNVectorFields();i++)
+            {
+                Session::getInstance().setEntityVisible(mid,R_ENTITY_GROUP_VECTOR_FIELD,i,visible);
+            }
+        }
         else if (entityType == MODEL_TREE_POINT ||
                  entityType == MODEL_TREE_LINE ||
                  entityType == MODEL_TREE_SURFACE ||
                  entityType == MODEL_TREE_VOLUME ||
-                 entityType == MODEL_TREE_VECTOR_FIELD ||
-                 entityType == MODEL_TREE_SCALAR_FIELD ||
-                 entityType == MODEL_TREE_STREAM_LINE ||
                  entityType == MODEL_TREE_CUT ||
-                 entityType == MODEL_TREE_ISO)
+                 entityType == MODEL_TREE_ISO ||
+                 entityType == MODEL_TREE_STREAM_LINE ||
+                 entityType == MODEL_TREE_SCALAR_FIELD ||
+                 entityType == MODEL_TREE_VECTOR_FIELD)
         {
             Session::getInstance().setEntityVisible(mid,elementGrpType,eid,visible);
             if (entityType == MODEL_TREE_POINT)
@@ -1114,18 +1114,6 @@ void ModelTree::onItemChanged(QTreeWidgetItem *item, int column)
             {
                 Session::getInstance().getModel(mid).getVolume(eid).setName(newName);
             }
-            else if (entityType == MODEL_TREE_VECTOR_FIELD)
-            {
-                Session::getInstance().getModel(mid).getVectorField(eid).setName(newName);
-            }
-            else if (entityType == MODEL_TREE_SCALAR_FIELD)
-            {
-                Session::getInstance().getModel(mid).getScalarField(eid).setName(newName);
-            }
-            else if (entityType == MODEL_TREE_STREAM_LINE)
-            {
-                Session::getInstance().getModel(mid).getStreamLine(eid).setName(newName);
-            }
             else if (entityType == MODEL_TREE_CUT)
             {
                 Session::getInstance().getModel(mid).getCut(eid).setName(newName);
@@ -1133,6 +1121,18 @@ void ModelTree::onItemChanged(QTreeWidgetItem *item, int column)
             else if (entityType == MODEL_TREE_ISO)
             {
                 Session::getInstance().getModel(mid).getIso(eid).setName(newName);
+            }
+            else if (entityType == MODEL_TREE_STREAM_LINE)
+            {
+                Session::getInstance().getModel(mid).getStreamLine(eid).setName(newName);
+            }
+            else if (entityType == MODEL_TREE_SCALAR_FIELD)
+            {
+                Session::getInstance().getModel(mid).getScalarField(eid).setName(newName);
+            }
+            else if (entityType == MODEL_TREE_VECTOR_FIELD)
+            {
+                Session::getInstance().getModel(mid).getVectorField(eid).setName(newName);
             }
         }
         this->setIgnoreSignals(false);
@@ -1221,21 +1221,6 @@ void ModelTree::selectSelected(void)
             bool groupSelected = Session::getInstance().getModel(mid).isSelected(R_ENTITY_GROUP_VOLUME,true);
             allItems[i]->setSelected(groupSelected);
         }
-        else if (entityType == MODEL_TREE_GROUP_VECTOR_FIELD)
-        {
-            bool groupSelected = Session::getInstance().getModel(mid).isSelected(R_ENTITY_GROUP_VECTOR_FIELD,true);
-            allItems[i]->setSelected(groupSelected);
-        }
-        else if (entityType == MODEL_TREE_GROUP_SCALAR_FIELD)
-        {
-            bool groupSelected = Session::getInstance().getModel(mid).isSelected(R_ENTITY_GROUP_SCALAR_FIELD,true);
-            allItems[i]->setSelected(groupSelected);
-        }
-        else if (entityType == MODEL_TREE_GROUP_STREAM_LINE)
-        {
-            bool groupSelected = Session::getInstance().getModel(mid).isSelected(R_ENTITY_GROUP_STREAM_LINE,true);
-            allItems[i]->setSelected(groupSelected);
-        }
         else if (entityType == MODEL_TREE_GROUP_CUT)
         {
             bool groupSelected = Session::getInstance().getModel(mid).isSelected(R_ENTITY_GROUP_CUT,true);
@@ -1246,15 +1231,30 @@ void ModelTree::selectSelected(void)
             bool groupSelected = Session::getInstance().getModel(mid).isSelected(R_ENTITY_GROUP_ISO,true);
             allItems[i]->setSelected(groupSelected);
         }
+        else if (entityType == MODEL_TREE_GROUP_STREAM_LINE)
+        {
+            bool groupSelected = Session::getInstance().getModel(mid).isSelected(R_ENTITY_GROUP_STREAM_LINE,true);
+            allItems[i]->setSelected(groupSelected);
+        }
+        else if (entityType == MODEL_TREE_GROUP_SCALAR_FIELD)
+        {
+            bool groupSelected = Session::getInstance().getModel(mid).isSelected(R_ENTITY_GROUP_SCALAR_FIELD,true);
+            allItems[i]->setSelected(groupSelected);
+        }
+        else if (entityType == MODEL_TREE_GROUP_VECTOR_FIELD)
+        {
+            bool groupSelected = Session::getInstance().getModel(mid).isSelected(R_ENTITY_GROUP_VECTOR_FIELD,true);
+            allItems[i]->setSelected(groupSelected);
+        }
         else if (entityType == MODEL_TREE_POINT ||
                  entityType == MODEL_TREE_LINE ||
                  entityType == MODEL_TREE_SURFACE ||
                  entityType == MODEL_TREE_VOLUME ||
-                 entityType == MODEL_TREE_VECTOR_FIELD ||
-                 entityType == MODEL_TREE_SCALAR_FIELD ||
-                 entityType == MODEL_TREE_STREAM_LINE ||
                  entityType == MODEL_TREE_CUT ||
-                 entityType == MODEL_TREE_ISO)
+                 entityType == MODEL_TREE_ISO ||
+                 entityType == MODEL_TREE_STREAM_LINE ||
+                 entityType == MODEL_TREE_SCALAR_FIELD ||
+                 entityType == MODEL_TREE_VECTOR_FIELD)
         {
             bool entitySelected = Session::getInstance().getModel(mid).getSelected(elementGrpType,eid);
             allItems[i]->setSelected(entitySelected);
@@ -1295,20 +1295,20 @@ void ModelTree::expandSelected(void)
             case MODEL_TREE_GROUP_VOLUME:
                 expand = (!Session::getInstance().getModel(mid).isSelected(R_ENTITY_GROUP_VOLUME,false));
                 break;
-            case MODEL_TREE_GROUP_VECTOR_FIELD:
-                expand = (!Session::getInstance().getModel(mid).isSelected(R_ENTITY_GROUP_VECTOR_FIELD,false));
-                break;
-            case MODEL_TREE_GROUP_SCALAR_FIELD:
-                expand = (!Session::getInstance().getModel(mid).isSelected(R_ENTITY_GROUP_SCALAR_FIELD,false));
-                break;
-            case MODEL_TREE_GROUP_STREAM_LINE:
-                expand = (!Session::getInstance().getModel(mid).isSelected(R_ENTITY_GROUP_STREAM_LINE,false));
-                break;
             case MODEL_TREE_GROUP_CUT:
                 expand = (!Session::getInstance().getModel(mid).isSelected(R_ENTITY_GROUP_CUT,false));
                 break;
             case MODEL_TREE_GROUP_ISO:
                 expand = (!Session::getInstance().getModel(mid).isSelected(R_ENTITY_GROUP_ISO,false));
+                break;
+            case MODEL_TREE_GROUP_STREAM_LINE:
+                expand = (!Session::getInstance().getModel(mid).isSelected(R_ENTITY_GROUP_STREAM_LINE,false));
+                break;
+            case MODEL_TREE_GROUP_SCALAR_FIELD:
+                expand = (!Session::getInstance().getModel(mid).isSelected(R_ENTITY_GROUP_SCALAR_FIELD,false));
+                break;
+            case MODEL_TREE_GROUP_VECTOR_FIELD:
+                expand = (!Session::getInstance().getModel(mid).isSelected(R_ENTITY_GROUP_VECTOR_FIELD,false));
                 break;
             default:
                 break;
@@ -1406,48 +1406,6 @@ void ModelTree::checkVisible(void)
             }
             allItems[i]->setCheckState(MODEL_TREE_COLUMN_NAME,checkState);
         }
-        else if (entityType == MODEL_TREE_GROUP_VECTOR_FIELD)
-        {
-            visible = Session::getInstance().getModel(mid).isVisible(R_ENTITY_GROUP_VECTOR_FIELD,true);
-            hidden = Session::getInstance().getModel(mid).isVisible(R_ENTITY_GROUP_VECTOR_FIELD,false);
-            if (visible)
-            {
-                checkState = Qt::Checked;
-            }
-            if (hidden)
-            {
-                checkState = Qt::Unchecked;
-            }
-            allItems[i]->setCheckState(MODEL_TREE_COLUMN_NAME,checkState);
-        }
-        else if (entityType == MODEL_TREE_GROUP_SCALAR_FIELD)
-        {
-            visible = Session::getInstance().getModel(mid).isVisible(R_ENTITY_GROUP_SCALAR_FIELD,true);
-            hidden = Session::getInstance().getModel(mid).isVisible(R_ENTITY_GROUP_SCALAR_FIELD,false);
-            if (visible)
-            {
-                checkState = Qt::Checked;
-            }
-            if (hidden)
-            {
-                checkState = Qt::Unchecked;
-            }
-            allItems[i]->setCheckState(MODEL_TREE_COLUMN_NAME,checkState);
-        }
-        else if (entityType == MODEL_TREE_GROUP_STREAM_LINE)
-        {
-            visible = Session::getInstance().getModel(mid).isVisible(R_ENTITY_GROUP_STREAM_LINE,true);
-            hidden = Session::getInstance().getModel(mid).isVisible(R_ENTITY_GROUP_STREAM_LINE,false);
-            if (visible)
-            {
-                checkState = Qt::Checked;
-            }
-            if (hidden)
-            {
-                checkState = Qt::Unchecked;
-            }
-            allItems[i]->setCheckState(MODEL_TREE_COLUMN_NAME,checkState);
-        }
         else if (entityType == MODEL_TREE_GROUP_CUT)
         {
             visible = Session::getInstance().getModel(mid).isVisible(R_ENTITY_GROUP_CUT,true);
@@ -1476,15 +1434,57 @@ void ModelTree::checkVisible(void)
             }
             allItems[i]->setCheckState(MODEL_TREE_COLUMN_NAME,checkState);
         }
+        else if (entityType == MODEL_TREE_GROUP_STREAM_LINE)
+        {
+            visible = Session::getInstance().getModel(mid).isVisible(R_ENTITY_GROUP_STREAM_LINE,true);
+            hidden = Session::getInstance().getModel(mid).isVisible(R_ENTITY_GROUP_STREAM_LINE,false);
+            if (visible)
+            {
+                checkState = Qt::Checked;
+            }
+            if (hidden)
+            {
+                checkState = Qt::Unchecked;
+            }
+            allItems[i]->setCheckState(MODEL_TREE_COLUMN_NAME,checkState);
+        }
+        else if (entityType == MODEL_TREE_GROUP_SCALAR_FIELD)
+        {
+            visible = Session::getInstance().getModel(mid).isVisible(R_ENTITY_GROUP_SCALAR_FIELD,true);
+            hidden = Session::getInstance().getModel(mid).isVisible(R_ENTITY_GROUP_SCALAR_FIELD,false);
+            if (visible)
+            {
+                checkState = Qt::Checked;
+            }
+            if (hidden)
+            {
+                checkState = Qt::Unchecked;
+            }
+            allItems[i]->setCheckState(MODEL_TREE_COLUMN_NAME,checkState);
+        }
+        else if (entityType == MODEL_TREE_GROUP_VECTOR_FIELD)
+        {
+            visible = Session::getInstance().getModel(mid).isVisible(R_ENTITY_GROUP_VECTOR_FIELD,true);
+            hidden = Session::getInstance().getModel(mid).isVisible(R_ENTITY_GROUP_VECTOR_FIELD,false);
+            if (visible)
+            {
+                checkState = Qt::Checked;
+            }
+            if (hidden)
+            {
+                checkState = Qt::Unchecked;
+            }
+            allItems[i]->setCheckState(MODEL_TREE_COLUMN_NAME,checkState);
+        }
         else if (entityType == MODEL_TREE_POINT ||
                  entityType == MODEL_TREE_LINE ||
                  entityType == MODEL_TREE_SURFACE ||
                  entityType == MODEL_TREE_VOLUME ||
-                 entityType == MODEL_TREE_VECTOR_FIELD ||
-                 entityType == MODEL_TREE_SCALAR_FIELD ||
-                 entityType == MODEL_TREE_STREAM_LINE ||
                  entityType == MODEL_TREE_CUT ||
-                 entityType == MODEL_TREE_ISO)
+                 entityType == MODEL_TREE_ISO ||
+                 entityType == MODEL_TREE_STREAM_LINE ||
+                 entityType == MODEL_TREE_SCALAR_FIELD ||
+                 entityType == MODEL_TREE_VECTOR_FIELD)
         {
             if (Session::getInstance().getModel(mid).getVisible(elementGrpType,eid))
             {
@@ -1528,11 +1528,11 @@ void ModelTree::onItemDoubleClicked(QTreeWidgetItem *item, int column)
             entityType == MODEL_TREE_LINE ||
             entityType == MODEL_TREE_SURFACE ||
             entityType == MODEL_TREE_VOLUME ||
-            entityType == MODEL_TREE_VECTOR_FIELD ||
-            entityType == MODEL_TREE_SCALAR_FIELD ||
-            entityType == MODEL_TREE_STREAM_LINE ||
             entityType == MODEL_TREE_CUT ||
-            entityType == MODEL_TREE_ISO)
+            entityType == MODEL_TREE_ISO ||
+            entityType == MODEL_TREE_STREAM_LINE ||
+            entityType == MODEL_TREE_SCALAR_FIELD ||
+            entityType == MODEL_TREE_VECTOR_FIELD)
         {
             isEditable = true;
         }

@@ -140,7 +140,12 @@ void RSolverGeneric::run(bool firstRun, uint taskIteration)
             this->applyDisplacement();
         }
 
-        this->updateScales();
+        static bool updateScalesDone = false;
+        if (!updateScalesDone || this->problemType == R_PROBLEM_MESH)
+        {
+            this->updateScales();
+        }
+        updateScalesDone = true;
         if (this->problemType != R_PROBLEM_MESH)
         {
             this->scales.downscale(*this->pModel);

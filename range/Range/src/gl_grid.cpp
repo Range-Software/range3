@@ -8,6 +8,7 @@
  *  DESCRIPTION: OpenGL grid class definition                        *
  *********************************************************************/
 
+#include "gl_functions.h"
 #include "gl_grid.h"
 #include "gl_line.h"
 #include "gl_node.h"

@@ -157,6 +157,8 @@ fi
 pushd $buildDir
 
 if [[ $(uname -s) == "Darwin" ]]; then
+    qmakeArgs+=" -spec macx-clang"
+
     override_clang="false"
     if [ "$override_clang" == "true" ]
     then

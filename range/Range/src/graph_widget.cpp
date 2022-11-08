@@ -177,7 +177,7 @@ void GraphWidget::mouseMoveEvent(QMouseEvent *mouseEvent)
     }
 }
 
-void GraphWidget::enterEvent(QEvent *)
+void GraphWidget::enterEvent(QEnterEvent *)
 {
     this->setFocus();
 }

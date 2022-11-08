@@ -11,8 +11,6 @@
 #ifndef RBL_BOX_H
 #define RBL_BOX_H
 
-#include "rbl_r3vector.h"
-
 class RLimitBox
 {
 

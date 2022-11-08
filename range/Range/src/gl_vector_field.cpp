@@ -12,6 +12,7 @@
 
 #include <rmlib.h>
 
+#include "gl_functions.h"
 #include "gl_vector_field.h"
 #include "gl_arrow.h"
 #include "session.h"

@@ -177,14 +177,14 @@ MainWindow::MainWindow (QWidget *parent)
     }
 }
 
-MainWindow *MainWindow::getInstance(void)
+MainWindow *MainWindow::getInstance()
 {
     R_LOG_TRACE;
     static MainWindow *mainWindow = new MainWindow;
     return mainWindow;
 }
 
-void MainWindow::showTransformGeometryWidget(void)
+void MainWindow::showTransformGeometryWidget()
 {
     R_LOG_TRACE;
     QString dockName = QString::fromUtf8("dockTransform");
@@ -202,32 +202,32 @@ void MainWindow::showTransformGeometryWidget(void)
     this->showCustomDockWidget(transformGeometryWidget,dockName,tr("Transform geometry"));
 }
 
-void MainWindow::hideTransformGeometryWidget(void)
+void MainWindow::hideTransformGeometryWidget()
 {
     R_LOG_TRACE;
     this->hideCustomDockWidget(QString::fromUtf8("dockTransform"));
 }
 
-void MainWindow::showDrawWidget(void)
+void MainWindow::showDrawWidget()
 {
     R_LOG_TRACE;
     QString dockName = QString::fromUtf8("dockDraw");
     this->showCustomDockWidget((findCustomDockWidget(dockName) ? nullptr : new DrawInputWidget),dockName,tr("Draw object"));
 }
 
-void MainWindow::hideDrawWidget(void)
+void MainWindow::hideDrawWidget()
 {
     R_LOG_TRACE;
     this->hideCustomDockWidget(QString::fromUtf8("dockDraw"));
 }
 
-void MainWindow::progressAutoHideEnable(void)
+void MainWindow::progressAutoHideEnable()
 {
     R_LOG_TRACE;
     this->mainProgressBar->setAutoHide(true);
 }
 
-void MainWindow::progressAutoHideDisable(void)
+void MainWindow::progressAutoHideDisable()
 {
     R_LOG_TRACE;
     this->mainProgressBar->setAutoHide(false);
@@ -283,7 +283,7 @@ void MainWindow::hideCustomDockWidget(const QString &name)
     }
 }
 
-void MainWindow::createMenus(void)
+void MainWindow::createMenus()
 {
     R_LOG_TRACE;
     QMenuBar *menubar = new QMenuBar(this);
@@ -478,7 +478,7 @@ void MainWindow::createMenus(void)
     menubar->addAction(menuHelp->menuAction());
 }
 
-void MainWindow::createToolBars(void)
+void MainWindow::createToolBars()
 {
     R_LOG_TRACE;
     QString key, actionName;
@@ -598,7 +598,7 @@ void MainWindow::createToolBars(void)
     }
 }
 
-void MainWindow::createStatusBar(void)
+void MainWindow::createStatusBar()
 {
     R_LOG_TRACE;
     QStatusBar *statusbar;
@@ -624,13 +624,13 @@ void MainWindow::createStatusBar(void)
     progressBarLayout->addWidget(this->downloadProgressBar);
 }
 
-void MainWindow::createDownloadBar(void)
+void MainWindow::createDownloadBar()
 {
     R_LOG_TRACE;
 
 }
 
-void MainWindow::createCentralWidget(void)
+void MainWindow::createCentralWidget()
 {
     R_LOG_TRACE;
     this->centralTabWidget = new CentralTabWidget(this);
@@ -789,7 +789,7 @@ QWidget *MainWindow::createResultsTab()
     return layoutResults;
 }
 
-QMenu * MainWindow::createPopupMenu (void)
+QMenu * MainWindow::createPopupMenu ()
 {
     R_LOG_TRACE;
     QMenu *popupMenu = this->QMainWindow::createPopupMenu();
@@ -799,7 +799,7 @@ QMenu * MainWindow::createPopupMenu (void)
     return popupMenu;
 }
 
-void MainWindow::readSettings(void)
+void MainWindow::readSettings()
 {
     R_LOG_TRACE;
     ApplicationSettings *pApplicationSettings = MainSettings::getInstance().getApplicationSettings();
@@ -856,7 +856,7 @@ void MainWindow::readSettings(void)
     MainSettings::getInstance().sync();
 }
 
-void MainWindow::writeSettings(void) const
+void MainWindow::writeSettings() const
 {
     R_LOG_TRACE;
     QList<QAction*> actionList;
@@ -921,13 +921,13 @@ void MainWindow::writeSettings(void) const
     MainSettings::getInstance().sync();
 }
 
-uint MainWindow::getNToolBars(void) const
+uint MainWindow::getNToolBars() const
 {
     R_LOG_TRACE;
     return uint(this->toolBars.size());
 }
 
-QList<uint> MainWindow::getSelectedModelIDs(void) const
+QList<uint> MainWindow::getSelectedModelIDs() const
 {
     R_LOG_TRACE;
     return this->modelManagerTree->getSelectedModelIDs();
@@ -1021,13 +1021,13 @@ void MainWindow::setEnabled(bool enabled)
     }
 }
 
-void MainWindow::enable(void)
+void MainWindow::enable()
 {
     R_LOG_TRACE;
     this->setEnabled(true);
 }
 
-void MainWindow::disable(void)
+void MainWindow::disable()
 {
     R_LOG_TRACE;
     this->setEnabled(false);
@@ -1099,13 +1099,13 @@ void MainWindow::onDownloadProgressFinalize(uint)
     this->progressBarFinalize(this->downloadProgressBar,tr("Download complete"));
 }
 
-void MainWindow::onDrawObjectAdded(void)
+void MainWindow::onDrawObjectAdded()
 {
     R_LOG_TRACE;
     this->showDrawWidget();
 }
 
-void MainWindow::onDrawObjectRemoved(void)
+void MainWindow::onDrawObjectRemoved()
 {
     R_LOG_TRACE;
     if (Session::getInstance().getDrawEngine()->getNObjects() == 0)
@@ -1127,12 +1127,12 @@ void MainWindow::onJobBlocking(bool blocking)
     }
 }
 
-void MainWindow::onJobStarted(void)
+void MainWindow::onJobStarted()
 {
     R_LOG_TRACE;
 }
 
-void MainWindow::onJobEnded(void)
+void MainWindow::onJobEnded()
 {
     R_LOG_TRACE;
 }
@@ -1205,7 +1205,7 @@ void MainWindow::onEntityVisibilityChanged(uint modelID, REntityGroupType, uint,
     }
 }
 
-void MainWindow::onGeometryTransformFinalize(void)
+void MainWindow::onGeometryTransformFinalize()
 {
     R_LOG_TRACE;
     this->hideTransformGeometryWidget();

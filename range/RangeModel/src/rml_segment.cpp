@@ -207,7 +207,7 @@ bool RSegment::findLineIntersection(const RR3Vector &position, const RR3Vector &
     return R_IS_IN_CLOSED_INTERVAL(0.0,1.0,u);
 }
 
-bool RSegment::findPointIntersection(const RNode &node, std::set<RR3Vector> &x) const
+bool RSegment::findPointIntersection(const RNode &node, QList<RR3Vector> &x) const
 {
     bool intersectionFound = false;
     RR3Vector point(node.toVector());
@@ -220,13 +220,13 @@ bool RSegment::findPointIntersection(const RNode &node, std::set<RR3Vector> &x) 
 
     if (intersectionFound)
     {
-        x.insert(point);
+        x.append(point);
     }
 
     return intersectionFound;
 }
 
-bool RSegment::findSegmentIntersection(const RSegment &segment, std::set<RR3Vector> &x) const
+bool RSegment::findSegmentIntersection(const RSegment &segment, QList<RR3Vector> &x, bool testOnly) const
 {
     double tollerance = 1.0e-5;
 
@@ -240,25 +240,26 @@ bool RSegment::findSegmentIntersection(const RSegment &segment, std::set<RR3Vect
         return false;
     }
 
-    std::set<RR3Vector> xTemp;
+    QList<RR3Vector> xTemp;
+    xTemp.reserve(2);
 
     if (RR3Vector::areParallel(this->findDirection(),segment.findDirection()))
     {
         if (this->isPointInside(segment.getNode1().toVector()))
         {
-            xTemp.insert(segment.getNode1().toVector());
+            xTemp.append(segment.getNode1().toVector());
         }
         if (this->isPointInside(segment.getNode2().toVector()))
         {
-            xTemp.insert(segment.getNode2().toVector());
+            xTemp.append(segment.getNode2().toVector());
         }
         if (segment.isPointInside(this->getNode1().toVector()))
         {
-            xTemp.insert(this->getNode1().toVector());
+            xTemp.append(this->getNode1().toVector());
         }
         if (segment.isPointInside(this->getNode2().toVector()))
         {
-            xTemp.insert(this->getNode2().toVector());
+            xTemp.append(this->getNode2().toVector());
         }
     }
     else
@@ -275,7 +276,7 @@ bool RSegment::findSegmentIntersection(const RSegment &segment, std::set<RR3Vect
         {
             if (R_IS_IN_CLOSED_INTERVAL(0.0,1.0,u1) && R_IS_IN_CLOSED_INTERVAL(0.0,1.0,u2))
             {
-                xTemp.insert(xVec);
+                xTemp.append(xVec);
             }
         }
     }
@@ -284,7 +285,7 @@ bool RSegment::findSegmentIntersection(const RSegment &segment, std::set<RR3Vect
 
     // Delete intersections at nodes.
 
-    std::set<RR3Vector>::reverse_iterator it;
+    QList<RR3Vector>::reverse_iterator it;
     for (it=xTemp.rbegin();it!=xTemp.rend();++it)
     {
         bool isNode1 = (RR3Vector::findDistance(this->getNode1().toVector(),*it) < RConstants::eps ||
@@ -296,7 +297,10 @@ bool RSegment::findSegmentIntersection(const RSegment &segment, std::set<RR3Vect
             continue;
         }
         // Intersection is not in node.
-        x.insert(*it);
+        if (!testOnly)
+        {
+            x.append(*it);
+        }
         intersectionFound = true;
     }
 

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #--------------------------------------------------------------------------
-# Script to generate RPM spec file
+# Script to generate MacOS app
 #--------------------------------------------------------------------------
 
 # Configuration section - Begin -------------------------------------------
@@ -45,7 +45,7 @@ license='Commercial'
 group='Application/Engineering'
 desc='Range Software Package.\nSoftware for engineering simulations.\nFinite Element Analysis.'
 
-installToDir=$HOME/bin
+appleDevId=
 debug=false
 
 # Configuration section - End ---------------------------------------------
@@ -62,9 +62,7 @@ cat <<End-of-help
 
      optional
 
-      --install-to=[DIRECTORY]       Install created package to 'DIRECTORY' (default='$installToDir')
-      --build-dir=[DIRECTORY]        Custom build directory
-
+      --apple-id=[DEVELOPER_ID]      Apple developer ID to sign application
       --debug                        Create debug package
 
       --help, -h, -?                 Print this help and exit
@@ -74,8 +72,8 @@ End-of-help
 while [ $# -gt 0 ]
 do
     case $1 in
-        --install-to=*)
-            installToDir=$( echo $1 | awk 'BEGIN{ FS="=" } { print $2 }' )
+        --apple-id=*)
+            appleDevId=$( echo $1 | awk 'BEGIN{ FS="=" } { print $2 }' )
             ;;
         --debug)
             debug=true
@@ -97,7 +95,7 @@ done
 buildType="Release"
 versionSuffix=
 
-if [ $debug = true ]
+if [ $debug == "true" ]
 then
     buildType="Debug"
     versionSuffix="_debug"
@@ -193,19 +191,35 @@ then
     exit 1
 fi
 
-macdeployqt $packageAppDir -executable=$packageRangeSolverBin -verbose=2
-if [ $? -ne 0 ]
-then
-    echo_e "Failed to run macdeployqt"
-    exit 1
-fi
-
 plutil -replace CFBundleIdentifier -string "Range-Software" $packagePlist && \
 plutil -replace CFBundleVersion -string "$version" $packagePlist
 if [ $? -ne 0 ]
 then
     echo_e "Failed to edit application plist file"
     exit 1
+fi
+
+deployDebugArgs=
+if [ $debug == "true" ]
+then
+    deployDebugArgs+="-use-debug-libs"
+fi
+
+macdeployqt $packageAppDir -executable=$packageRangeSolverBin -always-overwrite -verbose=2 $deployDebugArgs
+if [ $? -ne 0 ]
+then
+    echo_e "Failed to run macdeployqt"
+    exit 1
+fi
+
+if [ -n "$appleDevId" ]
+then
+    codesign --force --deep --verify --verbose --no-legacy-signing --sign "$appleDevId" $packageAppDir
+    if [ $? -ne 0 ]
+    then
+        echo_e "Failed to run codesign"
+        exit 1
+    fi
 fi
 
 # File preparation - End --------------------------------------------------
@@ -224,8 +238,8 @@ create-dmg --volname "Range $version installer" \
            --window-pos 200 120 \
            --window-size 800 400 \
            --icon-size 100 \
-           --icon "Range.app" 200 190 \
-           --hide-extension "Range.app" \
+           --icon "Range${versionSuffix}.app" 200 190 \
+           --hide-extension "Range${versionSuffix}.app" \
            --app-drop-link 600 185 \
            "$packageFile" \
            "$packageDir"

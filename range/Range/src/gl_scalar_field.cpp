@@ -13,6 +13,7 @@
 
 #include <rmlib.h>
 
+#include "gl_functions.h"
 #include "gl_scalar_field.h"
 #include "gl_point.h"
 #include "session.h"

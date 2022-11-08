@@ -37,7 +37,7 @@ void RTimeSolver::_init(const RTimeSolver *pTimeSolver)
     }
 } /* RTimeSolver::_init */
 
-void RTimeSolver::sort(void)
+void RTimeSolver::sort()
 {
     std::sort(this->times.begin(),this->times.end());
 } /* RTimeSolver::sort */
@@ -71,7 +71,7 @@ RTimeSolver &RTimeSolver::operator =(const RTimeSolver &timeSolver)
     return (*this);
 } /* RTimeSolver::operator = */
 
-bool RTimeSolver::getEnabled(void) const
+bool RTimeSolver::getEnabled() const
 {
     return this->enabled;
 } /* RTimeSolver::getEnabled */
@@ -81,12 +81,12 @@ void RTimeSolver::setEnabled(bool enabled)
     this->enabled = enabled;
 } /* RTimeSolver::setEnabled */
 
-RTimeMarchApproximation RTimeSolver::getTimeMarchApproximation(void) const
+RTimeMarchApproximation RTimeSolver::getTimeMarchApproximation() const
 {
     return this->timeMarchApproximation;
 } /* RTimeSolver::getTimeMarchApproximation */
 
-double RTimeSolver::getTimeMarchApproximationCoefficient(void) const
+double RTimeSolver::getTimeMarchApproximationCoefficient() const
 {
     switch (this->timeMarchApproximation)
     {
@@ -107,12 +107,12 @@ void RTimeSolver::setTimeMarchApproximation(RTimeMarchApproximation timeMarchApp
     this->timeMarchApproximation = timeMarchApproximation;
 } /* RTimeSolver::setTimeMarchApproximation */
 
-const std::vector<double> &RTimeSolver::getTimes(void) const
+const std::vector<double> &RTimeSolver::getTimes() const
 {
     return this->times;
 } /* RTimeSolver::getTimes */
 
-std::vector<double> &RTimeSolver::getTimes(void)
+std::vector<double> &RTimeSolver::getTimes()
 {
     return this->times;
 } /* RTimeSolver::getTimes */
@@ -124,7 +124,7 @@ void RTimeSolver::setTimes(const std::vector<double> &times)
     this->sort();
 } /* RTimeSolver::setTimes */
 
-void RTimeSolver::addTimes(unsigned int startTimeStep, unsigned int nTimeSteps, double timeStepSize)
+void RTimeSolver::addTimes(uint startTimeStep, uint nTimeSteps, double timeStepSize)
 {
     if (startTimeStep < this->getNTimeSteps())
     {
@@ -134,17 +134,17 @@ void RTimeSolver::addTimes(unsigned int startTimeStep, unsigned int nTimeSteps, 
     this->times.insert(this->times.end(),newTimes.begin(),newTimes.end());
 } /* RTimeSolver::addTimes */
 
-unsigned int RTimeSolver::getInputNTimeSteps(void) const
+uint RTimeSolver::getInputNTimeSteps() const
 {
     return this->inputNTimeSteps;
 } /* RTimeSolver::getInputNTimeSteps */
 
-void RTimeSolver::setInputNTimeSteps(unsigned int inputNTimeSteps)
+void RTimeSolver::setInputNTimeSteps(uint inputNTimeSteps)
 {
     this->inputNTimeSteps = inputNTimeSteps;
 } /* RTimeSolver::setInputNTimeSteps */
 
-double RTimeSolver::getInputStartTime(void) const
+double RTimeSolver::getInputStartTime() const
 {
     return this->inputStartTime;
 } /* RTimeSolver::getInputStartTime */
@@ -154,7 +154,7 @@ void RTimeSolver::setInputStartTime(double inputStartTime)
     this->inputStartTime = inputStartTime;
 } /* RTimeSolver::setInputStartTime */
 
-double RTimeSolver::getInputTimeStepSize(void) const
+double RTimeSolver::getInputTimeStepSize() const
 {
     return this->inputTimeStepSize;
 } /* RTimeSolver::getInputTimeStepSize */
@@ -164,28 +164,28 @@ void RTimeSolver::setInputTimeStepSize(double inputTimeStepSize)
     this->inputTimeStepSize = inputTimeStepSize;
 } /* RTimeSolver::setInputTimeStepSize */
 
-unsigned int RTimeSolver::getCurrentTimeStep(void) const
+uint RTimeSolver::getCurrentTimeStep() const
 {
     return this->currentTimeStep;
 } /* RTimeSolver::getCurrentTimeStep */
 
-void RTimeSolver::setCurrentTimeStep(unsigned int timeStep)
+void RTimeSolver::setCurrentTimeStep(uint timeStep)
 {
     R_ERROR_ASSERT(timeStep < this->getNTimeSteps());
     this->currentTimeStep = timeStep;
 } /* RTimeSolver::setCurrentTimeStep */
 
-unsigned int RTimeSolver::getOutputFrequency(void) const
+uint RTimeSolver::getOutputFrequency() const
 {
     return this->outputFrequency;
 } /* RTimeSolver::getOutputFrequency */
 
-void RTimeSolver::setOutputFrequency(unsigned int outputFrequency)
+void RTimeSolver::setOutputFrequency(uint outputFrequency)
 {
     this->outputFrequency = outputFrequency;
 } /* RTimeSolver::setOutputFrequency */
 
-unsigned int RTimeSolver::setNextTimeStep(void)
+uint RTimeSolver::setNextTimeStep()
 {
     if (this->currentTimeStep + 1 >= this->getNTimeSteps())
     {
@@ -194,7 +194,7 @@ unsigned int RTimeSolver::setNextTimeStep(void)
     return ++this->currentTimeStep;
 } /* RTimeSolver::setNextTimeStep */
 
-double RTimeSolver::getCurrentTimeStepSize(void) const
+double RTimeSolver::getCurrentTimeStepSize() const
 {
     if (this->enabled)
     {
@@ -206,7 +206,7 @@ double RTimeSolver::getCurrentTimeStepSize(void) const
     }
 } /* RTimeSolver::getCurrentTimeStepSize */
 
-double RTimeSolver::getComputedTime(void) const
+double RTimeSolver::getComputedTime() const
 {
     return this->computedTime;
 } /* RTimeSolver::getComputedTime */
@@ -216,13 +216,13 @@ void RTimeSolver::setComputedTime(double computedTime)
     this->computedTime = computedTime;
 } /* RTimeSolver::setComputedTime */
 
-double RTimeSolver::getCurrentTime(void) const
+double RTimeSolver::getCurrentTime() const
 {
     R_ERROR_ASSERT(this->getCurrentTimeStep() < this->getNTimeSteps());
     return this->times[this->getCurrentTimeStep()];
 } /* RTimeSolver::getCurrentTime */
 
-double RTimeSolver::getPreviousTime(void) const
+double RTimeSolver::getPreviousTime() const
 {
     R_ERROR_ASSERT(this->getCurrentTimeStep() < this->getNTimeSteps());
     if (this->getCurrentTimeStep() > 0)
@@ -235,25 +235,25 @@ double RTimeSolver::getPreviousTime(void) const
     }
 } /* RTimeSolver::getPreviousTime */
 
-double RTimeSolver::getTime(unsigned int timeStep) const
+double RTimeSolver::getTime(uint timeStep) const
 {
     R_ERROR_ASSERT(timeStep < this->getNTimeSteps());
     return this->times[timeStep];
 } /* RTimeSolver::getTime */
 
-double RTimeSolver::getFirstTime(void) const
+double RTimeSolver::getFirstTime() const
 {
     return this->getTime(0);
 } /* RTimeSolver::getFirstTime */
 
-double RTimeSolver::getLastTime(void) const
+double RTimeSolver::getLastTime() const
 {
     return this->getTime(this->getNTimeSteps()-1);
 } /* RTimeSolver::getLastTime */
 
-unsigned int RTimeSolver::getNTimeSteps(void) const
+uint RTimeSolver::getNTimeSteps() const
 {
-    return (unsigned int)this->times.size();
+    return (uint)this->times.size();
 } /* RTimeSolver::getNTimeSteps */
 
 bool RTimeSolver::hasTime(double timeValue) const
@@ -296,7 +296,7 @@ const QString &RTimeSolver::getTimeMarchApproximationName(RTimeMarchApproximatio
     return timeApproximationNames[timeApproximation];
 } /* RTimeSolver::getTimeMarchApproximationName */
 
-std::vector<double> RTimeSolver::findTimesVector(unsigned int nTimeSteps, double startTime, double timeStepSize)
+std::vector<double> RTimeSolver::findTimesVector(uint nTimeSteps, double startTime, double timeStepSize)
 {
     std::vector<double> timesVector;
 

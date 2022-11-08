@@ -159,7 +159,7 @@ RProblem::RProblem()
 } /* RProblem::RProblem */
 
 
-RProblem::RProblem(const RProblem & problem)
+RProblem::RProblem(const RProblem &problem)
 {
     this->_init(&problem);
 } /* RProblem::RProblem (copy) */
@@ -185,13 +185,13 @@ void RProblem::_init(const RProblem *pProblem)
 } /* RProblem::_init */
 
 
-const RProblemTaskItem &RProblem::getProblemTaskTree(void) const
+const RProblemTaskItem &RProblem::getProblemTaskTree() const
 {
     return this->taskTree;
 } /* RProblem::getProblemTaskTree */
 
 
-RProblemTaskItem &RProblem::getProblemTaskTree(void)
+RProblemTaskItem &RProblem::getProblemTaskTree()
 {
     return this->taskTree;
 } /* RProblem::getProblemTaskTree */
@@ -203,13 +203,13 @@ void RProblem::setProblemTaskTree(const RProblemTaskItem &taskTree)
 } /* RProblem::setProblemTaskTree */
 
 
-const RTimeSolver &RProblem::getTimeSolver(void) const
+const RTimeSolver &RProblem::getTimeSolver() const
 {
     return this->timeSolver;
 } /* RProblem::getTimeSolver */
 
 
-RTimeSolver &RProblem::getTimeSolver(void)
+RTimeSolver &RProblem::getTimeSolver()
 {
     return this->timeSolver;
 } /* RProblem::getTimeSolver */
@@ -242,13 +242,13 @@ RMatrixSolverConf &RProblem::getMatrixSolverConf(RMatrixSolverType matrixSolverT
 } /* RProblem::getMatrixSolver */
 
 
-const RMonitoringPointManager &RProblem::getMonitoringPointManager(void) const
+const RMonitoringPointManager &RProblem::getMonitoringPointManager() const
 {
     return this->monitoringPointManager;
 } /* RProblem::getMonitoringPointManager */
 
 
-RMonitoringPointManager &RProblem::getMonitoringPointManager(void)
+RMonitoringPointManager &RProblem::getMonitoringPointManager()
 {
     return this->monitoringPointManager;
 } /* RProblem::getMonitoringPointManager */
@@ -260,13 +260,13 @@ void RProblem::setMonitoringPointManager(const RMonitoringPointManager &monitori
 } /* RProblem::setMonitoringPointManager */
 
 
-const RProblemSetup &RProblem::getProblemSetup(void) const
+const RProblemSetup &RProblem::getProblemSetup() const
 {
     return this->problemSetup;
 } /* RProblem::getProblemSetup */
 
 
-RProblemSetup &RProblem::getProblemSetup(void)
+RProblemSetup &RProblem::getProblemSetup()
 {
     return this->problemSetup;
 } /* RProblem::getProblemSetup */
@@ -278,7 +278,7 @@ void RProblem::setProblemSetup(const RProblemSetup &problemSetup)
 } /* RProblem::setProblemSetup */
 
 
-RProblem & RProblem::operator = (const RProblem & problem)
+RProblem &RProblem::operator = (const RProblem &problem)
 {
     this->_init(&problem);
     return (*this);
@@ -371,7 +371,7 @@ bool RProblem::getTimeSolverEnabled(RProblemTypeMask typeMask)
 
     while (problemDesc[i].type != R_PROBLEM_NONE)
     {
-        if (problemDesc[i].type & typeMask && problemDesc[i].type != R_PROBLEM_MESH)
+        if (problemDesc[i].type &typeMask &&problemDesc[i].type != R_PROBLEM_MESH)
         {
             if (!problemDesc[i].timeSolverEnabled)
             {
@@ -390,7 +390,7 @@ RProblemTypeMask RProblem::getRequiredProblemTypeMask(RProblemTypeMask typeMask)
     unsigned int i = 0;
     while (problemDesc[i].type != R_PROBLEM_NONE)
     {
-        if (problemDesc[i].type & typeMask)
+        if (problemDesc[i].type &typeMask)
         {
             reqTypeMask |= problemDesc[i].requiredProblemTypeMask;
         }
@@ -406,7 +406,7 @@ RProblemTypeMask RProblem::getExcludedProblemTypeMask(RProblemTypeMask typeMask)
     unsigned int i = 0;
     while (problemDesc[i].type != R_PROBLEM_NONE)
     {
-        if (problemDesc[i].type & typeMask)
+        if (problemDesc[i].type &typeMask)
         {
             excTypeMask |= problemDesc[i].excludedProblemTypeMask;
         }
@@ -424,7 +424,7 @@ std::vector<RProblemType> RProblem::getTypes(RProblemTypeMask typeMask)
     unsigned int i = 0;
     while (problemDesc[i].type != R_PROBLEM_NONE)
     {
-        if (problemDesc[i].type & typeMask)
+        if (problemDesc[i].type &typeMask)
         {
             types.push_back (problemDesc[i].type);
         }
@@ -445,7 +445,7 @@ std::vector<RVariableType> RProblem::getVariableTypes(RProblemTypeMask typeMask)
         RProblemTypeMask variableProblemTypeMask = RVariable::getResultsProblemTypeMask(RVariableType(i));
         for (unsigned int j=0;j<problemTypes.size();j++)
         {
-            if (variableProblemTypeMask & problemTypes[j])
+            if (variableProblemTypeMask &problemTypes[j])
             {
                 variableTypes.push_back(RVariableType(i));
                 break;
@@ -473,7 +473,7 @@ void RProblem::sortTypesByDependency(std::vector<RProblemType> &problemTypes)
             RProblemTypeMask requiredProblemTypes = RProblem::getRequiredProblemTypeMask(problemTypes[i]);
             for (uint j=i+1;j<problemTypes.size();j++)
             {
-                if (requiredProblemTypes & problemTypes[j])
+                if (requiredProblemTypes &problemTypes[j])
                 {
                     problemTypes.insert(problemTypes.begin()+i,problemTypes.at(j));
                     problemTypes.erase(problemTypes.begin()+j+1);

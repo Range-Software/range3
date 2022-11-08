@@ -80,7 +80,7 @@ class DrawInputTree : public QTreeWidget
     signals:
 
         //! Emit selection changed signal.
-        void selectionChanged(const QList<uint>&objectIDs);
+        void objectSelectionChanged(const QList<uint>&objectIDs);
 
         //! Position request signal.
         void positionRequest(const RR3Vector &position);

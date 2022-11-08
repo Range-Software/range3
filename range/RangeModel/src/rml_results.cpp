@@ -32,10 +32,10 @@ void RResults::_init (const RResults *pResults)
     }
 } /* RResults::_init */
 
-RResults::RResults ()
+RResults::RResults()
 //    : compTime(0.0)
 {
-    this->_init ();
+    this->_init();
 } /* RResults::RResults */
 
 RResults::RResults (const RResults &results)
@@ -44,19 +44,19 @@ RResults::RResults (const RResults &results)
 } /* RResults::RResults (copy) */
 
 
-RResults::~RResults ()
+RResults::~RResults()
 {
 } /* RResults::~RResults */
 
 
-RResults & RResults::operator = (const RResults &results)
+RResults &RResults::operator = (const RResults &results)
 {
     this->_init (&results);
     return (*this);
 } /* RResults::operator = */
 
 
-void RResults::clearResults(void)
+void RResults::clearResults()
 {
     for (unsigned int i=0;i<this->variables.size();i++)
     {
@@ -66,7 +66,7 @@ void RResults::clearResults(void)
 } /* RResults::clearResults */
 
 
-//double RResults::getCompTime(void) const
+//double RResults::getCompTime() const
 //{
 //    return this->compTime;
 //} /* RResults::getCompTime */
@@ -78,7 +78,7 @@ void RResults::clearResults(void)
 //} /* RResults::setCompTime */
 
 
-unsigned int RResults::getNVariables (void) const
+unsigned int RResults::getNVariables() const
 {
     return uint(this->variables.size());
 } /* RResults::getNVariables */
@@ -90,14 +90,14 @@ void RResults::setNVariables (unsigned int nvariables)
 } /* RResults::set_n_variables */
 
 
-const RVariable & RResults::getVariable (unsigned int position) const
+const RVariable &RResults::getVariable (unsigned int position) const
 {
     R_ERROR_ASSERT (position < this->getNVariables());
     return this->variables[position];
 } /* RResults::getVariable */
 
 
-RVariable & RResults::getVariable (unsigned int position)
+RVariable &RResults::getVariable (unsigned int position)
 {
     R_ERROR_ASSERT (position < this->getNVariables());
     return this->variables[position];
@@ -166,13 +166,13 @@ void RResults::removeVariable(uint position)
 } /* RResults::removeVariable */
 
 
-void RResults::removeAllVariables(void)
+void RResults::removeAllVariables()
 {
     this->variables.clear();
 } /* RResults::removeAllVariables */
 
 
-unsigned int RResults::getNNodes (void) const
+unsigned int RResults::getNNodes() const
 {
     return this->nnodes;
 } /* RResults::getNNodes */
@@ -234,7 +234,7 @@ void RResults::removeNode (unsigned int position)
 } /* RResults::removeNode */
 
 
-unsigned int RResults::getNElements (void) const
+unsigned int RResults::getNElements() const
 {
     return this->nelements;
 } /* RResults::getNElements */

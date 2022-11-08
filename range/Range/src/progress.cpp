@@ -54,9 +54,10 @@ void Progress::emitProgressFinalize(const QString &message)
 static void progressPrintHandler (double fraction)
 {
     static double lastValue = 0.0;
-    if (qAbs(qFloor(fraction*100) - lastValue) >= 1)
+    double newValue = qFloor(fraction*100);
+    if (qAbs(newValue - lastValue) >= 1)
     {
-        lastValue = qFloor(fraction*100);
+        lastValue = newValue;
         Progress::getInstance().print(fraction);
     }
 }

@@ -73,7 +73,7 @@ DrawInputWidget::DrawInputWidget(QWidget *parent) :
     layout->addWidget(this->tree,0,0,1,2);
 
     QObject::connect(this->tree,
-                     &DrawInputTree::selectionChanged,
+                     &DrawInputTree::objectSelectionChanged,
                      this,
                      &DrawInputWidget::onSelectionChanged);
     QObject::connect(this->tree,

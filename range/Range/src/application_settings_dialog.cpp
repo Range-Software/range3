@@ -21,7 +21,6 @@
 
 #include "application_settings_dialog.h"
 #include "keyboard_shortcuts_edit.h"
-#include "main_settings.h"
 
 ApplicationSettingsDialog::ApplicationSettingsDialog(ApplicationSettings *applicationSettings, QWidget *parent) :
     QDialog(parent),
@@ -70,7 +69,7 @@ ApplicationSettingsDialog::ApplicationSettingsDialog(ApplicationSettings *applic
     QObject::connect(this->okButton,&QPushButton::clicked,this,&QDialog::accept);
 }
 
-int ApplicationSettingsDialog::exec(void)
+int ApplicationSettingsDialog::exec()
 {
     int retVal = QDialog::exec();
 
@@ -94,7 +93,7 @@ int ApplicationSettingsDialog::exec(void)
     return retVal;
 }
 
-QWidget *ApplicationSettingsDialog::createGeneralTab(void)
+QWidget *ApplicationSettingsDialog::createGeneralTab()
 {
     QWidget *widget = new QWidget;
 
@@ -173,7 +172,7 @@ QWidget *ApplicationSettingsDialog::createGeneralTab(void)
     return widget;
 }
 
-QWidget *ApplicationSettingsDialog::createShortcutsTab(void)
+QWidget *ApplicationSettingsDialog::createShortcutsTab()
 {
     QWidget *widget = new QWidget;
 
@@ -191,7 +190,7 @@ QWidget *ApplicationSettingsDialog::createShortcutsTab(void)
     return widget;
 }
 
-QWidget *ApplicationSettingsDialog::createRangeAccountTab(void)
+QWidget *ApplicationSettingsDialog::createRangeAccountTab()
 {
     QWidget *widget = new QWidget;
 
@@ -283,7 +282,7 @@ void ApplicationSettingsDialog::onRangeApiServerChanged(const QString &)
     this->okButton->setEnabled(true);
 }
 
-void ApplicationSettingsDialog::onDefaultClicked(void)
+void ApplicationSettingsDialog::onDefaultClicked()
 {
     this->solverFileChooserButton->setFileName(ApplicationSettings::getDefaultRangeSolverExecutable());
     this->helpFileChooserButton->setFileName(ApplicationSettings::getDefaultHelpDir());

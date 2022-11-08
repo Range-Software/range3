@@ -172,8 +172,7 @@ class RSolverFluid : public RSolverGeneric
         //! Find stream velocity.
         static double computeStreamVelocity(const RModel &rModel,
                                             const RSolverCartesianVector<RRVector> &nodeVelocity,
-                                            bool averageBased,
-                                            double streamVelocity = 0.0);
+                                            bool averageBased);
 
 };
 

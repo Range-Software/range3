@@ -167,13 +167,13 @@ void CutDialog::onAccept(void)
             rCut.addElementGroupID(elementGroupId);
         }
 
-        RLogger::info("Modified vector field \'%s\'\n",rCut.getName().toUtf8().constData());
+        RLogger::info("Modified cut \'%s\'\n",rCut.getName().toUtf8().constData());
     }
     else
     {
         RCut cut;
 
-        cut.setName("Cut");
+        cut.setName("Cut " + QString::number(Session::getInstance().getModel(this->modelID).getNCuts() + 1));
         cut.setPlane(this->cutPlane);
 
         for (int i=0;i<entities.size();i++)
@@ -184,7 +184,7 @@ void CutDialog::onAccept(void)
         }
 
         Session::getInstance().getModel(this->modelID).addCut(cut);
-        RLogger::info("Created new vector field \'%s\'\n",cut.getName().toUtf8().constData());
+        RLogger::info("Created new cut \'%s\'\n",cut.getName().toUtf8().constData());
     }
 
     Session::getInstance().setModelChanged(this->modelID);

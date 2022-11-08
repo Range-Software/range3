@@ -74,25 +74,25 @@ class MainWindow : public QMainWindow
     public:
 
         //! Get instance of singleton.
-        static MainWindow *getInstance(void);
+        static MainWindow *getInstance();
 
         //! Show transform geometry dock widget.
-        void showTransformGeometryWidget(void);
+        void showTransformGeometryWidget();
 
         //! Hide transform geometry dock widget.
-        void hideTransformGeometryWidget(void);
+        void hideTransformGeometryWidget();
 
         //! Show draw dock widget.
-        void showDrawWidget(void);
+        void showDrawWidget();
 
         //! Hide draw dock widget.
-        void hideDrawWidget(void);
+        void hideDrawWidget();
 
         //! Enable progress-bar autohide.
-        void progressAutoHideEnable(void);
+        void progressAutoHideEnable();
 
         //! Disable progress-bar autohide.
-        void progressAutoHideDisable(void);
+        void progressAutoHideDisable();
 
     protected:
 
@@ -108,25 +108,25 @@ class MainWindow : public QMainWindow
     protected:
 
         //! Return number of toolbars.
-        uint getNToolBars(void) const;
+        uint getNToolBars() const;
 
         //! Return list of selected model IDs.
-        QList<uint> getSelectedModelIDs(void) const;
+        QList<uint> getSelectedModelIDs() const;
 
         //! Create all menu items.
-        void createMenus(void);
+        void createMenus();
 
         //! Create all tool bars.
-        void createToolBars(void);
+        void createToolBars();
 
         //! Create status bar.
-        void createStatusBar(void);
+        void createStatusBar();
 
         //! Create download bar.
-        void createDownloadBar(void);
+        void createDownloadBar();
 
         //! Create central widget.
-        void createCentralWidget(void);
+        void createCentralWidget();
 
         //! Create model tab.
         QWidget *createModelTab();
@@ -156,13 +156,13 @@ class MainWindow : public QMainWindow
         QWidget *createResultsTab();
 
         //! Create custom popup menu.
-        QMenu * createPopupMenu (void);
+        QMenu * createPopupMenu ();
 
         //! Write application settings.
-        void writeSettings(void) const;
+        void writeSettings() const;
 
         //! Read application settings.
-        void readSettings(void);
+        void readSettings();
 
         //! Overloaded closeEvent function to catch close event.
         void closeEvent(QCloseEvent *event);
@@ -185,10 +185,10 @@ class MainWindow : public QMainWindow
         void setEnabled(bool enabled);
 
         //! Enable whole window.
-        void enable(void);
+        void enable();
 
         //! Disable whole window.
-        void disable(void);
+        void disable();
 
         //! Set main progress fraction.
         void onMainProgress(double fraction);
@@ -209,19 +209,19 @@ class MainWindow : public QMainWindow
         void onDownloadProgressFinalize(uint);
 
         //! Draw object was added.
-        void onDrawObjectAdded(void);
+        void onDrawObjectAdded();
 
         //! Draw object was removed.
-        void onDrawObjectRemoved(void);
+        void onDrawObjectRemoved();
 
         //! Job is blocking.
         void onJobBlocking(bool blocking);
 
         //! New job has started.
-        void onJobStarted(void);
+        void onJobStarted();
 
         //! Job has ended.
-        void onJobEnded(void);
+        void onJobEnded();
 
         //! New model has been added.
         void onModelAdded(uint position);
@@ -242,7 +242,7 @@ class MainWindow : public QMainWindow
         void onEntityVisibilityChanged(uint modelID, REntityGroupType, uint, bool visible);
 
         //! Finalize geometry transform widget.
-        void onGeometryTransformFinalize(void);
+        void onGeometryTransformFinalize();
 
         //! Called when number of history records has changed.
         void onNHistoryRecordsChanged(uint);

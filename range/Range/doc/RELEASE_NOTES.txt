@@ -1,4 +1,19 @@
 ------------------------------------------------------------------
+Version 3.2.8
+
+* ALL: Resolved build warnings
+* ALL: Optimised detection of self-intersecting elements
+* GUI: Change order of entities in the model tree to "Points,Lines,Surfaces,Volumes,Cuts,ISO surfaces,Stream Lines, Scalar fields,Vector fields"
+* GUI: Append counter to newly created cut name
+* GUI: Improved problem time setup dock.
+* SOLVER: Improved stability of CFD solver
+
+Bug fixes:
+
+* GUI: Fixed glitches when zooming using mouse wheel
+* GUI: Vector and scalar field entity list can get lost when results are reloaded
+
+------------------------------------------------------------------
 Version 3.2.7
 
 * ALL: New software installer

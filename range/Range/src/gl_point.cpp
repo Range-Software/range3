@@ -8,6 +8,7 @@
  *  DESCRIPTION: OpenGL point class definition                       *
  *********************************************************************/
 
+#include "gl_functions.h"
 #include "gl_point.h"
 
 void GLPoint::_init(const GLPoint *pGlPoint)

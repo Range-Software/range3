@@ -2,7 +2,7 @@
  *  AUTHOR: Tomas Soltys                                             *
  *  FILE:   rml_problem.h                                            *
  *  GROUP:  RML                                                      *
- *  TYPE:   header file (*.h)                                        *
+ *  TYPE:   header file(*.h)                                        *
  *  DATE:   23-rd December 2011                                      *
  *                                                                   *
  *  DESCRIPTION: Problem class declaration                           *
@@ -28,7 +28,7 @@ class RProblem
     private:
 
         //! Internal initialization function.
-        void _init ( const RProblem *pProblem = nullptr );
+        void _init(const RProblem *pProblem = nullptr);
 
     protected:
 
@@ -46,31 +46,31 @@ class RProblem
     public:
 
         //! Constructor.
-        RProblem ();
+        RProblem();
 
         //! Copy constructor.
-        RProblem ( const RProblem & problem );
+        RProblem(const RProblem &problem);
 
         //! Destructor.
-        ~RProblem ();
+        ~RProblem();
 
         //! Return const reference to problem task tree.
-        const RProblemTaskItem &getProblemTaskTree ( void ) const;
+        const RProblemTaskItem &getProblemTaskTree() const;
 
         //! Return reference to problem task tree.
-        RProblemTaskItem &getProblemTaskTree ( void );
+        RProblemTaskItem &getProblemTaskTree();
 
         //! Set problem task tree.
-        void setProblemTaskTree ( const RProblemTaskItem &taskTree );
+        void setProblemTaskTree(const RProblemTaskItem &taskTree);
 
         //! Return const reference to time-solver.
-        const RTimeSolver & getTimeSolver ( void ) const;
+        const RTimeSolver &getTimeSolver() const;
 
         //! Return reference to time-solver.
-        RTimeSolver & getTimeSolver ( void );
+        RTimeSolver &getTimeSolver();
 
         //! Set new time-solver.
-        void setTimeSolver ( const RTimeSolver &timeSolver );
+        void setTimeSolver(const RTimeSolver &timeSolver);
 
         //! Return const reference to matrix solver.
         RMatrixSolverConf getMatrixSolverConf(RMatrixSolverType matrixSolverType) const;
@@ -79,52 +79,52 @@ class RProblem
         RMatrixSolverConf &getMatrixSolverConf(RMatrixSolverType matrixSolverType);
 
         //! Return const reference to monitoring point manager.
-        const RMonitoringPointManager & getMonitoringPointManager(void) const;
+        const RMonitoringPointManager &getMonitoringPointManager() const;
 
         //! Return reference to monitoring point manager.
-        RMonitoringPointManager & getMonitoringPointManager(void);
+        RMonitoringPointManager &getMonitoringPointManager();
 
         //! Set monitoring point manager.
         void setMonitoringPointManager(const RMonitoringPointManager &monitoringPointManager);
 
         //! Return const reference to problem setup.
-        const RProblemSetup &getProblemSetup(void) const;
+        const RProblemSetup &getProblemSetup() const;
 
         //! Return reference to problem setup.
-        RProblemSetup &getProblemSetup(void);
+        RProblemSetup &getProblemSetup();
 
         //! Set problem setup.
         void setProblemSetup(const RProblemSetup &problemSetup);
 
         //! Assignment operator.
-        RProblem & operator = ( const RProblem & problem );
+        RProblem &operator =(const RProblem &problem);
 
         //! Return problem type for given problem ID.
         static RProblemType getTypeFromId(const QString &problemId);
 
         //! Return problem ID for specified problem type.
-        static QString getId ( RProblemType type );
+        static QString getId(RProblemType type);
 
         //! Return problem name for specified problem type.
-        static QString getName ( RProblemType type );
+        static QString getName(RProblemType type);
 
         //! Return problem description for specified problem type.
-        static QString getDesc ( RProblemType type );
+        static QString getDesc(RProblemType type);
 
         //! Return time-solver is enabled for specified problem type.
-        static bool getTimeSolverEnabled ( RProblemTypeMask typeMask );
+        static bool getTimeSolverEnabled(RProblemTypeMask typeMask);
 
         //! Return required problem type mask.
-        static RProblemTypeMask getRequiredProblemTypeMask ( RProblemTypeMask typeMask );
+        static RProblemTypeMask getRequiredProblemTypeMask(RProblemTypeMask typeMask);
 
         //! Return excluded problem type mask.
-        static RProblemTypeMask getExcludedProblemTypeMask ( RProblemTypeMask typeMask );
+        static RProblemTypeMask getExcludedProblemTypeMask(RProblemTypeMask typeMask);
 
         //! Return list of problem names for specified problem type mask.
-        static std::vector<RProblemType> getTypes ( RProblemTypeMask typeMask );
+        static std::vector<RProblemType> getTypes(RProblemTypeMask typeMask);
 
         //! Return list of possible result variable types for specific problem type mask.
-        static std::vector<RVariableType> getVariableTypes ( RProblemTypeMask typeMask );
+        static std::vector<RVariableType> getVariableTypes(RProblemTypeMask typeMask);
 
         //! Sort list of problem types by dependency.
         static void sortTypesByDependency(std::vector<RProblemType> &problemTypes);

@@ -8,7 +8,6 @@
  *  DESCRIPTION: OpenGL functions definitions                        *
  *********************************************************************/
 
-#include <QOpenGLFunctions>
 #include <QString>
 
 #include <rblib.h>

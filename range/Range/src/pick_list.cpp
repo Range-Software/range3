@@ -45,8 +45,7 @@ QVector<PickItem> PickList::getItems(uint modelID) const
 
     while (iter != this->items.end())
     {
-        const PickItem *pPickItem = iter;
-        if (pPickItem->getEntityID().getMid() == modelID)
+        if (iter->getEntityID().getMid() == modelID)
         {
             modelItems.append(*iter);
         }
@@ -64,10 +63,9 @@ uint PickList::getNItems(PickItemType type, uint modelID) const
 
     while (iter != this->items.end())
     {
-        const PickItem *pPickItem = iter;
-        if (pPickItem->getItemType() == type)
+        if (iter->getItemType() == type)
         {
-            if (modelID == RConstants::eod || modelID == pPickItem->getEntityID().getMid())
+            if (modelID == RConstants::eod || modelID == iter->getEntityID().getMid())
             {
                 nItems++;
             }
@@ -90,10 +88,9 @@ bool PickList::isEmpty(uint modelID, REntityGroupType elementGroupType) const
 
     while (iter != this->items.end())
     {
-        const PickItem *pPickItem = iter;
-        if (pPickItem->getEntityID().getMid() == modelID)
+        if (iter->getEntityID().getMid() == modelID)
         {
-            if (elementGroupType == R_ENTITY_GROUP_NONE || pPickItem->getEntityID().getType() == elementGroupType)
+            if (elementGroupType == R_ENTITY_GROUP_NONE || iter->getEntityID().getType() == elementGroupType)
             {
                 return false;
             }
@@ -114,8 +111,7 @@ QList<uint> PickList::getModelIDs(void) const
     iter = this->items.begin();
     while (iter != this->items.end())
     {
-        const PickItem *pPickItem = iter;
-        modelID = pPickItem->getEntityID().getMid();
+        modelID = iter->getEntityID().getMid();
         modelIDcnt[modelID]++;
         if (modelIDcnt[modelID] == 1)
         {
@@ -136,8 +132,7 @@ bool PickList::registerItem(const PickItem &pickItem)
 
     while (iter != this->items.end())
     {
-        PickItem *pPickItem = iter;
-        if ((*pPickItem) == pickItem)
+        if ((*iter) == pickItem)
         {
             this->items.erase(iter);
             itemErased = true;
@@ -153,8 +148,7 @@ bool PickList::registerItem(const PickItem &pickItem)
         iter = this->items.begin();
         while (iter != this->items.end())
         {
-            PickItem *pPickItem = iter;
-            if (pPickItem->getEntityID().getMid() == pickItem.getEntityID().getMid())
+            if (iter->getEntityID().getMid() == pickItem.getEntityID().getMid())
             {
                 iter = this->items.erase(iter);
             }
@@ -182,8 +176,7 @@ void PickList::addItem(const PickItem &pickItem)
 
     while (iter != this->items.end())
     {
-        PickItem *pPickItem = iter;
-        if ((*pPickItem) == pickItem)
+        if ((*iter) == pickItem)
         {
             return;
         }
@@ -198,8 +191,7 @@ void PickList::addItem(const PickItem &pickItem)
         iter = this->items.begin();
         while (iter != this->items.end())
         {
-            PickItem *pPickItem = iter;
-            if (pPickItem->getEntityID().getMid() == pickItem.getEntityID().getMid())
+            if (iter->getEntityID().getMid() == pickItem.getEntityID().getMid())
             {
                 iter = this->items.erase(iter);
             }
@@ -222,8 +214,7 @@ void PickList::removeItem(const PickItem &pickItem)
 
     while (iter != this->items.end())
     {
-        PickItem *pPickItem = iter;
-        if ((*pPickItem) == pickItem)
+        if ((*iter) == pickItem)
         {
             this->items.erase(iter);
         }
@@ -243,8 +234,7 @@ void PickList::removeItems(uint modelID)
 
     while (iter != this->items.end())
     {
-        PickItem *pPickItem = iter;
-        if (pPickItem->getEntityID().getMid() == modelID)
+        if (iter->getEntityID().getMid() == modelID)
         {
             this->items.erase(iter);
         }
@@ -264,8 +254,7 @@ bool PickList::hasItem(const PickItem &pickItem)
 
     while (iter != this->items.end())
     {
-        PickItem *pPickItem = iter;
-        if ((*pPickItem) == pickItem)
+        if ((*iter) == pickItem)
         {
             return true;
         }

@@ -13,9 +13,11 @@
 
 #include <vector>
 
-#include <QOpenGLFunctions>
+#ifdef __APPLE__
+#define GL_SILENCE_DEPRECATION
+#endif
 
-#include "gl_functions.h"
+#include <QOpenGLFunctions>
 
 class GLList
 {

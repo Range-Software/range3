@@ -10,6 +10,7 @@
 
 #include <rblib.h>
 
+#include "gl_functions.h"
 #include "gl_list.h"
 
 GLList::GLList(GLuint nLists)

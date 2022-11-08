@@ -8,6 +8,7 @@
  *  DESCRIPTION: OpenGL object class definition                      *
  *********************************************************************/
 
+#include "gl_functions.h"
 #include "gl_object.h"
 
 GLObject::GLObject(GLWidget *glWidget) :
