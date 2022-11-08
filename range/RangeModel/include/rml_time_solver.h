@@ -54,25 +54,25 @@ class RTimeSolver
         //! Vector of time values (seconds).
         std::vector<double> times;
         //! Input number of time steps.
-        unsigned int inputNTimeSteps;
+        uint inputNTimeSteps;
         //! Input start time.
         double inputStartTime;
         //! Input time-step size.
         double inputTimeStepSize;
         //! Current time-step.
-        unsigned int currentTimeStep;
+        uint currentTimeStep;
         //! Current computed time.
         double computedTime;
         //! Write output frequency.
-        unsigned int outputFrequency;
+        uint outputFrequency;
 
     private:
 
         //! Internal initialization function.
-        void _init ( const RTimeSolver *pTimeSolver = nullptr );
+        void _init(const RTimeSolver *pTimeSolver = nullptr);
 
         //! Sort array of times.
-        void sort ( void );
+        void sort();
 
     public:
 
@@ -80,13 +80,13 @@ class RTimeSolver
         RTimeSolver ();
 
         //! Copy constructor.
-        RTimeSolver ( const RTimeSolver &timeSolver );
+        RTimeSolver(const RTimeSolver &timeSolver);
 
         //! Destructor.
         ~RTimeSolver ();
 
         //! Assignment operator.
-        RTimeSolver & operator = ( const RTimeSolver &timeSolver );
+        RTimeSolver & operator =(const RTimeSolver &timeSolver);
 
         //! Return enabled.
         bool getEnabled(void) const;
@@ -95,103 +95,103 @@ class RTimeSolver
         void setEnabled(bool enabled);
 
         //! Return time march approximation.
-        RTimeMarchApproximation getTimeMarchApproximation ( void ) const;
+        RTimeMarchApproximation getTimeMarchApproximation() const;
 
         //! Return alpha coefficient for time approximation.
-        double getTimeMarchApproximationCoefficient ( void ) const;
+        double getTimeMarchApproximationCoefficient() const;
 
         //! Set time march approximation.
-        void setTimeMarchApproximation ( RTimeMarchApproximation timeMarchApproximation );
+        void setTimeMarchApproximation(RTimeMarchApproximation timeMarchApproximation);
 
         //! Return const reference to vector containing all time step times.
-        const std::vector<double> & getTimes ( void ) const;
+        const std::vector<double> & getTimes() const;
 
         //! Return reference to vector containing all time step times.
         //! This function will also set the current time step to zero (first time step).
-        std::vector<double> & getTimes ( void );
+        std::vector<double> & getTimes();
 
         //! Set new vector containing all time step times.
-        void setTimes ( const std::vector<double> &times );
+        void setTimes(const std::vector<double> &times);
 
         //! Add new time step times.
-        void addTimes( unsigned int startTimeStep,
-                       unsigned int nTimeSteps,
-                       double timeStepSize );
+        void addTimes( uint startTimeStep,
+                       uint nTimeSteps,
+                       double timeStepSize);
 
         //! Return input number of time-steps.
-        unsigned int getInputNTimeSteps(void) const;
+        uint getInputNTimeSteps(void) const;
 
         //! Set input number of time-steps.
-        void setInputNTimeSteps(unsigned int inputNTimeSteps);
+        void setInputNTimeSteps(uint inputNTimeSteps);
 
         //! Return input start time.
-        double getInputStartTime ( void ) const;
+        double getInputStartTime() const;
 
         //! Return input start time.
-        void setInputStartTime ( double inputStartTime );
+        void setInputStartTime(double inputStartTime);
 
         //! Return input time-step size.
-        double getInputTimeStepSize ( void ) const;
+        double getInputTimeStepSize() const;
 
         //! Set input time step size.
-        void setInputTimeStepSize ( double inputTimeStepSize );
+        void setInputTimeStepSize(double inputTimeStepSize);
 
         //! Return current time step.
-        unsigned int getCurrentTimeStep ( void ) const;
+        uint getCurrentTimeStep() const;
 
         //! Set current time step.
-        void setCurrentTimeStep ( unsigned int currentTimeStep );
+        void setCurrentTimeStep(uint currentTimeStep);
 
         //! Return write output frequency.
-        unsigned int getOutputFrequency ( void ) const;
+        uint getOutputFrequency() const;
 
         //! Set write output frequency.
-        void setOutputFrequency ( unsigned int outputFrequency );
+        void setOutputFrequency(uint outputFrequency);
 
         //! Set next time step and return modified current time step.
         //! If no next time step can be set RConstants::eod is returned.
-        unsigned int setNextTimeStep ( void );
+        uint setNextTimeStep();
 
         //! Return current time step size.
-        double getCurrentTimeStepSize ( void ) const;
+        double getCurrentTimeStepSize() const;
 
         //! Return computed time.
-        double getComputedTime ( void ) const;
+        double getComputedTime() const;
 
         //! Set computed time.
-        void setComputedTime ( double computedTime );
+        void setComputedTime(double computedTime);
 
         //! Return current time.
-        double getCurrentTime ( void ) const;
+        double getCurrentTime() const;
 
         //! Return previous time.
-        double getPreviousTime ( void ) const;
+        double getPreviousTime() const;
 
         //! Return time at given time step.
-        double getTime ( unsigned int timeStep ) const;
+        double getTime(uint timeStep) const;
 
         //! Return first time in the list.
-        double getFirstTime ( void ) const;
+        double getFirstTime() const;
 
         //! Return last time in the list.
-        double getLastTime ( void ) const;
+        double getLastTime() const;
 
         //! Return number of time steps.
-        unsigned int getNTimeSteps ( void ) const;
+        uint getNTimeSteps() const;
 
         //! Return true if given time is in the time interval.
-        bool hasTime ( double timeValue ) const;
+        bool hasTime(double timeValue) const;
 
         //! Harmonize times with input.
         void harmonizeTimesWithInput(bool restart);
 
         //! Return time-marching approximation name.
-        static const QString & getTimeMarchApproximationName ( RTimeMarchApproximation timeApproximation );
+        static const QString & getTimeMarchApproximationName(RTimeMarchApproximation timeApproximation);
 
         //! Compute times vector.
-        static std::vector<double> findTimesVector ( unsigned int nTimeSteps,
-                                                     double startTime,
-                                                     double timeStepSize);
+        static std::vector<double> findTimesVector(uint nTimeSteps,
+                                                   double startTime,
+                                                   double timeStepSize);
 
         //! Allow RFileIO to access private members.
         friend class RFileIO;
